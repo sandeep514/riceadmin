@@ -1,0 +1,15 @@
+[03-Oct-2020 01:25:55 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[24-Oct-2020 03:39:09 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[24-Oct-2020 03:39:09 UTC] PHP Notice:  Undefined offset: -1 in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function on line 270
+[26-Oct-2020 22:11:19 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[03-Nov-2020 13:45:19 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[03-Nov-2020 13:45:48 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[05-Nov-2020 21:58:52 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[05-Nov-2020 21:58:55 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'hubcreat_wrdp3'@'localhost' (using password: YES) in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function on line 47
+[05-Nov-2020 21:58:55 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_fetch_all() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function:51
+Stack trace:
+#0 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function(141): parse_wp('<?php\r\n/** Enab...', '/home/sboy8c4wy...')
+#1 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2): __lambda_func()
+#2 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2): zjaxr(Array, Array)
+#3 {main}
+  thrown in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function on line 51
