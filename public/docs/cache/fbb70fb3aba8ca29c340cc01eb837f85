@@ -1,0 +1,110 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5302:"Share with Us. Perdue, the Maryland-based meat processing company, distanced itself from the GOP lawmaker over the weekend as he faced scrutiny for mispronouncing the name of Sen. Kamala Harris. Perdue mentioned President Trump only once in the 60 minute debate – but decried what he called Ossoff… - With in-person campaigning dampened by the coronavirus, advertising has taken on even greater importance in Perdue's race against Democrat Jon Ossoff Polls show a …  The company’s official Twitter account, @PerdueChicken, responded Saturday to a slew of angry social media posts directed its way by putting space between itself and the senator. We hope that you continue to enjoy our free content. Good morning! “You assured us the risk was low,” Ossoff said to Perdue. Mainly sunny. “Gov. Low 62F. Don't knowingly lie about anyone With Democrats needing to capture just three or four seats to take control of the Senate, depending on the outcome of the presidential election, the Perdue-Ossoff contest is one of a handful of Senate races that could sway the outcome. Click Winds ENE at 5 to 10 mph. Mr. Perdue accordingly ignited a firestorm on social media that inadvertently caused a hassle for the 100-year-old chicken and pork processing company with the senator’s surname. racist or sexually-oriented language. Lindsey Graham vs. Jaime Harrison (South Carolina): It remains to be seen how Harrison’s relatively low name recognition fares against Graham’s disastrously high name recognition.  - 1 ranking for fifth straight year, Loeffler: Conservative voters are 'firewall' to preserve values, ON THE MARKET: Quiet Lee County home features pool, huge closet in master bedroom, From Wuhan to the White House: A timeline of COVID-19’s spread, ON THE MARKET: Albany home in golf course community on the Flint River features double boat dock, 10 editorial and topical cartoons from the past week — Oct. 13, PHOTOS: Georgia Tech Women's Basketball's Locker Room Renovation, ON THE MARKET: Lakefront home in gated Albany community features hardwood floors, screened-in back porch, Podcasts to Listen To: Unspookable and the best Halloween podcasts for kids, Seager, Turner slug Dodgers into Game 7 of NLCS, Lawrence leads No. He specifically cited the shooting death of Ahmaud Arbery, a black man, near Brunswick and the subsequent arrest of three white men. Doug Jones vs. Tommy Tuberville (Alabama): Democrat Jones remains a heavy underdog against any candidate who isn’t a confirmed child molester. Winds ENE at 5 to 10 mph.. Mostly clear. or anything. Perdue, seeking a second six-year term in the Senate after a career as a corporate executive, and Ossoff, an investigative journalist running for statewide office for the first time, have been locked in a dead heat for months, according to numerous polls. Martha McSally vs. Mark Kelly (Arizona): McSally has criticized former astronaut Kelly of dual loyalties to Earth and space. An email has been sent to  with a link to confirm list signup. Keep it Clean. David Perdue vs. Jon Ossoff (Georgia): Democratic challenger Ossoff hopes to prove to voters that he’s capable of narrowly losing both the House and Senate races. Threats of harming another Error! On COVID-19, Ossoff charged Perdue with echoing Trump’s response early on in the pandemic. Kelly Loeffler vs. Doug Collins vs. Raphael Warnock (Georgia special election): Even if she loses this tossup race, Loeffler can celebrate an extremely successful 2020 after receiving a Senate appointment and, unrelated, getting remarkably lucky in the stock market.                                 Hunter Biden demanded Chinese billionaire pay $10 million for 'introductions alone,' emails show Be Proactive. “[Ossoff] will be nothing but a rubber stamp when [Senate Minority Leader Chuck] Schumer wants to pack the court,” Perdue said. Please log in, or sign up for a new account and purchase a subscription to continue reading. Republican David Perdue, Democrat Jon Ossoff trade familiar blows in debate, By Dave Williams JavaScript is required for full functionality on this website, but scripting is currently disabled. Now, Perdue said, Ossoff wants to join a Senate Democratic caucus that plans to offset the expected confirmation of conservative court nominee Amy Coney Barrett by adding more seats to the court.                                Coronavirus restrictions drive Democrats to back Trump in Pennsylvania, Border Patrol rips newspaper over skewed facts, attempt to ‘villainize’ agents, Armed and Dangerous: best new concealed carry handguns, U.S. scrambling to hit back at China’s ‘magic weapon’ amid global power grab, Doctor: “Doing This Every Morning Can Snap Back Sagging Skin (No Creams Needed)”, How CIA tried to wave FBI off Trump-Russia conspiracy as it pointed the finger at Hillary Clinton, New York Times targeted as GOP clamors for prosecution of Trump’s tax leaker. Brian Kemp to task for the statewide stay-at-home order he handed down during the pandemic’s early stages to discourage the spread of the virus. Ossoff accused Perdue of downplaying the threat posed by the coronavirus pandemic while doing nothing to respond to the demands of millions of peacefully protesting Americans for criminal justice reform. ";s:7:"keyword";s:26:"david perdue vs jon ossoff";s:5:"links";s:7172:"<a href='https://ricebrok-staging.webcooks.in/docs/billy-blair-machete-86e6ec'>Billy Blair Machete</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/right-triangle-calculator-86e6ec'>Right Triangle Calculator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daddy%27s-little-girl-poem-86e6ec'>Daddy's Little Girl Poem</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/planet-hulk-characters-86e6ec'>Planet Hulk Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ghee-benefits-86e6ec'>Ghee Benefits</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/legado-en-los-huesos-cast-86e6ec'>Legado En Los Huesos Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-hillerman-funeral-86e6ec'>John Hillerman Funeral</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/caiman-species-86e6ec'>Caiman Species</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-invented-cat%27s-eyes-86e6ec'>Who Invented Cat's Eyes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zabana-rum-86e6ec'>Zabana Rum</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/radiohead-ok-computer-oknotok-vinyl-86e6ec'>Radiohead Ok Computer Oknotok Vinyl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oliver-platt-wife-86e6ec'>Oliver Platt Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pod-medical-term-prefix-86e6ec'>Pod Medical Term Prefix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/things-to-do-in-shenandoah-valley-in-summer-86e6ec'>Things To Do In Shenandoah Valley In Summer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-college-football-rankings-86e6ec'>2020 College Football Rankings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-rabbi%27s-cat-2-86e6ec'>The Rabbi's Cat 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/death-becomes-her---watch-online-86e6ec'>Death Becomes Her - Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kansas-state-basketball-recruiting-86e6ec'>Kansas State Basketball Recruiting</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/list-of-islamic-countries-in-africa-86e6ec'>List Of Islamic Countries In Africa</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beach-flags-86e6ec'>Beach Flags</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/upon-anyone-meaning-in-urdu-86e6ec'>Upon Anyone Meaning In Urdu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pork-chop-hill-vietnam-86e6ec'>Pork Chop Hill Vietnam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amanda-bynes-age-86e6ec'>Amanda Bynes Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gingerbread-man-author-86e6ec'>The Gingerbread Man Author</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/humbert-humbert-character-analysis-86e6ec'>Humbert Humbert Character Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-vs-sevilla-results-86e6ec'>Barcelona Vs Sevilla Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/presidio-heights-86e6ec'>Presidio Heights</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/interrupt-handling-86e6ec'>Interrupt Handling</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-everest-2019-field-86e6ec'>The Everest 2019 Field</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alabama-vs-arkansas-2016-86e6ec'>Alabama Vs Arkansas 2016</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zombie-diary-2-hack-mod-apk-86e6ec'>Zombie Diary 2 Hack Mod Apk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nin-broken-movie-vimeo-86e6ec'>Nin Broken Movie Vimeo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/4-horsemen-of-the-apocalypse-personality-86e6ec'>4 Horsemen Of The Apocalypse Personality</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-wanna-thank-you-baby-you-make-me-feel-like-christmas-86e6ec'>I Wanna Thank You Baby You Make Me Feel Like Christmas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/greg-jackson-kingdom-86e6ec'>Greg Jackson Kingdom</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blake-griffin-height-at-15-86e6ec'>Blake Griffin Height At 15</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pie-one-week-86e6ec'>American Pie One Week</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anton-du-beke-children%27s-names-86e6ec'>Anton Du Beke Children's Names</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alexi-wasser-height-86e6ec'>Alexi Wasser Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/auburn-basketball-jersey-86e6ec'>Auburn Basketball Jersey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/linda-perry-instagram-86e6ec'>Linda Perry Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sigmund-freud-theory-pdf-86e6ec'>Sigmund Freud Theory Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/basketball-video-games-2000s-86e6ec'>Basketball Video Games 2000s</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-remake-86e6ec'>Metal Gear Solid Remake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-air-script-86e6ec'>Dead Air Script</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gdb-tutorial-86e6ec'>Gdb Tutorial</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-long-kiss-goodnight-streaming-86e6ec'>The Long Kiss Goodnight Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/djokovic-kyrgios-86e6ec'>Djokovic Kyrgios</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/short-story-clothing-86e6ec'>Short Story Clothing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-hopkins-best-movies-86e6ec'>Anthony Hopkins Best Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/streets-of-laredo-lyrics-chords-86e6ec'>Streets Of Laredo Lyrics Chords</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pga-tour-2k21-review-86e6ec'>Pga Tour 2k21 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barry-watson-baywatch-86e6ec'>Barry Watson Baywatch</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-interrupts-86e6ec'>Types Of Interrupts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pablo-schreiber-the-wire-86e6ec'>Pablo Schreiber The Wire</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/house-of-trust-86e6ec'>House Of Trust</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shattered-%282017%29-86e6ec'>Shattered (2017)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pre-primer-sight-words-printable-86e6ec'>Pre Primer Sight Words Printable</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/seven-seconds-episode-9-recap-86e6ec'>Seven Seconds Episode 9 Recap</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-evil-sermon-86e6ec'>Deliver Us From Evil Sermon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rajon-rondo-salary-86e6ec'>Rajon Rondo Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-novak-hockey-86e6ec'>John Novak Hockey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jack-the-ripper-identity-86e6ec'>Jack The Ripper Identity</a>,
+";s:7:"expired";i:-1;}

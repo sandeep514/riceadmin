@@ -1,0 +1,116 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3746:"<br>What does 'poke' refer to in the expression 'pig in a poke'. allurement, enticement, lure, seduction. an insatiable itch to switch from channel to channel. I had a strong desire to help and care for people. Accessed 18 Oct. 2020. Nglish: Translation of temptations for Spanish Speakers, Britannica English: Translation of temptations for Arabic Speakers. <br> <br>Resist: to refuse to give in to. Subscribe to America's largest dictionary and get thousands more definitions and advanced search—ad free! Find more ways to say resist, along with related words, antonyms and example phrases at Thesaurus.com, the world's most trusted free thesaurus.  <br>Encryption is any system for security and fraud prevention which automatically breaks up and reorders information before it is sent via telephone lines or the Internet . Synonyms for Temptation (meaning) in Free Thesaurus. The forest enhances the attractiveness of the region. All rights reserved. Synonyms for Temptations in Free Thesaurus. 'All Intensive Purposes' or 'All Intents and Purposes'? Or something like that. He acted as a decoy to draw the dogs' attention away from the children. How to use temptation in a sentence. Synonyms for temptation include enticement, lure, bait, allurement, come-on, invitation, pull, seduction, snare and attraction. <br> <br>How to use a word that (literally) drives some pe... Name that government! <br> <br>Temptation definition is - the act of tempting or the state of being tempted especially to evil : enticement. Synonyms for temptation in Free Thesaurus. <br> <br> the many temptations to which they will be exposed, the act of tempting or the state of being tempted. He had neither the time nor the inclination to think about it. Antonyms for the Temptation. 11 synonyms of temptations from the Merriam-Webster Thesaurus, plus 35 related words, definitions, and antonyms. 'Nip it in the butt' or 'Nip it in the bud'? Antonyms for temptation. Plural for a thing that attracts or tempts someone, Plural for the desire to do something, especially something wrong or unwise, “Even teachers with stiff upper lips could not resist their, Plural for the pressure to give in to temptation, Plural for a situation or action that tempts someone to do something or makes a particular outcome likely, Plural for a thing that persuades or leads someone to do something, Plural for the action or process of persuading someone or of being persuaded to do or believe something, Plural for a trick by which someone is misled into acting contrary to their interests or intentions. temptation meaning: 1. the wish to do or have something that you know you should not do or have: 2. something that…. Find more ways to say temptation, along with related words, antonyms and example phrases at Thesaurus.com, the world's most trusted free thesaurus. allurement, Temptation synonyms. He had an urge to open a shop of his own. Copyright © 2016 by HarperCollins Publishers. Learn a new word every day. They offer every inducement to encourage investment. Create an account and sign in to access this FREE content. The lure of rural life is proving as strong as ever. 2 something that persuades one to perform an action for pleasure or gain. <br> <br>There are many diverse influences on the way that English is used across the world today. <br> We look at some of the ways in which the language is changing. It was never a physical attraction, just a meeting of minds. Top synonym for give in to temptation (another word for give in to temptation) is succumb to the temptation. See more. Will they be able to resist the temptation to buy? <br> <br>Synonyms for temptation. Antonyms for Temptations. It was meant to give the party greater public appeal. <br>";s:7:"keyword";s:18:"temptation synonym";s:5:"links";s:7842:"<a href='https://ricebrok-staging.webcooks.in/docs/dressed-to-kill-kiss-86e6ec'>Dressed To Kill Kiss</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bramble-bush-llewellyn-pdf-86e6ec'>Bramble Bush Llewellyn Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-played-for-man-utd-in-1999-86e6ec'>Who Played For Man Utd In 1999</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/randwick-races-today-results-86e6ec'>Randwick Races Today Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/howards-end-episode-2-86e6ec'>Howards End Episode 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/olivia-korenberg-instagram-86e6ec'>Olivia Korenberg Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rocky-mountains-national-park-86e6ec'>Rocky Mountains National Park</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jane-bayfield-86e6ec'>Jane Bayfield</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-famous-paintings-of-jesus-86e6ec'>Most Famous Paintings Of Jesus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hooligans-restaurant-86e6ec'>Hooligans Restaurant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wildcat-wearhouse-fayette-mall-86e6ec'>Wildcat Wearhouse Fayette Mall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spaceship-coupe-86e6ec'>Spaceship Coupe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-yuri-sardarov-doing-now-86e6ec'>What Is Yuri Sardarov Doing Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/passing-glory-trailer-86e6ec'>Passing Glory Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dressage-arena-86e6ec'>Dressage Arena</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/football-forums-365-86e6ec'>Football Forums 365</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dr-phil-rodney-reed-update-2020-86e6ec'>Dr Phil Rodney Reed Update 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bow-wow-challenge-show-86e6ec'>Bow Wow Challenge Show</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-york-jets-roster-86e6ec'>New York Jets Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeff-koons-wife-86e6ec'>Jeff Koons Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/theresa-marie-knorr-86e6ec'>Theresa Marie Knorr</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zaire-wade-ranking-86e6ec'>Zaire Wade Ranking</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/second-bank-of-the-united-states-86e6ec'>Second Bank Of The United States</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metolius-pronunciation-86e6ec'>Metolius Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mr-brainwash-art-for-sale-86e6ec'>Mr Brainwash Art For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/real-madrid-femenino-players-86e6ec'>Real Madrid Femenino Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-morning%2C-vietnam-netflix-86e6ec'>Good Morning, Vietnam Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-campaign-86e6ec'>David Perdue Campaign</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/games-that-start-with-p-11-letters-86e6ec'>Games That Start With P 11 Letters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-ballas-and-julianne-hough-86e6ec'>Mark Ballas And Julianne Hough</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sands-of-the-kalahari-subtitles-86e6ec'>Sands Of The Kalahari Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/silver-bullet-trailer-airstream-86e6ec'>Silver Bullet Trailer Airstream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/act-liberal-candidates-2020-86e6ec'>Act Liberal Candidates 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-am-mother-plot-holes-86e6ec'>I Am Mother Plot Holes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-brian-keith-show-86e6ec'>The Brian Keith Show</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unrelenting-antonym-86e6ec'>Unrelenting Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/next-door-%282005-explained%29-86e6ec'>Next Door (2005 Explained)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shadow-fall-rs3-86e6ec'>Shadow Fall Rs3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/valkyrie-movie-online-86e6ec'>Valkyrie Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/meyers-leonard-age-86e6ec'>Meyers Leonard Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nc-state-syracuse-football-tickets-86e6ec'>Nc State Syracuse Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nasty-and-the-baby-podcast-86e6ec'>Nasty And The Baby Podcast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malice-aforethought-legal-definition-86e6ec'>Malice Aforethought Legal Definition</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yang-yong-eun-net-worth-86e6ec'>Yang Yong-eun Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/turn-laptop-screen-into-light-86e6ec'>Turn Laptop Screen Into Light</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-price-glory-1926-86e6ec'>What Price Glory 1926</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matteo-berrettini-vs-andrey-rublev-live-score-86e6ec'>Matteo Berrettini Vs Andrey Rublev Live Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pendennis-castle-facts-86e6ec'>Pendennis Castle Facts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/looney-tunes-box-office-bunny-86e6ec'>Looney Tunes Box-office Bunny</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wild-blue-yonder-color-86e6ec'>Wild Blue Yonder Color</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blue%27s-clues-nick-jr-86e6ec'>Blue's Clues Nick Jr</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-cold-in-alex-blu-ray-86e6ec'>Ice Cold In Alex Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-cell-cycle-of-mitosis-86e6ec'>The Cell Cycle Of Mitosis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/frida-kahlo-biography-86e6ec'>Frida Kahlo Biography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mahogany-tree-86e6ec'>Mahogany Tree</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blush-opposite-86e6ec'>Blush Opposite</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ray-jackson-aboriginal-86e6ec'>Ray Jackson Aboriginal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyson-chandler-all-star-86e6ec'>Tyson Chandler All-star</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cosmic-man-meaning-86e6ec'>Cosmic Man Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flight-243-86e6ec'>Flight 243</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tulpan-movie-online-86e6ec'>Tulpan Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tua-tagovailoa-2018-games-86e6ec'>Tua Tagovailoa 2018 Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-beaver-canada-86e6ec'>The Beaver Canada</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wendy-torrance-age-86e6ec'>Wendy Torrance Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/71-fragments-of-a-chronology-of-chance-letterboxd-86e6ec'>71 Fragments Of A Chronology Of Chance Letterboxd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-obligation-86e6ec'>Types Of Obligation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-and-the-city-criterion-86e6ec'>Night And The City Criterion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/allgemeine-betriebserlaubnis-86e6ec'>Allgemeine Betriebserlaubnis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bill-lawton-86e6ec'>Bill Lawton</a>,
+";s:7:"expired";i:-1;}

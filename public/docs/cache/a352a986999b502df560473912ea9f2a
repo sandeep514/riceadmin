@@ -1,0 +1,108 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4108:"[33] In an effort to stabilize the front on November 28, Walker ordered the US 2nd Infantry Division to retreat from Kujang-dong and to set up a new defensive line at Kunu-ri. [100] On the 23rd Infantry Regiment's left, the 9th Infantry Regiment's G Company was also overran by the attacking Chinese forces, forcing Colonel Charles C. Sloane Jr. to withdraw the remnants of his regiment across the river. [83][135] With the US 35th Infantry Regiment rejoining the 25th Infantry Division after the battle at Yongsan-dong,[136] the 25th Infantry Division withdrew south and Task Force Wilson was dissolved by Kean on November 28. [151] On the night of November 27, the Turks took up defensive position at Wawon to the east of Kunu-ri. [140], As the battle around Taechon dragged into the night of November 26, the ROK 11th Infantry Regiment on the division's right became disorganized. These include swan geese, bean geese, whooper swans, Oriental storks, black-faced spoonbills, Chinese egrets, great bustards, white-naped cranes, hooded cranes, red-crowned cranes, Far Eastern curlews and spotted greenshanks. [160] Meanwhile, the PVA 114th Division attacked the Turkish Brigade and the right flank of the 38th Infantry Regiment. Notify me of follow-up comments by email. [64] With only one battalion in reserve to check the Chinese divisions, the Tokchon garrison and the ROK 7th Infantry Division headquarters were soon surrounded and attacked by the two Chinese divisions at 4 a.m. on November 26. [173] With its advance blocked, the 5th Cavalry Regiment tried to dislodge the Chinese garrison, but it was forced to turn back by the afternoon. In the subsequent battles and withdrawals during the period of November 26 to December 2, 1950, although the US Eighth Army managed to avoid being surrounded by Chinese forces, the Chinese 13th Army were still able to inflict heavy losses onto the retreating UN forces which had lost all cohesion. [180], The PVA 38th Corps, on the other hand, was marching towards the Kunu-ri—Sunchon road virtually unopposed. [64], The PVA 38th Corps landed the first blow against the ROK II Corps at 5 p.m. on November 25. [175][176] Lacking reinforcements, the ROK 6th Infantry Division was quickly routed by the PVA 42nd Corps on the night of November 28. Click to share on Facebook (Opens in new window), Click to share on Twitter (Opens in new window), Click to share on Pinterest (Opens in new window), Click to email this to a friend (Opens in new window), Click to share on LinkedIn (Opens in new window), Click to share on Reddit (Opens in new window), Click to share on Tumblr (Opens in new window), Click to share on WhatsApp (Opens in new window). [33] The hilly terrains on the northern bank of the Ch'ongch'on River formed a defensive barrier that allowed the Chinese to hide their presence while dispersing the advancing UN forces. [21], Unknown to the UN planners, however, there were already 180,000 Chinese troops stationed in Korea, with more reinforcements infiltrating across the border. [205] However, it was later approximated that the US 2nd Infantry Division had suffered 4,037 casualties, and most of its artillery pieces, 40 percent of its signal equipment, 45 percent of its crew-served weapons, 30 percent of its vehicles were lost during the battle. [127] Although the tank fire from the E Company stopped the Chinese advance,[129] the company was reduced to just one platoon after the battle. [103], Although Walker did not cancel the Home-by-Christmas Offensive on November 27, Keiser ordered his division to withdraw to Kujang-dong. [183], One of the first victims of the new Chinese roadblock was a convoy from the Turkish Brigade, and it was ambushed on the night of November 28. [114] When Task Force Dolvin proceeded to capture a series of hills north of Ipsok on the next day,[116] Chinese resistance started to stiffen. A rifle company from the US IX Corps, for example, started its advance with most of the helmets and bayonets thrown away, and there were on average less than one grenade and 50 rounds of ammunition carried per man. ";s:7:"keyword";s:17:"ch'ongch'on river";s:5:"links";s:7074:"<a href='https://ricebrok-staging.webcooks.in/docs/ice-soldiers-review-86e6ec'>Ice Soldiers Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-shack-book-86e6ec'>The Shack Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tudi-wiggins-photos-86e6ec'>Tudi Wiggins Photos</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cold-mountain-nominations-86e6ec'>Cold Mountain Nominations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/katherine-hough-86e6ec'>Katherine Hough</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crystal-palace-ladies-trials-2020-86e6ec'>Crystal Palace Ladies Trials 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/over-and-over-and-over-again-rock-song-86e6ec'>Over And Over And Over Again Rock Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/edgar-ram%C3%ADrez-bright-86e6ec'>Edgar Ramírez Bright</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rondae-hollis-jefferson-religion-86e6ec'>Rondae Hollis-jefferson Religion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doctor-strange-power-level-86e6ec'>Doctor Strange Power Level</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/songs-by-the-monkees-86e6ec'>Songs By The Monkees</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clelin-ferrell-86e6ec'>Clelin Ferrell</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cj-wilcox-net-worth-86e6ec'>Cj Wilcox Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marion-bartoli-illness-86e6ec'>Marion Bartoli Illness</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hyper-light-drifter-walkthrough-north-dark-room-86e6ec'>Hyper Light Drifter Walkthrough North Dark Room</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/static-electricity-diagram-86e6ec'>Static Electricity Diagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ai-weiwei%3A-never-sorry-essay-86e6ec'>Ai Weiwei: Never Sorry Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-belize-safe-86e6ec'>Is Belize Safe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/book-of-solomon-86e6ec'>Book Of Solomon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/famous-cello-duets-86e6ec'>Famous Cello Duets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-outlaws-movie-netflix-86e6ec'>American Outlaws Movie Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sam-fatu-son-86e6ec'>Sam Fatu Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stephen-curry-height-in-cm-86e6ec'>Stephen Curry Height In Cm</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chelsea-schedule-86e6ec'>Chelsea Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/surf-nazis-must-die-streaming-86e6ec'>Surf Nazis Must Die Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tool-undertow-hidden-track-86e6ec'>Tool Undertow Hidden Track</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/only-the-strong-streaming-86e6ec'>Only The Strong Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eyes-wide-shut-mask-name-86e6ec'>Eyes Wide Shut Mask Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kate-ledger-movies-86e6ec'>Kate Ledger Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/erik-spoelstra-salary-86e6ec'>Erik Spoelstra Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-abandoned-%282006%29-full-movie-123movies-86e6ec'>The Abandoned (2006) Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-roost-subscription-86e6ec'>The Roost Subscription</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flint-redemption-movie-86e6ec'>Flint Redemption Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/presidential-election-philippines-2019-86e6ec'>Presidential Election Philippines 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-doomsday-machine-audiobook-86e6ec'>The Doomsday Machine Audiobook</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-wolf-eternal-champion-series-86e6ec'>White Wolf Eternal Champion Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-man-who-would-be-king-online-86e6ec'>The Man Who Would Be King Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/normal-pulse-rate-86e6ec'>Normal Pulse Rate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-boy-a-86e6ec'>Watch Boy A</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/el-aviso-%282018%29-86e6ec'>El Aviso (2018)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-phantom-tollbooth-characters-86e6ec'>The Phantom Tollbooth Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-northern-ireland-like-today-86e6ec'>What Is Northern Ireland Like Today</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clippers-news-86e6ec'>Clippers News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tracker-atv-bass-pro-86e6ec'>Tracker Atv Bass Pro</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fast-heart-rate-treatment-86e6ec'>Fast Heart Rate Treatment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-bride-2017-full-movie-with-english-subtitles-watch-online-86e6ec'>The Bride 2017 Full Movie With English Subtitles Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-the-heart-of-the-sea-summary-sparknotes-86e6ec'>In The Heart Of The Sea Summary Sparknotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martian-child-streaming-86e6ec'>Martian Child Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kirk-herbstreit-cries-86e6ec'>Kirk Herbstreit Cries</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scarface-%281932-streaming%29-86e6ec'>Scarface (1932 Streaming)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/does-gross-misconduct-go-on-your-record-86e6ec'>Does Gross Misconduct Go On Your Record</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-general-election-map-86e6ec'>2019 General Election Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crash-gambling-86e6ec'>Crash Gambling</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barry-roberts-death-86e6ec'>Barry Roberts Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-all-american-true-story-86e6ec'>My All American True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stephen-conroy-hellfest-86e6ec'>Stephen Conroy Hellfest</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jackson-pollock-artworks-86e6ec'>Jackson Pollock Artworks</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/demarcus-cousins-contract-warriors-86e6ec'>Demarcus Cousins Contract Warriors</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bloody-sunday-u2-86e6ec'>Bloody Sunday U2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fast-9-release-date-86e6ec'>Fast 9 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-glover-adam-kurtzman-86e6ec'>John Glover Adam Kurtzman</a>,
+";s:7:"expired";i:-1;}

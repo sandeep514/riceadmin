@@ -1,0 +1,101 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3125:"<p></p> <p>Also check our developers blog, where we publish new content weekly on game/data analysis, engineering and design insights, and more. "[85] Bob Mackey of USgamer was more critical of the game, giving it 2 of 5 stars. [91] Oli Welsh of Eurogamer praised the game's puzzles for providing numerous "eureka" moments to the player and considered the title as the video game analog of the Goldberg Variations, but felt that the narrative atop the puzzles was "self-involved and wilfully obscure" and believed that it could have been omitted, as Blow and his team "needn't have tried to make a puzzle out of art when he had already, so beautifully and so successfully, made art out of puzzles". [76][73][74][75], Chloi Rad of IGN awarded the game a perfect score of 10/10, calling it a masterpiece and stating that it was "[a] beautiful, powerful, and cleverly designed puzzle game with a wealth of mysteries to unravel. Amazon's Choice for witness board game. The concept that proved to be the basis for The Witness was the prototype that Blow considered to be "very ambitious and challenging". 1-16 of 231 results for "witness board game" Price and other details may vary based on size and color. "[27] He considers the game "anti-Nintendo", saying that "if you play a Nintendo game, there's a little character telling you every obvious thing over and over again for hours.          [58] In September 2015, Blow announced that the game's release was set for January 26, 2016, simultaneously for PlayStation 4 and Microsoft Windows, with the iOS version to follow shortly thereafter. [25], The island has been structured to provide a fair mix of puzzle-solving, exploration, and narrative elements while avoiding a "paradox of choice" by giving the player too much freedom and confusion about where to go next. Get it … [18], The art style was influenced by a simplification approach, eliminating enough details but keeping overall shapes to make objects clearly recognizable. [17], The development team had incorporated support for upcoming virtual reality (VR) hardware within The Witness, following a November 2013 meeting between Blow and two Valve developers demonstrating their upcoming SteamVR technology, which Blow found to help enhance the player's ability to explore the island.              [22] Puzzles within the game were designed to be meaningful within the context of the game, rather than to be simply puzzles to be solved, and further aimed to be different from any other puzzle within the game. [28] He was very careful to avoid "over-tutorializing" the game, noting that when a new idea is introduced in a game, the decision to immediately explain it to avoid confusion "kills epiphany and related things like the joy of discovery. [48] The ambient sound effects were difficult to include, as the game world has no wildlife, making the player aware of how alone they are while on the island. What should I do? - 86% of the 8,249 user reviews for this game are positive. The player, as an unnamed character, explores an island with numerous structures and natural formations. 49 $49.99 $49.99. </p>";s:7:"keyword";s:12:"witness game";s:5:"links";s:6120:"<a href='https://ricebrok-staging.webcooks.in/docs/denmark-1848-revolution-86e6ec'>Denmark 1848 Revolution</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-married-86e6ec'>Klay Thompson Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brass-instruments-86e6ec'>Brass Instruments</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stargate-universe-online-86e6ec'>Stargate Universe Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-ham-squad-2018%2F19-86e6ec'>West Ham Squad 2018/19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/edna-may-pioneer-woman-86e6ec'>Edna May Pioneer Woman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crying-boy-painting-movie-86e6ec'>Crying Boy Painting Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rogue-legacy-platforms-86e6ec'>Rogue Legacy Platforms</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rare-mental-disorders-86e6ec'>Rare Mental Disorders</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-feuerstein-net-worth-86e6ec'>Mark Feuerstein Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bronny-james-snapchat-86e6ec'>Bronny James Snapchat</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/prick-up-your-ears-streaming-86e6ec'>Prick Up Your Ears Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creep-radiohead-meaning-86e6ec'>Creep Radiohead Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amityville-horror-house-movie-86e6ec'>Amityville Horror House Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/patrick-heusinger-jack-reacher-86e6ec'>Patrick Heusinger Jack Reacher</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nifl-premier-league-table-86e6ec'>Nifl Premier League Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/on-a-clear-day-you-can-see-forever-dvd-86e6ec'>On A Clear Day You Can See Forever Dvd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tibby-schlegel-quotes-86e6ec'>Tibby Schlegel Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/forsaken-disturbed-86e6ec'>Forsaken Disturbed</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-things-name-86e6ec'>Sports Things Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/conservation-of-forest-and-wildlife-essay-86e6ec'>Conservation Of Forest And Wildlife Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/packed-to-the-rafters-chrissy-86e6ec'>Packed To The Rafters Chrissy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-assignment-book-86e6ec'>The Assignment Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kenny-smith-son-86e6ec'>Kenny Smith Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rabid-netflix-86e6ec'>Rabid Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sight-sentence-86e6ec'>Sight Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marquese-chriss-2k20-86e6ec'>Marquese Chriss 2k20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-conspiracy-of-paper-summary-86e6ec'>A Conspiracy Of Paper Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-bench-press-86e6ec'>Anthony Davis Bench Press</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-fate-of-the-furious-netflix-country-86e6ec'>The Fate Of The Furious Netflix Country</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julian-bailey-f1-86e6ec'>Julian Bailey F1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kentucky-derby-picks-86e6ec'>Kentucky Derby Picks</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-christmas-card-movie-sequel-86e6ec'>The Christmas Card Movie Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/long-dash-symbol-86e6ec'>Long Dash Symbol</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sunshine-melbourne-crime-86e6ec'>Sunshine Melbourne Crime</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/welcome-to-mooseport-netflix-86e6ec'>Welcome To Mooseport Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/richard-libertini-net-worth-86e6ec'>Richard Libertini Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lost-boy%2C-lost-girl-summary-86e6ec'>Lost Boy, Lost Girl Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nba-courtside-2003-86e6ec'>Nba Courtside 2003</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/open-your-eyes-song-86e6ec'>Open Your Eyes Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sharna-burgess-dwts-partner-2020-86e6ec'>Sharna Burgess Dwts Partner 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mother-and-child-stone-sculpture-86e6ec'>Mother And Child Stone Sculpture</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/olympic-medal-table-2008-86e6ec'>Olympic Medal Table 2008</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/orphan-sequel-86e6ec'>Orphan Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-vagrant-summary-86e6ec'>The Vagrant Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/harden-vol-2-melon-86e6ec'>Harden Vol 2 Melon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nail-designs-for-summer-86e6ec'>Nail Designs For Summer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dressage-arena-86e6ec'>Dressage Arena</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metolius-pronunciation-86e6ec'>Metolius Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kspn-airport-86e6ec'>Kspn Airport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-wrong-with-virginia-86e6ec'>What Is Wrong With Virginia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bitter-moon-%D8%AF%D8%A7%D9%86%D9%84%D9%88%D8%AF-86e6ec'>Bitter Moon دانلود</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/catwoman-cast-in-batman-86e6ec'>Catwoman Cast In Batman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-sinful-woman-of-hollfall-explained-86e6ec'>The Sinful Woman Of Hollfall Explained</a>,
+";s:7:"expired";i:-1;}

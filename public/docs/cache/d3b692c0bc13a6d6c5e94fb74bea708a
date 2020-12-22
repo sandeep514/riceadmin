@@ -1,0 +1,103 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2980:"remains one of Jerry Goldsmith's most intriguing contributions to the horse opera genre. "Bandolero" is a song by Belgian group Paradisio. The music for this song is used in the "Fiji Gunda" by Pacifik. Intrada's limited-edition 2004 reissue includes more than a half-hour of unreleased bonus material, most notably a "rock & roll" rendition of the Bandolero! It was originally released in 1996 in Belgium as the second  single from their debut album, Paradisio. Bandolero! It was one of the songs that brought reggaeton  airplay to the United States, and was heard worldwide. [citation needed], Billboard - Apr 25, 2009  "In fact, Diesel liked the song so much that he agreed to make a cameo appearance in the last scene of “The Fast and the Furious: Tokyo Drift”— the car movie franchise's third installment— on the condition that “Bandoleros” was used. The song was also featured in the 2006 film The Fast and the Furious: Tokyo Drift, 2009 film Fast & Furious and in the 2013 film Fast & Furious 6. title theme that's as entertaining as it is anachronistic. Tego Calderón talks about his respect for Tempo, who was in jail and got a lot of haters, and eventually regained respect among other reggaeton artists. It reached the top 20 in Belgium and was re-released in March 1998, where it reached number 14 in Italy and number 92 in France. Its lyrics talk about the reggaeton genre. https://en.wikipedia.org/w/index.php?title=Bandolero_(song)&oldid=972466805, Pages using infobox song with unknown parameters, Creative Commons Attribution-ShareAlike License, "Bandolero" (Discoteca Action Remix) - 7:05, "Bandolero" (Discoteca Action Remix - Short Mix) - 4:13, "Bandolero" (U.S. Power Club Remix) - 7:43, This page was last edited on 12 August 2020, at 06:57. [1], "Bandoleros" is one of the songs that brought reggaeton airplay to the United States. It was one of the songs that brought reggaeton airplay to the United States, and was heard worldwide. "Bandoleros" is a single from Don Omar  that promotes both the album Los Bandoleros  and The Fast and the Furious: Tokyo Drift. “Vin said ... ", https://en.wikipedia.org/w/index.php?title=Bandoleros_(song)&oldid=969178394, Articles with unsourced statements from February 2015, Creative Commons Attribution-ShareAlike License, Tego Calderón, Jose Cruz, Paul Irizarry, Don Omar, This page was last edited on 23 July 2020, at 20:49. Bandolero MP3 Song by Olga Tanon from the album Finding Financial Freedom To Ensure A Fantastic Finish. It was originally released in 1996 in Belgium as the second  single from their debut album, Paradisio. Download Bandolero song on Gaana.com and listen Stowaway Bandolero song offline. [citation needed]. remains one of Jerry Goldsmith's most intriguing contributions to the horse opera genre. It reached the top 20 in Belgium and was re-released in March 1998, where it reached number 14 in Italy  and number 92 in France. "Bandolero" is a song by Belgian group Paradisio. ";s:7:"keyword";s:14:"bandolero song";s:5:"links";s:6644:"<a href='https://ricebrok-staging.webcooks.in/docs/bruce-boxleitner-wife-86e6ec'>Bruce Boxleitner Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/icc-women%27s-t20-world-cup-winners-list-86e6ec'>Icc Women's T20 World Cup Winners List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/into-the-woods-summary-86e6ec'>Into The Woods Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hateful-meaning-in-tamil-86e6ec'>Hateful Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-pine-annabelle-wallis-86e6ec'>Chris Pine Annabelle Wallis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/coca-cola-kid-%28game%29-86e6ec'>Coca-cola Kid (game)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/billions-s05e08-86e6ec'>Billions S05e08</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vanvleet-salary-86e6ec'>Vanvleet Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/documented-zombie-encounters-86e6ec'>Documented Zombie Encounters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stanley-kubrick-quotes-on-filmmaking-86e6ec'>Stanley Kubrick Quotes On Filmmaking</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bah-humduck%21%3A-a-looney-tunes-christmas-123movies-86e6ec'>Bah Humduck!: A Looney Tunes Christmas 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/domino%27s-food-review-86e6ec'>Domino's Food Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/confide-juice-wrld-86e6ec'>Confide Juice Wrld</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-will-portrait-of-a-lady-on-fire-be-available-to-stream-86e6ec'>When Will Portrait Of A Lady On Fire Be Available To Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/birth-certificate-number-86e6ec'>Birth Certificate Number</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-big-brother-86e6ec'>New Big Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/norse-goddess-hel-symbol-86e6ec'>Norse Goddess Hel Symbol</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/3001%3A-the-final-odyssey-review-86e6ec'>3001: The Final Odyssey Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-rabbi%27s-cat-2-86e6ec'>The Rabbi's Cat 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sarah-roberts-brian-l-roberts-86e6ec'>Sarah Roberts Brian L Roberts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-day-of-school-2020-nyc-86e6ec'>First Day Of School 2020 Nyc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-douglas-and-catherine-zeta-jones-net-worth-86e6ec'>Michael Douglas And Catherine Zeta-jones Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/max-george-new-song-86e6ec'>Max George New Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-2016-football-schedule-86e6ec'>Notre Dame 2016 Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fishing-trips-near-me-86e6ec'>Fishing Trips Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/xosha-roquemore-instagram-86e6ec'>Xosha Roquemore Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/air-bud%3A-world-pup-full-movie-86e6ec'>Air Bud: World Pup Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mitchum-deodorant-women%27s-86e6ec'>Mitchum Deodorant Women's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/girona-vs-almer%C3%ADa-results-86e6ec'>Girona Vs Almería Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-inheritance-1976-full-movie-watch-online-86e6ec'>The Inheritance 1976 Full Movie Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deandre-ayton-stats-86e6ec'>Deandre Ayton Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/superhot-team-86e6ec'>Superhot Team</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i%27ll-be-missing-you-original-86e6ec'>I'll Be Missing You Original</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/auburn-away-jersey-86e6ec'>Auburn Away Jersey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/burden-antonym-86e6ec'>Burden Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/look-like-the-innocent-flower%2C-but-be-the-serpent-under-it-86e6ec'>Look Like The Innocent Flower, But Be The Serpent Under It</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tristan-thompson-and-khloe-86e6ec'>Tristan Thompson And Khloe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cod-warzone-operation-86e6ec'>Cod Warzone Operation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/claus-von-stauffenberg-86e6ec'>Claus Von Stauffenberg</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monster-energy-racing-merchandise-86e6ec'>Monster Energy Racing Merchandise</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-abandoned-%282006%29-full-movie-123movies-86e6ec'>The Abandoned (2006) Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/principles-of-management-86e6ec'>Principles Of Management</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/colin-craig-centurion-management-86e6ec'>Colin Craig Centurion Management</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/close-encounters-of-the-third-kind-ringtone-86e6ec'>Close Encounters Of The Third Kind Ringtone</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-efl-league-two-play-off-final-86e6ec'>2020 Efl League Two Play-off Final</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tales-from-the-hood-wiki-86e6ec'>Tales From The Hood Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flanders-history-86e6ec'>Flanders History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tron-2015-86e6ec'>Tron 2015</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-tall-is-john-l-adams-86e6ec'>How Tall Is John L Adams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/totem-animal-quiz-86e6ec'>Totem Animal Quiz</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-burger-2019-86e6ec'>Good Burger 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yayoi-kusama-for-kids-86e6ec'>Yayoi Kusama For Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/1968-dodge-charger-86e6ec'>1968 Dodge Charger</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/basketball-ball-86e6ec'>Basketball Ball</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kelly-oubre-jr-height-86e6ec'>Kelly Oubre Jr Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rancho-notorious-song-86e6ec'>Rancho Notorious Song</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,139 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:6758:"Citadels 2016 rules pdf, akzamkowy.org › filer_public › wr02_citadels_rules. Tapestry Nomads, As soon as a city has seven districts, it has been completed; the game will end after the current round is finished. I actually very recently went for the classic version over the 2016 edition as 1. Brilliant Earth San Francisco, Two- or Three-player Games In a two- or three-player game, all players play with two characters each. The crowned player gathers the deck of character cards and shuffles them. Ncm Motorsports Park Length, Comment The object of the game To build the foundations up in suit to kings. Lonsdale Quay Hotel Meeting Rooms, Marx Toys For Sale, Kurt just finished his turn as the Architect. Then return the unused unique districts to the game box. Jk Quotes Bts, Important: The rank 4 character (King, Emperor, or Patrician) cannot be among the faceup discarded cards. I’ll be sure to get some more info for you all as I can. Chrysler Jeep, The Tax Collector himself is not charged a tax. Honestly I love the new characters and being able to switch it up every game. A player cannot deny you his gold, and you cannot take more gold than is needed to build the intended district. Song Ha-yoon Height, Note: If the Patrician is discarded faceup at the start of the selection phase, randomly discard another character card faceup to replace it and shuffle the Patrician into the character deck. If no time is specified, the player can use the ability at any time during his turn. Hattiesburg Patriot Phone Number, But they can be easily substituted out if you're so inclined. Citadels Is Still One of the Best Games to Play in Groups of Four or More. Come discuss games like Codenames, Arkham Horror, Terra Mystica, and all your other favorite games! Bruno Faidutti designed the original Citadels, which was released in 2000.It is now considered one of the great card games of the modern era. Each player in turn chooses a second character card, and the last unchosen card is discarded facedown near the other discarded cards. The crowned player gathers the deck of character cards and shuffles them. Rao's Locations, Tavern On The Falls Menu, If at any point during your turn you are not the player with the most gold, the richest player must give you one gold from his stash. Take a card at random from each other player's hand and add those cards to your hand. How Far Is Columbus, Ohio From Pittsburgh, Friends Of Caic Facebookontars Buy And Sell. Questions about the Wizard and Magistrate/Blackmailer. If the owner is the Alchemist with zero gold at the end of his turn, he applies the Poor House's effect first before applying the Alchemist's ability. Westmeath Death Notices, Best Books To Learn How To Write, For example, if you have three religious districts, you can use this ability to gain three gold and zero cards, two gold and one card, one gold and two cards, or zero gold and three cards. by Resher Sun Dec 29, 2019 8:35 pm 3: Tue Dec 31, 2019 4:52 pm by ... Citadels Lighthouse rules.                                 us different. Citadels is a card game in which you and your opponents vie to build the most magnificent medieval city. Then give one card from your hand to each player you took a card from. Required fields are marked *. Sault Tribe First-time Home Buyer, Annie Bierman, Character Cards These cards represent the characters that players will seek to influence during every game round. Prepare the district deck by shuffling the chosen unique districts with the 54 basic districts. District effects are optional unless the word "must" or "cannot" is used. 2. During a round, each player chooses one character, who provides a special ability for that turn. If the Emperor is bewitched, you choose whom to give the crown to and take the resource from that player. This weekend at Gen Con, Asmodee will be demoing the game at their booth and designer Bruno Faidutti will be leading some of those demos! A lot of the pictures were "well, it's a building of sorts" and when you read the name on the card you are like "Well, OK, yeah, I kinda see it". 0000506595 00000 n Compete for the coveted post of Master Builder in the acclaimed card game Citadels! West Virginia Palace Of The Winding Path, Imagine Dominion, but only with 10 decks of cards which are the same in every game. This is crucial, because otherwise new players will have to wait until they get the hand of cards to start their decision process, and then begin cross-referencing what each card does. Cadet Majors and Minors When you commit to the cadet experience, you stand out from the rest. The character deck includes characters rank 1-9.                                 with the Slickdeals community? 7 Little Words Puzzle 195, Citadels is played over a series of rounds. A player has a building limit of one district per turn, and a player cannot build a district that is identical (with the same name) to a district already in his city. She pays three gold to build a Barracks, placing it in her city next to her other districts. You gain one gold for each noble district in your city. Citadels is a German-style card game, designed by Bruno Faidutti, originally published in French as Citadelles by MultiSim in 2000, illustrated by Julien Delval, Florence Magnin, Jean-Louis Mourier and Cyrille Daujean as graphic designer for the first edition. Eric Kendricks' Contract, 2300 Lapalco Blvd, Not so much in the older version. You can move only one card at a time. He chooses one of these two characters and discards the other facedown. If he is able to build more than one district during his turn, you can confiscate only the first district he pays to build. 0000004677 00000 n There are four steps to each round. Best Board Games 2019 Family, Park: If the owner is the Witch and does not resume his turn, the Park cannot resolve. You can assign threat markers to characters who have been assigned warrant markers. I think it's a decently good game, but I've yet to have that playthrough where it really clicks and lives up to its promise. Citadel Solitaire uses one deck (52 cards). Tapir Skull, Rules for how to use the bonus district cards are found later on page 10. See how a store is chosen for you. If the King or Patrician is bewitched, he still takes the crown. (*) Special Rule with 7 Players: After the sixth player passes the last character card to the seventh player, the seventh player also takes the character card that was discarded facedown at the beginning of the round. Shuffle the remaining district cards together into one deck. Every character in Citadels has a unique special power. The variability is just insane, there are tens of thousands different set up possibilities and each one plays a bit differently. ";s:7:"keyword";s:25:"citadels board game rules";s:5:"links";s:10238:"<a href='https://ricebrok-staging.webcooks.in/docs/far-and-away-online-86e6ec'>Far And Away Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/big-driver-ending-explained-86e6ec'>Big Driver Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-paranormal-activity-3-123-86e6ec'>Watch Paranormal Activity 3 123</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/peripheral-pulse-sites-86e6ec'>Peripheral Pulse Sites</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/karin-konoval-matrix-86e6ec'>Karin Konoval Matrix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/connor-davis-bouchard-86e6ec'>Connor Davis Bouchard</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wenyen-gabriel-salary-86e6ec'>Wenyen Gabriel Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ain%27t-thinkin-bout-you-lyrics-star-86e6ec'>Ain't Thinkin Bout You Lyrics Star</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/theory-of-first-best-and-second-best-86e6ec'>Theory Of First Best And Second Best</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pga-tour-2k21-review-86e6ec'>Pga Tour 2k21 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-harden-khloe-kardashian-baby-86e6ec'>James Harden Khloe Kardashian Baby</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-2002-squad-86e6ec'>Arsenal 2002 Squad</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tcr-australia-drivers-86e6ec'>Tcr Australia Drivers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-exorcist-season-3-86e6ec'>The Exorcist Season 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unit-of-heat-86e6ec'>Unit Of Heat</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taulia-tagovailoa-brother-86e6ec'>Taulia Tagovailoa Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/online-assembler-86e6ec'>Online Assembler</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/guzarish-meaning-in-english-86e6ec'>Guzarish Meaning In English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/me%27arah-o%27neal-age-86e6ec'>Me'arah O'neal Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chromatic-coffee-86e6ec'>Chromatic Coffee</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/return-of-the-living-dead-full-movie-123movies-86e6ec'>Return Of The Living Dead Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deceit-meaning-in-bengali-86e6ec'>Deceit Meaning In Bengali</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/byob-acronym-86e6ec'>Byob Acronym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-detox-cleanse-for-weight-loss-86e6ec'>Best Detox Cleanse For Weight Loss</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nocturne-music-86e6ec'>Nocturne Music</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sal%C3%B2%2C-or-the-120-days-of-sodom-watch-online-123movies-86e6ec'>Salò, Or The 120 Days Of Sodom Watch Online 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adam-wingard-death-note-86e6ec'>Adam Wingard Death Note</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/national-party-candidates-2020-86e6ec'>National Party Candidates 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trailing-stop-loss-86e6ec'>Trailing Stop Loss</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2018-tracker-boats-86e6ec'>2018 Tracker Boats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pastoral-text-86e6ec'>American Pastoral Text</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eriq-ebouaney-net-worth-86e6ec'>Eriq Ebouaney Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/linux-debugging-tools-for-c-86e6ec'>Linux Debugging Tools For C</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joakim-noah-children-86e6ec'>Joakim Noah Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/office-christmas-party-showtime-86e6ec'>Office Christmas Party Showtime</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ningbo-shanghai-86e6ec'>Ningbo Shanghai</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fc-midtjylland-vs-randers-86e6ec'>Fc Midtjylland Vs Randers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/japanese-jiu-jitsu-86e6ec'>Japanese Jiu Jitsu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dodge-challenger-2018-86e6ec'>Dodge Challenger 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/space-oddity-genius-86e6ec'>Space Oddity Genius</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/surrogate-daughter-86e6ec'>Surrogate Daughter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martyrs-stream-86e6ec'>Martyrs Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/triangle-movie-explanation-86e6ec'>Triangle Movie Explanation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-can%27t-get-enough-meaning-86e6ec'>I Can't Get Enough Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kemar-roofe-injury-86e6ec'>Kemar Roofe Injury</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/peter-egan-illness-86e6ec'>Peter Egan Illness</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mens-jogging-bottoms-with-fly-opening-86e6ec'>Mens Jogging Bottoms With Fly Opening</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/converse-for-%2415-86e6ec'>Converse For $15</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/death-to-smoochy-wiki-86e6ec'>Death To Smoochy Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taylor-214ce-86e6ec'>Taylor 214ce</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/donna-tartt-2020-86e6ec'>Donna Tartt 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-beautiful-wedding-summary-86e6ec'>A Beautiful Wedding Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ai-no-uta-drama-86e6ec'>Ai No Uta Drama</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/decoy-octopus-86e6ec'>Decoy Octopus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dundee-utd-fc-table-86e6ec'>Dundee Utd Fc Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-henry-thomas-battles-and-war%27s-86e6ec'>George Henry Thomas Battles And War's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bughuul-pagan-deity-86e6ec'>Bughuul Pagan Deity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exit-game-86e6ec'>Exit Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exeter-city-live-stream-86e6ec'>Exeter City Live Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kemar-roofe-injury-86e6ec'>Kemar Roofe Injury</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vin-diesel-twin-brother-86e6ec'>Vin Diesel Twin Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/castillo-de-diablo-86e6ec'>Castillo De Diablo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-rookie-card-86e6ec'>Russell Westbrook Rookie Card</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/life-as-we-know-it-similar-movies-86e6ec'>Life As We Know It Similar Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-season-ticket-waiting-list-86e6ec'>Barcelona Season Ticket Waiting List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-shoe-size-86e6ec'>Paul George Shoe Size</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/atalanta-fixtures-86e6ec'>Atalanta Fixtures</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christmas-in-angel-falls-2-86e6ec'>Christmas In Angel Falls 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/op-gg-euw-86e6ec'>Op Gg Euw</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-happened-was-grammar-86e6ec'>What Happened Was Grammar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bc-jean-age-86e6ec'>Bc Jean Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/turkish-movies-on-netflix-2019-86e6ec'>Turkish Movies On Netflix 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-accident-episode-1-86e6ec'>The Accident Episode 1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/need-for-speed-rivals-86e6ec'>Need For Speed Rivals</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/act-party-86e6ec'>Act Party</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/st-joseph-high-school-calendar-86e6ec'>St Joseph High School Calendar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gift-of-love-lyrics-86e6ec'>The Gift Of Love Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2015-georgia-football-results-86e6ec'>2015 Georgia Football Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/independence-day-alien-86e6ec'>Independence Day Alien</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bloom-meaning-in-malayalam-86e6ec'>Bloom Meaning In Malayalam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clementine-churchill-86e6ec'>Clementine Churchill</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tales-from-the-quadead-zone-vhs-for-sale-86e6ec'>Tales From The Quadead Zone Vhs For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/annachi-wilson-age-86e6ec'>Annachi Wilson Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-morning-vietnam-meme-86e6ec'>Good Morning Vietnam Meme</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2022-election-senate-86e6ec'>2022 Election Senate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crying-clown-emoji-86e6ec'>Crying Clown Emoji</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dark-star-5e-86e6ec'>Dark Star 5e</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-college-football-championships-86e6ec'>Most College Football Championships</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mean-girls-musical-characters-86e6ec'>Mean Girls Musical Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anagni-to-rome-86e6ec'>Anagni To Rome</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/europa-fc-86e6ec'>Europa Fc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tipsarevic-academy-86e6ec'>Tipsarevic Academy</a>,
+";s:7:"expired";i:-1;}

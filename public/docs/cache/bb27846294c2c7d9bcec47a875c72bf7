@@ -1,0 +1,109 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5378:"Futsal Rules Simplified 1. Futsal is played to touch and restarted with a kick in from where the ball went out. The game of Futsal is played on a court 2. Play resumes with a kick-in if the ball crosses either touchline (but not the goal line) or hits the ceiling. Instead ball is placed on ground and passed in to a teammate with the foot, Free kicks and corners the opposing team has to be minimum of 5 yards away from the ball, With a penalty kick, all players behind the ball except for the penalty kicker, 106-06 Queens BoulevardForest Hills, NY 11375(718) 261-2403 or(347) 756-2568 (Español). Size 4. SFUSA coaches will organize this. The goals are taller than traditional 5-aside goals and are much more the size of hockey or hand ball goals. 5 players versus 5 players, one of which will be a Goalkeeper. Players can be changed individually or en masse. The use of walls is not allowed, whilst kick-ins are taken if the ball leaves the playing area. Rolling substitutes are used with each team allowed up to twelve players. Futsal – Coaching manual | Contents 3 Page Chapter 5 Preface 7 1. After every back pass to the GK the ball must cross the halfway-line or be touched by an opponent before the ball can again be passed back to the GK. An outfield player can come on and off as a substitute for the goalkeeper, but the referee must ensure this so-called flying goalkeeper wears a keeper's jersey with his own number – and that all of a team's flying goalkeepers wear the same colour (different from both the standard keepers' and the outfield players' shirts). Futsal EURO - Futsal rules: a quick guide - News, A flying goalkeeper created the late equaliser in the 2018 opener. The features of futsal 12 2.1 Special features 13 2.2 Laws of the game 15 2.3 Motivation to play and develop futsal 17 3. Substitutions are unlimited and can be made at any time during play provided a player does not go on before his team-mate comes off. At half-time both foul counts are wiped clean, but they are not erased prior to either extra-time period, where second-half fouls still count. However, once a team has committed five fouls in one half, for every subsequent foul their opponents get a free shot at goal from the second penalty mark, ten metres out (often known as a double penalty). FIFA Website: Rules of Futsal. The latest edition of the FIFA Futsal handbook contains 18 laws along with an annex. No goalkeeper punts, ball must stay below head height, otherwise possession and a free kick will be awarded to the opposing team . Small ball with reduced bounce. SFUSA coaches will organize this, No goalkeeper punts, ball must stay below head height, otherwise possession and a free kick will be awarded to the opposing team, No slide tackles, players must not go to ground to steal possession back, No Throw-ins from the sidelines. Goal clearances must be thrown, not kicked out. Players are allowed in goalkeepers area and can score from anywhere on the pitch, Futsal match duration is 40 min, 2 x 20 min”, Futsal is a non contact sport with no shoulder charges and sliding tackles allowed, Players are not allowed to play the ball when on the ground, Game is played with a size 4, 30%, If a team commits 5 fouls in a half every subsequent foul is punished by a 10m penalty irrespective of where the foul is made, Regular penalties are taken from 6m and are awarded when an offence is committed in the, Kick off is taken from the half way line at the start of each half and after a goal is scored, A goal may not be scored direct from a kick off, Goalkeepers can only handle the ball in their own area, Goalkeepers must where a different colour top to outfield players, Goalkeepers can leave the area as in 11 a side. He must also enter the pitch from the zone marked in front of each bench. Opposition players retreat 5 mtrs at kickins & free kicks. Futsal Rules. These codes illustrate how Futsal Oz expects your team/club should expect its members and guests to behave . Player sent off can be substituted after 2 minutes has elapsed or opponent has scored. Futsal Strategy – How to Improve your game, How to Improve Your Futsal Speed Performance, 4 Sneaky Tricks to Turn Your Marker and Leave Them for Dust, 3 Devastatingly Effective Football Drills to Dominate Your Opposition, Each team can have 10 players on any match day, Unlimited rolling substitutions made from teams zone, Goalkeepers can be replaced by an outfield sub if team is chasing the game, If the ball exits via a defending player a corner is awarded, If the ball exits via a forward the game is restarted from the goalkeepers hand, If a team has less than 3 players the game is abandoned, If a team goes down to less than 3 players due to a sending off or injury the game is awarded, Futsal is played in 3 x 2m hockey style goals. Article summary. The pitch is generally larger than most traditional 5-a-side playing areas and must be between a certain length and width (basically the size of a basketball court) as set out in the FIFA laws of the game. No use for commercial purposes may be made of such trademarks. A strict no-contact law is enforced by the referees – protecting the attacking players and encouraging skill and flair in the game. It is played to touchlines and all players are free to enter the penalty area and play the ball over head height. ";s:7:"keyword";s:12:"futsal rules";s:5:"links";s:6946:"<a href='https://ricebrok-staging.webcooks.in/docs/phil-agassi-86e6ec'>Phil Agassi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doctor-sleep-vs-the-shining-86e6ec'>Doctor Sleep Vs The Shining</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lebron-james-number-86e6ec'>Lebron James Number</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/u-571-full-movie-with-english-subtitles-86e6ec'>U 571 Full Movie With English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hibernian-vs-kilmarnock-prediction-86e6ec'>Hibernian Vs Kilmarnock Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/damian-lillard-kid-86e6ec'>Damian Lillard Kid</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-evidence-86e6ec'>Types Of Evidence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-heart-within-%281957%29-86e6ec'>The Heart Within (1957)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-collection-season-2-86e6ec'>The Collection Season 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watchmen-comic-86e6ec'>Watchmen Comic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-extraordinary-summer-with-tess-trailer-86e6ec'>My Extraordinary Summer With Tess Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/poker-unblocked-86e6ec'>Poker Unblocked</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/banksy-under-the-rain-canvas-86e6ec'>Banksy Under The Rain Canvas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-shoe-size-86e6ec'>Paul George Shoe Size</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/muriel-the-arcana-86e6ec'>Muriel The Arcana</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-orleans-pelicans-standings-86e6ec'>New Orleans Pelicans Standings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brightburn-2-cast-86e6ec'>Brightburn 2 Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ernie-hudson-kids-86e6ec'>Ernie Hudson Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/montrezl-harrell-nba-86e6ec'>Montrezl Harrell Nba</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drew-sanders-247-86e6ec'>Drew Sanders 247</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/glenn-yarbrough-the-world-i-used-to-know-86e6ec'>Glenn Yarbrough The World I Used To Know</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jason-mitchell-wife-86e6ec'>Jason Mitchell Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trevor-ariza-kobe-86e6ec'>Trevor Ariza Kobe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-arizin-ibm-86e6ec'>Paul Arizin Ibm</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manassas%2C-va-map-86e6ec'>Manassas, Va Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/atalanta-fixtures-86e6ec'>Atalanta Fixtures</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jimmy-butler-wife-2020-86e6ec'>Jimmy Butler Wife 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/europa-report-full-movie-123movies-86e6ec'>Europa Report Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/d-rose-7-low-86e6ec'>D Rose 7 Low</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-rules-of-the-game-cinematography-86e6ec'>The Rules Of The Game Cinematography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-tarrant-family-86e6ec'>Alex Tarrant Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/red-e-cathey-86e6ec'>Red E Cathey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sam-howard-actor-86e6ec'>Sam Howard Actor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daniel-richter-gallery-86e6ec'>Daniel Richter Gallery</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/olympic-medal-table-2008-86e6ec'>Olympic Medal Table 2008</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/troop-beverly-hills-2-86e6ec'>Troop Beverly Hills 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-of-alabama-tuition-86e6ec'>University Of Alabama Tuition</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louisville-football-stats-2018-86e6ec'>Louisville Football Stats 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creepshow-episode-4-review-86e6ec'>Creepshow Episode 4 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/babadook-book-replica-86e6ec'>Babadook Book Replica</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/importance-of-sports-86e6ec'>Importance Of Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gerhard-richter%2C-betty-86e6ec'>Gerhard Richter, Betty</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/algebraic-identities-questions-86e6ec'>Algebraic Identities Questions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-cliffs-of-dover-beach-86e6ec'>White Cliffs Of Dover Beach</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wieners-cast-86e6ec'>Wieners Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/air-force-football-tickets-2020-86e6ec'>Air Force Football Tickets 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/reddit-web-design-86e6ec'>Reddit Web Design</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sir-movie-2020-86e6ec'>Sir Movie 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/obvious-plant-86e6ec'>Obvious Plant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/super-dad-logo-86e6ec'>Super Dad Logo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/billy-blair-machete-86e6ec'>Billy Blair Machete</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lebesgue-measure-86e6ec'>Lebesgue Measure</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/parental-guidance-advised-meaning-86e6ec'>Parental Guidance Advised Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/focus-vs-presence-of-mind-warzone-86e6ec'>Focus Vs Presence Of Mind Warzone</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/palmeiras-vs-vasco-da-gama-prediction-86e6ec'>Palmeiras Vs Vasco Da Gama Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mr-potato-head-song-lyrics-86e6ec'>Mr Potato Head Song Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it-was-a-pleasure-working-with-you-good-luck-86e6ec'>It Was A Pleasure Working With You Good Luck</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-stoning-in-fulham-county-wiki-86e6ec'>A Stoning In Fulham County Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dream-interpretation-quotes-86e6ec'>Dream Interpretation Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aquamarine-full-movie-full-screen-86e6ec'>Aquamarine Full Movie Full Screen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/book-of-joshua-86e6ec'>Book Of Joshua</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lds-church-ball-86e6ec'>Lds Church Ball</a>,
+";s:7:"expired";i:-1;}

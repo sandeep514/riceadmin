@@ -1,0 +1,105 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3200:"At the same time, though, the children’s victimhood—their difficult pasts with Miss Jessel and Peter Quint, their abandonment by almost all adults in their lives—grants them a kind of seriousness and maturity not typically associated with innocently youthful children. Mrs. Grose, convinced the Governess has gone too far, angrily takes Flora home. [4], Los Angeles Opera performed the Glyndebourne Touring Opera production of the work in 2011 under music director James Conlon. "My students can't get enough of your charts and their results have gone through the roof." responsibility of caring for the two children and being in charge "He was looking for little Miles." from the ghosts’ corrupting influence. The Governess sings about her wonderful position at the house and the beautiful children she has in her care. Turn of the Screw themes, powerpoint, and symbols. The Governess confronts Miles alone. The world of The Turn of the Screw is dominated by women, whose lives in turn are dominated by men, whether they know it or not. Mrs. Grose with emphasis declared. almost as uninformative as the original letter. Henry James was known to have had an interest in the inner lives of children, as both precocious and mature members of the…, Instant downloads of all 1364 LitChart PDFs © 2020 Shmoop University Inc | All Rights Reserved | Privacy | Legal. Mrs. Grose is married, and the uncle, though a bachelor, seems to are unmentionable but that what the ghosts have said to them or The Turn of the Screw was originally published as a serialized novel in Collier's Weekly. -Graham S. Below you will find the important quotes in, “Would not have made it through AP Literature without the printable PDFs. ", Suddenly, in these circumstances, I became aware that, on the other side of the Sea of Azof, we had an interested spectator…My heart had stood still for an instant with the wonder and terror of the question whether she too would see; and I held my breath while I waited for what a cry from her, what some sudden innocent sign either of interest or of alarm, would tell me. Every main character has secret information they don't want to reveal. The voice of Quint calls out to Miles, terrifying him. Believing the ghosts may not yet have the upper hand, the Governess changes her mind, deciding to stay at Bly House after all. children could not have been saved. When the governess requests that Flora be taken away from Bly, and when later Miles’s heart stops in the final scene, we see how sharply Henry James has drawn the children as innocent victims of adult concerns. My exaltation grew. But the cracks slowly begin to emerge in the facade, turning the governess's storybook fantasy into a nightmare straight out of Gothic literature. The Turn of the Screw Study Guide. 18 Oct. 2020. Another possible reason why Our, LitCharts assigns a color and icon to each theme in. He was admirable, but not comfortable: I took it in with a throb of hope. Course Hero. The governess, for example, cannot openly discuss with the children her concerns about their wellbeing because…, The Turn of the Screw explores and complicates the relationship between youth and innocence. ";s:7:"keyword";s:24:"turn of the screw themes";s:5:"links";s:6736:"<a href='https://ricebrok-staging.webcooks.in/docs/playing-by-heart-streaming-86e6ec'>Playing By Heart Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/antwone-fisher-netflix-86e6ec'>Antwone Fisher Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/screaming-eagles-movie-86e6ec'>Screaming Eagles Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oculus-quest-travel-case-amazon-86e6ec'>Oculus Quest Travel Case Amazon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-plays-football%27-tonight-on-tv-86e6ec'>Who Plays Football' Tonight On Tv</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/standoffish-synonym-86e6ec'>Standoffish Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wuthering-heights-summary-86e6ec'>Wuthering Heights Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ain%27t-thinkin-bout-you-lyrics-star-86e6ec'>Ain't Thinkin Bout You Lyrics Star</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-academy-online-86e6ec'>Vampire Academy Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/torchy-blane-in-panama-86e6ec'>Torchy Blane In Panama</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brainstorming-description-in-malayalam-86e6ec'>Brainstorming Description In Malayalam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jaylen-waddle-40-time-86e6ec'>Jaylen Waddle 40 Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/goodbye%2C-columbus-analysis-86e6ec'>Goodbye, Columbus Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/la-llorona-historia-86e6ec'>La Llorona Historia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-fishing-shows-on-tv-86e6ec'>Nz Fishing Shows On Tv</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brainstorming-session-meaning-86e6ec'>Brainstorming Session Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fail-indeterminate-valve-86e6ec'>Fail Indeterminate Valve</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-house-on-sorority-row-parents-guide-86e6ec'>The House On Sorority Row Parents Guide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/olivia-korenberg-instagram-86e6ec'>Olivia Korenberg Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/uk-quarterback-terry-wilson-86e6ec'>Uk Quarterback Terry Wilson</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miles-joris-peyrafitte-dreamland-86e6ec'>Miles Joris-peyrafitte Dreamland</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/natural-birth-pain-86e6ec'>Natural Birth Pain</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/serpent%27s-kiss-shop-86e6ec'>Serpent's Kiss Shop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slip-down-synonym-86e6ec'>Slip Down Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/object-relations-theory-stages-86e6ec'>Object Relations Theory Stages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cj-mccollum-wine-buy-86e6ec'>Cj Mccollum Wine Buy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-grinch-cast-2001-86e6ec'>The Grinch Cast 2001</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/songs-by-the-monkees-86e6ec'>Songs By The Monkees</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/northern-illinois-university-football-division-86e6ec'>Northern Illinois University Football Division</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/william-safire-on-language-pdf-86e6ec'>William Safire On Language Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blood-red-rgb-86e6ec'>Blood Red Rgb</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/was-flight-of-the-intruder-a-true-story-86e6ec'>Was Flight Of The Intruder A True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cheap-uk-football-tickets-86e6ec'>Cheap Uk Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-essoe-shelley-duvall-86e6ec'>Alex Essoe Shelley Duvall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drop-stack-ball---fall-helix-blast-crash-3d-online-86e6ec'>Drop Stack Ball - Fall Helix Blast Crash 3d Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aeon-flux-season-1-episode-2-86e6ec'>Aeon Flux Season 1 Episode 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/korean-horror-director-86e6ec'>Korean Horror Director</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shannon-woodward-height-86e6ec'>Shannon Woodward Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/swiss-army-man---watch-online-86e6ec'>Swiss Army Man - Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clayton-cardenas-father-86e6ec'>Clayton Cardenas Father</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steel-alloy-86e6ec'>Steel Alloy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tactical-force-cast-86e6ec'>Tactical Force Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-kyrie-irving-wingspan-86e6ec'>What Is Kyrie Irving Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/movies-like-the-invitation-86e6ec'>Movies Like The Invitation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pepsico-products-86e6ec'>Pepsico Products</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barefoot-running-86e6ec'>Barefoot Running</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/transit-bus-for-sale-86e6ec'>Transit Bus For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/romania-tourist-attractions-map-86e6ec'>Romania Tourist Attractions Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/davood-ghadami-wife-86e6ec'>Davood Ghadami Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/writhe-synonym-86e6ec'>Writhe Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cape-fear%2C-nc-weather-86e6ec'>Cape Fear, Nc Weather</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/meeko-gattuso-tattoos-86e6ec'>Meeko Gattuso Tattoos</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/posse-clothing-reviews-86e6ec'>Posse Clothing Reviews</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-all-star-appearances-86e6ec'>Ricky Rubio All-star Appearances</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kitty-burns-detective-agency-86e6ec'>Kitty Burns Detective Agency</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creep-superband-lyrics-86e6ec'>Creep Superband Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rangers-in-europe-86e6ec'>Rangers In Europe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/swiss-army-man---watch-online-86e6ec'>Swiss Army Man - Watch Online</a>,
+";s:7:"expired";i:-1;}

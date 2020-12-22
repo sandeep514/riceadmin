@@ -1,0 +1,107 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4543:"The celebrity mom hasn’t said much about the matter mainly because of a gag order. Dwyane Wade recalled his 12-year-old saying, "'Hey, I want to talk to you guys. But the one thing we never did was leave each other behind. Wade began to use "she/her" pronouns for Zaya publicly in December 2019. Our editors handpick the products that we feature. NBA star Dwyane Wade's 12-year-old child is transitioning, from male to female. ", S/O to @yngdna for these Please Remain Inclusive & Dedicated to Equality tees‼️ We are donating 50% of the proceeds to GLSEN as well as a 50 thousand dollar donation on behalf of our family‼️ #wesupporteachotherwithpride, A post shared by  dwyanewade (@dwyanewade) on Sep 13, 2019 at 11:20am PDT. She also shares stories on Medium that are meant to encourage thought and discussion. Dwyane Wade and Siohvaughn Funches finalized their divorce in 2010. He is also the father of son Xavier, 6, with Aja Metoyer and daughter Kaavia, 15 months, with wife Gabrielle Union. Dave East held a surprise baby shower for his girlfriend, Millie Colon, on October 15,... Kevin Hart and his wife, Eniko Hart, are in love. Back in November 2019, Union shared a photo of her family celebrating Thanksgiving on Instagram. Zaire shared a pair of throwback photos of himself with Zaya, including a picture of him kissing his sibling on the cheek. Dwyane Wade’s son Zaire shared a heartfelt tribute to his sibling Zaya after she publicly came out as transgender. ", I’ve seen some post-thanksgiving hate on social about my family photo. She's compassionate, loving, whip smart and we are so proud of her. Dwyane Wade is parent to Zaire and Zaya with Siohvaughn Funches, son Xavier, 6, with Aja Metoyer, and daughter Kavvia, 15 months, with his wife, actress Gabrielle Union. “Man, I remember bugging my mom as a kid telling her I wanted a brother so bad. In a new video shared by Union, Zaya talks about the importance of being yourself, offering words of wisdom for anyone having a similar experience. Us Weekly has affiliate partnerships so we may receive compensation for some links to products and services. But here’s the thing—I’ve been chosen to lead my family not y’all. Many fans are wondering what Zaya Wade’s mom, Siohvaughn Funches, thinks about her child identifying as a girl. Dwyane Wade daughter: Wade defends and sides with daughter . It’s Ok to listen to, love & respect your children exactly as they are. To all the friends and family that have my back and all the friends and family I've never met who show love and support when everyone is looking and when no one is looking...All praise, gratitude and thankfulness, A post shared by  Gabrielle Union-Wade (@gabunion) on Nov 28, 2019 at 3:02pm PST, Wade soon after took to Twitter to defend his family, writing, "I’ve seen some post-thanksgiving hate on social about my family photo. Feb. 12 (UPI) -- Dwyane Wade's son Zaire Wade is showing his support for his sibling Zaya Wade following her coming out as transgender. Dwyane Wade pens touching farewell note to son Zaire as he leaves for school. While Zaya had not come out back then, Wade still … 'Home Improvement' star Zachery Ty Bryan charged with strangulation, assault, Rashida Jones says Michael Jackson would bring snake, chimp on visits, Rock Fest: Disturbed, Limp Bizkit, Korn to headline 2021 festival, Fetty Wap mourns late brother on Instagram. “First of all, me and my wife, Gabrielle Union, we are proud parents of a child in the LGBTQ+ community, and we’re proud allies as well,” Wade said. On an episode of the sports podcast All the Smoke, Wade spoke about the beauty of watching Zaya's coming-of-age unfold in real time. “Why do people feel the need to give their opinion,” one fan asked. This past weekend, Dwyane Wade proudly posted about his son's formal introduction as a girl as the the Truth Awards. Wade began to use "she/her" pronouns for Zaya publicly in December 2019. Wade also told DeGeneres he hopes they can create real change by raising awareness and advocating for the LGBTQ+ community. Dwyane Wade is parent to Zaire and Zaya with Siohvaughn Funches, son Xavier, 6, with Aja Metoyer, and daughter Kavvia, 15 months, with his wife, actress Gabrielle Union. “I have been blessed to have my best friend, Zaya with me for 12 years. "I know it can get tough, but I think you push through and you be the best you...it's worth it when you reach that point. "Zion, born as a boy, came home and said, ‘Hey, so I want to talk to you guys. ";s:7:"keyword";s:20:"dwyane wade son zaya";s:5:"links";s:7016:"<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-playoff-average-2020-86e6ec'>Anthony Davis Playoff Average 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/come-and-see-%28criterion%29-86e6ec'>Come And See (criterion)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/juneau-alaska-time-86e6ec'>Juneau Alaska Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-bird-with-the-crystal-plumage-blu-ray-86e6ec'>The Bird With The Crystal Plumage Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-roost-subscription-86e6ec'>The Roost Subscription</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/devon-live-tiverton-high-school-86e6ec'>Devon Live Tiverton High School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/home-improvement-death-episode-86e6ec'>Home Improvement Death Episode</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2016-election-map-by-county-86e6ec'>2016 Election Map By County</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slang-for-wake-up-86e6ec'>Slang For Wake Up</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thierry-noir-prints-86e6ec'>Thierry Noir Prints</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stream-judy-online-86e6ec'>Stream Judy Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lady-pink-quotes-86e6ec'>Lady Pink Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/v8-supercars-2022-cars-86e6ec'>V8 Supercars 2022 Cars</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyrese-gibson-open-invitation-86e6ec'>Tyrese Gibson Open Invitation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/black-bird-with-white-stripes-on-wings-and-tail-86e6ec'>Black Bird With White Stripes On Wings And Tail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/black-and-yellow-color-meaning-86e6ec'>Black And Yellow Color Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/van-halen---little-guitars-86e6ec'>Van Halen - Little Guitars</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/magic-8-ball-walmart-86e6ec'>Magic 8 Ball Walmart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/molly-ephraim-modern-family-86e6ec'>Molly Ephraim Modern Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ash-blonde-86e6ec'>Ash Blonde</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-friends-forever-song-86e6ec'>Best Friends Forever Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/georges-m%C3%A9li%C3%A8s-pronunciation-86e6ec'>Georges Méliès Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-student-tickets-2020-86e6ec'>Clemson Student Tickets 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-long-kiss-goodnight-streaming-86e6ec'>The Long Kiss Goodnight Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-shoe-size-86e6ec'>Paul George Shoe Size</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/symbolism-in-the-shining-book-86e6ec'>Symbolism In The Shining Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/homeward-bound-ii%3A-lost-in-san-francisco-full-movie-86e6ec'>Homeward Bound Ii: Lost In San Francisco Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/black-pirate-website-86e6ec'>Black Pirate Website</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/no-way-out-ending-game-86e6ec'>No Way Out Ending Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-haunting-%281999-full-movie-watch-online%29-86e6ec'>The Haunting (1999 Full Movie Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gemma-atkinson-net-worth-86e6ec'>Gemma Atkinson Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barry-lyndon-trailer-86e6ec'>Barry Lyndon Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hush%2C-hush-cast-86e6ec'>Hush, Hush Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-life-without-me-online-86e6ec'>My Life Without Me Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/c-street-movie-86e6ec'>C Street Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/benwell-newcastle-rough-86e6ec'>Benwell Newcastle Rough</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/richard-roxburgh-accident-86e6ec'>Richard Roxburgh Accident</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-did-george-washington-do-86e6ec'>What Did George Washington Do</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wood-splinter-infection-86e6ec'>Wood Splinter Infection</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hwayi%3A-a-monster-boy-online-86e6ec'>Hwayi: A Monster Boy Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/online-assembler-86e6ec'>Online Assembler</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/top-10-best-sports-86e6ec'>Top 10 Best Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/elementary%27%27-unfriended-cast-86e6ec'>Elementary'' Unfriended Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/virginia-huston-cause-of-death-86e6ec'>Virginia Huston Cause Of Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/static-electricity-diagram-86e6ec'>Static Electricity Diagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marion-bartoli-illness-86e6ec'>Marion Bartoli Illness</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louisville-football-stats-2018-86e6ec'>Louisville Football Stats 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-the-evil-one-meaning-86e6ec'>Deliver Us From The Evil One Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2016-election-map-by-county-86e6ec'>2016 Election Map By County</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/demarcus-cousins-contract-warriors-86e6ec'>Demarcus Cousins Contract Warriors</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/father-gary-thomas-buzzfeed-86e6ec'>Father Gary Thomas Buzzfeed</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-campaign-86e6ec'>David Perdue Campaign</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dell-curry-86e6ec'>Dell Curry</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/love-actually-%283%29-86e6ec'>Love Actually (3)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/serpent%27s-kiss-isaac-unlock-86e6ec'>Serpent's Kiss Isaac Unlock</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyrese-instagram-86e6ec'>Tyrese Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/texas-state-university-86e6ec'>Texas State University</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bet365-english-86e6ec'>Bet365 English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fc-midtjylland-vs-randers-86e6ec'>Fc Midtjylland Vs Randers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-gambon-and-ian-mckellen-86e6ec'>Michael Gambon And Ian Mckellen</a>,
+";s:7:"expired";i:-1;}

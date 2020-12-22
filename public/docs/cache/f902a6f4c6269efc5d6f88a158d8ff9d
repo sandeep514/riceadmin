@@ -1,0 +1,90 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2989:"<p>Any way to transfer the trainings and badges to the new name/email? </p> <p>Additionally, Brainstorm and Microsoft’s SaaS (Software-as-a-Service) platform enables employees to learn how to use Office 365 apps and features. Why do you think the end user needs Office 365 training? Black and Veatch is an employee-owned engineering, procurement, consulting, and construction company with more than 10,000 employees across 100 offices worldwide. And, when will I use them? Haven't heard from you for a while. Reinforce new concepts with challenge questions and practice files. </p> <p>However, it’s much more than training. </p> <p>Zach Terry: “Teams, right now, is probably the hot one. </p> <p>Zach Terry: “It allows the users to consume the content that’s assigned to them at their own pace. Deze invoegtoepassing heeft toegang tot persoonlijke informatie over het actieve bericht, zoals telefoonnummers, postadressen of URL's. Protect yourself and your organization from virtual security threats. Microsoft 365 Apps or Office 365 Business. After completing the learning experience in QuickHelp, users report a 112% confidence increase in using Microsoft Teams. We sat down with Zach recently to find out more about QuickHelp and how it can help workers be more productive. Rating: 4.7 / 5 (14) Read All Reviews: 5 / 5 (4) Ease of Use endstreamendobj14 0 obj<>>>endobj15 0 obj<. Hi 805AZKat, Thanks for sharing your experience in our forum. Within this Klaxoon space, you can add and connect images, text, drawing and media – but also live polls, word clouds, and visualizations in one collaborative location. But have you ever explored its sche[...]. Please note that this interview has been condensed for clarity. </p> <p>She’s an avid volunteer for the Rogers’ Cup tennis tournament in Montreal. </p> <p>68 0 obj<>/Filter/FlateDecode/ID[<7CA73F6659074B73836D787E1702EF9B><30CB57FB055C99479DBAA199422E22C5>]/Index[13 90]/Info 12 0 R/Length 207/Prev 179075/Root 14 0 R/Size 103/Type/XRef/W[1 3 1]>>stream </p> <p>BrainStorm QuickHelp is a SaaS platform hosted in Microsoft Azure designed to help organization drive ongoing adoption of the Microsoft Office 365 platform. Ideal number of Users: 50 - 1000+ 2 - 499. BrainStorm QuickHelp empowers organizations to harness the power of technology to achieve their business results. You can follow the question or vote as helpful, but you cannot reply to this thread. Reinforce new concepts with challenge questions and practice files. BrainStorm's QuickHelp is an on-demand learning solution that creates an immersive experience, engaging employees with software in a way that's applicable to their job and work style. Thanks for marking this as the answer. +91% Improved Collaboration QuickHelp users now believe Microsoft Teams simplifies group work at PepsiCo. Our goal is not to simply deliver Office 365 learning, but to influence the proper behavioral changes required to fully adopt the Office 365 tools. </p>";s:7:"keyword";s:36:"brainstorm quickhelp microsoft teams";s:5:"links";s:4870:"<a href='https://ricebrok-staging.webcooks.in/docs/the-dragon%27s-pearl-story-86e6ec'>The Dragon's Pearl Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/minnesota-golden-gophers-football-roster-86e6ec'>Minnesota Golden Gophers Football Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amanda-burton-partner-86e6ec'>Amanda Burton Partner</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lewis-page-journalist-86e6ec'>Lewis Page Journalist</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/light-in-august-characters-86e6ec'>Light In August Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/venice-film-festival-best-movies-86e6ec'>Venice Film Festival Best Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/francis-antetokounmpo-sport-86e6ec'>Francis Antetokounmpo Sport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blowout-salons-near-me-86e6ec'>Blowout Salons Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rory-mcilroy-86e6ec'>Rory Mcilroy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/grosse-pointe-blank-wiki-86e6ec'>Grosse Pointe Blank Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boris-karloff-86e6ec'>Boris Karloff</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-spieth-scorecard-86e6ec'>Jordan Spieth Scorecard</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/time-slips-86e6ec'>Time Slips</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mike-bibby-career-earnings-86e6ec'>Mike Bibby Career Earnings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ernie-hudson-jr-son-86e6ec'>Ernie Hudson Jr Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-novak-baseball-86e6ec'>John Novak Baseball</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/led-safelight-86e6ec'>Led Safelight</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vick-hope-height-86e6ec'>Vick Hope Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-did-warren-clarke-die-from-86e6ec'>What Did Warren Clarke Die From</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-killers-tour-2021-usa-86e6ec'>The Killers Tour 2021 Usa</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hussh-sales-86e6ec'>Hussh Sales</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/streets-of-laredo-lyrics-chords-86e6ec'>Streets Of Laredo Lyrics Chords</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dinner-at-the-homesick-restaurant-themes-86e6ec'>Dinner At The Homesick Restaurant Themes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/once%2C-twice-86e6ec'>Once, Twice</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/don-t-leave-home-movie-explained-reddit-86e6ec'>Don T Leave Home Movie Explained Reddit</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-sectarianism-in-religion-86e6ec'>What Is Sectarianism In Religion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/funny-names-for-bruises-86e6ec'>Funny Names For Bruises</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/waitress-cast-broadway-86e6ec'>Waitress Cast Broadway</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vincent-d%27onofrio-kingpin-86e6ec'>Vincent D'onofrio Kingpin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/swimming-upstream-lyrics-86e6ec'>Swimming Upstream Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-could-never-be-your-woman-netflix-86e6ec'>I Could Never Be Your Woman Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/de%27aaron-fox-twitter-86e6ec'>De'aaron Fox Twitter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gorka-marquez-brother-86e6ec'>Gorka Marquez Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bitcoin-calculator-86e6ec'>Bitcoin Calculator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aquamarine-full-movie-full-screen-86e6ec'>Aquamarine Full Movie Full Screen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lianna-meaning-86e6ec'>Lianna Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sherif-el-hosaini-86e6ec'>Sherif El Hosaini</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/biker-exploitation-movies-86e6ec'>Biker Exploitation Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/open-your-eyes-song-86e6ec'>Open Your Eyes Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-aquamarine-on-netflix-86e6ec'>Is Aquamarine On Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/demar-derozan-wife-instagram-86e6ec'>Demar Derozan Wife Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-found-you-lyrics-the-wanted-86e6ec'>I Found You Lyrics The Wanted</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ghc-vs-hcc-live-match-score-86e6ec'>Ghc Vs Hcc Live Match Score</a>,
+";s:7:"expired";i:-1;}

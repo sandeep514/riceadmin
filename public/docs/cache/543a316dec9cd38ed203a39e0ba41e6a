@@ -1,0 +1,113 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5692:"<p>In the top left, click , then select Data Source.             > Often this data is exported from system A and imported in system B. Click on the button below for an appointment with one of our specialists or call direct! All rights reserved. This can help you explore different interpretations of your data than is possible in reports using a standard (already aggregated) data source.             Sample chapters You can also remove any worksheets you and your colleagues won’t need by right-clicking the tab of an unneeded worksheet and, on the shortcut menu that appears, clicking Delete. In many companies there is a variety of information flow out of multiple software systems and tools. </p> <p>See the image below. The new custom column will contain a Table for each URL and we will need to expand this table to see the results.Left click on the Results Data column filter icon seen in the column heading. However, the maintained version of that data is stored on a different SQL Server database. </p> <p>Rather than remembering which cells you need to update when a value changes, you can create a link to the original cell. Double left click on the column heading to rename it. Some of the column headings were missing in our source data, so we can rename them. Create the workbook you want to save as a template. You can always copy data from one worksheet to another, but if the original value were to change, that change would not be reflected in the cell range to which you copied the data. Add specific worksheet types by using the Insert dialog box. Home For this chapter, use the practice files from the Excel2016SBS\Ch07 folder. By clicking on the button below you can leave your details, we will contact you as soon as possible. For example, you might have established a design for your monthly sales-tracking workbook. This information flow from A to B and so forth is often established via links or even manual input. The name of the source files can be anything. The Backstage view displays available Excel workbook templates. This way, the extract will be managed as part of the published data source and migrating updates to the workbooks that use that data source can be simplified by not having to worry about the connection to the live database or the data extract. Extracting Data from multiple sources ; Conducting Samples ; Financial Controls ; Audit trails, Audit history ; IT Auditing ; Data Integrity ; Fighting Fraud and money laundering ; Do you recognize this? </p> <p>Click the Save as type arrow, and then click Excel Template.                     Website door. Different formats can be used as source in Informatica, For eg: txt, CSV, XML, Excel files and Database Sources like : SQL, Oracle etc </p> <p>You can talk about a problem you helped solve, or a solution you got to based on analyzing multiple sources. To visualize what contribution our products can bring for you, we are happy to get to know you! The General tab contains icons you can click to insert a blank worksheet, a chart sheet, and any worksheet templates available to you. Excel creates a new workbook (an .xlsx workbook file, not an .xltx template file) with the template’s formatting and contents in place. Otherwise, you need to gather the data from both tables to a common location (one or other of the servers 'in play', or a third server/technology solely for the purpose of co-locating the data). We are happy to make an appointment for your getting acquainted with the software and its possibilities. To ensure that every year’s workbook has a similar appearance, you can create a workbook with the characteristics you want, and save it as a pattern, or template, for similar workbooks you will create in the future. Be sure to save your Excel template file in the Custom Office Templates folder so it’s available for you to use later. How do i download the tools used for the tutorial like; Informatica ? The Spreadsheet Solutions tab contains a set of useful templates for a variety of financial and personal tasks. </p> <p>You can always copy data from one worksheet to another, but if the original value were to change, that change would not be reflected in the cell range to which you copied the data. After you decide on the type of data you want to store in a workbook and what that workbook should look like, you probably want to be able to create similar workbooks without adding all of the formatting and formulas again. All rights Reserved - Powered by Whizdom Trainings, How to Extract Data From Different Sources In Informatica, Installation of SQL Server and SQL Server Management Studio, How To Install And Attach NorthWind Database in SQL, Difference Between Subquery And Join Operation, Download And Install Sql Server Data Tools As Visual Studio. For example, you created an extract from a SQL Server database that has the past ten years worth of data. If you click on the button below you can make an appointment with one of our specialists. The Insert dialog box splits its contents into two tabs. You can also save your Excel 2016 workbook either as an Excel 97–2003 template (.xlt) or as a macro-enabled Excel 2016 workbook template (.xltm). After the transition from A to B there is a need to verify the data out of A and B in order to see it is 100% correct. How to Extract Data From Different Sources In Informatica 18 min. After you save a workbook as a template, you can use it as a model for new workbooks. Often this data is exported from system A and imported in system B. By clicking on the button below you are able to directly apply for brochures. Then you can join the data happily. Option 1: Use Published Data Sources. </p>";s:7:"keyword";s:42:"how to extract data from different sources";s:5:"links";s:7452:"<a href='https://ricebrok-staging.webcooks.in/docs/kill-theory-full-movie-watch-online-86e6ec'>Kill Theory Full Movie Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kobe-bryant-biography-book-pdf-86e6ec'>Kobe Bryant Biography Book Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spider-forest-comics-86e6ec'>Spider Forest Comics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/william-makepeace-thackeray-1811-1863-86e6ec'>William Makepeace Thackeray 1811-1863</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/women%27s-tennis-rankings-2018-86e6ec'>Women's Tennis Rankings 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-happened-at-the-end-of-close-encounters-86e6ec'>What Happened At The End Of Close Encounters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/derrick-rose-2k20-attributes-86e6ec'>Derrick Rose 2k20 Attributes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/read-the-satyricon-86e6ec'>Read The Satyricon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-sympathizer-symbolism-86e6ec'>The Sympathizer Symbolism</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-mystery-train-86e6ec'>Watch Mystery Train</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/focals-showroom-86e6ec'>Focals Showroom</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wimbledon-tennis-games-86e6ec'>Wimbledon Tennis Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-vs-celtic-7-0-line-up-86e6ec'>Barcelona Vs Celtic 7-0 Line Up</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/meyers-leonard-age-86e6ec'>Meyers Leonard Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sharna-burgess-dwts-partner-2020-86e6ec'>Sharna Burgess Dwts Partner 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-happened-to-cameron-dallas-86e6ec'>What Happened To Cameron Dallas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klute-review-86e6ec'>Klute Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crimson-tide-school-86e6ec'>Crimson Tide School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leslie-ekanayake-86e6ec'>Leslie Ekanayake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/five-star-final-wikipedia-86e6ec'>Five Star Final Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/madigan-pharmacy-jobs-86e6ec'>Madigan Pharmacy Jobs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-watched-sporting-event-in-the-world-2019-86e6ec'>Most Watched Sporting Event In The World 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hitman-games-86e6ec'>Hitman Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/krypton-wiki-86e6ec'>Krypton Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-rifkind-wife-86e6ec'>Steve Rifkind Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jessica-chastain-children-86e6ec'>Jessica Chastain Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dark-star-5e-86e6ec'>Dark Star 5e</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tex-vs-latex-86e6ec'>Tex Vs Latex</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/danielle-van-de-donk-instagram-86e6ec'>Danielle Van De Donk Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/richest-sports-teams-in-the-world-2020-86e6ec'>Richest Sports Teams In The World 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monster-energy-racing-merchandise-86e6ec'>Monster Energy Racing Merchandise</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/make-a-move-charity-86e6ec'>Make A Move Charity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shelter-city-amsterdam-86e6ec'>Shelter City Amsterdam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/seth-williams-stats-86e6ec'>Seth Williams Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deandre-ayton-career-stats-86e6ec'>Deandre Ayton Career Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alabama-high-school-football-86e6ec'>Alabama High School Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/derrick-rose-2k20-86e6ec'>Derrick Rose 2k20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emily-browning-net-worth-86e6ec'>Emily Browning Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-in-show-watch-online-86e6ec'>Best In Show Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-motto-86e6ec'>Arsenal Motto</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/roxanne-meaning-86e6ec'>Roxanne Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/burke-and-hare-facts-86e6ec'>Burke And Hare Facts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/frank-pesce-jr-86e6ec'>Frank Pesce Jr</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chronically-metropolitan-review-86e6ec'>Chronically Metropolitan Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cops-kdrama-review-86e6ec'>Two Cops Kdrama Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-big-brother-86e6ec'>New Big Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monstrum-pbs-wiki-86e6ec'>Monstrum Pbs Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-polls-86e6ec'>David Perdue Polls</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-court-length-and-width-86e6ec'>Volleyball Court Length And Width</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bathurst-easter-festival-86e6ec'>Bathurst Easter Festival</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/executive-suite-hotel-86e6ec'>Executive Suite Hotel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clarence-nash-86e6ec'>Clarence Nash</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-bridge-too-far-wow-86e6ec'>A Bridge Too Far Wow</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/surf%27s-up-game-86e6ec'>Surf's Up Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sigmund-freud-psychology-86e6ec'>Sigmund Freud Psychology</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/land-of-the-blind-bondi-86e6ec'>Land Of The Blind Bondi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/man-city-goal-scorers-2019%2F20-86e6ec'>Man City Goal Scorers 2019/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ny-rangers-2020-schedule-86e6ec'>Ny Rangers 2020 Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exeter-chiefs-news-86e6ec'>Exeter Chiefs News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/back-to-square-one-idiom-meaning-86e6ec'>Back To Square One Idiom Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rangers-kit-sponsor-86e6ec'>Rangers Kit Sponsor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/whiteside-fell-86e6ec'>Whiteside Fell</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-pleasure-vs-you%27re-welcome-86e6ec'>My Pleasure Vs You're Welcome</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shenandoah-chords-trampled-by-turtles-86e6ec'>Shenandoah Chords Trampled By Turtles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pre-primer-sight-words-printable-86e6ec'>Pre Primer Sight Words Printable</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-status-update-online-now-86e6ec'>Watch Status Update Online Now</a>,
+";s:7:"expired";i:-1;}

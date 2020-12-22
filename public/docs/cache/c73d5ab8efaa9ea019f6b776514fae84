@@ -1,0 +1,111 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3477:"Reserve String without reverse() function. C:\Documents and Settings\JavaTutorial>edit Calculator.java. Hello @Unknown, what is your doubt? It is used to hold the command line arguments in the form of string values. main method in Java is public so that its visible to every other class, even which are not part of its package. Main is the name of the Method. All rights reserved. It is the parameter to the main method. The main() is the starting point for JVM to start execution of a Java program. The main method must be static, which means that applications run in a static context by default. It is called by JVM to execute a program line by line and end the execution after completion of this method. Why main is public s... 7 Free 1Z0-803 and 1Z0-804 Sample Questions - OCAJ... How to determine if a string has all unique charac... 10 Must Read Books for Coders of All Level, 10 Framework Java Developer Should Learn in 2018, 10 Books Java Programmers Should Read in 2018, 10 Open Source Libraries and Framework for Java Developers, Top 10 Android Interview Questions for Java Programmers, 5 Books to Learn Spring MVC and Core in 2017, 12 Advanced Java Programming Books for Experienced Programmers. I know we can use it as a CLA and save space of an extra variable, but why it was so necessary to put it there? The argument name could be anything. Powered by, Exception in thread "main" java.lang.NoSuchMethodError: main. Java main() method. static: You can make a method static by using the keyword static. Command Line Arguments The DateApp application ignores its command Each value is called a case, and the variable being switched on is chec Which aspect of main() method is not clear? If you call the program from a command line, for example, you can pass along arguments separated by spaces and when main runs, the args array will have your Strings in it. It's also integral to the intranet applications and other e-business solutions that are the foundation of corporate computing. Here, agrs[] is the array name, and it is of String type. Duration: 1 week to 2 week. main. What is Java? Main has been declared as Public as it can be accessed globally. That's all on What is main method in Java, What are valid signature of main method in Java, What happens if you put incorrect signature of main method, Why main method is public, static, and void in Java and finally we saw difference between C, C++ and Java main methods. There should be exactly three dots between String and array; otherwise, it gives an error. main method is public, static and void and accept an String[] as argument and from Java 5 onwards it can also accept variable arguments instead of array. A program that has no main() method, but compile and runs successfully. Java Command Line Arguments Differ from C and C++. We observe that JVM first executes the static block, if it is present in the program. Mail us on hr@javatpoint.com, to get more information about given services. It means that it can store a group of string. One of the basic rules of working with static methods is that you can’t access a nonstatic method or field from a static method because the static method doesn’t have an instance of the class to use to reference instance methods or fields. if its not public JVM classes might not able to access it. We can also overload the main() method. We should use a public keyword before the main() method so that JVM can identify the execution point of the program. ";s:7:"keyword";s:27:"what does main mean in java";s:5:"links";s:7340:"<a href='https://ricebrok-staging.webcooks.in/docs/paleo-diet-86e6ec'>Paleo Diet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barbara-kean-gordon-86e6ec'>Barbara Kean-gordon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/soccer-position-stereotypes-86e6ec'>Soccer Position Stereotypes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brutal-synonym-86e6ec'>Brutal Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julie-ann-emery-bosch-86e6ec'>Julie Ann Emery Bosch</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/games-about-water-uses-86e6ec'>Games About Water Uses</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/higher-learning-movie-essay-86e6ec'>Higher Learning Movie Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/domantas-sabonis-height-86e6ec'>Domantas Sabonis Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/v8-supercars-2021-teams-86e6ec'>V8 Supercars 2021 Teams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/personal-identity-theories-86e6ec'>Personal Identity Theories</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-ritson-wework-86e6ec'>Mark Ritson Wework</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-on-tv-today-86e6ec'>Clemson On Tv Today</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adam-resurrected-by-jesus%27-blood-86e6ec'>Adam Resurrected By Jesus' Blood</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/srikanth-kidambi-achievements-86e6ec'>Srikanth Kidambi Achievements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blair-witch-game-review-86e6ec'>Blair Witch Game Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nrlw-dragons-86e6ec'>Nrlw Dragons</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/srikanth-kidambi-salary-86e6ec'>Srikanth Kidambi Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-brothers-86e6ec'>Klay Thompson Brothers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jj-sports-blenheim-86e6ec'>Jj Sports Blenheim</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/heaven-movie-list-86e6ec'>Heaven Movie List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miruthan-budget-86e6ec'>Miruthan Budget</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-nanny-diaries-netflix-86e6ec'>The Nanny Diaries Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-do-i-start-believing-in-myself-86e6ec'>How Do I Start Believing In Myself</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tulpan-movie-online-86e6ec'>Tulpan Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russian-roulette-origin-86e6ec'>Russian Roulette Origin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-contracts-in-business-86e6ec'>Types Of Contracts In Business</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-all-star-appearances-86e6ec'>Ricky Rubio All-star Appearances</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bailee-madison-instagram-86e6ec'>Bailee Madison Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bonnie-hunt-kids-86e6ec'>Bonnie Hunt Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amanda-fuller-son-86e6ec'>Amanda Fuller Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-do-i-get-to-my-pinterest-profile-86e6ec'>How Do I Get To My Pinterest Profile</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gate-kaminarimon-tokyo-86e6ec'>The Gate Kaminarimon Tokyo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taulia-tagovailoa-brother-86e6ec'>Taulia Tagovailoa Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/books-of-blood-movie-hulu-86e6ec'>Books Of Blood Movie Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andrew-prine-height-86e6ec'>Andrew Prine Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anguish-osrs-ge-86e6ec'>Anguish Osrs Ge</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joanna-gaines-paint-colors-sherwin-williams-86e6ec'>Joanna Gaines Paint Colors Sherwin Williams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sarah-bolger-husband-86e6ec'>Sarah Bolger Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonathan-swift-philosophy-86e6ec'>Jonathan Swift Philosophy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-contract-2020-86e6ec'>Russell Westbrook Contract 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-words-that-start-with-e-86e6ec'>Sports Words That Start With E</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sweating-bullets-lyrics-86e6ec'>Sweating Bullets Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brad-pitt-instagram-86e6ec'>Brad Pitt Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-wife-one-husband-quotes-86e6ec'>Two Wife One Husband Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ffxiv-reddit-86e6ec'>Ffxiv Reddit</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rhonda-fleming-diet-86e6ec'>Rhonda Fleming Diet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/true-trader-review-86e6ec'>True Trader Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/neverwinter-nights-2%3A-mask-of-the-betrayer-steam-86e6ec'>Neverwinter Nights 2: Mask Of The Betrayer Steam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ollydbg-unable-to-start-file-86e6ec'>Ollydbg Unable To Start File</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/speedball-marvel-86e6ec'>Speedball Marvel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gingerbread-man-author-86e6ec'>The Gingerbread Man Author</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flags-of-our-fathers-hulu-86e6ec'>Flags Of Our Fathers Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paper-moon%27%27-oscar-winner-clue-86e6ec'>Paper Moon'' Oscar Winner Clue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/which-version-of-funny-games-is-better-86e6ec'>Which Version Of Funny Games Is Better</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/persuasive-essay-about-sports-86e6ec'>Persuasive Essay About Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/charley-varrick-blu-review-86e6ec'>Charley Varrick Blu Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/select-tv-channel-86e6ec'>Select Tv Channel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/before-the-revolution-documentary-86e6ec'>Before The Revolution Documentary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/extremely-loud-and-incredibly-close-book-quotes-86e6ec'>Extremely Loud And Incredibly Close Book Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sigmund-freud-theory-pdf-86e6ec'>Sigmund Freud Theory Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hell%27s-heroes-festival-86e6ec'>Hell's Heroes Festival</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kosciuszko-race-2020-86e6ec'>Kosciuszko Race 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-did-roy-lichtenstein-live-86e6ec'>Where Did Roy Lichtenstein Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/neon-demon-symbolism-86e6ec'>Neon Demon Symbolism</a>,
+";s:7:"expired";i:-1;}

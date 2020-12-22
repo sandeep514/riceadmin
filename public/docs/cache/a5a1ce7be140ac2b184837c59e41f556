@@ -1,0 +1,78 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2978:"Malheureusement le scénario se focalise sur les relations entre les protagonistes mais oublie toute évolution logique de ces personnages, il n'y a ni intrigue ni enjeu mis en place. D'ailleurs, a ses yeux, la ville n'existe pas.                                  Written by Posing as a priest, he attempts to lead the women to safety. Title:  Penned by famous Weibo commentator Zuo Ye Ben, Love Will Tear Us Apart is the story of white-collar worker Liang Liang and young actress Miao Miao.                  A pair of brides-to-be put their friendship to the test when they battle it out for the perfect wedding scheduled on the same day. Elle a atterri a Hong Kong avec un visa touristique. Joy Division were an English rock band formed in Salford in 1976. Watch Movie Love Will Tear Us Apart Streaming In HD Watch Movie Love Will Tear Us Apart For Free with duration 86 Min and broadcast on 2013-06-02 with MPAA rating is 0.. Title:                     1 abonné                     1951 abonnés A number of viewers regard the protagonists' interactions as overly exaggerated, but there's also a major contradictory perspective, with which the audience suggest that this film reflects their own relationships in a truthful way. The friends begin dating Max, keeping their affairs a secret from one another. An American finds refuge during the 1937 Japanese invasion of Nanking in a church with a group of women. There she meets another Chinese immigrant man working as a driver, even as she finds her life beginning to change. They strongly attract each other, but Miao Miao's insecurity in ... View production, box office, & company info. Penned by famous Weibo commentator Zuo Ye Ben, Love Will Tear Us Apart is the story of white-collar worker Liang Liang and young actress Miao Miao. Ce film dramatique, tourné à pékin et en Thaïlande, a pour principaux intermprètes  Ni Ni et Feng Shaofeng. Cinéma pour les enfants : à partir de quel âge voir Calamity, une enfance de Martha Jane Cannary ? Want to share IMDb's rating on your own site? Check out some of the IMDb editors' favorites movies and shows to round out your Watchlist. A simple but heartbreaking love story. Love Will Tear Us Apart (Chinese: 我想和你好好的) is a 2013 Chinese film directed by Li Weiran and starring Feng Shaofeng and Ni Ni. Il lui importe peu de vivre avec les autres qui de toutes manières n'aiment plus, et son incommunicabilité, sa fuite devant autrui et son refus des regards et des compassions en font un monstre, un fantôme, privé de passé. Genevieve and Adrian, two young friends, are individually seduced by the same young man.      Recrutement | Retrouvez plus d'infos sur notre page Revue de presse pour en savoir plus. There have been no recommendations submitted. Les personnages n'aident d'ailleurs pas, ... Quel ennui ! They strongly attract each other, but Miao Miao's insecurity in relationships gradually tears them apart.  Looking for something to watch? ";s:7:"keyword";s:29:"love will tear us apart movie";s:5:"links";s:3426:"<a href='https://ricebrok-staging.webcooks.in/docs/roosters-lineup-round-7-86e6ec'>Roosters Lineup Round 7</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-great-blue-yonder-86e6ec'>The Great Blue Yonder</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acacia-flower-edible-86e6ec'>Acacia Flower Edible</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blackbeard-facts-86e6ec'>Blackbeard Facts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joel-embiid-espn-86e6ec'>Joel Embiid Espn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-robinson-quadruple-double-86e6ec'>David Robinson Quadruple Double</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scarface-%281932-analysis%29-86e6ec'>Scarface (1932 Analysis)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kevin-spacey-best-movies-86e6ec'>Kevin Spacey Best Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/singing-in-the-dark-penguin-86e6ec'>Singing In The Dark Penguin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-master-amazon-prime-86e6ec'>The Master Amazon Prime</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-jazz-86e6ec'>Ricky Rubio Jazz</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lower-motor-neuron-diseases-86e6ec'>Lower Motor Neuron Diseases</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dabo-swinney-86e6ec'>Dabo Swinney</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joint-commission-resources-86e6ec'>Joint Commission Resources</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clockwork-orange-watch-online-86e6ec'>Clockwork Orange Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it%27s-funky-enough-lyrics-86e6ec'>It's Funky Enough Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alabama-vs-usc-2019-86e6ec'>Alabama Vs Usc 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ianis-hagi-fifa-19-86e6ec'>Ianis Hagi Fifa 19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/second-best-synonym-86e6ec'>Second Best Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watchmen-comic-86e6ec'>Watchmen Comic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/melanie-shamet-86e6ec'>Melanie Shamet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-de-niro-wife-and-kids-86e6ec'>Robert De Niro Wife And Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ac-odyssey-cultist-86e6ec'>Ac Odyssey Cultist</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-cube-check-yo-self-shirt-86e6ec'>Ice Cube Check Yo Self Shirt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-sympathizer-pdf-86e6ec'>The Sympathizer Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nick-brown-piano-86e6ec'>Nick Brown Piano</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/suicide-kings-nick-of-time-86e6ec'>Suicide Kings Nick Of Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-most-wonderful-time-of-the-year-123movies-86e6ec'>The Most Wonderful Time Of The Year 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/efl-championship-2019%2F20-table-86e6ec'>Efl Championship 2019/20 Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bandit-gremlin-86e6ec'>Bandit Gremlin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it-ain%27t-easy-2pac-86e6ec'>It Ain't Easy 2pac</a>,
+";s:7:"expired";i:-1;}

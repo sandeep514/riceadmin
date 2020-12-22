@@ -1,0 +1,108 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2530:"<p>With a little faith in a big God, she believes that all things are possible through Him who strengthens her. For any questions email media@stjamesstp.org. {{familyColorButtonText(colorFamily.name)}}, {{carousel.total_number_of_results}} Ergebnisse anzeigen. </p> <p>Our Pastor Pastor, Rev. </p> <p>General Order of Service. Check here for new media, past service recordings, and more! Donna began her second career within the financial industry at Aflac US headquarters as a Market Consultant within Sales Operations. </p> <p>A life-long learner, she is a product of the Barnwell County School System. In 2012, Rev Donna was ordained an Itinerant Elder. This repository is populated with tens of thousands of assets and should be your first stop for asset selection. He successfully pastored Ebenezer until he graduated from college. View all supply and food donation and distribution cites via Twin Cities Mutual Aid. View the profiles of people named James Ame. Equally active within the community, Rev. Richard S. McNair, Jr. and . </p> <p>Rev. First Lady, Deirdre McNair. Events. As we learn to engage in new ways, we aim to continue our worship and praise as spirit filled virtual gatherings! As we learn to engage in new ways, we aim to continue our worship and praise as spirit filled virtual gatherings! Currently, she serves as President of the Southwest Georgia Annual Conference Women In Ministry, Vice President of the Southwest Georgia Annual Conference Ministers Spouses Widows and Widowers plus PKs, Chair of the Southwest Georgia Annual Conference Committee on Deeds and Abstracts and the Sixth Episcopal District leader of Bishop Jackson’s 3rd Priority: Handling Money God’s Way. Hier können Sie Inhalte sammeln, auswählen und Anmerkungen zu Ihren Dateien hinterlegen. Log In. Please let us know if you have any questions. During her 19 year career, she served the Carolinas as a Branch Manager, Regional Sales Manager of Worksite Services, Private Banker of Gaston County, Financial Sales Leader of the Low Country, District Manager of the Low County and Regional Client Service Manager of the Private Bank for South Carolina. </p> <p>Stacey L. Smith, Pastor and Presiding ElderRev. Wählen Sie bis maximal 100 Bilder zum Herunterladen aus. Church History. We would love to answer them. While in Savannah, Georgia, she pastored Saint Luke AMEC as the first woman pastor in the 100 history of the church. Ministries. Download hochwertiger Bilder, die man nirgendwo sonst findet. Tithes and Offering. </p>";s:7:"keyword";s:9:"james ame";s:5:"links";s:6848:"<a href='https://ricebrok-staging.webcooks.in/docs/tron-2015-86e6ec'>Tron 2015</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/great-iroquois-trail-86e6ec'>Great Iroquois Trail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/star-raiders-rifftrax-86e6ec'>Star Raiders Rifftrax</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/peter-brock-bathurst-wins-86e6ec'>Peter Brock Bathurst Wins</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-harvey-mr-potato-head-stop-sending-me-this-86e6ec'>Steve Harvey Mr Potato Head Stop Sending Me This</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-nalbandian-family-86e6ec'>David Nalbandian Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/movie-misconduct-spoiler-86e6ec'>Movie Misconduct Spoiler</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jojo-rabbit-watch-86e6ec'>Jojo Rabbit Watch</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eyes-wide-shut-domino-scene-86e6ec'>Eyes Wide Shut Domino Scene</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/melanie-shamet-86e6ec'>Melanie Shamet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-men%27s-soccer-roster-86e6ec'>Lsu Men's Soccer Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-3-86e6ec'>Metal Gear Solid 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/resident-evil-film-86e6ec'>Resident Evil Film</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/making-sports-banners-86e6ec'>Making Sports Banners</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-rescuers-3-86e6ec'>The Rescuers 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/terry-wilson-40-time-86e6ec'>Terry Wilson 40 Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/storm-v-warriors-2020-86e6ec'>Storm V Warriors 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ishmael-character-analysis-86e6ec'>Ishmael Character Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-howard-real-estate-86e6ec'>George Howard Real Estate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-frazier-scouting-report-86e6ec'>Michael Frazier Scouting Report</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/howard-league-for-penal-reform-86e6ec'>Howard League For Penal Reform</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/london-iguodala-86e6ec'>London Iguodala</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fifth-midnight-movie-86e6ec'>Fifth Midnight Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/holiday-date-2020-86e6ec'>Holiday Date 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/law-and-crime-hysterectomy-86e6ec'>Law And Crime Hysterectomy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/judy-garland-husbands-86e6ec'>Judy Garland Husbands</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/importance-of-games-and-sports-essay-86e6ec'>Importance Of Games And Sports Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/far-and-away-movie-questions-and-answers-86e6ec'>Far And Away Movie Questions And Answers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-heat-band-86e6ec'>Dead Heat Band</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-fury-marvel-86e6ec'>The Fury Marvel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hellraiser-online-86e6ec'>Hellraiser Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-uninvited-%281944-netflix%29-86e6ec'>The Uninvited (1944 Netflix)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/precious-meaning-names-86e6ec'>Precious Meaning Names</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/apartments-near-me-86e6ec'>Apartments Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marooned-in-a-sentence-86e6ec'>Marooned In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/owners-of-black-caviar-86e6ec'>Owners Of Black Caviar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/life-movie-ending-86e6ec'>Life Movie Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/northern-illinois-university-football-division-86e6ec'>Northern Illinois University Football Division</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aberdeen-v-rangers-score-86e6ec'>Aberdeen V Rangers Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-accused-stream-86e6ec'>The Accused Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/non-static-meaning-in-tamil-86e6ec'>Non Static Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cultural-identity-examples-86e6ec'>Cultural Identity Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/upon-anyone-meaning-in-urdu-86e6ec'>Upon Anyone Meaning In Urdu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sinister-2-ending-scene-86e6ec'>Sinister 2 Ending Scene</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-thousand-words-netflix-86e6ec'>A Thousand Words Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/surf-nazis-must-die-streaming-86e6ec'>Surf Nazis Must Die Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-pine-annabelle-wallis-86e6ec'>Chris Pine Annabelle Wallis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/guadalcanal-diary-band-86e6ec'>Guadalcanal Diary Band</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tom-hart-wife-86e6ec'>Tom Hart Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brentford-community-stadium-capacity-86e6ec'>Brentford Community Stadium Capacity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boriska-kipriyanovich-height-86e6ec'>Boriska Kipriyanovich Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gymnastics-quotes-images-86e6ec'>Gymnastics Quotes Images</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-bat-bite-86e6ec'>Vampire Bat Bite</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2016-electoral-map-86e6ec'>2016 Electoral Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drifters-loot-the-galaxy---beta-86e6ec'>Drifters Loot The Galaxy - Beta</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manderlay-streaming-ita-86e6ec'>Manderlay Streaming Ita</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-golf-86e6ec'>American Golf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jaeden-martell-dad-86e6ec'>Jaeden Martell Dad</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hakeem-olajuwon-now-86e6ec'>Hakeem Olajuwon Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/werewolf-movie-series-86e6ec'>Werewolf Movie Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/allied-full-movie-watch-online-86e6ec'>Allied Full Movie Watch Online</a>,
+";s:7:"expired";i:-1;}

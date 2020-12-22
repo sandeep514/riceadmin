@@ -1,0 +1,107 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3415:"Quartet in Autumn is one of the books Pym wrote during the 15 years when no one would publish her, and perhaps the same kind of balance between hopelessness and inner strength helped shape this novel's story about four friends in an office nearing the age of retirement. They’re loners, lonely, and lonesome. © Copyright 2020 Kirkus Media LLC. I felt the characters' emptiness and personal estrangement, as they scrupulously avoided each others' personal space. View all posts by Reading Between the Dunes. The book is also representative of an era, London in the 1970s. Disabling it will result in some disabled or missing features. Their preservation of each others' privacy at times is funny, if not obsessive. The one time the four of them decide to meet up at a cafe was a somewhat stilted, though pleasant enough lunch, but one bereft of true warmth and friendship. Filled with dry, ironic humor, Quartet in Autumn, first published in 1977, is a poignant depiction of the lives of four elderly people, who have worked together in London for several years. Reviewed in the United States on October 23, 2013. Quartet in Autumn follows four coworkers in their 60s, near or at retirement: Marcia, Letty, Norman, and Edwin.                             influencers in the know since 1933. review of another edition Quartet in Autumn is about two men and two women in their early sixties, solitary but not necessarily lonely Londoners, who work in the same office in the mid-1970s. Quartet in Autumn left me wondering: what is life if not a life lived for connecting, learning, sharing, and growing with others? 				Change ), You are commenting using your Facebook account. Funny and moving. "There was something to be said for tea and a comfortable chat about crematoria. Edwin, Letty, Marcia and Norman have little in common except that they have worked in the same office for many years. ( Log Out /  By nature of their age and their work, they interact superficially with each other at work, but past that, they see each other as less than friends, but not quite only colleagues. It also analyzes reviews to verify trustworthiness. After viewing product detail pages, look here to find an easy way to navigate back to pages you are interested in. Enter your email address to follow this blog and receive notifications of new posts by email. It stirred too much of that dread I mentioned, and made me concerned that maybe, just maybe, I could end up like any one of the four if I didn’t have friends later in life. Fill in your details below or click an icon to log in: You are commenting using your WordPress.com account. This is one of Barbara Pym's best, but be forewarned that I am a serious fan of hers. Beautiful edition of a Barbara Pym classic, Reviewed in the United States on December 11, 2016. Sorry, your blog cannot share posts by email. Terribly brisk, but very affecting. The rest of the group knew there had been a "medical event", but seemed unable to intervene or offer support, even when they all noted her increasing thinness. With an exploration of human social needs, and a darker tone embedded in what it’s like to be lonely and pitied, Quartet in Autumn left me distressed. Realistic view of getting old but not depressing. I felt a dread throughout the book, not one of horror or morbidness, but more a dread built out of the fear that I could end up like one of the quartet. ";s:7:"keyword";s:24:"quartet in autumn review";s:5:"links";s:6952:"<a href='https://ricebrok-staging.webcooks.in/docs/yasushi-watanabe-86e6ec'>Yasushi Watanabe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kimberly-wyatt-husband-86e6ec'>Kimberly Wyatt Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/st-james-park-stadium-86e6ec'>St James Park Stadium</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acacia-wood-durability-86e6ec'>Acacia Wood Durability</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-french-connection-netflix-86e6ec'>The French Connection Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/molly-mccook-the-ranch-86e6ec'>Molly Mccook The Ranch</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shakespeare-idioms-worksheet-86e6ec'>Shakespeare Idioms Worksheet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-woman-in-space-86e6ec'>First Woman In Space</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-woman-in-space-86e6ec'>First Woman In Space</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/starry-eyes-emoji-86e6ec'>Starry Eyes Emoji</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stadio-olimpico-tickets-86e6ec'>Stadio Olimpico Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremy-lin-salary-2020-86e6ec'>Jeremy Lin Salary 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/francis-uzoho-fifa-20-86e6ec'>Francis Uzoho Fifa 20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-make-butter-from-pasteurized-milk-86e6ec'>How To Make Butter From Pasteurized Milk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/faded-piano-chords-86e6ec'>Faded Piano Chords</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rita-bernal-86e6ec'>Rita Bernal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-clennon-thirtysomething-86e6ec'>David Clennon Thirtysomething</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brake-rotor-86e6ec'>Brake Rotor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/like-dandelion-dust-sparknotes-86e6ec'>Like Dandelion Dust Sparknotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-island-of-dr-moreau-chapter-1-summary-86e6ec'>The Island Of Dr Moreau Chapter 1 Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wait-until-dark-%2F-theme-song-86e6ec'>Wait Until Dark / Theme Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/troubled-waters-columbo-cast-86e6ec'>Troubled Waters Columbo Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blame-movie-ending-explained-reddit-86e6ec'>Blame Movie Ending Explained Reddit</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-electorates-2020-86e6ec'>Nz Electorates 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-died-a-thousand-times-lyrics-86e6ec'>I Died A Thousand Times Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rachel-true-age-86e6ec'>Rachel True Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/warzone-lyrics-86e6ec'>Warzone Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tobi-bakare-net-worth-86e6ec'>Tobi Bakare Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hidden-season-2-episode-6-recap-86e6ec'>Hidden Season 2 Episode 6 Recap</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ulee%27s-gold-netflix-86e6ec'>Ulee's Gold Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tottenham-vs-southampton-5-2-86e6ec'>Tottenham Vs Southampton 5-2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-is-david-vaughn-now-86e6ec'>Where Is David Vaughn Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-york-rangers-wins-and-losses-2019-86e6ec'>New York Rangers Wins And Losses 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-sharna-burgess-doing-now-86e6ec'>What Is Sharna Burgess Doing Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/psycho-shower-scene-music-analysis-86e6ec'>Psycho Shower Scene Music Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/neo-rauch-website-86e6ec'>Neo Rauch Website</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flanders-history-86e6ec'>Flanders History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anselm-kiefer-works-86e6ec'>Anselm Kiefer Works</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/book-of-judges-86e6ec'>Book Of Judges</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hudson-hawk-full-movie-123movies-86e6ec'>Hudson Hawk Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/defi-crypto-86e6ec'>Defi Crypto</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alaska-weather-in-july-86e6ec'>Alaska Weather In July</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-dark-horse-podcast-86e6ec'>The Dark Horse Podcast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeff-koons-puppy-location-86e6ec'>Jeff Koons Puppy Location</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beautiful-disaster-song-lyrics-86e6ec'>Beautiful Disaster Song Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/big-deal-on-madonna-street-full-movie-english-subtitles-86e6ec'>Big Deal On Madonna Street Full Movie English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dosti-friends-forever-child-cast-86e6ec'>Dosti Friends Forever Child Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-ghost-story-watch-online-86e6ec'>A Ghost Story Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-basketball-commits-86e6ec'>Lsu Basketball Commits</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barbara-jefford-from-russia-with-love-86e6ec'>Barbara Jefford From Russia With Love</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stockholm%2C-sweden-time-86e6ec'>Stockholm, Sweden Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sob-full-form-in-physical-education-86e6ec'>Sob Full Form In Physical Education</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ghost-ship-%282020-korean-movie%29-86e6ec'>Ghost Ship (2020 Korean Movie)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-the-king-and-i-86e6ec'>Watch The King And I</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clelin-ferrell-86e6ec'>Clelin Ferrell</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-wind-synonym-86e6ec'>West Wind Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/standing-still-watch-online-86e6ec'>Standing Still Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-frazier%2C-md-86e6ec'>Michael Frazier, Md</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/frame-sentences-using-following-words-86e6ec'>Frame Sentences Using Following Words</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andre-iguodala-trade-exception-86e6ec'>Andre Iguodala Trade Exception</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,114 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3295:"					 Sign up for the latest news and ticket information. Join the 2023 Family today and enjoy some exclusive advantages for Rugby World Cup France 2023. Nine stadiums in Japan were chosen to host the clashes. Find out more about how your privacy is protected. 2023 WORLD CUP in France Tickets, Fri 08/09/2023 at 7:00 pm | Eventbrite France 2023 aims to deliver positive impact and unite the host nation with three years to go. This commitment was formalized this Monday, September 7 by Gérard Deprez, President of the LOXAM group and Claude Atcher, General Manager of Rugby World Cup France 2023. You can set your browser to block or alert you about these cookies, but some parts of these sites will not then work. 20 teams will compete, with the top 12 teams from the 2019 event qualifying automatically, with the remaining 8 teams coming from the regional qualifiers and playoffs being held through to 2022. It is easy and safe to buy rugby tickets now online at LiveRugbyTickets.co.uk to be able to attend this truly world-class sporting event! 					 A leader in rail transport, SNCF has become a Rugby World Cup 2023 Official Sponsor. Using this tool will set a cookie on your device to remember your preferences. Tickets for the Rugby League World Cup 2021 will start from £2.21 for concessions and £10 for adults across all three of the tournaments. By closing this banner or by continuing to use Eventbrite, you agree. 				 Browse through our extensive real-time Rugby World Cup 2023 Ticket Inventory for your favourite team; select your desired date, match, and price range. There's a desire for France 2023 and there is a need for it too. The final match will be held at Stade de France in Paris. Ltd. Rugby World Cup Limited © 2007 - 2020. Rugby World Cup 2023 Official Travel Agents will be appointed and notified in October 2020. 						Things to do in Paris 				 Interested agencies had until 17 July 2020 to submit their completed applications to become Official Travel Agents. 					 SNCF BECOMES RUGBY WORLD CUP 2023 OFFICIAL SPONSOR. The Rugby World Cup enters the finals stages eight teams are going to compete for the title. Sat., 21/10/2023, 10:00 pm Central European Summer Time France Time. The LOXAM group, leader in equipment rental, becomes Official Sponsor of Rugby World Cup France 2023. 						Paris Events 					 Ticket-inclusive travel packages will go on sale in March 2021, and supporters across the world can start organising their Rugby World Cup 2023 trips two and a half years before the tournament takes place. Vote for the World Rugby 15s Players of the Decade, Heather-Latu makes history as first woman chair of Oceania Rugby judiciary, When Bill McLaren helped Scotland enjoy the sweetest of victories. Rugby World Cup 2023 draw to take place three years before tournament starts as teams face crucial 2020. © 2004 - 2020 Live Rugby Tickets. Ticket-inclusive travel packages will go on sale in March 2021, and supporters across the world can start organising their Rugby World Cup 2023 trips two and a half years before the tournament takes place. A commitment formalised on Monday, 7 September by Jean-Pierre Farandou, SNCF Group Chairman and Claude Atcher, Rugby World Cup France 2023 Managing Director, as part of the ‘WE LOVE 2023 TOUR’ launch. ";s:7:"keyword";s:28:"2023 rugby world cup tickets";s:5:"links";s:7768:"<a href='https://ricebrok-staging.webcooks.in/docs/hsieh-su-wei-ranking-86e6ec'>Hsieh Su-wei Ranking</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thirteen-moons-summary-86e6ec'>Thirteen Moons Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/single-moms-club-plot-86e6ec'>Single Moms Club Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-was-ww2-86e6ec'>When Was Ww2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wit-in-a-sentence-86e6ec'>Wit In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/act-party-news-86e6ec'>Act Party News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/love-story-music-mp3-86e6ec'>Love Story Music Mp3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/father-gary-thomas-buzzfeed-86e6ec'>Father Gary Thomas Buzzfeed</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/false-trial-86e6ec'>False Trial</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-tribes-of-palos-verdes-true-story-86e6ec'>The Tribes Of Palos Verdes True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/real-madrid-dls-kit-2021-86e6ec'>Real Madrid Dls Kit 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mahana-community-2020-86e6ec'>Mahana Community 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/animal-crossing-fortune-teller-set-86e6ec'>Animal Crossing Fortune Teller Set</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fit-for-sport-86e6ec'>Fit For Sport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/phantom-of-the-opera-musical-pdf-86e6ec'>Phantom Of The Opera Musical Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mal-mo-e%3A-the-secret-mission-watch-online-86e6ec'>Mal Mo E: The Secret Mission Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/man-city-goal-scorers-2019%2F20-86e6ec'>Man City Goal Scorers 2019/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blue-train-available-packages-86e6ec'>Blue Train Available Packages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-explosive-workout-86e6ec'>Russell Westbrook Explosive Workout</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/intel-studio-86e6ec'>Intel Studio</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/giannis-antetokounmpo-wingspan-86e6ec'>Giannis Antetokounmpo Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-machinist-trailer-86e6ec'>The Machinist Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/western-kentucky-basketball-nba-players-86e6ec'>Western Kentucky Basketball Nba Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-jonathan-goldsmith-still-alive-86e6ec'>Is Jonathan Goldsmith Still Alive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jrue-holiday-small-forward-86e6ec'>Jrue Holiday Small Forward</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/call-me-crazy-a-five-film-full-movie-online-86e6ec'>Call Me Crazy A Five Film Full Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jerzy-janowicz-csgo-86e6ec'>Jerzy Janowicz Csgo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/germany-teams-86e6ec'>Germany Teams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/southampton-leicester-tickets-86e6ec'>Southampton Leicester Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/san-pietro-italy-86e6ec'>San Pietro Italy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ireland-with-ardal-o%27hanlon-86e6ec'>Ireland With Ardal O'hanlon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-cry-in-the-night-book-summary-86e6ec'>A Cry In The Night Book Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tool-opiate-86e6ec'>Tool Opiate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kim-little-actress-wiki-86e6ec'>Kim Little Actress Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-toma-obituary-86e6ec'>David Toma Obituary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jensen-arnold-wedding-86e6ec'>Jensen Arnold Wedding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/roxanne-meaning-86e6ec'>Roxanne Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/extremely-loud-and-incredibly-close-oskar%27s-fears-86e6ec'>Extremely Loud And Incredibly Close Oskar's Fears</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-conspiracy-of-paper-summary-86e6ec'>A Conspiracy Of Paper Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-sectarianism-in-religion-86e6ec'>What Is Sectarianism In Religion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kroger-field-seating-chart-86e6ec'>Kroger Field Seating Chart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fran%C3%A7ois-truffaut-rats-86e6ec'>François Truffaut Rats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shane-west-net-worth-86e6ec'>Shane West Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/next-meadowhall-86e6ec'>Next Meadowhall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ain%27t-thinkin-bout-you-lyrics-star-86e6ec'>Ain't Thinkin Bout You Lyrics Star</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-book-series-86e6ec'>Vampire Book Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nobody-walks-in-la-wikipedia-86e6ec'>Nobody Walks In La Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wyatt-davis-scouting-report-86e6ec'>Wyatt Davis Scouting Report</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dice-stacking-games-86e6ec'>Dice Stacking Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/valencia-vs-levante-h2h-86e6ec'>Valencia Vs Levante H2h</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-date-with-miss-fortune-ending-86e6ec'>A Date With Miss Fortune Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/harry-breaker-morant-86e6ec'>Harry Breaker Morant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/almeria-vs-girona-prediction-86e6ec'>Almeria Vs Girona Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-trip-to-the-moon-with-sound-86e6ec'>A Trip To The Moon With Sound</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/t-34-movie-english-subtitles-86e6ec'>T-34 Movie English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/xim-uma-primer-data-sheet-86e6ec'>Xim Uma Primer Data Sheet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gentlemen-prefer-blondes-songs-86e6ec'>Gentlemen Prefer Blondes Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-randall-jean-wallace-86e6ec'>James Randall Jean Wallace</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/illusion-of-consciousness-86e6ec'>Illusion Of Consciousness</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vietnam-green-beret-roster-86e6ec'>Vietnam Green Beret Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/purchasing-reaper-86e6ec'>Purchasing Reaper</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-sell-the-dead-sequel-86e6ec'>I Sell The Dead Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-zahn-kids-86e6ec'>Steve Zahn Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fail-indeterminate-valve-86e6ec'>Fail Indeterminate Valve</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2013-tennessee-football-roster-86e6ec'>2013 Tennessee Football Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/use-your-demons-to-your-advantage-meaning-86e6ec'>Use Your Demons To Your Advantage Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lim-ju-eun-husband-86e6ec'>Lim Ju-eun Husband</a>,
+";s:7:"expired";i:-1;}

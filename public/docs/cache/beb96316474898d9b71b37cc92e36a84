@@ -1,0 +1,95 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4223:"She already moved on from andrea.               }); 2020-04-09 15:28:11; SUB Hospital Playlist Episode 4 2020-04-02 13:44:45; SUB Hospital Playlist Episode 3 2020-03-26 14:57:13; SUB Hospital Playlist Episode 2 2020-03-19 13:04:15; SUB Hospital Playlist Episode 1 2020-03-12 13:49:21; Login to Drama Cool Log in with Google Remember me Forgot password? But I read somewhere that Italy had the highest cases because of the flux of Chinese residents and tourist visiting Italy. Seok-Hyeon was kind enough to let his father’s mistress pay her respects as she is 6 months pregnant. He doesn’t see Jang. Not reality. I would be saying to myself, “what more can I do to assure you that I am not him? @Kandiboo –  Thank you for the response. Jang – more than likely the realization that she’s over Dr Garden and into Dr Romantic. This is the Hospital Playlist Episode 11 English Sub Watch Video Korean Drama has been released.Your website Kdramastv.com will always provide you the latest episode, so please Bookmark and also share us for updates. Jang was the only resident assisting 13 professors. Her story to tell. It helps us who aren’t in the medical profession better understand the nuances of this drama. Lee Ji-won as Han Hyun-hee, pediatric surgery medical assistant. Anyway, that is why I love this site: we dissect our dramas, have a storm of ideas and get enriched in the process. I was overly judgmental about her GS profs then for not giving her the opportunities to perform her first surgery. Probably because they didn’t have the time or patience to supervise her? It was the other GS Prof’s. It makes a lot more sense and explains why Jang’s first surgery was in Pediatrics then. Andrea – it will be his relationship with God (priesthood). ?? Once there, he sees that Song-Hwa had the same idea. She had a huge smile on her face when she ran past Rosa after she got a phone call. He also tells his family to leave his wife alone as it is between them. I am fairly new to watch Korean shows. If I were him I would be horribly frustrated because she’s using her past experience with her bf as a gauge for their existing relationship? It wasn’t like they could supervise anyone else.               window.googletag.pubads().addEventListener('slotOnload', function(event) { As we cut back to the karaoke room, Jun-Wan takes two rings out of his pocket. Dramacool will be the fastest one to upload Ep 11 with Eng Sub for free. 			65 Comments He hasn’t told anyone about their relationship so it’s very lonely for him with no one to talk to about it. And cornered again at the staff dinner. “Hospital Playlist : Jung Kyung Ho, Kwak Sun Young, Yoo Yeon Seok, ShinHyunBin – An UNEXPECTED CHANGE IN THEIR RELATIONSHIP” Looking forward to all of the character growth. He will start feeling if she is really into this relationship for being a pessimist in it . Funny how they released the ost on episode 10 where we get the package and the proposal of songhwa to andrea, and andrea told songhwa that he’s daddy long legs.               ga('create', 'UA-67136960-15', 'auto', 'ads'); Knowing that Ik-Sun is in town staying with her brother, Jun-Wan decides to bring dinner over.                     eventCategory: event.slot.getSlotElementId(), She shoved IJ off her shoulder (overstepping again). Rosa sees her son with Gyeo-Wool talking and laughing together. And she’s not ready to receive it? I could be wrong about 1 vs 2. After all, he let her take lead on surgery which is something that he had never done before. But JWan having to constantly reassuring her will becoming very taxing on him too. – futile CPR attempt scene (re: JWon in ep 1?) I have also seen quite a few break ups because of feng Shui or what we call ‘8-character’ which supposedly dictates the fortune your/SO/parents/kids life and relationship etc, PS: JWan first time in a serious relationship! Probably because they didn’t have the time or patience to supervise her? (Translation credit to YeoNiverse YYS IFC), I also noticed the BGM when mama rosa saw wintergarden at yulje’s garden is OST on episode 7 J.Rabbit “You Always”.                   eventCategory: event.slot.getSlotElementId(), ";s:7:"keyword";s:28:"hospital playlist episode 11";s:5:"links";s:5332:"<a href='https://ricebrok-staging.webcooks.in/docs/home-improvement-mr-wilson-86e6ec'>Home Improvement Mr Wilson</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slander-vs-libel-86e6ec'>Slander Vs Libel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/history-of-the-american-dream-86e6ec'>History Of The American Dream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-the-king-and-i-86e6ec'>Watch The King And I</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ac-milan-away-kit-19%2F20-86e6ec'>Ac Milan Away Kit 19/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yayoi-kusama-pumpkin-art-86e6ec'>Yayoi Kusama Pumpkin Art</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-ritson-purpose-86e6ec'>Mark Ritson Purpose</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ohio-state-football-roster-2016-86e6ec'>Ohio State Football Roster 2016</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/standing-still-watch-online-86e6ec'>Standing Still Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/never-let-me-go-lyrics-jess-glynne-86e6ec'>Never Let Me Go Lyrics Jess Glynne</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bruce-boxleitner-wife-86e6ec'>Bruce Boxleitner Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hangar-10-watch-online-86e6ec'>Hangar 10 Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kalank-hit-or-flop-86e6ec'>Kalank Hit Or Flop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fox-funko-pop-86e6ec'>Fox Funko Pop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/curling-techniques-sport-86e6ec'>Curling Techniques Sport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/desire-and-fear-86e6ec'>Desire And Fear</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2003-heatwave-86e6ec'>2003 Heatwave</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ginostra-island-86e6ec'>Ginostra Island</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nba-reddit-buffstream-86e6ec'>Nba Reddit Buffstream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/king-ludd-86e6ec'>King Ludd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doctor-sue%C3%B1o-pelicula-completa-en-espa%C3%B1ol-latino-86e6ec'>Doctor Sueño Pelicula Completa En Español Latino</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-vaughan-dechert-86e6ec'>David Vaughan Dechert</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henry-chalfant-photography-86e6ec'>Henry Chalfant Photography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fontamara-summary-86e6ec'>Fontamara Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/santa-who-cast-86e6ec'>Santa Who Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/outland-slippers-white-86e6ec'>Outland Slippers White</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/against-the-ropes-meaning-86e6ec'>Against The Ropes Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/house-of-fear-another-world-mod-apk-86e6ec'>House Of Fear Another World Mod Apk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/truffaut-rififi-86e6ec'>Truffaut Rififi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-reaping-2-cast-86e6ec'>The Reaping 2 Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/london-road-play-86e6ec'>London Road Play</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spring-boot-tomcat-version-86e6ec'>Spring-boot Tomcat Version</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-light-song-lyrics-86e6ec'>Night Light Song Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-rapp-86e6ec'>Anthony Rapp</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/premiership-rugby-league-table-86e6ec'>Premiership Rugby League Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/demons-drake-wiki-86e6ec'>Demons Drake Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/warren-g-songs-86e6ec'>Warren G Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netherworld-mythology-86e6ec'>Netherworld Mythology</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-does-bob-bryan-live-86e6ec'>Where Does Bob Bryan Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/threatening-antonym-86e6ec'>Threatening Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jane-bayfield-86e6ec'>Jane Bayfield</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-air-script-86e6ec'>Dead Air Script</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-anderson-tapes-book-86e6ec'>The Anderson Tapes Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trinchetto-overture-to-the-sun-86e6ec'>Trinchetto Overture To The Sun</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2007-kentucky-football-stats-86e6ec'>2007 Kentucky Football Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hidden-%282015-full-movie-watch-online%29-86e6ec'>Hidden (2015 Full Movie Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emily-name-meaning-biblical-86e6ec'>Emily Name Meaning Biblical</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/investing-5-dollars-a-day-calculator-86e6ec'>Investing 5 Dollars A Day Calculator</a>,
+";s:7:"expired";i:-1;}

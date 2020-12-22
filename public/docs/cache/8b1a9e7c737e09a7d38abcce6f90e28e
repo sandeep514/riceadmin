@@ -1,0 +1,113 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3755:"<p>Country kitchen has breakfast area and adjoins family room with fp. </p> <p>Distinctive 3 BR Georgian Brick unit with impeccable attention to detail within. This home is located at 406 Silvermine Road New Canaan, CT 06840 US and has been listed on Homes.com since 25 June 2020 and is currently priced at $1,150,000, approximately $383 per square foot.  It was erected before 1921. Other features include 3 car garage, 2.7 acres, flagstone patio, possible pool/pool house opportunity, minutes to town, Pound Ridge & more. Park- like level property has mature landscaping done by Hamptons landscape architect , Elizabeth Lear, this home has beautiful flower gardens, two outdoor patios & is perfect for entertaining guests and family cook-outs. Conveniently Located to Merritt Parkway, Minutes from Downtown and Shopping Area, Great Location and easy access to Public Transportation, Come Visit the Property and See for Yourself and you will Absolutely Fall in Love with the Modern World from Yesteryear. The Coldwell Banker System fully supports the principles of the Fair Housing Act and the Equal Opportunity Act. You can browse all New Canaan real estate or Find contact info for current and past residents, property value, and more.                   are the registered and unregistered trademarks of Urban Compass, Inc. dba Compass in Find information about 406 Silvermine Road, New Canaan, CT 06840 on coldwellbanker.com. Built in 2004, you are welcomed by an intimate foyer with fireplace, inviting formal rooms, paneled wood library/office, gourmet white eat-in-kitchen offering full size refrigerator and freezer & commercial grade appliances, Butler's pantry, plus step down family room with fireplace. All information that influences a decision to purchase a listed property should be independently verified by the purchaser. Our interactive guide can help find which is right for you, and guide you through the paperwork. Yes, I would like more information from Coldwell Banker. Surrounded by beautiful custom built estate homes and convenient to all New Canaan has to offer. Newly finished lower level has additional +/-850 sq ft not included in sq ft. and includes Family room, laundry room and storage. If you have feedback about an individual agent or office, please locate the office and contact the manager. Luxurious master suite is on the first floor. This Single Family House is 4-bed, 4-bath, 3,006-Sqft ($399/Sqft), listed at $1,200,000. Homes.com | © 2020 Dominion Enterprises. contact a Coldwell Banker agent to request more information. Similar properties nearby are <a href="/property/600-oenoke-rdg-new-canaan-ct-06840/id-500013500855/">600 Oenoke Rdg</a>, <a href="/property/263-oenoke-rdg-new-canaan-ct-06840/id-500013500774/">263 Oenoke Rdg</a>, <a href="/property/new-canaan-ct-06840/id-500013501067/">19 Father Peters Ln</a>, <a href="/property/33-rippowam-rd-new-canaan-ct-06840/id-500013499755/">33 Rippowam Rd</a>, <a href="/property/new-canaan-ct-06840/id-1000008121883/">680 Carter St</a>, <a href="/property/188-brushy-ridge-rd-new-canaan-ct-06840/id-500013501819/">188 Brushy Ridge Rd</a>, <a href="/property/new-canaan-ct-06840/id-500013501080/">20 Father Peters Ln</a>, <a href="/property/pound-ridge-ny-10576/id-400022522947/">17 Eastwoods Rd</a>, <a href="/property/69-windrow-ln-new-canaan-ct-06840/id-500013500688/">69 Windrow Ln</a>, and <a href="/property/955-ponus-rdg-new-canaan-ct-06840/id-500013499565/">955 Ponus Rdg</a>. </p> <p>Explore the area around 406 Silvermine Rd. Park- like level property has mature landscaping done by Hamptons landscape architect , Elizabeth Lear, this home has beautiful flower gardens, two outdoor patios & is perfect for entertaining guests and family cook-outs. </p>";s:7:"keyword";s:35:"406 silvermine road, new canaan, ct";s:5:"links";s:7654:"<a href='https://ricebrok-staging.webcooks.in/docs/stephanie-sinopsis-86e6ec'>Stephanie Sinopsis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thierry-noir-prints-86e6ec'>Thierry Noir Prints</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-two-noble-kinsmen-characters-86e6ec'>The Two Noble Kinsmen Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/no-other-woman-famous-lines-86e6ec'>No Other Woman Famous Lines</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rotten-tomatoes-meaning-86e6ec'>Rotten Tomatoes Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/babyface-net-worth-86e6ec'>Babyface Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hannah-ware-net-worth-86e6ec'>Hannah Ware Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clockwork-orange-analysis-86e6ec'>Clockwork Orange Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notorious-gangsters-86e6ec'>Notorious Gangsters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/summer-work-outfits-men%27s-86e6ec'>Summer Work Outfits Men's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sophia-lillis-long-hair-86e6ec'>Sophia Lillis Long Hair</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/philodendron-xanadu-propagation-86e6ec'>Philodendron Xanadu Propagation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/9-eta-86e6ec'>9 Eta</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-pratt-son-86e6ec'>Chris Pratt Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-laura-harrier-86e6ec'>Klay Thompson Laura Harrier</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-women%27s-soccer-ranking-86e6ec'>Clemson Women's Soccer Ranking</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/frankenstein-must-be-destroyed-123movies-86e6ec'>Frankenstein Must Be Destroyed 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vincent-kartheiser-and-alexis-bledel-86e6ec'>Vincent Kartheiser And Alexis Bledel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dawn-of-the-dead-unblocked-86e6ec'>Dawn Of The Dead Unblocked</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/muggsy-bogues-height-cm-86e6ec'>Muggsy Bogues Height Cm</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-good-burger-on-netflix-86e6ec'>Is Good Burger On Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spain-divisi%C3%B3n-de-honor-juvenil-86e6ec'>Spain División De Honor Juvenil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/inbred-children-86e6ec'>Inbred Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hayley-kiyoko-2020-86e6ec'>Hayley Kiyoko 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-mcclelland-net-worth-86e6ec'>Anthony Mcclelland Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tidying-up-with-marie-kondo-episode-6-86e6ec'>Tidying Up With Marie Kondo Episode 6</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-lapaglia-net-worth-86e6ec'>Anthony Lapaglia Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eazy-e-real-muthaphuckkin-g%27s-86e6ec'>Eazy-e Real Muthaphuckkin G's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fragile-pronunciation-in-british-english-86e6ec'>Fragile Pronunciation In British English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kai-schreiber-gender-86e6ec'>Kai Schreiber Gender</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-schwartz-father-86e6ec'>Anthony Schwartz Father</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/birdy-wings-remix-86e6ec'>Birdy Wings Remix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/real-madrid-dls-kit-2021-86e6ec'>Real Madrid Dls Kit 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-00%2F01-86e6ec'>Arsenal 00/01</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthrax-spreading-the-disease-30th-anniversary-86e6ec'>Anthrax Spreading The Disease 30th Anniversary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pen15-season-1-episode-1-full-episode-86e6ec'>Pen15 Season 1 Episode 1 Full Episode</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-white-negro-summary-86e6ec'>The White Negro Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dinner-at-the-homesick-restaurant-themes-86e6ec'>Dinner At The Homesick Restaurant Themes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ernesto-valverde-salary-86e6ec'>Ernesto Valverde Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/84%2C-charing-cross-road-pdf-86e6ec'>84, Charing Cross Road Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonah-hill-girlfriend-86e6ec'>Jonah Hill Girlfriend</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-beast-osrs-86e6ec'>Night Beast Osrs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/supervolcano-eruption-2020-86e6ec'>Supervolcano Eruption 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/punctuation-marks-94-86e6ec'>Punctuation Marks 94</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/talking-heads-the-overload-joy-division-86e6ec'>Talking Heads The Overload Joy Division</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cj-mccollum-wine-buy-86e6ec'>Cj Mccollum Wine Buy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/converse-for-%2415-86e6ec'>Converse For $15</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/super-mega-baseball-3-trailer-86e6ec'>Super Mega Baseball 3 Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hard-candy-makeup-dollar-tree-86e6ec'>Hard Candy Makeup Dollar Tree</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sky-sports-f1-presenters-86e6ec'>Sky Sports F1 Presenters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/animal-crossing-fortune-teller-set-86e6ec'>Animal Crossing Fortune Teller Set</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kitty-vs-alacritty-86e6ec'>Kitty Vs Alacritty</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nemesis-greek-goddess-86e6ec'>Nemesis Greek Goddess</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/breath-of-life-the-awakening-86e6ec'>Breath Of Life The Awakening</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stephanie-cmar-top-chef-season-10-86e6ec'>Stephanie Cmar Top Chef Season 10</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/breathe-and-stop-video-models-86e6ec'>Breathe And Stop Video Models</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-recruiter-network-reviews-86e6ec'>The Recruiter Network Reviews</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-motto-86e6ec'>Arsenal Motto</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ambush-ring-86e6ec'>Ambush Ring</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/friction-meaning-in-tamil-86e6ec'>Friction Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/does-spasmo-proxyvon-cause-infertility-86e6ec'>Does Spasmo Proxyvon Cause Infertility</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amuse-sentence-86e6ec'>Amuse Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/karen-cabin-fever-86e6ec'>Karen Cabin Fever</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vivianne-miedema-dates-joined-86e6ec'>Vivianne Miedema Dates Joined</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-brothers-86e6ec'>Klay Thompson Brothers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/haunted-mansion-86e6ec'>Haunted Mansion</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,129 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3756:"<p>Whether or not all of these are true remains to be seen. This is still only a rumour so keep that in mind but, according to YouTube channel RedGamingTech, Metal Gear Solid is getting remade (its second full-blown remake since Twin Snakes on the GameCube) rather than a port or polished remaster. </p> <p>The source also reported Metal Gear Solid 2, 3, and 4 are being re-released, albeit as remasters rather than a full remake. But, if it is … This game bundle contains a treasure trove of classic NES titles, including the first three Castlevania games, as well as Contra and Super C, which spells even more good news for OG Konami fans. In addition, a PC port for Konami Collector’s Series: Castlevania and Contra was also listed. Forgive him in advance if he suddenly blurts out terms such as “Mind Flayer” and “Magic Missile”, because never once does he stop thinking about his next Dungeons & Dragons game. Marion has a serious RPG addiction.  By visiting this page, you declare yourself one of us! Copyright © 2013-2020 Geek Culture LLP.Privacy Policy | Work With Us | Join UsProudly hosted by Kroud, Two PlayStation 5 Launch Titles Will Already Take Up 20% Of Your Console's SSD, Transformers Are Rolling Out Into World Of Warships As Playable Dreadnaughts, South Korea’s Biggest K-pop Group BTS To Debut Music Video In Fortnite, Konami Collector’s Series: Castlevania and Contra. In addition to Metal Gear Solid and Metal Gear Solid 2: Substance coming to PC, GOG.com has also added the original Metal Gear, plus Konami Collector’s Series, a compilation that … It is unlikely that he would return to oversee this remake and do we really want a Metal Gear Solid remake without Hideo Kojima? Privacy Policy Additionally, Metal Gear Solid 2, 3, and 4 are all reportedly getting PC ports as well, though they will be just remastered versions of the original games instead of full-blown remakes. </p> <p>According to RedGamingTech on YouTube (via Push Square), the original PS1 title could be coming to the PS5, as well as the PC. The same YouTube creator also mentions that Metal Gear Solid 2, 3, and 4 are reportedly getting PC ports — or remasters. </p> <p>Advertise on The Digital Fix © Copyright Poisonous Monkey Ltd, Registered in England & Wales. Sometimes it bleeds into real life; he forgets to sleep because he thinks he has a Witcher’s body clock. </p> <p>How accurate this rumor is remains to be seen, though RedGamingTech’s source is known to be accurate. We appreciate your support. How accurate this rumor is remains to be seen, though RedGamingTech’s source is known to be accurate. RedGamingTech has a proven track record with reporting leaks, although usually related to hardware rather than games, but it comes via a source that they trust implicitly. This is backed up by a report from Gematsu, who cite ratings for Metal Gear, Metal Gear Solid, Metal Gear Solid … Hosting by Stablepoint, Search for the best prices on thousands of products. </p> <p>The ratings are only for PC releases and there is no word on whether these games will be available on PS5 but if the MGS Remake rumours pan out, it is likely these remasters could also find their way onto Sony’s platform. While we’re certainly going to have our hands full with the likes of Marvel’s Spider-Man: Miles Morales and Demon’s Souls, and later on God of War: Ragnarok, Horizon Forbidden West and Final Fantasy XVI, here’s another name that could see a potential release on the new console: Metal Gear Solid. </p> <p>Just like the Beholder we have adopted as our mascot, we have both depth and width of geeky topics we cover. The question is, do we want this? The ratings even include images to support the theory further. </p>";s:7:"keyword";s:30:"metal gear solid remastered pc";s:5:"links";s:9120:"<a href='https://ricebrok-staging.webcooks.in/docs/xosha-roquemore-baby-daddy-86e6ec'>Xosha Roquemore Baby Daddy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/motor-neurone-disease-diagnosis-86e6ec'>Motor Neurone Disease Diagnosis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brandon-ingram-net-worth-86e6ec'>Brandon Ingram Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-magnificent-ambersons-streaming-86e6ec'>The Magnificent Ambersons Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/famous-texas-rangers-players-86e6ec'>Famous Texas Rangers Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonathan-taylor-thomas-singing-i-just-can-t-wait-to-be-king-86e6ec'>Jonathan Taylor Thomas Singing I Just Can T Wait To Be King</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-allen-upcoming-movies-86e6ec'>Tim Allen Upcoming Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/antigone-pronunciation-86e6ec'>Antigone Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tulpan-movie-online-86e6ec'>Tulpan Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/muriel-the-arcana-86e6ec'>Muriel The Arcana</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dilemma-examples-86e6ec'>Dilemma Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lexi-murphy-86e6ec'>Lexi Murphy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/women%27s-tennis-statistics-86e6ec'>Women's Tennis Statistics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cardinal-sin-band-86e6ec'>Cardinal Sin Band</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mlm-meaning-86e6ec'>Mlm Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eyes-wide-shut-is-confusing-86e6ec'>Eyes Wide Shut Is Confusing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wake-up-meme-funny-86e6ec'>Wake Up Meme Funny</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/motsi-mabuse-net-worth-86e6ec'>Motsi Mabuse Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pushover-pricing-86e6ec'>Pushover Pricing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/natalie-sawyer-leaves-talksport-86e6ec'>Natalie Sawyer Leaves Talksport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jane-hajduk-parents-86e6ec'>Jane Hajduk Parents</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henrik-ibsen-86e6ec'>Henrik Ibsen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/griffin-o%27neal-86e6ec'>Griffin O'neal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lima-restaurant-86e6ec'>Lima Restaurant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/william-frawley-wife-86e6ec'>William Frawley Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shepard-fairey-facts-86e6ec'>Shepard Fairey Facts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-francis-net-worth-2020-86e6ec'>Steve Francis Net Worth 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-western-michigan-football-86e6ec'>2019 Western Michigan Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/5-friends-images-hd-86e6ec'>5 Friends Images Hd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dial-m-for-murders-movie-tamil-86e6ec'>Dial M For Murders Movie Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/be-afraid-cast-86e6ec'>Be Afraid Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-conjuring-universe-movies-86e6ec'>The Conjuring Universe Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/she-cried-no-cast-86e6ec'>She Cried No Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2009-nba-draft-combine-measurements-86e6ec'>2009 Nba Draft Combine Measurements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/parenthood-streaming-86e6ec'>Parenthood Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tiffany-eastenders-martine-86e6ec'>Tiffany Eastenders Martine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/air-max-90-black-86e6ec'>Air Max 90 Black</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-coral-island-questions-and-answers-86e6ec'>The Coral Island Questions And Answers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/living-in-oblivion-movie-analysis-86e6ec'>Living In Oblivion Movie Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/waikiki-wedding-packages-86e6ec'>Waikiki Wedding Packages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/body-slam-%281986-full-movie%29-86e6ec'>Body Slam (1986 Full Movie)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aap-mujhe-achche-lagne-lage-watch-online-86e6ec'>Aap Mujhe Achche Lagne Lage Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/civic-arena-of-milan-86e6ec'>Civic Arena Of Milan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kurupt-songs-86e6ec'>Kurupt Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nocturnal-animals-explained-86e6ec'>Nocturnal Animals Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vehicle-legends-codes-86e6ec'>Vehicle Legends Codes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/celtic-players-who-support-rangers-86e6ec'>Celtic Players Who Support Rangers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nala-davis-86e6ec'>Nala Davis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bowling-rules-points-86e6ec'>Bowling Rules Points</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/neptune-movie-ending-86e6ec'>Neptune Movie Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paper-hearts-ali-novak-86e6ec'>Paper Hearts Ali Novak</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bono-wife-age-86e6ec'>Bono Wife Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/faded-piano-chords-86e6ec'>Faded Piano Chords</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/battle-of-nanking-86e6ec'>Battle Of Nanking</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tulane-football-2020-86e6ec'>Tulane Football 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremy-lin-wedding-86e6ec'>Jeremy Lin Wedding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-daniel-sloan-height-86e6ec'>Robert Daniel Sloan Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jasper-jones-play-86e6ec'>Jasper Jones Play</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/made-in-heaven-season-2-release-date-86e6ec'>Made In Heaven Season 2 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/griffin-o%27neal-86e6ec'>Griffin O'neal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/walsall-fc-86e6ec'>Walsall Fc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mercy-hospital-chicago-86e6ec'>Mercy Hospital Chicago</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sorry-to-bother-you-meaning-86e6ec'>Sorry To Bother You Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ayesha-curry-thanksgiving-86e6ec'>Ayesha Curry Thanksgiving</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ellis-genge-instagram-86e6ec'>Ellis Genge Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bruce-anderson-1912-86e6ec'>Bruce Anderson 1912</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/efl-championship-86e6ec'>Efl Championship</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/winter%27s-bone-characters-86e6ec'>Winter's Bone Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/snow-day-full-movie-86e6ec'>Snow Day Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stormtroopers-of-death-speak-english-or-die-lyrics-86e6ec'>Stormtroopers Of Death Speak English Or Die Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/games-about-water-uses-86e6ec'>Games About Water Uses</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-eyed-jacks-bbq-menu-86e6ec'>One-eyed Jacks Bbq Menu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyle-korver-age-86e6ec'>Kyle Korver Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/punctuation-marks-94-86e6ec'>Punctuation Marks 94</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-bat-predators-86e6ec'>Vampire Bat Predators</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/disturbia-streaming-86e6ec'>Disturbia Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tony-rowe-obe-age-86e6ec'>Tony Rowe Obe Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adopt-a-mile-86e6ec'>Adopt A Mile</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/life-movie-ending-86e6ec'>Life Movie Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cheers-for-democracy-quote-86e6ec'>Two Cheers For Democracy Quote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-sanders-net-worth-86e6ec'>George Sanders Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/danny-lloyd-doctor-sleep-86e6ec'>Danny Lloyd Doctor Sleep</a>,
+";s:7:"expired";i:-1;}

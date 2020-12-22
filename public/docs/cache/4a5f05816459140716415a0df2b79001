@@ -1,0 +1,85 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3116:"<p>Use a mixing console in Pro version. They employ a vocal choir for heavenly emphasis when appropriate and allow silence to create spaces between what the lyrics say and the instrument's voice. ‘Grand Army’: The Kids Are Not Alright Netflix’s new teen drama tackles hot-button topics like sexual assault, identity, and racism with a deft touch Sean and Chris welcome special guest Myke Thompson to discuss Childish Gambino's album "Awaken, My Love!". Best time and place to listen to. Guitar, guitar pro, bass, drum tabs and chords with online tab player. The best we can do is to declare ourselves and keep on keeping on. Rateliff has mentioned the work of Harry Nilsson as a songwriting inspiration, and this can be heard on the whimsical melodies and wordplay of songs such as "All or Nothing" and the title track. You can also catch Rateliff on his previously announced “And It’s Still Alright Tour” by getting tickets here. And It’s Still Alright Tracklist:01. You Need Me 08. </p> <p>Sean and Chris welcome special guest Matt Burnett to discuss Radiohead's album In Rainbows. B.B. Watch The Tonight Show Starring Jimmy Fallon highlight 'Nathaniel Rateliff: And It's Still Alright' on NBC.com </p> <p>Which lyrics stood out? And It's Still Alright is a Rateliff record, and although he is joined by violinist Tom Hagerman, bassist Elijah Thomson, keyboardist Daniel Creamer, steel guitarist Eric Swanson, and guitarist Luke Mossman (and two drummers), the music sounds intimate as if it is just Rateliff speaking one to one with the listeners. And It’s Still Alright  “They say you learn a lot out there/ How to scorch and burn/ Gonna have to bury your friends/ Then you’ll find it gets worse,” he sings, ending every verse with the short refrain, “But it’s still alright.”. This persona allows Rateliff to take on various roles from song to song. </p> <p>Tonight Show Polls: What’s the Greatest Threat Facing Our Nation? </p> <p>Rush On, The No. The album's last song—and it's longest one—the six-minute plus "Rush On" plods on at a slow pace. As punks were looking for some potential pathways out of the cul-de-sacs of their limited soundscapes, they saw in funk a way to expand the punk palette without sacrificing either their ethos or idea(l)s. The Reign of Kindo's Joseph Secchiaroli delves deep into their latest single and future plans, as well as how COVID-19 has affected not only the band but America as a whole. Learn to play And Its Still Alright Chords by Nathaniel Rateliff. Initially, Rateliff had wanted to call the record All or Nothing, after one of its songs, before settling on And It’s Still Alright. </p> <p>On Waiting Out the Storm, Jeremy Ivey apologizes for present society's destruction of the environment and wonders if racism still exists in the future and whether people still get high and have mental health issues. Easy Guitar Chords with Strumming Pattern. Senator Kamala Harris, Talib Kweli, Roy Wood Jr. Kareem Abdul-Jabbar, Phoebe Robinson, W. Kamau Bell, Sofia Vergara, Steve Coogan & Rob Brydon, Courtney Barnett. What a Drag 02. </p>";s:7:"keyword";s:34:"how to play and it's still alright";s:5:"links";s:4346:"<a href='https://ricebrok-staging.webcooks.in/docs/stanley-kubrick-quotes-on-filmmaking-86e6ec'>Stanley Kubrick Quotes On Filmmaking</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/coastlines-of-submergence-86e6ec'>Coastlines Of Submergence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brainstorming-description-in-malayalam-86e6ec'>Brainstorming Description In Malayalam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nocturne-music-86e6ec'>Nocturne Music</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremy-howard-net-worth-86e6ec'>Jeremy Howard Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/c-michael-armstrong-naples%2C-fl-86e6ec'>C Michael Armstrong Naples, Fl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shirin-wheeler-mother-86e6ec'>Shirin Wheeler Mother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trick-questions-86e6ec'>Trick Questions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hakeem-olajuwon-now-86e6ec'>Hakeem Olajuwon Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wyrmwood-gaming-table-kickstarter-86e6ec'>Wyrmwood Gaming Table Kickstarter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/damien-hirst-house-86e6ec'>Damien Hirst House</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/picnic-food-86e6ec'>Picnic Food</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cj-mccollum-wife-dentist-86e6ec'>Cj Mccollum Wife Dentist</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blu-ray-reviews-uk-86e6ec'>Blu-ray Reviews Uk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-college-basketball-roster-86e6ec'>Notre Dame College Basketball Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/secret-in-their-eyes---ending-explained-86e6ec'>Secret In Their Eyes - Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brainstorm-in-a-sentence-86e6ec'>Brainstorm In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/air-max-90-black-86e6ec'>Air Max 90 Black</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-wrote-if-i-had-a-hammer-86e6ec'>Who Wrote If I Had A Hammer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-old-is-frances-de-la-tour-86e6ec'>How Old Is Frances De La Tour</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jason-bell-obituary-kentucky-86e6ec'>Jason Bell Obituary Kentucky</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nightmare-cinema-spider-86e6ec'>Nightmare Cinema Spider</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lois-nettleton-grave-86e6ec'>Lois Nettleton Grave</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/backyard-olympic-games-86e6ec'>Backyard Olympic Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/patrick-mouratoglou-wife-86e6ec'>Patrick Mouratoglou Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/don%27t-breathe-2-86e6ec'>Don't Breathe 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eduard-davidovich-86e6ec'>Eduard Davidovich</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-did-klay-thompson-and-laura-harrier-meet-86e6ec'>How Did Klay Thompson And Laura Harrier Meet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/single-ladies-choreography-86e6ec'>Single Ladies Choreography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pablo-hernandez-86e6ec'>Pablo Hernandez</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/catholic-rangers-players-86e6ec'>Catholic Rangers Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/max-duffy-nfl-draft-86e6ec'>Max Duffy Nfl Draft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mother-night-symbols-86e6ec'>Mother Night Symbols</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tiverton-gazette-funeral-notices-86e6ec'>Tiverton Gazette Funeral Notices</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/motor-neuron-disease-types-86e6ec'>Motor Neuron Disease Types</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liangelo-ball-net-worth-2020-86e6ec'>Liangelo Ball Net Worth 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tracker-atv-bass-pro-86e6ec'>Tracker Atv Bass Pro</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ianis-hagi-fifa-19-86e6ec'>Ianis Hagi Fifa 19</a>,
+";s:7:"expired";i:-1;}

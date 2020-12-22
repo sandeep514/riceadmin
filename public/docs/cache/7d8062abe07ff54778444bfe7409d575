@@ -1,0 +1,90 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3765:"<br>No B. Biologydictionary.net, November 28, 2016. https://biologydictionary.net/species/. A species is a group of organisms that share a genetic heritage, are able to interbreed, and to create offspring that are also fertile. Other foxes such as the swift fox, Vulpes velox, are also part of the Vulpes genus, but barriers exist that keep them from interbreeding with the Red foxes. While they have the same number of chromosomes and could technically breed, the domestic dog has come a long way from its wild counterpart. Species is one of the most specific classification that scientists use to describe animals.  <br>Get exclusive access to content from our 1768 First Edition with your subscription. Updates? <br> <br>A. Biologydictionary.net Editors. <br> <br>Now you have seen a lot of different examples of different types of species. <br> <br>In this way, they remain distinct species. Species,  in biology, classification comprising related organisms that share common characteristics and are capable of interbreeding. They are still separated by a geographical reproductive barrier. <br> <br>Linnaeus, classifying organisms in the 1700s, restricted his classifications to the physical attributes of various organisms. Sexual dimorphism is a type of speciation C. They are considered different species. Because of this, animals can often hybridize, or mate between species. Omissions? These populations, according to Darwin and Wallace, are now considered separate species. Some examples include the ecological species concept, which describes a species as a group of organisms framed by the resources they depend on (in other words, their ecological niche), and the genetic species concept, which considers all organisms capable of inheriting traits from one another within a common gene pool and the amount of genetic difference between populations of that species. https://www.britannica.com/science/species-taxon, University College, London - Biodiversity and Species. All Rights Reserved. Be on the lookout for your Britannica newsletter to get trusted stories delivered right to your inbox. “Species.”, Biologydictionary.net Editors. Thus, some animals like the Red fox, Vulpes vulpes, are both in the genus Vulpes and their species name is vulpes. Biologydictionary.net Editors. <br> Organisms are grouped into species partly according to their morphological, or external, similarities, but more important in classifying sexually reproducing organisms is the organisms’ ability to successfully interbreed. Keystone species often dominate the attention of ecologists and policy-makers, who develop specific strategies for their protection, while media repeatedly report on their conservation status. A. <br> <br>Modern day scientists have been forced to reclassify the elephant several times. Still other animals, like dogs and wolves, are still technically the same species. Oftentimes the only barrier to reproduction is geographic, or based on the physical location of the animals. Here are examples of plant species with their common name listed first: Allegheny Mountain buttercup - Ranunculus allegheniensis, New Mexico evening primrose - Oenothera neomexicana, Yellow cockspur - Centaurea solstitialisFungi Species. Because genetic variations originate in individuals of a species and because those individuals pass on their variations only within the species, then it is at the species level that evolution takes place. Our editors will review what you’ve submitted and determine whether to revise the article. However, a Chihuahua can breed with a slightly bigger dog, which can breed with large dog, which could easily breed with a wolf. The genes that control growth in the turtle would not function in a bat, and vis-versa. <br>";s:7:"keyword";s:16:"species examples";s:5:"links";s:4872:"<a href='https://ricebrok-staging.webcooks.in/docs/flashdance-dancer-dies-86e6ec'>Flashdance Dancer Dies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bae-doona-english-86e6ec'>Bae Doona English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-phantom-tollbooth-characters-86e6ec'>The Phantom Tollbooth Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netball-history-86e6ec'>Netball History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skeet-ulrich-wife-86e6ec'>Skeet Ulrich Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martin-om-28-reimagined-86e6ec'>Martin Om-28 Reimagined</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/princess-o%27mahoney-86e6ec'>Princess O'mahoney</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/carlito%27s-way-netflix-uk-86e6ec'>Carlito's Way Netflix Uk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stigmata-medical-86e6ec'>Stigmata Medical</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/9mm-ammo-near-me-86e6ec'>9mm Ammo Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yayoi-kusama-dots-room-86e6ec'>Yayoi Kusama Dots Room</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-demon-poe-86e6ec'>The Demon Poe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-time-to-dive-god%27s-pocket-86e6ec'>Best Time To Dive God's Pocket</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doc-rivers-salary-sixers-86e6ec'>Doc Rivers Salary Sixers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyrie-irving-2k20-rating-86e6ec'>Kyrie Irving 2k20 Rating</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/over-and-over-and-over-again-rock-song-86e6ec'>Over And Over And Over Again Rock Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rhodri-giggs-advert-86e6ec'>Rhodri Giggs Advert</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/citizenfour-awards-86e6ec'>Citizenfour Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/higher-learning-movie-essay-86e6ec'>Higher Learning Movie Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spring-season-essay-86e6ec'>Spring Season Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hwayi%3A-a-monster-boy-online-86e6ec'>Hwayi: A Monster Boy Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drywall-primer-86e6ec'>Drywall Primer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aquamarine-full-movie-full-screen-86e6ec'>Aquamarine Full Movie Full Screen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-caruso-sister-86e6ec'>Alex Caruso Sister</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leaving-las-vegas-book-pdf-86e6ec'>Leaving Las Vegas Book Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-make-american-girl-dolls-86e6ec'>How To Make American Girl Dolls</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-capture-the-castle-quotes-86e6ec'>I Capture The Castle Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-evil-%282020-english-subtitles%29-86e6ec'>Deliver Us From Evil (2020 English Subtitles)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/everything-you-need-to-ace-86e6ec'>Everything You Need To Ace</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-long-riders-script-86e6ec'>The Long Riders Script</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/we-are-what-we-are-spoilers-86e6ec'>We Are What We Are Spoilers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fullarton-park-vale-of-clyde-86e6ec'>Fullarton Park Vale Of Clyde</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lleida-poblaci%C3%B3n-86e6ec'>Lleida Población</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/death-ceremony-86e6ec'>Death Ceremony</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/promethazine-pregnancy-86e6ec'>Promethazine Pregnancy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/why-was-the-electoral-college-created-86e6ec'>Why Was The Electoral College Created</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jesus-crucifixion-movie-netflix-86e6ec'>Jesus Crucifixion Movie Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-line-up-2020-86e6ec'>Barcelona Line Up 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daphnis-and-chloe-pdf-86e6ec'>Daphnis And Chloe Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nba-courtside-2003-86e6ec'>Nba Courtside 2003</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fall-sports-86e6ec'>Fall Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tennessee-football-roster-2020-86e6ec'>Tennessee Football Roster 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-make-a-scarecrow-head-86e6ec'>How To Make A Scarecrow Head</a>,
+";s:7:"expired";i:-1;}

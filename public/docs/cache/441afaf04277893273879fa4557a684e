@@ -1,0 +1,111 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3170:"The swimsuit shots came after the Waitress star posted a fun slideshow of photos that featured her on the boat — drink in hand — in an ‘80s-inspired get-up. And cut to 12 months later, and the singer/actress and The Real Housewives of Beverly Hills ex-husband are living in wedded bliss. He also offered his wife praise for coming into his family and getting along with all of his grown kiddos. RELATED: From Robin & Clement to Harry & Meghan: See Which Star Couples Tied the Knot in 2018. ", Katharine then responded about her husband, who just so happened to write the track: "The real reason I married David. Only one of the 10 is an age difference. Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube. © Copyright 2020 HollywoodLife, LLC, a subsidiary of Penske Business Media, LLC. Katharine and David are currently on their honeymoon in Italy! I really like her. Actress Katharine McPhee and her husband David Foster are reportedly expecting their first child together. The couple got married just over a year ago, making McPhee, 36, stepmom to Sara, 39, Erin, 37, and Jordan, 34 -- as well as David's other children Alison, 50, Amy, 46. ", She also paid homage to her husband to mark their one-year wedding anniversary: "A year ago today I married the love of my life. “And maybe a little Xanax.”. Katharine McPhee was a vision in white on her wedding day. ❤️.”, I CAN'T STOP POSTING PICTURES OF KAT IN HER WEDDING DRESS I'M  @katharinemcphee #katharinemcphee, A post shared by  met elyes cherif gabel  (@teamscorpionfamily) on Jun 28, 2019 at 6:21pm PDT, Before standing on the altar, Katharine treated herself to a facial and face mask on the morning of her big day. Photo: Courtesy of Zac Posen. Today… I’m marrying the man who produced it. Erin’s sister Amy, 45, also shared a video of herself receiving an IV drip. Katharine McPhee and David Foster were first romantically linked in May 2017 but they've been friends for over a decade. I love you. (Steven Ferdman/WireImage via Getty Images), Fox News Flash top entertainment headlines for July 1, Why 'The Rock' is endorsing THIS candidate, 'SNL' cold open mocks Trump, Biden dueling town halls, Zachery Ty Bryan of 'Home Improvement' arrested, accused of trying to strangle girlfriend, Rapper Nuke Bizzle arrested for identity theft, fraud after boasting about unemployment scam in music video, Johnny Bush, songwriter who penned Willie Nelson's 'Whiskey River,' dead at 85, Atlanta cops make arrest in actor Thomas Jefferson Byrd's shooting death. Now Mrs. Foster No. The historic parish was built in 1867, and currently holds the title of Great Britain’s largest Armenian Apostolic Church. ), A post shared by  Katharine McPhee Foster (@katharinefoster) on Jun 28, 2020 at 12:10pm PDT. Katharine McPhee and David Foster officially tied the knot in a beautiful wedding in London yesterday, June 28th. Text us for exclusive photos and videos, royal news, and way more. Katharine McPhee and David Foster tied the knot last week and now they’re giving an inside look at their romantic wedding in London! ";s:7:"keyword";s:24:"katharine mcphee wedding";s:5:"links";s:7286:"<a href='https://ricebrok-staging.webcooks.in/docs/guitar-trio-pedal-86e6ec'>Guitar Trio Pedal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-indifferent-86e6ec'>How To Pronounce Indifferent</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alhambra-palace-86e6ec'>Alhambra Palace</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/early-explorers-86e6ec'>Early Explorers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/x-15-crash-86e6ec'>X-15 Crash</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dreamland-margate-events-86e6ec'>Dreamland Margate Events</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-conformist-2019-86e6ec'>The Conformist 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/team-sports-benefits-86e6ec'>Team Sports Benefits</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bellatrix-ainslie-86e6ec'>Bellatrix Ainslie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unpublished-electoral-roll-86e6ec'>Unpublished Electoral Roll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beyond-the-border-action-plan-86e6ec'>Beyond The Border Action Plan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thuy-le-nationality-86e6ec'>Thuy Le Nationality</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/denis-shapovalov-ranking-2020-86e6ec'>Denis Shapovalov Ranking 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/everton-catholic-86e6ec'>Everton Catholic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hamilton-academical-vs-st-mirren-prediction-86e6ec'>Hamilton Academical Vs St Mirren Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pakistan-cricket-team-86e6ec'>Pakistan Cricket Team</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kentucky-football-recruiting-offers-2020-86e6ec'>Kentucky Football Recruiting Offers 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/peripheral-pulses-2-86e6ec'>Peripheral Pulses 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-big-lift-barnes-86e6ec'>The Big Lift Barnes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-air-script-86e6ec'>Dead Air Script</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kerry-katona-mark-croft-86e6ec'>Kerry Katona Mark Croft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/4-sided-triangle-name-86e6ec'>4-sided Triangle Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/allgemeine-betriebserlaubnis-86e6ec'>Allgemeine Betriebserlaubnis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marketing-podcasts-uk-86e6ec'>Marketing Podcasts Uk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-oklahoma-state-football-schedule-86e6ec'>2020 Oklahoma State Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chloe-franks-2018-86e6ec'>Chloe Franks 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brynley-arnold-age-86e6ec'>Brynley Arnold Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trevor-ariza-kobe-86e6ec'>Trevor Ariza Kobe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-lazarus-effect-on-hulu-86e6ec'>Is The Lazarus Effect On Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/la-jet%C3%A9e-watch-online-86e6ec'>La Jetée Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2d-fighting-games-pc-86e6ec'>2d Fighting Games Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ultraviolence-clockwork-orange-86e6ec'>Ultraviolence Clockwork Orange</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nightwish-bless-the-child-lyrics-86e6ec'>Nightwish Bless The Child Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skeleton-crew-narrators-86e6ec'>Skeleton Crew Narrators</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/diamond-farnsworth-86e6ec'>Diamond Farnsworth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bluffmaster-songs-86e6ec'>Bluffmaster Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/harden-vol-3-86e6ec'>Harden Vol 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/edie-falco-italian-86e6ec'>Edie Falco Italian</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/archie-kao-net-worth-86e6ec'>Archie Kao Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jimmy-workman-wife-86e6ec'>Jimmy Workman Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martin-e-brooks-net-worth-86e6ec'>Martin E Brooks Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leyton-orient-italian-ownerhawai%27i-football-stats-2018-86e6ec'>Leyton Orient Italian Ownerhawai'i Football Stats 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-the-line-of-fire-assassination-86e6ec'>In The Line Of Fire Assassination</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/okey-game-86e6ec'>Okey Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mr-potato-head-song-lyrics-86e6ec'>Mr Potato Head Song Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/high-school-tennis-rules-86e6ec'>High School Tennis Rules</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/perfect-strangers-%282016-full-movie%29-86e6ec'>Perfect Strangers (2016 Full Movie)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/iam-hendersonville%2C-nc-86e6ec'>Iam Hendersonville, Nc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-daniel-sloan-height-86e6ec'>Robert Daniel Sloan Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/straight-outta-compton-song-lyrics-86e6ec'>Straight Outta Compton Song Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/quick-change-full-movie-86e6ec'>Quick Change Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bedknobs-and-broomsticks-watch-online-86e6ec'>Bedknobs And Broomsticks Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-did-erwin-rommel-die-86e6ec'>How Did Erwin Rommel Die</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ruby-programming-language-examples-86e6ec'>Ruby Programming Language Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/keith-bogans-high-school-86e6ec'>Keith Bogans High School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/animal-house-jacksonville%2C-nc-86e6ec'>Animal House Jacksonville, Nc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-house-flash-game-86e6ec'>The House Flash Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mary-frann-wiki-86e6ec'>Mary Frann Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-s-p-e-c-i-a-l-86e6ec'>How To Pronounce S P E C I A L</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leon-balogun---stats-86e6ec'>Leon Balogun - Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-patterson-first-wife-86e6ec'>Gary Patterson First Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-did-frances-hodgson-burnett-die-86e6ec'>How Did Frances Hodgson Burnett Die</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anjaam-pathiraa-86e6ec'>Anjaam Pathiraa</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/heartbeat-in-a-sentence-86e6ec'>Heartbeat In A Sentence</a>,
+";s:7:"expired";i:-1;}

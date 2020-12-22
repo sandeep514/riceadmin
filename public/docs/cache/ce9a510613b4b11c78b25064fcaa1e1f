@@ -1,0 +1,109 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2556:" Marc Gasol was born in Barcelona, Spain in … Marc signed a four year $58 million deal with Memphis in 2011. Marc is the younger brother of NBA player Pau Gasol. Marc Gasol Saez was born on January 29, 1985 in Barcelona, Spain. How much money is Marc Gasol worth at the age of 35 and what’s his real net worth now? Gasol grew up in Spain but moved to Memphis, Tennessee where he played high school basketball. Marc is a Aquarius. He was named to the NBA All-Rookie Second Team in 2009 and was an NBA All-Star in 2012. These revolutionary thinkers support “power to the people,” aspiring to change the world through radical social progress. He moved to the United States after his brother, Pau, was drafted, and he was named Memphis’s Division 2 Mr. Basketball in 2003. Since then, he has been playing for the Memphis Grizzlies after he signed a contract with the team on June 23, 2o08. The Los Angeles Lakers selected him as the second round (48th overall) pick of the 2008 NBA Draft. All net worths are calculated through the combination of a robust methodology and a proprietary algorithm. He currently resides in Barcelona, Spain. He was also named NBA Defensive Player of the Year. The education details are not available at this time. Marc Gasol attended Memphis' Lausanne Collegiate School where he played basketball and was named as  "the Big Burrito.". Marc Gasol was born in Barcelona, Spain on Tuesday, January 29, 1985 (Millennials Generation). Marc went back to Spain to play professionally for FC Barcelona from 2004 to 2006 and then played for Akasvayu Girona from 2006 to 2008. In 2013 Gasol was part of the All-NBA Second Team and NBA All-Defensive Second Team. © 2020 Celebrity Net Worth / All Rights Reserved, © 2015 Celebrity Net Worth / All Rights Reserved. Gasol was a Spanish League champion in 2004 and was named Spanish League MVP in 2008. He currently plays in the National Basketball Association for the Memphis Grizzlies taking the center position. Online estimates of Marc Gasol’s net worth vary. In December 2011, the Grizzlies signed him to a four-year $58 million extension deal. To win an Aquarian's trust, don't try to reign in their quirks, Aquarius thrives on shock value. Marc Gasol is a member of Richest Celebrities and Basketball Players. Marc Gasol Sáez is a Spanish professional basketball player for the Memphis Grizzlies of the National Basketball Association (NBA). Marc Gasol Net Worth and salary: Marc Gasol is a Spanish professional basketball player who has a net worth of $50 million. ";s:7:"keyword";s:20:"marc gasol net worth";s:5:"links";s:7442:"<a href='https://ricebrok-staging.webcooks.in/docs/keep-watching-full-movie-watch-online-86e6ec'>Keep Watching Full Movie Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/custom-converse-86e6ec'>Custom Converse</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/charles-babbacombe-lee-86e6ec'>Charles Babbacombe Lee</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-clockwork-orange-violence-analysis-86e6ec'>A Clockwork Orange Violence Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-burger-restaurant-menu-86e6ec'>Good Burger Restaurant Menu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mitochondrial-therapeutics-86e6ec'>Mitochondrial Therapeutics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/f-19-stealth-fighter-manual-86e6ec'>F-19 Stealth Fighter Manual</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/movies-like-deadly-prey-86e6ec'>Movies Like Deadly Prey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manchester-by-the-sea-real-estate-86e6ec'>Manchester By The Sea Real Estate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-of-texas-at-dallas-86e6ec'>University Of Texas At Dallas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marina-abramovic-documentary-86e6ec'>Marina Abramovic Documentary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/long-umbrella-kurtis-86e6ec'>Long Umbrella Kurtis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metolius-pronunciation-86e6ec'>Metolius Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fulfill-quotes-86e6ec'>Fulfill Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-the-mouth-of-madness-putlockers-86e6ec'>In The Mouth Of Madness Putlockers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2018-nba-draft-combine-measurements-86e6ec'>2018 Nba Draft Combine Measurements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cincinnati-reds-trade-rumors-86e6ec'>Cincinnati Reds Trade Rumors</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christmas-in-angel-falls-2-86e6ec'>Christmas In Angel Falls 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gymnastics-movies-86e6ec'>Gymnastics Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vidal-transfermarkt-86e6ec'>Vidal Transfermarkt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/right-triangle-calculator-86e6ec'>Right Triangle Calculator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-original-of-laura-pdf-86e6ec'>The Original Of Laura Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/run-lola-run-summary-86e6ec'>Run Lola Run Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-wright-wife-86e6ec'>Michael Wright Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-evil---korean-movie-86e6ec'>Deliver Us From Evil - Korean Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steal-your-girlfriend-full-episodes-86e6ec'>Steal Your Girlfriend Full Episodes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tin-whistle-vs-recorder-86e6ec'>Tin Whistle Vs Recorder</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-sec-men%27s-basketball-tournament-bracket-86e6ec'>2020 Sec Men's Basketball Tournament Bracket</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nba-players-86e6ec'>Nba Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/billy-lynn%27s-long-halftime-walk-120fps-trailer-86e6ec'>Billy Lynn's Long Halftime Walk 120fps Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-softball-roster-86e6ec'>Clemson Softball Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shenandoah-river-fishing-guides-86e6ec'>Shenandoah River Fishing Guides</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/magic-island-lagoon-snorkeling-86e6ec'>Magic Island Lagoon Snorkeling</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pen15-season-1-episode-1-full-episode-86e6ec'>Pen15 Season 1 Episode 1 Full Episode</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jurassic-world%3A-fallen-kingdom-hulu-86e6ec'>Jurassic World: Fallen Kingdom Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/college-football-tv-schedule-2020-86e6ec'>College Football Tv Schedule 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louis-van-gaal-trophies-86e6ec'>Louis Van Gaal Trophies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/southport%2C-north-carolina-86e6ec'>Southport, North Carolina</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-texas-football-tickets-86e6ec'>Lsu Texas Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/friendly-fire-podcast-86e6ec'>Friendly Fire Podcast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wenyen-gabriel-salary-86e6ec'>Wenyen Gabriel Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/del-the-funky-homosapien-i-wish-my-brother-george-was-here-songs-86e6ec'>Del The Funky Homosapien I Wish My Brother George Was Here Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jax-lore-86e6ec'>Jax Lore</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/time-slips-86e6ec'>Time Slips</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manchester-city-catholic-or-protestant-86e6ec'>Manchester City Catholic Or Protestant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/full-service-hand-car-wash-near-me-86e6ec'>Full Service Hand Car Wash Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wind-rises-did-naoko-die-86e6ec'>The Wind Rises Did Naoko Die</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-devils-%282002%29-86e6ec'>The Devils (2002)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beautiful-oblivion-what-was-the-secret-86e6ec'>Beautiful Oblivion What Was The Secret</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-handmaiden-watch-online-in-english-86e6ec'>The Handmaiden Watch Online In English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/foam-gun---autobarn-86e6ec'>Foam Gun - Autobarn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-ryan-jennifer-ehle-86e6ec'>Michael Ryan Jennifer Ehle</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-rothko-paintings-for-sale-86e6ec'>Mark Rothko Paintings For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sportz-tv-buffering-86e6ec'>Sportz Tv Buffering</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-rifkind-wife-86e6ec'>Steve Rifkind Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rockets-sign-danuel-house-86e6ec'>Rockets Sign Danuel House</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ad-astra-opening-scene-86e6ec'>Ad Astra Opening Scene</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-promised-neverland-netflix-86e6ec'>The Promised Neverland Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tommy-brown-blackpink-86e6ec'>Tommy Brown Blackpink</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anguis-pronunciation-86e6ec'>Anguis Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/time-in-shanghai-86e6ec'>Time In Shanghai</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adventures-of-lolo-walkthrough-%28floor-5%29-86e6ec'>Adventures Of Lolo Walkthrough (floor 5)</a>,
+";s:7:"expired";i:-1;}

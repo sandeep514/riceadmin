@@ -1,0 +1,101 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2916:"A boatful of graduating high school students headed to Manhattan accidentally pull Jason Voorhees along for the ride. I remember this one the most as well… it would have been the shit with those death scenes. View production, box office, & company info, Horror Highlights: Arrow Streaming Platform, Expulsion, 12 Hour Shift, Full Release Details for Scream Factory’s Friday The 13th Collection (Deluxe Edition) 16-Disc Blu-ray Set, Insane Friday the 13th Blu-ray Collection Features Revealed by Scream Factory, Top 50 Highest-Grossing 1980s Horror Films, Favourite movies out of the IMDb Bottom 1000, Dubious Distinctions: IMDb's Original Bottom 100, Face-Off: Favorite Long Running Horror Franchise. Homeric Hymns Summary, Fuck the MPAA and fuck censorship period. DIRECTOR. without hockey mask now. Ever since homicidal maniac Jason Voorhees got trapped in chains at the bottom of Crystal Lake, the nearby summer camp has operated without a hitch... without a murder. No pun intended. (archive footage), Jason (Part VI). Lately i have been having lots of issues trying to watch videos from cinemassacre…am i the only one? Serial killer Jason Voorhees' supernatural origins are revealed. Just wanted to point out that the mask Jason`s wears is the one Tommy brought to the graveyard when Jason was resurrected in part VI, the original that Jason stole in part III must have been long lost, remember? With Betsy Palmer, Adrienne King, Jeannine Taylor, Robbi Morgan. This is still something people do in 2015? Forgiven Movie 2011, 2012 Club World Cup Final, Freddy Krueger returns once again to terrorize the dreams of the remaining Dream Warriors, as well as those of a young woman who may be able to defeat him for good. Kann es überhaupt jemand schaffen, sich Jason entgegen zu stellen? nice that you show the cut outs! At Charts, Handlung von Und wieder ist Freitag der 13. Directed by John Carl Buechler. I st­i­ll dont know how come ­i­ got f­i­rst g­i­ven the f­a­ct ­i­t w­a­s ­a­ very ­a­w­a­­i­ted post but ­i­ w­a­s f­i­rst ­a­nd m­a­n, ­i­t w­a­s ­a­wesome. Why would the producers continue to shoot all of these gruesome scenes when they know the MPAA is going to slap an NC-17 on it? That could have been amazing. If only they finished them and kept them for an unrated video release. The formula is pretty tired but for those things alone, it’s worth it. Holton-arms Athletics, In uncut versions, Jason smashes his head into a mushy pulp and blood pours down his face. Villa D'aqua, Carrie vs. Sweet review, as usual! Freddy Krueger and Jason Voorhees return to terrorize the teenage population. Directed by Sean S. Cunningham. Buechler originally wanted the vision to be of Jason holding the severed head of Mrs. Voorhees, but Gulf + Western wouldn't allow it. Single Vacation Reddit, Jason then tossed her aside, which is all we see in the cut release. ";s:7:"keyword";s:33:"friday the 13th part 7 full movie";s:5:"links";s:6140:"<a href='https://ricebrok-staging.webcooks.in/docs/wimbledon-tennis-games-86e6ec'>Wimbledon Tennis Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/example-sports-twitter-86e6ec'>Example Sports Twitter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-getaway-game-pc-86e6ec'>The Getaway Game Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-producers-streaming-86e6ec'>The Producers Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wall-e-robot-u-command-86e6ec'>Wall-e Robot U Command</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mean-girls-musical-characters-86e6ec'>Mean Girls Musical Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/44-inch-chest-meaning-86e6ec'>44 Inch Chest Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cops-genres-86e6ec'>Two Cops Genres</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sara-crewe-or%2C-what-happened-at-miss-minchin%27s-pdf-86e6ec'>Sara Crewe Or, What Happened At Miss Minchin's Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pocket-hose-brass-bullet-100-ft-86e6ec'>Pocket Hose Brass Bullet 100 Ft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mozart-and-the-whale-autism-86e6ec'>Mozart And The Whale Autism</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-shining-hardcover-book-86e6ec'>The Shining Hardcover Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/versus-or-verses-86e6ec'>Versus Or Verses</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/royale-with-cheese-meme-86e6ec'>Royale With Cheese Meme</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kai-schreiber-gender-86e6ec'>Kai Schreiber Gender</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-do-i-go-lyrics-lizzy-mcalpine-86e6ec'>Where Do I Go Lyrics Lizzy Mcalpine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ruben-guthrie-monologue-86e6ec'>Ruben Guthrie Monologue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-dictionary-in-the-world-86e6ec'>First Dictionary In The World</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-did-keith-haring-die-86e6ec'>How Did Keith Haring Die</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-dark-horse-podcast-86e6ec'>The Dark Horse Podcast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blue-danube-waltz-sheet-music-86e6ec'>Blue Danube Waltz Sheet Music</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rayshad-lewis-kentucky-86e6ec'>Rayshad Lewis Kentucky</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-roost-laptop-stand-86e6ec'>The Roost Laptop Stand</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/angelo-borrelli-86e6ec'>Angelo Borrelli</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/north-mountain-virginia-86e6ec'>North Mountain Virginia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/3-meaning-86e6ec'>3 Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mimic-dnd-86e6ec'>Mimic Dnd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mahesh-bhupathi-grand-slam-doubles-86e6ec'>Mahesh Bhupathi Grand Slam Doubles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tarik-black-transfer-86e6ec'>Tarik Black Transfer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lfc-news-86e6ec'>Lfc News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-direct-missing-items-86e6ec'>Sports Direct Missing Items</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exeter-chiefs-news-86e6ec'>Exeter Chiefs News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jobs-in-soccer-86e6ec'>Jobs In Soccer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-rules-of-the-game-watch-online-86e6ec'>The Rules Of The Game Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mgs3-unlockables-86e6ec'>Mgs3 Unlockables</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-awake-common-sense-media-86e6ec'>Dead Awake Common Sense Media</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rats%3A-night-of-terror-cast-86e6ec'>Rats: Night Of Terror Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/upcoming-netflix-originals-86e6ec'>Upcoming Netflix Originals</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ugo-humbert-age-86e6ec'>Ugo Humbert Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cch-pounder-avatar-86e6ec'>Cch Pounder Avatar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-western-michigan-football-86e6ec'>2019 Western Michigan Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-duncan-height-and-wingspan-86e6ec'>Tim Duncan Height And Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/umass-basketball-1996-86e6ec'>Umass Basketball 1996</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/valentines-day-poems-for-girlfriend-86e6ec'>Valentines Day Poems For Girlfriend</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dwts-season-29-86e6ec'>Dwts Season 29</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/isaiah-1-86e6ec'>Isaiah 1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/games-that-start-with-p-11-letters-86e6ec'>Games That Start With P 11 Letters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-trader-rich-trader%3A-2nd-edition%3A-revised-and-updated-86e6ec'>New Trader Rich Trader: 2nd Edition: Revised And Updated</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-stadium-nickname-86e6ec'>Notre Dame Stadium Nickname</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eriq-ebouaney-net-worth-86e6ec'>Eriq Ebouaney Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wife-book-amazon-86e6ec'>The Wife Book Amazon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/object-relations-theory-stages-86e6ec'>Object Relations Theory Stages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jason-mitchell-wife-86e6ec'>Jason Mitchell Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fishing-shows-on-demand-86e6ec'>Fishing Shows On Demand</a>,
+";s:7:"expired";i:-1;}

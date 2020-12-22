@@ -1,0 +1,103 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3174:"<p>When snowboarding, you are normally on an edge, your heel edge or your toe edge. This is a really important skill when out on the snow, as it means you’ll be able to slow down and speed up whenever you need to, meaning your confidence will develop more quickly. These are practical options to learn how to snowboard. Goggles or sunglasses can help keep the sun and snow out of your eyes. That front foot and bent knee will twist at what feels like an awkward angle. </p> <p>In terms of similarity, both snowboarding and skiing involve sliding downhill, but that’s where the similarities end. </p> <p>Figure out which is your dominant foot before going to the rental shop. Snowboarding For Beginners: A Complete Guide. SO IMPORTANT. There is no extra cost to you but what I earn means I can keep offering travel advice for free. Please consider making a contribution to wikiHow today. Try to fall uphill rather than downhill and try to avoid falling on your coccyx - that can really hurt. If it’s your left foot then you are ‘regular’, if you step forward with your right then you are what’s known as ‘goofy’. </p> <p></p> <p>The first step is getting to know the basics. Frozen or icy snow can be difficult and dangerous to learn in. Quite a bit. Even at home, you can practice strapping into the board and shifting your weight. Once you reach that position, push off with your hands while pressing the toe side into the snow. Start by facing your snowboard down a gentle hill with your body balanced in proper falling leaf position. Snowboarding for beginners is all about getting the foundations right, and that means maintaining even pressure across both feet and sinking down into the knees. </p> <p>Multi-day packages, usually called “1-2-3 Ride,” propose three-day lessons, rentals and lift tickets. For walking up a hill, the technique changes. Point your front hand downhill and backhand uphill. Most likely, the instructor will start with the falling leaf. Get travel insurance. Swinging your arms in the direction you want to turn can help you shift your weight. Try to look up and where you want to go. As the precursor to turning, it’s part of the learning progression where you slide one direction for a little bit and then reverse to slide the other direction. Still Stoked’s mission is to tell the strong female-inspired stories we wished were available when we were younger. Push with your rear foot like you would using a skateboard. Find your dominate leg and plan on using the stance that matches it. Thanks to all authors for creating a page that has been read 88,871 times. If you prefer to lead with your right leg your stance will be considered “goofy” stance. </p> <p>Let’s be honest here, if you are learning to snowboard you are going to fall. Guess again! Regardless, it isn’t strictly necessary to always use an instructor if you’re just starting out. Try to spread your weight out over your entire body if you need to fall down. Luckily for you, Chill Factore is open 7 days a week with early mornings and late evenings as well, meaning there is always time to practice and keep trying until you get it. </p>";s:7:"keyword";s:26:"snowboarding for beginners";s:5:"links";s:6562:"<a href='https://ricebrok-staging.webcooks.in/docs/raymond-felton-retired-86e6ec'>Raymond Felton Retired</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/satyricon-sparknotes-86e6ec'>Satyricon Sparknotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jessica-tovey-partner-86e6ec'>Jessica Tovey Partner</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pga-tour-2k21-review-86e6ec'>Pga Tour 2k21 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-collar-jobs-86e6ec'>White Collar Jobs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/electoral-roll-86e6ec'>Electoral Roll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ghc-vs-hcc-live-match-score-86e6ec'>Ghc Vs Hcc Live Match Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louisville-football-season-tickets-2020-86e6ec'>Louisville Football Season Tickets 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shred-workout-86e6ec'>Shred Workout</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aec-results-86e6ec'>Aec Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maungakiekie-electorate-2020-86e6ec'>Maungakiekie Electorate 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/burn-hollywood-burn-lyrics-86e6ec'>Burn Hollywood Burn Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/traditional-valkyrie-symbol-86e6ec'>Traditional Valkyrie Symbol</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-best-fiend-stream-86e6ec'>My Best Fiend Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-94-home-shirt-86e6ec'>Arsenal 94 Home Shirt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/weather-barcelona%2C-spain-86e6ec'>Weather Barcelona, Spain</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-ham-squad-2018%2F19-86e6ec'>West Ham Squad 2018/19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slander-vs-libel-86e6ec'>Slander Vs Libel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/derrick-rose-2k20-86e6ec'>Derrick Rose 2k20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ireland-with-ardal-o%27hanlon-86e6ec'>Ireland With Ardal O'hanlon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-4%3A-guns-of-the-patriots-pc-86e6ec'>Metal Gear Solid 4: Guns Of The Patriots Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oakland-high-school-famous-alumni-86e6ec'>Oakland High School Famous Alumni</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deborah-quinn-actress-86e6ec'>Deborah Quinn Actress</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/garry-chalk-net-worth-86e6ec'>Garry Chalk Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hudson-hawk-game-86e6ec'>Hudson Hawk Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/superfast-synonyms-86e6ec'>Superfast Synonyms</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-haunting-of-molly-hartley-joseph-86e6ec'>The Haunting Of Molly Hartley Joseph</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drake-gaines-age-86e6ec'>Drake Gaines Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-producers-streaming-86e6ec'>The Producers Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-garden-of-the-finzi-continis-book-pdf-86e6ec'>The Garden Of The Finzi-continis Book Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/afresh-trauma-wow-86e6ec'>Afresh Trauma Wow</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ghost-tracks%3A-case-files-of-ed-%26-lorraine-warren-86e6ec'>Ghost Tracks: Case Files Of Ed & Lorraine Warren</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gold-mining-games-86e6ec'>Gold Mining Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-pir%C3%A8s-foot-86e6ec'>Robert Pirès Foot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-watched-sporting-event-in-the-world-2019-86e6ec'>Most Watched Sporting Event In The World 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-salesman-awards-86e6ec'>The Salesman Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/south-carolina-basketball-roster-86e6ec'>South Carolina Basketball Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/al-anon-meetings-mississauga-86e6ec'>Al-anon Meetings Mississauga</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/made-in-heaven-season-2-release-date-86e6ec'>Made In Heaven Season 2 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-nietzsche-wept-quotes-86e6ec'>When Nietzsche Wept Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/umberto-d-full-movie-english-subtitles-86e6ec'>Umberto D Full Movie English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/safari-search-engine-86e6ec'>Safari Search Engine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/why-was-the-wild-bunch-a-controversial-movie-86e6ec'>Why Was The Wild Bunch A Controversial Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lady-gaga-enigma-86e6ec'>Lady Gaga Enigma</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/imagine-dragons-it%27s-time-86e6ec'>Imagine Dragons It's Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gymnastics-equipment-list-with-pictures-86e6ec'>Gymnastics Equipment List With Pictures</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daniella-anderson-age-86e6ec'>Daniella Anderson Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ryan-corr-the-commons-86e6ec'>Ryan Corr The Commons</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/london-irish-vs-exeter-tv-channel-86e6ec'>London Irish Vs Exeter Tv Channel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/under-the-volcano-analysis-86e6ec'>Under The Volcano Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/damian-lillard-vertical-86e6ec'>Damian Lillard Vertical</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/93-%27til-infinity-in-movies-86e6ec'>93 'til Infinity In Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gettysburg-movie-streaming-86e6ec'>Gettysburg Movie Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/meg-giry-kills-christine-86e6ec'>Meg Giry Kills Christine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/baylor-women%27s-basketball-season-tickets-86e6ec'>Baylor Women's Basketball Season Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/straight-angle-86e6ec'>Straight Angle</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,93 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3123:"Beth is outraged that they're visiting her sister; April was the apple of the family eye before she went wrong, and Beth feels threatened that she seems about to go right again.                 movie theaters are playing Pieces of April near you. While Bobby tries to borrow a suit for himself, April realizes that her stove is broken. Released in 2003, "Pieces Of April" is an American comedy drama film, written and directed by Peter Hedges. The turkey is the problem. Fandango helps you go back to the movies with confidence and peace of mind. Pieces of April Directed by Peter Hedges. Marking Hedges' directorial debut, the film stars Katie Holmes, Derek Luke, Sean Hayes, Alison Pill, Oliver Platt and Patricia Clarkson. The spirit of the genre is summed up in "Home for the Holidays" when two family members are fighting on the lawn while the father hoses them down. The review of this Movie prepared by Tara Dugan. Peyton Place ← Katie Holmes plays April Burns, the tattooed daughter who has been the family's despair. You have the feeling that Hedges sees the same stuff that bothers you and it makes him squirm, too; a movie made this close to the line has no room for second thoughts. Collect bonus rewards from our many partners, including AMC, Stubs, Cinemark Connections, Regal Crown Club when you link accounts. They live in a small ugly apartment and are trying to prepare the perfect Thanksgiving dinner. This is where the movie starts. He's bleeding and looks dangerous, and they think they're under attack.     |                         Released in 2003, "Pieces Of April" is an American comedy drama film, written and directed by Peter Hedges. It has inspired a uniquely North American group of films. Pieces of April is a 2003 American comedy-drama film written and directed by Peter Hedges. The plot revolves around April Burns, played by Katie Holmes, the eldest daughter of a dysfunctional family, apparently an outcast (string of bad boyfriends and rebellious attitude), and her effort to host a Thanksgiving dinner for her family. She's gone through a punk/goth rebellion, but a yearning for family ritual runs deep, and her new boyfriend has helped her believe that she has a home she can invite her family to. In 1975, he won the Pulitzer Prize for distinguished criticism. Joy is dying of cancer and this might be her last Thanksgiving. She tries desperately to find a neighbor that can let her cook the turkey, since she does not want to fail (again) with her family. Twitter Facebook Link Print. Thanksgiving brings an alienated woman's family over for the big meal. Quirky and rebellious April Burns (Katie Holmes) lives with her boyfriend in a low-rent New York City apartment miles away from her emotionally distant family. Joy is dying of breast cancer and this may be her final Thanksgiving, but she uses her mortality as a springboard for brave humor; at one point, she asks for silence to reflect on an approaching crisis. "We all have to give a lot thought..." she says, and they wait for a declaration about her impending death, "to how we are going to hide the food we don't eat." ";s:7:"keyword";s:23:"pieces of april summary";s:5:"links";s:5224:"<a href='https://ricebrok-staging.webcooks.in/docs/add-pin-extension-86e6ec'>Add Pin Extension</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liberty-island-86e6ec'>Liberty Island</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/olympic-medal-table-2008-86e6ec'>Olympic Medal Table 2008</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ashfall-book-86e6ec'>Ashfall Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/left-4-dead-2-pc-86e6ec'>Left 4 Dead 2 Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-rainbows-font-86e6ec'>In Rainbows Font</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/navy-football-schedule-2020-86e6ec'>Navy Football Schedule 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zombie-diary-2-hack-86e6ec'>Zombie Diary 2 Hack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/madagascar-3-netflix-86e6ec'>Madagascar 3 Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/belgium-league-prediction-86e6ec'>Belgium League Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/giannis-antetokounmpo-1-86e6ec'>Giannis Antetokounmpo 1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lfc-news-86e6ec'>Lfc News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/movies-like-the-hallow-86e6ec'>Movies Like The Hallow</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tcu-football-2019-86e6ec'>Tcu Football 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-inquiry-movie-1986-86e6ec'>The Inquiry Movie 1986</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marc-gasol-family-86e6ec'>Marc Gasol Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-3%3A-subsistence-limited-edition-86e6ec'>Metal Gear Solid 3: Subsistence Limited Edition</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vincent-kartheiser-and-alexis-bledel-86e6ec'>Vincent Kartheiser And Alexis Bledel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/here-comes-the-devil-%282012-watch-online%29-86e6ec'>Here Comes The Devil (2012 Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hellraiser-3-full-movie-youtube-86e6ec'>Hellraiser 3 Full Movie Youtube</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/triumph-of-love-televisa-full-episodes-english-86e6ec'>Triumph Of Love Televisa Full Episodes English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jim-jones-suga-86e6ec'>Jim Jones Suga</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-miracle-of-bern-dvd-86e6ec'>The Miracle Of Bern Dvd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/triumph-bonneville-t100-black-86e6ec'>Triumph Bonneville T100 Black</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/timothy-busfield-for-life-86e6ec'>Timothy Busfield For Life</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trailing-stop-loss-86e6ec'>Trailing Stop Loss</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-ritson-purpose-86e6ec'>Mark Ritson Purpose</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/under-the-shadow-synonym-86e6ec'>Under The Shadow Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-entity-%282019-plot%29-86e6ec'>The Entity (2019 Plot)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ray-allen-wife-age-86e6ec'>Ray Allen Wife Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ural-mountains-on-map-86e6ec'>Ural Mountains On Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anagni-to-rome-86e6ec'>Anagni To Rome</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anne-marie-mcevoy-husband-86e6ec'>Anne Marie Mcevoy Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/usmc-flag-86e6ec'>Usmc Flag</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-rsvp-on-game-changer-86e6ec'>How To Rsvp On Game Changer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/curious-george-2%3A-follow-that-monkey-netflix-86e6ec'>Curious George 2: Follow That Monkey Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-sympathizer-symbolism-86e6ec'>The Sympathizer Symbolism</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-getaway-game-pc-86e6ec'>The Getaway Game Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/danielle-van-de-donk-instagram-86e6ec'>Danielle Van De Donk Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/famous-wnba-players-86e6ec'>Famous Wnba Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/all-star-sports-shorts-86e6ec'>All Star Sports Shorts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/see-you-up-there-english-subtitles-86e6ec'>See You Up There English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-morning-after-lyrics-86e6ec'>The Morning After Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-peele-wife-86e6ec'>Jordan Peele Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/riot-games-login-86e6ec'>Riot Games Login</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-is-the-haunting-of-bly-manor-coming-to-netflix-86e6ec'>When Is The Haunting Of Bly Manor Coming To Netflix</a>,
+";s:7:"expired";i:-1;}

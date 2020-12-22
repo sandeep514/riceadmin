@@ -1,0 +1,134 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2800:"These are usually party loyalists, donors or other key players the candidate or the candidates’ party wants to reward. pegged to the size of its congressional delegation. That’s what Trump did on Tuesday. First, each state’s political parties choose a group of potential Electors at a point before the general election. By the Electoral College’s own count, there have been at least 700 measures introduced in Congress at various times to reform or eliminate the Electoral College. The process of choosing electors can be an “insider’s game,” said Kimberly Wehle, a professor at the University of Baltimore and the author of “What You Need to Know About Voting and Why.” They are often state legislators, party leaders or donors, she said. It usually reflects the popular vote. In a stark example, sparsely populated Wyoming has three votes and a population of about 580,000, giving its individual voters far more clout in the election than their millions of counterparts in densely populated states like Florida, California and New York. Ultimately, any disputes about the procedure could land everything in the Supreme Court. Although it’s previously only happened a handful of times, there’s a belief that as American demography changes, the electoral college vote will become more distorted. Each state has its own rules on how electors are chosen. “Let me just say we’ve changed some procedures,” says Amy Bunk, the Federal Register’s director of legal affairs and policy and, if there were such a title, the “dean” of nation’s Electoral College. However, this changed over the course of the early 19th century, when states granted the right to vote to more of the country’s population. These represent the two senators and one representative in congress. In my 15+ years as a political strategist, I’ve covered every element of presidential campaigns—many of which I discuss on my podcast Your Presidential Playlist with women like Hillary Clinton, Stacey Abrams, and Nancy Pelosi. Most are, and it helps to think of voting on a state-by-state basis, Professor Amar said. Please send an email to info@moyersmedia.com. Source: AP, In the Electoral College system, it's first to collect enough states to reach 270. Do you have a story tip? But the Electoral College is a piece of the puzzle that still confuses many people—no matter what age they are! And the American citizens who live in territories like Puerto Rico, Guam and the U.S. Virgin Islands are not represented by any electors. “We are that cool,” Bunk quips. (adsbygoogle = window.adsbygoogle || []).push({}); Electoral College Example Involving the 2016 Election. Some states list electors’ names on the general election ballot. Comments and questions about our policy are welcome. ";s:7:"keyword";s:27:"electoral college explained";s:5:"links";s:10032:"<a href='https://ricebrok-staging.webcooks.in/docs/aadhi-movie-cast-86e6ec'>Aadhi Movie Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/noelle-name-personality-86e6ec'>Noelle Name Personality</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/neptune-movie-ending-86e6ec'>Neptune Movie Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-mother-song-86e6ec'>The Mother Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/holiday-retreat-meaning-86e6ec'>Holiday Retreat Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scott-haze-net-worth-86e6ec'>Scott Haze Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jokes-about-bad-timing-86e6ec'>Jokes About Bad Timing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/full-history-of-liverpool-fc-86e6ec'>Full History Of Liverpool Fc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/karin-konoval-matrix-86e6ec'>Karin Konoval Matrix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stephanie-name-personality-86e6ec'>Stephanie Name Personality</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-day-of-school-message-to-teachers-86e6ec'>First Day Of School Message To Teachers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spring-boot-tomcat-version-86e6ec'>Spring-boot Tomcat Version</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alexi-wasser-height-86e6ec'>Alexi Wasser Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/star-wars-republic-constitution-86e6ec'>Star Wars Republic Constitution</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gymnastics-moves-86e6ec'>Gymnastics Moves</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jimmy-workman-wife-86e6ec'>Jimmy Workman Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/home-improvement%27-actor-dies-2020-86e6ec'>Home Improvement' Actor Dies 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jacqueline-jossa-age-86e6ec'>Jacqueline Jossa Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doctor-sleep-vs-the-shining-86e6ec'>Doctor Sleep Vs The Shining</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/1951-sci-fi-classic-86e6ec'>1951 Sci-fi Classic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-you-are-in-a-dark-place-quotes-86e6ec'>When You Are In A Dark Place Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremy-blackman-texas-86e6ec'>Jeremy Blackman Texas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lara-croft%3A-tomb-raider-series-86e6ec'>Lara Croft: Tomb Raider Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adventureland-rides-86e6ec'>Adventureland Rides</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/they-meaning-in-tamil-86e6ec'>They Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/radu-albot-live-score-86e6ec'>Radu Albot Live Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blush-opposite-86e6ec'>Blush Opposite</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/true-romance-hulu-86e6ec'>True Romance Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hwayi%3A-a-monster-boy-online-86e6ec'>Hwayi: A Monster Boy Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/riot-valorant-submit-a-ticket-86e6ec'>Riot Valorant Submit A Ticket</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/untogether-online-86e6ec'>Untogether Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pen15-season-1-episode-1-full-episode-86e6ec'>Pen15 Season 1 Episode 1 Full Episode</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-wall-stats-86e6ec'>John Wall Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-westbrook-one-take-black-cat-86e6ec'>Jordan Westbrook One Take Black Cat</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-hill-family-86e6ec'>George Hill Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stuart-hogg-weight-86e6ec'>Stuart Hogg Weight</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hannah-ware-net-worth-86e6ec'>Hannah Ware Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-soul-to-keep-wiki-86e6ec'>My Soul To Keep Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/madeline-kahn-snl-86e6ec'>Madeline Kahn Snl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jim-tressel-wife-86e6ec'>Jim Tressel Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jusuf-nurkic-jersey-message-86e6ec'>Jusuf Nurkic Jersey Message</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/11-letter-words-starting-with-p-86e6ec'>11 Letter Words Starting With P</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sub-bituminous-coal-86e6ec'>Sub Bituminous Coal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bryan-michael-cox-genius-86e6ec'>Bryan-michael Cox Genius</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/destiny-2%3A-the-drifter-lore-book-guide-86e6ec'>Destiny 2: The Drifter Lore Book Guide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/independence-day-alien-86e6ec'>Independence Day Alien</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exeter-v-sale-teams-86e6ec'>Exeter V Sale Teams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crying-boy-painting-movie-86e6ec'>Crying Boy Painting Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/burton-gilliam-dukes-of-hazzard-86e6ec'>Burton Gilliam Dukes Of Hazzard</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bicentennial-man-quotes-86e6ec'>Bicentennial Man Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-howard-wife-86e6ec'>Chris Howard Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-brainstorming-86e6ec'>How To Pronounce Brainstorming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vanderbilt-football-tickets-86e6ec'>Vanderbilt Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-strange-vice-of-mrs-wardh-plot-86e6ec'>The Strange Vice Of Mrs Wardh Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anderlecht-sint-truiden-86e6ec'>Anderlecht Sint-truiden</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arkansas-vs-kentucky-football-tickets-86e6ec'>Arkansas Vs Kentucky Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ross-county-vs-rangers-prediction-86e6ec'>Ross County Vs Rangers Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jamie-lee-palladino-86e6ec'>Jamie Lee-palladino</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-paul-trade-rumors%3A-lakers-86e6ec'>Chris Paul Trade Rumors: Lakers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/elliot-cowan-net-worth-86e6ec'>Elliot Cowan Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trailing-stop-loss-86e6ec'>Trailing Stop Loss</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scum-map-2020-86e6ec'>Scum Map 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-wineries-near-shenandoah-national-park-86e6ec'>Best Wineries Near Shenandoah National Park</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aut%C3%B3dromo-hermanos-rodr%C3%ADguez-f1-86e6ec'>Autódromo Hermanos Rodríguez F1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/endless-poetry-movie-online-86e6ec'>Endless Poetry Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stacey-giggs-wedding-86e6ec'>Stacey Giggs Wedding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/star-wars-the-force-awakens-full-movie-dailymotion-86e6ec'>Star Wars The Force Awakens Full Movie Dailymotion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lauren-hashian-height-86e6ec'>Lauren Hashian Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pie-one-week-86e6ec'>American Pie One Week</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-johnson-actor-86e6ec'>Steve Johnson Actor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liquid-snake-86e6ec'>Liquid Snake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/karen-and-kevin-86e6ec'>Karen And Kevin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/second-bank-of-the-united-states-86e6ec'>Second Bank Of The United States</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fist-of-the-north-star%3A-lost-paradise-review-86e6ec'>Fist Of The North Star: Lost Paradise Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ryan-gosling-eva-mendes-married-86e6ec'>Ryan Gosling Eva Mendes Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ryan-reynolds-vs-ryan-gosling-poll-86e6ec'>Ryan Reynolds Vs Ryan Gosling Poll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyrie-irving-2k20-rating-86e6ec'>Kyrie Irving 2k20 Rating</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-ball-price-86e6ec'>Volleyball Ball Price</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barry-lyndon-trailer-86e6ec'>Barry Lyndon Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/st-johnstone-catholic-or-protestant-86e6ec'>St Johnstone Catholic Or Protestant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blood-feast-pathfinder-86e6ec'>Blood Feast Pathfinder</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/philistines-map-86e6ec'>Philistines Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aquamarine-rings-gold-86e6ec'>Aquamarine Rings Gold</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drive-movie-cast-86e6ec'>Drive Movie Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/judy-davis-woody-allen-86e6ec'>Judy Davis Woody Allen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/static-electricity-and-lightning-86e6ec'>Static Electricity And Lightning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-westbrook-one-take-beijing-86e6ec'>Jordan Westbrook One Take Beijing</a>,
+";s:7:"expired";i:-1;}

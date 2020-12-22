@@ -1,0 +1,112 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3290:"In an interview earlier this year, Ben said: “I imagine we will get married at some point. “And I want to be in better shape on my wedding day than I am now.”. Ben first met Kristina when they were partnered on Strictly Come Dancing back in 2013, and they went public with their relationship in 2015. The 39-year-old blonde bombshell is said to be in meetings with show bosses as she jets out to Los Angeles for "secret talks". Kristina announced her pregnancy with the athlete during her appearance on Celebrity Big Brother last year. To inquire about a licence to reproduce material, visit our Syndication site. View our online Press Pack. A source previously told The Sun that DWTS are "very keen" on Kristina and claimed that former Strictly Come Dancing head judge Len Goodman, 73, who is a judge on the show, is encouraging her to make the move. The couple are not engaged but hinted at the possibility of marriage. By Becca Longmire PUBLISHED: 10:46, Sun, Sep 20, 2015 “Having a baby later on in life, we were both very set in our ways so it has been a big change for both of us.”. As part of her healing, Abby joined JetTV show The Updaters, with Ant McPartlin’s ex Lisa Armstrong and Kate Middleton’s hairdresser, Richard Ward, which helps people ­prepare for online dating. Kristina Rihanoff has defended her relationship with Ben Cohen. The Sun website is regulated by the Independent Press Standards Organisation (IPSO). The 'Strictly Come Dancing' professional has been branded a "home-wrecker" for getting together with the former rugby star - who she was partnered with on the BBC dance contest in 2013 - but she's now spoken out to insist it wasn't until he split from wife Abby that they began seeing one another. "Ooh who's your perfect man? For other inquiries Contact Us. To see all content on The Sun, please use the Site Map. To inquire about a licence to reproduce material, visit our Syndication site. Express.co.uk has contacted representative for Kristina Rihanoff and Ben Cohen asking for comment. STRICTLY couple Kristina Rihanoff and Ben Cohen are on the rocks because she is trying to launch a Hollywood career. She has already established links to DWTS as Gleb is a professional on the show and his wife, Elena Samodanova, who created One More Dance, is a judge on the ABC favourite. He has family ties in London as he also shares nine-year-old twin daughters with his ex-wife Abby Blayney, who he split up with in September 2014. “Ben desperately doesn’t want her to move to the States and it is causing serious tension in their relationship. I support five people in my family in Russia.". The  pro dancer is jetting out to Los Angeles for meetings with bosses at Dancing with the Stars – the US version of Strictly Come Dancing. News Corp is a network of leading companies in the worlds of diversified media, news, education, and information services. After the split, Ben got together with Kristina and he divorced his wife in 2016 - … Ben Cohen couldn’t keep his hands off girlfriend Kristina Rihanoff as they celebrated the end of her Dance To The Music tour. The 39-year-old Russian is being encouraged by Len Goodman, who now works full-time as a judge for the show that is filmed in Los Angeles for top broadcaster ABC. ";s:7:"keyword";s:44:"kristina rihanoff and ben cohen relationship";s:5:"links";s:7340:"<a href='https://ricebrok-staging.webcooks.in/docs/broncos-vs-rabbitohs-highlights-86e6ec'>Broncos Vs Rabbitohs Highlights</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drive-angry-cast-86e6ec'>Drive Angry Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/donald-woods-family-86e6ec'>Donald Woods Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/whiteboyz-full-movie-online-86e6ec'>Whiteboyz Full Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/summary-of-where-the-sidewalk-ends-86e6ec'>Summary Of Where The Sidewalk Ends</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acid-transactions-in-mongodb-86e6ec'>Acid Transactions In Mongodb</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kris-kristofferson-health-2019-86e6ec'>Kris Kristofferson Health 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/car-shop-for-sale-86e6ec'>Car Shop For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/into-the-woods-summary-86e6ec'>Into The Woods Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-believer-magazine-86e6ec'>The Believer Magazine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/olympic-medal-table-2008-86e6ec'>Olympic Medal Table 2008</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/poker-unblocked-86e6ec'>Poker Unblocked</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crazy-on-the-outside-cast-86e6ec'>Crazy On The Outside Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ross-county-vs-kilmarnock-h2h-86e6ec'>Ross County Vs Kilmarnock H2h</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jerzy-janowicz-news-86e6ec'>Jerzy Janowicz News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/novelty-badminton-gifts-86e6ec'>Novelty Badminton Gifts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lords-of-salem-sequel-86e6ec'>Lords Of Salem Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-birth-ice-cube-86e6ec'>The Birth Ice Cube</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chicago-15-album-86e6ec'>Chicago 15 Album</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ing-direct-uk-savings-account-86e6ec'>Ing Direct Uk Savings Account</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/prairie-moon-nursery-coupon-86e6ec'>Prairie Moon Nursery Coupon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/10%2C000-days-meaning-86e6ec'>10,000 Days Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trade-desk-stock-86e6ec'>Trade Desk Stock</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pacific-heights-san-francisco-86e6ec'>Pacific Heights San Francisco</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/essie-davis-in-game-of-thrones-86e6ec'>Essie Davis In Game Of Thrones</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deborah-quinn-actress-86e6ec'>Deborah Quinn Actress</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-doctor-poe-86e6ec'>The Doctor Poe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/midnight-in-paris-subtitles-86e6ec'>Midnight In Paris Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cj-wilcox-contract-86e6ec'>Cj Wilcox Contract</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-famous-paintings-of-jesus-86e6ec'>Most Famous Paintings Of Jesus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acacia-flower-taste-86e6ec'>Acacia Flower Taste</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/momentum-in-badminton-86e6ec'>Momentum In Badminton</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lara-croft%3A-tomb-raider-series-86e6ec'>Lara Croft: Tomb Raider Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zoombies-kifo-86e6ec'>Zoombies Kifo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ouija-board-near-me-86e6ec'>Ouija Board Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/faithful-x32-86e6ec'>Faithful X32</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-inner-demons-pierce-86e6ec'>My Inner Demons Pierce</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/why-was-the-electoral-college-created-86e6ec'>Why Was The Electoral College Created</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blue-train-available-packages-86e6ec'>Blue Train Available Packages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dilemma-examples-86e6ec'>Dilemma Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rick-hoffman-billions-86e6ec'>Rick Hoffman Billions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-country-girl-awards-86e6ec'>The Country Girl Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deceit-ps4-86e6ec'>Deceit Ps4</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/physical-exertion-in-chess-86e6ec'>Physical Exertion In Chess</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lucas-black-family-86e6ec'>Lucas Black Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-cold-in-alex-blu-ray-86e6ec'>Ice Cold In Alex Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drea-de-matteo-net-worth-86e6ec'>Drea De Matteo Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trespassers-meaning-in-bengali-86e6ec'>Trespassers Meaning In Bengali</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/caretaker-period-2020-victoria-86e6ec'>Caretaker Period 2020 Victoria</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2008-georgia-football-schedule-86e6ec'>2008 Georgia Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/three-godfathers-%281916%29-86e6ec'>Three Godfathers (1916)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/signs-netflix-season-3-86e6ec'>Signs Netflix Season 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-vs-jon-ossoff-86e6ec'>David Perdue Vs Jon Ossoff</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marc-gasol-net-worth-86e6ec'>Marc Gasol Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/why-is-personal-identity-important-86e6ec'>Why Is Personal Identity Important</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-alexandra-burke-married-86e6ec'>Is Alexandra Burke Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-superman%3A-man-of-tomorrow-86e6ec'>Watch Superman: Man Of Tomorrow</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/orphan-sequel-86e6ec'>Orphan Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/casa-mil%C3%A0-inspiration-86e6ec'>Casa Milà Inspiration</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/badminton-court-height-86e6ec'>Badminton Court Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/precious-meaning-names-86e6ec'>Precious Meaning Names</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-magnesium-fire-starter-86e6ec'>Best Magnesium Fire Starter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/summer-work-outfits-men%27s-86e6ec'>Summer Work Outfits Men's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cnbc-channel-spectrum-86e6ec'>Cnbc Channel Spectrum</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonathan-taylor-thomas-new-orleans-86e6ec'>Jonathan Taylor Thomas New Orleans</a>,
+";s:7:"expired";i:-1;}

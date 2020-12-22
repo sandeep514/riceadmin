@@ -1,0 +1,108 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3802:"<br> <br>There is no exact incidence that is available as of the moment. Another “rule” of monotone color design is that designers often use it for an entire project. Monochromatic color is an option that can work for big brands and small. Anyone can earn It is a confident claim for most mammals. <br> <br>Experts recommend picking at least two options off the base color—one lighter, one darker. Scientists estimated that for a hundred thousand men, only one might suffer from blue cone monochromacy. For example you could paint with Quinacridone Red plus Alizarin Red, and it would still be considered a Monochromatic Color Scheme. However, there is a layer of necessity outside the aesthetics. A lot of people who suffer from monochromatic color blindness are a bit good in distinguishing between tones and textures. What is Color Theory? <br> <br>Here, we’ll explore ways to help you better understand and effectively use monochromatic color in any of your design projects. <br> <br>Explain why. <br> Popular for people of all ages and gender, a fine mix is one... One kitchen appliance you should invest on is an electric range. A dermatologist breaks down the difference between these everyday shower products. <br> <br>All rights reserved. <br> <br>Benefits of monotone color schemes include: Strict adherence to the rules would dictate that all colors be within the monochromatic scheme, with no exceptions. <br> <br>The basic definition of monochromatic color is to use a single base color and shades, tints and tones of that hue. Enrolling in a course lets you earn progress by passing quizzes and exams. <br> <br>								Sciences, Culinary Arts and Personal While the thought of completing a design project with only one color might be intimidating, it can actually result in a pretty awesome aesthetic. Professional interior designers who have helped other color blind clients have some great ideas to make your home appealing for others. <br> <br>Some purists may argue that the initial color option must come from the color wheel as one of the primary, secondary or tertiary colors, but for design purposes that does not necessarily hold true. <br> <br>Start small with a two-tone hover action or single-color style business card. We can define a monochromatic color scheme as being one in which a single base color forms the foundation of the color scheme, while various shades, tints, and tones of that hue provide the other colors. There are some reports about various kinds of blue-cone monochromacy and it isn’t easy to differentiate it from the rod monochromacy. Try the boldest color in small doses on throw pillows, an accent wall, or window frames and counter it with the near-white pinks on walls, the ceiling, and trim. Begin by picking a base color. It is very common, for example, to use white trim or white accessories in a room that has any kind of monochromatic scheme. Monochromatic color palettes don’t have to be black and white—but they can be. Real Simple may receive compensation for some links to products and services in this email on this website. I fell in love with home decor and interior design in the summer of 2015, when I joined an interior design company as intern. Plus, get practice tests, quizzes, and personalized coaching to help you Real Simple is part of the Meredith Home Group. Sometimes also referred to as an electric stove, the device is considered as... © Copyright 2020 Interior Fun All Rights Reserved, Monochromacy or Monochromatic Color Blindness, Design Tips for Monochromatic Color Blindness, Difference Between Foyer, Mudroom And Porch. all come from the same family. <br> <br>Pair two darker tones for a striking look, or balance it out with pops of a lighter (but still cool) shade for a little more playfulness. <br>";s:7:"keyword";s:19:"monochromatic color";s:5:"links";s:7104:"<a href='https://ricebrok-staging.webcooks.in/docs/the-english-patient-online-86e6ec'>The English Patient Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/children-of-men-book-86e6ec'>Children Of Men Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/orphans-of-the-storm-facebook-86e6ec'>Orphans Of The Storm Facebook</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-possess-86e6ec'>How To Pronounce Possess</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremy-blackman-texas-86e6ec'>Jeremy Blackman Texas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/man-united-players-86e6ec'>Man United Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-cube---it-was-a-good-day-86e6ec'>Ice Cube - It Was A Good Day</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kati-kati-food-86e6ec'>Kati Kati Food</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-heart-songs-86e6ec'>My Heart Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volpi-cup-for-best-actress-wiki-86e6ec'>Volpi Cup For Best Actress Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/timothy-busfield-for-life-86e6ec'>Timothy Busfield For Life</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-bittersweet-life-english-subtitles%29-86e6ec'>A Bittersweet Life English Subtitles)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mary-queen-of-scots-86e6ec'>Mary Queen Of Scots</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tantrix-game-pack-86e6ec'>Tantrix Game Pack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-line-of-beauty-quotes-86e6ec'>The Line Of Beauty Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/illeana-douglas-tv-shows-86e6ec'>Illeana Douglas Tv Shows</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-planet-star-wars-rise-of-skywalker-86e6ec'>Ice Planet Star Wars Rise Of Skywalker</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vikingdom-m1s-86e6ec'>Vikingdom M1s</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mr-church-watch-online-86e6ec'>Mr Church Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/do-it-baby-miracles-lyrics-86e6ec'>Do It Baby Miracles Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dan-carter-salary-86e6ec'>Dan Carter Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-is-the-curse-of-la-llorona-coming-out-on-netflix-86e6ec'>When Is The Curse Of La Llorona Coming Out On Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-programming-languages-pdf-86e6ec'>Types Of Programming Languages Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ala-moana-beach-park-hours-86e6ec'>Ala Moana Beach Park Hours</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/list-of-video-games-by-year-86e6ec'>List Of Video Games By Year</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/prairie-moon-nursery-coupon-86e6ec'>Prairie Moon Nursery Coupon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/panic-in-the-streets-%281950-ok-ru%29-86e6ec'>Panic In The Streets (1950 Ok Ru)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emmett-kelly-wife-86e6ec'>Emmett Kelly Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-rowland-86e6ec'>Steve Rowland</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dark-metropolis-book-86e6ec'>Dark Metropolis Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/until-death-do-us-part-86e6ec'>Until Death Do Us Part</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tynecastle-fc-86e6ec'>Tynecastle Fc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/discovery-antonym-86e6ec'>Discovery Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/virus-movies-list-86e6ec'>Virus Movies List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/st%C3%A9phane-pronunciation-86e6ec'>Stéphane Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blowing-out-candles-meme-86e6ec'>Blowing Out Candles Meme</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-was-pride%2C-prejudice-and-mistletoe-filmed-86e6ec'>Where Was Pride, Prejudice And Mistletoe Filmed</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/triumph-bonneville-t100-black-86e6ec'>Triumph Bonneville T100 Black</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/armageddon-meaning-in-arabic-86e6ec'>Armageddon Meaning In Arabic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christmas-festival-of-ice-trailer-86e6ec'>Christmas Festival Of Ice Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/viy-severin-films-86e6ec'>Viy Severin Films</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henry-chalfant-bronx-museum-86e6ec'>Henry Chalfant Bronx Museum</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/callie-rivers-wikipedia-86e6ec'>Callie Rivers Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bristol-bears-signings-86e6ec'>Bristol Bears Signings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it-ain%27t-easy-2pac-86e6ec'>It Ain't Easy 2pac</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bob%27s-stores-delivery-tracker-86e6ec'>Bob's Stores Delivery Tracker</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/agyness-deyn-joel-mcandrew-86e6ec'>Agyness Deyn Joel Mcandrew</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/south-carolina-football-roster-2021-86e6ec'>South Carolina Football Roster 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/graduate-program-sace-simest-86e6ec'>Graduate Program Sace Simest</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-book-dragonfly-a-true-story-86e6ec'>Is The Book Dragonfly A True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rose-the-hat-hat-for-sale-86e6ec'>Rose The Hat Hat For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-legend-of-bagger-vance-summary-86e6ec'>The Legend Of Bagger Vance Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kimberly-wyatt-husband-86e6ec'>Kimberly Wyatt Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-baker-and-the-beauty-season-2-86e6ec'>The Baker And The Beauty Season 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cheap-uk-football-tickets-86e6ec'>Cheap Uk Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deborah-quinn-actress-86e6ec'>Deborah Quinn Actress</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-wallpaper-iphone-86e6ec'>Paul George Wallpaper Iphone</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/look-at-me-meme-86e6ec'>Look At Me Meme</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/london-iguodala-86e6ec'>London Iguodala</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-rookie-season-86e6ec'>Ricky Rubio Rookie Season</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monster-book-of-monsters-wizards-unite-86e6ec'>Monster Book Of Monsters Wizards Unite</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,106 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5210:"Classroom instruction would typically include firearm mechanics and terminology, cleaning and maintenance of a firearm, concealed carry legislation and limitations, liability issues, carry methods and safety, home defense, methods for managing and defusing confrontational situations, and practice of gun handling techniques without firing the weapon. While generally a concealed carry permit allows the permit holder to carry a concealed weapon in public, a state may restrict carry of a firearm including a permitted concealed weapon while in or on certain properties, facilities or types of businesses that are otherwise open to the public. And the Congress may by general laws prescribe the manner in which such acts, records, and proceedings shall be proved, and the effect thereof. States with shall-issue laws that allow a limited degree of discretion include Illinois, Indiana, Minnesota, New Hampshire, Oregon, and Pennsylvania. are no-issue jurisdictions in practice. in the case of any other firearm, in a holder designed, manufactured or adapted for the carrying of the firearm. [83] Idaho, Mississippi, North Dakota, South Dakota, and Tennessee have standard and enhanced permits that have different requirements to obtain and also have unique reciprocity with different states; Utah and West Virginia have provisional permits for 18-20 year olds with more limited recognition by other states.[84]. Federal law gives installation commanders wide discretion in establishing firearms policies for their respective installations. New CPL/CCW Applications may be submitted by appointment COVID-19 Clerk/Register Operating Plan. Unloaded and enclosed in a case, firearm carrying box, shipping box, or other container. [14] Self defence is no longer considered a legitimate reason for the granting of a Firearms Certificate (FAC) in Great Britain. The force of law behind a non-compliant sign varies based on state statutes and case law. For example, in Florida, carrying pepper spray in more than a specified volume (2 oz.) Concealment of the firearm is permitted only if it is specifically stipulated in the conditions of the ATC, as section 58(1) of the Firearms Act allows a CFO to attach conditions to an ATC. Clayton E. Cramer & David B. Kopel, " 'Shall Issue': The New Wave of Concealed Handgun Permit Laws", Tennessee Law Review, July 1995. New Mexico laws allow an individual to conceal carry an unloaded handgun without a permit. Illinois had banned concealed carry, and generally prohibited open carry in most locations as well. [115] While in New York State, a similar crime committed by an individual with no criminal convictions is classified as a Class D felony, punishable by a mandatory minimum of 3.5 years imprisonment, to a maximum of 7 years. In Maryland, Woollard v. Sheridan, the United States District Court for the District of Maryland decided in favor of a Maryland resident who was denied a permit renewal due to lack of "good cause" in accordance with Maryland law. of chemical requires a CCW permit, whereas everyone may legally carry a smaller, “self-defense chemical spray” device hidden on their person without a CCW permit. Other states have decided in case law that if efforts were made in good faith to conform to the statutes, the sign carries the force of law even if it fails to meet current specification. [125] Donohue and Cook argue that the crack epidemic made it difficult to determine the causal effects of CCW laws and that this made earlier results inconclusive; recent research does not suffer the same challenges with causality. Upon paying all applicable fees and filing the application, the applicant must have classifiable fingerprints taken by the county clerk, state police, sheriff’s office, local police agency, or other entity that provides fingerprinting services. Criminal possession of a weapon is the unlawful possession of a weapon by a citizen. Sports shooting licences require active participation in competitions every year. Unlike in most other European countries, the Czech gun legislation also permits a citizen to carry a concealed weapon for self-defense – 246,715 out of some 303,936 legal gun owners have a E category license which permits them to carry a concealed firearm. States that do not have this exemption generally do not recognize any license from states that do. [125] A 2018 RAND review of the literature concluded that concealed carry either has no impact on crime or that it may increase violent crime. As Gov. [119] The large variability of state carry laws has resulted in confusing circumstances where a person in Vermont (which requires no license of any kind to carry a concealed weapon by anyone who is not prohibited by law), could unwittingly travel into the adjacent state of New York, where such individual, despite acting entirely within the law of Vermont, would then face a mandatory 3.5 year prison sentence simply for accidentally crossing the state's border into New York. (Q2245). The robocalls falsely told people that mail-in voting will allow personal information to become part databases used to track people with old warrants, outstanding debts, and for mandatory vaccination programs. ";s:7:"keyword";s:16:"concealed weapon";s:5:"links";s:6616:"<a href='https://ricebrok-staging.webcooks.in/docs/damien-hirst-contact-86e6ec'>Damien Hirst Contact</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bone-comic-pdf-86e6ec'>Bone Comic Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-lighthouse-scary-86e6ec'>Is The Lighthouse Scary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andy-mouse-meaning-86e6ec'>Andy Mouse Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gelert-horizon-waterproof-jacket-mens-86e6ec'>Gelert Horizon Waterproof Jacket Mens</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/graveyard-shift-vs-night-shift-86e6ec'>Graveyard Shift Vs Night Shift</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lush-clothing-tops-86e6ec'>Lush Clothing Tops</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/looney-tunes-sounds-mp3-86e6ec'>Looney Tunes Sounds Mp3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robots-characters-86e6ec'>Robots Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/traffic-update-live-86e6ec'>Traffic Update Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jasper-jones-play-86e6ec'>Jasper Jones Play</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/affection-examples-86e6ec'>Affection Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ningbo-shanghai-86e6ec'>Ningbo Shanghai</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gotta-kick-it-up-soundtrack-86e6ec'>Gotta Kick It Up Soundtrack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dusan-lajovic-vs-karen-khachanov-prediction-86e6ec'>Dusan Lajovic Vs Karen Khachanov Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/khris-middleton-height-86e6ec'>Khris Middleton Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/caridad-rivera-wikipedia-86e6ec'>Caridad Rivera Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-misery-scary-86e6ec'>Is Misery Scary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/natalie-sawyer-leaves-talksport-86e6ec'>Natalie Sawyer Leaves Talksport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-sport-pdf-86e6ec'>What Is Sport Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/srikanth-kidambi-achievements-86e6ec'>Srikanth Kidambi Achievements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/football-video-games-list-86e6ec'>Football Video Games List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-baby-for-christmas-cast-86e6ec'>A Baby For Christmas Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/home-improvement-streaming-hulu-86e6ec'>Home Improvement Streaming Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-prowse-news-86e6ec'>David Prowse News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/call-me-crazy-a-five-film-full-movie-online-86e6ec'>Call Me Crazy A Five Film Full Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/that%27s-okay-rose-would-say-86e6ec'>That's Okay Rose Would Say</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rent-a-cat-movie-86e6ec'>Rent A Cat Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/usb-debugging-windows-10-86e6ec'>Usb Debugging Windows 10</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/murray-state-football-players-86e6ec'>Murray State Football Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mahesh-bhupathi-grand-slam-doubles-86e6ec'>Mahesh Bhupathi Grand Slam Doubles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/angel-face-movie-online-86e6ec'>Angel Face Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zipper-online-86e6ec'>Zipper Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/driving-miss-daisy-car-86e6ec'>Driving Miss Daisy Car</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alison-brie-celtic-86e6ec'>Alison Brie Celtic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-world-weapons-86e6ec'>New World Weapons</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/top-gun-cast-86e6ec'>Top Gun Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monkey-kingdom-disney-plus-86e6ec'>Monkey Kingdom Disney Plus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kevin-spacey-upcoming-movies-86e6ec'>Kevin Spacey Upcoming Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eddie-peng-news-86e6ec'>Eddie Peng News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/light-in-august-characters-86e6ec'>Light In August Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/normal-pulse-rate-86e6ec'>Normal Pulse Rate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/westfront-1918-full-movie-%7C-english-subtitles-86e6ec'>Westfront 1918 Full Movie | English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dw-sports-dundee-shop-86e6ec'>Dw Sports Dundee Shop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vin-diesel-new-movie-86e6ec'>Vin Diesel New Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-happened-to-naveen-andrews-86e6ec'>What Happened To Naveen Andrews</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/true-romance-you%27re-so-cool-meaning-86e6ec'>True Romance You're So Cool Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/civic-arena-of-milan-86e6ec'>Civic Arena Of Milan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/queen-of-katwe-netflix-86e6ec'>Queen Of Katwe Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rider-strong-age-86e6ec'>Rider Strong Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amanda-shepherd-hocus-pocus-86e6ec'>Amanda Shepherd Hocus Pocus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skai-jackson-age-86e6ec'>Skai Jackson Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/la-casa-del-diablo-en-mexico-86e6ec'>La Casa Del Diablo En Mexico</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amy-seimetz-husband-86e6ec'>Amy Seimetz Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lost-girls-plot-86e6ec'>Lost Girls Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/field-hockey-ball-86e6ec'>Field Hockey Ball</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nobody-walks-book-86e6ec'>Nobody Walks Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hard-candy-makeup-dollar-tree-86e6ec'>Hard Candy Makeup Dollar Tree</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mgs3-unlockables-86e6ec'>Mgs3 Unlockables</a>,
+";s:7:"expired";i:-1;}

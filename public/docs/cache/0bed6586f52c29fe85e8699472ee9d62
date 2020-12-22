@@ -1,0 +1,119 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3919:"London: Hamish Hamilton, 2005. As he walks around New York, Oskar carries a tambourine, which he shakes to try and calm himself. After the lesson the students should have general knowledge about trauma and its effects. If a person is busy dealing with the past, there migth be no room for the present nor for the future. As Caruth claims, he tries to bring the past – the voice of his dad – into the present. Apparently, the image evokes the idea that the possibility to open the door is not given and therefore, the key which could have opened the door does not exist (anymore). The first word he loses is the word ‘Anna’, which implies her importance (16) and innocence, so as if to reverse his own history of creation: In the beginning was no word. The lesson I have planned relates to both, characterisation and psychoanalytic approaches. The key in the doorknob picture sticks diagonally in the keyhole implying a state between an opened and locked door. Knowing children of his age do not know the word, Oskar explains it to them (2). This statement emphasises that Oskar is lost in his emotions, but again he can express his feelings in a very adult wayThe boy feels that his father's death forces him to feel bad. 7.2 Entry Video Extremely Loud & Incredibly Close Thursday, April 10, 2008. The basic trauma theory is provided by the ‘father of psychoanalysis’ Sigmund Freud.In his developed psychological system described in Jenseits des Lustprinzips, he claims that a traumatic neurosis is ascribable to the moment of surprise, which is followed by a shock (Freud, 222.). After meeting his Grandpa, he enlists the man's help to dig up his father's empty coffin. However, intense attractions that cannot be prevented by this layer do exist. Running through only one of these procedures could evoke a mental illness. In this paper I focus onCathy Caruth, and DominickLaCaprawho build up their theories on the basis of Sigmund Freud’s psychoanalysis which I also briefly explain.Nevertheless, other scientists that build up trauma theories like Pierre Janet, Ruth Leys, KristiaanVersluys and SienUytterschout are taken briefly into consideration in this paper too. Mr. Schell’s silence is complete by losing the last word: ‘I’. According to Caruth, the repression of the consequences theevent involves, activated by the shock of the happening, enables the person not to lose control about the physical functions. First, Oskar thinks of a teakettle with a mouth that is capable of whistling pretty melodies, speaking Shakespeare’s work, or making jokes. and besides, uses a little book where he writes down his thoughts or feelings to communicate with others, using one page per statement (19-27). When they accomplish the task, Grandpa fills the coffin with the many unsent letters he has written Thomas Jr. over the years. The loss of Grandfather Schell’s speaking does not happen abruptly but is rather a process. It comes to recurring hallucinations, dreams, thoughts or behaviour. Moreover, it is important have the ability to emphasise with this character and change their perspectives or contribute their own experiences with loss to explain the others why somebody could show such behaviour. According to the death of his father, Oskar mentions that even after one year of the terrorist attacks “there was a lot of stuff that made [him] panicky like […] airplanes, Arab people, bags without owners [and] smoke […]” (36). In all chapters of Grandfather Schell’s different pictures doorknobs appear. This flashback appears to be light-hearted and joyful.  At the end of this chapter Thomas admits to himself that the marriage between him and Grandmother Schell could have been a turning point in his life. I thought this is the best way, as the students can talk about how they perceived the character and his or her ability to deal with the trauma they have gone through. ";s:7:"keyword";s:49:"extremely loud and incredibly close oskar's fears";s:5:"links";s:8624:"<a href='https://ricebrok-staging.webcooks.in/docs/kyle-hamilton-espn-86e6ec'>Kyle Hamilton Espn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anheuser-busch-inbev-careers-86e6ec'>Anheuser-busch Inbev Careers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/captain-america%3A-civil-war-amazon-prime-86e6ec'>Captain America: Civil War Amazon Prime</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/terrifier-box-office-86e6ec'>Terrifier Box Office</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kobe-bryant-funeral-live-86e6ec'>Kobe Bryant Funeral Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/banksy-locations-86e6ec'>Banksy Locations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monsters-netflix-movie-86e6ec'>Monsters Netflix Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hidden-%282015-full-movie-watch-online%29-86e6ec'>Hidden (2015 Full Movie Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/resto-al-sud-compila-la-domanda-86e6ec'>Resto Al Sud Compila La Domanda</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-violence-plot-explained-86e6ec'>Miss Violence Plot Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-paranormal-activity-on-netflix-2020-86e6ec'>Is Paranormal Activity On Netflix 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/georgette-m%C3%A9li%C3%A8s-86e6ec'>Georgette Méliès</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ad-astra-stream-86e6ec'>Ad Astra Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jan-bijvoet-into-the-night-86e6ec'>Jan Bijvoet Into The Night</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/civil-law-examples-86e6ec'>Civil Law Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shakespeare-idioms-worksheet-86e6ec'>Shakespeare Idioms Worksheet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/map-of-the-walking-dead-world-86e6ec'>Map Of The Walking Dead World</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-comanche-film-location-86e6ec'>White Comanche Film Location</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/keith-haring-heart-86e6ec'>Keith Haring Heart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-of-the-goals-of-the-allies-was-to-support-russia-by-86e6ec'>One Of The Goals Of The Allies Was To Support Russia By</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-a-compiler-in-programming-86e6ec'>What Is A Compiler In Programming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pga-tour-2k21-review-86e6ec'>Pga Tour 2k21 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pastoral-summary-86e6ec'>American Pastoral Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/saaheb-songs-86e6ec'>Saaheb Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-hallow-monsters-86e6ec'>The Hallow Monsters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/single-moms-club-plot-86e6ec'>Single Moms Club Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adana-merkez-indir-86e6ec'>Adana Merkez Indir</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spruce-knob-observation-tower-86e6ec'>Spruce Knob Observation Tower</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-lee-roth-children-86e6ec'>David Lee Roth Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-ballas-and-julianne-hough-86e6ec'>Mark Ballas And Julianne Hough</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tcu-baseball-history-86e6ec'>Tcu Baseball History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hacksaw-ridge-watch-online-86e6ec'>Hacksaw Ridge Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robin-batman-86e6ec'>Robin Batman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/journey-to-the-seventh-planet-rotten-tomatoes-86e6ec'>Journey To The Seventh Planet Rotten Tomatoes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-cell-netflix-86e6ec'>The Cell Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/things-i-wish-i%27d-known-before-we-got-married-86e6ec'>Things I Wish I'd Known Before We Got Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/assassination-tango-netflix-86e6ec'>Assassination Tango Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-monster-book-86e6ec'>The Monster Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/motor-neurone-disease-treatment-86e6ec'>Motor Neurone Disease Treatment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/serene-life-paddle-board-replacement-parts-86e6ec'>Serene Life Paddle Board Replacement Parts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-prize-amazon-86e6ec'>The Prize Amazon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/screamo-bands-2020-86e6ec'>Screamo Bands 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-can-i-watch-bag-of-bones-86e6ec'>Where Can I Watch Bag Of Bones</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-has-the-most-national-championships-in-the-sec-football-86e6ec'>Who Has The Most National Championships In The Sec Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/natalia-bryant-volleyball-recruiting-86e6ec'>Natalia Bryant Volleyball Recruiting</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-devil%27s-due-fallout-4-reddit-86e6ec'>The Devil's Due Fallout 4 Reddit</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremy-howard-net-worth-86e6ec'>Jeremy Howard Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-terror-season-2-streaming-86e6ec'>The Terror Season 2 Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alexander-gilkes-paddle8-86e6ec'>Alexander Gilkes Paddle8</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-caruso-girlfriend-86e6ec'>Alex Caruso Girlfriend</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-calories-should-a-wheelchair-user-eat-86e6ec'>How Many Calories Should A Wheelchair User Eat</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-holt-political-party-86e6ec'>David Holt Political Party</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-big-heat-blu-ray-86e6ec'>The Big Heat Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-contract-2020-86e6ec'>Russell Westbrook Contract 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lldb-print-string-86e6ec'>Lldb Print String</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/truffaut-rififi-86e6ec'>Truffaut Rififi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2015-sec-basketball-tournament-86e6ec'>2015 Sec Basketball Tournament</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-books-are-in-the-beautiful-disaster-series-86e6ec'>How Many Books Are In The Beautiful Disaster Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/reap-the-wild-wind-meaning-86e6ec'>Reap The Wild Wind Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-court-diagram-with-measurements-86e6ec'>Volleyball Court Diagram With Measurements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creep-superband-lyrics-86e6ec'>Creep Superband Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-00%2F01-86e6ec'>Arsenal 00/01</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dirty-rotten-scoundrels-netflix-canada-86e6ec'>Dirty Rotten Scoundrels Netflix Canada</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-cole-wife-86e6ec'>Gary Cole Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/d%27rose-9-review-86e6ec'>D'rose 9 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-do-tardigrades-live-86e6ec'>Where Do Tardigrades Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-pursuit-of-honor-true-story-86e6ec'>In Pursuit Of Honor True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-york-knicks-jersey-86e6ec'>New York Knicks Jersey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cobweb-movie-2021-86e6ec'>Cobweb Movie 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exeter-chiefs-south-african-players-86e6ec'>Exeter Chiefs South African Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lizzie-page-books-86e6ec'>Lizzie Page Books</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/not-easily-broken-full-movie-123movies-86e6ec'>Not Easily Broken Full Movie 123movies</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,106 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3491:"<p>Golden State Warriors center DeMarcus Cousins (0) exits following Game 6 of the NBA Finals at Oracle Arena on Thursday, June 13, 2019, in Oakland, Calif. The Golden State Warriors could have interest in Dwight Howard should be become available...the Los... Anthony Davis made sure to reach out to a close friend shortly after winning a championship. DeMarcus Cousins has had a really rough go of things over the last few NBA seasons. A healthy Cousins would give them a third star that would help LeBron James and AD defend their throne next year. </p> <p>As of now, his No. Ellis believes that if he gets 100 percent healthy and rediscovers his form in Los Angeles, he will have the right to demand a lucrative deal in the summer of 2021 and get him back on the path to the Hall of Fame. </p> <p>Joining the Purple and Gold would not only give him the opportunity to revive his career but also a realistic chance of winning his first championship ring next season.  Also, it’s worth noting that, though he didn’t play a single game, Cousins was with the Lakers in the first half of the 2019-20 NBA season. 1 priority is finding a team that will give him the opportunity to rebuild his value and prove to everyone in the league that he still has plenty of gas left in the tank. DeMarcus Cousins contract and salary cap details, contract breakdowns, dead money, and news. All content © 2008 Unfortunately, plenty of things have changed since he parted ways with the Sacramento Kings. Kylie Jenner Posts Sultry Snap With Shirtless Travis Scott, Sparking Rumors The Pair Are Back Together, Lakers Coach Frank Vogel Denies Rumors Team Was Planning To Boycott Playoffs, Tahlia Skaines Basks In The Sun While Wearing A Skimpy White Bikini, Joselyn Cano Flaunts Curvy Booty In Thong Bikini While Posing At The Beach, Donald Trump Is Going To Get ‘Absolutely Crushed’ By Joe Biden, Republican Strategist Predicts, Jennifer Lopez Dances By The Pool In A Tiny Sports Bra In New Video Shared By Alex Rodriguez, ‘DWTS’ Judge Derek Hough Reveals How Producers Really Reacted To Tyra Banks’ Elimination Blunder, Pamela Anderson, 53, Sits With Legs Spread Apart In Lacy White Dress, Kelly Clarkson Shows Off Her Hourglass Figure In Glittery Black Dress, Jennifer Lopez, 51, Arches Her Back And Shows Serious Skin In Sizzling Poolside Photo, NBA Rumors: Lakers-Pistons Trade Involving Derrick Rose ‘More Likely Now,’ Says Anonymous GM, Privacy Notice for Personal Data used for Interest-Based Advertising and Third-Party Marketing. Far from being a max guy, he’s no longer considered a starting-caliber big man and so far, he’s having a hard time securing a decent contract in the free agency market. His best bet is to sign another minimum contract in Los Angeles and earn a ring through his play rather than from the bench.”. </p> <p>We spent considerable time discussing whether the Warriors mishandled Kevin Durant‘s injury. </p> <p>Dwight Howard played well for the Lakers this season and revived his flagging career.                     - 2020 The Inquisitr. On April 7, 2010, Cousins announced that he would forgo his final three seasons of collegiate eligibility and enter the 2010 NBA draft, where he was selected by the Sacramento Kings  with the fifth overall pick. 7 months ago. “Boogie” won’t have a hard time making himself comfortable in Los Angeles since he would be reuniting with former New Orleans Pelicans teammates Anthony Davis and Rajon Rondo. </p>";s:7:"keyword";s:34:"demarcus cousins contract warriors";s:5:"links";s:6840:"<a href='https://ricebrok-staging.webcooks.in/docs/ring-of-power-dnd-86e6ec'>Ring Of Power Dnd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/t-34-movie-english-subtitles-86e6ec'>T-34 Movie English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/galaxy-quest-2-86e6ec'>Galaxy Quest 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/top-eleven-2019---be-a-soccer-manager-86e6ec'>Top Eleven 2019 - Be A Soccer Manager</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-giants-walked-the-earth-pdf-86e6ec'>When Giants Walked The Earth Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lebron-james-salary-2019-86e6ec'>Lebron James Salary 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/warriors-trade-86e6ec'>Warriors Trade</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/red-bull-events-86e6ec'>Red Bull Events</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pendulum-ride-86e6ec'>Pendulum Ride</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/little-martin-lx1e-86e6ec'>Little Martin Lx1e</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/carolyn-kieger-86e6ec'>Carolyn Kieger</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/isaac-bashevis-singer-biography-86e6ec'>Isaac Bashevis Singer Biography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ul-football-schedule-86e6ec'>Ul Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/possess-antonym-86e6ec'>Possess Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/biggest-participation-sport-in-uk-86e6ec'>Biggest Participation Sport In Uk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bone-anatomy-foot-86e6ec'>Bone Anatomy Foot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeffrey-anderson-upenn-86e6ec'>Jeffrey Anderson Upenn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-man-in-the-white-suit-summary-86e6ec'>The Man In The White Suit Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2061%3A-odyssey-three-summary-86e6ec'>2061: Odyssey Three Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/savage-vengeance-%281993-watch-online%29-86e6ec'>Savage Vengeance (1993 Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2010%3A-the-year-we-make-contact-openload-86e6ec'>2010: The Year We Make Contact Openload</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lacrosse-rules-and-equipment-86e6ec'>Lacrosse Rules And Equipment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taylor-kitsch-height-86e6ec'>Taylor Kitsch Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyler-herro-espn-86e6ec'>Tyler Herro Espn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/whiskey-beach%2C-delaware-86e6ec'>Whiskey Beach, Delaware</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dwyane-wade-shoes-rick-ross-86e6ec'>Dwyane Wade Shoes Rick Ross</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/richard-anderson-tailor-86e6ec'>Richard Anderson Tailor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/theresa-marie-knorr-walker-death-86e6ec'>Theresa Marie Knorr Walker Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doctor-sue%C3%B1o-pelicula-completa-en-espa%C3%B1ol-latino-86e6ec'>Doctor Sueño Pelicula Completa En Español Latino</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/romantic-movies-86e6ec'>Romantic Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dilemma-examples-86e6ec'>Dilemma Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cedric-hardwicke-cause-of-death-86e6ec'>Cedric Hardwicke Cause Of Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bloody-sunday-lyrics-86e6ec'>Bloody Sunday Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-mighty-b-wiki-86e6ec'>The Mighty B Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zebra-lounge-online-86e6ec'>Zebra Lounge Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-make-soft-beads-86e6ec'>How To Make Soft Beads</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-house-%28game-story%29-86e6ec'>The House (game Story)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/to-live-and-die-in-la-lyrics-wang-chung-86e6ec'>To Live And Die In La Lyrics Wang Chung</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/funny-girl-broadway-2019-86e6ec'>Funny Girl Broadway 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ian-bannen-nominations-86e6ec'>Ian Bannen Nominations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/idle-town-lyrics-86e6ec'>Idle Town Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mr-sammler%27s-planet-summary-86e6ec'>Mr Sammler's Planet Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dirty-rotten-scoundrels-on-tv-86e6ec'>Dirty Rotten Scoundrels On Tv</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-direct-culture-86e6ec'>Sports Direct Culture</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rossini-william-tell-overture-86e6ec'>Rossini William Tell Overture</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-teams-that-start-with-r-86e6ec'>Sports Teams That Start With R</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zion-williamson-shoe-deal-86e6ec'>Zion Williamson Shoe Deal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gerald%27s-game-book-online-86e6ec'>Gerald's Game Book Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unc-football-schedule-86e6ec'>Unc Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/small-town-country-song-86e6ec'>Small Town Country Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/last-man-standing%27%27-keep-the-change-86e6ec'>Last Man Standing'' Keep The Change</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bad-news-bears-saying-86e6ec'>Bad News Bears Saying</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gaudium-latin-86e6ec'>Gaudium Latin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-triumph-of-love-painting-86e6ec'>The Triumph Of Love Painting</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/history-of-basketball-essay-86e6ec'>History Of Basketball Essay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/natural-birth-pain-86e6ec'>Natural Birth Pain</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matthew-goode-children-86e6ec'>Matthew Goode Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-michael-gross-still-alive-86e6ec'>Is Michael Gross Still Alive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-of-the-goals-of-the-allies-was-to-support-russia-by-86e6ec'>One Of The Goals Of The Allies Was To Support Russia By</a>,
+";s:7:"expired";i:-1;}

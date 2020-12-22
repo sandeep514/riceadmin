@@ -1,0 +1,107 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4070:"<p>Assault on Precinct 13 ( 407 ) IMDb 7.4 1h 30min 1976 X-Ray R Isolated and cut off from the city inside a soon-to-be-closed L.A. police station, a group of police officers and convicts must join forces to defend themselves against the gang called Street Thunder, who have taken a blood oath to kill someone trapped inside the precinct. Movie25 - Watch Assault on Precinct 13 (2005) Full Movie Online Free - Plot unknown. Trouble strikes when an exhausted pop singer, sent on a vacation to a farm, realizes that the farm’s owner grows deadly bees. As the quartet debate their…. The writings of a…. Watch Assault on Precinct 13 starring Ethan Hawke in this Drama on DIRECTV. Disclaimer: This site does not store any files on its server. Please fill your email to form below. A teenager’s quest to launch Norwegian Black Metal in Oslo in the 1990s results in a very violent outcome. Dozens of people are held hostage as fire races through the…, Struggling to make ends meet, single Mother, Corina buys a second hand phone, but there’s a SIM card wedged inside. <strong>We're sorry but jw-app doesn't work properly without JavaScript enabled. Tells the true story of a 60 Minutes television series exposé of the tobacco industry, as seen through the eyes of a real tobacco executive, Jeffrey Wigand. On New Year’s Eve, inside a police station that’s about to be closed for good, officer Jake Roenick must cobble together a force made up cops and criminals to save themselves from a mob looking to kill mobster Marion Bishop. For everybody, everywhere, everydevice, and everything ;). Start your free trial to watch Assault on Precinct 13 and other popular TV shows and movies including new releases, classics, Hulu Originals, and more. Two brothers and their wives meet up at a haute-cuisine restaurant to discuss what to do about a horrific crime that their sons committed together. Views: 353 All contents are provided by non-affiliated third parties. </p> <p>John McClane is back and badder than ever, and this time he’s working for Homeland Security. He calls on the services of a young hacker in his bid to stop…, In 2008 the Taj Mahal Palace Hotel in Mumbai becomes the target of a deadly attack by Pakistani militants. Please enable it to continue.</strong> A police station under siege from a vicious street gang becomes a cataclysmic battleground where only the strongest survive! </p> <p>Reportedly an animated project based on the long-running Assault on Precinct 13 video game franchise. WATCH Assault on Precinct 13 ONLINE. Computer hacker Will Farmer engages a government super-computer named Ripley in an online terrorist-attack simulation game. Soon, the only thing more dangerous than the criminals on the inside is the rogue gang on the outside. On New Year's Eve inside a Detroit police station, an officer (Ethan Hawke) must round up a makeshift brigade of cops and criminals when the precinct is besieged by a relentless mob. We will send a new password to your email. A small group of Catholics led by an ailing priest believe that Satan intends to become man, just as God did in the person of Jesus.  On his latest private investigation, a shamed former cop connects a murder case to a government conspiracy involving rogue agents from a top spy agency. It's available to watch on TV, online, tablets, phone. When becoming members of the site, you could use the full range of functions and enjoy the most exciting films. While en route to prison, a bus carrying criminals Marion (Laurence Fishburne), Beck (John Alberto Leguizamo) and Anna (Aisha Hinds) is rerouted to Detroit's soon-to-be-closed Precinct 13 because of a dangerous winter storm. As she tries to remove it, the phone begins to…. Tale of a 15-year-old Australian girl who went missing. Run-down Precinct 13 is about to close its doors forever. Little does Farmer know that Ripley has been designed to appeal to potential terrorists,…. Bookmark and share - 123MOVIES.CHURCH & SWATCHSERIES.INFO :). </p> <p>Gritty action fires up this intense crime drama. </p>";s:7:"keyword";s:35:"assault on precinct 13 watch online";s:5:"links";s:6936:"<a href='https://ricebrok-staging.webcooks.in/docs/the-hand-that-rocks-the-cradle-rules-the-world-song-86e6ec'>The Hand That Rocks The Cradle Rules The World Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dickie-moore-86e6ec'>Dickie Moore</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/being-julia-streaming-86e6ec'>Being Julia Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/before-i-wake-review-86e6ec'>Before I Wake Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shepard-fairey-process-86e6ec'>Shepard Fairey Process</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/time-heist-meaning-in-tamil-86e6ec'>Time Heist Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aeon-flux-season-1-episode-2-86e6ec'>Aeon Flux Season 1 Episode 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-beast-osrs-86e6ec'>Night Beast Osrs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/georges-m%C3%A9li%C3%A8s-pronunciation-86e6ec'>Georges Méliès Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rangers-supporters-clubs-worldwide-86e6ec'>Rangers Supporters Clubs Worldwide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chasing-fire-movie-86e6ec'>Chasing Fire Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stanley-kubrick-directing-style-86e6ec'>Stanley Kubrick Directing Style</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jean-michel-basquiat-words-86e6ec'>Jean-michel Basquiat Words</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-interpreter-chinese-drama-trailer-86e6ec'>The Interpreter Chinese Drama Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sky-sports-f1-presenters-86e6ec'>Sky Sports F1 Presenters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gelert-tents-cadiz-5-86e6ec'>Gelert Tents Cadiz 5</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-interrupts-86e6ec'>Types Of Interrupts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/playing-by-heart-streaming-86e6ec'>Playing By Heart Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/goodneighbor-triggermen-in-alley-86e6ec'>Goodneighbor Triggermen In Alley</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-green-butchers-online-86e6ec'>The Green Butchers Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julia-duffy-newhart-86e6ec'>Julia Duffy Newhart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-bat-predators-86e6ec'>Vampire Bat Predators</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/made-in-heaven-season-2-release-date-86e6ec'>Made In Heaven Season 2 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sharna-burgess-dwts-partner-2020-86e6ec'>Sharna Burgess Dwts Partner 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marquese-chriss-age-86e6ec'>Marquese Chriss Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-carrie-%282013%29-on-netflix-86e6ec'>Is Carrie (2013) On Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/noelle-name-personality-86e6ec'>Noelle Name Personality</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/summary-of-the-skeleton-key-86e6ec'>Summary Of The Skeleton Key</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rider-strong-boy-meets-world-86e6ec'>Rider Strong Boy Meets World</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-lockwood-net-worth-86e6ec'>Gary Lockwood Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it%27s-bruno-dog-86e6ec'>It's Bruno Dog</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/golden-state-warriors-payroll-86e6ec'>Golden State Warriors Payroll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cloud-atlas-netflix-2020-86e6ec'>Cloud Atlas Netflix 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dennis-rodman-stats-86e6ec'>Dennis Rodman Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/celtic-vs-st-mirren-live-stream-86e6ec'>Celtic Vs St Mirren Live Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ianis-hagi-fifa-19-86e6ec'>Ianis Hagi Fifa 19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/le-manoir-du-diable-pronunciation-86e6ec'>Le Manoir Du Diable Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kentucky-football-2019-record-86e6ec'>Kentucky Football 2019 Record</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hamilton-vs-aberdeen-prediction-86e6ec'>Hamilton Vs Aberdeen Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/elastic-heart-video-86e6ec'>Elastic Heart Video</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matthew-fox-family-86e6ec'>Matthew Fox Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nail-designs-for-summer-86e6ec'>Nail Designs For Summer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skidmark-nickname-meaning-86e6ec'>Skidmark Nickname Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spring-tutorial-86e6ec'>Spring Tutorial</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michigan-maryland-football-tickets-86e6ec'>Michigan Maryland Football Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/instant-camera-86e6ec'>Instant Camera</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alison-brie-celtic-86e6ec'>Alison Brie Celtic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/confession-2015-korean-movie-86e6ec'>Confession 2015 Korean Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/richa-jackson-86e6ec'>Richa Jackson</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-is-conchita-martinez-partner-86e6ec'>Who Is Conchita Martinez Partner</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kim-hye-ja-desert-86e6ec'>Kim Hye Ja Desert</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andrzej-bargiel-86e6ec'>Andrzej Bargiel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trayce-thompson-stats-86e6ec'>Trayce Thompson Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/only-the-strong-streaming-86e6ec'>Only The Strong Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-teams-that-start-with-r-86e6ec'>Sports Teams That Start With R</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christmas-festival-of-ice-trailer-86e6ec'>Christmas Festival Of Ice Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/this-land-is-mine-nina-paley-86e6ec'>This Land Is Mine Nina Paley</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mary-frann-wiki-86e6ec'>Mary Frann Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jasmin-brown-comedian-net-worth-86e6ec'>Jasmin Brown Comedian Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonny-hayes-salary-celtic-86e6ec'>Jonny Hayes Salary Celtic</a>,
+";s:7:"expired";i:-1;}

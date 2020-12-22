@@ -1,0 +1,129 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4839:"Still, I can't help but feel jipped with a corruption world where I don't have access to the ichor buff and ichor gear, which I frankly feel is overpowered in many situations, and instead I get the cursed flames debuff and gear which I feel is underpowered in almost every situation. Note: This is ONLY to be used to report spam, advertising, and problematic (harassment, fighting, or rude) posts. It is crafted with 150 musket balls and 1 Ichor (This makes 150 bullets). If the enemy has 35 defence instead, we are looking at 940 damage for cursed bullets and 2600 for ichor bullets. Press J to jump to the feed. Yeah, spraying the blood of gods onto bosses is way more effective than it sounds. Enemies with less than 20 defense get negative defense from ichor. Cursed flames deals 4 damage per second. Death Bringer Fairy • Mechanical Amalgam • Mutant Voodoo Doll • Ancient Seal. There is no profit in producing Endless Ichor Pouches for resale. Which are best for the battle? I didn't make this post to offer some suggestions (other than a simple "please include access to ichor in all worlds because it is vital and cursed flames is next to useless") but if there is interest I can offer some suggestions about changing the nature of the debuff rather than just tweaking the numbers. The EoW's expert item is a thousand times better than the Brain's, though. At least I skip to hallowed armor pretty quickly anyway, unless there is pallidium involved... ranged: i don't think ichor arrows surpass luminite arrows. First, I wanna point out that cursed bullets deal 1 less base damage than ichor bullets. If the enemy has 15 defence cursed does 2500 and ichor does 3800 (really 3800 for anything below 21 defence). Thanks for the tip! © Valve Corporation. debuff). Skeletron Prime is way easier with an arena, Golden Shower, and a Megashark with Ichor or Crystal Bullets than just summoning him on the roof of your house. All rights reserved. The debuff will not apply in PvP. The better Hardmode metals are alternative to the worse, because "worse" ones came first. This page was last edited on 1 July 2020, at 11:15. Crimson has many things better than the corruption: No annoying pits, ichor, easily crafted Bloody Spine, etc. Ichor is a debuff that lowers the afflicted entity's defense by 20. The Chlorophyte is the best option. save hide report. Dig, fight, explore, build! Even after all of their nerfs, the Vampire Knives far and away trump the SotC. Players can use this to quickly alternate between infinite and special ammo. The Endless Musket Pouch follows the same ammunition priority rules as other ammo types. I always use the Chlorophyte Bullets whenever I can and they deal the most damage. Likewise, the bullets will not home in on a Target Dummy, due to it not technically being an enemy. Español - Latinoamérica (Spanish - Latin America), https://www.youtube.com/watch?v=Oyvbdacj7gw. While in the user's inventory, it acts as a single Ichor Bullet that can be fired from any appropriate Gun without being depleted. Moreover, in multiplayer, everyone benefits from the ichor debuff separately, while the cursed flames don't stack. Press question mark to learn the rest of the keyboard shortcuts.  Which kind of bullets should I use for my first plantera fight on my alt world? tl;dr: it's not entirely one sided but crimson is slightly better. The Endless Musket Pouch is incredibly useful when used with the, The Endless Musket Pouch can be used to reserve better bullets for boss fights, like, The Endless Musket Pouch is useful for the. Crafting the Endless Musket Pouch requires 4 full stacks of Musket Balls (999 each). the Chlorophyte + Sniper Rifle (if possible, quick/agile) is the most damage.). If you find any mistakes in the calculations or perhaps misunderstandings of game mechanics, or even if you have some helpful advice to share about making up for a lack of ichor, I would love to hear it! The Endless Musket Pouch is a Hardmode item that acts as ammunition, and can be placed in the ammo slots in the player's inventory. #1;; Mar 26, 2016 @ 4:36am Both like use 10 to lower Defence than 50? Really, preparing enough for any boss in Terraria makes them way easier. Both like use 10 to lower Defence than 50? Nothing is impossible in this action-packed adventure game. Guns with unique shot types will fire their special shots indefinitely, including those such as the Uzi that specifically require Musket Balls for their specialized shot types to work. ; Reflected Chlorophyte Bullets from either Biome Mimics in Expert Mode or Selenians will target the … With most weapons you see a decent DPS buff with ichor: hitting an armored enemy once or twice per second can give you 16-32 dps you wouldn't normally have but for fast firing weapons like the megashark, the dps buff is insane. ";s:7:"keyword";s:13:"ichor bullets";s:5:"links";s:9512:"<a href='https://ricebrok-staging.webcooks.in/docs/tennessee-football-schedule-2019-tickets-86e6ec'>Tennessee Football Schedule 2019 Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/natalia-bryant-volleyball-recruiting-86e6ec'>Natalia Bryant Volleyball Recruiting</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-randall-jean-wallace-86e6ec'>James Randall Jean Wallace</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-harden-yoga-86e6ec'>James Harden Yoga</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tina-thompson-son-father-86e6ec'>Tina Thompson Son Father</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sant-sebasti%C3%A0-beach-86e6ec'>Sant Sebastià Beach</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wall--e-eve-pronunciation-86e6ec'>Wall- E Eve Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netflix-now-streaming-86e6ec'>Netflix Now Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-interesting-sports-86e6ec'>Most Interesting Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/snapdragon-company-86e6ec'>Snapdragon Company</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/splinter-removal-hack-86e6ec'>Splinter Removal Hack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/howard-league-for-penal-reform-86e6ec'>Howard League For Penal Reform</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gamecock-football-recruiting-2020-86e6ec'>Gamecock Football Recruiting 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pray-for-rain-lyrics-86e6ec'>Pray For Rain Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oakland-high-school-website-86e6ec'>Oakland High School Website</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/truffaut-rififi-86e6ec'>Truffaut Rififi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/goin%27-south-restaurant-86e6ec'>Goin' South Restaurant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vanish-liquid-86e6ec'>Vanish Liquid</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maria-sharapova-instagram-stories-86e6ec'>Maria Sharapova Instagram Stories</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/german-revolution-1848-86e6ec'>German Revolution 1848</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scott-brown-sister-rangers-86e6ec'>Scott Brown Sister Rangers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-mcavoy-awards-86e6ec'>James Mcavoy Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/city-streets-shoes-86e6ec'>City Streets Shoes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-stand-movie-2020-86e6ec'>The Stand Movie 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ida-cantor-86e6ec'>Ida Cantor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kevin-durant-shoes-6-86e6ec'>Kevin Durant Shoes 6</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spring-boot-tomcat-version-86e6ec'>Spring-boot Tomcat Version</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-cold-in-alex-blu-ray-86e6ec'>Ice Cold In Alex Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/terrence-ross-wife-86e6ec'>Terrence Ross Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mission%3A-impossible---ghost-protocol-netflix-86e6ec'>Mission: Impossible - Ghost Protocol Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kalidou-koulibaly-man-city-86e6ec'>Kalidou Koulibaly Man City</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-shoes-ps4-86e6ec'>Paul George Shoes Ps4</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rockets-sign-danuel-house-86e6ec'>Rockets Sign Danuel House</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hidden-season-2-episode-1-review-86e6ec'>Hidden Season 2 Episode 1 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tennessee-vols-basketball-schedule-2020-2021-86e6ec'>Tennessee Vols Basketball Schedule 2020-2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyson-chandler-rings-86e6ec'>Tyson Chandler Rings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matthew-fox-kids-86e6ec'>Matthew Fox Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chrissy-teigen-siblings-86e6ec'>Chrissy Teigen Siblings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henry-james-biography-86e6ec'>Henry James Biography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/monkey-cartoon-movie-list-86e6ec'>Monkey Cartoon Movie List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/assassination-tango-netflix-86e6ec'>Assassination Tango Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rachael-leigh-cook-net-worth-86e6ec'>Rachael Leigh Cook Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/strangers-on-a-train-2011-remake-86e6ec'>Strangers On A Train 2011 Remake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/93-%27til-infinity-in-movies-86e6ec'>93 'til Infinity In Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-house-on-sorority-row-parents-guide-86e6ec'>The House On Sorority Row Parents Guide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/killer-in-the-family-episodes-86e6ec'>Killer In The Family Episodes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cricbuzz-point-table-2020-ipl-86e6ec'>Cricbuzz Point Table 2020 Ipl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dyna-switchback-discontinued-86e6ec'>Dyna Switchback Discontinued</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/burke-and-hare-watch-online-86e6ec'>Burke And Hare Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/she-went-thataway-tyson-tate-86e6ec'>She Went Thataway Tyson Tate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/special-effects-makeup-products-86e6ec'>Special Effects Makeup Products</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ray-jackson-aboriginal-86e6ec'>Ray Jackson Aboriginal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-devils-hand-book-86e6ec'>The Devils Hand Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nightmare-cinema-spider-86e6ec'>Nightmare Cinema Spider</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-ham-squad-2018%2F19-86e6ec'>West Ham Squad 2018/19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/panthers-vs-roosters-grand-final-86e6ec'>Panthers Vs Roosters Grand Final</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amityville-horror-house-movie-86e6ec'>Amityville Horror House Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henry%3A-portrait-of-a-serial-killer-aspect-ratio-86e6ec'>Henry: Portrait Of A Serial Killer Aspect Ratio</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/class-of-1990-reunion-86e6ec'>Class Of 1990 Reunion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2d-fighting-games-pc-86e6ec'>2d Fighting Games Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-payton-ii-height-86e6ec'>Gary Payton Ii Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-bank-story-oscar-86e6ec'>West Bank Story Oscar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wake-forest-football-roster-2014-86e6ec'>Wake Forest Football Roster 2014</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/s-c-gamecock-football-recruiting-86e6ec'>S C Gamecock Football Recruiting</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oss-karate-86e6ec'>Oss Karate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/expelled-movie-wiki-86e6ec'>Expelled Movie Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-de-niro-wife-and-kids-86e6ec'>Robert De Niro Wife And Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chaffee-county-points-of-interest-86e6ec'>Chaffee County Points Of Interest</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fitzcarraldo-meaning-86e6ec'>Fitzcarraldo Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deborah-mailman-siblings-86e6ec'>Deborah Mailman Siblings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brick-woman-lady-pink-86e6ec'>Brick Woman Lady Pink</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/avatar-box-office-86e6ec'>Avatar Box Office</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/conversion-court-cases-86e6ec'>Conversion Court Cases</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malice-aforethought-legal-definition-86e6ec'>Malice Aforethought Legal Definition</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/inbred-children-86e6ec'>Inbred Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lauren-holiday-eye-86e6ec'>Lauren Holiday Eye</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oedipus-complex%3B-examples-86e6ec'>Oedipus Complex; Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hitchhiker%27s-guide-to-the-galaxy-characters-86e6ec'>Hitchhiker's Guide To The Galaxy Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bossaball-rules-86e6ec'>Bossaball Rules</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/goliath-birdeater-for-sale-86e6ec'>Goliath Birdeater For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-caused-the-dark-ages-86e6ec'>What Caused The Dark Ages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/under-your-bed-86e6ec'>Under Your Bed</a>,
+";s:7:"expired";i:-1;}

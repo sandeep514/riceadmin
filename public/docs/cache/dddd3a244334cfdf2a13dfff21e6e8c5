@@ -1,0 +1,111 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3024:"                   { bidder: 'openx', params: { unit: '539971080', delDomain: 'idm-d.openx.net' }},              googletag.cmd.push(function() {                                  { bidder: 'triplelift', params: { inventoryCode: 'Cambridge_SR' }},             var mapping_topslot_b = googletag.sizeMapping().addSize([746, 0], [[728, 90]]).addSize([0, 0], []).build();                    { bidder: 'ix', params: { siteId: '195452', size: [336, 280] }},             }                    { bidder: 'onemobile', params: { dcn: '8a969411017171829a5c82bb4deb000b', pos: 'cdo_rightslot_flex' }},                    { bidder: 'triplelift', params: { inventoryCode: 'Cambridge_MidArticle' }},                    { bidder: 'openx', params: { unit: '539971067', delDomain: 'idm-d.openx.net' }}, The soldier was told to watch the prisoner. I'm not leaving until you tell me what I want to know.                    { bidder: 'ix', params: { siteId: '195467', size: [300, 250] }},                    { bidder: 'triplelift', params: { inventoryCode: 'Cambridge_SR' }},                    { bidder: 'sovrn', params: { tagid: '446385' }},                    { bidder: 'appnexus', params: { placementId: '11654189' }},             bids: [{ bidder: 'rubicon', params: { accountId: '17282', siteId: '162036', zoneId: '776160', position: 'atf' }},                    { bidder: 'sovrn', params: { tagid: '446381' }},             googletag.pubads().collapseEmptyDivs(false);                    { bidder: 'onemobile', params: { dcn: '8a969411017171829a5c82bb4deb000b', pos: 'cdo_rightslot2_flex' }},             {code: 'ad_leftslot', pubstack: { adUnitName: 'cdo_leftslot', adUnitPath: '/2863368/leftslot' }, mediaTypes: { banner: { sizes: [[120, 600], [160, 600], [300, 600]] } }, The Paul Noble Method: no books, no rote memorization, no chance of failure.                 gdpr: {                    { bidder: 'ix', params: { siteId: '195466', size: [728, 90] }},             var mapping_houseslot_a = googletag.sizeMapping().addSize([963, 0], [300, 250]).addSize([0, 0], []).build();                    { bidder: 'onemobile', params: { dcn: '8a969411017171829a5c82bb4deb000b', pos: 'cdo_topslot_728x90' }},                    { bidder: 'pubmatic', params: { publisherId: '158679', adSlot: 'cdo_topslot' }}]},                    { bidder: 'sovrn', params: { tagid: '446383' }},                    { bidder: 'appnexus', params: { placementId: '11653860' }},                    { bidder: 'criteo', params: { networkId: 7100, publisherSubId: 'cdo_topslot' }},             {code: 'ad_topslot_b', pubstack: { adUnitName: 'cdo_topslot', adUnitPath: '/2863368/topslot' }, mediaTypes: { banner: { sizes: [[728, 90]] } }, Free-range and battery eggs are hard to tell apart.                    { bidder: 'openx', params: { unit: '539971067', delDomain: 'idm-d.openx.net' }}, Start with the Complete Spanish Beginner's course, then follow up with Next Steps Spanish.                 "sign-up": "https://dictionary.cambridge.org/us/auth/signup?rid=READER_ID", ";s:7:"keyword";s:18:"to tell in spanish";s:5:"links";s:7448:"<a href='https://ricebrok-staging.webcooks.in/docs/kanehsatake%3A-270-years-of-resistance-quotes-86e6ec'>Kanehsatake: 270 Years Of Resistance Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/courtland-mead-instagram-86e6ec'>Courtland Mead Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kingdom-of-heaven-director%27s-cut-online-86e6ec'>Kingdom Of Heaven Director's Cut Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/baby-boy-names-that-go-with-martin-86e6ec'>Baby Boy Names That Go With Martin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pedro-rodr%C3%ADguez-stats-86e6ec'>Pedro Rodríguez Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-secret-lives-of-color-summary-86e6ec'>The Secret Lives Of Color Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-morning-after-lyrics-86e6ec'>The Morning After Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martha-marcy-may-marlene-ending-scene-86e6ec'>Martha Marcy May Marlene Ending Scene</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-last-exorcism-explained-86e6ec'>The Last Exorcism Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tony-hawk%27s-pro-skater-2-86e6ec'>Tony Hawk's Pro Skater 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-goffin-vs-shapovalov-86e6ec'>David Goffin Vs Shapovalov</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-turturro-brothercoming-home-on-a-wing-and-a-prayer-lyrics-86e6ec'>John Turturro Brothercoming Home On A Wing And A Prayer Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-virginia-mountain-towns-86e6ec'>West Virginia Mountain Towns</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barry-lyndon-script-86e6ec'>Barry Lyndon Script</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bowling-rules-points-86e6ec'>Bowling Rules Points</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-track-and-field-uniforms-86e6ec'>Lsu Track And Field Uniforms</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/static-electricity-diagram-86e6ec'>Static Electricity Diagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blowing-out-candles-meme-86e6ec'>Blowing Out Candles Meme</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cold-shoulder---crossword-clue-86e6ec'>Cold Shoulder - Crossword Clue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/run-lola-run-summary-86e6ec'>Run Lola Run Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bubble-bass%27-order-lyrics-86e6ec'>Bubble Bass' Order Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/d%27rose-9-review-86e6ec'>D'rose 9 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/red-river-canada-86e6ec'>Red River Canada</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-legend-all-of-me-album-86e6ec'>John Legend All Of Me Album</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/importance-of-rule-of-law-86e6ec'>Importance Of Rule Of Law</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who%27s-afraid-of-virginia-woolf-pdf-86e6ec'>Who's Afraid Of Virginia Woolf Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leslie-lowe-pure-barre-86e6ec'>Leslie Lowe Pure Barre</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-keating-education-86e6ec'>Paul Keating Education</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-secret-of-the-kingdom-86e6ec'>The Secret Of The Kingdom</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/get-shorty-season-4-86e6ec'>Get Shorty Season 4</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/here-comes-the-boom-lyrics-86e6ec'>Here Comes The Boom Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/world-war-z-review-rotten-tomatoes-86e6ec'>World War Z Review Rotten Tomatoes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/work-like-rihanna-lyrics-86e6ec'>Work Like Rihanna Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-stich-now-86e6ec'>Michael Stich Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drea-de-matteo-net-worth-86e6ec'>Drea De Matteo Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/odense-bk-vs-sonderjyske-prediction-86e6ec'>Odense Bk Vs Sonderjyske Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crystal-palace-transfer-news-86e6ec'>Crystal Palace Transfer News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rescuers-down-under-jake-86e6ec'>Rescuers Down Under Jake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eddie-bauer-warehouse-86e6ec'>Eddie Bauer Warehouse</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/longest-wingspan-human-86e6ec'>Longest Wingspan Human</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/army-counseling-form-86e6ec'>Army Counseling Form</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jusuf-nurkic-jersey-message-86e6ec'>Jusuf Nurkic Jersey Message</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zach-collins-height-86e6ec'>Zach Collins Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mother-and-child-painting-description-86e6ec'>Mother And Child Painting Description</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paintings-of-female-saints-86e6ec'>Paintings Of Female Saints</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/breaker-morant-poem-movie-86e6ec'>Breaker Morant Poem Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/go-cry-go-lyrics-86e6ec'>Go Cry Go Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/league-one-2020%2F21-start-date-86e6ec'>League One 2020/21 Start Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flight-243-86e6ec'>Flight 243</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/s%27il-suffisait-d%27aimer-86e6ec'>S'il Suffisait D'aimer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joel-embiid-espn-86e6ec'>Joel Embiid Espn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/padmaavat-online-86e6ec'>Padmaavat Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/suspect-movie-2005-86e6ec'>Suspect Movie 2005</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/giannis-antetokounmpo-celtics-trade-86e6ec'>Giannis Antetokounmpo Celtics Trade</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-boys-liberty-86e6ec'>The Boys Liberty</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/raging-sharks-budget-86e6ec'>Raging Sharks Budget</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sentence-of-gesture-86e6ec'>Sentence Of Gesture</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-94%2F95-home-shirt-86e6ec'>Arsenal 94/95 Home Shirt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beachhead-encryption-86e6ec'>Beachhead Encryption</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/changeling-meaning-in-tamil-86e6ec'>Changeling Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bristol-bears-signings-86e6ec'>Bristol Bears Signings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wanted-warzone-lyrics-86e6ec'>The Wanted Warzone Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/curtis-main-86e6ec'>Curtis Main</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/another-word-for-love-you-86e6ec'>Another Word For Love You</a>,
+";s:7:"expired";i:-1;}

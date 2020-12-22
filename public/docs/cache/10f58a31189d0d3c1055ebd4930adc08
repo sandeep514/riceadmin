@@ -1,0 +1,110 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2941:"<p>For more info on these technical requirements and features, please view GameSpy's Specs FAQ.          Blue Flame Labs. Metal Gear Solid 3 Subsistence [First Print Limited Edition]Metal Gear Solid 3: Subsistence is an expanded version of Metal Gear Solid 3: Snake Eater.                     An IGN Entertainment Games site, Metal Gear Solid 3: Subsistence (Limited Edition), Metal Gear Solid 3: Subsistence (Limited Edition) Walkthrough & Strategy Guide, Metal Gear Solid 3: Subsistence (Limited Edition) Cheats & Codes. </p> <p>Keep your comments focused on the game. the absolute best meta gaming experience you will ever have. All the community rules apply here. Ranked #8 game of 2004 among Glitchwave users. 1 bonus DVD. This Limited Edition version also features the bonus Existence bonus disc, featuring a film-style re-editing of the game's cutscenes as one giant story presentation. Everything in MobyGames is contributable by users. Copyright 1996-2013, IGN Entertainment, Inc. Any spoilers should be placed in spoiler tags as such. Privacy Policy. The Existence disc is a theater disc that presents the game's storyline and cutscenes edited to be suitable for a … Subsistence features a new 3rd Person View Camera," a new multiplayer online mode, remakes of the original Metal Gear and Metal Gear 2: Solid Snake, a new Duel Mode, a Demo Theater, expanded Snake vs. Monkey missions and more. Be respectful! The oldest, largest and most accurate video game database covering over 280 platforms from 1950 to date! Those who pre-ordered Subsistence (LE or standard edition) also received the Metal Gear Saga Vol. If I wanted to play Time Crisis, I would just play Time Crisis, Hated every time the story got overly serious. MobyGames™ Copyright © 1999-2020 i've heard the original release's control scheme is different, but the subsistence version honestly might have my favorite control scheme of any game ever. </p> <p>Metal Gear Solid 3: Subsistence (Limited Edition) Metal Gear Solid 3: Subsistence is a PS2-exclusive expanded release of Hideo Kojima's powerful and dazzling Metal Gear Solid 3: Snake Eater. </p> <p>Terms of Use. I'll be honest. </p> <p>Don't get in arguments with people here, or start long discussions. Don't post randomness/off-topic comments. Don't use this space to complain about the average rating, chart position, genre voting,  others' reviews or ratings, or errors on the page. There is no trivia on file for this game. I don't get the hype for this game. the last 2 or 3 hours of this are so boring. On the other hand, if you don't take it too seriously you can use your first playthrough to learn everything you want and enjoy it enough to play again. </p> <p>Metal Gear Solid 3: Subsistence is a PS2-exclusive expanded release of Hideo Kojima's powerful and dazzling Metal Gear Solid 3: Snake Eater. Join our Discord to chat with fellow friendly gamers and our knowledgeable contributors! </p>";s:7:"keyword";s:47:"metal gear solid 3: subsistence limited edition";s:5:"links";s:7308:"<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-height-weight-86e6ec'>Ricky Rubio Height Weight</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rudy-fernandez-salary-86e6ec'>Rudy Fernandez Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-corpse-of-anna-fritz-dual-audio-720p-86e6ec'>The Corpse Of Anna Fritz Dual Audio 720p</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nolan-gerard-funk-height-86e6ec'>Nolan Gerard Funk Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2006-alabama-football-86e6ec'>2006 Alabama Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/void-in-java-86e6ec'>Void In Java</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/colm-meaney-star-trek-86e6ec'>Colm Meaney Star Trek</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/margaret-sheridan-phd-86e6ec'>Margaret Sheridan Phd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-chucky-movies-are-there-86e6ec'>How Many Chucky Movies Are There</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anticipation-pok%C3%A9mon-86e6ec'>Anticipation Pokémon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rebel-wilson-siblings-real-names-86e6ec'>Rebel Wilson Siblings Real Names</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wyatt-davis-scouting-report-86e6ec'>Wyatt Davis Scouting Report</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/johnny-suede-cast-86e6ec'>Johnny Suede Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-peppard-funeral-86e6ec'>George Peppard Funeral</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/whatever-it-takes-cast-86e6ec'>Whatever It Takes Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martin-guitar-price-guide-86e6ec'>Martin Guitar Price Guide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/babyface-albums-86e6ec'>Babyface Albums</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gymnastics-pictures-to-do-86e6ec'>Gymnastics Pictures To Do</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/curling-olympics-86e6ec'>Curling Olympics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/man-united-players-86e6ec'>Man United Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lure-synonym-crossword-86e6ec'>Lure Synonym Crossword</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/love%2C-death-and-robots-cast-86e6ec'>Love, Death And Robots Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joel-anthony-team-86e6ec'>Joel Anthony Team</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-demonoid-still-active-86e6ec'>Is Demonoid Still Active</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-clarkson-trade-to-jazz-86e6ec'>Jordan Clarkson Trade To Jazz</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nick-adams-net-worth-86e6ec'>Nick Adams Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/csk-vs-rr-2017-86e6ec'>Csk Vs Rr 2017</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adam-sandler-wife-and-kids-86e6ec'>Adam Sandler Wife And Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/luxury-adventure-travel-86e6ec'>Luxury Adventure Travel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pastoral-full-text-86e6ec'>American Pastoral Full Text</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tripler-army-medical-center-86e6ec'>Tripler Army Medical Center</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-did-george-washington-do-86e6ec'>What Did George Washington Do</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pro%3Adirect-running-reviews-86e6ec'>Pro:direct Running Reviews</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/broken-horses-lyrics-86e6ec'>Broken Horses Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cable-street-mural-address-86e6ec'>Cable Street Mural Address</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/johnny-suede-cast-86e6ec'>Johnny Suede Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-payton-ii-draft-pick-86e6ec'>Gary Payton Ii Draft Pick</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/celtic-kit-history-86e6ec'>Celtic Kit History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gingerbread-man-author-86e6ec'>The Gingerbread Man Author</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pa-high-school-football-scores-2020-86e6ec'>Pa High School Football Scores 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/xcode-lldb-commands-86e6ec'>Xcode Lldb Commands</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-interpreter-chinese-drama-trailer-86e6ec'>The Interpreter Chinese Drama Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joanna-gaines-paint-colors-sherwin-williams-86e6ec'>Joanna Gaines Paint Colors Sherwin Williams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-abandoned-%282006%29-full-movie-123movies-86e6ec'>The Abandoned (2006) Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/all-along-kid-cudi-lyrics-86e6ec'>All Along Kid Cudi Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/handball-courts-near-me-86e6ec'>Handball Courts Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fall-sports-86e6ec'>Fall Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-caddy-trailer-86e6ec'>The Caddy Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marilyn-manson-book-2020-86e6ec'>Marilyn Manson Book 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rangers-vs-st-johnstone-results-86e6ec'>Rangers Vs St Johnstone Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ams-airport-86e6ec'>Ams Airport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-10-westbrook-release-date-86e6ec'>Jordan 10 Westbrook Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/parenthood-streaming-86e6ec'>Parenthood Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emilie-ullerup-surgery-86e6ec'>Emilie Ullerup Surgery</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dimitris-diamantidis-86e6ec'>Dimitris Diamantidis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonestown-movie-netflix-86e6ec'>Jonestown Movie Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-2%3A-substance-pc-86e6ec'>Metal Gear Solid 2: Substance Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-trader-rich-trader%3A-2nd-edition%3A-revised-and-updated-86e6ec'>New Trader Rich Trader: 2nd Edition: Revised And Updated</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sec-football-national-championships-86e6ec'>Sec Football National Championships</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/swades-full-movie-watch-online-voot-86e6ec'>Swades Full Movie Watch Online Voot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andy-warhol-marilyn-monroe-86e6ec'>Andy Warhol Marilyn Monroe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/segunda-division-table-2019%2F20-86e6ec'>Segunda Division Table 2019/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dip-singh-funeral-86e6ec'>Dip Singh Funeral</a>,
+";s:7:"expired";i:-1;}

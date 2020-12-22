@@ -1,0 +1,109 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4957:"<br>But opting out of some of these cookies may have an effect on your browsing experience. <br> <br>We also use third-party cookies that help us analyze and understand how you use this website.  <br>Yo Doc, you ready? Furious Trump Demands To Know Why He Can’t Go Golfing In... President Obama Confirms He Will Refuse To Leave Office If Trump... Trump Mocks Trudeau For Celebrating Thanksgiving ‘6 Weeks Early’. Shia LaBeouf is favourite to be cast in the lead role as the infamous Marty McFly, replacing Michael J.Fox. It’s time to go back baby!” The tweet which was quickly deleted, appeared to. <br> <br>Earlier today, the 29-year-old actor tweeted: “@TheRock Great scott! “We knew that by putting October 21st, 2015 as the future date, we could create demand on social media. This website uses cookies to ensure you get the best experience possible. <br> <br>“This was always the long term plan for the series,” he said. <br> <br>For more info, see our cookie policy. You also have the option to opt-out of these cookies. <br> <br>Whether or not the original cast will make cameo appearances in the reboot remains to be seen, but one “star” from the cult-classic, already confirmed for the reboot, is Crispin Glover who will reprise his role of George McFly. We'll assume you're ok with this, but you can opt-out if you wish. HIMYM Movie Officially Confirmed | Back to the Future Remake, Trump Advised To Drink As Much Bleach As Possible, Alex Jones ‘Seriously Considering’ Presidential Run Given Current Field, Satire Writer Struggling To Think Of Dumber Celebrity To Run For President Than Kanye, Trump, Taiwan Officially Lists British Columbia As Province Of China, Juventus Sign Cartoon Aardvark For £72.5 Million, LIVE: British Columbia Renamed Irish Columbia [As it happened], Man Utd Make Last-Minute Bid To Re-Sign Marouane Fellaini. <br> <br>Out of these cookies, the cookies that are categorized as necessary are stored on your browser as they are essential for the working of basic functionalities of the website. “Where we’re going with this film, we won’t need cameos.”. Speaking to Variety, an unnamed exec confirmed the reboot has been in development for over 20 years. <br> <br>The WWE superstar, admitted earlier this week, that he would be “very interested” in playing the role if his demanding schedule would allow it. The news that millions of BTTF fans had been hoping for has been confirmed, with Universal Pictures announcing a Back to the Future remake for the iconic film franchise for the summer of 2021. <br> <br>This category only includes cookies that ensures basic functionalities and security features of the website. <br> <br>Rumours began as part of “Back to the Future Day”, fans inevitably speculated whether a 4th film in the popular franchise was on the cards, in hope rather than expectation. <br> <br>MANCHESTER, UK—With just hours remaining of the 2020 summer transfer window, Manchester United have launched a last minute bid to re-sign Marouane... © Copyright 2019 - The Burrard Street Journal | Burrard Street Football | All rights reserved. <br> <br>The actor announced to both his twitter followers, that he was “thrilled” to be “returning home”. And with every company from Toyota to Ashley Madison cashing in on “Back to the Future day”, all eyes were on NBC Universal.  <br> <br>Any cookies that may not be particularly necessary for the website to function and is used specifically to collect user personal data via analytics, ads, other embedded contents are termed as non-necessary cookies. Johnson is currently signed on to star in the next 10 Fast and Furious films, which will begin filming consecutively in December. This website uses cookies to improve your experience. <br> <br>Donald Trump To Ban Canadians From Entering U.S. <br> This website uses cookies to improve your experience while you navigate through the website. Click to share on Twitter (Opens in new window), Click to share on Facebook (Opens in new window). Yo Doc, you ready? <br> <br>Initially Universal execs dismissed reports as “fan fiction”, but they have now been forced to confirm the rumours after the domain www.BackToTheFutureRemake.com was registered by the company, as well as several social media handles under the same name. Back To The Future Remake Confirmed On Back To The Future Day, Shia LaBeouf is favourite to be cast in the lead role as the infamous Marty McFly, replacing Michael J.Fox. <br> <br>“Cameos?” He said surprisingly. The role of ‘Biff’ is expected to be handed to Channing Tatum, with Megan Fox earmarked for an unnamed role, presumably as a scientist. <br> <br>Steven Spielberg will executive produce the film, passing the directorial duties to JJ Abrams. Necessary cookies are absolutely essential for the website to function properly. <br> <br>Earlier today, the 29-year-old actor tweeted: “@TheRock Great scott! <br>";s:7:"keyword";s:75:"the empire writes back theory and practice in post colonial literatures pdf";s:5:"links";s:7248:"<a href='https://ricebrok-staging.webcooks.in/docs/demons-drake-wiki-86e6ec'>Demons Drake Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/synchronic-dvd-release-date-86e6ec'>Synchronic Dvd Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-crow-habitat-86e6ec'>American Crow Habitat</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-the-heart-of-the-sea-full-movie-online-youtube-86e6ec'>In The Heart Of The Sea Full Movie Online Youtube</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/synchronic-dvd-release-date-86e6ec'>Synchronic Dvd Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rublev-vs-medvedev-prediction-86e6ec'>Rublev Vs Medvedev Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-line-of-beauty-quotes-86e6ec'>The Line Of Beauty Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trading-habits-steve-burns-pdf-86e6ec'>Trading Habits Steve Burns Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fault-in-tennis-86e6ec'>Fault In Tennis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/damian-lillard-shoes-3-86e6ec'>Damian Lillard Shoes 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bride-of-%27re-animator-blu-ray-86e6ec'>Bride Of 're Animator Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/exeter-chiefs-v-northampton-on-tv-86e6ec'>Exeter Chiefs V Northampton On Tv</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jimmy-butler-points-last-game-86e6ec'>Jimmy Butler Points Last Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-vagrant-book-2-86e6ec'>The Vagrant Book 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/out-of-the-past-analysis-86e6ec'>Out Of The Past Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2021-alabama-football-schedule-86e6ec'>2021 Alabama Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/history-of-rhythmic-gymnastics-86e6ec'>History Of Rhythmic Gymnastics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louis-smith-singer-86e6ec'>Louis Smith Singer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-runaways-cast-86e6ec'>The Runaways Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/list-of-video-games-by-year-86e6ec'>List Of Video Games By Year</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-dream-today-86e6ec'>American Dream Today</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sometimes-they-come-back-trilogy-86e6ec'>Sometimes They Come Back Trilogy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vhs-2-a-ride-in-the-park-86e6ec'>Vhs 2 A Ride In The Park</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/charleston-9-86e6ec'>Charleston 9</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cedi-osman-lebron-james-86e6ec'>Cedi Osman Lebron James</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/upcoming-war-movies-2021-86e6ec'>Upcoming War Movies 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/800-words-season-3-netflix-86e6ec'>800 Words Season 3 Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-thousand-words-netflix-86e6ec'>A Thousand Words Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lady-pink-86e6ec'>Lady Pink</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/logan-brandt-absentia-actor-86e6ec'>Logan Brandt Absentia Actor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/airline-disaster-cast-86e6ec'>Airline Disaster Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trevor-ariza-kobe-86e6ec'>Trevor Ariza Kobe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trading-habits-steve-burns-pdf-86e6ec'>Trading Habits Steve Burns Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-bat-facts-86e6ec'>Vampire Bat Facts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/feeling-of-regret-or-guilt-codycross-86e6ec'>Feeling Of Regret Or Guilt Codycross</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gremio-vs-fluminense-prediction-86e6ec'>Gremio Vs Fluminense Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-court-size-in-feet-86e6ec'>Volleyball Court Size In Feet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paris-jackson-habit-movie-86e6ec'>Paris Jackson Habit Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/20-bad-habits-86e6ec'>20 Bad Habits</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/men%27s-trainers-australia-86e6ec'>Men's Trainers Australia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/california-high-school-football-rankings-2018-86e6ec'>California High School Football Rankings 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dirk-nowitzki-autograph-signing-2019-86e6ec'>Dirk Nowitzki Autograph Signing 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spud-webb-wingspan-86e6ec'>Spud Webb Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/walgreens-stock-86e6ec'>Walgreens Stock</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/london-irish-shirt-18%2F19-86e6ec'>London Irish Shirt 18/19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amnesiac-movie-review-86e6ec'>Amnesiac Movie Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-birth-ice-cube-86e6ec'>The Birth Ice Cube</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scranton-strangler-toby-evidence-86e6ec'>Scranton Strangler Toby Evidence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/grace-kelly-children-86e6ec'>Grace Kelly Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lauren-lapkus-blended-86e6ec'>Lauren Lapkus Blended</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dennis-bergkamp-goal-vs-argentina-86e6ec'>Dennis Bergkamp Goal Vs Argentina</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shepard-fairey-art-for-sale-86e6ec'>Shepard Fairey Art For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fran%C3%A7ois-truffaut-rats-86e6ec'>François Truffaut Rats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/designer-golf-clothing-86e6ec'>Designer Golf Clothing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hidden-%282015-full-movie-watch-online%29-86e6ec'>Hidden (2015 Full Movie Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/harold-perrineau-daughter-86e6ec'>Harold Perrineau Daughter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kawhi-leonard-playoff-appearances-86e6ec'>Kawhi Leonard Playoff Appearances</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netball-rules-and-positions-86e6ec'>Netball Rules And Positions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maryland-football-starting-qb-86e6ec'>Maryland Football Starting Qb</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beautiful-oblivion-what-was-the-secret-86e6ec'>Beautiful Oblivion What Was The Secret</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sapphire-color-meaning-86e6ec'>Sapphire Color Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-aquamarine-on-netflix-86e6ec'>Is Aquamarine On Netflix</a>,
+";s:7:"expired";i:-1;}

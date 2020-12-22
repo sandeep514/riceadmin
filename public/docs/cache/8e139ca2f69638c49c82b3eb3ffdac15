@@ -1,0 +1,129 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4211:"To avoid griefing, you will not be able to post or report for the first %d hours upon visiting this forum for the first time. It feels dirty to drop smoke on the objective and pick people off in the confusion. All the latest gaming news, game reviews and trailers. To reduce the overall disc space that MW and WZ take up, we’re compressing a bunch of assets. Events can occur during Warzone Battle Royale matches and have an impact on the strategy and approach to gameplay. Please be advised that we may not reply to every individual feedbacks. With the announcement of these rounds, fans of the title are all scrambling to get their hands on the disrespectfully Gorey bullets. Subway trains & stations has been opened up in Verdansk and is available for looting & transportation! after the first drop kit and before the Gulag closes. It is a Battle Royale, which means players must search the map for resources and fight it out to be the last person standing. Increased control of aim while being shot.  The Snake Shot converts your sidearm into a mini shotgun. These 2 Allegiance operators will become available once you purchase the Season 6 Battle Pass. The season four update for Call of Duty: Modern Warfare and Warzone is coming in just a couple of hours and the list of patch notes is extensive. 745 gr bullets have a lower muzzle velocity, but are devastating at very long ranges. There are so many pages for Optics that aren't there, like the Cronen 2x2 Elite for the RAM-7, the Integral 3.0x Optic for the AUG, the FFS Ring Sight for the P90 and the Lockwood Pistol Scope, Call of Duty: Modern Warfare 2020 & Warzone - Wiki Guide. Perks like Quick Fix immediately kickstart your health regen after winning a fight to keep you going, while Tracker can lead you to your next victim. I use harpy which I think has the same iron sights as mud drauber. The attachments in this setup were chosen specifically to reduce the amount of time it takes ADS. This gives you some insurance so you can wholly focus on taking out enemy targets! Fixes to help prevent issues with voice chat. Once you have it, take it to the designated Helicopter Extraction location to call in the helicopter. This Perk will allow you to reload faster, getting you back into the fight much quicker. Or death traps to those that try to open them? Read this Call of Duty: Modern Warfare 2020 & Warzone guide to learn more about the attachment Presence of Mind! Subway trains & stations has been opened up in Verdansk and is available for looting & transportation! We’re continuing to sweep all assets to make size reductions where we can, and also further optimize future patches for size. The classic last man standing feeling is a driving force in any battle royale experience, but with several Warzone exclusive mechanics and systems, the game establishes its own identity. A place to share your favorite classes and loadouts for Modern Warfare (2019) or Warzone Dropkits. By clicking Submit you are agreeing to the Terms of Use. A one-stop shop for all things video games. Check out weapon articles for unlock level information! Stadium Access Codes & Locked Doors - How To Open. Unlock levels depend on weapons and they are basically different. GameWith uses cookies and IP addresses. A Supply Choppers event brings a non-lethal, but heavily armored helicopter to Verdansk. Or death traps to those that try to open them? Read The New Update 1.28 Patch Notes Here! Once installed, the season four launch will only take up an additional four GB on consoles for all of the new content. Call of Duty: Modern Warfare 2020 & Warzone - Wiki Guide. By using our site you agree to our privacy policy. Find info about the Warzone / Modern Warfare best loadout, how to unlock, unlock level, & setup for SKS. But Infinity Ward is working on reducing the game’s overall size after the season four update. Presence of Mind perk. By clicking Submit you are agreeing to the Terms of Use. Longer barrel increases muzzle velocity and extends range. This gives you more survivability during matches. This means that you need to keep using the weapon during matches and get kills! Namely: Muzzle, Underbarrel, Optic, Laser, Stock and Perk. ";s:7:"keyword";s:33:"focus vs presence of mind warzone";s:5:"links";s:9620:"<a href='https://ricebrok-staging.webcooks.in/docs/down-and-out-in-beverly-hills-filming-locations-86e6ec'>Down And Out In Beverly Hills Filming Locations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joel-embiid-espn-86e6ec'>Joel Embiid Espn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-bird-with-the-crystal-plumage-blu-ray-86e6ec'>The Bird With The Crystal Plumage Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wind-rises-did-naoko-die-86e6ec'>The Wind Rises Did Naoko Die</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/used-martin-acoustic-guitars-for-sale-86e6ec'>Used Martin Acoustic Guitars For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-can-i-view-the-electoral-roll-86e6ec'>Where Can I View The Electoral Roll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonah-hill-girlfriend-86e6ec'>Jonah Hill Girlfriend</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jessica-tovey-partner-86e6ec'>Jessica Tovey Partner</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zebra---wikipedia-86e6ec'>Zebra - Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-return-of-martin-guerre-summary-86e6ec'>The Return Of Martin Guerre Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/grant-hill-net-worth-86e6ec'>Grant Hill Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/v%2Fh%2Fs-4%3A-marble-hornets-86e6ec'>V/h/s 4: Marble Hornets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/return-to-neverland-full-movie-86e6ec'>Return To Neverland Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cam-mechanism-86e6ec'>Cam Mechanism</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bow-wow-net-worth-2006-86e6ec'>Bow Wow Net Worth 2006</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dexys-midnight-runners-lead-singer-dies-86e6ec'>Dexys Midnight Runners Lead Singer Dies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sherlock-holmes-3-release-date-86e6ec'>Sherlock Holmes 3 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tatum-o%27neal-2020-86e6ec'>Tatum O'neal 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martha-marcy-may-marlene-analysis-86e6ec'>Martha Marcy May Marlene Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/patricia-haines-daughter-86e6ec'>Patricia Haines Daughter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dusan-lajovic-vs-karen-khachanov-86e6ec'>Dusan Lajovic Vs Karen Khachanov</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sam-fatu-son-86e6ec'>Sam Fatu Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christian-wood-stats-86e6ec'>Christian Wood Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-teeth-after-86e6ec'>Anthony Davis Teeth After</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-owl-service-summary-86e6ec'>The Owl Service Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jason-jones-bungie-net-worth-86e6ec'>Jason Jones Bungie Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-runaways-cast-86e6ec'>The Runaways Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-payton-ii-draft-pick-86e6ec'>Gary Payton Ii Draft Pick</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maya-moore-net-worth-86e6ec'>Maya Moore Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-spieth-scorecard-86e6ec'>Jordan Spieth Scorecard</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/enid-graham-wikipedia-86e6ec'>Enid Graham Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ue-cornella-fifa-20-86e6ec'>Ue Cornella Fifa 20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christina%27s-house-parents-guide-86e6ec'>Christina's House Parents Guide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ominous-in-a-sentence-86e6ec'>Ominous In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marilyn-manson-book-2020-86e6ec'>Marilyn Manson Book 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/missionary-who-never-saw-a-convert-86e6ec'>Missionary Who Never Saw A Convert</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dark-horse-wine-86e6ec'>Dark Horse Wine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henry%3A-portrait-of-a-serial-killer-aspect-ratio-86e6ec'>Henry: Portrait Of A Serial Killer Aspect Ratio</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tarantula-venom-86e6ec'>Tarantula Venom</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-programming-languages-pdf-86e6ec'>Types Of Programming Languages Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shalita-grant-sabrina-skau-86e6ec'>Shalita Grant Sabrina Skau</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/don%27t-look-now-full-movie-123-86e6ec'>Don't Look Now Full Movie 123</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-defiant-ones-online-86e6ec'>The Defiant Ones Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wenyen-gabriel-2k20-86e6ec'>Wenyen Gabriel 2k20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it%27s-a-wonderful-life-song-86e6ec'>It's A Wonderful Life Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyrese-instagram-86e6ec'>Tyrese Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-dawn-%282020-review%29-86e6ec'>The Dawn (2020 Review)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leyton-orient-italian-ownerhawai%27i-football-stats-2018-86e6ec'>Leyton Orient Italian Ownerhawai'i Football Stats 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/did-nick-die-at-the-end-of-into-the-ashes-86e6ec'>Did Nick Die At The End Of Into The Ashes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alabama-high-school-football-rankings-86e6ec'>Alabama High School Football Rankings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/theresa-marie-knorr-walker-death-86e6ec'>Theresa Marie Knorr Walker Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/coquette-restaurant-86e6ec'>Coquette Restaurant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-vs-sevilla-results-86e6ec'>Barcelona Vs Sevilla Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dark-horse%3A-achieving-success-through-the-pursuit-of-fulfillment-86e6ec'>Dark Horse: Achieving Success Through The Pursuit Of Fulfillment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/castle-season-9-86e6ec'>Castle Season 9</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/heaven-movie-list-86e6ec'>Heaven Movie List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jack-the-ripper-letters-86e6ec'>Jack The Ripper Letters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-harden-clothing-86e6ec'>James Harden Clothing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/light-of-my-life-what-happened-to-calvin-86e6ec'>Light Of My Life What Happened To Calvin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-long-is-36-hours-from-now-86e6ec'>How Long Is 36 Hours From Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/functions-of-capital-market-86e6ec'>Functions Of Capital Market</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-alexandra-burke-married-86e6ec'>Is Alexandra Burke Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daughters-lyrics-86e6ec'>Daughters Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joe-ledger-book-11-86e6ec'>Joe Ledger Book 11</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acid-transactions-examples-86e6ec'>Acid Transactions Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wild-america-full-movie-online-86e6ec'>Wild America Full Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/villain-opposite-86e6ec'>Villain Opposite</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-election-act-86e6ec'>The Election Act</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-political-parties-86e6ec'>Nz Political Parties</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-ball-price-86e6ec'>Volleyball Ball Price</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/edward-colston-86e6ec'>Edward Colston</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flying-saucer-game-86e6ec'>Flying Saucer Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/criterion-top-10-86e6ec'>Criterion Top 10</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trespassers-will-be-prosecuted-meaning-86e6ec'>Trespassers Will Be Prosecuted Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/goodbye-first-love-english-subtitles-86e6ec'>Goodbye First Love English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/baby-birth-video-live-normal-86e6ec'>Baby Birth Video Live Normal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/basil-zempilas-hair-treatment-86e6ec'>Basil Zempilas Hair Treatment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jamal-murray-injury-86e6ec'>Jamal Murray Injury</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-giant-claw-mst3k-86e6ec'>The Giant Claw Mst3k</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dare-logo-86e6ec'>Dare Logo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/attack-force-trailer-86e6ec'>Attack Force Trailer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pop-up-canopy-86e6ec'>Pop Up Canopy</a>,
+";s:7:"expired";i:-1;}

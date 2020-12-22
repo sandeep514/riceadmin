@@ -1,0 +1,102 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3764:"<br>The film's ending does not mirror the story's ending. The film has entered the public domain. Cynthia is pregnant, but worries about sharing this news with Harry, who is passionate about his travels and work as a journalist and author. Harry's bartender suggests that the leopard ended up there as he was on a false scent and became lost, but Harry takes Helen on a safari to Kenya to learn the answer of the riddle. NOVA takes an unusual expedition to the top of Mt. Along their journey of courage and endurance they encounter strange landscapes and endure harsh conditions as they travel through five climate zones ranging from the lower rainforest reaches of Kilimanjaro to the summit’s artic glaciers, all the while learning about the formation of the African continent and the Great Rift Valley. [8] Jazz musician Benny Carter performs early on in the film. Kilimanjaro to investigate these two scientific mysteries, and to explore the unique beauty of this “island in the sky.” Joining NOVA on this breathtaking adventure is African-born naturalist Robin Buxton, who was disabled by polio at age two, and who now dreams of summiting a mountain he has long studied. The loss of mobility brings self-reflection. The glacier atop the mountain has shrunk by over a third in the last decade due to global warming, and could disappear altogether by 2015. KILIMANJARO: TO THE ROOF OF AFRICA (2002). <br> <br>As Harry nears death, the protective Helen fights off a witch doctor. About | Privacy policy | Contact | Deals | Partners, New Episodes 'Available Across the Americas'. [6], The film begins with the opening words of Hemingway's story:  "Kilimanjaro is a snow-covered mountain 19,710 feet high, and is said to be the highest mountain in Africa.  <br>[17] Hemingway, who disliked the typical Hollywood happy ending, accepted the money for the film, but he could not bring himself to view it, according to one report. <br> <br>[20], 20th Century Fox released the film on DVD in March 2007, separately and as part of five-disc collection entitled "The  Ernest Hemingway Film Collection", where it was packaged with Under My Skin, The Sun Also Rises, A Farewell to Arms, and Hemingway's Adventures of a Young Man. Her devotion to him makes him finally realize that he is not a failure. Bonner soon learns there is no preparation for what he finds on the mountain. He is injured and develops an infection. Hemingway, Ernest, and White, William (ed.). No one has explained what the leopard was seeking at that altitude."[5]. Over 8 days, 64 miles, sheer cliffs, sub-zero temperatures, and ever-thinning oxygen, Bonner and his team are truly tested beyond their own physical and mental limits in this stirring documentary. <br> While he is standing on the bridge watching the river, he meets Helen, who reminds him of Cynthia. <br> <br>Sign up, Why ? Though she is dead Cynthia continues to haunt Street’s thoughts. [6], "'Gregory Peck: A Biography', by Gary Fishgall". Directed by Kim Kwang-eun (김광은). [19], The film was nominated for two Academy Awards; for Best Cinematography and Best Art Direction (Lyle R. Wheeler, John DeCuir, Thomas Little, Paul S. Harry returns to Paris. Subscribe to HanCinema Pure to remove ads from the website (not for episode and movie videos) for US$0.99 monthly or US$7.99 yearly (you can cancel anytime). In his October 18, 2002, article in the journal Science, Thompson and his co-authors note that the ice on the summit, which formed more than 11,000 years ago, has dwindled by 82 percent over the past century. Synopsis Fox). [5], Helped by a star-studded cast, the film was one of the most successful films of the early 1950s and earned $12.5 million at the box office, very high for that period. <br>";s:7:"keyword";s:22:"kilimanjaro movie 2020";s:5:"links";s:6236:"<a href='https://ricebrok-staging.webcooks.in/docs/bureaucratic-rules-to-stick-by-86e6ec'>Bureaucratic Rules To Stick By</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drop-stack-ball---fall-helix-blast-crash-3d-online-86e6ec'>Drop Stack Ball - Fall Helix Blast Crash 3d Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/devin-booker-season-stats-86e6ec'>Devin Booker Season Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-day-of-school-inspirational-quotes-86e6ec'>First Day Of School Inspirational Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-haunting-of-hill-house-episode-1-86e6ec'>The Haunting Of Hill House Episode 1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nt-election-odds-86e6ec'>Nt Election Odds</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nbc-commentators-86e6ec'>Nbc Commentators</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-future-roblox-86e6ec'>The Future Roblox</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-bank-story-oscar-86e6ec'>West Bank Story Oscar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ellen-burstyn-2020-86e6ec'>Ellen Burstyn 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/black-hole-86e6ec'>Black Hole</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emotive-vs-emotional-86e6ec'>Emotive Vs Emotional</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/guangdong-province-86e6ec'>Guangdong Province</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-there-a-killer-in-my-family-wikipedia-86e6ec'>Is There A Killer In My Family Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-football-record-2017-86e6ec'>Notre Dame Football Record 2017</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-dictionary-app-iphone-86e6ec'>Best Dictionary App Iphone</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shenandoah-mountain-trail-86e6ec'>Shenandoah Mountain Trail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/videodrome-blu-ray-86e6ec'>Videodrome Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-college-football-wins-86e6ec'>Most College Football Wins</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-other-man-ending-explained-86e6ec'>The Other Man Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-mine-bitcoin-86e6ec'>How To Mine Bitcoin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/amusement-parks-in-usa-map-86e6ec'>Amusement Parks In Usa Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/roost-happy-hour-86e6ec'>Roost Happy Hour</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jackson-pollock-artworks-86e6ec'>Jackson Pollock Artworks</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/second-choice-meaning-86e6ec'>Second Choice Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/conversation-killer-examples-86e6ec'>Conversation Killer Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-peacekeeper-for-honor-86e6ec'>The Peacekeeper For Honor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-college-basketball-roster-86e6ec'>Notre Dame College Basketball Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jacknife-lee---hit-the-bell-86e6ec'>Jacknife Lee - Hit The Bell</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2014-senate-elections-86e6ec'>2014 Senate Elections</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-evidence-86e6ec'>Types Of Evidence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sleuth-%282007-ending-explained%29-86e6ec'>Sleuth (2007 Ending Explained)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/khris-middleton-height-86e6ec'>Khris Middleton Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/super-rugby-winners-86e6ec'>Super Rugby Winners</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wit-in-a-sentence-86e6ec'>Wit In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rosa-arredondo-age-86e6ec'>Rosa Arredondo Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lia-mchugh-parents-86e6ec'>Lia Mchugh Parents</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-smiler-86e6ec'>The Smiler</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/do-cats-copy-each-other-86e6ec'>Do Cats Copy Each Other</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brandon-ingram-net-worth-86e6ec'>Brandon Ingram Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/philodendron-xanadu-propagation-86e6ec'>Philodendron Xanadu Propagation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flaming-lips-best-song-86e6ec'>Flaming Lips Best Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/need-for-speed-rivals-86e6ec'>Need For Speed Rivals</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wrestling-news-86e6ec'>Wrestling News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sup-surfing-vs-surfing-86e6ec'>Sup Surfing Vs Surfing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/living-in-a-ghost-town-review-86e6ec'>Living In A Ghost Town Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-quiet-family-english-subtitles-86e6ec'>The Quiet Family English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russci-instagram-86e6ec'>Russci Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-spy-who-came-in-from-the-cold-netflix-86e6ec'>The Spy Who Came In From The Cold Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/msf-assistance-86e6ec'>Msf Assistance</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-ferryman-book-86e6ec'>The Ferryman Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/josh-jackson-contract-86e6ec'>Josh Jackson Contract</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/backyard-olympic-games-86e6ec'>Backyard Olympic Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/torchy-blane-in-panama-86e6ec'>Torchy Blane In Panama</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nutrient-distillation-86e6ec'>Nutrient Distillation</a>,
+";s:7:"expired";i:-1;}

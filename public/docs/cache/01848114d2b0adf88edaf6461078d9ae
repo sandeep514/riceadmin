@@ -1,0 +1,102 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3404:"<br>Chichester, West Sussex: Wiley-Blackwell. If you think you don’t have to pay back your debt in the afterlife, think again! <br> <br>While Ann is in the kitchen cooking, Peter visits and asks to borrow some eggs. I watched the original and honestly I thought it was a bit boring. Don’t say anything. Scrabble is a game everyone has played at least once in their lives. I watched both back to back, and I would recommend the American version. Include naughty punishments whenever you can. R/HORROR, known as Dreadit by our subscribers is the premier horror entertainment community on Reddit. To make it more fun, you can try and dress up like the character that you are trying to be. [7] The film is an international co-production of the United States, United Kingdom, France, Germany, and Italy. Take turns in giving one another clues of what you observe. The content is not intended to be a substitute for professional medical advice, diagnosis, or treatment. Playing Left 4 Dead is a great deal of fun. However, it is definitely possible for two people to play charades. That said, I like the American version more because I think the acting is much better in it.  <br>Did dragons exist? If you guys are in a bar, you can have flaming tequila shots to play this drinking game. Indie games are the hidden gems of the video game world. Better think of something to tell the Mrs. Stanley, an obedient office worker suddenly realizes he hasn’t received a task in a while and that all of his co-workers have vanished. All you will need is a bundle of colorful papers. Funny Games (2007). It’s a good thing, then, that the remake portrays Peter and Paul as totally unsympathetic. Embarrassingly, he fails his task. The American Funny Games still retains its original director, Michael Haneke and that’s really what makes the difference. You can ask funny or personal questions if they choose ‘Truth,’ and turn the heat up if they select Dare. You can even compete against each other. While some sightings might seem... Dragons, did they really exist? People have been stabbed over less. Whether you are ripping through the river of the dead with a chainsaw or throwing a pipe bomb to lure them away for a... Players take the captain's chair as they command their own starship and crew. When was the last time you and your SO spent some time in the kitchen? For eg., if you say “I have been arrested for a traffic violation,” you and your partner will show your placards at the same time. She also loves dancing and traveling to offbeat destinations. 575–579. <br> Like Human: Fall Flat, the controls are not easy, but that’s what makes it so funny. <br> <br>No problem! Same director and same movie. Well, look no further. Funny Games (alternatively titled Funny Games U.S.) is a 2007 internationally co-produced psychological thriller film written and directed by Michael Haneke, an Austrian, and a remake of his own 1997 film of the same name. What better way to cosplay Yennefer than with a little lace, leather, and a fiery attitude? In this article, we celebrate 11 hot gamer girls – wonderful women united by their... Watch These 3 Korean Babes Transform Into Heroes Of The Storm Characters. These cosplays will make you want to catch 'em all! Numerous people hear of the desolation and aftermath that a post-apocalyptic situation can bring upon humanity. What is a man? <br>";s:7:"keyword";s:38:"which version of funny games is better";s:5:"links";s:6346:"<a href='https://ricebrok-staging.webcooks.in/docs/celebrity-tampa-bay-lightning-fans-86e6ec'>Celebrity Tampa Bay Lightning Fans</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyle-hamilton-espn-86e6ec'>Kyle Hamilton Espn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/why-valkyrie-failed-86e6ec'>Why Valkyrie Failed</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/concealed-weapon-86e6ec'>Concealed Weapon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jason-schanne-86e6ec'>Jason Schanne</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/damien-hirst-metamorphosis-86e6ec'>Damien Hirst Metamorphosis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/september-calendar-printable-86e6ec'>September Calendar Printable</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lagaan-meaning-in-malayalam-86e6ec'>Lagaan Meaning In Malayalam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sherlock-holmes-3-release-date-86e6ec'>Sherlock Holmes 3 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/splinter-removal-hack-86e6ec'>Splinter Removal Hack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/biker-exploitation-movies-86e6ec'>Biker Exploitation Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flag-football-team-names-86e6ec'>Flag Football Team Names</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martin-om-28v-86e6ec'>Martin Om-28v</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/act-greens-candidates-86e6ec'>Act Greens Candidates</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-of-hawaii-football-schedule-2021-86e6ec'>University Of Hawaii Football Schedule 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kim-da-mi-upcoming-movies-86e6ec'>Kim Da-mi Upcoming Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/surf%27s-up-budget-86e6ec'>Surf's Up Budget</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/polaroid-meaning-in-tamil-86e6ec'>Polaroid Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-katz-flowers-86e6ec'>Alex Katz Flowers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-career-stats-86e6ec'>Ricky Rubio Career Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-ensminger-jr-86e6ec'>Steve Ensminger Jr</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-doomsday-machine-audiobook-86e6ec'>The Doomsday Machine Audiobook</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vehicle-tracking-device-no-monthly-fee-86e6ec'>Vehicle Tracking Device No Monthly Fee</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/north-virginia-cities-86e6ec'>North Virginia Cities</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/imagine-dragons-it%27s-time-86e6ec'>Imagine Dragons It's Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alaska-weather-in-july-86e6ec'>Alaska Weather In July</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/esther-waters-cast-86e6ec'>Esther Waters Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/regular-show-last-episode-86e6ec'>Regular Show Last Episode</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/partners-healthcare-customer-service-86e6ec'>Partners Healthcare Customer Service</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-duncan-height-and-wingspan-86e6ec'>Tim Duncan Height And Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mortuary-worker-86e6ec'>Mortuary Worker</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-auburn-football-schedule-86e6ec'>New Auburn Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jusuf-nurkic-jersey-message-86e6ec'>Jusuf Nurkic Jersey Message</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-4%3A-guns-of-the-patriots-pc-86e6ec'>Metal Gear Solid 4: Guns Of The Patriots Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scenes-from-a-marriage-versions-86e6ec'>Scenes From A Marriage Versions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyrie-irving-net-worth-2020-forbes-86e6ec'>Kyrie Irving Net Worth 2020 Forbes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/product-to-make-hair-dirty-86e6ec'>Product To Make Hair Dirty</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/global-epidemic-86e6ec'>Global Epidemic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-basketball-record-86e6ec'>Lsu Basketball Record</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hateful-meaning-in-tamil-86e6ec'>Hateful Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/silverado-town-86e6ec'>Silverado Town</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sigmund-freud-theory-of-personality-ppt-86e6ec'>Sigmund Freud Theory Of Personality Ppt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/criminal%3A-france-netflix-review-86e6ec'>Criminal: France Netflix Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/berry-berenson-ring-86e6ec'>Berry Berenson Ring</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/naworth-castle-86e6ec'>Naworth Castle</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-brood-cast-86e6ec'>The Brood Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/little-women-original-cast-86e6ec'>Little Women Original Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-sky-sports-news-live-stream-wiziwig-86e6ec'>Watch Sky Sports News Live Stream Wiziwig</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gorka-and-gemma-baby-86e6ec'>Gorka And Gemma Baby</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/let-it-snow-lyrics-86e6ec'>Let It Snow Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clockwork-orange-part-1-chapter-1-summary-86e6ec'>Clockwork Orange Part 1 Chapter 1 Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ac-odyssey-cultist-86e6ec'>Ac Odyssey Cultist</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gothika-2%3A-electric-boogaloo-86e6ec'>Gothika 2: Electric Boogaloo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-allen-fan-mail-86e6ec'>Tim Allen Fan Mail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brookside-chocolates-86e6ec'>Brookside Chocolates</a>,
+";s:7:"expired";i:-1;}

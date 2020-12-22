@@ -1,0 +1,131 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:6345:"<br>'Rififi,' saga of gem heist, is a jewel (review), New York Daily Mirror, Justin Gilbert, 1955. Ever since its release in 1955, the French crime thriller "Rififi" has been celebrated for the 30-minute jewel heist segment that could be the finest thing of its kind ever put on film. It’s interesting to contemplate what he could have accomplished had he been able to continue in the U.S. <br> <br>He refused. RIFIFI has been called the best French crime drama ever made, and  the best French film noir. I suppose that was true for all of those that experienced it first-hand. “We’ll do this scene here and this scene there. It’s interesting that RIFIFI had trouble securing distribution in the U.S. The back stories of these films are sometimes more interesting than the story we see on film. Movie history permeates the air at the Paramount Pictures Studio Archives. <br> <br>There are several similarities, but in Rififi Dassin extracts every bit of tension and friction out of the characters and their endeavors, and in this low-budget film, he made every detail count in furthering the plot. They take a seat. Yes, Dassin was one of the great film noir and movie directors, and he no doubt could have accomplished much more in those years he could do nothing as a blacklisted director. A seminal work of crime filmmaking that led the young critic Francois Truffaut to declare “the best Film Noir I have ever seen”, Jules Dassin’s ‘Rififi’ has influenced films as diverse as ‘Reservoir Dogs’ and ‘Ocean’s Eleven’ since its release. forgave Hollywood or those those that betrayed him or turned their back on him, which frankly, was everybody. <br> <br>He used the atmosphere of Paris as he had London in Night and the City, and New York in The Naked City, this becoming a stylistic hallmark of film noir. He was asked near the end of his life did he think blacklisting could ever happen again.He thought it could. <br> <br>Glad you liked the article. <br> <br>Daryl Zanuck at Universal purposefully sent Dassin to London to work on his noir masterpiece Night and the City in 1950, where he missed being called to testify to the Committee. Yes, I’m sure he felt vindicated. An instant commercial success in Paris and worldwide, the film was also very well received by critics with Jules Dassin awarded the best director prize at the prestigious Festival de Cannes. <br> <br>I guess Dassin felt satisfaction later when NEVER ON SUNDAY became of the biggest worldwide hits of 1960s. Dassin won the Best Director Award at the Cannes Film Festival in 1955. As he escapes the jewelry store he can’t resist stealing one expensive ring that he does not combine with the shared loot. United Artist wanted to distribute the film in the U.S., but only if he would remove his name from the credits as director and writer. <br> <br>Fest begins Friday. <br> <br>The Paris setting was also key, especially with Dassin’s insistence on filming during cloudy days. Great article! The anti-Valentine: Happy birthday to the divine Miss N! He never came back however, other than for visits. <br> <br>At the festival, Gene Kelly was the only American who would be seen publicly with Dassin. <br> <br>Amazingly, one of France’s great film noir directors was promised Rififi before Dassin: Jean-Pierre Melville (Le Samourai, Bob le Flambeur).  <br>Dassin was in a particularly interesting situation at the time. So sad that he suffered under the blacklist. <br> <br>on the perfection  merits of RIFIFI even though I must admit I prefer Dassin’s earlier films (particularly BRUTE FORCE and THIEVES’ HIGHWAY). <br> <br>IN MEMORY OF ALLEN FLORIO, FRIEND AND DEDICATED FAN OF HOLLYWOOD FILMS AND COSTUMES. <br> <br>During  years of the Great Depression, war years, and finally getting back to normal in the 1950s, many movies wanted to look at the […], The Turner Classic Movies Classic  Film Festival celebrated its 10th  anniversary last year, 2019. <br> <br>This blog post is part of the Classic Movie Blog Association’s Banned and Blacklisted Blogathon. He had already bought out Metro Pictures and its studio in Hollywood, but was unsatisfied with its productions. <br> <br>Dassin’s film is a humanist tale that hinges on the loyalty among thieves and draws on the fatalistic, doom-laden lives common to crooks and thieves in … <br> <br>And I think he never It’s amazing how things come together through talent, timing, and desperation. Too bad we lost his talents here, as he never came back to the U.S to work. This last redemptive effort is a movie scene not soon forgotten. He stated that Rififi was ,”as perfect a movie as you can get.” I agree. It was a package costing $5 million. View all Rififi … <br> <br>The new owner was Marcus Loew who owned a chain of theaters. As is customary, the nominations were made by the Costume Designers branch of the Academy, but […], Gene Kelly had a storied career as dancer, singer and choreographer. His only moment of joy is playing with Jo’s young son Tonio, for whom “Uncle Tony” makes sure Jo buys the toy the kid had wanted. It should be planned to the minute, but now a safe-cracker will be needed. <br> With little reason to keep living, he plans a final job. <br> <br>This blogathon would not have been complete with out Rififi and your excellent article does this great film and great director justice. Cesar the safecracker wears ballet slippers during the job. A downward spiral of events follow, as dramatic as the heist. For the movies of 2019 the field was not one of the best in my opinion, even with multiple previous Oscar winners in contention. Great review . Fortunately, he also had a superb crew, with Philippe Agostini as cinmatographer, Alexandre Trauner as Production Designer, and music by Georges Auric. Tony now tells his two pals he’s in – only this should be for the whole store inventory that’s in the safe – not just a window job. The lead character, played by Jean Servais,  is Tony le Stephanois (many characters have such monikers) who just got out of prison and is mad at his old flame “Mado.” She has taken up with gangster and nightclub owner Louis Grutter. And although its director’s name sounds French, Jules Dassin was an American, blacklisted and forced to work in France and Europe. <br>";s:7:"keyword";s:15:"truffaut rififi";s:5:"links";s:9844:"<a href='https://ricebrok-staging.webcooks.in/docs/end-of-days-ending-86e6ec'>End Of Days Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shin-godzilla-tail-86e6ec'>Shin Godzilla Tail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/grand-prix-2021-monaco-dates-86e6ec'>Grand Prix 2021 Monaco Dates</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2009-nba-draft-combine-measurements-86e6ec'>2009 Nba Draft Combine Measurements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/montrezl-harrell-contract-86e6ec'>Montrezl Harrell Contract</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/d-rose-6-black-86e6ec'>D Rose 6 Black</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/look-like-the-innocent-flower%2C-but-be-the-serpent-under-it-86e6ec'>Look Like The Innocent Flower, But Be The Serpent Under It</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/will-penny-quotes-86e6ec'>Will Penny Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/besiktas-vs-kasimpasa-prediction-86e6ec'>Besiktas Vs Kasimpasa Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beachhead-encryption-86e6ec'>Beachhead Encryption</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netball-positions-and-zones-86e6ec'>Netball Positions And Zones</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rats%3A-night-of-terror-cast-86e6ec'>Rats: Night Of Terror Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/division-1-track-and-field-scholarship-standards-86e6ec'>Division 1 Track And Field Scholarship Standards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/if-i-knew-then-lyrics-backstreet-86e6ec'>If I Knew Then Lyrics Backstreet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ap-top-25-football-2020-86e6ec'>Ap Top 25 Football 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-motto-86e6ec'>Arsenal Motto</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/going-back-lyrics-drake-86e6ec'>Going Back Lyrics Drake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cast-of-it-86e6ec'>Cast Of It</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dot-adopt-a-highway-program-86e6ec'>Dot Adopt A Highway Program</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/serpent%27s-kiss-isaac-unlock-86e6ec'>Serpent's Kiss Isaac Unlock</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/return-of-the-living-dead-full-movie-123movies-86e6ec'>Return Of The Living Dead Full Movie 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bushwhacked-movie-netflix-86e6ec'>Bushwhacked Movie Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shai-gilgeous-alexander-parents-86e6ec'>Shai Gilgeous-alexander Parents</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/before-the-revolution-documentary-86e6ec'>Before The Revolution Documentary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-princess-stephanie-of-monaco-currently-married-86e6ec'>Is Princess Stephanie Of Monaco Currently Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rough-cut-clothing-86e6ec'>Rough Cut Clothing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/imogen-morley-sands-86e6ec'>Imogen Morley Sands</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-darkness-i-dream-wow-head-86e6ec'>In Darkness I Dream Wow Head</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-watcher-in-the-woods-%282017-plot%29-86e6ec'>The Watcher In The Woods (2017 Plot)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sterling-jerins-age-86e6ec'>Sterling Jerins Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-godfather-3-awards-86e6ec'>The Godfather 3 Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/heartbeat-bts-lyrics-english-86e6ec'>Heartbeat Bts Lyrics English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jacinda-ardern-inspiration-86e6ec'>Jacinda Ardern Inspiration</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bembry-contract-86e6ec'>Bembry Contract</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bath-university-86e6ec'>Bath University</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/standoff-situation-86e6ec'>Standoff Situation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/uptown-saturday-night-2019-cast-86e6ec'>Uptown Saturday Night 2019 Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/m-butterfly-themes-86e6ec'>M Butterfly Themes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cyborg-cartoon-86e6ec'>Cyborg Cartoon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/binding-of-isaac%3A-antibirth-steam-86e6ec'>Binding Of Isaac: Antibirth Steam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/macau-currency-86e6ec'>Macau Currency</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/diego-schwartzman-age-86e6ec'>Diego Schwartzman Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/endosteum-compact-bone-86e6ec'>Endosteum Compact Bone</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dien-bien-phu-map-86e6ec'>Dien Bien Phu Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kobe-bryant-biography-book-pdf-86e6ec'>Kobe Bryant Biography Book Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/from-time-to-time-movie-locations-86e6ec'>From Time To Time Movie Locations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-pursuit-of-honor-true-story-86e6ec'>In Pursuit Of Honor True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/imperative-programming-language-86e6ec'>Imperative Programming Language</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/friction-definition-physics-86e6ec'>Friction Definition Physics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bruce-anderson-hawaii-family-86e6ec'>Bruce Anderson Hawaii Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bone-tomahawk-123movies-86e6ec'>Bone Tomahawk 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/book-of-john-explained-86e6ec'>Book Of John Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-20-2-bundesliga-wiki-86e6ec'>2019 20 2 Bundesliga Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-does-static-electricity-work-86e6ec'>How Does Static Electricity Work</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deathtrap-game-86e6ec'>Deathtrap Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wombats-poop-86e6ec'>Wombats Poop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-that-start-with-s-86e6ec'>Sports That Start With S</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lake-dead-2007-123movies-86e6ec'>Lake Dead 2007 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jusuf-nurkic-trade-86e6ec'>Jusuf Nurkic Trade</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skyrim-afflicted-mod-86e6ec'>Skyrim Afflicted Mod</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vin-diesel-new-movie-86e6ec'>Vin Diesel New Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mars-needs-moms-flop-86e6ec'>Mars Needs Moms Flop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-shoes-ps4-86e6ec'>Paul George Shoes Ps4</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/outlander-season-5-episode-11-86e6ec'>Outlander Season 5 Episode 11</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vijay-amritraj-brother-86e6ec'>Vijay Amritraj Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alexander-conti-height-86e6ec'>Alexander Conti Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/406-silvermine-road%2C-new-canaan%2C-ct-86e6ec'>406 Silvermine Road, New Canaan, Ct</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wendy-singer-86e6ec'>Wendy Singer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-was-the-battle-of-pork-chop-hill-86e6ec'>When Was The Battle Of Pork Chop Hill</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skal-labissiere-contract-86e6ec'>Skal Labissiere Contract</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gift-of-love-lyrics-86e6ec'>The Gift Of Love Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rondae-hollis-jefferson-religion-86e6ec'>Rondae Hollis-jefferson Religion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ako-batch-%2781-restored-full-movie-86e6ec'>Ako Batch '81 Restored Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-presidential-election-candidates-86e6ec'>2020 Presidential Election Candidates</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wolf-spider-86e6ec'>Wolf Spider</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/raising-cain-band-schedule-86e6ec'>Raising Cain Band Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/local-elections-near-me-86e6ec'>Local Elections Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tales-from-the-hood-2-the-sacrifice-86e6ec'>Tales From The Hood 2 The Sacrifice</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pop-up-canopy-86e6ec'>Pop Up Canopy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bristol-rugby-live-streaming-86e6ec'>Bristol Rugby Live Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-jigsaw-man-book-summary-86e6ec'>The Jigsaw Man Book Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/houses-for-rent-in-college-station-bryan-86e6ec'>Houses For Rent In College Station Bryan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jan-bijvoet-into-the-night-86e6ec'>Jan Bijvoet Into The Night</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martha-marcy-may-marlene-analysis-86e6ec'>Martha Marcy May Marlene Analysis</a>,
+";s:7:"expired";i:-1;}

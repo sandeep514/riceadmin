@@ -1,0 +1,123 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2937:"The Bergamo side registered wins against Torino, Lazio and Cagliari but are bound to face a tough challenge against Napoli this weekend. High-scoring Atalanta are currently at the summit of the Serie A table with nine points from three games and have netted 13 times already this campaign. Nazionali al lavoro a Milanello: manca sempre meno a #InterMilan #SempreMilan pic.twitter.com/xnM2lQ2J3p, AC Milan have started the new season in style, winning all three of their opening games. © 2020 Guardian News & Media Limited or its affiliated companies. Napoli return to action after failing to fulfil their Juventus fixture with a big win over Atalanta. The Crotone vs Juventus clash is scheduled to kick off on Saturday, October 17, 9:00 pm local time (Sunday, 12:30 am IST). Copyright: © 2020 ESPN Enterprises, Inc. All rights reserved. Crotone have already conceded 10 goals and appear to be relegation candidates. Gennaro Gattuso's Napoli began the new season with two wins from their first two games but failed to turn up for their clash against Juventus just before the international break. Andrea Pirlo's men now have seven points from their three games and are clear favourites against Crotone. European roundup: Napoli hit four past Atalanta, Leipzig stay top in Germany . The winning goal came in the first half from Anthony Lozano, whose chip over Thibaut Courtois had enough on it to get over the Real Madrid keeper and into the net. ALSO READ: Speculation Of Kylian Mbappe To Real Madrid Rife As Frenchman Hints At Transfer, Arkadiusz Milik to United? … Napoli blasted four goals in a devastating 20-minute first half spell as they thumped Atalanta 4-1 in Serie A on Saturday. Reus and Haaland were brought on in the 64th minute and instantly breathed life into their team’s attack. Madrid piled on the pressure in the second half but Cádiz held on gamely. Bayern Munich’s Robert Lewandowski and Thomas Müller scored two goals each as the German champions crushed hosts Arminia Bielefeld 4-1 in the Bundesliga to move within a point of top spot.  After the resounding seasonal debut at the Gewiss Stadium against Cagliari and the international break, which saw 13 Atalanta players between Europe and South America as protagonists, the Nerazzurri are ready to undertake a real tour de force. Available for everyone, funded by readers. UEFA Admits Plan Can't Go Ahead As Changes Needed After COVID-19, Speculation Of Kylian Mbappe To Real Madrid Rife As Frenchman Hints At Transfer, Napoli vs Atalanta - 3:00 pm (6:30 pm IST), Sampdoria vs Lazio - 6:00 pm (9:30 pm IST, Inter Milan vs AC Milan - 6:00 pm (9:30 pm IST), Crotone vs Juventus - 8:45 pm (Sunday, 12:15 am IST), Bologna vs Sassuolo - 12:30 pm (4:00 pm IST), Spezia vs Fiorentina - 3:00 pm (6:30 pm IST), Torino vs Cagliari - 3:00 pm (6:30 pm IST), Roma vs Benevento - 8:45 pm (Monday, 12:15 am IST), Verona vs Genoa - 8:45 pm (Tuesday, 12:15 am IST). ";s:7:"keyword";s:17:"atalanta fixtures";s:5:"links";s:8844:"<a href='https://ricebrok-staging.webcooks.in/docs/acids-and-bases-86e6ec'>Acids And Bases</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jacqueline-kennedy-onassis-siblings-86e6ec'>Jacqueline Kennedy Onassis Siblings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it-was-a-pleasure-meeting-you-both-86e6ec'>It Was A Pleasure Meeting You Both</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aberdeen-fc-goalkeepers-86e6ec'>Aberdeen Fc Goalkeepers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-hitcher-nash-death-86e6ec'>The Hitcher Nash Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shaapit-songs-86e6ec'>Shaapit Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unpregnant-release-date-86e6ec'>Unpregnant Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ash-blonde-86e6ec'>Ash Blonde</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shaapit-songs-86e6ec'>Shaapit Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adolphe-menjou-cause-of-death-86e6ec'>Adolphe Menjou Cause Of Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/luc-mbah-a-moute-wife-86e6ec'>Luc Mbah A Moute Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/donner-lake-lodge-86e6ec'>Donner Lake Lodge</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cheap-thrills-big-brother-wikipedia-86e6ec'>Cheap Thrills Big Brother Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-countess-diablo-2-86e6ec'>The Countess Diablo 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kays-curling-stones-86e6ec'>Kays Curling Stones</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/see-you-up-there-online-86e6ec'>See You Up There Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fortney-brothers-86e6ec'>Fortney Brothers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pavlyuchenkova-vs-svitolina-86e6ec'>Pavlyuchenkova Vs Svitolina</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cops-kdrama-review-86e6ec'>Two Cops Kdrama Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kristy-sowin-instagram-86e6ec'>Kristy Sowin Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hoodwinked-watch-online-86e6ec'>Hoodwinked Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gael-monfils-svitolina-split-86e6ec'>Gael Monfils Svitolina Split</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/premonition-movie-explanation-86e6ec'>Premonition Movie Explanation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cockfighter-restaurant-86e6ec'>Cockfighter Restaurant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jrue-holiday-small-forward-86e6ec'>Jrue Holiday Small Forward</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/homeward-bound-ii%3A-lost-in-san-francisco-full-movie-86e6ec'>Homeward Bound Ii: Lost In San Francisco Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/graduate-program-sace-simest-86e6ec'>Graduate Program Sace Simest</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steve-johnson-actor-86e6ec'>Steve Johnson Actor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trouble-no-more-spyro-86e6ec'>Trouble No More Spyro</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/imperative-programming-language-86e6ec'>Imperative Programming Language</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/torchy-blane-in-panama-86e6ec'>Torchy Blane In Panama</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stan-wawrinka-and-garbine-muguruza-relationship-86e6ec'>Stan Wawrinka And Garbine Muguruza Relationship</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aquamarine-rings-gold-86e6ec'>Aquamarine Rings Gold</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-remove-splinter-86e6ec'>How To Remove Splinter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/identity-equation-example-86e6ec'>Identity Equation Example</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rangers-ftp-meaning-86e6ec'>Rangers Ftp Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-did-klay-thompson-and-laura-harrier-meet-86e6ec'>How Did Klay Thompson And Laura Harrier Meet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-make-butter-recipe-86e6ec'>How To Make Butter Recipe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/repco-replacement-parts-86e6ec'>Repco Replacement Parts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-goldfinch-summary-86e6ec'>The Goldfinch Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/doppelganger-finder-86e6ec'>Doppelganger Finder</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bob-barker-house-86e6ec'>Bob Barker House</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-central-intelligence-86e6ec'>Watch Central Intelligence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ice-cold-in-alex-blu-ray-86e6ec'>Ice Cold In Alex Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/output-arcade-review-2020-86e6ec'>Output Arcade Review 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adventures-of-lolo-walkthrough-%28floor-6%29-86e6ec'>Adventures Of Lolo Walkthrough (floor 6)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/does-gross-misconduct-go-on-your-record-86e6ec'>Does Gross Misconduct Go On Your Record</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dw-sports-dundee-shop-86e6ec'>Dw Sports Dundee Shop</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/silent-scream-anna-blue-meaning-86e6ec'>Silent Scream Anna Blue Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/martha-marcy-may-marlene-ending-scene-86e6ec'>Martha Marcy May Marlene Ending Scene</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-seventh-day-2020-86e6ec'>The Seventh Day 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/funny-games-quotes-86e6ec'>Funny Games Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sarah-ward-author-86e6ec'>Sarah Ward Author</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/captain-spaulding-86e6ec'>Captain Spaulding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jessica-hynes-harry-potter-86e6ec'>Jessica Hynes Harry Potter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wildcat-wearhouse-fayette-mall-86e6ec'>Wildcat Wearhouse Fayette Mall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-crying-boy-86e6ec'>The Crying Boy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nate-mcmillan-wife-86e6ec'>Nate Mcmillan Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/serie-b-2019%2F20-86e6ec'>Serie B 2019/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/april-9th-movie-english-subtitles-86e6ec'>April 9th Movie English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cheers-for-democracy-quote-86e6ec'>Two Cheers For Democracy Quote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-doors-movie-streaming-86e6ec'>The Doors Movie Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-turning-ending-explained-86e6ec'>The Turning Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/carlito%27s-way%3A-rise-to-power-pel%C3%ADcula-completa-en-espa%C3%B1ol-latino-86e6ec'>Carlito's Way: Rise To Power Película Completa En Español Latino</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/texas-horned-frog-86e6ec'>Texas Horned Frog</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cobweb-movie-2021-86e6ec'>Cobweb Movie 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/no-other-woman-famous-lines-86e6ec'>No Other Woman Famous Lines</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/walter-cromwell-86e6ec'>Walter Cromwell</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bad-moms-casts-86e6ec'>Bad Moms Casts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-pettigrew-lives-for-a-day-%28dvd%29-86e6ec'>Miss Pettigrew Lives For A Day (dvd)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pyaar-diwana-hota-hai-lyrics-86e6ec'>Pyaar Diwana Hota Hai Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-stadium-map-86e6ec'>Notre Dame Stadium Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemency-in-law-86e6ec'>Clemency In Law</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/71-fragments-of-a-chronology-of-chance-letterboxd-86e6ec'>71 Fragments Of A Chronology Of Chance Letterboxd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jrue-holiday-small-forward-86e6ec'>Jrue Holiday Small Forward</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kati-kati-food-86e6ec'>Kati Kati Food</a>,
+";s:7:"expired";i:-1;}

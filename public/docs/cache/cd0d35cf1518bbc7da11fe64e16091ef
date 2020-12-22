@@ -1,0 +1,90 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3555:"Please provide the email address associated with your account to receive the password reset instructions. Throughout the book, many of the current and former agents come across as little more than disgruntled rent-a-guards, complaining about their shifts, their assignments and their pay while traveling on Air Force One and walking the halls of the West Wing. [2] Written by Jeff Maguire, the film is about a disillusioned and obsessed former CIA agent who attempts to assassinate the President of the United States and the Secret Service agent who tracks him. Vos articles vus récemment et vos recommandations en vedette. First, it started out with historical details that should have been shortened. "You could see their nipples," snickers Taylor. He finds a collage of photographs and newspaper articles on famous assassinations, a model-building magazine, and a Time cover with the President's head circled. Just 17 days later, Ford was greeting bystanders streetside at San Francisco’s St. Francis Hotel when 45-year-old political activist Sara Jane Moore fired a .44-caliber pistol at him. It tends to get a bit repetitive with the author constantly trying to make the point that budget cuts within SS will eventually result in the US president being assassinated. Escape & Inspire Deepwater Horizon Heroes of Disaster Mark Wahlberg + True Stories ... To calculate the overall star rating and percentage breakdown by star, we don’t use a simple average. Note - Autoplay has been disabled for this video. in the line of fire By Charles Apple The Spokesman-Review 155 years ago today, President Abraham Lincoln was assassinated by a famous actor who was angry in … Autoplay has been paused. Booth escapes Horrigan and D'Andrea after one such call from Lafayette Park, but unknowingly leaves fingerprints in the process. He thoroughly discussed his days before and after becoming President. Kessler never asks the agents anything substantive, such as if they had any insights into how the Bush White House involved the country in the Iraq war. AFI's 100 Years...100 Heroes and Villains, "In the Line of Fire: Whose Movie Is It, Anyway? If a president is assassinated, it nullifies democracy. Horrigan is the only remaining active agent who was guarding the President that day, and he is wracked with guilt over his failure to react quickly enough to the first shot, shielding Kennedy from the subsequent fatal bullet, which could have saved the President's life. Reviewed in the United States on January 17, 2017. Roosevelt was unharmed, but Anton Cermak, the mayor of Chicago, a Secret Service agent and four bystanders were hit. Taunting him by phone and tantalizing him with clues, the assassin (John Malkovich) lures Horrigan into an electrifying battle of wits and will that only one man can survive. character. For the scenes of campaign rallies, the filmmakers used digitally altered footage from the campaign events of President George H.W. [5], In the Line of Fire was released in United States theaters in July 1993. Lincoln resisted efforts of his friends, the police, and the military to safeguard him. In a new chapter to the paperback edition of In the President’s Secret Service: Behind the Scenes with Agents in the Line of Fire and the Presidents They Protect, I reveal that threats against President Obama have become so disturbing that a secret Presidential Threat Task Force has been created within the FBI to gather, track, and evaluate assassination threats that might be related to domestic or international terrorism. ";s:7:"keyword";s:33:"in the line of fire assassination";s:5:"links";s:4936:"<a href='https://ricebrok-staging.webcooks.in/docs/baton-baton-mein-actress-name-86e6ec'>Baton Baton Mein Actress Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-violence-plot-explained-86e6ec'>Miss Violence Plot Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/red-e-cathey-86e6ec'>Red E Cathey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rosewood-lumber-86e6ec'>Rosewood Lumber</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ultimate-avengers-full-movie-watch-online-86e6ec'>Ultimate Avengers Full Movie Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/afl-odds-86e6ec'>Afl Odds</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/date-format-yyyy-mm-dd-86e6ec'>Date Format Yyyy-mm-dd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-liquidator-%282017%29-86e6ec'>The Liquidator (2017)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/friction-meaning-in-tamil-86e6ec'>Friction Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nifl-premier-league-table-86e6ec'>Nifl Premier League Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/death-ceremony-86e6ec'>Death Ceremony</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eyes-wide-shut-mask-name-86e6ec'>Eyes Wide Shut Mask Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/t%27au-ethereal-86e6ec'>T'au Ethereal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-chocolate-war-banned-86e6ec'>The Chocolate War Banned</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-lazarus-effect-on-hulu-86e6ec'>Is The Lazarus Effect On Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/obvious-plant-86e6ec'>Obvious Plant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-women%27s-soccer-score-86e6ec'>Clemson Women's Soccer Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/troubled-waters-columbo-cast-86e6ec'>Troubled Waters Columbo Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-side-story-lyrics-the-game-86e6ec'>West Side Story Lyrics The Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creepshow-skincrawlers-wiki-86e6ec'>Creepshow Skincrawlers Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/conflict-in-a-clockwork-orange-86e6ec'>Conflict In A Clockwork Orange</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sky-sports-f1-presenters-86e6ec'>Sky Sports F1 Presenters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liangelo-ball-net-worth-2020-86e6ec'>Liangelo Ball Net Worth 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-bollywood-horror-movies-86e6ec'>Best Bollywood Horror Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-countries-in-europe-86e6ec'>How Many Countries In Europe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/saving-private-ryan-streaming-online-86e6ec'>Saving Private Ryan Streaming Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/linda-perry-instagram-86e6ec'>Linda Perry Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-chalk-garden-movie-online-86e6ec'>The Chalk Garden Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spawn-comic-86e6ec'>Spawn Comic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/il-postino-restaurant-nyc-menu-86e6ec'>Il Postino Restaurant Nyc Menu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-rankings-86e6ec'>University Rankings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/guzaarish-cast-86e6ec'>Guzaarish Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nick-owen-partner-vicki-beevers-86e6ec'>Nick Owen Partner Vicki Beevers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-elliot-cowan-married-86e6ec'>Is Elliot Cowan Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/riz-ahmed-religion-86e6ec'>Riz Ahmed Religion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unpublished-electoral-roll-86e6ec'>Unpublished Electoral Roll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/diamond-farnsworth-86e6ec'>Diamond Farnsworth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-paul-injury-playoffs-2015-86e6ec'>Chris Paul Injury Playoffs 2015</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/donde-est%C3%A1-xuxa-86e6ec'>Donde Está Xuxa</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/everybody-hurts-sometimes-everybody-hurts-someday-86e6ec'>Everybody Hurts Sometimes Everybody Hurts Someday</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bend-sinister-marvel-86e6ec'>Bend Sinister Marvel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steph-curry-shoe-deal-86e6ec'>Steph Curry Shoe Deal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-could-never-be-your-woman-netflix-86e6ec'>I Could Never Be Your Woman Netflix</a>,
+";s:7:"expired";i:-1;}

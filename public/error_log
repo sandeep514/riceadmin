@@ -1,0 +1,28 @@
+[14-Aug-2020 10:06:24 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ApiController::getpriceByTimePeriod() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/app/Http/Controllers/ApiController.php on line 236
+[14-Aug-2020 10:06:24 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ApiController::getpriceByTimePeriod() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/app/Http/Controllers/ApiController.php on line 236
+[14-Aug-2020 10:07:25 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ApiController::getpriceByTimePeriod() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/app/Http/Controllers/ApiController.php on line 236
+[14-Aug-2020 10:07:25 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ApiController::getpriceByTimePeriod() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/app/Http/Controllers/ApiController.php on line 236
+[14-Aug-2020 10:07:37 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\ApiController::getpriceByTimePeriod() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/app/Http/Controllers/ApiController.php on line 236
+[02-Oct-2020 21:33:01 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Oct-2020 01:25:12 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Oct-2020 01:25:14 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Oct-2020 01:25:19 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Oct-2020 01:25:29 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Oct-2020 01:25:47 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Oct-2020 01:25:51 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[18-Oct-2020 10:43:01 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[19-Oct-2020 11:25:47 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[28-Oct-2020 09:16:44 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Nov-2020 13:45:31 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[03-Nov-2020 13:45:35 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[05-Nov-2020 21:59:07 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[05-Nov-2020 21:59:07 UTC] PHP Warning:  mysqli_connect(): (28000/1045): Access denied for user 'hubcreat_wrdp3'@'localhost' (using password: YES) in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php(2) : runtime-created function on line 47
+[05-Nov-2020 21:59:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function mysqli_fetch_all() in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php(2) : runtime-created function:51
+Stack trace:
+#0 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php(2) : runtime-created function(141): parse_wp('<?php\r\n/** Enab...', '/home/sboy8c4wy...')
+#1 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php(2): __lambda_func()
+#2 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php(2): tagmmem(Array, Array)
+#3 {main}
+  thrown in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php(2) : runtime-created function on line 51
+[28-Nov-2020 12:41:15 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2
+[14-Dec-2020 19:21:22 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/4f29i5ze.php on line 2

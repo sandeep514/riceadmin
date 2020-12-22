@@ -1,0 +1,139 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:7388:"At the same time, the poem expresses the hope that its words will inspire and influence those who read or hear it. It was published in 1820 (see 1820 in poetry) by Charles and James Ollier in London as part of the Prometheus Unbound, A Lyrical Drama in Four Acts, With Other Poems collection. "Structure and Development of Shelley's 'Ode to the West Wind'. Web Connection is a complete application framework for developing scalable, Web based business solutions using Visual FoxPro. Certainly the author wants to dramatise the atmosphere so that the reader recalls the situation of canto one to three. To explain the appearance of an underwater world, it might be easier to explain it by something that is realistic; and that might be that the wind is able to produce illusions on the water. Sponsored Content. Wild, Quixotic notions of sacrifice flooded his mood of dejection. Again the wind is very important in this last canto. It is also necessary to mention that the first-person pronouns again appear in a great frequency; but the possessive pronoun ‘my’ predominates. ", Wilcox, Stewart C. "Imagery, Ideas, and Design in Shelley's 'Ode to the West Wind'. Shelley also changes his use of metaphors in this canto. This again shows the influence of the west wind which announces the change of the season. Choose the design that fits your site. Ode to the West Wind is an ode written by Percy Bysshe Shelley in 1819 near Florence, Italy. ", Gonzalez Groba, Constante. With this knowledge, the West Wind becomes a different meaning. This was a subject Shelley wrote a great deal about, especially around 1819, with this strongest version of it articulated the last famous lines of his "Defence of Poetry": "Poets are the hierophants of an unapprehended inspiration; the mirrors of the gigantic shadows which futurity casts upon the present; the words which express what they understand not; the trumpets which sing to battle, and feel not what they inspire; the influence which is moved not, but moves. southwest synonyms, southwest pronunciation, southwest translation, English dictionary definition of southwest. ", Yan, Chen. With the ‘Mediterranean’ as subject of the canto, the “syntactical movement” is continued and there is no break in the fluency of the poem; it is said that ‘he lay, / Lull’d by the coil of his crystalline streams,/Beside a pumice isle in Baiae’s bay, / And saw in sleep old palaces and towers’ (l. 30–33). His other poems written at the same time—"The Mask of Anarchy," "Prometheus Unbound," and "England in 1819"—take up these same problems of political change, revolution, and role of the poet.[2]. Pirie is not sure of that either. This is of course a rhetorical question because spring does come after winter, but the "if" suggests that it might not come if the rebirth is strong and extensive enough, and if it is not, another renewal---spring---will come anyway. Each canto consists of four tercets (ABA, BCB, CDC, DED) and a rhyming couplet (EE). a burial chamber or grave for the dying year or the year which is coming to an end. west side. The poem ends with an optimistic note which is that if winter days are here then spring is not very far. The West Wing is an American serial political drama television series created by Aaron Sorkin that aired on NBC from September 22, 1999 to May 14, 2006. © William Collins Sons & Co. Ltd. 1979, 1986 © HarperCollins  Top Wind Songs List. "How Shelley Approached the 'Ode to the West Wind'. "Research on the Translation of 'Ode to the West Wind' in China. Some of these albums were previously issued on labels such as Circle Records (Germany).. Discography. It also indicates that after the struggles and problems in life, there would always be a solution. The ‘locks of the approaching storm’ (l. 23) are the messengers of this bursting: the ‘clouds’. Others say that Phineus's in-laws, Zetes and Calais, saved him from the Harpies stealing his food. Poetry as a Moral Force. The poem begins with three cantos describing the wind's effects upon earth, air, and ocean. This “signals a restored confidence, if not in the poet’s own abilities, at least in his capacity to communicate with [...] the Wind”. Absentee Ballot vs. Mail-In Ballot: Is There A Difference? The clouds now reflect the image of the swirling leaves; this is a parallelism that gives evidence that we lifted “our attention from the finite world into the macrocosm”. In “West Wind,” the speaker meditates on the many metaphysical meanings the wind holds for him. ", Fogle, Richard Harter. Roget's 21st Century Thesaurus, Third Edition Copyright © 2013 by the Philip Lief Group. west wind: Find more words! All rights reserved. A windows (pop-into) of information (full-content of Sensagent) triggered by double-clicking any word on your webpage. ", This entry is from Wikipedia, the leading user-contributed encyclopedia. There was no danger of discovery on his approach, for it was a wild night of wind and rain.  ○   Wildcard, crossword    Company Information Westerly definition, moving, directed, or situated toward the west: the westerly end of the field. Publishers 1998, 2000, 2003, 2005, 2006, 2007, 2009, 2012. moving, bearing, facing, or situated toward the west: the westward part, direction, etc; the west, In the Future We'll All Be Renters: America's Disappearing Middle Class, ‘The Land of the Permanent Wave’ Is Bud Shrake’s Classic Take on ‘60s Texas, History of Rome from the Earliest times down to 476 AD. At last, Shelley again calls the Wind in a kind of prayer and even wants him to be ‘his’ Spirit: he says: ‘My spirit! You can also try the grid of 16 letters. ", Friederich, R. H. "The Apocalyptic Mode and Shelley's 'Ode to the West Wind'. Some have interpreted the poem as the speaker lamenting his inability to directly help those in England owing to his being in Italy. ", Duffy, Edward. The sky’s ‘clouds’ (l. 16) are ‘like earth’s decaying leaves’ (l. 16). It may not have been reviewed by professional editors (see full disclaimer). The form of the apostrophe makes the wind also a personification.  Describe 2020 In Just One Word? "Where Shelley Wrote and What He Wrote For: The Example of 'The Ode to the West Wind'. The last two cantos give a relation between the ‘Wind’ and the speaker. Shelley in this canto “expands his vision from the earthly scene with the leaves before him to take in the vaster commotion of the skies”. However, one must not think of this ‘Ode’ as an optimistic praise of the wind; it is clearly associated with autumn. See more. Whereas the cantos one to three began with ‘O wild West Wind’ (l. 1) and ‘Thou...’ (l. 15, 29) and were clearly directed to the wind, there is a change in the fourth canto. Unlike the frequent use of the ‘I’ in the previous canto that made the canto sound self-conscious, this canto might now sound self-possessed. To the westward flowed the stream of doctrines which sprang up in the Orient. Westward definition, moving, bearing, facing, or situated toward the west: a westward migration of farm workers. The wordgames anagrams, crossword, Lettris and Boggle are provided by Memodata. The westward expansion of the Republic created huge opportunities for expansion of land ownership. an offensive content(racist, pornographic, injurious, etc. ";s:7:"keyword";s:17:"west wind synonym";s:5:"links";s:10610:"<a href='https://ricebrok-staging.webcooks.in/docs/ray-jackson-australia-86e6ec'>Ray Jackson Australia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lomachenko-age-86e6ec'>Lomachenko Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/animal-crossing-fortune-teller-set-86e6ec'>Animal Crossing Fortune Teller Set</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mrs-frisby-and-the-rats-of-nimh-chapter-1-86e6ec'>Mrs Frisby And The Rats Of Nimh Chapter 1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/western-religion-similarities-86e6ec'>Western Religion Similarities</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hare-tonic-86e6ec'>Hare Tonic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mgs2-fortune-husband-86e6ec'>Mgs2 Fortune Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christoph-sanders-age-86e6ec'>Christoph Sanders Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/games-to-play-alone-inside-86e6ec'>Games To Play Alone Inside</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-special-report-on-fishing-86e6ec'>2019 Special Report On Fishing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2013-louisville-football-depth-chart-86e6ec'>2013 Louisville Football Depth Chart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-94%2F95-home-shirt-86e6ec'>Arsenal 94/95 Home Shirt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/op-gg-euw-86e6ec'>Op Gg Euw</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joakim-noah-children-86e6ec'>Joakim Noah Children</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/battle-of-heartbreak-ridge-summary-86e6ec'>Battle Of Heartbreak Ridge Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/list-of-video-games-by-year-86e6ec'>List Of Video Games By Year</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeff-koons-puppy-location-86e6ec'>Jeff Koons Puppy Location</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/takashi-murakami-official-website-86e6ec'>Takashi Murakami Official Website</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blockers-board-game-strategy-86e6ec'>Blockers Board Game Strategy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metallic-license-plates-86e6ec'>Metallic License Plates</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aap-ke-deewane-songs-86e6ec'>Aap Ke Deewane Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/usb-debugging-windows-10-86e6ec'>Usb Debugging Windows 10</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clydebank-fc-moved-86e6ec'>Clydebank Fc Moved</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-man-in-the-white-suit-summary-86e6ec'>The Man In The White Suit Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-mackay-steven-salary-86e6ec'>Gary Mackay-steven Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gunshot-wound-surgery-86e6ec'>Gunshot Wound Surgery</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kelvin-fletcher-instagram-86e6ec'>Kelvin Fletcher Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/long-umbrella-kurtis-86e6ec'>Long Umbrella Kurtis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/he-was-raised-by-cain-crossword-clue-86e6ec'>He Was Raised By Cain Crossword Clue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/land-of-the-blind-bondi-86e6ec'>Land Of The Blind Bondi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-pelican-brief-questions-and-answers-86e6ec'>The Pelican Brief Questions And Answers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gloria-loring-2020-86e6ec'>Gloria Loring 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ayesha-curry-paella-86e6ec'>Ayesha Curry Paella</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/frida-kahlo-for-kids-86e6ec'>Frida Kahlo For Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/downhill-racer-streaming-86e6ec'>Downhill Racer Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-eagle-has-landed-meaning-86e6ec'>The Eagle Has Landed Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bride-of-%27re-animator-blu-ray-86e6ec'>Bride Of 're Animator Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aj-pritchard-gf-86e6ec'>Aj Pritchard Gf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-rules-of-the-game-cinematography-86e6ec'>The Rules Of The Game Cinematography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jenna-dewan-age-86e6ec'>Jenna Dewan Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/labyrinth-characters-86e6ec'>Labyrinth Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/glasgow-pub-bombings-86e6ec'>Glasgow Pub Bombings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/soccer-basics-86e6ec'>Soccer Basics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-big-green-full-movie-86e6ec'>The Big Green Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/different-spiderman-actors-86e6ec'>Different Spiderman Actors</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/roy-keane-transfermarkt-86e6ec'>Roy Keane Transfermarkt</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fido-verification-86e6ec'>Fido Verification</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christopher-meloni-net-worth-2020-86e6ec'>Christopher Meloni Net Worth 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/devon-points-of-interest-86e6ec'>Devon Points Of Interest</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gift-of-love-american-writer-o-86e6ec'>The Gift Of Love American Writer O</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-vi-and-i-86e6ec'>James Vi And I</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/austin-texas-rivers-open-86e6ec'>Austin Texas Rivers Open</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/puss-in-boots%3A-the-three-diablos-watch-online-86e6ec'>Puss In Boots: The Three Diablos Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/indy-500-tickets-packages-86e6ec'>Indy 500 Tickets Packages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cole-younger-guns-86e6ec'>Cole Younger Guns</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-pure-formality-english-subtitles-86e6ec'>A Pure Formality English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/retina-layers-86e6ec'>Retina Layers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-love-meaning-86e6ec'>My Love Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/highlander-3-streaming-86e6ec'>Highlander 3 Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eli-devil-bible-86e6ec'>Eli Devil Bible</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/henry%3A-portrait-of-a-serial-killer-123movies-86e6ec'>Henry: Portrait Of A Serial Killer 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/silver-streak-train-crash-86e6ec'>Silver Streak Train Crash</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-duma-86e6ec'>How To Pronounce Duma</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lacrosse-equipment-near-me-86e6ec'>Lacrosse Equipment Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/movies-like-legally-blonde-86e6ec'>Movies Like Legally Blonde</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taieri-electorate-candidates-2020-86e6ec'>Taieri Electorate Candidates 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sam-okyere-and-abigail-86e6ec'>Sam Okyere And Abigail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ron-kovic-wife-86e6ec'>Ron Kovic Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/demon-stone-xbox-360-86e6ec'>Demon Stone Xbox 360</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bad-reputation-lyrics-taylor-swift-86e6ec'>Bad Reputation Lyrics Taylor Swift</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyler-murray-height-and-weight-chart-86e6ec'>Kyler Murray Height And Weight Chart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ila-fae-dent-pictures-86e6ec'>Ila Fae Dent Pictures</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pinterest-popular-86e6ec'>Pinterest Popular</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/speak%2C-memory-analysis-86e6ec'>Speak, Memory Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-ham-sleeve-sponsor-86e6ec'>West Ham Sleeve Sponsor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cops-genres-86e6ec'>Two Cops Genres</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/haegemonia-legions-of-iron-wiki-86e6ec'>Haegemonia Legions Of Iron Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cities-in-shanghai-86e6ec'>Cities In Shanghai</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-shadow-man-twilight-zone-86e6ec'>The Shadow Man Twilight Zone</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/descriptive-essay-on-my-first-day-at-school-86e6ec'>Descriptive Essay On My First Day At School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-allen-airbnb-design-86e6ec'>Tim Allen Airbnb Design</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ap-poll-top-25-86e6ec'>Ap Poll Top 25</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-white-negro-summary-86e6ec'>The White Negro Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andrew-keenan-bolger-scott-bixby-86e6ec'>Andrew Keenan-bolger Scott Bixby</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2001-notre-dame-football-86e6ec'>2001 Notre Dame Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/saving-private-ryan-characters-86e6ec'>Saving Private Ryan Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-webber-hall-of-fame-speech-86e6ec'>Chris Webber Hall Of Fame Speech</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/uk-ticket-office-86e6ec'>Uk Ticket Office</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ruby-programming-language-uses-86e6ec'>Ruby Programming Language Uses</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/air-force-football-tickets-2020-86e6ec'>Air Force Football Tickets 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bughuul-pagan-deity-86e6ec'>Bughuul Pagan Deity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/silhouettes-clothing-86e6ec'>Silhouettes Clothing</a>,
+";s:7:"expired";i:-1;}

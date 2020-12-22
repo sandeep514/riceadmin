@@ -1,0 +1,116 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4375:"All photos used are royalty-free, and credits are included in the Alt tag of each image. Forested areas with streams and ponds are ideal moose habitat. The species of plants consumed can vary greatly based on the geographical location.  Scientists have even discovered moose antlers in the remains of Swedish wooden huts dating back to 6000 B.C.E. Letter to the editor Except for arctic regions, they can be found throughout the vast majority of Canada and Alaska. On the other hand, the scientific names, albeit frequently awkward to articulate, are universal in their usage and eliminate the confusion generated by the more familiar appellations. Moose are truly massive members of the deer, or Cervidae, family.     document.write(y0); It is not advisable to own one of these animals as a pet, and it is illegal to do so in many locations. Easily identified by their unique antlers (in bulls), these huge mammals are truly magnificent. These massive animals can strip an entire branch of leaves, or pull a dandelion from the ground, roots and all, using its sensitive and dexterous upper lip. These massive animals are members of the deer, or Cervidae, family. Due to their large size and insulating fur, moose are limited to cold climates. These massive mammals mainly browse on vegetation, rather than grazing on grasses for the bulk of their diet. The climate differs from zone to zone, and moose prefer only those zones where the average summer temperature does not much exceed sixty degrees Fahrenheit (15 degrees Celsius). As with many other animal species, if harassed, it can and will charge or attack a person. If neither backs down, they may battle with their large antlers for the right to breed. We have utilized their meat, hide, and antlers for hundreds of years. The males, known as “bulls,” are the only gender that grows antlers. //Script created by Ronny Drappier, http://sipreal.com Moose are most active during the day, making them a diurnal animal. © 1999- Moose meat is high in protein, and low in fat. Habitat of the Moose. Moose are found in the northern regions of the United States, from Maine to Washington, throughout Canada, and into Alaska. To describe moose country, an immense area of different habitats, is not easy. Once a female chooses the most dominant male, they will breed, and the male will move on to seek other females. They have a number of interesting survival adaptations.  --> They prefer areas that have lots of acceptable food, and plenty of hiding places from people and predators. In sheer numbers, moose attacks are the second most common wild animal attack in the world, behind hippopotamuses. These are are very large animals, and have been known to attack and injure humans. Under the direction of a veterinarian, they are fed a diet of browse, vegetation, pelleted feed, and supplemental vitamins to replicate that of their wild counterparts. Oh, and it can’t be too hot, or too terribly cold either! Newborns have a much redder coloration than adults do. They also have a very large, bulbous nose with long nostrils. Wind chill or take abundance help the moose to stay cool in the coastal and relatively humid zones, as well as in the much drier interior. Moose are cold-adapted mammals with thickened skin, dense, heat-retaining coat, and a low surface:volume ratio, which provides excellent … Conserve habitat for moose. CTRL + SPACE for auto-complete. The actual injuries related to these attacks are usually minimal. Moose typically inhabit boreal and mixed deciduous forests in temperate to sub arctic climates. They are not very commonly kept in zoos, because it can be quite difficult to meet their dietary needs. moose This site is about moose–learning about moose habitat, diet, ecology and behavior, seeing moose in the wild and seeing how the "metaphor" of moose can make lives better and happier. However, in simplified form, moose country is the variously dense mixed forest, called taiga or "northern bush," on the one hand; on the other hand, it is the open "forest-tundra," where conifers, ten to fourteen feet (three to four metres) high, dwarf-birch, alder and willows are scattered, mostly around lakes, bogs and streams. By its body proportions, antlers' shape and size, and demeanor, the moose is the mighty symbol of the boreal and subarctic zones of the entire northern hemisphere. ";s:7:"keyword";s:13:"moose habitat";s:5:"links";s:7784:"<a href='https://ricebrok-staging.webcooks.in/docs/electoral-roll-86e6ec'>Electoral Roll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-old-is-devan-key-2020-86e6ec'>How Old Is Devan Key 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/denis-shapovalov-height-weight-86e6ec'>Denis Shapovalov Height Weight</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/976-evil-meaning-86e6ec'>976-evil Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-accurate-football-prediction-site-86e6ec'>Most Accurate Football Prediction Site</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-guns-of-august-publisher-86e6ec'>The Guns Of August Publisher</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-am-interested-synonym-86e6ec'>I Am Interested Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ecq-pay-rates-2020-86e6ec'>Ecq Pay Rates 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/texas-killing-fields-true-events-86e6ec'>Texas Killing Fields True Events</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-vs-jon-ossoff-86e6ec'>David Perdue Vs Jon Ossoff</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rugby-world-cup-2015-game-86e6ec'>Rugby World Cup 2015 Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steel-alloy-86e6ec'>Steel Alloy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-beginning-with-l-86e6ec'>Sports Beginning With L</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pulse-movie-explained-86e6ec'>Pulse Movie Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/last-of-the-mohicans-chimney-rock-scene-86e6ec'>Last Of The Mohicans Chimney Rock Scene</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/close-encounters-of-the-third-kind-sheet-music-86e6ec'>Close Encounters Of The Third Kind Sheet Music</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/assassin%27s-creed-syndicate-86e6ec'>Assassin's Creed Syndicate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/division-1-track-and-field-scholarship-standards-86e6ec'>Division 1 Track And Field Scholarship Standards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-happened-to-cameron-dallas-86e6ec'>What Happened To Cameron Dallas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aphrodite-personality-type-86e6ec'>Aphrodite Personality Type</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daily-sleeper-sale-86e6ec'>Daily Sleeper Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-future-of-food-book-86e6ec'>The Future Of Food Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-team-2020-86e6ec'>Klay Thompson Team 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/real-madrid-line-up-86e6ec'>Real Madrid Line Up</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-violence-plot-explained-86e6ec'>Miss Violence Plot Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emelie-name-86e6ec'>Emelie Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/100-tears-dvd-86e6ec'>100 Tears Dvd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-life-to-live-melissa-fumero-86e6ec'>One Life To Live Melissa Fumero</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lenny-wilkens-net-worth-86e6ec'>Lenny Wilkens Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/celtic-vs-st-mirren-live-stream-86e6ec'>Celtic Vs St Mirren Live Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wim-wenders-spouse-86e6ec'>Wim Wenders Spouse</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-ferryman-book-86e6ec'>The Ferryman Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bristol-rugby-tv-coverage-86e6ec'>Bristol Rugby Tv Coverage</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daniel-richter-gallery-86e6ec'>Daniel Richter Gallery</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-direct-ealing-closing-down-86e6ec'>Sports Direct Ealing Closing Down</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lords-of-flatbush-netflix-86e6ec'>Lords Of Flatbush Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/centurion-roman-86e6ec'>Centurion Roman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shanghai-weather-hourly-86e6ec'>Shanghai Weather Hourly</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-cops-kdrama-review-86e6ec'>Two Cops Kdrama Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/foam-gun---autobarn-86e6ec'>Foam Gun - Autobarn</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/casino-royale-cast-2018-86e6ec'>Casino Royale Cast 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/skeet-ulrich-wife-86e6ec'>Skeet Ulrich Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ulla-klopp-86e6ec'>Ulla Klopp</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mrs-frisby-and-the-rats-of-nimh-reading-level-86e6ec'>Mrs Frisby And The Rats Of Nimh Reading Level</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dwight-howard-shoes-nike-86e6ec'>Dwight Howard Shoes Nike</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sandy-park-road-postcode-86e6ec'>Sandy Park Road Postcode</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nikola-jokic-abs-86e6ec'>Nikola Jokic Abs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emma-slater-age-86e6ec'>Emma Slater Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metolius-pronunciation-86e6ec'>Metolius Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-did-george-washington-do-86e6ec'>What Did George Washington Do</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-2017-recruiting-class-86e6ec'>Notre Dame 2017 Recruiting Class</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marina-abramovic-documentary-86e6ec'>Marina Abramovic Documentary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chromatic-coffee-86e6ec'>Chromatic Coffee</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pendennis-summary-86e6ec'>Pendennis Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shattered-%282017%29-86e6ec'>Shattered (2017)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rick-and-morty-season-5-86e6ec'>Rick And Morty Season 5</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matt-kay-86e6ec'>Matt Kay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/novels-to-read-86e6ec'>Novels To Read</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bradner-homes-86e6ec'>Bradner Homes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acceptance-buddhism-quotes-86e6ec'>Acceptance Buddhism Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-runaways-cast-86e6ec'>The Runaways Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-addiction-coffee-rockport-tx-86e6ec'>The Addiction Coffee Rockport Tx</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acacia-flower-taste-86e6ec'>Acacia Flower Taste</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-comanche-streaming-86e6ec'>White Comanche Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/celtic-players-who-support-rangers-86e6ec'>Celtic Players Who Support Rangers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/roma-2018-awards-oscar-86e6ec'>Roma 2018 Awards Oscar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hugo-gaston-medals-86e6ec'>Hugo Gaston Medals</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-dierkes-baltimore-86e6ec'>John Dierkes Baltimore</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eddie-bauer-warehouse-86e6ec'>Eddie Bauer Warehouse</a>,
+";s:7:"expired";i:-1;}

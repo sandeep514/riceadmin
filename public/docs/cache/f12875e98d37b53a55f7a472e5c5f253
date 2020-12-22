@@ -1,0 +1,139 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5142:"Mike Flanagan's Doctor Sleep is recreating parts of Stanley Kubrick's classic horror movie The Shining, but just how does the sequel compare? I recently read The Shining and I'm about 1/3 through Doctor Sleep. Granted, I haven't read it since high school but it was the first book to scare me to the bone. It's a good book, you really have nothing to lose! Flanagan chose to make Doctor Sleep utterly banal. A young Danny Torrance rides his tricycle through the corridors of the Overlook Hotel, and the shot from Doctor Sleep is extremely similar at first glance. Boring, dragging and uninspired, it often reads like a fantasy novel and where "Shining" had me terrified, this one did not scare me once. While doing that, Dan is also forced to confront the demons of his past. In my opinion its connection to "The Shining" is the only reason to give "Doctor Sleep" a try. Doctor Sleep Vs The Shining! But more to the point, how is it possible that Flanagan’s film does and contains so much less than its comparatively svelter predecessor? The writer/director said: "There’s only one shot in the trailer you saw that’s actually his footage, and that’s the shot of the bloody elevators. You'll be fine if you skip directly to Doctor Sleep, but you may appreciate it more if you read The Shining first. But I think that reading The Shining first will add more enjoyment to Doctor Sleep- not just in the "a-ha" immediate recognition of some characters/events, but in that you'll have more of an emotional connection with them. But the most important thing is not to consider the Stanley Kubrick movie an adequate representation of The Shining because it's not. But even if the Shining echoes are defensible, they don’t make for a more enjoyable or interesting movie. Here's my detailed review on Amazon. Here's another scene where Flanagan has decided to alter the framing of The Shining for Doctor Sleep, this time keeping us at a safe difference from the Overlook Hotel's nightmarish bathroom. The color of the wood is darker in the new film too, which might not be as trivial as it sounds. The text itself is remarkably similar though. It’s an age-old lesson that Shining protagonist Danny Torrance, now an adult played by Ewan McGregor, could stand to keep in mind himself. Great to see King getting back to his roots. The way it's shot, with Dan slightly removed from the hole, does allow us to see a bit more of it, and there's a bit more of the door missing to the left, but otherwise, it appears to be more or less right. Doctor Sleep is a different type of horror than The Shining, but it's still a frightful and disturbing film. Directed by Mike Flanagan. A one-stop shop for all things video games. Click the button below to start this article in quick view. Cookies help us deliver our Services. The color is different here as well. I don't think people appreciated my allegorical references, but if there's anything else lousy about the review--please let me know. Whereas in The Shining the green looked fresh and vibrant, Doctor Sleep's is dark and dour. Never read The Shining, I've only been into King for a couple years. After the trailer's premiere, Flanagan spoke at a Q&A about painstakingly bringing The Shining into Doctor Sleep. Just got Doctor Sleep, haven't started it yet. That's until he meets Abra, a young girl with whom he shares an ability known as "the shining", and the pair team up to fight an evil group called The True Knot, who feed off the power possessed by people like Dan and Rose. Dann M Super Reviewer See all Audience reviews You can read Doctor Sleep without having read The Shining- it's definitely its own story. Like sleep with the lights on kind of scared. I just finished it and think it's one of the worst Kings I've ever read. Register to vote! The second is pretty damn good so far, and it feels safe to say that reading the second without the first won't give you the proper context to understand Danny or the changes he struggles with as an adult. Through means straightforward and blunt, he’s turned a surreal simulation of succumbing to insanity into a plainly stated reminder to always be true to yourself. Now that I've finished both, I agree 100%. Scare-for-scare, there is more content in Doctor Sleep. New comments cannot be posted and votes cannot be cast. Seems to me a no brainer, read the first, then the second. I just finished Dr. Sleep and was blown away. He’s fallen into self-destructive behaviors: he’s introduced waking up to a naked stranger and dried vomit, and flashing back to the previous night’s bar fight, coke lines, and sloppy hookup. EDIT: forgot to add the link to my review. The clever management of space and communication of interiority that brought Flanagan’s earlier King-adapted movie Gerald’s Game to life have inexplicably taken leave of him. And one final point: the King of today is much improved from the King of thirty years ago. He may not be as intoxicating as his drunken writing days, but I'll take that trade-off for a cleaner writing style. It looks almost exactly right, with only a couple of very subtle changes. ";s:7:"keyword";s:27:"doctor sleep vs the shining";s:5:"links";s:10654:"<a href='https://ricebrok-staging.webcooks.in/docs/netflix-gift-86e6ec'>Netflix Gift</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sands-of-the-kalahari-subtitles-86e6ec'>Sands Of The Kalahari Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sinister-3-review-86e6ec'>Sinister 3 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liverpool-fc-orange-order-86e6ec'>Liverpool Fc Orange Order</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dexys-midnight-runners-lead-singer-dies-86e6ec'>Dexys Midnight Runners Lead Singer Dies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/punch-drunk-love-analysis-86e6ec'>Punch-drunk Love Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/valentine-lyrics-86e6ec'>Valentine Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/danny-dyer-net-worth-86e6ec'>Danny Dyer Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nike-shoes-86e6ec'>Nike Shoes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jack-the-ripper-identity-86e6ec'>Jack The Ripper Identity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-gift-of-love-lyrics-86e6ec'>The Gift Of Love Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/never-tear-us-apart-lyrics-paloma-faith-86e6ec'>Never Tear Us Apart Lyrics Paloma Faith</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/status-update-google-docs-86e6ec'>Status Update Google Docs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vmfa-122-patches-86e6ec'>Vmfa-122 Patches</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/general-walker-seven-days-in-may-86e6ec'>General Walker Seven Days In May</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-dark-horse-podcast-86e6ec'>The Dark Horse Podcast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-2002-squad-86e6ec'>Arsenal 2002 Squad</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/transcending-synonym-86e6ec'>Transcending Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/green-parakeet-86e6ec'>Green Parakeet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-___-of-sorrow-1925-film-86e6ec'>The ___ Of Sorrow 1925 Film</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matteo-berrettini-vs-andrey-rublev-live-score-86e6ec'>Matteo Berrettini Vs Andrey Rublev Live Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/melissa-rios-dwight-howard-instagram-86e6ec'>Melissa Rios Dwight Howard Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jonathan-taylor-thomas-wife-natalie-wright-actress-86e6ec'>Jonathan Taylor Thomas Wife Natalie Wright Actress</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pauly-d-86e6ec'>Pauly D</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spud-webb-wingspan-86e6ec'>Spud Webb Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yayoi-kusama-art-86e6ec'>Yayoi Kusama Art</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/purchase-olympic-tickets-86e6ec'>Purchase Olympic Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-court-size-in-feet-86e6ec'>Volleyball Court Size In Feet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-klieman-86e6ec'>Chris Klieman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ayesha-curry-paella-86e6ec'>Ayesha Curry Paella</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-election-results-history-86e6ec'>Nz Election Results History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/let-me-know-original-song-86e6ec'>Let Me Know Original Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spooky-buddies-cast-86e6ec'>Spooky Buddies Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scooby-doo-and-the-cyber-chase-voice-actors-86e6ec'>Scooby-doo And The Cyber Chase Voice Actors</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sophie-cookson-kingsman-2-86e6ec'>Sophie Cookson Kingsman 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eric-bauza-bugs-bunny-86e6ec'>Eric Bauza Bugs Bunny</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gerhard-richter%2C-betty-86e6ec'>Gerhard Richter, Betty</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-strange-vice-of-mrs-wardh-plot-86e6ec'>The Strange Vice Of Mrs Wardh Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-are-the-essential-elements-of-a-crime%3F-86e6ec'>What Are The Essential Elements Of A Crime?</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/action-instagram-86e6ec'>Action Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-plays-at-st-james-park-86e6ec'>Who Plays At St James Park</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/heechee-saga-86e6ec'>Heechee Saga</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-hellboy-movies-are-there-86e6ec'>How Many Hellboy Movies Are There</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/see-you-up-there-english-subtitles-86e6ec'>See You Up There English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pacific-heights-apartments---fairfield%2C-ca-86e6ec'>Pacific Heights Apartments - Fairfield, Ca</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/catholic-rangers-players-86e6ec'>Catholic Rangers Players</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/living-dead-museum-monroeville-mall-86e6ec'>Living Dead Museum Monroeville Mall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creep-radiohead-meaning-86e6ec'>Creep Radiohead Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/action-jackson-meaning-86e6ec'>Action Jackson Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/death-stranding-characters-86e6ec'>Death Stranding Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mojave-desert-plants-86e6ec'>Mojave Desert Plants</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/working-partner-meaning-in-tamil-86e6ec'>Working Partner Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/10-sports-name-86e6ec'>10 Sports Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vietnam-war-movies-86e6ec'>Vietnam War Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nobody-walks-in-la-wikipedia-86e6ec'>Nobody Walks In La Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-that-start-with-s-86e6ec'>Sports That Start With S</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adrianne-palicki-supernatural-86e6ec'>Adrianne Palicki Supernatural</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/writhe-synonym-86e6ec'>Writhe Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-bittersweet-life-english-subtitles%29-86e6ec'>A Bittersweet Life English Subtitles)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-height-in-high-school-86e6ec'>Russell Westbrook Height In High School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/to-tell-in-spanish-86e6ec'>To Tell In Spanish</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/javier-calleja-bearbrick-86e6ec'>Javier Calleja Bearbrick</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hotstar-disney-plus-price-86e6ec'>Hotstar Disney Plus Price</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/audrey-reid-photography-86e6ec'>Audrey Reid Photography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kitty-burns-detective-agency-86e6ec'>Kitty Burns Detective Agency</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/home-of-the-brave-book-summary-86e6ec'>Home Of The Brave Book Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/steven-spielberg-awards-86e6ec'>Steven Spielberg Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/psv-vs-fortuna-sittard-results-86e6ec'>Psv Vs Fortuna Sittard Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eyes-wide-shut-tamil-song-86e6ec'>Eyes Wide Shut Tamil Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dark-victory-1976-86e6ec'>Dark Victory 1976</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ac-milan-legends-defenders-86e6ec'>Ac Milan Legends Defenders</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/test-cricket-explained-simply-86e6ec'>Test Cricket Explained Simply</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cedi-osman-wife-86e6ec'>Cedi Osman Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clone-meaning-in-tamil-86e6ec'>Clone Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/baby-boy-names-that-go-with-martin-86e6ec'>Baby Boy Names That Go With Martin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/summer-camp-murders-86e6ec'>Summer Camp Murders</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-harden-khloe-kardashian-baby-86e6ec'>James Harden Khloe Kardashian Baby</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-tone-real-story-86e6ec'>Dead Tone Real Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ryan-bowman-morgan-stanley-86e6ec'>Ryan Bowman Morgan Stanley</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chris-paul-injury-playoffs-2015-86e6ec'>Chris Paul Injury Playoffs 2015</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oil-futures-86e6ec'>Oil Futures</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-nightmare-before-christmas-2-86e6ec'>The Nightmare Before Christmas 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alabama-2015-football-schedule-86e6ec'>Alabama 2015 Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adam-flayman-86e6ec'>Adam Flayman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ole-miss-football-schedule-2021-86e6ec'>Ole Miss Football Schedule 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-eggers-northman-86e6ec'>Robert Eggers Northman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-ritson-purpose-86e6ec'>Mark Ritson Purpose</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/repulsion-pathfinder-86e6ec'>Repulsion Pathfinder</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ominous-in-a-sentence-86e6ec'>Ominous In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dwight-howard-shoes-nike-86e6ec'>Dwight Howard Shoes Nike</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jenny-mollen-instagram-86e6ec'>Jenny Mollen Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-essoe-shelley-duvall-86e6ec'>Alex Essoe Shelley Duvall</a>,
+";s:7:"expired";i:-1;}

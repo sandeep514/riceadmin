@@ -1,0 +1,133 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:6016:"On the other hand, what are you looking for in a person you will love? If, somewhere along the way, their goals have become differentiated, or the other partner has become a burden to the other and is no longer contributing to the partnership, the relationship may go down the drain. Thank you, {{form.email}}, for signing up. E-mail is already registered on the site. Large body of research advocates that love does indeed prolong human life and is good for your Positive Well being with a gender bias advocating men are the superior Beneficial’s of this notion. Love is everywhere. Gender differences have been identified as men are more susceptible to lucid behaviours and women are more prone to practical friendship gestures (C.Hendrick & Hendrick, 1986). First book to examine aspects of close relationships such as romantic love, friendship, positive emotions, and sexuality through the lens of positive psychology. There is no love at first sight to speak of. In other words, it’s quantity over quality. It is easy for them to go from extremely happy to extremely dissatisfied or fearful, and this practically keeps them from being happy in their partners and in their relationships. Try it, you’ll be pleasantly surprised! Here's how we can stop it. Unfortunately, not everyone recognizes this fact, and that is mostly because they do not fully comprehend what love is. This is probably one of the most important things that one can do in order to be loved. Their refusal to destroy the trust of their partners will then force them to simply go through the motions of everyday home life, not really looking forward to anything special happening. Love and the Capacity to Love is one of the twenty-four character strengths identified in Peterson and Seligman’s book Character Strengths and Virtues. Lee added that agape love is easier to feel for all humanity in general than for an individual. There are some battles that aren’t meant to be won, and this may be one of yours. While most people desire relationships that combine the security and stability of compassionate with intense passionate love, Hatfield believes that this is rare. Based on this definition, Rubin devised a questionnaire to assess attitudes about others and found that these scales of liking and loving provided support for his conception of love. While stopped by a traffic light, you look out the window and see a middle-aged couple sharing breakfast in the coffee shop across the street. Prime members enjoy FREE Delivery and exclusive access to music, movies, TV shows, original audio series, and Kindle books. In this same situation, how would you speak to them, how would you treat them? Do People Agree on What Makes One Feel Loved? That person has to know that you exist, and that you plan on being a constant presence around him. What is passionate love? Each individual should, for starters, feel confident that their partner is willing to devote time and attention to the other. If he experiences only one of the two, then that is another type of love (which we will get to later). The love you seek outside of you, is the love you really need to give yourself. The voice of the …, The work place is not exactly a cozy place. According to psychologist Elaine Hatfield and her colleagues, there are two basic types of love: Compassionate love is characterized by mutual respect, attachment, affection, and trust. A structured search through millions of jobs. It’s pleasant, it’s safe, and it’s tranquil. But psychologists today would beg to differ. They must both also be committed to accommodating their differences, even as those change over time. This makes her, in his eyes, someone worth more than a second and third look. The agape lover may be opening himself up to being taken advantage of by other lovers, especially the ludic and manic lovers. Your email address will not be published. By using Verywell Mind, you accept our, 4 Common Questions About the Science of Love. This makes them cold-hearted and ruthless, and they usually won’t feel bad about being viewed as such. This will be the basis of their relationship and, from there, the lovers will find themselves picturing starting to build a future together. Further differentiating it into four components: “Eros”: desire for the beautiful, “Philia”: companionship love, “Nomos”: obedience to ones loved one, and “Agape”: preference of love over spirituality. Intimacy refers to the sharing of thoughts, desires, and feelings with the other person. Here is an interesting summary of our main feelings. This is considered to be love in its purest form, with the lover being selfless and willing to make sacrifices for the one that he loves. Many topics within the study of close relationships are relevant to positive psychology, such as love, friendship, social support, and forgiveness. Find counselling to strengthen relationships. The Zeitgeist of understanding love within an applied adult love attachment theory states that joys and sorrows of childhood come prevalent within adult love experiences (Hazan and Shaver, 1987). What do you have that will attract other people? Find all the books, read about the author, and more. This is almost like saying that it is impossible for a person to feel unconditional love for a certain someone. There are 16 major chapters, each of which focuses on a different aspect of close and intimate relationships as related to positive psychology. Here are 5 strategies to help you keep your cool. Clearly, hormones play a big role in how this type of love plays out. Too often, though, they lead us astray, especially with regard to people who are single or living alone. You can apply the same principle here. Someone who would make a good partner may push an individual to discover new activities or beliefs that expand their own self-concept. One of my favourite quotes is: ‘if you spoke to your friends the way you speak to yourself, would they still be your friends?’. ";s:7:"keyword";s:27:"love in positive psychology";s:5:"links";s:9924:"<a href='https://ricebrok-staging.webcooks.in/docs/in-dreams-lyrics-tomemitsu-86e6ec'>In Dreams Lyrics Tomemitsu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-bench-press-86e6ec'>Anthony Davis Bench Press</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maia-norman-86e6ec'>Maia Norman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christmas-in-angel-falls-123movies-86e6ec'>Christmas In Angel Falls 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wuthering-heights-kate-bush-meaningjack-in-the-box-menu-86e6ec'>Wuthering Heights Kate Bush Meaningjack In The Box Menu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/diamond-farnsworth-86e6ec'>Diamond Farnsworth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/inflatable-paddle-board-11-86e6ec'>Inflatable Paddle Board 11</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-shining-forwards-and-backwards-86e6ec'>The Shining Forwards And Backwards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daughters-lyrics-86e6ec'>Daughters Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeff-green-salary-86e6ec'>Jeff Green Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/identity-moratorium-example-86e6ec'>Identity Moratorium Example</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tiffany-haddish-husband-86e6ec'>Tiffany Haddish Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-the-evil-one-meaning-86e6ec'>Deliver Us From The Evil One Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/iron-ridge-xr100-86e6ec'>Iron Ridge Xr100</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maniac-cast-asia-86e6ec'>Maniac Cast Asia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-last-flight-of-noah%27s-ark-streaming-86e6ec'>The Last Flight Of Noah's Ark Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/under-the-volcano-analysis-86e6ec'>Under The Volcano Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-house-on-the-edge-of-the-park-part-ii-86e6ec'>The House On The Edge Of The Park Part Ii</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/donna-tartt-2020-86e6ec'>Donna Tartt 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/isaac-bashevis-singer-biography-86e6ec'>Isaac Bashevis Singer Biography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leaving-las-vegas-streaming-86e6ec'>Leaving Las Vegas Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aberdeen-v-celtic-head-to-head-86e6ec'>Aberdeen V Celtic Head To Head</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blow-out-streaming-86e6ec'>Blow Out Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-trial-of-the-chicago-7-release-date-86e6ec'>The Trial Of The Chicago 7 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pumpkinhead-4-blood-feud-putlockers-86e6ec'>Pumpkinhead 4 Blood Feud Putlockers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blackway-cast-86e6ec'>Blackway Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/team-sports-wear-86e6ec'>Team Sports Wear</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arnaud-valois-instagram-86e6ec'>Arnaud Valois Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-man-who-would-be-king-online-86e6ec'>The Man Who Would Be King Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eric-braeden-1980-86e6ec'>Eric Braeden 1980</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-time-to-dive-god%27s-pocket-86e6ec'>Best Time To Dive God's Pocket</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/central-ohio-high-school-football-scores-86e6ec'>Central Ohio High School Football Scores</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/101-films-86e6ec'>101 Films</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/inherent-vice-streaming-86e6ec'>Inherent Vice Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trailing-stop-loss-86e6ec'>Trailing Stop Loss</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it-happened-one-night-netflix-86e6ec'>It Happened One Night Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/swingle-singers-bach%27s-greatest-hits-86e6ec'>Swingle Singers Bach's Greatest Hits</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/breaking-point-game-86e6ec'>Breaking Point Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/itvbe-hugh-grant-86e6ec'>Itvbe Hugh Grant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/livingston-vs-motherwell-h2h-86e6ec'>Livingston Vs Motherwell H2h</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-great-american-baking-show-netflix-86e6ec'>The Great American Baking Show Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ma-kill-count-86e6ec'>Ma Kill Count</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hateful-meaning-in-tamil-86e6ec'>Hateful Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cursed-book-86e6ec'>Cursed Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/un-million-en-chiffre-86e6ec'>Un Million En Chiffre</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mgs3-the-end-cheat-86e6ec'>Mgs3 The End Cheat</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scott-winters-lake-effects-86e6ec'>Scott Winters Lake Effects</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-did-roy-lichtenstein-live-86e6ec'>Where Did Roy Lichtenstein Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-thing-from-another-world-analysis-86e6ec'>The Thing From Another World Analysis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/papillon-soo-soo-images-86e6ec'>Papillon Soo Soo Images</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/games-to-play-alone-with-pen-and-paper-86e6ec'>Games To Play Alone With Pen And Paper</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chances-games-86e6ec'>Chances Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/act-greens-candidates-86e6ec'>Act Greens Candidates</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/max-duffy-nfl-draft-86e6ec'>Max Duffy Nfl Draft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christopher-abbott-tattoos-86e6ec'>Christopher Abbott Tattoos</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/william-tell-overture-piano-86e6ec'>William Tell Overture Piano</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kilz-pva-drywall-primer-lowe%27s-86e6ec'>Kilz Pva Drywall Primer Lowe's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taylor-rooks-husband-86e6ec'>Taylor Rooks Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lacrosse-history-facts-86e6ec'>Lacrosse History Facts</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-bollywood-horror-movies-86e6ec'>Best Bollywood Horror Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/little-women-original-cast-86e6ec'>Little Women Original Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nwsl-player-salaries-2019-86e6ec'>Nwsl Player Salaries 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-condemned-2-on-netflix-86e6ec'>Is The Condemned 2 On Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tales-from-the-hood-dvd-86e6ec'>Tales From The Hood Dvd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aap-mujhe-achche-lagne-lage-watch-online-86e6ec'>Aap Mujhe Achche Lagne Lage Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lords-of-salem-sequel-86e6ec'>Lords Of Salem Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/basquiat-crown-canvas-86e6ec'>Basquiat Crown Canvas</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beginners-music-band-86e6ec'>Beginners Music Band</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sigmund-freud-theory-pdf-86e6ec'>Sigmund Freud Theory Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/celtic-players-who-support-rangers-86e6ec'>Celtic Players Who Support Rangers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mercy-hospital-chicago-86e6ec'>Mercy Hospital Chicago</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/midnight-in-paris-subtitles-86e6ec'>Midnight In Paris Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jesse-moss-wife-86e6ec'>Jesse Moss Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-evil-joel-mchale-86e6ec'>Deliver Us From Evil Joel Mchale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cricket-youtube-channel-86e6ec'>Cricket Youtube Channel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/little-boy%27%27-atomic-bomb-86e6ec'>Little Boy'' Atomic Bomb</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/graduation-juice-wrld-movie-86e6ec'>Graduation Juice Wrld Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/patrick-patterson-wiki-86e6ec'>Patrick Patterson Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gary-sweet-luton-86e6ec'>Gary Sweet Luton</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/matt-kay-86e6ec'>Matt Kay</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/das-wunder-von-bern-characters-86e6ec'>Das Wunder Von Bern Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rose-beuret-86e6ec'>Rose Beuret</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/galaxy-poll-86e6ec'>Galaxy Poll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cursed-horror-movies-documentary-86e6ec'>Cursed Horror Movies Documentary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/summer-of-sam-netflix-86e6ec'>Summer Of Sam Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/black-snow-ending-86e6ec'>Black Snow Ending</a>,
+";s:7:"expired";i:-1;}

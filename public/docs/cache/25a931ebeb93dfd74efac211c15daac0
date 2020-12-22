@@ -1,0 +1,109 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3887:"And one Pink Ranger was no different. She has appeared in several... Valerie Leon (born 12 November 1943) is an English actress who had roles in a number of... Valerie Hobson (born Babette Valerie Louise Hobson, 14 April 1917 – 13 November 1998) was a... Valerie Concepcion (born December 21, 1987) is a Filipina actress, host, endorser. They were attempting to recover the data on Gold and Silver Series Bio-Suits. Daggeron’s death is pretty dark in hindsight. He sacrifices himself to save his father and his friends, leaving behind no way of saving his software. Poor Jason can’t catch a break. Valerie Bertinelli, Valerie Harper, and Valerie Perrine are only a few of the well-known people named Valerie on this list. The go-to source for comic book and superhero movie fans. They would battle and betray one another, slowly gaining their memories back, before dying in battle against the Red Ranger. Valerie Jean Solanas (April 9, 1936 – April 25, 1988) was an American radical feminist and... Meet Valerie Solanas, Lena Dunham's Character On AHS: Cult, Who Attempted To Assassinate Andy Warhol, History's Most Fascinating Female Assassins. Even though a lot of these characters were eventually resurrected, you have to give credit to the show for exploring death as a likely outcome of war, and for creating the right atmosphere for those deaths to be meaningful when they happened. From the gritty fan film and upcoming cartoon by Adi Shankar to the comic book continuation of Mighty Morphin’ published by BOOM Studios, to the live-action reboot that’s coming to theaters in a few weeks, it seems like it’s 1995 all over again. SPD also proved the series was always evolving, now adding more character depth and a little bit more pathos to the stories. She is... Valerie van der Graaf is a Dutch model who has appeared in Vogue and the Sports Illustrated... Valérie Kaprisky (born 19 August 1962) is a French actress. The next season, Karone wanted to redeem herself, so she became the Pink Ranger. Her second husband was John Profumo, a government minister who became the subject of … Here, most of humanity has either been enslaved or wiped out thanks to a sentient computer virus. She is known for her role as Su-Chin... Valerie French (born Valerie Harrison 11 March 1928 (or 1932) – 3 November 1990) was an... Valérie Quennessen (3 December 1957 – 19 March 1989) was a French theatre and film actress. The evil Master Org—who looks like a Star Trek: TOS villain—uses the boy’s naivete to his advantage, making him think the Rangers were evil, and using his great power to take their Zords away. She and a bunch of the other rangers went back in time to stop Ransik. Also, it’s incredibly depressing. Luckily, that secondary teaching gig of his paid dividends, and the Power Rangers resurrected him. That’s why the show was so damn bleak—the writers didn’t have to care as much about protecting their jobs. When Officer Tate was killed in the line of duty, Sky knew what he would do. Rita has "killed Rangers before." His little brother was basically promoted to senior management with his own office while Mike was stuck in middle management where he has to share a desk. Thankfully, Vernon recovered, and even cameoed in later episodes.  She is also the only character in the franchise to be a villain in one season and a Ranger in the next. Lucky, lucky guy. Did we miss any dead Rangers? Were you expecting Braveheart? After the publicized death and eye-rolling resurrection of Superman in the 1992 storyline The Death of Superman, a number of icons have been killed only to make a triumphant comeback some way or another: Batman, Green Arrow, Wolverine, Supergirl, Nightcrawler, Spider-Man (sorta), Wolverine (again, multiple times), Captain America, Jason Toddâs Robin, Barry Allenâs the Flash â the list goes on. ";s:7:"keyword";s:28:"valerie vernon 1950s actress";s:5:"links";s:7188:"<a href='https://ricebrok-staging.webcooks.in/docs/the-wild-bunch-themes-86e6ec'>The Wild Bunch Themes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2010%3A-the-year-we-make-contact-openload-86e6ec'>2010: The Year We Make Contact Openload</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/glasgow-pub-bombings-86e6ec'>Glasgow Pub Bombings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jackson-pollock-artworks-86e6ec'>Jackson Pollock Artworks</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lexi-murphy-86e6ec'>Lexi Murphy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arjun-shlok-badminton-86e6ec'>Arjun Shlok Badminton</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-hills-have-eyes-%282006-full-movie-123movies%29-86e6ec'>The Hills Have Eyes (2006 Full Movie 123movies)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/devon-live-tiverton-high-school-86e6ec'>Devon Live Tiverton High School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/giannis-miami-heat-trade-86e6ec'>Giannis Miami Heat Trade</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ivan-turgenev-books-86e6ec'>Ivan Turgenev Books</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ed-begley-jr-net-worth-86e6ec'>Ed Begley Jr Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thillu-mullu-%282013-cast%29-86e6ec'>Thillu Mullu (2013 Cast)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bailey-hockman-86e6ec'>Bailey Hockman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manhattan-baby-soundtrack-86e6ec'>Manhattan Baby Soundtrack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-france-economy-86e6ec'>New France Economy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tynecastle-stadium-redevelopment-86e6ec'>Tynecastle Stadium Redevelopment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/insidious-antonym-86e6ec'>Insidious Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-love-you-too-gif-cartoon-86e6ec'>I Love You Too Gif Cartoon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/conversation-killer-examples-86e6ec'>Conversation Killer Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-terror-season-2-streaming-86e6ec'>The Terror Season 2 Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rex-meaning-in-tamil-86e6ec'>Rex Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cj-mccollum-salary-86e6ec'>Cj Mccollum Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mc-ren-new-album-86e6ec'>Mc Ren New Album</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-am-mother-plot-holes-86e6ec'>I Am Mother Plot Holes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kelly-lynch-instagram-86e6ec'>Kelly Lynch Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-efl-league-two-play-off-final-86e6ec'>2020 Efl League Two Play-off Final</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/valentines-day-poems-for-girlfriend-86e6ec'>Valentines Day Poems For Girlfriend</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nike-bishopbriggs-86e6ec'>Nike Bishopbriggs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manhattan-baby-toys-86e6ec'>Manhattan Baby Toys</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-tall-is-the-statue-of-liberty-86e6ec'>How Tall Is The Statue Of Liberty</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-conjuring-3-cast-86e6ec'>The Conjuring 3 Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leon-vitali-email-86e6ec'>Leon Vitali Email</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-life-without-me-online-86e6ec'>My Life Without Me Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hide-and-seek-%282013-full-movie%29-86e6ec'>Hide And Seek (2013 Full Movie)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yao-ming-meme-86e6ec'>Yao Ming Meme</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/precious-meaning-in-arabic-86e6ec'>Precious Meaning In Arabic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ohio-state-football-schedule-2019-20-86e6ec'>Ohio State Football Schedule 2019-20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creepshow-season-2-shudder-release-date-86e6ec'>Creepshow Season 2 Shudder Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manikarnika%3A-the-queen-of-jhansi-cast-86e6ec'>Manikarnika: The Queen Of Jhansi Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-is-shiner-bock-made-86e6ec'>Where Is Shiner Bock Made</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pastoral-characters-86e6ec'>American Pastoral Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adventures-of-lolo-enemies-86e6ec'>Adventures Of Lolo Enemies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/in-the-mouth-of-madness-putlockers-86e6ec'>In The Mouth Of Madness Putlockers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-fury-mgs-86e6ec'>The Fury Mgs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-super-league-86e6ec'>2020 Super League</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/close-encounters-of-the-third-kind-quotes-86e6ec'>Close Encounters Of The Third Kind Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jaws-all-deaths-86e6ec'>Jaws All Deaths</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/troop-beverly-hills-2-86e6ec'>Troop Beverly Hills 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/frostbite-pictures-86e6ec'>Frostbite Pictures</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/happy-birthday-images-female-86e6ec'>Happy Birthday Images Female</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/villain-opposite-86e6ec'>Villain Opposite</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-howard-wife-86e6ec'>George Howard Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/family-blood-wiki-86e6ec'>Family Blood Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/allgemeine-betriebserlaubnis-86e6ec'>Allgemeine Betriebserlaubnis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2008-georgia-football-schedule-86e6ec'>2008 Georgia Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/napa-valley-wine-86e6ec'>Napa Valley Wine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/plymouth-population-86e6ec'>Plymouth Population</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dusan-lajovic-vs-karen-khachanov-86e6ec'>Dusan Lajovic Vs Karen Khachanov</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shenandoah-national-park-camping-reservations-86e6ec'>Shenandoah National Park Camping Reservations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-lizard-in-a-woman%27s-skin-123movies-86e6ec'>A Lizard In A Woman's Skin 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-atkins-cbre-86e6ec'>John Atkins Cbre</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-words-that-start-with-e-86e6ec'>Sports Words That Start With E</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,96 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3024:"“I’m happy to be third and not lose too much time.”. Leaky interviewed the director of, The first full week of the new decade was a spellbinding one in the Wizarding World. Get the latest race news, results, commentary, and tech, delivered daily to your inbox. MERIBEL, FRANCE - SEPTEMBER 16: Arrival / Tadej Pogacar of Slovenia and UAE Team Emirates White Best Young Rider Jersey / during the 107th Tour de France 2020, Stage 17 a 170km stage from Grenoble to Méribel - Col de la Loze 2304m / #TDF2020 / @LeTour / on September 16, 2020 in Méribel, France. Create a personalized feed and bookmark your favorites. Hartnell was 55 when he was cast, as was Peter Capaldi, but Hartnell currently holds the record of the oldest person cast in the role due to him having been a few months older than Capaldi when cast. When asked if the Tour de France’s yellow jersey is still reachable, Pogačar said that it was now a harder goal to achieve. “I saw 10 points for free almost so I went for it,” Pogačar said. Capaldi believes that Frances de la Tour (Madame Maxime) should replace him as the lead on the show. He grabbed hold of the classification by sprinting over the summit of the Col de Madeleine. Capaldi seems to agree with those vying for a female Doctor, he even has a certain actress picked out for the role. Find high-quality Frances De La Tour stock photos and editorial news pictures from Getty Images. Daniel Huttlestone, Frances de la Tour, James Corden, Emily Blunt, Rob Marshall, Meryl Streep, Tracey Ullman, Marc Platt and Joanna Riding attend the "Into The Woods" gala screening at The Curzon... Get premium, high resolution news photos at Getty Images ☰  Harry Potter News | Essays | Crafts | and more. Then, in the final five kilometers, the road tilts upward, with gradients hitting 11 and 12 percent falling alongside more mellow ramps of 4 or 5 percent. The IBM strategic repository for digital assets such as images and videos is located at dam.ibm.com. And on Wednesday, riders tackled the climb with tired legs —  it came just after the punishing ascent of the famed Col de la Madeleine. “It was just that steep section and then flat sections — that was really hard for me today,” Pogačar said. The undulating road presents a challenge for riders who climb at a steady tempo, and creates attacking opportunities for riders with more explosive style. If cast, Frances de la Tour would be the oldest person to ever possess the role at 72 years old. In spite of the Covid-19 crisis, broadcasting of La Course is on the rise. Download premium images you can't get anywhere else. Boards are the best place to save images and video clips. For the first time in this year’s race Pogačar was distanced on a climb; accelerations from stage winner Miguel Ángel López and then rival Primož Roglič unhitched the Slovenian wunderkind. Tadej Pogačar finally looked vulnerable during Wednesday's Tour de France stage 17 to the Col de la Loze. Cancel 0 Cart 0 items in shopping cart. ";s:7:"keyword";s:29:"how old is frances de la tour";s:5:"links";s:5454:"<a href='https://ricebrok-staging.webcooks.in/docs/rfl-championship-table-86e6ec'>Rfl Championship Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-lace-dame-3-86e6ec'>How To Lace Dame 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/handball-courts-near-me-86e6ec'>Handball Courts Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/growing-pains-86e6ec'>Growing Pains</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tcr-cars-86e6ec'>Tcr Cars</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/atp-photosynthesis-86e6ec'>Atp Photosynthesis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/triumph-bonneville-price-uk-86e6ec'>Triumph Bonneville Price Uk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/just-a-gigolo-louis-prima-lyrics-86e6ec'>Just A Gigolo Louis Prima Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netball-history-86e6ec'>Netball History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-strange-vice-of-mrs-wardh-plot-86e6ec'>The Strange Vice Of Mrs Wardh Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/richard-hamilton-net-worth-86e6ec'>Richard Hamilton Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rim-blackberry-86e6ec'>Rim Blackberry</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/caiman-species-86e6ec'>Caiman Species</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gotta-kick-it-up-soundtrack-86e6ec'>Gotta Kick It Up Soundtrack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-play-stack-ball-86e6ec'>How To Play Stack Ball</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2020-college-football-rankings-86e6ec'>2020 College Football Rankings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cannon-billiards-86e6ec'>Cannon Billiards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fish-tacos-recipe-86e6ec'>Fish Tacos Recipe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/claireece-%22precious%22-jones-86e6ec'>Claireece "precious" Jones</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wendell-stephen-curry-86e6ec'>Wendell Stephen Curry</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/star-wars-9-86e6ec'>Star Wars 9</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-of-us-song-86e6ec'>One Of Us Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adults-only-all-inclusive-86e6ec'>Adults Only All Inclusive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anton-du-beke-wife-86e6ec'>Anton Du Beke Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/revolutionary-road-book-86e6ec'>Revolutionary Road Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-famous-paintings-of-jesus-86e6ec'>Most Famous Paintings Of Jesus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/electrical-switchboard-design-86e6ec'>Electrical Switchboard Design</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mortal-kombat-11-pc-86e6ec'>Mortal Kombat 11 Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/home-improvement%27-actor-dies-2020-86e6ec'>Home Improvement' Actor Dies 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/germany-teams-86e6ec'>Germany Teams</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-was-the-ambassadors-painted-86e6ec'>Where Was The Ambassadors Painted</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malcolm-mcdowell-net-worth-86e6ec'>Malcolm Mcdowell Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-to-stream-the-golden-bowl-86e6ec'>Where To Stream The Golden Bowl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-hallow-monsters-86e6ec'>The Hallow Monsters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stuart-hogg-weight-86e6ec'>Stuart Hogg Weight</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clarence-nash-cause-of-death-86e6ec'>Clarence Nash Cause Of Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-can-only-imagine-amy-grant-86e6ec'>I Can Only Imagine Amy Grant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-old-is-imogen-in-cymbeline-86e6ec'>How Old Is Imogen In Cymbeline</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rita-bernal-86e6ec'>Rita Bernal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aurelio-de-laurentiis-cousins-86e6ec'>Aurelio De Laurentiis Cousins</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scaramouche-mask-86e6ec'>Scaramouche Mask</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-to-stream-the-golden-bowl-86e6ec'>Where To Stream The Golden Bowl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dairy-queen-ebook-86e6ec'>Dairy Queen Ebook</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jenna-coleman-and-tom-hughes-2020-86e6ec'>Jenna Coleman And Tom Hughes 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-island-of-dr-moreau-text-86e6ec'>The Island Of Dr Moreau Text</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trading-options-for-dummies-86e6ec'>Trading Options For Dummies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-witney-carson-mormon-86e6ec'>Is Witney Carson Mormon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beste-films-netflix-2020-86e6ec'>Beste Films Netflix 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-wilson%2C-md-86e6ec'>David Wilson, Md</a>,
+";s:7:"expired";i:-1;}

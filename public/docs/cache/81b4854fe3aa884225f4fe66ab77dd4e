@@ -1,0 +1,107 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4348:"Shareef Jackson shares his father’s deep love for basketball and often accompanies him to the NBA games. Astronauts train for certain missions, including Hubble service repair, by performing in special underwater tanks. Tagged: Hubble, Galaxies, GRAIL, Curiosity, MArs, A color-composite image of the Pleiades from the. Check out the story below at Read Write Web for 10 instagram accounts that you should be aware of! Instagram: @mahrudeboi Shareef Jackson As the founder of the math and physics tutoring service Math Looks Good LLC, Shareef ’s culturally relevant communication style helps break down science, gaming, and math in a way that the average person can understand and appreciate. Many widely known images of the galaxy have been taken by the Hubble Space Telescope, which turns 25 this year (time to rent a car!). Medieval Law Enforcement, Karima Jackson was born on 17 February 1994, which makes her age 24. Brandon Stennis is a partnered content creator on Twitch.tv for the last 4 years. Check out more Hubble goodness here at the official NASA site, or the Hubble 25th anniversary site. Jackson later posted an apology on Instagram that attracted more than 150,000 views in its first hour. Köln Vs Mainz H2h, Donyale Mahorn, Shareef tends to spend a lot of time with his rapper father, Ice. in 1989 to start his solo career, which has also been a successful venture. Known for her immaculate dressing sense, she is often compared to her diva mother, BeyoncÃ©. For further details of our complaints policy and to make a complaint please click here. Greg and Shelly open the show as always with all the latest D&D news! Famous Details is the source for must-know facts of your favorite celebrities and famous people. 2000 Iowa State Basketball, Books Like After,                                Auburn University Football Alumni, Rural Property For Sale Costa Tropical, Jack Harbaugh, LaTia Bryant joined the cast of Season 6! The wide receiver apologised - insisting he had "no hatred towards anyone" - but still faces "appropriate action" from the 2017 Super Bowl winners. Royalty Brown is the first and only child (so far) of the world famous hip hop and R&B artist, Chris Brown. He also owns three other channels, namely, TruthPlusDare and OMMyGoshTV. National Day Of Prayer March 15, 2020, View past relationships, dating news, rumors, net worth, and full biography. Shareef Jackson’s father, Ice Cube, is originally from Los Angeles, California.                                     08/26/2020, Dragon Talk -                                                         10/15/2020. I guess they are always being hunted. Surena Marie is an actor, and podcaster living in Chicago. His views on science and technology have been featured on sources such as the New York Times, NPR, Wisconsin Public Radio, Scientific American, and MacLean's. 1966 League Cup Final, Lck Ranking, Torquay News Today, They have a larger, higher quality selection on Flickr. siblings: Darrel Jackson, Deja Jackson, Karima Jackson, O'Shea Jackson Jr. Shareef Jackson is the youngest son of rapper Ice Cube and his wife Kimberly Woodruff. Save my name, email, and website in this browser for the next time I comment.                   Privacy Policy                 For other inquiries, Contact Us. Join Facebook to connect with Shareef Jackson and others you may know. "We take these matters very seriously and are committed to continuing to have productive and meaningful conversations with DeSean, as well as all of our players and staff, in order to educate, learn, and grow.". Let's comment immediately with Shareef Jackson, Birthday of celebrities all the world today, (Let's click to find what you are looking for), Biography, Before Fame, Trivia, Family life. North is an adorable toddler who is the current favorite subject of the paparazzi who has their viewfinders trained on her whenever she steps out. Cicero a lifelong gamer who parlayed his love for all things tech into a 20 plus year career in Systems Administration. Another Shareef Jackson is a STEM diversity advocate, founder and a tutor of 'Maths Looks Good, video game professor, and has his own YouTube channel under his name Shareef Jackson with 515 subscribers. Just because Shareef doesn’t rap doesn’t mean he is not close to his father. Ole Miss Volleyball 2019, ";s:7:"keyword";s:25:"shareef jackson instagram";s:5:"links";s:6556:"<a href='https://ricebrok-staging.webcooks.in/docs/to-live-youtube-86e6ec'>To Live Youtube</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-allen-autograph-86e6ec'>Tim Allen Autograph</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marvin-williams-nba-draft-86e6ec'>Marvin Williams Nba Draft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adventure-time-episodes-86e6ec'>Adventure Time Episodes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pandemic-legacy-board-game-86e6ec'>Pandemic Legacy Board Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/destiny-2-scorned-baron-86e6ec'>Destiny 2 Scorned Baron</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-brothers-86e6ec'>Klay Thompson Brothers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/megha-majumdar-biography-86e6ec'>Megha Majumdar Biography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/d%2Aface-bio-86e6ec'>D*face Bio</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-miseducation-of-cameron-post-on-hulu-86e6ec'>Is The Miseducation Of Cameron Post On Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/prussian-blue-86e6ec'>Prussian Blue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-of-hawaii-football-schedule-2022-86e6ec'>University Of Hawaii Football Schedule 2022</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pittsburgh-attractions-86e6ec'>Pittsburgh Attractions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/reprisal%27-review-86e6ec'>Reprisal' Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/enneagram-type-9-86e6ec'>Enneagram Type 9</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/parasomnia-examples-86e6ec'>Parasomnia Examples</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kathryn-tappen-husband-86e6ec'>Kathryn Tappen Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/need-you-tonight-tab-86e6ec'>Need You Tonight Tab</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/whiteside-fell-86e6ec'>Whiteside Fell</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-2020-football-schedule-86e6ec'>Clemson 2020 Football Schedule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-phantom-tollbooth-characters-86e6ec'>The Phantom Tollbooth Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julian-bailey-f1-86e6ec'>Julian Bailey F1</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thor-ragnarok-comic-pdf-86e6ec'>Thor Ragnarok Comic Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nissan-skyline-gtr-r32-86e6ec'>Nissan Skyline Gtr R32</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/champaign-ill-86e6ec'>Champaign Ill</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-last-mountain-k2-86e6ec'>The Last Mountain K2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spider-man-full-movie-86e6ec'>Spider-man Full Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/are-you-lonely-tonight-lyrics-86e6ec'>Are You Lonely Tonight Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/germany-year-zero-ending-86e6ec'>Germany Year Zero Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/netherworld-mythology-86e6ec'>Netherworld Mythology</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cannon-basketball-2-86e6ec'>Cannon Basketball 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-arizin-ibm-86e6ec'>Paul Arizin Ibm</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/annie-lol-skins-86e6ec'>Annie Lol Skins</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eazy-e-son-86e6ec'>Eazy-e Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/josh-meyers%27-wife-86e6ec'>Josh Meyers' Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/le-manoir-du-diable-pronunciation-86e6ec'>Le Manoir Du Diable Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-make-a-scarecrow-head-86e6ec'>How To Make A Scarecrow Head</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boychoir-netflix-86e6ec'>Boychoir Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/primer-synonym-86e6ec'>Primer Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-mine-bitcoin-86e6ec'>How To Mine Bitcoin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/intolerance-synonym-86e6ec'>Intolerance Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-beast-osrs-86e6ec'>Night Beast Osrs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/forsaken-lyrics-86e6ec'>Forsaken Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rose-the-hat-hat-for-sale-86e6ec'>Rose The Hat Hat For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/believe-child-advocacy-center-86e6ec'>Believe Child Advocacy Center</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stan-snowtown-86e6ec'>Stan Snowtown</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/everything-you-need-to-ace-86e6ec'>Everything You Need To Ace</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tua-tagovailoa-2018-games-86e6ec'>Tua Tagovailoa 2018 Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sleepover-synonym-86e6ec'>Sleepover Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/psycho-iv-soundtrack-86e6ec'>Psycho Iv Soundtrack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ryan-bowman-morgan-stanley-86e6ec'>Ryan Bowman Morgan Stanley</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flashdance-dancer-dies-86e6ec'>Flashdance Dancer Dies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/google-film-86e6ec'>Google Film</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/once-upon-a-time-in-hollywood-full-movie-dailymotion-86e6ec'>Once Upon A Time In Hollywood Full Movie Dailymotion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-paint-86e6ec'>Types Of Paint</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/torquay-pronunciation-86e6ec'>Torquay Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stay-alive-game-rules-86e6ec'>Stay Alive Game Rules</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/moonfall-wiki-86e6ec'>Moonfall Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-violence-plot-explained-86e6ec'>Miss Violence Plot Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trading-habits-steve-burns-pdf-86e6ec'>Trading Habits Steve Burns Pdf</a>,
+";s:7:"expired";i:-1;}

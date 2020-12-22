@@ -1,0 +1,141 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4756:"The type of this object must agree with the type Recall that this directory is a Python package with the same name as the ROS 2 package it’s nested in. The next logical part would be to create a subscriber node so you can receive the published data, and take action. Depending on the applications turned on, the data below may differ. Now the directory should have these files: Open the subscriber_member_function.py with your text editor. You can also pass in no arguments and initialize the fields directly, e.g. rosrun = ros+run : runs a node from a given package. To make an executable file, run the command: The Subscriber node will display all the random numbers sent by the Subscriber node.  This will take 3 parameters: In the loop with the rospy Rate at 10Hz, we publish the state on the topic just after we get it.         } Next, the MinimalPublisher class is created, which inherits from (or is a subclass of) Node. ROS For Beginners - A Step By Step Course, Installation and setup for your publisher node, Write the code for the ROS Python publisher, Initialize the GPIO with the RPi.GPIO module, Publish GPIO state with a ROS Python publisher on your Raspberry Pi, Test your ROS Python Publisher on your Pi, Create a ROS Python subscriber on your Raspberry Pi, to power on a LED. After this advertise() call is made, the master The first line makes sure your script is executed as a Python script. On your breadboard, place your push button so that each leg is not connected with other legs. My guess is that the OP is accumulating those errors. Services allow nodes to send a request and receive a response. I open a new terminal and use rosrun but receive the following error: Open a new terminal and source your ROS 2 installation so that ros2 commands will work. Alright, now let’s write the ROS code in Python! But if you are just getting started it will be extremely difficult to follow these steps and actually get something compiling. Do you want to become better at programming robots, with Arduino, Raspberry Pi, or ROS2? Next, a timer is created with a callback to execute every 0.5 seconds. The string of numbers returned by the sensor will be read by the Subscriber node for the calculation and decision-making of the robot navigation. My new ROS environment works fine using turtlesim: To run the two files, you must run three shell commands in different terminals. Below is the code for the Publisher node. Navigate into the dev_ws directory created in a previous tutorial. The parameter Note: I have written with capital letters the Publisher and Subscriber to highlight the two ROS concepts.     )    * must hold on to until you want to unsubscribe. The Publisher node will generate a random number, while the Subscriber node will display the random number received from the Publisher node. */, /** Messages: ROS data type used when subscribing or publishing to a topic. Step 1. Your email address will not be published. You can retrieve the topic of a publisher with the ros::Publisher::getTopic() method.    * You must call one of the versions of ros::init() before using any other Connect one leg to the ground. The code used in these examples can be found here. This section of code defines the talker's interface to the rest of ROS. This loop is a fairly standard rospy construct: checking the rospy.is_shutdown() flag and then doing work. #add here the node name. If it finds it, it will run it with ARGS.”, What am I doing wrong? advertise() returns a Publisher object which allows you to A short description of the Publisher and Subscriber nodes The two above mentioned nodes are a kind of “Hello World” in programming. The commands for creating the package are: catkin_create_pkg your_package_name rospy. Now, only after the hardware setup is complete, power on your Raspberry Pi. how to compile and install protobuf-cpp on ubuntu 16.04, /** You’ve successfully combined ROS with Raspberry Pi, using a rospy Publisher to publish the state of a GPIO. ROS requires that each node have a unique name. ROS講座11 gitリポジトリを参照してください。 概要.    * is the number of messages that will be buffered up before beginning to throw publish() behavior and queueing.    * any ROS arguments and name remapping that were provided at the command line. With this version, all  // --> Python rospy.Publisher() Examples ... # Create a publisher for our custom message. */, /** * rosnode = ros+node : ROS tool to get information about a node. There is also a special type in ROS: Header, the header contains a timestamp and coordinate frame information that are commonly used in ROS. Header headerstring child_frame_idgeometry_msgs/PoseWithCovariance posegeometry_msgs/TwistWithCovariance twist. ";s:7:"keyword";s:20:"ros publisher python";s:5:"links";s:10864:"<a href='https://ricebrok-staging.webcooks.in/docs/radio-sport-extra-86e6ec'>Radio Sport Extra</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jay-mcguiness-now-86e6ec'>Jay Mcguiness Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joel-tobeck-wife-86e6ec'>Joel Tobeck Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kingdom-of-the-spiders-streaming-86e6ec'>Kingdom Of The Spiders Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/peter-egan-illness-86e6ec'>Peter Egan Illness</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/parenthood-streaming-86e6ec'>Parenthood Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-chalk-garden-movie-online-86e6ec'>The Chalk Garden Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/caroline-wozniacki-david-lee-wedding-86e6ec'>Caroline Wozniacki David Lee Wedding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ncaa-division-i-86e6ec'>Ncaa Division I</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brunswick-bowling-shoes-86e6ec'>Brunswick Bowling Shoes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/testing-and-debugging-cycle-in-software-testing-86e6ec'>Testing And Debugging Cycle In Software Testing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malaika-kr%C3%BCger-86e6ec'>Malaika Krüger</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/assoluto-racing-black-screen-86e6ec'>Assoluto Racing Black Screen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/american-pastoral-full-text-86e6ec'>American Pastoral Full Text</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/does-netflix-have-goldfinch-86e6ec'>Does Netflix Have Goldfinch</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gili-komodo-sup-review-86e6ec'>Gili Komodo Sup Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-midnight-meat-train-tamilyogi-86e6ec'>The Midnight Meat Train Tamilyogi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/california-love-release-date-86e6ec'>California Love Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hagazussa-streaming-86e6ec'>Hagazussa Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/working-class-vs-middle-class-86e6ec'>Working Class Vs Middle Class</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alabama-football-ticket-packages-86e6ec'>Alabama Football Ticket Packages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/uncle-drew-full-movie-google-drive-86e6ec'>Uncle Drew Full Movie Google Drive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zhuhai-airport-86e6ec'>Zhuhai Airport</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-devils-hand-book-86e6ec'>The Devils Hand Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nrl-predictions%3A-round-16-86e6ec'>Nrl Predictions: Round 16</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-all-star-jersey-2018-86e6ec'>Russell Westbrook All Star Jersey 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/giannis-vs-lebron-stats-this-season-86e6ec'>Giannis Vs Lebron Stats This Season</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/robert-daniel-sloan-height-86e6ec'>Robert Daniel Sloan Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-did-keith-haring-die-86e6ec'>How Did Keith Haring Die</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/medium-bob-haircut-86e6ec'>Medium Bob Haircut</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stephen-curry-vs-lebron-james-head-to-head-86e6ec'>Stephen Curry Vs Lebron James Head-to-head</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-is-holding-on-and-letting-go-played-in-tvd-86e6ec'>When Is Holding On And Letting Go Played In Tvd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ricky-rubio-career-stats-86e6ec'>Ricky Rubio Career Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lebron-james-wine-86e6ec'>Lebron James Wine</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fittest-celebrities-female-86e6ec'>Fittest Celebrities Female</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-bigboote-86e6ec'>John Bigboote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stonewall-%281995-watch-online%29-86e6ec'>Stonewall (1995 Watch Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/changeling-wiki-86e6ec'>Changeling Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wonder-woman-1984-release-date-86e6ec'>Wonder Woman 1984 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marquese-chriss-2k20-86e6ec'>Marquese Chriss 2k20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/severin-films-sale-86e6ec'>Severin Films Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-killing-of-a-sacred-deer-supernatural-86e6ec'>The Killing Of A Sacred Deer Supernatural</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/champions-league-fixtures-2018%2F19-86e6ec'>Champions League Fixtures 2018/19</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scream-and-scream-again-ending-86e6ec'>Scream And Scream Again Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gamecock-central-twitter-86e6ec'>Gamecock Central Twitter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wikipedia-baron-mordo-86e6ec'>Wikipedia Baron Mordo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mirror-mirror-burlington-86e6ec'>Mirror Mirror Burlington</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/george-howard-real-estate-86e6ec'>George Howard Real Estate</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ryan-reynolds-vs-ryan-gosling-poll-86e6ec'>Ryan Reynolds Vs Ryan Gosling Poll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/homemade-math-board-games-86e6ec'>Homemade Math Board Games</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-stoning-in-fulham-county-wiki-86e6ec'>A Stoning In Fulham County Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-great-outdoors-austin-86e6ec'>The Great Outdoors Austin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boys-don%27t-cry-real-story-86e6ec'>Boys Don't Cry Real Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ian-lithgow-perry-mason-86e6ec'>Ian Lithgow Perry Mason</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blow-out-streaming-86e6ec'>Blow Out Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/delbert-grady-doctor-sleep-86e6ec'>Delbert Grady Doctor Sleep</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/saint-peter-86e6ec'>Saint Peter</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vampire-reads-86e6ec'>Vampire Reads</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/andy-warhol-marilyn-monroe-86e6ec'>Andy Warhol Marilyn Monroe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beautiful-disaster-online-86e6ec'>Beautiful Disaster Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boychoir-netflix-86e6ec'>Boychoir Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/f1-qualifying-live-86e6ec'>F1 Qualifying Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/water-molecule-86e6ec'>Water Molecule</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bathurst-1000-2020-86e6ec'>Bathurst 1000 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mal-mo-e%3A-the-secret-mission-watch-online-86e6ec'>Mal Mo E: The Secret Mission Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/charles-wheeler-san-antonio-86e6ec'>Charles Wheeler San Antonio</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/reddit-web-design-86e6ec'>Reddit Web Design</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mood-disorders-86e6ec'>Mood Disorders</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/discovery-antonym-86e6ec'>Discovery Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/captains-of-the-clouds-film-locations-86e6ec'>Captains Of The Clouds Film Locations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/penny-hardaway-injury-86e6ec'>Penny Hardaway Injury</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stir-crazy-origin-86e6ec'>Stir-crazy Origin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dundee-united-jersey-86e6ec'>Dundee United Jersey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mohabbatein-cast-86e6ec'>Mohabbatein Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ai-no-uta-drama-86e6ec'>Ai No Uta Drama</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deandre-ayton-career-stats-86e6ec'>Deandre Ayton Career Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lorraine-kelly-political-views-86e6ec'>Lorraine Kelly Political Views</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/federer-vs-nadal-head-to-head-86e6ec'>Federer Vs Nadal Head To Head</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/raising-cain-wikipedia-86e6ec'>Raising Cain Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-defensive-rating-86e6ec'>Russell Westbrook Defensive Rating</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sleepers-shoes-86e6ec'>Sleepers Shoes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-wolf-eternal-champion-series-86e6ec'>White Wolf Eternal Champion Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-mine-bitcoin-86e6ec'>How To Mine Bitcoin</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/investing-5-dollars-a-day-calculator-86e6ec'>Investing 5 Dollars A Day Calculator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-legend-of-bagger-vance-summary-86e6ec'>The Legend Of Bagger Vance Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vivian-vance-funeral-86e6ec'>Vivian Vance Funeral</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wild-thornberrys-movie-elephant-86e6ec'>The Wild Thornberrys Movie Elephant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bambai-ka-babu-%281996%29-86e6ec'>Bambai Ka Babu (1996)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-take-2020-86e6ec'>The Take 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nurse-betty-streaming-86e6ec'>Nurse Betty Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/angel-with-a-shotgun-and-angel-of-darkness-86e6ec'>Angel With A Shotgun And Angel Of Darkness</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/suspect-antonyms-86e6ec'>Suspect Antonyms</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/google-research-jobs-86e6ec'>Google Research Jobs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christoph-sanders-age-86e6ec'>Christoph Sanders Age</a>,
+";s:7:"expired";i:-1;}

@@ -1,0 +1,109 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4674:"<p>In the early 21st century, illegal immigration also became a key issue in Australia as an increasing number of foreigners sought asylum in the country. Im März 2003 begründete John Howard die Entsendung australischer Truppen und Schiffe zur Unterstützung der USA und Großbritanniens bei der Invasion des Irak mit der Notwendigkeit, Saddam Hussein von der Macht zu entfernen, da dieser Massenvernichtungswaffen besitze. He responded decisively, introducing uniform gun laws and a gun buy-back scheme. By the time he won the job, he had been in parliament for 22 years. Howard understood the importance of open dialogue with the backbench. That Kevin '07 was so keen to frame himself as a younger version of Howard the fiscal conservative says it all: to be electable was to be more Howard than Howard. Answer to: How long was John Howard prime minister? Gillard | John Howard digested lessons from his many years in parliament to become a highly disciplined and professional politician who left nothing to chance. A disclaimer before we start: While I was born during the Hawke era, most of my understanding of politics was gained in the years after 1996 when John Howard was in power. 					 answer! Am 11. </p> <p>Turnbull | Whitlam | Answer to: How long was John Howard prime minister? By the time he won the job, he had been in parliament for 22 years. Australien stellte bis 2012 weiter Truppen und anderes Personal für UN-Missionen zur Stabilisierung Osttimors. In 1999 the government supported the East Timorese independence push from Indonesia and Australian troops led the United Nations peace keeping force deployed to Timor. </p> <p>By signing up for this email, you are agreeing to news, offers, and information from Encyclopaedia Britannica. Former prime minister John Howard in Canberra on Tuesday. After the High Court’s Wik decision the government enacted legislation to calm pastoralists’ concerns over Indigenous native title. ), The Howard Years, Black Inc. Books, Melbourne, 2004. John Winston Howard was born on July 26, 1939, in the New South Wales region of Australia. Howard modernisierte das Steuerrecht und führte eine Mehrwertsteuer mit Ausnahme auf einzelne Lebensmittel ein. Forde | He attended the University of Sydney and worked as a commercial lawyer. Twitter: @TerryBarnes5. After the High Court’s Wik decision the government enacted legislation to calm pastoralists’ concerns over Indigenous native title. He responded decisively, introducing uniform gun laws and a gun buy-back scheme. Australian troops were sent to Afghanistan and Iraq in 2003 to support the American-led coalition. Vor den Vorwahlen zur Präsidentschaftswahl in den USA warnte er sehr direkt vor der Wahl des Kandidaten Barack Obama wegen dessen angeblich muslimischen Wurzeln und seiner Position zur Zukunft des Irak.[4]. Rudd was too arrogant and obsessed by elite opinion and his own brilliance; Julia Gillard was fatally diminished by how she became prime minister and the political disaster that was her 2010 election; Tony Abbott never adapted to positive government instead of negative opposition; and Malcolm Turnbull brought a sense of entitlement to the top job but so far not much of substance beside. Under Howard’s leadership, the Liberal-National coalition won reelection in 1998, 2001, and 2004, with a program that prioritized…. Howard had experienced poor hearing since childhood and did not get his first hearing aid until he was 19 years of age. The Commonwealth Heads of Government Meeting in Coolum, Queensland on 4 March 2002 establishes a committee to determine the Commonwealth response to the Mugabe regime in Zimbabwe. He said: When I was unsuccessful in an election I said in my concession speech that the things that united Australians were infinitely more important and more enduring than the things that divided Australians. Follow our live coverage for the latest news on the coronavirus pandemic. Industrial relations reform was always a core issue for Howard and in January 1997 the Workplace Relations amendments were passed. It was made up of members of the Liberal – National Coalition, which won a majority of seats in the House of … Howard won a fourth term in 2004, but was weakened by the strong reaction against his WorkChoices reform. Juni 2020 um 08:16 Uhr bearbeitet. The evening television news bulletins and the morning's newspapers were politicians' main media opportunities. 					 </p> <p>Malcolm Fraser is appointed as a special envoy of the Australian government on 19 April 1999 to secure the release of CARE Australia aid workers Steve Pratt and Peter Wallace imprisoned in Yugoslavia. </p>";s:7:"keyword";s:39:"how long was john howard prime minister";s:5:"links";s:7162:"<a href='https://ricebrok-staging.webcooks.in/docs/ashfall-streaming-86e6ec'>Ashfall Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dare-logo-86e6ec'>Dare Logo</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/downfall-game-86e6ec'>Downfall Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-respond-to-i-love-you-when-you%27re-not-ready-86e6ec'>How To Respond To I Love You When You're Not Ready</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-gaucherie-86e6ec'>How To Pronounce Gaucherie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/enigmatic-in-a-sentence-86e6ec'>Enigmatic In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/springhill-entertainment-net-worth-86e6ec'>Springhill Entertainment Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mma-growth-statistics-86e6ec'>Mma Growth Statistics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sagrada-fam%C3%ADlia-architects-86e6ec'>Sagrada Família Architects</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/second-choice-meaning-86e6ec'>Second Choice Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/htc-vive-pro-86e6ec'>Htc Vive Pro</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/banned-coming-of-age-movies-86e6ec'>Banned Coming Of Age Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sidney-lowe-jr-86e6ec'>Sidney Lowe Jr</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/xavier-beauvois-86e6ec'>Xavier Beauvois</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/penrith-panthers-vs-sydney-roosters-prediction-86e6ec'>Penrith Panthers Vs Sydney Roosters Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rain-korean-86e6ec'>Rain Korean</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tom-hart-wife-86e6ec'>Tom Hart Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/made-in-heaven-season-2-release-date-86e6ec'>Made In Heaven Season 2 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/list-of-mammals-a-z-86e6ec'>List Of Mammals A-z</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kevin-durant-height-and-wingspan-86e6ec'>Kevin Durant Height And Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-walker-car-86e6ec'>Paul Walker Car</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-dreamer-of-oz-dvd-86e6ec'>The Dreamer Of Oz Dvd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chinatown-123movies-86e6ec'>Chinatown 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daphnis-and-chloe-pdf-86e6ec'>Daphnis And Chloe Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/portnoy%27s-complaint-liver-86e6ec'>Portnoy's Complaint Liver</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wild-one-motorcycle-86e6ec'>The Wild One Motorcycle</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notorious-gangsters-86e6ec'>Notorious Gangsters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liquid-snake-86e6ec'>Liquid Snake</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alan-ormsby-utah-86e6ec'>Alan Ormsby Utah</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-does-main-mean-in-java-86e6ec'>What Does Main Mean In Java</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sue-bownds-86e6ec'>Sue Bownds</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/melissa-rios-dwight-howard-instagram-86e6ec'>Melissa Rios Dwight Howard Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordana-brewster-net-worth-2019-86e6ec'>Jordana Brewster Net Worth 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shin-godzilla-tail-86e6ec'>Shin Godzilla Tail</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/princess-of-asturias-award-for-international-cooperation-winners-86e6ec'>Princess Of Asturias Award For International Cooperation Winners</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malice-in-fact-86e6ec'>Malice In Fact</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-of-new-mexico-agriculture-86e6ec'>University Of New Mexico Agriculture</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-red-badge-of-courage-pdf-86e6ec'>The Red Badge Of Courage Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/drive-movie-cast-86e6ec'>Drive Movie Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/english-to-greek-alphabet-86e6ec'>English To Greek Alphabet</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malice-aforethought-legal-definition-86e6ec'>Malice Aforethought Legal Definition</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/outsourced-movie-streaming-86e6ec'>Outsourced Movie Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/st-johnstone-vs-kilmarnock-predictions-86e6ec'>St Johnstone Vs Kilmarnock Predictions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eric-devendorf-high-school-86e6ec'>Eric Devendorf High School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-evil-sermon-86e6ec'>Deliver Us From Evil Sermon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/schall-electric-86e6ec'>Schall Electric</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-odd-life-of-timothy-green-ending-quote-86e6ec'>The Odd Life Of Timothy Green Ending Quote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-uninvited-guest-explained-86e6ec'>The Uninvited Guest Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tenebrae-ffxv-86e6ec'>Tenebrae Ffxv</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bride-of-frankenstein-name-86e6ec'>Bride Of Frankenstein Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/leaving-las-vegas-book-pdf-86e6ec'>Leaving Las Vegas Book Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-owns-jd-sports-86e6ec'>Who Owns Jd Sports</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/handel-sarabande-wiki-86e6ec'>Handel Sarabande Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/annoyed-meaning-in-bengali-86e6ec'>Annoyed Meaning In Bengali</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/juan-carlos-ferrero-2020-86e6ec'>Juan Carlos Ferrero 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-elvis-presley-movie-86e6ec'>New Elvis Presley Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/phil-harvey-microsoft-86e6ec'>Phil Harvey Microsoft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kosciuszko-race-2020-86e6ec'>Kosciuszko Race 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trading-options-for-dummies-86e6ec'>Trading Options For Dummies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/11-letter-words-starting-with-a-86e6ec'>11 Letter Words Starting With A</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/house-of-trust-86e6ec'>House Of Trust</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pribram-vs-teplice-h2h-predictionglenn-robinson-iii-daughter-86e6ec'>Pribram Vs Teplice H2h Predictionglenn Robinson Iii Daughter</a>,
+";s:7:"expired";i:-1;}
