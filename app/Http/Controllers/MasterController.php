@@ -254,6 +254,10 @@ class MasterController extends Controller
 			'route' => 'required',
 		]);
 
+		$explodedArray = explode(' ',$request->route);
+		$implodedString = implode('_' , $explodedArray);
+		$request->route = $implodedString;
+
 		$listPorts = Port::get()->pluck('id' , 'state');
 		foreach($listPorts as $k => $v){
 			Port::create([ 'state' => $k ,'route' => $request->route,'price' => 0]);
