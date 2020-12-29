@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LivePrice extends Model
 {
-    protected $fillable = ['name','form','min_price','max_price','state','up_down'];
+    protected $fillable = ['name','form','min_price','max_price','state','up_down','status'];
 
     public function name_rel(){
         return $this->belongsTo(RiceName::class,'name','id');

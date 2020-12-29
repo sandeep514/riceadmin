@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/',function(){
+    return redirect()->route('home');
+});
 Route::group(['prefix'=>'administrator'], function(){
     Route::group(['middleware'=>'auth'], function(){
         Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
@@ -269,7 +272,57 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('couriers/delete/{id}', ['as' => 'delete.courier', 'uses' => 'CouriersController@delete','action'=>'delete']);
             });
 
+
+            
+
         });
+
+    });
+
+    Route::group(['prefix' => 'master'] , function(){
+        Route::get('/' ,                        ['as' => 'master.index'         ,'uses' => 'MasterController@index' ] );
+
+        //rice type
+        Route::get('list/rice/type' ,           ['as' => 'master.list.rice.type'        ,'uses' => 'MasterController@listRiceType' ] );
+        Route::post('create/rice/type' ,        ['as' => 'master.create.rice.type'      ,'uses' => 'MasterController@createRiceType' ] );
+        Route::get('delete/rice/type/{id}' ,    ['as' => 'master.delete.rice.type'      ,'uses' => 'MasterController@deleteRiceType' ] );
+        Route::get('get/rice/type/{id}' ,       ['as' => 'master.get.rice.type'         ,'uses' => 'MasterController@getRiceTypeById'] );
+        Route::POST('update/rice/type' ,        ['as' => 'master.update.rice.type'      ,'uses' => 'MasterController@updateRiceTypeById'] );
+
+        // rice Quality
+        Route::get('list/rice/quality' ,            ['as' => 'master.list.rice.quality'     ,'uses' => 'MasterController@listRiceQuality' ] );
+        Route::post('create/rice/quality' ,         ['as' => 'master.create.rice.quality'   ,'uses' => 'MasterController@createRiceQuality' ] );
+        Route::get('delete/rice/quality/{id}',      ['as' => 'master.delete.rice.quality'   ,'uses' => 'MasterController@deleteRiceQuality' ] );
+        Route::get('get/rice/quality/{id}' ,        ['as' => 'master.get.rice.quality'      ,'uses' => 'MasterController@getRicequalityById'] );
+        Route::POST('update/rice/quality' ,         ['as' => 'master.update.rice.quality'   ,'uses' => 'MasterController@updateRiceQualityById'] );
+
+        //rice City
+        Route::get('list/city' ,                ['as' => 'master.list.city'     ,'uses' => 'MasterController@listCity' ] );
+        Route::post('create/city' ,             ['as' => 'master.create.city'   ,'uses' => 'MasterController@createCity' ] );
+        Route::get('delete/city/{id}' ,         ['as' => 'master.delete.city'   ,'uses' => 'MasterController@deleteCity' ] );
+        Route::get('get/rice/city/{id}' ,       ['as' => 'master.get.city'      ,'uses' => 'MasterController@getCityById'] );
+        Route::POST('update/rice/city' ,        ['as' => 'master.update.city'   ,'uses' => 'MasterController@updateCityById'] );
+        Route::get('city/status/{city}' ,       ['as' => 'master.city.changeStatus'   ,'uses' => 'MasterController@statusCity'] );
+
+        //Transport States
+        Route::get('list/state' ,               ['as' => 'master.transport.list.state'    ,'uses' => 'MasterController@listPort' ] );
+        Route::post('create/state' ,            ['as' => 'master.transport.create.state'  ,'uses' => 'MasterController@createPort' ] );
+        Route::get('delete/state/{id}' ,        ['as' => 'master.transport.delete.state'  ,'uses' => 'MasterController@deletePort' ] );
+        Route::get('edit/state/{id}' ,          ['as' => 'master.transport.edit.state'    ,'uses' => 'MasterController@editPort']);
+        Route::post('update/state' ,            ['as' => 'master.transport.update.state'  ,'uses' => 'MasterController@updatePort']);
+
+
+        //Transport route
+        Route::get('list/route' ,               ['as' => 'master.transport.list.route'      ,'uses' => 'MasterController@listRoute' ] );
+        Route::post('create/route' ,            ['as' => 'master.transport.create.route'    ,'uses' => 'MasterController@createRoute' ] );
+        Route::get('delete/route/{id}' ,        ['as' => 'master.transport.delete.route'    ,'uses' => 'MasterController@deleteRoute' ] );
+        Route::put('get/transport/route/{id}' , ['as' => 'master.transport.update.route'    ,'uses' => 'MasterController@updateTransportRoute' ] );
+        Route::get('get/route/transport/{id}' , ['as' => 'master.get.transport.route'       ,'uses' => 'MasterController@getTransportRoute' ] );
+
+        //Transport ports
+        // Route::get('list/ports' ,            ['as' => 'master.transport.list.ports'    ,'uses' => 'MasterController@listPort' ] );
+        // Route::post('create/ports' ,         ['as' => 'master.transport.create.ports'  ,'uses' => 'MasterController@createPort' ] );
+        // Route::delete('delete/ports/{id}' ,  ['as' => 'master.transport.delete.ports'  ,'uses' => 'MasterController@deletePort' ] );
 
     });
 

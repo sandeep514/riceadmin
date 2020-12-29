@@ -11,14 +11,17 @@ use Illuminate\Support\Facades\DB;
 class PortsController extends Controller
 {
     public function index(Request $request){
+        $todayPrice = collect();
         if($request->has('date')){
-            $todayPrice = Port::where(DB::raw('date(created_at)'),$request->date)->get();
+            $todayPrice = Port::where( 'route' ,'!=', '0' )->where(DB::raw('date(created_at)'),$request->date)->get()->groupBy('state');
         }else{
             $lastUpdatedDate = Port::orderBy('created_at' , 'DESC')->first();
-            $dateCreate = date_create($lastUpdatedDate->created_at);
-            $formatedDate = date_format($dateCreate , 'Y/m/d');
-            
-            $todayPrice = Port::whereDate('created_at' , $formatedDate)->get();
+            if( $lastUpdatedDate != null ){
+                $dateCreate = date_create($lastUpdatedDate->created_at);
+                $formatedDate = date_format($dateCreate , 'Y/m/d');
+                
+                $todayPrice = Port::where( 'route' ,'!=', '0' )->whereDate('created_at' , $formatedDate)->get()->groupBy('state');
+            }
         }
         return view('ports.create',['prices'=>$todayPrice]);
     }
@@ -35,7 +38,6 @@ class PortsController extends Controller
                     $isPortPriceAlreadyExists->price = $price;
                     $isPortPriceAlreadyExists->save();
                 }
-                
             }
         }
         Session::flash('success','Success|Ports saved successfully!');

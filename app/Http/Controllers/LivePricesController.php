@@ -14,6 +14,10 @@ class LivePricesController extends Controller
 {
     public function index(Request $request, $riceName = null){
 
+        $RiceForm= RiceForm::get();
+        $RiceName= RiceName::get();
+        $livePrice = LivePrice::get()->groupBy('state');
+
         $riceModel = null;
         $riceForms = null;
         $todaysPrices = null;
@@ -36,18 +40,17 @@ class LivePricesController extends Controller
         }else{
             $prices = LivePrice::with(['name_rel','form_rel'])->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
         }
-
-        return view('live_prices.create',['prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
+        return view('live_prices.create',['livePrice'=>$livePrice,'prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
     }
 
     public function savePrice(Request $request){
         $todayDate = Carbon::now()->format('Y-m-d');
         $lastAvailableDate ='';
         $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
+
         if( $lastAvaibleRecord != null ){
             $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');    
         }
-        
         
         if( $todayDate == $lastAvailableDate ){
             foreach($request->min as $state => $values){

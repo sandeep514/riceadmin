@@ -8,8 +8,7 @@ class RiceType extends Model
 {
     protected $fillable = ['name'];
 
-
-    public static function riceTypes(){
+   	public static function riceTypes(){
         return self::pluck('name','id');
     }
 }

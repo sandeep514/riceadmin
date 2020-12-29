@@ -130,6 +130,11 @@
                     <i class="fa fa-address-card-o"></i> <span> User App Trial </span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['master.index']))?'active':'' }}">
+                <a href="{{ route('master.index') }}">
+                    <i class="fa fa-address-card-o"></i> <span> Master </span>
+                </a>
+            </li>
 
         </ul>
     </section>
