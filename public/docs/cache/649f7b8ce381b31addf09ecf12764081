@@ -1,0 +1,116 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:2589:"Laura is played by Belén Rueda. Neither the NGO she works for, nor the embassy, have news on her whereabouts until a photo appears of Sara in a mining town.  Director Norberto López Amado Cast Belén Rueda (The Body), Marian Álvarez, Manolo Cardona Genre Adventure Duration 115 min. SARA’S NOTEBOOK (EL CUADERNO DE SARA) is a film of adventures, tension and dangers to overcome, as much about survival as it is discovery. Sara’s Notebook. Apparently, Sara is being held captive by The Hawk, the fearsome rebel leader who controls the mafias behind the prized mineral coltan. Rueda brings a keen sense of naivety to the screen; this is not a case of a western woman suddenly becoming completely at home in the Congo. Sara’s Notebook is certainly gifted with a talented cast. If you continue to use this site we will assume that you are happy with it. Despite the difficulties, Laura decides to travel to Kampala and to follow in her sister’s footsteps on a treacherous journey into the heart of the African jungle, an area run by warlords. For more information read our. Trailer. Apparently, Sara is being held captive by The Hawk, the fearsome rebel leader who controls the mafias behind the prized mineral coltan. Laura has spent years looking for her sister Sara who went missing in the depths of the jungle in the Congo. C/Lincoln 11, 2º 4ª 08006 Barcelona Spain, Terms of use | Data privacy policy | ©2020 Film Factory Entertainment, We use cookies to ensure that we give you the best experience on our website. Nationality Spain Year 2017 Language Spanish, Swahili, English, French Production Companies Telecinco Cinema, Ikiru Films Theatrical Release 26th January, 2018 by Buena Vista. Neither the NGO she works for, nor the embassy, have news on her whereabouts until a photo appears of Sara in a mining town. Shot in exotic locations with a realism rarely seen in this genre, this high-budget production comes from the creators of The Impossible and Perfume. El Cuaderno de Sara. Starring: Belén Rueda, Marian Álvarez, Iván Mendes … A naive Madrid lawyer travels to Africa to search for her younger sister, who has gone missing in a part of Congo plagued by violence and strife. Laura has spent years looking for her sister Sara who went missing in the depths of the jungle in the Congo. Her odyssey, plagued by scuffles with soldiers and raids, as well as the threats only the jungle can provide, takes her to the rebel stronghold where she is sure she will find her sister... Sign Up to our Newsletter and stay tuned. SARA’S NOTEBOOK (EL CUADERNO DE SARA… ";s:7:"keyword";s:22:"sara%27s notebook cast";s:5:"links";s:7838:"<a href='https://ricebrok-staging.webcooks.in/docs/frailty-syndromes-86e6ec'>Frailty Syndromes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slaughter-high-blu-ray-86e6ec'>Slaughter High Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/graveyard-shift-vs-night-shift-86e6ec'>Graveyard Shift Vs Night Shift</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spooky-buddies-cast-86e6ec'>Spooky Buddies Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/logro%C3%B1o-spain-language-86e6ec'>Logroño Spain Language</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crystal-palace-ladies-results-86e6ec'>Crystal Palace Ladies Results</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-nba-2k21-86e6ec'>Anthony Davis Nba 2k21</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/west-ham-logo-history-86e6ec'>West Ham Logo History</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/birdy-wings-remix-86e6ec'>Birdy Wings Remix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/am-i-enrolled-to-vote-86e6ec'>Am I Enrolled To Vote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mrs-cornelius-86e6ec'>Mrs Cornelius</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clang-sound-effect-berserk-86e6ec'>Clang Sound Effect Berserk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cam-mechanism-86e6ec'>Cam Mechanism</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-odd-life-of-timothy-green-ending-quote-86e6ec'>The Odd Life Of Timothy Green Ending Quote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spy-kids-2-netflix-86e6ec'>Spy Kids 2 Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/76ers-jersey-iverson-86e6ec'>76ers Jersey Iverson</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sevilla-vs-levante-86e6ec'>Sevilla Vs Levante</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/carla-suarez-navarro-news-86e6ec'>Carla Suarez Navarro News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louisville-football-stats-2018-86e6ec'>Louisville Football Stats 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/venom-carnage-86e6ec'>Venom Carnage</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/get-out-netflix-canada-86e6ec'>Get Out Netflix Canada</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thank-you-mom-for-86e6ec'>Thank You Mom For</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/admiral-2015-english-subtitles-86e6ec'>Admiral 2015 English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-burger-google-drive-86e6ec'>Good Burger Google Drive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-20-la-liga-86e6ec'>2019-20 La Liga</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/history-of-sirens-86e6ec'>History Of Sirens</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pray-for-rain-lyrics-86e6ec'>Pray For Rain Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-angels-fear-to-tread-original-song-86e6ec'>Where Angels Fear To Tread Original Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rats%3A-night-of-terror-cast-86e6ec'>Rats: Night Of Terror Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2019-general-election-map-86e6ec'>2019 General Election Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/knowing-movie-online-86e6ec'>Knowing Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scum-discount-code-86e6ec'>Scum Discount Code</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/white-zombie-first-album-86e6ec'>White Zombie First Album</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-vs-celtic-1-0-86e6ec'>Barcelona Vs Celtic 1-0</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/religious-movies-86e6ec'>Religious Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/northfield%2C-mn-restaurants-86e6ec'>Northfield, Mn Restaurants</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bob-hope-funeral-86e6ec'>Bob Hope Funeral</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fun-tennis-games-for-groups-86e6ec'>Fun Tennis Games For Groups</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/soleil-moon-frye-on-friends-86e6ec'>Soleil Moon Frye On Friends</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/baboon-harems-86e6ec'>Baboon Harems</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-hand-that-rocks-the-cradle-rules-the-world-song-86e6ec'>The Hand That Rocks The Cradle Rules The World Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zombie-diary-2-hack-mod-apk-86e6ec'>Zombie Diary 2 Hack Mod Apk</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/godforsaken-antonym-86e6ec'>Godforsaken Antonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/book-of-solomon-86e6ec'>Book Of Solomon</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beaufort-scale-chart-86e6ec'>Beaufort Scale Chart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bundesliga-3-table-2019%2F20-86e6ec'>Bundesliga 3 Table 2019/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/best-action-games-2019-pc-86e6ec'>Best Action Games 2019 Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/front-and-center-urban-dictionary-86e6ec'>Front And Center Urban Dictionary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shani-witcher-3-86e6ec'>Shani Witcher 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/un-million-en-chiffre-86e6ec'>Un Million En Chiffre</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-caruso-girlfriend-86e6ec'>Alex Caruso Girlfriend</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/federer-vs-nadal-head-to-head-86e6ec'>Federer Vs Nadal Head To Head</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/penrith-panthers-vs-sydney-roosters-prediction-86e6ec'>Penrith Panthers Vs Sydney Roosters Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/failan-meaning-86e6ec'>Failan Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-book-dragonfly-a-true-story-86e6ec'>Is The Book Dragonfly A True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dead-cells-rise-of-the-giant-ps4-86e6ec'>Dead Cells Rise Of The Giant Ps4</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kevin-durant-investments-86e6ec'>Kevin Durant Investments</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nick-owen-partner-vicki-beevers-86e6ec'>Nick Owen Partner Vicki Beevers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/full-service-hand-car-wash-near-me-86e6ec'>Full Service Hand Car Wash Near Me</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arsenal-2002-squad-86e6ec'>Arsenal 2002 Squad</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wendy-torrance-age-86e6ec'>Wendy Torrance Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/battle-of-xuzhou-1948-86e6ec'>Battle Of Xuzhou 1948</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ncaa-division-i-86e6ec'>Ncaa Division I</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2028-summer-olympics-tickets-86e6ec'>2028 Summer Olympics Tickets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sonny-bill-williams-height-86e6ec'>Sonny Bill Williams Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/colin-craig-centurion-management-86e6ec'>Colin Craig Centurion Management</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/f-16-dodging-6-iraqi-sam-86e6ec'>F-16 Dodging 6 Iraqi Sam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-3-ps2-cheat-codes-86e6ec'>Metal Gear Solid 3 Ps2 Cheat Codes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-join-kanopy-86e6ec'>How To Join Kanopy</a>,
+";s:7:"expired";i:-1;}

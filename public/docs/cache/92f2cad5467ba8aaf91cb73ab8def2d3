@@ -1,0 +1,134 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5373:"'Amour', 'Happy End' and a few more. Mieux vaut y réfléchir à deux fois avant de laisser entrer quelqu'un chez soi car parfois, la présence d'autrui devient vite... Pour écrire un commentaire, identifiez-vous. De ce point de vue, le film est une réussite, Michael Haneke étant suffisamment habile pour créer un vrai suspense tout en usant assez peu d'effets et avec une technique parfois assez magistrale, l'interprétation (notamment ... Un film inégal qui pour ma part manque cruellement de rythme et de réalisme, la violence y est en effet ici dépourvue de toute urgence, de toute adrénaline (. Both still good though, I guess they couldn't get the rights to the 2007 version but it has no blu-ray release and it would have been great for Criterion to have released both of them. I ask because my girlfriend won't watch any films where real animals are hurt on screen or animal corpses used as props, and I've been wanting to watch Funny Games for a while but because I usually watch films with her haven't been able to yet. Dites moi ce que vous voulez entendre, quelle histoire vous ferez plaisir, de toute façon vous savez que c'est faux c'que je dis. So -- I prefer the US version. Plutôt sympa à regarder avec quelques idées intéressantes (suppression du 4ème mur, rembobinage...).  Funny Games 1997 vs. 2007. Plus, we already know Haneke originally intended for the story to take place in the United States, so I think it’s the version he would rather have people see. Honestly, see both. Mais quelle scène de violence, il n'y a pas eu le meurtre de Tom car on voit qu'il est vivant (je reviendrai sur la télécommande).      Les meilleurs films de l'année 1997, Anna doit ensuite dire une prière et la réciter à l’envers. To what extent people prefer the foreign version due to bias of having seen it first while also wanting to recommend something foreign for obscurity, I don't know - But my suspicion is that those are the main reasons. But then again, I speak German and didn't need subtitles, so that might skew my view. Le fait que le protagoniste regarde la caméra et parle aux spectateurs.http://fr.wikipedia.org/wiki/Q... Eh du calme, ce n'est pas moi qui l'ai réalisé hein ! On ne voit aucun coup de feu certes mais pour moi c'est un des films les plus choquant que j'ai jamais vu, et pourtant j'en ai vu beaucoup. michael pitt. Ils les séquestrent et leur font vivre un enfer... Haneke filme la violence avec une froideur qui fait froid dans le dos.     Publicité | Puis, ils demandent à Anna de se déshabiller. Agree. Ca fait vraiment passer du bon temps à quelqu'un ce Funny Games? To me it’s absolutely better than the original for all the reasons you mentioned. Deux jeunes hommes leur rendent visite sous un prétexte futile. I love most of his works. R/HORROR, known as Dreadit by our subscribers is the premier horror entertainment community on Reddit. I think in general Shot-for-Shot remakes are frowned upon (even if made by the same director) so I think that's part of why the remake has a lower rating on Rotten Tomatoes and IMDb, but I think since Haneke wanted it to be in English and set in America, the remake is probably the definitive version of the film. Funny Games U.S. ou Drôles de jeux au Québec est un thriller américain réalisé par Michael Haneke, sorti en 2007.Le film est un remake quasiment plan pour plan du film Funny Games autrichien réalisé par Michael Haneke en 1997. En fait, bien que très dur, le film est entièrement dans la suggestion ce qui lui donne un attrait particulier sans nuire au fond. Le couple demande aux jeunes de partir mais ceux-ci refusent.                                                  New comments cannot be posted and votes cannot be cast, Press J to jump to the feed. DoloresFreeman, ambersweet and 3 others like this . Few people went to see this version, either, but at least Haneke could no longer claim that an aversion to subtitles was to blame for the lack of interest.     CGU |                                  Trop facile.3.5/5Au niveau qualitatif, on est loin d'un Orange Mécanique. video. Watts and Roth, as a married couple whose vacation home is invaded for no reason (save cinematic sadism) by two polite young men in tennis whites, do excellent work in the roles originated by Susanne Lothar and Ulrich Mühe, and if Pitt can’t match the cold menace of Arno Frisch, he’s balanced by Brady Corbet’s superior performance as the dweebier of the two killers. Su doblete, polémico y controvertido como pocos, de ‘Funny Games’ (1997 el título austríaco, 2007 el remake estadounidense) es quizá su pieza catedralicia, la que con menos recursos y menos personajes, con mayor sencillez y audacia, consigue hacernos regresar a las cavernas, de la forma más despiadada y, eso sí, elegante posible. One thing I learned through comparing the two is that "good' cinematography doesn't always improve the narrative. Georges est blessé et Anna est ligotée ; Anna se débat pour se détacher. Haneke a réalisé un remake de son propre film, sorti en France en avril 2008 : La dernière modification de cette page a été faite le 14 septembre 2020 à 04:54. The film was entered into the 1997 Cannes Film Festival. I just remember feeling far more disturbed by the performances of the original - the family and the villains. ";s:7:"keyword";s:24:"funny games 1997 vs 2007";s:5:"links";s:9900:"<a href='https://ricebrok-staging.webcooks.in/docs/gary-lockwood-net-worth-86e6ec'>Gary Lockwood Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/max-for-live-tutorial-86e6ec'>Max For Live Tutorial</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/push-and-pull-forces-worksheets-86e6ec'>Push And Pull Forces Worksheets</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/thackeray-ritchie-86e6ec'>Thackeray Ritchie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adidas-shoes-for-men-2020-86e6ec'>Adidas Shoes For Men 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/welcome-to-me---watch-online-86e6ec'>Welcome To Me - Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rob-burrow-wife-86e6ec'>Rob Burrow Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/if-you-love-a-flower-don%27t-pick-it-up-meaning-86e6ec'>If You Love A Flower Don't Pick It Up Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/battle-of-xuzhou-1948-86e6ec'>Battle Of Xuzhou 1948</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-burger-google-drive-86e6ec'>Good Burger Google Drive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/revenge-clothing-wiki-86e6ec'>Revenge Clothing Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/a-clockwork-orange-book-summary-86e6ec'>A Clockwork Orange Book Summary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/run-away-harlan-coben-86e6ec'>Run Away Harlan Coben</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stages-of-shock-86e6ec'>Stages Of Shock</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/changeling-netflix-canada-86e6ec'>Changeling Netflix Canada</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/soccer-basics-86e6ec'>Soccer Basics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-does-anatoly-lomachenko-train-86e6ec'>Who Does Anatoly Lomachenko Train</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/live-sports-hd-tv-pc-86e6ec'>Live Sports Hd Tv Pc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/into-the-forest-cast-86e6ec'>Into The Forest Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeff-koons-parents-86e6ec'>Jeff Koons Parents</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kd-injury-86e6ec'>Kd Injury</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rafael-nadal-height-86e6ec'>Rafael Nadal Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/neo-ned-streaming-86e6ec'>Neo Ned Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-hicks-mo%27nique-86e6ec'>David Hicks Mo'nique</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/homework-1989-online-86e6ec'>Homework 1989 Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-football-projected-depth-chart-2020-86e6ec'>Clemson Football Projected Depth Chart 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/icc-cricket-world-cup-2020-86e6ec'>Icc Cricket World Cup 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/de-helleveeg-%282016-online%29-86e6ec'>De Helleveeg (2016 Online)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-campaign-86e6ec'>David Perdue Campaign</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/plymouth-population-86e6ec'>Plymouth Population</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/disha-vakani-son-86e6ec'>Disha Vakani Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/step-brothers-2-trailer-2018-86e6ec'>Step Brothers 2 Trailer 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oculus-in-tagalog-86e6ec'>Oculus In Tagalog</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-brood-cast-86e6ec'>The Brood Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/off-season-lyrics-nba-86e6ec'>Off Season Lyrics Nba</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/impetigore-plot-86e6ec'>Impetigore Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bad-moms-netflix-86e6ec'>Bad Moms Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-direct-military-discount-code-86e6ec'>Sports Direct Military Discount Code</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arroyo-high-school-athletic-director-86e6ec'>Arroyo High School Athletic Director</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/date-la-vuelta-in-english-86e6ec'>Date La Vuelta In English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boardworks-muse-sup-review-86e6ec'>Boardworks Muse Sup Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nia-long-kids-86e6ec'>Nia Long Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/are-you-lonely-tonight-lyrics-86e6ec'>Are You Lonely Tonight Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-naughton-accounting-86e6ec'>James Naughton Accounting</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vikingdom-m1s-86e6ec'>Vikingdom M1s</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mitchum-deodorant-women%27s-86e6ec'>Mitchum Deodorant Women's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/airline-disaster-cast-86e6ec'>Airline Disaster Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-ball-images-86e6ec'>Sports Ball Images</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mission%3A-impossible---ghost-protocol-netflix-86e6ec'>Mission: Impossible - Ghost Protocol Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/it%27s-only-a-paper-moon-lyrics-86e6ec'>It's Only A Paper Moon Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-are-you-album-review-86e6ec'>Who Are You Album Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/two-days%2C-one-night-watch-online-english-subtitles-86e6ec'>Two Days, One Night Watch Online English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/goodbye%2C-columbus-quotes-86e6ec'>Goodbye, Columbus Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/words-to-describe-a-clown-86e6ec'>Words To Describe A Clown</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marc-gasol-family-86e6ec'>Marc Gasol Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deceit-meaning-in-bengali-86e6ec'>Deceit Meaning In Bengali</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/justin-holiday-warriors-86e6ec'>Justin Holiday Warriors</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jaws-ending-86e6ec'>Jaws Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/antlers-movie-online-86e6ec'>Antlers Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-sharna-burgess-doing-now-86e6ec'>What Is Sharna Burgess Doing Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paycheck-portal-86e6ec'>Paycheck Portal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ghc-vs-hcc-live-match-score-86e6ec'>Ghc Vs Hcc Live Match Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/borat-google-drive-86e6ec'>Borat Google Drive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/georgette-m%C3%A9li%C3%A8s-86e6ec'>Georgette Méliès</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-atkins-cbre-86e6ec'>John Atkins Cbre</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/senator-david-perdue-staff-86e6ec'>Senator David Perdue Staff</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/number-11-lakers-all-time-86e6ec'>Number 11 Lakers All Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-bell-salary-86e6ec'>Jordan Bell Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/meteorite-for-sale-86e6ec'>Meteorite For Sale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lords-of-flatbush-netflix-86e6ec'>Lords Of Flatbush Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/presidential-election-philippines-2019-86e6ec'>Presidential Election Philippines 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mark-taylor-cricket-86e6ec'>Mark Taylor Cricket</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-anderson-tapes-book-86e6ec'>The Anderson Tapes Book</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/benchwarmers-netflix-86e6ec'>Benchwarmers Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/which-version-of-funny-games-is-better-86e6ec'>Which Version Of Funny Games Is Better</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paul-george-numbers-86e6ec'>Paul George Numbers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/10-items-or-less-movie-watch-online-86e6ec'>10 Items Or Less Movie Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-is-passengers-2-coming-out-86e6ec'>When Is Passengers 2 Coming Out</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kosovare-asllani-salary-86e6ec'>Kosovare Asllani Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-direction-net-worth-2015-86e6ec'>One Direction Net Worth 2015</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ross-county-vs-rangers-prediction-86e6ec'>Ross County Vs Rangers Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tim-hardaway-brother-86e6ec'>Tim Hardaway Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/arliss-howard-related-to-ron-howard-86e6ec'>Arliss Howard Related To Ron Howard</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/guadalcanal-diary-band-86e6ec'>Guadalcanal Diary Band</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/scott-winters-lake-effects-86e6ec'>Scott Winters Lake Effects</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/derrick-rose-autograph-signing-86e6ec'>Derrick Rose Autograph Signing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ai-no-uta-drama-86e6ec'>Ai No Uta Drama</a>,
+";s:7:"expired";i:-1;}

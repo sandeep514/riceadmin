@@ -1,0 +1,134 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:6823:"I look forward to the opportunity to speak to my submission. My name is Graeme Edgeler. 			 But enrolling prisoners is complex. Under the Electoral Act, the determinant of whether a convicted person is eligible to vote is whether they are in prison under a sentence of imprisonment. The unpublished roll consists of the enrolment forms of all electors who have satisfied the Chief Registrar of Electors that they need to keep their personal enrolment details confidential. PO Box 190 Ministry of Corrections chief custodial officer Neil Beales explains how Corrections works with inmates. The Committee should consider whether the bill should treat service prisoners in the same way as civil prisoners, in particular, it should reconsider the distinction the Electoral Act and Corrections Act make based on where a service prisoner is directed to serve a sentence of imprisonment. This option applies to people in life threatening situations. 			 There are several aspects to this that are arbitrary. 					 This not a right accorded to non-prisoners. 		Reply, Graeme Edgeler, ** a statutory declaration from a member of the Police to the effect that he or she believes that your personal safety, or that of your family’s, could be prejudiced by the publication of your name and details, or Voters can also place their ballots by post. However, the effect of both the current law and of the bill is that a service prisoner (that is a person convicted at court martial and sentenced to a sentence of imprisonment) is entitled to vote, even after conviction. I support the overall intention of this bill. 		Report 		 Or you can phone us free on 0800 36 76 56, and we will post the form ‘Enrolling to vote on the Unpublished Electoral Roll’ out to you. 			 To vote in local council and district health board elections you will need to apply to the local electoral officer at your local council to be issued with a special declaration vote. 				  Anyone who is eligible to enrol but who believes that having their details recorded on the printed electoral roll could threaten their personal safety or that of … However if a service prisoner is transferred from a service prison to a civilian prison, they would lose the right to vote (a service detainee transferred to a civilian prison would retain the right to vote). However, for some convicted people, lacking in financial means, or living in precarious or overcrowded accommodation can mean they are effectively ineligible for home detention, and may be sentenced to imprisonment where a more wealthy person would receive home detention. 			Since Nov 2006 •  : The Electoral Act dictates how a prisoner’s electorate is chosen. A process of this nature could even apply to some people convicted but not sentenced to prison, where the nature of their conviction was such as to undermine the integrity of the electoral system (for example, offending related to an election, but charged as forgery, as we saw with the conviction of Daljit Singh, who was sentenced to community detention). Prisoners sentenced for longer than three years have their names removed from the electoral roll but Corrections staff pass on an enrolment pack to inmates upon release. “Our staff work with people to help them identify which address they should use.”. 			 			 How long do I stay on the unpublished roll? Prisoners are given the option for their names to be kept on the unpublished roll to protect their identities. Unpublished Electoral Roll Not everyone feels safe enough to have their details publicly available on the electoral roll, but that doesn’t mean they lose the right to vote. : Facility : How to Apply For The Unpublished Roll : The Committee should consider whether there are other, less restrictive means of achieving the bill’s aim or ensuring that certain categories of prisoner should not be able to vote, while avoiding the anomalies the bill maintains. Their enrolment details will not appear on the published roll. 			 			 We give your … I am a Wellington barrister with a strong interest in electoral law. 03 August 2017 The New Zealand Law Society has released an updated Practice Briefing on how people concerned about personal safety can have their details recorded on the Unpublished Electoral Roll. Prisoners are given the option for their names to be kept on the unpublished roll to protect their identities. Prisoners can register the prison as their mailing address so Electoral Commission mail can be sent to them. 				 If you are eligible to enrol and believe that having your details recorded on the published electoral roll could threaten your personal safety, or that of your family, you may request that your details be included only on the confidential unpublished roll. Under both the current law, and the amendment, it does. If you're concerned that having your details on an electoral roll could threaten your personal safety, or that of your family, you can ask to go on the unpublished roll. 				09:16 Apr 20, 2020, Email/*<! NZLS updates Unpublished Electoral Roll briefing. I would prefer that this bill went further than it does. 				 The inconsistency between the treatment of civil prisoners and service prisoners. Fonts by Typekit (disable) I recognise that a policy decision has been made, so while I touch on the arguments for this, I also address some other matters of policy and drafting raised by the bill. 		 			 The completed application form with supporting documents should be emailed to unpublished.roll@elections.org.nz. 		  “Engagement with prisoners involves prison staff talking to each prisoner about their eligibility to enrol to vote,” Beales says. Enrolment Services 				 If not emailed, it should be sent to: Once approved, people stay on the unpublished roll until their circumstances change. 		Reply, Hilary Stace, Can I join yours? ** a copy of a restraining order that is in force under the Harassment Act 1997, or 		 “Each site has identified dates and times when voting services will be delivered at the prison during the advanced voting period, to spread the demand on electoral staff,” Beales says. To do so, you will need to download the unpublished roll application form or phone the Electoral Commission free on 0800 36 76 56, and they will post an application form to you. The unpublished electoral roll allows voters to enrol without having their details (e.g. An alternative to a system whereby imprisonment is the determining factor could include one where upon conviction, a judge has the power to order that someone be entered onto something like the corrupt practices list for a time. 				 I would welcome any further opening up of the right to vote, including, for example, raising the threshold, and encourage the Committee to recommend this to the House. Dunedin •  ";s:7:"keyword";s:26:"unpublished electoral roll";s:5:"links";s:9962:"<a href='https://ricebrok-staging.webcooks.in/docs/pentatonix-hallelujah-meaning-86e6ec'>Pentatonix Hallelujah Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/knight-riders-86e6ec'>Knight Riders</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/basketball-games-to-play-by-yourself-86e6ec'>Basketball Games To Play By Yourself</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gymnasium-meaning-in-tamil-86e6ec'>Gymnasium Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-rookie-card-86e6ec'>Russell Westbrook Rookie Card</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/northern-illinois-football-conference-86e6ec'>Northern Illinois Football Conference</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mitochondrial-disease-86e6ec'>Mitochondrial Disease</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ingredients-of-criminal-trespass-86e6ec'>Ingredients Of Criminal Trespass</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/krept-and-konan-play-dirty-hoodie-86e6ec'>Krept And Konan Play Dirty Hoodie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/boris-karloff-86e6ec'>Boris Karloff</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manchester-city-catholic-or-protestant-86e6ec'>Manchester City Catholic Or Protestant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-potter-hulu-86e6ec'>Miss Potter Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dinamo-zagreb-vs-lok-zagreb-h2h-86e6ec'>Dinamo Zagreb Vs Lok Zagreb H2h</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-political-parties-86e6ec'>Nz Political Parties</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/electronic-sound-magazine-promo-code-86e6ec'>Electronic Sound Magazine Promo Code</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michael-bates-cricket-86e6ec'>Michael Bates Cricket</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gordon-hayward-stats-86e6ec'>Gordon Hayward Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kastrup-the-wind-rises-86e6ec'>Kastrup The Wind Rises</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-triangle-mini-series-ending-explained-86e6ec'>The Triangle Mini Series Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/weston-mckennie-schalke-salary-86e6ec'>Weston Mckennie Schalke Salary</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-a-noose-in-nascar-86e6ec'>What Is A Noose In Nascar</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-beirut-safe-now-86e6ec'>Is Beirut Safe Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/crimson-tide-watch-online-86e6ec'>Crimson Tide Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yasushi-watanabe-86e6ec'>Yasushi Watanabe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/larsa-pippen-86e6ec'>Larsa Pippen</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/philistines-map-86e6ec'>Philistines Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-old-was-sophia-loren-in-grumpier-old-men-86e6ec'>How Old Was Sophia Loren In Grumpier Old Men</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/too-much-too-young-single-cover-86e6ec'>Too Much Too Young Single Cover</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/edmond-o%27brien-military-service-86e6ec'>Edmond O'brien Military Service</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-train-denis-shapovalov-lyrics-86e6ec'>Night Train Denis Shapovalov Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/good-burger-2019-86e6ec'>Good Burger 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sapphire-meaning-name-86e6ec'>Sapphire Meaning Name</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lauren-name-popularity-86e6ec'>Lauren Name Popularity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nutcracker-christmas-decorations-86e6ec'>Nutcracker Christmas Decorations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/htc-vive-pro-86e6ec'>Htc Vive Pro</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-novak-hockey-86e6ec'>John Novak Hockey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dangerous-minds-cast-now-86e6ec'>Dangerous Minds Cast Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daddy%27s-little-girl-poem-86e6ec'>Daddy's Little Girl Poem</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bono-wife-age-86e6ec'>Bono Wife Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eastchester-fish-menu-86e6ec'>Eastchester Fish Menu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julian-fuego-thicke-86e6ec'>Julian Fuego Thicke</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alan-parry-illustrator-86e6ec'>Alan Parry Illustrator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nightwatch-%281997-full-movie%29-86e6ec'>Nightwatch (1997 Full Movie)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cannon-basketball-2-86e6ec'>Cannon Basketball 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/storms-vs-warriors-score-86e6ec'>Storms Vs Warriors Score</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aphrodite-and-ares-vegan-86e6ec'>Aphrodite And Ares Vegan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/april-9th-movie-english-subtitles-86e6ec'>April 9th Movie English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/promethazine-pregnancy-86e6ec'>Promethazine Pregnancy</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kyler-murray-height-and-weight-chart-86e6ec'>Kyler Murray Height And Weight Chart</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/north-virginia-cities-86e6ec'>North Virginia Cities</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fittest-celebrities-female-86e6ec'>Fittest Celebrities Female</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jordan-shoes-list-86e6ec'>Jordan Shoes List</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kentucky-wildcats-football-jersey-86e6ec'>Kentucky Wildcats Football Jersey</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-there-a-babadook-2-86e6ec'>Is There A Babadook 2</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lakers-vs-clippers-playoffs-86e6ec'>Lakers Vs Clippers Playoffs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/university-of-bristol-86e6ec'>University Of Bristol</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/johnny-got-his-gun-metallica-86e6ec'>Johnny Got His Gun Metallica</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rose-red-true-story-86e6ec'>Rose Red True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/juventus-vs-torino-prediction-86e6ec'>Juventus Vs Torino Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/under-the-shadow-synonym-86e6ec'>Under The Shadow Synonym</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-basements-86e6ec'>Types Of Basements</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alligator-habitat-map-86e6ec'>Alligator Habitat Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-fear-86e6ec'>What Is Fear</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louis-van-gaal-trophies-86e6ec'>Louis Van Gaal Trophies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/transform-plate-boundaries-86e6ec'>Transform Plate Boundaries</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/caridad-rivera-wikipedia-86e6ec'>Caridad Rivera Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/battleground-states-polls-86e6ec'>Battleground States Polls</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/me-before-you-sequel-86e6ec'>Me Before You Sequel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/zach-collins-height-86e6ec'>Zach Collins Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sports-uniforms-wholesale-86e6ec'>Sports Uniforms Wholesale</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-real-mr-church-86e6ec'>The Real Mr Church</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clydebank-fc-moved-86e6ec'>Clydebank Fc Moved</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chinatown-123movies-86e6ec'>Chinatown 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/paycheck-portal-86e6ec'>Paycheck Portal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maze-runner-4-86e6ec'>Maze Runner 4</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flaco-navaja-and-the-razor-blades-86e6ec'>Flaco Navaja And The Razor Blades</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/velus-jones-jr-highlights-86e6ec'>Velus Jones Jr Highlights</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/basketball-video-games-2020-86e6ec'>Basketball Video Games 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fragile-simile-86e6ec'>Fragile Simile</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tom-and-jerry%3A-the-fast-and-the-furry-google-drive-86e6ec'>Tom And Jerry: The Fast And The Furry Google Drive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/danuel-house-wingspan-86e6ec'>Danuel House Wingspan</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/texas-killing-fields-true-events-86e6ec'>Texas Killing Fields True Events</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wait-until-dark-%2F-theme-song-86e6ec'>Wait Until Dark / Theme Song</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/trespass-to-goods-conversion-86e6ec'>Trespass To Goods Conversion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/romantic-movies-86e6ec'>Romantic Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-woman-in-space-86e6ec'>First Woman In Space</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sandy-park-road-postcode-86e6ec'>Sandy Park Road Postcode</a>,
+";s:7:"expired";i:-1;}

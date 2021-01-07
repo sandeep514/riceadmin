@@ -1,0 +1,114 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:3334:"The Howard League for Penal Reformis a registered charityin the United Kingdom. We began to hold meetings and to be well scoffed at, and badly reported in the newspapers – the name Howard being interpreted as that of E.J. [7]. The Penal Reform League had been founded in 1907 with Arthur St John as Secretary. The Howard League's Chief Executive, Frances Crook, said that the fall could be attributed to better use of resources, removing national targets, improving staff training, and support from communities.[4]. In 1866, the Howard Association was formed. It is the oldest penal reformorganisation in the world, named after John Howard. The charity has held inquiries to examine a variety of issues relating to the criminal justice system, including suicides in prison; sexual health in prison; and the imprisonment of former armed services personnel. Lady Edwina Louise Grosvenor is an English philanthropist and prison reformer. The charity focuses on penal reform in England and Wales. Incarceration in Norway's criminal justice system focuses on the principle of restorative justice and rehabilitating prisoners. The Howard League played a key role in campaigning for the abolition of capital punishment; advocated for the founding of the National Probation Service; and co-founded the Prisoners' Advice Service. The charity also successfully campaigned for the introduction of the victims' compensation scheme.[1]. The Canterbury branch was relaunched by Kathie Dunstall MNZM in February 1998 to work on reform of the penal system and especially to fight against the huge increase in prison numbers. By 1928, however, we had managed to get groups interested in other centres and emphasised the fact that the League was for penal reform, and that we were not an ‘aftercare society’, though the Prisons Board wanted us to be. The charity later set up a Centre of Excellence to advise government and the private sector on how to implement real work for prisoners. This period is known as the "minimum term". It has continued to flourish as an independent body ever since, and of course, took on a new relevance and enhanced role with the re-establishment of the Scottish Parliament. The prison abolition movement is a loose network of groups and activists that seek to reduce or eliminate prisons and the prison system, and replace them with systems of rehabilitation that do not place a focus on punishment and government institutionalization. We have always, of course, advocated the abolition of Capital Punishment and it was the League that initiated the success agitation against the hanging of the three Nuie Islanders recently convicted. For the U.S. benevolent organization, known by the former name of the Howard League, see. You could also do it yourself at any point in time. It provides a free and confidential advice line for prisoners under the age of 21. Andrew Coyle CMG is Emeritus Professor of Prison Studies at the University of London. The Howard League has a long history of working for prison reform and criminal justice in Aotearoa. Teething troubles quickly began and how our baby League managed to weather them I hardly know; but we had a few faithful members and survived a war, a slump, hostility from the authorities, contempt from some of the public and complete indifference from most of it. ";s:7:"keyword";s:30:"howard league for penal reform";s:5:"links";s:7740:"<a href='https://ricebrok-staging.webcooks.in/docs/what-price-glory-1926-86e6ec'>What Price Glory 1926</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/oasis-of-fear-blu-ray-86e6ec'>Oasis Of Fear Blu-ray</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ashfall-streaming-86e6ec'>Ashfall Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blair-witch-game-endings-86e6ec'>Blair Witch Game Endings</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/storm-v-warriors-2020-86e6ec'>Storm V Warriors 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-way-i-see-it-documentary-msnbc-86e6ec'>The Way I See It Documentary Msnbc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/guitar-trio-pedal-86e6ec'>Guitar Trio Pedal</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/she-was-born-on-the-fourth-of-july-86e6ec'>She Was Born On The Fourth Of July</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/new-movies-to-rent-86e6ec'>New Movies To Rent</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/payday-2-bain-face-86e6ec'>Payday 2 Bain Face</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rabbit-hole-lyrics-mindy-gledhill-86e6ec'>Rabbit Hole Lyrics Mindy Gledhill</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fortney-brothers-86e6ec'>Fortney Brothers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/somerset-live-86e6ec'>Somerset Live</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-playoff-stats-2019-86e6ec'>Russell Westbrook Playoff Stats 2019</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/presidential-election-2021-86e6ec'>Presidential Election 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-thousand-pierced-bear-86e6ec'>The Thousand-pierced Bear</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jenna-dewan-step-up-86e6ec'>Jenna Dewan Step Up</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/octane-employee-login-86e6ec'>Octane Employee Login</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rider-strong-boy-meets-world-86e6ec'>Rider Strong Boy Meets World</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemson-basketball-recruiting-2021-86e6ec'>Clemson Basketball Recruiting 2021</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-invented-cat%27s-eyes-86e6ec'>Who Invented Cat's Eyes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-seventh-day-2020-86e6ec'>The Seventh Day 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/road-to-istanbul-movie-86e6ec'>Road To Istanbul Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/german-revolution-1848-86e6ec'>German Revolution 1848</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wim-wenders-spouse-86e6ec'>Wim Wenders Spouse</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-hitcher-nash-death-86e6ec'>The Hitcher Nash Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-the-book-dragonfly-a-true-story-86e6ec'>Is The Book Dragonfly A True Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/action-jackson-meaning-86e6ec'>Action Jackson Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/man-city-goal-scorers-2019%2F20-86e6ec'>Man City Goal Scorers 2019/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/metal-gear-solid-2-quotes-86e6ec'>Metal Gear Solid 2 Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wake-up-meme-funny-86e6ec'>Wake Up Meme Funny</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tony-adams-son-86e6ec'>Tony Adams Son</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hotstar-thriller-series-86e6ec'>Hotstar Thriller Series</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/james-vi-and-i-86e6ec'>James Vi And I</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/word-roots-beginning-pdf-86e6ec'>Word Roots Beginning Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-talk-of-the-town-%281942-nominations%29-86e6ec'>The Talk Of The Town (1942 Nominations)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mimic-dnd-86e6ec'>Mimic Dnd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/venice-film-festival-best-movies-86e6ec'>Venice Film Festival Best Movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/time-in-taiwan-calculator-86e6ec'>Time In Taiwan Calculator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pure-heart-meaning-86e6ec'>Pure Heart Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/to-live-youtube-86e6ec'>To Live Youtube</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-2019-defense-86e6ec'>Lsu 2019 Defense</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/big-brother-%26-the-holding-company-be-a-brother-86e6ec'>Big Brother & The Holding Company Be A Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adopt-a-mile-86e6ec'>Adopt A Mile</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wuthering-heights-movie-online-86e6ec'>Wuthering Heights Movie Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joel-edgerton-great-gatsby-86e6ec'>Joel Edgerton Great Gatsby</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/macau-currency-86e6ec'>Macau Currency</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tristan-thompson-contract-86e6ec'>Tristan Thompson Contract</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/once-upon-a-time-in-hollywood-full-movie-dailymotion-86e6ec'>Once Upon A Time In Hollywood Full Movie Dailymotion</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/my-wife-is-a-gangsters-full-movie-eng-sub-86e6ec'>My Wife Is A Gangsters Full Movie Eng Sub</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tenebrae-film-86e6ec'>Tenebrae Film</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/office-christmas-party-showtime-86e6ec'>Office Christmas Party Showtime</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/txt-universe-theory-86e6ec'>Txt Universe Theory</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bushwhacked-movie-netflix-86e6ec'>Bushwhacked Movie Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/11-letter-words-starting-with-a-86e6ec'>11 Letter Words Starting With A</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/van-halen---little-guitars-86e6ec'>Van Halen - Little Guitars</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-carmelo-anthony-retiring-this-year-86e6ec'>Is Carmelo Anthony Retiring This Year</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/i-come-in-peace-soundtrack-86e6ec'>I Come In Peace Soundtrack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/louisville-basketball-recruiting-2020-86e6ec'>Louisville Basketball Recruiting 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ernest-saves-christmas-123movies-86e6ec'>Ernest Saves Christmas 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/south-fork-shenandoah-river-fishing-report-86e6ec'>South Fork Shenandoah River Fishing Report</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malcolm-mcdowell-house-86e6ec'>Malcolm Mcdowell House</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/11-letter-words-starting-with-a-86e6ec'>11 Letter Words Starting With A</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/john-wall-stats-86e6ec'>John Wall Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-track-and-field-uniforms-86e6ec'>Lsu Track And Field Uniforms</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-7-0-86e6ec'>Barcelona 7-0</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/epidemic-vs-pandemic-86e6ec'>Epidemic Vs Pandemic</a>,
+";s:7:"expired";i:-1;}

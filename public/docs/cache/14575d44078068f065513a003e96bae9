@@ -1,0 +1,101 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4238:"1 junior. Gauff recalled, "I wasn't much of a team person. 1 junior in the world. She is a premature and gifted tennis player in the world. She stands at a height of 5 feet 9 1⁄2 inches (1.76 m). 44 Venus Williams in straight sets. After a month later following another final win against McNally at the Grade 1 Junior International Roehampton, she became the No. Her parents gave up their careers to focus on training their daughter, with her father later taking over as her primary coach and her mother overseeing her homeschooling. 1 Naomi Osaka. "[8][9], When Gauff was seven years old, her family moved back to Delray Beach so that she would have better opportunities to train in tennis. She began playing on the ITF Junior Circuit at 13 and finished runner-up at the junior 2017 US Open in just her fourth ITF event, making her the youngest finalist in the tournament's history. 92 Aliona Bolsova, the top seed in the qualifying draw in the first round and later defeated No. Cori Gauff’s height is 5 feet 9 inches, which is considered decently tall as far as the global average height of women is concerned. Coco Gauff is a tennis player and her age is 15. Which NFL Teams Have Won the Most Trophies? Just scroll down to know about the latest update on your favorite celebrity, Coco Gauff’s Bio, Age, Net Worth, Salary, Career, Personal Life and many more in detail.Also find her body measurements such as height, weight, shoe size As a famous American professional tennis player, Coco Gauff has a massive net worth between Her dress size is still not known. Coco Gauff is a tennis player and her age is 15. Her body measurements are 33-26-34 inches and bra size is 32B. 92 Aliona Bolsova, the top seed in the qualifying draw, in the first round and defeated No. [39] With this performance, Gauff rose to No. She did not drop a set until the final, where she came from behind to defeat compatriot Caty McNally in three sets. Her paycheck increases when he beat Venus Williams in Wimbledon tournament in 2019. She became the youngest girls' singles finalist in US Open history. Her estimated net worth ranges between $1 Million - $5 Million. She follows a strict diet routine and weighs 55 kg. The net worth of Coco Gauff is $2.5 million USD as of 2020. When I turned eight, that was when I played 'Little Mo' and after that I decided to do that for the rest of my life. Height and more Cori Gauff is an American professional tennis player from Atlanta, Georgia. Serena Williams revealed that the Gauff’s are the cool people. Gauff started 2020 playing at the 2020 ASB Classic in Auckland, New Zealand. Number Theory Worksheets, Please let us know if you think data we have about Coco Gauff's height is not correct. She finished runner-up in singles, she won her maiden WTA title in doubles alongside Paige Hourigan against compatriots Usue Maitane Arconada and Emina Bektas. 42 in doubles. Gauff made her WTA Tour debut in March 2019 at the Miami Open and won her opening match. [40], Gauff played in one US Open Series tournament at the Citi Open, where she qualified for the main draw but lost in the first round. Eye Colour: Black. Emt-b Course Near Me, Coco Gauff height of 5 feet 10 inches (1.77 m) tall and body weight of 55 kg. She has an athletic body build. 42 in doubles. What Is Broadcloth Used For, [9] After defeating Venus at Wimbledon in 2019, Gauff commended Venus when they shook hands at the net. "[35], In a 2020 post on "Behind the Racquet," created by Noah Rubin, Gauff admitted to having experienced depression and stress related to her sporting career. She started playing on the ITF Junior Circuit at the age of 13. She did not enter another tournament in singles until French Open, where she won her first career junior Grand Slam tournament title. Coco Gauff is famous for a tennis player. Gauff uses a Head Graphene 360 Speed MP[58] that has 16 main and 19 cross strings. 1 junior in the world. She has two younger brothers named Codey and Cameron. Also, women belonging to the same race & ethnicity (Afro-American) as that of Coco have more or less the same height as … Notify me of follow-up comments by email. On the other hand, her present international ranking as of July 1, 2019, is 313. ";s:7:"keyword";s:27:"coco gauff height%2C weight";s:5:"links";s:6376:"<a href='https://ricebrok-staging.webcooks.in/docs/summer-holiday-clubs-near-me-2020-86e6ec'>Summer Holiday Clubs Near Me 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dan-sheridan-options-86e6ec'>Dan Sheridan Options</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-premier-league-titles-have-man-city-won-86e6ec'>How Many Premier League Titles Have Man City Won</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/end-of-days-ending-86e6ec'>End Of Days Ending</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/citizenfour-awards-86e6ec'>Citizenfour Awards</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/batman-v-superman-ultimate-edition-review-86e6ec'>Batman V Superman Ultimate Edition Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julie-thompson-singer-86e6ec'>Julie Thompson Singer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rent-a-cat-movie-86e6ec'>Rent A Cat Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barcelona-coach-2003-86e6ec'>Barcelona Coach 2003</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/controversial-sports-topics-for-essays-86e6ec'>Controversial Sports Topics For Essays</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/charles-wright-poems-pdf-86e6ec'>Charles Wright Poems Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/songs-with-misery-in-the-lyrics-86e6ec'>Songs With Misery In The Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-small-back-room-1948-novel-86e6ec'>The Small Back Room 1948 Novel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/sinister-3-review-86e6ec'>Sinister 3 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/128x128-texture-pack-86e6ec'>128x128 Texture Pack</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-lives-of-a-bengal-lancer-watch-online-86e6ec'>The Lives Of A Bengal Lancer Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/field-of-vision-fund-86e6ec'>Field Of Vision Fund</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dr-phil-rodney-reed-update-2020-86e6ec'>Dr Phil Rodney Reed Update 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kemba-walker-height-in-cm-86e6ec'>Kemba Walker Height In Cm</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wisconsin-department-of-transportation-86e6ec'>Wisconsin Department Of Transportation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/attack-of-the-50-foot-woman-123movies-86e6ec'>Attack Of The 50 Foot Woman 123movies</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-french-connection-netflix-86e6ec'>The French Connection Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/planet-hulk-characters-86e6ec'>Planet Hulk Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeremiah-owusu-koramoah-draft-86e6ec'>Jeremiah Owusu-koramoah Draft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/clemency-in-law-86e6ec'>Clemency In Law</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-roost-happy-hour-86e6ec'>The Roost Happy Hour</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/where-was-the-man-in-the-white-suit-filmed-86e6ec'>Where Was The Man In The White Suit Filmed</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-indifferent-86e6ec'>How To Pronounce Indifferent</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pandemic-legacy-board-game-86e6ec'>Pandemic Legacy Board Game</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fake-happy-lyrics-86e6ec'>Fake Happy Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/unmanifest-meaning-86e6ec'>Unmanifest Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/harden-3-black-and-blue-86e6ec'>Harden 3 Black And Blue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/special-ops-review-86e6ec'>Special Ops Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/yayoi-kusama-website-86e6ec'>Yayoi Kusama Website</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-caruso-college-stats-86e6ec'>Alex Caruso College Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/broken-promises-book-ibm-86e6ec'>Broken Promises Book Ibm</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-mascot-86e6ec'>Notre Dame Mascot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/roseland-cornwall-86e6ec'>Roseland Cornwall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/elfrid-payton-age-86e6ec'>Elfrid Payton Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-lego-movie-streaming-86e6ec'>The Lego Movie Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/criterion-collection-1%2C000-86e6ec'>Criterion Collection 1,000</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/friend-synonym-slang-86e6ec'>Friend Synonym Slang</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ordinary-love-where-to-watch-86e6ec'>Ordinary Love Where To Watch</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/flesh-and-bone-nominations-86e6ec'>Flesh And Bone Nominations</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/isosceles-triangle-calculator-86e6ec'>Isosceles Triangle Calculator</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/debugging-tools-in-embedded-system-86e6ec'>Debugging Tools In Embedded System</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/maggi-company-86e6ec'>Maggi Company</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/love-movie-2015%2C-watch-online-with-english-subtitles-86e6ec'>Love Movie 2015, Watch Online With English Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-is-jeepers-creepers-4-release-date-86e6ec'>When Is Jeepers Creepers 4 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/prometheus-god-punishment-86e6ec'>Prometheus God Punishment</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cape-fear%2C-nc-weather-86e6ec'>Cape Fear, Nc Weather</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/streets-of-laredo-lyrics-chords-86e6ec'>Streets Of Laredo Lyrics Chords</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/conflict-in-a-clockwork-orange-86e6ec'>Conflict In A Clockwork Orange</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/phil-agassi-86e6ec'>Phil Agassi</a>,
+";s:7:"expired";i:-1;}

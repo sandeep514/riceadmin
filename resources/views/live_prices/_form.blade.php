@@ -26,14 +26,13 @@
                 <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 15px;">
                     @foreach( $livePrice as $k => $v )
                         <li class="">
-                            <a href="#model{{ $k }}" data-toggle="tab">{{ $k }}</a>
+                            <a href="#model{{ str_replace(' ' , '_' , $k) }}" data-toggle="tab">{{ str_replace(' ','_', $k) }}</a>
                         </li>
                     @endforeach
-
                 </ul>
                 <div id="myTabContent" class="tab-content" >
                     @foreach( $livePrice as $keyy => $val )
-                        <div class="tab-pane fade in " id="model{{ $keyy }}">
+                        <div class="tab-pane fade in " id="model{{ str_replace(' ' , '_' , $keyy) }}">
                             <div class="row">
                                 <div class="col-md-12 text-center">
                                     <h3>Price Details</h3>
@@ -59,7 +58,7 @@
                                                             $upDown = null;
                                                             
                                                             if($lastPrices != null){
-                                                                $details = $lastPrices->where('form',$form->id)->where('state', $keyy )->first();
+                                                                $details = $lastPrices->where('form',$form->id)->where('state', str_replace(' ' , '_' , $keyy) )->first();
                                                                 if($details != null){
                                                                     $min = $details->min_price;
                                                                     $max = $details->max_price;
@@ -71,13 +70,13 @@
                                                             <tr>
                                                                 <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
                                                                 <td>
-                                                                    {!! Form::text('min['.$keyy.']['.$form->id.']',$min,['class'=>'form-control']) !!}
+                                                                    {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
                                                                 </td>
                                                                 <td>
-                                                                    {!! Form::text('max['.$keyy.']['.$form->id.']',$max,['class'=>'form-control']) !!}
+                                                                    {!! Form::text('max['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$max,['class'=>'form-control']) !!}
                                                                 </td>
                                                                 <td>
-                                                                    {!! Form::select('up_down['.$keyy.']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
+                                                                    {!! Form::select('up_down['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
                                                                 </td>
                                                             </tr>
 
@@ -97,14 +96,15 @@
             <div class="responsiveTabs nonbasmatitabs">
                 <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 15px;">
                     @foreach( $livePrice as $k => $v )
+                        
                         <li class="">
-                            <a href="#model{{ $k }}" data-toggle="tab">{{ $k }}</a>
+                            <a href="#model{{ str_replace(' ' , '_' , $k) }}" data-toggle="tab">{{ str_replace(' ' , '_' , $k) }}</a>
                         </li>
                     @endforeach
                 </ul>
                 <div id="myTabContent" class="tab-content " >
                     @foreach( $livePrice as $keyy => $val )
-                        <div class="tab-pane fade in active" id="ph">
+                        <div class="tab-pane fade in" id="model{{ str_replace(' ' , '_' , $keyy) }}">
                             <div class="row">
                                 <div class="col-md-12 text-center">
                                     <h3>Price Details</h3>
@@ -129,7 +129,7 @@
                                                         $max = null;
                                                         $upDown = null;
                                                         if($lastPrices != null){
-                                                            $details = $lastPrices->where('form',$form->id)->where('state',$keyy)->first();
+                                                            $details = $lastPrices->where('form',$form->id)->where('state', str_replace(' ' , '_' , $keyy))->first();
                                                             if($details != null){
                                                                 $min = $details->min_price;
                                                                 $max = $details->max_price;
@@ -140,13 +140,13 @@
                                                         <tr>
                                                             <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
                                                             <td>
-                                                                {!! Form::text('min['.$keyy.']['.$form->id.']',$min,['class'=>'form-control']) !!}
+                                                                {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
                                                             </td>
                                                             <td>
-                                                                {!! Form::text('max['.$keyy.']['.$form->id.']',$max,['class'=>'form-control']) !!}
+                                                                {!! Form::text('max['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$max,['class'=>'form-control']) !!}
                                                             </td>
                                                             <td>
-                                                                {!! Form::select('up_down['.$keyy.']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
+                                                                {!! Form::select('up_down['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
                                                             </td>
                                                         </tr>
                                                 @endforeach
@@ -167,4 +167,9 @@
 
 @section('scripts')
     <script src="{{ asset('js/live-price.js?ref='.rand(1111,9999)) }}"></script>
+    <script>
+        $(document).ready(function(){
+            $('#myTab li:first-child a').click();
+        });
+    </script>
 @endsection

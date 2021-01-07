@@ -36,9 +36,9 @@ class LivePricesController extends Controller
         }
 
         if($request->has('date')){
-            $prices = LivePrice::with(['name_rel','form_rel'])->where(DB::raw('date(created_at)'),Carbon::parse($request->date)->format('Y-m-d'))->get();
+            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::parse($request->date)->format('Y-m-d'))->get();
         }else{
-            $prices = LivePrice::with(['name_rel','form_rel'])->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
+            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
         }
         return view('live_prices.create',['livePrice'=>$livePrice,'prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
     }
@@ -51,11 +51,12 @@ class LivePricesController extends Controller
         if( $lastAvaibleRecord != null ){
             $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');    
         }
-        
+
         if( $todayDate == $lastAvailableDate ){
             foreach($request->min as $state => $values){
                 foreach($values as $form => $price){
                     $userDetails = LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->first();
+
                     if( $userDetails ){
                         LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([ 'min_price' => $price , 'max_price' => $request->max[$state][$form] , 'up_down' => $request->up_down[$state][$form] ]);    
                     }else{
@@ -71,7 +72,6 @@ class LivePricesController extends Controller
                     
                 }
             }
-            
         }else{
             $lastUpdatedPrice = LivePrice::whereDate( 'created_at' , $lastAvailableDate )->get();
 

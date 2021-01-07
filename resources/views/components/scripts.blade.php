@@ -98,3 +98,5 @@
     @section('scripts')
     
     @show
+
+    @yield('javascripts')

@@ -227,22 +227,20 @@
         public function getPrices($state, $ricetype)
         {
             $processedData = [];
-            $lastRecord = LivePrice::get()->last();
-            
+            $lastRecord = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
+
             if ($lastRecord != null) {
-                
-                $prices = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($ricetype) {
+            
+                $prices = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query) use($ricetype){
+                    return $query->where('type' , $ricetype)->get();
+                },'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
-                    $lastRecord->created_at->format('Y-m-d'))->get();
+                ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
                 
-                $lastToLastDate = LivePrice::where('min_price', '!=', null)->where('max_price', '!=',
-                    null)->orderBy('created_at', 'DESC')->where(DB::raw('date(created_at)'), '<',
-                    $lastRecord->created_at->format('Y-m-d'))->get();
-                    
+                $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
+                ->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
+
                 if (!$lastToLastDate->isEmpty()) {
                     $pricesprevious = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
                         'name_rel',
@@ -337,10 +335,11 @@
                         'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                     ]);
                 }
-
+    
                 foreach ($prices as $k => $v) {
                     if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
                         if ($state == $v->state) {
+                            dd($v);
                             $replaceHignfn = explode('-', $v->name_rel->type);
                             $implodeUnderscore = implode('_', $replaceHignfn);
                             $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
@@ -357,7 +356,7 @@
                     'oldDate' => ''
                 ]);
             } else {
-                $data = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+                $data = LivePrice::where('state' , $state)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
                     'name_rel',
                     'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
@@ -378,23 +377,23 @@
                 return response()->json([
                     'errors' => null,
                     'prices' => $processedData,
-                    'latest' => $lastRecord->created_at->format('Y-m-d'),
+                    'latest' => '',
                     'oldDate' => ''
                 ]);
             }
             
         }
         
+        
         public function getPorts()
         {
             $lastUpdatedDate = Port::orderBy('created_at' , 'DESC')->first();
-        
+
             $dateCreate = date_create($lastUpdatedDate->created_at);
             $formatedDate = date_format($dateCreate , 'Y/m/d');
-            $listPort = Port::whereIn('route', ['kandla_port', 'mundra_port', 'JNPT_port'])->whereDate('created_at' , $formatedDate)->get()->groupBy('state');
+            $listPort = Port::whereDate('created_at' , $formatedDate)->orderBy('id' , 'DESC')->where('route' ,'!=', 0)->get()->groupBy('state');
             
             return response()->json(['errors' => null, 'list' => $listPort]);
-            
         }
         
         public function getpriceByTimePeriod($state, $riceType, $rice, $timePeriod)
@@ -756,26 +755,58 @@
         public function getBasmatiState()
         {
             $ricename = RiceName::select('id')->where('type', 'basmati')->pluck('id')->toArray();
-            $lastRecord = LivePrice::get()->last();
-            $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
-            
-            $livePrice = LivePrice::select('state')->whereDate('created_at',
-                $lastEnteredRecord)->groupBy('state')->where('min_price', '!=', null)->where('max_price', '!=',
-                null)->whereIn('name', $ricename)->pluck('state');
-            return response()->json(['error' => null, 'data' => $livePrice], 200);
+            $lastRecord = LivePrice::where('name' ,'!=',0)->where('form' , '!=' , 0)->where('min_price', '!=', null)->where('max_price', '!=', null)->get()->last();
+            if($lastRecord != null){
+                $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+                
+                $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)->whereIn('name', $ricename)->get()->map(function($query){
+                    return $query->state;
+                });
+
+                // if( $livePrice->count() == 0 ){
+                //     $lastRecord = LivePrice::whereDate('created_at' , '<' , $lastEnteredRecord )->get()->last();
+                //     $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+                
+                //     $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)->whereIn('name', $ricename)->get()->map(function($query){
+                //         return $query->state;
+                //     });
+                // }
+
+                if( count($livePrice) > 0 ){
+                    $livePrice = array_unique($livePrice->toArray());
+                    $livePrice = array_values($livePrice);
+                }else{
+                    $livePrice = [];
+                }
+                
+                return response()->json(['error' => null, 'data' => $livePrice], 200);    
+            }
+            return response()->json(['error' => null, 'data' => ''], 500);
         }
         
         public function getNONBasmatiState()
         {
             $ricename = RiceName::select('id')->where('type', 'non-basmati')->pluck('id')->toArray();
+            $lastRecord = LivePrice::where('name' ,'!=',0)->where('form' , '!=' , 0)->where('min_price', '!=', null)->where('max_price', '!=', null)->get()->last();
+
+            if( $lastRecord != null ){
+                $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
             
-            $lastRecord = LivePrice::get()->last();
-            $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
-            
-            $livePrice = LivePrice::select('state')->whereDate('created_at',
-                $lastEnteredRecord)->groupBy('state')->where('min_price', '!=', null)->where('max_price', '!=',
-                null)->whereIn('name', $ricename)->pluck('state');
-            return response()->json(['error' => null, 'data' => $livePrice], 200);
+                $livePrice = LivePrice::select('state')->whereDate('created_at',$lastEnteredRecord)->groupBy('state')->where('min_price', '!=', null)->where('max_price', '!=',null)
+                ->whereIn('name', $ricename)->pluck('state');
+                
+                // if( $livePrice->count() == 0 ){
+                //     $lastRecord = LivePrice::whereDate('created_at' , '<' , $lastEnteredRecord )->get()->last();
+                //     $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+
+                //     $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)
+                //     ->whereIn('name', $ricename)->get()->map(function($query){
+                //         return $query->state;
+                //     });
+                // }
+                return response()->json(['error' => null, 'data' => $livePrice], 200);    
+            }
+            return response()->json(['error' => null, 'data' => ''], 200);
         }
         
         public function getChartinterval()
@@ -799,7 +830,7 @@
         public function updateUserToken(Request $request)
         {
             User::where(['id' => $request->id])->update(['userToken' => $request->userToken]);
-            return response()->json(['error' => null, 'message' => "Token updated successfully.."]);
+            return response()->json(['error' => null, 'message' => "Token updated successfully..."]);
         }
         
         // Update User Token
@@ -1006,11 +1037,41 @@
         
         public function getMessgaeDetails($userId){
             return ['unseenMessage' => Message::where('from','=',$userId)->where('seen' , 0)->get()->count(),
-            'latestMessage' => Message::where('from','=',$userId)->orWhere('to','=',$userId)->latest()->first()->message];
+            'latestMessage' => Message::where('from','=',$userId)->orWhere('to' , '=' , $userId)->latest()->first()->message];
         }
         
         public function checkUserExpired($userId){
             $user = User::where('id' , $userId)->first();
             return response()->json(['status' => true , 'data' => $user->expired_on]);
         }
+        
+        public function getPriceStates(){
+            
+            $lastRecord = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
+            
+            if( $lastRecord != null ){
+                $lastDate = Carbon::parse($lastRecord->created_at)->format('Y-m-d');
+                
+                $prices = LivePrice::whereDate('created_at' , $lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query){
+                    return $query->get();
+                },'form_rel' => function ($query) {
+                        return $query->orderBy('id', "ASC")->get();
+                    }
+                ])->get()->groupBy('state');    
+                
+                return response()->json(['status' => true , 'data' => $prices]);
+            }
+            return response()->json(['status' => true , 'data' => '']);
+        }
+        
+        public function getTransportStates(){
+            $port = Port::where('route' , '!=' , '0')->where('price' , '!=' , '0')->get()->groupBy('state');
+            return response()->json(['status' => true , 'data' => $port ]);
+        }
+        
+        public function getPortDetails($state){
+            $port = Port::where('state',$state)->where('price' ,'!=' ,'0')->where('route' ,'!=' ,'0')->get();
+            return response()->json(['status' => true , 'data' => $port ]);
+        }
+        
     }

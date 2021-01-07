@@ -164,8 +164,19 @@ class MasterController extends Controller
 		$request->validate([
 			'state' => 'required|unique:ports',
 		]);
+		
+        $availableRoute =   Port::where('route' ,'!=', '0')->get()->map( function( $query ){
+                                return $query->route;
+                            } );
 
-		Port::create([ 'state' => $request->state,'route' => '0','price' => 0]);
+        if( $availableRoute->count() > 0 ){
+            foreach( $availableRoute as $k => $v ){
+                Port::create([ 'state' => $request->state,'route' => $v,'price' => 0]);    
+            }    
+        }else{
+            Port::create([ 'state' => $request->state,'route' => '0','price' => 0]);
+        }
+        
 		Session::flash('message' , 'City added successfully');
 		return back();
 	}

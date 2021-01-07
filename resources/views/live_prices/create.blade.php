@@ -73,7 +73,7 @@
                                         </thead>
                                         <tbody>
                                             @foreach($prices as $key => $price)
-                                                @if( $price->name_rel != null )
+                                                @if( $price->name_rel != null && $price->form_rel )
                                                     <tr>
                                                         <td>{{ $loop->index + 1 }}</td>
                                                         <td>{{ $price->name_rel->name }}</td>
