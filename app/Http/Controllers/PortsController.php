@@ -10,37 +10,88 @@ use Illuminate\Support\Facades\DB;
 
 class PortsController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
+
         $todayPrice = collect();
-        if($request->has('date')){
-            $todayPrice = Port::where( 'route' ,'!=', '0' )->where(DB::raw('date(created_at)'),$request->date)->get()->groupBy('state');
-        }else{
-            $lastUpdatedDate = Port::orderBy('created_at' , 'DESC')->first();
-            if( $lastUpdatedDate != null ){
+
+        if ($request->has('date')) {
+            $todayPrice = Port::where('route', '!=', '0')->where(DB::raw('date(created_at)'), $request->date)->get()->groupBy('state');
+        } else {
+            $lastUpdatedDate = Port::orderBy('created_at', 'DESC')->first();
+
+
+            if ($lastUpdatedDate != null) {
                 $dateCreate = date_create($lastUpdatedDate->created_at);
-                $formatedDate = date_format($dateCreate , 'Y/m/d');
-                
-                $todayPrice = Port::where( 'route' ,'!=', '0' )->whereDate('created_at' , $formatedDate)->get()->groupBy('state');
+                $formatedDate = date_format($dateCreate, 'Y/m/d');
+
+                // $todayPrice = Port::whereDate('created_at' , $formatedDate)->get()->groupBy('state');
+
+                /**
+                 * Changes By Jaskaran Singh
+                 **/
+                // where('route','!=','0')->
+                // ->groupBy('state')
+                // where('state','=','CHHATTISGARH')
+                $todayPrice = Port::where('route','!=','0')->get()->groupBy('state');
             }
         }
-        return view('ports.create',['prices'=>$todayPrice]);
+        return view('ports.create', ['prices' => $todayPrice]);
     }
 
-    public function save(Request $request){
-        $requestData = $request->except(['_token','date']);
-        foreach($requestData as $state => $routes){
-            foreach($routes as $route => $price){
-                if( $price != null || $price != '' ){
-                    $isPortPriceAlreadyExists = Port::where(DB::raw('date(created_at)'),Carbon::today()->format('Y-m-d'))
-                    ->firstOrNew(['state'=>$state,'route'=>$route]);
-                    $isPortPriceAlreadyExists->state = $state;
-                    $isPortPriceAlreadyExists->route = $route;
-                    $isPortPriceAlreadyExists->price = $price;
-                    $isPortPriceAlreadyExists->save();
+    public function save(Request $request)
+    {
+        $portsOrder = Port::distinct('state_order' , 'state')->where('state_order' ,'!=', null)->pluck('state_order' , 'state');
+        
+        $data = Port::where('state_order','!=',null)->pluck('state','state_order')->all();
+    
+        $requestData = $request->except(['_token', 'date']);
+        $checkIfHasTodayPorts = Port::whereDate('created_at', Carbon::today()->format('Y-m-d'))->first();
+        Port::whereDate('created_at', Carbon::today()->format('Y-m-d'))->delete();
+        
+        foreach($requestData as $k => $v){
+            foreach($v as $kk => $vv){
+                if( $vv != null ){
+                    $price = $vv;
+                }else{
+                    $price = 0;
                 }
+                $create = ['state' => $k , 'route' => $kk , 'price' => $price , 'status' => 1];
+                Port::create($create);
             }
         }
-        Session::flash('success','Success|Ports saved successfully!');
+        foreach($portsOrder as $k => $v){
+            $getBanner = Port::where('state' , $k)->first();
+            if( $getBanner != null ){
+                $getBannerUrl = $getBanner->banner; 
+                Port::where('state' , $k)->update(['state_order' => $v , 'banner' => $getBannerUrl ]);
+            }else{
+                Port::where( 'state' , $k )->update([ 'state_order' => $v ]);
+            }
+        }
+        // if ($checkIfHasTodayPorts != null) {
+        //     foreach ($requestData as $state => $routes) {
+        //         foreach ($routes as $route => $price) {
+        //             $isPortPriceAlreadyExists = Port::where(DB::raw('date(created_at)'), Carbon::today()->format('Y-m-d'))->where(['state' => $state, 'route' => $route])->update(['price' => $price]);
+        //         }
+        //     }
+        // } else {
+        //     foreach ($requestData as $state => $routes) {
+        //         foreach ($routes as $route => $price) {
+        //             $isPortPriceAlreadyExists = Port::where(DB::raw('date(created_at)'), Carbon::today()->format('Y-m-d'))->firstOrNew(['state' => $state, 'route' => $route]);
+        //             $isPortPriceAlreadyExists->state = $state;
+        //             $isPortPriceAlreadyExists->route = $route;
+        //             $isPortPriceAlreadyExists->price = $price;
+        //             $isPortPriceAlreadyExists->save();
+        //         }
+        //     }
+        // }
+        
+        // foreach($data as $key => $value ){
+        //     Port::where('state',$value)->update(['state_order'=>$key]);
+        // }
+
+        Session::flash('success', 'Success|Ports saved successfully!');
         return back();
     }
 }

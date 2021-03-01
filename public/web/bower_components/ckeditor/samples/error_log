@@ -13,3 +13,7 @@ Stack trace:
 #2 /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2): zjaxr(Array, Array)
 #3 {main}
   thrown in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function on line 51
+[26-Jan-2021 11:50:50 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[26-Jan-2021 11:50:50 UTC] PHP Notice:  Undefined offset: 5 in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php(2) : runtime-created function on line 133
+[24-Feb-2021 17:36:06 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2
+[26-Feb-2021 09:03:25 UTC] PHP Deprecated:  Function create_function() is deprecated in /home/sboy8c4wy24p/public_html/ricebrok-staging.webcooks.in/public/web/bower_components/ckeditor/samples/qqvdrtnt.php on line 2

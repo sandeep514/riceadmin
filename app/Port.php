@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Port extends Model
 {
-    protected $fillable = ['state','route','price'];
+    protected $fillable = ['banner' , 'state','route','price','state_order'];
 }

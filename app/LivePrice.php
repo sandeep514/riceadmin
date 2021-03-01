@@ -9,7 +9,7 @@ class LivePrice extends Model
     protected $fillable = ['name','form','min_price','max_price','state','up_down','status'];
 
     public function name_rel(){
-        return $this->belongsTo(RiceName::class,'name','id');
+        return $this->belongsTo(RiceName::class,'name','id')->orderBy('order','ASC');
     }
 
     public function form_rel(){

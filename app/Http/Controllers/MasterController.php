@@ -139,7 +139,9 @@ class MasterController extends Controller
 	}
 
 	public function createCity(Request $request){
+
 		LivePrice::create(['name' => 0,'form' => 0 , 'state' => $request->name , 'up_down' => 'up']);
+		
 		Session::flash('message' , 'City added successfully');
 		return back();
 	}
@@ -165,16 +167,18 @@ class MasterController extends Controller
 			'state' => 'required|unique:ports',
 		]);
 		
-        $availableRoute =   Port::where('route' ,'!=', '0')->get()->map( function( $query ){
-                                return $query->route;
-                            } );
-
-        if( $availableRoute->count() > 0 ){
-            foreach( $availableRoute as $k => $v ){
-                Port::create([ 'state' => $request->state,'route' => $v,'price' => 0]);    
+        $availableRoute =   Port::where('route' ,'!=', '0')->get()->groupBy('route');
+		$data  = Port::orderBy('state_order','DESC')->first();
+		$order = 0;
+		if($data != null){
+			$order = $data->state_order;
+		}
+        if($availableRoute->keys()->count() > 0 ){
+            foreach( $availableRoute->keys() as $k => $v ){
+                Port::create([ 'state' => $request->state,'route' => $v,'price' => 0,'state_order' => $order+1]);    
             }    
         }else{
-            Port::create([ 'state' => $request->state,'route' => '0','price' => 0]);
+            Port::create([ 'state' => $request->state,'route' => '0','price' => 0,'state_order' => $order+1]);
         }
         
 		Session::flash('message' , 'City added successfully');
@@ -253,9 +257,27 @@ class MasterController extends Controller
 
 	public function updatePort(Request $request)
 	{
-		$port = Port::where('id' , $request->id)->first();
 
+		$port = Port::where('id' , $request->id)->first();
+		
 		Port::where('state' , $port->state)->update(['state' => $request->state]);
+		
+		if( $request->has('uploadBanner') ){
+		    if( $request->uploadBanner != null ){
+		        $file = $request->file('uploadBanner');
+        		$filename = rand(1111,9999).'_'.$file->getClientOriginalName();
+        		$fileExtention = $file->getclientoriginalextension();
+        		
+                if( $fileExtention == 'jpg' || $fileExtention == "JPEG" || $fileExtention == 'png' || $fileExtention == "PNG" ){
+                    $destination = 'uploads/banner';
+            		$file->move($destination , $filename);
+            		Port::where([ 'state' => $port->state ])->update(['banner' => $filename]);
+                }else{
+                    return back()->withErrors(['fileFormat' => 'File Extention must be jpg or png.']);
+                }
+		    }
+		}
+		
 		return back();
 	}
 

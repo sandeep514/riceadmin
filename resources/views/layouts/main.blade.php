@@ -70,6 +70,7 @@
             {{ $errors->first('error') }}
         </div>
     @endif
+    
     <!-- Content Wrapper. Contains page content -->
     @yield('content')
     <!-- /.content-wrapper -->
@@ -103,6 +104,9 @@
         setTimeout(() =>{
             $('.alert').fadeOut()
         } , 3000);
+        
+        
+        
     });
 </script>
 </body>

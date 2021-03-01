@@ -1,0 +1,111 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4746:"It was transferred onto the Welsh channel S4C in 1982 and has been broadcast there ever since, but is still filmed in the BBC Cymru studios. Cyrraedd y Cwm Golygu. Cyn-berchennog Y Deri Arms. BBC Radio Cymru are to broadcast a programme at 0900 BST on Saturday to celebrate 35 years of programming for the show. Cyn-wr Cassie, cefnder i Glan, a tad Chester a Catrin Monk. Aled Richards; Rhif 10, Stryd Fawr; Mrs Lloyd; Gwenllian James; Mr Lloyd; Dani Monk; Llio Jones; Community . The episode marking the 35th anniversary of the day the show was debuted was broadcast on Friday. Ioan Gruffudd, mânt mânaperp kekehp, sjehitan un da sçoun hiç 1987 - 1994. Add new page. Articles presented on Wikinews reflect the specific time at which they were written and published, and do not attempt to encompass events or knowledge which occur or become known after their publication. Unan deus ar soap-opera koshañ produet gant ar BBC eo ha dalc'hmat e vez an abadenn … Friday, October 16, 2009 Cyrhaeddod Gina Gwmderi yn 1991 i aros gyda'i chwaer Eileen. Da sçoun kantet bohwan cjelan mânt. The exterior outdoor high street of Cwmderi was recreated from scratch, while many interiors are shot inside the Roath Lock Studios. The number of episodes being broadcast would be also be reduced to two a week "so that we can ensure the audience can continue to enjoy Pobol y Cwm in their homes for as long as possible." POBOL Y CWM. Cyn pen dim cafodd waith yn gweini yn y Plas, a chartref newydd yn rhannu Rhif 7 gyda Meira Ellis. Daeth ei wraig, … The Friday episodes were dropped in 2019, and an hour long episode airs every Wednesday instead. [3] The longest-running television soap opera produced by the BBC, Pobol y Cwm was originally transmitted on BBC One Wales and later transferred to the Welsh-language station S4C when it opened in November 1982.[3]. PYC is on Sky+ and I remember getting a shock when I went to a skiing chalet in France years ago and switched on the television and PYC came on!".  Welsh language television soap-opera Pobol y Cwm celebrated the 35th anniversary of broadcasting on Friday. When production recommenced, social distancing measures was utilised and the show's cast were required to do their own hair and make-up, which is normally done by a make-up artist. Take your favorite fandoms with you and never miss a beat. Four episodes are produced each week. Wiki Activity; Random page; Videos; Images; Discuss. Pobol y Cwm bosçounitan ahr BBC Wales wen da gonno o S4C, da Galoniç-sçpâk kulkwanap, un Dînofûwêt 1982. Un Cwmderi, sjeh uhvîp Y Deri, ac unâl sûbdeniç dmnisçtahna un da sçoun sjeh Llanarthur a Cwrt Mynach. Pobol y Cwm — Welsh for "People of the Valley" — made its first broadcast on BBC One Wales on October 16, 1974. Cyn-wraig Teg. Pobol y Cwm (hag a zo Tud an draoñienn) zo un abadenn skinwel soap-opera kembreat. A behind-the-scenes show, Pobol y Cwm: Y Cymeriadau, aired in the show's place during the tranmission break. Popular pages. It’s the only Welsh soap and in the last 10 years it’s become even more accessible. Reporter's notes and the broadcast source details are available at the. Pobol y Cwm (Njûlan: Pohnna o da Buhlan) sjeh BBC sûbdensçoun un da Galoniç sçpâk, det bogonitan un Dîfûwêt 1974. It is one of the most watched programmes on the Welsh channel and the longest-running television soap-opera produced by the BBC. Teithio i lawr am wyliau at ei ffrind Jean McGurk oedd Cassie yn arfer ei wneud a phob tro'roedd yng Nghwmderi roedd yn cael cyfle i gambihafio - daeth ei haffêrs gyda Dic, Rod ac Eddie yn enwog! [8] Filming recommenced on 10 August 2020, with new episodes airing from 8 September 2020 semiweekly. The soap also aired a repeat of "iconic" episodes from the past. Originally filmed at Broadcasting House, Cardiff, since 2011, the programme has been filmed at the BBC's drama studios at Roath Lock in Cardiff Bay, other than a few on-location shoots around Cardiff. Please note that due to our archival policy, we will not alter or update the content of articles that are archived, but will only accept requests to make grammatical and formatting corrections. All text created after September 25, 2005 available under the terms of the, Tributes paid to recently deceased US actor Chadwick Boseman, Japanese professional wrestler and Netflix star Hana Kimura dies aged 22, BBC newsreader Alagiah to undergo treatment for bowel cancer, First Star Trek series in twelve years, Discovery, debuts on television, https://en.wikinews.org/w/index.php?title=Welsh_soap_opera_Pobol_y_Cwm_celebrates_35_years_on_air&oldid=1566513, Some information contained in this article was obtained from television, radio, or live webcast sources. ";s:7:"keyword";s:16:"pobol y cwm wiki";s:5:"links";s:7398:"<a href='https://ricebrok-staging.webcooks.in/docs/tommy-robredo-career-stats-86e6ec'>Tommy Robredo Career Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/select-tv-channel-86e6ec'>Select Tv Channel</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hinterland-season-1-episode-1-explained-86e6ec'>Hinterland Season 1 Episode 1 Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kevin-durant-shoes-6-86e6ec'>Kevin Durant Shoes 6</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jobs-in-soccer-86e6ec'>Jobs In Soccer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/agnes-pauline-jones-86e6ec'>Agnes Pauline Jones</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/board-of-election-jobs-86e6ec'>Board Of Election Jobs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/testing-and-debugging-cycle-in-software-testing-86e6ec'>Testing And Debugging Cycle In Software Testing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-grinch-cast-2001-86e6ec'>The Grinch Cast 2001</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/collin-sexton-age-86e6ec'>Collin Sexton Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/book-of-joshua-86e6ec'>Book Of Joshua</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-day-of-school-inspirational-quotes-86e6ec'>First Day Of School Inspirational Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-premier-league-titles-have-man-city-won-86e6ec'>How Many Premier League Titles Have Man City Won</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/friday-night-lights-book-pages-86e6ec'>Friday Night Lights Book Pages</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/true-secret-confessions-86e6ec'>True Secret Confessions</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shepard-fairey-autograph-86e6ec'>Shepard Fairey Autograph</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wku-football-recruiting-2020-86e6ec'>Wku Football Recruiting 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/primer-book-pronunciation-86e6ec'>Primer Book Pronunciation</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dave-bing-family-86e6ec'>Dave Bing Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vikingdom-m1s-86e6ec'>Vikingdom M1s</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/miss-pettigrew-lives-for-a-day-%28dvd%29-86e6ec'>Miss Pettigrew Lives For A Day (dvd)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-lodge-at-river-park-86e6ec'>The Lodge At River Park</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/working-partner-meaning-in-tamil-86e6ec'>Working Partner Meaning In Tamil</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/madagascar-flag-meaning-86e6ec'>Madagascar Flag Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/evolve-steam-86e6ec'>Evolve Steam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/out-of-africa-theory-86e6ec'>Out Of Africa Theory</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/phil-harvey-microsoft-86e6ec'>Phil Harvey Microsoft</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jeff-koons-parents-86e6ec'>Jeff Koons Parents</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bristol-rugby-tv-coverage-86e6ec'>Bristol Rugby Tv Coverage</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/idle-town-lyrics-86e6ec'>Idle Town Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/carolina-moon-lyrics-86e6ec'>Carolina Moon Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/into-the-forest-cast-86e6ec'>Into The Forest Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/city-on-fire-sales-86e6ec'>City On Fire Sales</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/viy-severin-films-86e6ec'>Viy Severin Films</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chicago-15-album-86e6ec'>Chicago 15 Album</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-will-portrait-of-a-lady-on-fire-be-available-to-stream-86e6ec'>When Will Portrait Of A Lady On Fire Be Available To Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/erik-griffin-podcast-86e6ec'>Erik Griffin Podcast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/astonish-linen-fresh-86e6ec'>Astonish Linen Fresh</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/road-to-istanbul-movie-86e6ec'>Road To Istanbul Movie</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-alicia-witt-married-86e6ec'>Is Alicia Witt Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/del-the-funky-homosapien-i-wish-my-brother-george-was-here-songs-86e6ec'>Del The Funky Homosapien I Wish My Brother George Was Here Songs</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/notre-dame-mascot-86e6ec'>Notre Dame Mascot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alan-king-racing-86e6ec'>Alan King Racing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/duma-meaning-chinese-86e6ec'>Duma Meaning Chinese</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/saucer-meaning-in-bengali-86e6ec'>Saucer Meaning In Bengali</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/creepshow-episode-4-review-86e6ec'>Creepshow Episode 4 Review</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-peacekeeper-for-honor-86e6ec'>The Peacekeeper For Honor</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dept-kent-band-ksumgf-home-86e6ec'>Dept Kent Band Ksumgf Home</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vehicle-tracking-device-no-monthly-fee-86e6ec'>Vehicle Tracking Device No Monthly Fee</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pickle-man-long-island-86e6ec'>Pickle Man Long Island</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/interstellar-plot-86e6ec'>Interstellar Plot</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kate-siegel-net-worth-86e6ec'>Kate Siegel Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-two-noble-kinsmen-globe-cast-86e6ec'>The Two Noble Kinsmen Globe Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ac-milan-away-kit-19%2F20-86e6ec'>Ac Milan Away Kit 19/20</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bring-me-the-head-of-alfredo-garcia-subtitles-86e6ec'>Bring Me The Head Of Alfredo Garcia Subtitles</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wall-e-2-back-on-earth-86e6ec'>Wall-e 2 Back On Earth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/charlie-company-vietnam-members-86e6ec'>Charlie Company Vietnam Members</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hollow-point-vs-round-nose-86e6ec'>Hollow Point Vs Round Nose</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/southbound-movie-stream-86e6ec'>Southbound Movie Stream</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-reaping-2-cast-86e6ec'>The Reaping 2 Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/air-force-special-forces-86e6ec'>Air Force Special Forces</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/2006-alabama-football-86e6ec'>2006 Alabama Football</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/storm-v-warriors-2020-86e6ec'>Storm V Warriors 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ugo-humbert-parents-86e6ec'>Ugo Humbert Parents</a>,
+";s:7:"expired";i:-1;}

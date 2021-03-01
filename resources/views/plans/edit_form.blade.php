@@ -64,10 +64,14 @@
                                                     if( array_key_exists('offerPrice' , $data) ){
                                                         $offerPrice = $data['offerPrice'];
                                                     }
+                                                    if( array_key_exists('feature' , $data) ){
+                                                        $feature = $data['feature'];
+                                                    }
                                                 @endphp
                                                 
                                                 <div class="col-md-4">
                                                     <div class="row">
+                                                        
                                                         <div class="col-md-12">
                                                             {!! Form::label('subplan[]',$v['data']['name']) !!}
                                                             <div class="row">
@@ -79,6 +83,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
                                                         <div class="col-md-12">
                                                             <div class="row">
                                                                 <div class="col-md-4">
@@ -89,11 +94,22 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-4">
+                                                                    {!! Form::label('subplan['.$v['data']->id.']','Features' , ['class' => 'lineheight25']) !!}
+                                                                </div>
+                                                                <div class="col-md-8">
+                                                                    {!! Form::textarea('subplan['.$v['data']->id.'][feature]', $feature ,['rows' => 5,'placeholder' => 'Features' ,'class'=>'form-control']) !!}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
                                                     </div>
                                                 </div>
                                             @endforeach
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>

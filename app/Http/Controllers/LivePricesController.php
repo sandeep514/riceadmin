@@ -44,10 +44,28 @@ class LivePricesController extends Controller
     }
 
     public function savePrice(Request $request){
+        
         $todayDate = Carbon::now()->format('Y-m-d');
         $lastAvailableDate ='';
         $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
-
+        $sortedStateData = [];
+        $sortedNameData = [];
+        $data_state_order = LivePrice::get()->sortBy('state_order');
+        $data_name_order = LivePrice::with(['name_rel' , 'form_rel'])->get()->sortBy('name_order');
+        
+        foreach($data_state_order as $k => $v){
+            if( $v->state_order != null ){
+                $sortedStateData[$v->state_order] = $v->state; 
+            }
+        }
+        
+        foreach($data_name_order as $k => $v){
+            if( $v->name_order != null  ){
+                $sortedNameData[$v->name_order] = $v->name; 
+            }
+        }
+        
+        
         if( $lastAvaibleRecord != null ){
             $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');    
         }
@@ -123,7 +141,7 @@ class LivePricesController extends Controller
             
         }
         
-        
+        LivePrice::where('min_price' , null)->where('max_price' , null)->delete();
         
         // $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
 
@@ -143,6 +161,13 @@ class LivePricesController extends Controller
         //         $priceModel->save();
         //     }
         // }
+        
+        foreach($sortedStateData as $k => $v){
+            LivePrice::where('state' , $v)->update(['state_order' => $k]);
+        }
+        foreach($sortedNameData as $k => $v){
+            LivePrice::where('name' , $v)->update(['name_order' => $k]);    
+        }
         Session::flash('success','Success|Price saved successfully!');
         return back();
     }

@@ -1,0 +1,102 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4323:"I love you sis. 16) Sisters are not your best friends… they’re even better. How do people make it through life without a sister? The two releases are variously categorised as a double album, two single albums or a single album and an extended play. Love ya. 19) Dear sister, you are the only person in the whole world who knows me better than I know myself. 39) Sis, whenever you feel that your heart isn’t with you, check up with me because I am its guardian. I know I'm to old for that but that's my sister, my ONLY full blood sister. 6) A sister is someone who fights with you at home, so you can become stronger and be prepared to take on the cruel world outside. 38) I love you despite the fact that you fight with me day and night. 14) When God gives you a sister, it means that He has sent an angel on deputation to watch over you. Funny Goodbye Messages for Friends: Farewell Quotes, I Am Sorry Messages for Wife: Apology Quotes for Her, I Forgive You Quotes for Her: Forgiveness Quotes for Girlfriend, Birthday Wishes for Fiancé: Quotes and Messages, Birthday Wishes for Grandma: Happy Birthday Granny, Military Homecoming Quotes: Welcome Back from Deployment, RIP Mom Poems: Funeral Poems for a Mother’s Death, Will You Marry Me Quotes: Proposal Messages for Him, Sympathy Messages for Pets: Condolence Quotes for Dogs, Cats and more, Inspirational Quotes for Girls: Motivational messages for young girls, Thank You Notes for Nurses: Quotes and Messages to say Thanks, Inspirational Quotes for Teens: Motivational Messages for Teenagers, Will You Marry Me Quotes: Proposal Messages for Her, Pick Up Lines to Impress a Girl: Cute and Funny Quotes to Ask Her Out, Funny Messages for Friends: Friendship Quotes, RIP Poems for Dad: Funeral Poems for a Father’s Death, Get Well Soon Messages for Husband: Quotes and Wishes, I Forgive You Quotes for Him: Forgiveness Quotes for Boyfriend, Birthday Wishes for Doctors: Quotes and Messages, Birthday Wishes for Ex-Girlfriend: Quotes and Messages. I love you sis. Just walk up to her and catch her off guard. I fight with you sis, but deep down inside I have nothing but love for you. A sister will always notice her sister's first gray hairs with glee. In that sense, your feelings may be practice for when you do identify someone you would like to start seeing in a relationship. Our goal is to help you by delivering amazing quotes to bring inspiration, personal growth, love and happiness to your everyday life. I love you. I love you sis. When we were 20 our parents got together and married, so it's not like we grew up together or anything. .therab_url { color:#4C88C5; font-family:"open sans condensed",arial; text-decoration:none!important; } Never praise a sister to a sister in the hope of your compliments reaching the proper ears. A sister is a gift to the heart, a friend to the spirit, a golden thread to the meaning of life. 37) Competing with a sister is better than competing with other people because even if you lose, she showers you with hugs instead of insults. Ignore her and stay true to your wife. You should only have eyes for your wife.You are crossing all types of boundaries here. I love you sis. I love you. But I never had the chance to choose my sister, and that is one choice I am glad I never had – because you are the best sis anyone could ever have. Love for a sister is not being “in love”. Feelings, feelings like I wanna deck you, feelings like I've gotta get you out of my life. Is it really wrong to feel this way about her? 23) Sisters are almost a reflection of their brothers, except that they are way more mature. The only difference is that she actually knows what you want for Christmas. 26) Friends make you laugh and lovers make you smile. You are not only the sweetest sister but also a true friend. Custom and user added quotes with pictures. It doesn’t take a lot. Whether you are an older brother to a little sis or a younger bro to an elder sister – don’t wait for Sister’s Day to share an adorable sibling moment with your sis. Acting on those impulses, even a little, would damage your relationships in your family for a very, very long time. If your sister is in a tearing hurry to go out and cannot catch your eye, she's wearing your best sweater. Sister quotes. We're brother and sister. ";s:7:"keyword";s:19:"feelings for sister";s:5:"links";s:6274:"<a href='https://ricebrok-staging.webcooks.in/docs/a-date-with-miss-fortune-story-86e6ec'>A Date With Miss Fortune Story</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-great-escape-book-characters-86e6ec'>The Great Escape Book Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bc-jean-wedding-dress-86e6ec'>Bc Jean Wedding Dress</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jamal-murray-season-stats-86e6ec'>Jamal Murray Season Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-darkness-falls-a-real-place-86e6ec'>Is Darkness Falls A Real Place</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ring-of-power-dnd-86e6ec'>Ring Of Power Dnd</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/super-dad-86e6ec'>Super Dad</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/chrome-parental-controls-android-86e6ec'>Chrome Parental Controls Android</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rayshad-lewis-kentucky-86e6ec'>Rayshad Lewis Kentucky</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eric-braeden-wife-picture-86e6ec'>Eric Braeden Wife Picture</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/margo-martindale---imdb-86e6ec'>Margo Martindale - Imdb</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/centurion-roman-86e6ec'>Centurion Roman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-all-star-jersey-2018-86e6ec'>Russell Westbrook All Star Jersey 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-to-file-a-complaint-against-a-politician-86e6ec'>How To File A Complaint Against A Politician</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beirut-movie-budget-86e6ec'>Beirut Movie Budget</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/de%27aaron-fox-new-haircut-86e6ec'>De'aaron Fox New Haircut</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/deliver-us-from-evil-%282020-english-subtitles%29-86e6ec'>Deliver Us From Evil (2020 English Subtitles)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aec-medical-86e6ec'>Aec Medical</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/francis-antetokounmpo-age-86e6ec'>Francis Antetokounmpo Age</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tosin-morohunfola-wikipedia-86e6ec'>Tosin Morohunfola Wikipedia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-we-become-walking-dead-86e6ec'>What We Become Walking Dead</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/manassas%2C-va-map-86e6ec'>Manassas, Va Map</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/marine-raiders-86e6ec'>Marine Raiders</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bird-lists-86e6ec'>Bird Lists</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/atalanta-vs-cagliari-prediction-86e6ec'>Atalanta Vs Cagliari Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slang-for-wake-up-86e6ec'>Slang For Wake Up</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brann-fc-table-86e6ec'>Brann Fc Table</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/usmc-flag-86e6ec'>Usmc Flag</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kay%27la-hanson-ethnicity-86e6ec'>Kay'la Hanson Ethnicity</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stacey-giggs-wedding-86e6ec'>Stacey Giggs Wedding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/far-and-away-movie-questions-and-answers-86e6ec'>Far And Away Movie Questions And Answers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/christina%27s-house-parents-guide-86e6ec'>Christina's House Parents Guide</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/epidemic-vs-pandemic-86e6ec'>Epidemic Vs Pandemic</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kent-lane-biography-86e6ec'>Kent Lane Biography</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eddie-peng-news-86e6ec'>Eddie Peng News</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/acid-sql-86e6ec'>Acid Sql</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/barry-coe-and-wife-86e6ec'>Barry Coe And Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/types-of-balls-86e6ec'>Types Of Balls</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-stranger-movie-netflix-86e6ec'>The Stranger Movie Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bugs-bunny-in-space-1977-86e6ec'>Bugs Bunny In Space 1977</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nick-owen-partner-vicki-beevers-86e6ec'>Nick Owen Partner Vicki Beevers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hearing-aid-price-comparison-86e6ec'>Hearing Aid Price Comparison</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bomb-hugger-original-86e6ec'>Bomb Hugger Original</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/beyond-a-shadow-of-a-doubt-legal-definition-86e6ec'>Beyond A Shadow Of A Doubt Legal Definition</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-a-wonderful-world-genre-86e6ec'>What A Wonderful World Genre</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/liberty-in-a-sentence-86e6ec'>Liberty In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/slash-2020-86e6ec'>Slash 2020</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/house-at-the-end-of-the-street-plot-holes-86e6ec'>House At The End Of The Street Plot Holes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ian-lithgow-perry-mason-86e6ec'>Ian Lithgow Perry Mason</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-secret-garden-3-86e6ec'>The Secret Garden 3</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/madigan-drive-through-pharmacy-phone-number-86e6ec'>Madigan Drive Through Pharmacy Phone Number</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gedion-zelalem-stats-86e6ec'>Gedion Zelalem Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/team-sports-1-class-in-high-school-86e6ec'>Team Sports 1 Class In High School</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ma%C3%AFwenn-the-professional-86e6ec'>Maïwenn The Professional</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-polls-86e6ec'>David Perdue Polls</a>,
+";s:7:"expired";i:-1;}

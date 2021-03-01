@@ -109,8 +109,8 @@ class PlanController extends Controller
         $chartIntArray = $chartInt->toArray();
         
         return view('plans.edit', compact('data' ,'SubPlans' , 'SubPlan', 'ChartInterval', 'plan' , 'chartInt','chartIntArray'));
-   }
-   
+    }
+    
     public function updatePlan(Request $request){
 
         $id = $request->plan_id;

@@ -327,6 +327,6 @@ Route::group(['prefix'=>'administrator'], function(){
     });
 
     Auth::routes();
-
+    Route::POST('change/chat/status' , ['as' => 'change.chat.status' , 'uses' => 'UsersController@changeChatStatus']);
     Route::get('logout','Auth\LoginController@logout');
 });

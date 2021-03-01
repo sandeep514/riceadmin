@@ -22,15 +22,33 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Quality Details</h3>
                         </div>
+                        
+                       
+                        
                         <!-- /.box-header -->
-                        {!! Form::open(['route'=>'master.transport.update.state','method'=>'post']) !!}
+                        {!! Form::open(['route'=>'master.transport.update.state','method'=>'post' ,'files' => 'true']) !!}
                             <input type="hidden" name="id" value="{{ $portState->id }}">
+                            
                             <div class="form-group col-md-4 ">
                                 {!! Form::label('state','State*') !!}
-                                {!! Form::text('state' ,$portState->state , ['class' => 'form-control']) !!}
+                                {!! Form::text('state' , $portState->state , ['class' => 'form-control']) !!}
                             </div>
-                            <div class="box-footer">
-                                <button type="submit" class="btn btn-primary">Save</button>
+                            
+                            <div class="form-group col-md-4">
+                                {!! Form::label('file','Upload file*') !!}
+                                <input type="file" name="uploadBanner" class="form-control">
+                                <img src="{{ asset('uploads/banner/'.$portState->banner) }}" style="width:100px; height:100px" >
+                                @if($errors->has('fileFormat'))
+                                    <div style="color: red">
+                                        <span>{{ $errors->first('fileFormat') }}</span>
+                                    </div>
+                                @endIf
+                            </div>
+                            
+                            <div class="form-group col-md-4">
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
                             </div>
                         {!! Form::close() !!}
                     </div>

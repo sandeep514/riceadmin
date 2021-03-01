@@ -1,0 +1,107 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:4726:"323 969 8985. If this item isn't available to be reserved nearby.  var abpartner = get_cookie ( "abpartner" ); Published to accompany a major international exhibition, David Hockney: Drawing from Life features Hockney's drawings from the 1950s to the present day, and focuses on his depictions of himself and a small group of sitters close to him: his muse, Celia Birtwell; his mother, Laura Hockney; and his friends, the curator, Gregory Evans, and master printer, Maurice Payne.  – ggf. Please check by using, as intimate as it gets, and barely a swimming pool in sight--Robin Simon "Daily Mail", This site is protected by reCAPTCHA and the Google. By continuing to browse the site you accept our Cookie Policy, you can change your settings at any time. David Hockney is recognised as one of the master draughtsmen of our times and a champion of the medium. Bitte versuchen Sie es erneut. Available in shop from just two hours, subject to availability. Hockney studied at the Bradford School of Art and the Royal College of Art with R.B. For reproduction permissions, contact the copyright holders. Like most young artists, his subjects were himself, those close to him, and his immediate surroundings; domestic interiors and the local landscape. 																			 ARTBOOK LLC D.A.P. Sie hören eine Hörprobe des Audible Hörbuch-Downloads. Um aus diesem Karussell zu navigieren, benutzen Sie bitte Ihre Überschrift-Tastenkombination, um zur nächsten oder vorherigen Überschrift zu navigieren. Publisher: National Portrait Gallery Publications Leider ist ein Problem beim Speichern Ihrer Cookie-Einstellungen aufgetreten. In his portrait drawings of these figures, Hockney tries out new stylistic experiments and expresses his admiration for his artistic predecessors, from Holbein to Picasso.Featuring 150 beautifully reproduced works from public and private collections across the world, this publication traces the trajectory of Hockneys drawing practice by examining how he has revisited these five figures throughout his career. In his portrait drawings of these figures, Hockney tries out new stylistic experiments and expresses his admiration for his artistic predecessors, from Holbein to Picasso. ExclusiveCatalog: SPRING  2020 p. 15, PRODUCT DETAILS ISBN 9781855147973 TRADEList Price: $45.00 CDN $63.00, London, UK National Portrait Gallery, 02/27/2006/28/20New York, NY Morgan Library & Museum, 10/02/2001/17/21. These interests have remained with him throughout his working life; he still draws on every available piece of paper and his creative mind never rests. | DISTRIBUTED ART PUBLISHERSTel: (212) 627-1999   Fax: (212) 627-9484  Customer Service: (800) 338-2665Email Trade Sales:  orders@dapinc.com. Stattdessen betrachtet unser System Faktoren wie die Aktualität einer Rezension und ob der Rezensent den Artikel bei Amazon gekauft hat. The history of Hockney and his lifelong life-drawing itch, pursued now over seven decades. BOOK FORMAT Hardcover, 9.75 x 10.5 in. Graduating with a gold medal, he became a leading figure in pop art. 																												 This item can be requested from the shops shown below. März 2020, Beautiful, informed... who would have thought the simple line could convey so much. Your review has been submitted successfully. Your order is now being processed and we have sent a confirmation email to you at. //-- Stop hiding script -->, CUSTOMER SERVICEorders@artbook.com 212 627 1999   M-F 9-5 EST, NEW YORKShowroom by Appointment Only75 Broad Street, Suite 630New York NY 10004Tel   212 627 1999, LOS ANGELESShowroom by Appointment Only A stunning overview of [Hockneys] drawings from the late 1950s to the present day. PUBLISHING STATUS Pub Date 4/28/2020Active, DISTRIBUTION D.A.P. Preise inkl. Kitaj, Allen Jones and Derek Boshier. (Englisch) Gebundene Ausgabe – 27. From joyful sketches of old friends to a nude meeting with Picasso  when Hockney wields his pencil we see the undisguised truth. temporär gesenkter USt. If you have changed your email address then contact us and we will update your details. Ihre zuletzt angesehenen Artikel und besonderen Empfehlungen. What's New?BestsellersEventsStaff PicksImage Gallery, Art | PhotographyArchitecture | DesignFilm | Music | FashionTheory | Culture | KidsLiterature | Ebooks, Artist | PhotographerArchitect | DesignerCurator | ThemeJournal | EditionsImprint | Series, New | BestsellersTrade | AcademicD.A.P. Es liegen 0 Rezensionen und 2 Bewertungen aus Deutschland vor, Entdecken Sie jetzt alle Amazon Prime-Vorteile. Übersetzen Sie alle Bewertungen auf Deutsch, Lieferung verfolgen oder Bestellung anzeigen, Recycling (einschließlich Entsorgung von Elektro- & Elektronikaltgeräten). ";s:7:"keyword";s:37:"david hockney: drawing from life book";s:5:"links";s:6912:"<a href='https://ricebrok-staging.webcooks.in/docs/be-the-game-changer-quotes-86e6ec'>Be The Game Changer Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/super-rugby-revenue-86e6ec'>Super Rugby Revenue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/madden-nfl-21-release-date-86e6ec'>Madden Nfl 21 Release Date</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kent-lane-madison%2C-wi-86e6ec'>Kent Lane Madison, Wi</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/kant-means-to-an-end-quote-86e6ec'>Kant Means To An End Quote</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/blake-griffin-family-86e6ec'>Blake Griffin Family</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/one-direction-net-worth-2015-86e6ec'>One Direction Net Worth 2015</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daniel-richter-gallery-86e6ec'>Daniel Richter Gallery</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/israel-election-odds-86e6ec'>Israel Election Odds</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lemonade-recipe-86e6ec'>Lemonade Recipe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-wild-one-motorcycle-86e6ec'>The Wild One Motorcycle</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jacqueline-baudit-86e6ec'>Jacqueline Baudit</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/principles-of-conveyancing-86e6ec'>Principles Of Conveyancing</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/decoy-octopus-86e6ec'>Decoy Octopus</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vanishing-on-7th-street-ending-explained-86e6ec'>Vanishing On 7th Street Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-was-gail-russell-married-to-86e6ec'>Who Was Gail Russell Married To</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/emily-perkins-husband-86e6ec'>Emily Perkins Husband</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/superhot-team-86e6ec'>Superhot Team</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lin-shaye-insidious-86e6ec'>Lin Shaye Insidious</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/midnight-express-streaming-86e6ec'>Midnight Express Streaming</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/who-wrote-old-time-rock-and-roll-86e6ec'>Who Wrote Old Time Rock And Roll</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/adopt-a-mile-86e6ec'>Adopt A Mile</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/texas-rangers%27-new-stadium-86e6ec'>Texas Rangers' New Stadium</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/night-caller-5e-tools-86e6ec'>Night Caller 5e Tools</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/cricbuzz-point-table-2020-ipl-86e6ec'>Cricbuzz Point Table 2020 Ipl</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/auger-aliassime-dad-86e6ec'>Auger Aliassime Dad</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/pacific-heights-san-francisco-86e6ec'>Pacific Heights San Francisco</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/aaron-brooks-accident-86e6ec'>Aaron Brooks Accident</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/suicide-kings-nick-of-time-86e6ec'>Suicide Kings Nick Of Time</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/ernie-hudson-kids-86e6ec'>Ernie Hudson Kids</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/william-o%27leary-height-86e6ec'>William O'leary Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/another-word-for-partner-in-crime-86e6ec'>Another Word For Partner In Crime</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/green-mansions-pdf-86e6ec'>Green Mansions Pdf</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/10-cloverfield-lane-hulu-86e6ec'>10 Cloverfield Lane Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/penny-oleksiak-denis-shapovalov-86e6ec'>Penny Oleksiak Denis Shapovalov</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/julie-delpy-net-worth-86e6ec'>Julie Delpy Net Worth</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/michel-bouchard-investment-banker-86e6ec'>Michel Bouchard Investment Banker</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/faithful-x32-86e6ec'>Faithful X32</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/watch-stay-alive-123-86e6ec'>Watch Stay Alive 123</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eazy-e-real-muthaphuckkin-g%27s-86e6ec'>Eazy-e Real Muthaphuckkin G's</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-marine-6%3A-close-quarters-box-office-86e6ec'>The Marine 6: Close Quarters Box Office</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daddy%27s-little-girl-poem-86e6ec'>Daddy's Little Girl Poem</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dilwale-dulhania-le-jayenge-meaning-in-english-86e6ec'>Dilwale Dulhania Le Jayenge Meaning In English</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mma-growth-statistics-86e6ec'>Mma Growth Statistics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/first-day-of-school-2020-nyc-86e6ec'>First Day Of School 2020 Nyc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/shutter-marathi-movie-watch-online-86e6ec'>Shutter Marathi Movie Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/spruce-knob-observation-tower-86e6ec'>Spruce Knob Observation Tower</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hyper-light-drifter-walkthrough-north-dark-room-86e6ec'>Hyper Light Drifter Walkthrough North Dark Room</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/most-college-football-championships-86e6ec'>Most College Football Championships</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-general-election-1999-86e6ec'>Nz General Election 1999</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/loyalist-areas-of-glasgow-86e6ec'>Loyalist Areas Of Glasgow</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/light-in-august-characters-86e6ec'>Light In August Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/wit-in-a-sentence-86e6ec'>Wit In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hanuman-ji-86e6ec'>Hanuman Ji</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/full-history-of-liverpool-fc-86e6ec'>Full History Of Liverpool Fc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/joy-mangano-sister-86e6ec'>Joy Mangano Sister</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/midnight-runners-watch-online-86e6ec'>Midnight Runners Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/malmo-vs-mjallby-prediction-86e6ec'>Malmo Vs Mjallby Prediction</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/erica-wright-facebook-86e6ec'>Erica Wright Facebook</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anguish-osrs-ge-86e6ec'>Anguish Osrs Ge</a>,
+";s:7:"expired";i:-1;}

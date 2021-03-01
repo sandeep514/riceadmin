@@ -58,5 +58,7 @@ Route::post('save/message',['as'=>'save.message','uses'=>'ApiController@saveMess
 Route::get('get/message/contacts/list/RefactorCode',['as'=>'get.message.contact.refactor','uses'=>'ApiController@getMessageContactsRefator']);
 Route::get('check/user/expired/{id}',['as'=>'check.user.expired','uses'=>'ApiController@checkUserExpired']);
 
-Route::get('get/transport/states' , ['as' => 'get.transport.states' , 'uses' => 'ApiController@getTransportStates']);
+Route::get('get/transport/states' ,     ['as' => 'get.transport.states' , 'uses' => 'ApiController@getTransportStates']);
 Route::get('get/port/details/{state}' , ['as' => 'get.port.details' , 'uses' => 'ApiController@getPortDetails']);
+Route::get('get/user/plan/{user_id}' ,  ['as' => 'get.user.plan' , 'uses' => 'ApiController@getUserPlan']);
+Route::get('get/chat/status' ,          ['as' => 'get.chat.status' , 'uses' => 'ApiController@getChatStatus']);

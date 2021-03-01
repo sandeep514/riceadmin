@@ -27,9 +27,9 @@ class GalleryReportDatatable extends DataTable
             ->editColumn('desc', function($model){
                 return $model->description;
             })
-            ->editColumn('file', function($model){
-                return '<img src="'.asset('uploads/gallery/'.$model->attachment).'" width="100" />';
-            })
+            // ->editColumn('file', function($model){
+            //     return '<img src="'.asset('uploads/gallery/'.$model->attachment).'" width="100" />';
+            // })
             ->addColumn('action', function($model){
                 return view('gallery._action',['model'=>$model]);
             })->editColumn('created_at', function($model){
@@ -81,7 +81,7 @@ class GalleryReportDatatable extends DataTable
             Column::make('id'),
             Column::make('title'),
             Column::make('desc'),
-            Column::make('file')->width(50),
+            // Column::make('file')->width(50),
             Column::make('created_at')->width(100),
             Column::computed('action')
                 ->exportable(false)

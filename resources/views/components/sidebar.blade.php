@@ -8,7 +8,25 @@
             </div>
             <div class="pull-left info">
                 <p>Admin</p>
-                <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+                <!--<a href="#"><i class="fa fa-circle text-success"></i> </a>-->
+                
+                <div>
+                    <div class="">
+                        @if( ChatStatus::getStatus() == 0 )
+                            <form method="POST" action="{{ route('change.chat.status') }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="status" value="1">
+                                <button type="submit" class="btn btn-xs btn-primary">Enable Chat</button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('change.chat.status') }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="status" value="0">
+                                <button type="submit" class="btn btn-xs btn-danger">Disable Chat</button>
+                            </form>                        
+                        @endif
+                    </div> 
+                </div>  
             </div>
         </div>
         <!-- search form -->

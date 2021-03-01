@@ -27,7 +27,12 @@ class GalleryController extends Controller
 			'value' => 'required|array',
             'type' => 'required'
     	]);
-    	
+    	   $galleryCounter = rand(1111 , 9999).'0001';
+            $lastInsertedGallery = Gallery::all()->last();
+            
+            if( $lastInsertedGallery != null ){
+                $galleryCounter = rand(1111 , 9999).''.$lastInsertedGallery->id++;
+            }
     	if( $request->file ) {
 
     		$file = $request->file('file');
@@ -38,7 +43,8 @@ class GalleryController extends Controller
     			if( $request->key != null && $request->value != null ){
     				if( count($request->key) == count($request->value) ){
 			    		$destinationPath = 'uploads/gallery';
-						$file->move($destinationPath,$filename);
+			    		
+						$file->move($destinationPath,$galleryCounter.'_'.$filename);
                         if( $request->has('file2') ) {
                             $file2 = $request->file('file2');
                             $filename2 = $file2->getClientOriginalName();
@@ -47,7 +53,7 @@ class GalleryController extends Controller
 
                             if( $fileextension2 =="png" ||  $fileextension == "JPG" ||  $fileextension == "JPEG" || $fileextension2 == "jpg" || $fileextension2 == "jpeg"){
                                 $destinationPath2 = 'uploads/gallery';
-                                $file2->move($destinationPath2,$filename2);
+                                $file2->move($destinationPath2,$galleryCounter.'_'.$filename2);
                                 
                             }else{
                                 return back()->withErrors(['error' => "File type not allowed ...! only jpg , jpeg, png is allowed."]);
@@ -55,16 +61,18 @@ class GalleryController extends Controller
                         }else{
                             $filename2 = null;
                         }
+                        
 						Gallery::create([
 							'title' => $request->title,
 							'description' => $request->desc,
-							'attachment' => $filename,
-                            'attachment2' => $filename2,
+							'attachment' => $galleryCounter.'_'.$filename,
+                            'attachment2' => $galleryCounter.'_'.$filename2,
 							'spec' => json_encode(array_combine($request->key , $request->value)),
 							'status' => 1,
                             'type' => $request->type,
 							'amount' => 0
 						]);
+
 						return redirect()->route('gallery');
     				}else{
 	    				return back()->withErrors(['error' => 'field must be same and valid.']);
@@ -81,6 +89,20 @@ class GalleryController extends Controller
     
     public function galleryUpdate(Request $request){
 
+    
+        $requestedValue = [];
+        $requestedKey = [];
+        foreach( $request->value as $k => $v ){
+            if( $v != null ){
+                $requestedValue[] = $v;    
+            }
+        }
+        foreach( $request->key as $k => $v ){
+            if( $v != null ){
+                $requestedKey[] = $v;    
+            }
+        }
+        
         $request->validate([
     		'title' => 'required',
 			'desc' => 'required',
@@ -88,8 +110,16 @@ class GalleryController extends Controller
 			'value' => 'required|array',
             'type' => 'required'
     	]);
-    	$request['key'] = array_filter($request->key);
-    	$request['value'] = array_filter($request->value);
+    
+    	$galleryCounter = rand(1111 , 9999).'0001';
+        $lastInsertedGallery = Gallery::all()->last();
+        
+        if( $lastInsertedGallery != null ){
+            $galleryCounter = rand(1111 , 9999).''.$lastInsertedGallery->id++;
+        }
+        
+    	$request['key'] = $requestedKey;
+    	$request['value'] = $requestedValue;
 
     	$gallery = Gallery::where('id' , $request->id)->update(['title' => $request->title,'description' => $request->desc,'spec' => json_encode(array_combine($request->key , $request->value)),'type' => $request->type,'amount' => 0]);
 
@@ -104,9 +134,9 @@ class GalleryController extends Controller
     			if( $request->key != null && $request->value != null ){
     				if( count($request->key) == count($request->value) ){
 			    		$destinationPath = 'uploads/gallery';
-						$file->move($destinationPath,$filename);
+						$file->move($destinationPath,$galleryCounter.'_'.$filename);
                         
-						$gallery = Gallery::where('id' , $request->id)->update([ 'attachment' => $filename ]);
+						$gallery = Gallery::where('id' , $request->id)->update([ 'attachment' => $galleryCounter.'_'.$filename ]);
 						return back();
     				}else{
 	    				return back()->withErrors(['error' => 'field must be same and valid.']);
@@ -128,9 +158,9 @@ class GalleryController extends Controller
 
                 if( $fileextension2 =="png" || $fileextension2 == "jpg" || $fileextension2 == "jpeg" ||  $fileextension == "JPG" ||  $fileextension == "JPEG" ){
                     $destinationPath2 = 'uploads/gallery';
-                    $file2->move($destinationPath2,$filename2);
+                    $file2->move($destinationPath2,$galleryCounter.'_'.$filename2);
                     
-                    $gallery = Gallery::where('id' , $request->id)->update([ 'attachment2' => $filename2 ]);
+                    $gallery = Gallery::where('id' , $request->id)->update([ 'attachment2' => $galleryCounter.'_'.$filename2 ]);
 					return back();
                 }else{
                     return back()->withErrors(['error' => "File type not allowed ...! only jpg , jpeg, png is allowed."]);

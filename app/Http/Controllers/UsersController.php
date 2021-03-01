@@ -6,6 +6,7 @@ use App\DataTables\UsersDataTable;
 use App\Http\Requests\UserRequest;
 use App\Services\UserService;
 use App\User;
+use App\ChatStatus;
 use Illuminate\Http\Request;
 use Session;
 
@@ -75,6 +76,11 @@ class UsersController extends Controller
         }
         $sellerModel->delete();
         Session::flash('success','Success|Record deleted successfully!');
+        return back();
+    }
+    
+    public function changeChatStatus(Request $request){
+        ChatStatus::where('id' , 1)->update(['status' => $request->status]);
         return back();
     }
 }

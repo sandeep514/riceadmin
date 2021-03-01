@@ -11,6 +11,7 @@
             @endif
         </div>
     </div>
+
     @foreach($prices as $k => $v)
         <div class="row margin-top-10">
             <div class="col-md-12">
@@ -18,14 +19,15 @@
                     <label class="group-title">{{ $k }}</label>
                     <div class="group-content">
                         <div class="row">
-                            @foreach( $v as $kk => $vv )
+                            @foreach( $v->groupBy('route') as $kk => $vv )
                                 @php
-                                    $route = explode('_', $vv->route);
+                                    $latestRoute = $vv->last();
+                                    $route = explode('_', $latestRoute->route);
                                     $route = implode(' ' , $route);
                                 @endphp
                                 <div class="col-md-4">
-                                    {!! Form::label($vv->route,$route) !!}
-                                    {!! Form::text(ucfirst($k).'['.$vv->route.']',$vv->price,['class'=>'form-control']) !!}
+                                    {!! Form::label($latestRoute->route,$route) !!}
+                                    {!! Form::text(ucfirst($k).'['.$latestRoute->route.']',$latestRoute->price,['class'=>'form-control']) !!}
                                 </div>
                             @endforeach
                         </div>

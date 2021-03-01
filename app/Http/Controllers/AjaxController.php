@@ -10,7 +10,10 @@ use Illuminate\Http\Request;
 class AjaxController extends Controller
 {
     public function saveCity(Request $request){
+
+        City::max('order');
         $cityModel = City::firstOrNew(['city_name'=>$request->city]);
+        
         if($cityModel->exists){
             return response()->json(['status'=>'error','message'=>'City already exists!']);
         }else{
@@ -19,6 +22,7 @@ class AjaxController extends Controller
             $cities = City::userCities();
             return response()->json(['status'=>'success','cities'=>$cities]);
         }
+
     }
 
     public function getSampleRegisterFromSntc($sntcNo, $type = 'json'){

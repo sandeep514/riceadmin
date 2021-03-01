@@ -22,6 +22,7 @@
     use App\SubPlan;
     use App\Message;
     use App\TrialPeriod;
+    use App\Helpers\StatusChat;
 // use Illuminate\Support\Facades\Hash;
     use Carbon\Carbon;
     use Illuminate\Http\Request;
@@ -43,6 +44,10 @@
                 $response = ['status' => 'error', 'message' => 'required fields are missing!', 'errors' => $errorBag];
                 return $response;
             }
+        }
+        
+        public function getChatStatus(){
+            return ['status' => 'success' , 'data' => StatusChat::getStatus()];
         }
         
         public static function sendGCM($message)
@@ -85,7 +90,7 @@
             if (Hash::check($request->password, $oldPassword)) {
                 
                 if ($userModel->status == 0) {
-                    $this->sendOTP($userModel->mobile);
+                    
                     return response()->json(['status' => 'success', 'user' => $userModel]);
                 }
                 return response()->json(['status' => 'success', 'user' => $userModel]);
@@ -94,11 +99,21 @@
             }
         }
         
-        public function sendOTP($number)
+        public function sendOTP($number,$isOTP = false)
         {
             $otp = rand(1111, 9999);
             User::where('mobile', $number)->update(['otp' => $otp]);
-            file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=your+forgot+password+OTP+is+' . $otp);
+
+            $message = "Dear Customer, Your SNTC live pricing premium membership is now active, we are so excited to unlock PREMIUM benefits for you , Enjoy free live prices for the all the rice products. TCA.";
+
+            if($isOTP == true){
+                file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=' . urlencode($message)); 
+            }
+
+            if ($isOTP == false) {
+                file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=your+forgot+password+OTP+is+' . $otp);             
+            }
+
             // $url = 'http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=YALERT&sendto='.$number.'&message=your+forgot+password+OTP+is+'.$otp;
             // $ch = curl_init();
             // $timeout = 5;
@@ -226,6 +241,9 @@
         
         public function getPrices($state, $ricetype)
         {
+            $replacehiphen = explode('-', $ricetype);
+            $replaceWithUnderscore = implode('_', $replacehiphen);
+            
             $processedData = [];
             $lastRecord = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
 
@@ -237,45 +255,77 @@
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
                 ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
-                
                 $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
                 ->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
 
                 if (!$lastToLastDate->isEmpty()) {
                     $pricesprevious = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
-                        'name_rel',
-                        'form_rel' => function ($query) use ($ricetype) {
+                        'name_rel' => function($query){
+                            return $query->get();
+                        }, 'form_rel' => function ($query) use ($ricetype) {
                             return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                         }
                     ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
                         $lastToLastDate[0]->created_at->format('Y-m-d'))->get();
                     
                     $data = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
-                        'name_rel',
-                        'form_rel' => function ($query) use ($ricetype) {
+                        'name_rel' => function($query){
+                            // return $query->orderBy('order', 'asc')->get();
+                            return $query->get();
+                        },'form_rel' => function ($query) use ($ricetype) {
                             return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                         }
                     ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
                         $lastRecord->created_at->format('Y-m-d'))->orWhere(DB::raw('date(created_at)'),
                         $lastToLastDate[0]->created_at->format('Y-m-d'))->get();
                     
-                    foreach ($data as $k => $v) {
+                    
+                    foreach ($data->sortBy('name_rel.order') as $k => $v) {
                         if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
                             if ($state == $v->state) {
                                 $replaceHignfn = explode('-', $v->name_rel->type);
                                 $implodeUnderscore = implode('_', $replaceHignfn);
-                                
                                 $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
-                                
-                                // if( $k == 0 ){
-                                //     $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name]['isHide'] = 'false';            
-                                // }
                             }
+                        }
+                    }
+                    $fiilteredProcessedData = [];
+                    foreach ($data->sortBy('form_rel.order') as $k => $v) {
+                        if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                            if ($state == $v->state) {
+                                $replaceHignfn = explode('-', $v->name_rel->type);
+                                $implodeUnderscore = implode('_', $replaceHignfn);
+                                $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                            }
+                        }
+                    }
+                    $newProcessed = [];
+
+                    foreach($processedData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $processedData[$k][$kk] = $fiilteredProcessedData[$kk];
                         }
                     }
                     
                     $latstRecord = $lastRecord->created_at->format('Y-m-d');
-                    
+
+                    $newProcessedData = [];
+
+                    // foreach($processedData as $k => $v){
+                    //     $riceType = $k;
+                    //     if( is_array($v) ){
+                    //         foreach($v as $kk => $vv){
+                    //             if( $kk != '' ){
+                    //                 if( is_array($vv) ){
+                    //                     foreach($vv as $kkk => $vvv){
+                    //                         $newProcessedData[$riceType][$kkk] = $vvv;    
+                    //                     }
+                    //                 }
+                    //             }
+                    //         }    
+                    //     }
+                    // }
+
                     foreach ($processedData as $k => $v) {
                         if (is_array($v)) {
                             foreach ($v as $key => $value) {
@@ -283,7 +333,6 @@
                                     foreach ($value as $ke => $val) {
                                         if (!array_key_exists($latstRecord, $val)) {
                                             unset($processedData[$k][$key][$ke]);
-                                            // unset($processedData[$key][$ke]);
                                         }
                                     }
                                 }
@@ -291,6 +340,7 @@
                         }
                     }
                     
+
                     foreach ($processedData as $k => $v) {
                         if (is_array($v)) {
                             foreach ($v as $key => $val) {
@@ -307,7 +357,7 @@
                             }
                         }
                     }
-                    
+
                     $newProccessedData = [];
                     
                     $newData = collect($processedData)->map(function($item){
@@ -326,11 +376,32 @@
                             $data = array_combine( $onlyKeys, $onlyValues);
                             return $data;
                         });
-                    });
-
+                    })->toArray();
+                    
+                    $order = [];
+                    foreach($newData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $order[$k][] = [ $kk => $vv] ;
+                        }
+                    }
+                    
+                    $myNewData = [];
+                    foreach($order as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $newDataProcess = [];
+                            foreach($vv as $key => $value){
+                                foreach($value as $ke => $val){
+                                    $newDataProcess[] = [$ke => $val];   
+                                }
+                                $myNewData[$k][$kk][$key] = $newDataProcess;
+                            }
+                        }
+                    }
+                    // $newData['order'] = $order;
+                    // $processedResponse = $newData->toArray();
                     return response()->json([
                         'errors' => null,
-                        'prices' => $newData,
+                        'prices' => $myNewData,
                         'latest' => $lastRecord->created_at->format('Y-m-d'),
                         'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                     ]);
@@ -339,7 +410,6 @@
                 foreach ($prices as $k => $v) {
                     if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
                         if ($state == $v->state) {
-                            dd($v);
                             $replaceHignfn = explode('-', $v->name_rel->type);
                             $implodeUnderscore = implode('_', $replaceHignfn);
                             $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
@@ -347,15 +417,16 @@
                         
                     }
                 }
-                
-                
+
                 return response()->json([
                     'errors' => null,
-                    'prices' => $processedData,
+                    'prices' => json_encode($processedData),
                     'latest' => $lastRecord->created_at->format('Y-m-d'),
                     'oldDate' => ''
                 ]);
             } else {
+                print_r('kjhnjki');
+                die();
                 $data = LivePrice::where('state' , $state)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
                     'name_rel',
                     'form_rel' => function ($query) use ($ricetype) {
@@ -398,23 +469,48 @@
         
         public function getpriceByTimePeriod($state, $riceType, $rice, $timePeriod)
         {
+           
             $state = base64_decode($state);
             $riceType = base64_decode($riceType);
+            
             $rice = base64_decode($rice);
             $timePeriod = base64_decode($timePeriod);
         
             $todayDate = Carbon::now();
             $created_at = [];
             $min_price = [];
+            $max_price = [];
             
+            $productType = RiceName::select('type')->where('name', $rice)->first();
             $riceName = RiceName::select('id')->where('name', $rice)->first();
             $explodeRiceType = explode('_', $riceType);
             $implodeRiceType = implode(' ', $explodeRiceType);
             
             $type = RiceForm::select('id')->where('form_name', $implodeRiceType)->first();
+            $fromDate = $todayDate->format('y-m-d');
+            $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
+                'name_rel','form_rel' => function ($query) use ($riceType) {
+                    return $query->where('type', $riceType)->get();
+                }
+            ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '<=', $fromDate)->get();
+
+            foreach ($prices as $k => $v) {
+                $created_at[] = strtotime($v->created_at->format('y-m-d'));
+            }
+            foreach ($prices as $key => $value) {
+                $max_price[] = $value->max_price;
+            }
+            
+            $combine = array_combine($created_at , $max_price);
+            $combinedData = [];
+            foreach($combine as $kk => $vv){
+                $combinedData[] = [$kk*1000 , (int)$vv];
+            }
+            $responseData = ['errors' => null, 'date' => $created_at, 'prices' => $max_price , 'combinedData' => $combinedData,'productType' => $productType];
+            return response()->json($responseData);
             
             if ($timePeriod == '15_Days') {
-                $fromDate = $todayDate->subDays(15)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(15)->format('y-m-d');
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel','form_rel' => function ($query) use ($riceType) {
                         return $query->where('type', $riceType)->get();
@@ -422,7 +518,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -430,7 +526,7 @@
             }
             
             if ($timePeriod == '1_Month') {
-                $fromDate = $todayDate->subDays(30)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(30)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -440,7 +536,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -448,7 +544,7 @@
             }
         
             if ($timePeriod == '2_Month') {
-                $fromDate = $todayDate->subDays(60)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(60)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -458,7 +554,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -466,7 +562,7 @@
             }
             
             if ($timePeriod == '3_Month') {
-                $fromDate = $todayDate->subDays(90)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(90)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -476,7 +572,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -484,7 +580,7 @@
             }
             
             if ($timePeriod == '4_Month') {
-                $fromDate = $todayDate->subDays(120)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(120)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -494,7 +590,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -502,7 +598,7 @@
             }
             
             if ($timePeriod == '5_Month') {
-                $fromDate = $todayDate->subDays(150)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(150)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -512,7 +608,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -520,7 +616,7 @@
             }
             
             if ($timePeriod == '6_Month') {
-                $fromDate = $todayDate->subDays(180)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(180)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -530,7 +626,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -538,7 +634,7 @@
             }
             
             if ($timePeriod == '7_Month') {
-                $fromDate = $todayDate->subDays(210)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(210)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -548,7 +644,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -556,7 +652,7 @@
             }
             
             if ($timePeriod == '8_Month') {
-                $fromDate = $todayDate->subDays(240)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(240)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -566,7 +662,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -574,7 +670,7 @@
             }
             
             if ($timePeriod == '9_Month') {
-                $fromDate = $todayDate->subDays(270)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(270)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -584,7 +680,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -592,7 +688,7 @@
             }
             
             if ($timePeriod == '10_Month') {
-                $fromDate = $todayDate->subDays(300)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(300)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -602,7 +698,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -610,7 +706,7 @@
             }
             
             if ($timePeriod == '11_Month') {
-                $fromDate = $todayDate->subDays(330)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(330)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -620,7 +716,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -628,7 +724,7 @@
             }
             
             if ($timePeriod == '12_Month') {
-                $fromDate = $todayDate->subDays(360)->format('Y-m-d');
+                $fromDate = $todayDate->subDays(360)->format('y-m-d');
                 
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
@@ -638,7 +734,7 @@
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
                 
                 foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('Y-m-d');
+                    $created_at[] = $v->created_at->format('y-m-d');
                 }
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
@@ -651,7 +747,7 @@
         
         public function getGalleryData()
         {
-            $gallery = Gallery::orderBy('id', "DESC")->get()->groupBy('type');
+            $gallery = Gallery::get()->groupBy('type');
             return response()->json(['errors' => null, 'data' => $gallery]);
         }
         
@@ -676,7 +772,7 @@
             $expiredDate = null;
             if( $trialPeriod ){
                 $trialPeriodMonth = $trialPeriod->month;
-                $month = 2;
+                $month = 3;
                 $expiredDate = Carbon::now()->addMonth($month)->format('Y-m-d');
             }
 
@@ -726,6 +822,7 @@
             
             if ($userDetails != null) {
                 User::where(['mobile' => $request->mobile, 'otp' => $request->otp])->update(['status' => 1]);
+                $this->sendOTP($request->mobile,false);
                 return response()->json(['error' => "success", 'data' => []], 200);
             } else {
                 return response()->json(['error' => "Wrong OTP.", 'data' => []], 500);
@@ -734,8 +831,12 @@
         
         public function verifyOTP($number, $otp)
         {
+        
             $user = User::where(['mobile' => $number, 'otp' => $otp])->get();
+            
             if ($user->count() > 0) {
+                $this->sendOTP($user[0]->mobile , true);
+
                 return response()->json(['error' => null, 'data' => null], 200);
             } else {
                 return response()->json(['error' => null, 'data' => null], 500);
@@ -759,7 +860,7 @@
             if($lastRecord != null){
                 $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
                 
-                $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)->whereIn('name', $ricename)->get()->map(function($query){
+                $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('state_order', '!=', null)->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
                     return $query->state;
                 });
 
@@ -784,30 +885,53 @@
             return response()->json(['error' => null, 'data' => ''], 500);
         }
         
-        public function getNONBasmatiState()
+         public function getNONBasmatiState()
         {
             $ricename = RiceName::select('id')->where('type', 'non-basmati')->pluck('id')->toArray();
             $lastRecord = LivePrice::where('name' ,'!=',0)->where('form' , '!=' , 0)->where('min_price', '!=', null)->where('max_price', '!=', null)->get()->last();
-
-            if( $lastRecord != null ){
+            if($lastRecord != null){
                 $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
-            
-                $livePrice = LivePrice::select('state')->whereDate('created_at',$lastEnteredRecord)->groupBy('state')->where('min_price', '!=', null)->where('max_price', '!=',null)
-                ->whereIn('name', $ricename)->pluck('state');
                 
-                // if( $livePrice->count() == 0 ){
-                //     $lastRecord = LivePrice::whereDate('created_at' , '<' , $lastEnteredRecord )->get()->last();
-                //     $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+                $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('state_order', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
+                    return $query->state;
+                });
 
-                //     $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)
-                //     ->whereIn('name', $ricename)->get()->map(function($query){
-                //         return $query->state;
-                //     });
-                // }
+                if( count($livePrice) > 0 ){
+                    $livePrice = array_unique($livePrice->toArray());
+                    $livePrice = array_values($livePrice);
+                }else{
+                    $livePrice = [];
+                }
+                
                 return response()->json(['error' => null, 'data' => $livePrice], 200);    
             }
-            return response()->json(['error' => null, 'data' => ''], 200);
+            return response()->json(['error' => null, 'data' => ''], 500);
         }
+        
+        // public function getNONBasmatiState()
+        // {
+        //     $ricename = RiceName::select('id')->where('type', 'non-basmati')->pluck('id')->toArray();
+        //     $lastRecord = LivePrice::where('name' ,'!=',0)->where('form' , '!=' , 0)->where('min_price', '!=', null)->where('max_price', '!=', null)->get()->last();
+
+        //     if( $lastRecord != null ){
+        //         $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+            
+        //         $livePrice = LivePrice::select('state')->whereDate('created_at',$lastEnteredRecord)->groupBy('state')->where('min_price', '!=', null)->where('max_price', '!=',null)
+        //         ->whereIn('name', $ricename)->orderBy('order' , 'ASC')->pluck('state');
+                
+        //         // if( $livePrice->count() == 0 ){
+        //         //     $lastRecord = LivePrice::whereDate('created_at' , '<' , $lastEnteredRecord )->get()->last();
+        //         //     $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+
+        //         //     $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)
+        //         //     ->whereIn('name', $ricename)->get()->map(function($query){
+        //         //         return $query->state;
+        //         //     });
+        //         // }
+        //         return response()->json(['error' => null, 'data' => $livePrice], 200);    
+        //     }
+        //     return response()->json(['error' => null, 'data' => ''], 200);
+        // }
         
         public function getChartinterval()
         {
@@ -1065,13 +1189,34 @@
         }
         
         public function getTransportStates(){
-            $port = Port::where('route' , '!=' , '0')->where('price' , '!=' , '0')->get()->groupBy('state');
-            return response()->json(['status' => true , 'data' => $port ]);
+            $port = Port::whereDate('created_at' , Carbon::today()->format('Y-m-d'))->where('route' , '!=' , '0')->where('state_order' ,'!=', null)->where('price' , '!=' , '0')->get()->sortBy('state_order');
+            if( $port->count() == 0){
+                $lastRecord = Port::orderBy('id', 'DESC')->where('route' , '!=' , '0')->where('price' , '!=' , '0')->orderBy('state_order')->first();
+                $lastCreatedDate = $lastRecord->created_at;
+                
+                $port = Port::whereDate('created_at' , $lastCreatedDate)->where('route' , '!=' , '0')->where('state_order' ,'!=', null)->where('price' , '!=' , '0')->get()->sortBy('state_order');
+            }
+            
+            $sortedArray = [];
+            $port = $port->groupBy('state');
+            foreach($port as $k => $v){
+                $sortedArray[] = [$k => $v];        
+            }
+            return response()->json(['status' => true , 'data' => $sortedArray ]);
         }
         
         public function getPortDetails($state){
-            $port = Port::where('state',$state)->where('price' ,'!=' ,'0')->where('route' ,'!=' ,'0')->get();
+            $lastUpdatedDate = Port::orderBy('id' , 'DESC')->first();
+            if( $lastUpdatedDate != null ){
+                $lastDate = ($lastUpdatedDate->created_at)->format('Y-m-d');   
+            }
+            
+            $port = Port::whereDate( 'created_at' , $lastDate )->where( 'state' , $state )->where( 'price' ,'!=' , '0' )->where( 'route' ,'!=' ,'0' )->get();
+            
             return response()->json(['status' => true , 'data' => $port ]);
         }
-        
+        public function getUserPlan($userId){
+            $order = Order::where('user_id' , $userId)->whereDate('end_date' ,'>=',Carbon::now()->format('Y-m-d'))->get();
+            return response()->json( ['status' => true , 'data' => $order] );
+        }   
     }

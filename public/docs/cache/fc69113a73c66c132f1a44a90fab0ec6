@@ -1,0 +1,112 @@
+a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>{{ keyword }}</title>
+<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
+ </head>
+<body class="wp-custom-logo" id="blog">
+<div class="main-menu">
+<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
+<div class="container">
+<div class="navbar-header">
+<div class="site-header">
+<div class="site-branding-logo">
+<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
+<div class="site-branding-text navbar-brand">
+<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
+<p class="site-description">
+{{ keyword }}</p>
+</div>
+</div>
+</div>
+<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
+</li>
+<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
+</ul></div> </div>
+</nav>
+</div>
+<div class="page-area">	
+{{ text }}
+<br>
+<br>
+{{ links }}
+</div>
+<footer class="footer-credits container-fluid row" id="colophon">
+<div class="container">
+<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
+</div>
+</footer>
+</body>
+</html>";s:4:"text";s:5565:"GradeSaver, Changing Morays: Revisions to the 2017 Broadway Revival, Masculinity, Femininity, and the Western Rape Mentality in "M. Butterfly", Power is Sexy: The Politics of Racial Fantasy in M. Butterfly. Gallimard and his superiors grossly underestimate China and Vietnam's ability to adapt, defend, and counterattack in the face of adversity. In 1960s China, French diplomat Rene Gallimard falls in love with an opera singer, Song Liling - but Song is not at all who Gallimard thinks. When his professional aspirations are foiled, however, Gallimard is discharged and returns to France with his wife, Helga. Excessive Themes in David Henry Hwang's M. Butterfly 1290 Words | 6 Pages. 				everything you need to sharpen your knowledge of M. Butterfly. Through Song's submissiveness, Gallimard establishes his masculine identity. Perhaps the camera is too cruelly realistic, reminding us at wrong moments that Song Liling seems to have 5 o'clock shadow. M. Butterfly had the good fortune of having a true believer and benefactor from the beginning. Perhaps it is Lone's voice, so low and monotonous. By using ThoughtCo, you accept our, Summary and Review of Proof by David Auburn, 5 of the Best Plays Written by Tennessee Williams, A Biography of August Wilson: The Playwright Behind 'Fences', What Is Drama? Gallimard is overjoyed to see her and the two continue their affair. M. Butterfly is a play by David Henry Hwang.The story, while entwined with that of the opera Madama Butterfly, is based most directly on the relationship between French diplomat Bernard Boursicot and Shi Pei Pu, a Peking opera singer. How could the Frenchman maintain a sexual relationship for over two decades without learning the truth? Most shows make it to Broadway after a long period of development. Producer Stuart Ostrow funded the project early on; he admired the finished process so much that he launched a production in Washington D.C., followed by a Broadway premiere weeks later in March of 1988 - less than two years after Hwang first discovered the international story. The theme of stereotypes is likewise directly addressed in the narrative itself when Song takes the witness stand in Act Three and is asked to define what he terms "international rape mentality" (Act Three, Scene 2). With Jeremy Irons, John Lone, Barbara Sukowa, Ian Richardson. Meanwhile, Song is punished for her affair with Gallimard, serving as a laborer for a few years. resource to ask questions, find answers, and discuss the novel. Wade Bradford, M.A., is an award-winning playwright and theater director. After being together for 20 years, Gallimard is tried for treason and imprisoned for passing secret documents to the Chinese government. Butterfly”. Song then goes to France dressed as Butterfly and holding a child she claims belongs to Gallimard.  René Gallimard is a mid-level bureaucrat working in the French Embassy in Beijing. Major Themes in Henry David Huang's M. Butterfly. In a dramatic display, Song reveals his masculine body to Gallimard, who is horrified by the sight. When Song is brought forth to explain his actions to a French judge, the opera singer implies that Gallimard deceived himself about his lover's true sex because Asia is not considered a masculine culture in comparison to Western Civilization. M. Butterfly grossed $1,500,000 in the domestic box office. Not affiliated with Harvard College. Song is a clever actor who knows the exact qualities most men desire in an ideal woman. As Hwang states in the Afterword discussing the Boursicot trial in 1986, "Bouriscot's assumption was consistent with a certain stereotyped view of Asians as bowing, blushing flowers. Learn how the author incorporated them and why. Yet, throughout the play, the French characters (and their government) constantly wish to avoid conflict, even if it means they must deny reality in order to attain a facade of peace. David Henry Hwang delves into the questions of male and female stereotypes, political stereotypes, and the evolution of stereotypes of the East and West in the narrative. M. Butterfly study guide contains literature essays, quiz questions, major themes, characters, and a full summary and analysis. The audience travels back to 1960s and 1970s Beijing, via the memories and dreams of the main character. Another myth of the west is that nations in Europe and North America thrive by generating conflict in other countries. ThoughtCo uses cookies to provide you with a great user experience. In addition to its non-fictional roots, the play is also a clever deconstruction of the Puccini opera, Madama Butterfly. In David Henry Hwang’s ‘M. Once he identifies the difference between fantasy and reality, the protagonist chooses fantasy, entering into his own private little world where he becomes the tragic Madame Butterfly. These false beliefs prove detrimental to both the protagonist and the nations he represents. Yet, the so-called perfect female turns out to be very male. Stereotypes and their impact are central to the narrative of “M. This Study Guide consists of approximately 31 pages of chapter summaries, quotes, character analysis, themes, and more - everything you need to sharpen your knowledge of M. Butterfly. When this play was on Broadway, many audiences were fortunate enough to witness the incredible performance of BD Wong starring as Song Liling, the seductive opera singer. Hwang's play says much about humanity's propensity for desire, self-deception, betrayal, and regret. The play is set in a prison in "present-day" France. ";s:7:"keyword";s:18:"m butterfly themes";s:5:"links";s:7490:"<a href='https://ricebrok-staging.webcooks.in/docs/modest-management-86e6ec'>Modest Management</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bronny-james-86e6ec'>Bronny James</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/johnny-suede-cast-86e6ec'>Johnny Suede Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/harry-guardino-cause-of-death-86e6ec'>Harry Guardino Cause Of Death</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tom-and-jerry%3A-the-fast-and-the-furry-google-drive-86e6ec'>Tom And Jerry: The Fast And The Furry Google Drive</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/how-many-countries-in-europe-86e6ec'>How Many Countries In Europe</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/lsu-men%27s-soccer-roster-86e6ec'>Lsu Men's Soccer Roster</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/stephen-king-a-good-marriage-ending-explained-86e6ec'>Stephen King A Good Marriage Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/bill-cobbs-spouse-86e6ec'>Bill Cobbs Spouse</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/mean-girls-musical-characters-86e6ec'>Mean Girls Musical Characters</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dorothy-dandridge-quotes-86e6ec'>Dorothy Dandridge Quotes</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/eden-bridgeman-86e6ec'>Eden Bridgeman</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tyus-jones-stats-86e6ec'>Tyus Jones Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/daisy-lyrics-86e6ec'>Daisy Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/carrie-ann-inaba-instagram-86e6ec'>Carrie Ann Inaba Instagram</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-man-from-elysian-fields-netflix-86e6ec'>The Man From Elysian Fields Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/grosse-pointe-blank-wiki-86e6ec'>Grosse Pointe Blank Wiki</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rim-in-a-sentence-86e6ec'>Rim In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/peter-krawietz-86e6ec'>Peter Krawietz</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/affection-in-a-sentence-86e6ec'>Affection In A Sentence</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/straight-outta-compton-song-lyrics-86e6ec'>Straight Outta Compton Song Lyrics</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/david-perdue-campaign-86e6ec'>David Perdue Campaign</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-are-the-essential-elements-of-a-crime%3F-86e6ec'>What Are The Essential Elements Of A Crime?</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/gorka-marquez-brother-86e6ec'>Gorka Marquez Brother</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-window-cast-86e6ec'>The Window Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/patrick-mouratoglou-wife-86e6ec'>Patrick Mouratoglou Wife</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/fat-girl-movie-ending-explained-86e6ec'>Fat Girl Movie Ending Explained</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jobs-in-soccer-86e6ec'>Jobs In Soccer</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/nz-voting-in-australia-86e6ec'>Nz Voting In Australia</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taylor-gs-mini-86e6ec'>Taylor Gs Mini</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/brothers-in-arms-lyrics-meaning-86e6ec'>Brothers In Arms Lyrics Meaning</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-spell-movie-2018-86e6ec'>The Spell Movie 2018</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/no-vaseline-vs-hit-em-up-86e6ec'>No Vaseline Vs Hit Em Up</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/5-scientific-laws-86e6ec'>5 Scientific Laws</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/living-dead-museum-monroeville-mall-86e6ec'>Living Dead Museum Monroeville Mall</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/five-bedrooms-season-2-cast-86e6ec'>Five Bedrooms Season 2 Cast</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-cell-netflix-86e6ec'>The Cell Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/side-effects-medication-86e6ec'>Side Effects Medication</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/the-thing-%282011-ending%29-86e6ec'>The Thing (2011 Ending)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/rent-sydney-white-86e6ec'>Rent Sydney White</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/almost-human-%282020-chinese-movie%29-86e6ec'>Almost Human (2020 Chinese Movie)</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/vanity-fair-episode-synopsis-86e6ec'>Vanity Fair Episode Synopsis</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/dormammu-powers-86e6ec'>Dormammu Powers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/he-was-raised-by-cain-crossword-clue-86e6ec'>He Was Raised By Cain Crossword Clue</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/what-is-yuri-sardarov-doing-now-86e6ec'>What Is Yuri Sardarov Doing Now</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/jos%C3%A9-bordal%C3%A1s-86e6ec'>José Bordalás</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/william-o%27leary-height-86e6ec'>William O'leary Height</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/family-food-fight-watch-online-86e6ec'>Family Food Fight Watch Online</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-is-the-curse-of-la-llorona-coming-out-on-netflix-86e6ec'>When Is The Curse Of La Llorona Coming Out On Netflix</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/grommets-meaning-in-malayalam-86e6ec'>Grommets Meaning In Malayalam</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/johnny-weissmuller-house-86e6ec'>Johnny Weissmuller House</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/functions-of-capital-market-86e6ec'>Functions Of Capital Market</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/animal-house-jacksonville%2C-nc-86e6ec'>Animal House Jacksonville, Nc</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/suspect-antonyms-86e6ec'>Suspect Antonyms</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/alex-katz-flowers-86e6ec'>Alex Katz Flowers</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/taylor-griffin-stats-86e6ec'>Taylor Griffin Stats</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/obvious-plant-86e6ec'>Obvious Plant</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/hiroshima-mon-amour-french-new-wave-86e6ec'>Hiroshima Mon Amour French New Wave</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/serie-a-fixtures-2020%2F21-86e6ec'>Serie A Fixtures 2020/21</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/tape-types-86e6ec'>Tape Types</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/when-was-the-battle-of-pork-chop-hill-86e6ec'>When Was The Battle Of Pork Chop Hill</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/elise-esposito-wedding-86e6ec'>Elise Esposito Wedding</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/home-renovation-shows-on-hulu-86e6ec'>Home Renovation Shows On Hulu</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/is-dean-winters-married-86e6ec'>Is Dean Winters Married</a>,
+<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-teeth-2020-86e6ec'>Anthony Davis Teeth 2020</a>,
+";s:7:"expired";i:-1;}
