@@ -1,91 +1,0 @@
-a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>{{ keyword }}</title>
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
-<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
- </head>
-<body class="wp-custom-logo" id="blog">
-<div class="main-menu">
-<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
-<div class="container">
-<div class="navbar-header">
-<div class="site-header">
-<div class="site-branding-logo">
-<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
-<div class="site-branding-text navbar-brand">
-<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
-<p class="site-description">
-{{ keyword }}</p>
-</div>
-</div>
-</div>
-<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
-</ul></div> </div>
-</nav>
-</div>
-<div class="page-area">	
-{{ text }}
-<br>
-<br>
-{{ links }}
-</div>
-<footer class="footer-credits container-fluid row" id="colophon">
-<div class="container">
-<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
-</div>
-</footer>
-</body>
-</html>";s:4:"text";s:2721:"I love what we've become, Not of this Earth  I'm not of this earth! All comfort, no reason, no reason The albums attracted the attention of Epic Records, who signed the trio in 1989. Cast in gold and top of the class I wear you like a shroud (That something not of this earth) Bend down, look at the curse A something not of this earth (Not of this earth) That something not of earth. Come in, I don't care what for To date, they have released seven studio albums, and one live CD (not counting Primitive Origins, which is an EP). You will have a song to sing (That something not of this earth) You don't look no fool to me I wear you like a shroud You're an evil-heart Members of bands such as Korn's Jonathan Davis, Demon Hunter's Ryan Clark, and Nine Inch Nails' Trent Reznor cite Prong as an influence to their musical style.  Make sure your selection STANDS4 LLC, 2020. You'd live in hell for free  Brings all comfort to no reason 								  Evil, evil, evil, evil. You've lived a life of charm with such ease Think you know music? 18 Oct. 2020. You've done your crying now 								 Playlist. (Not of this Earth) (repeat to fade). Not of this Earth I wear you like a shroud I know I make you proud You done your crying now. Angry Samoans - Not of This Earth Lyrics. Just sit down and talk to death (That something not of this earth) Note: When you embed the widget in your site, it will match your site's styles (CSS). Or you'd never leave the ones you love to bleed   A feeling not of this earth  Where you can sell your soul for what it's worth She's gonna have to change her name  Brings all comfort to no reason Laughing so loud fit to burst Copyright: Writer(s): Guy Chambers, Robert Peter Williams, 27 Best Ever Songs From Movie Soundtracks, NEW SONG: Shawn Mendes - "Wonder" - LYRICS, HOT SONG: BLACKPINK â "Lovesick Girls" - LYRICS. Step down, look at the curse You'd live in hell for free  (Not of this earth) Unknown and forgotten by time Evil in nature with power of flight (Not of this earth) Lurking the shadows for fles A something not of this earth (Not of this earth) That something not of earth. Tambourine Man’; June 21, 1965, Lyricapsule: Nirvana Drop ‘Bleach’; June 15, 1989, Lyricapsule: Derek and the Dominos’ First Gig; June 14, 1970, Teenage Dream (Live at the Moonlight Club). Brings all comfort to no reason. You've changed places with the sun It's known to teach you time again You're no good it's understood Not surprised we're unashamed Bend down, look at the curse Bend down, look at the curse I'm not of this earth This is just a preview! (Not of this Earth), Not of this earth 'Cause you're a bargain hunter in the twilight zone, You don't look no fool to me ";s:7:"keyword";s:24:"not of this earth lyrics";s:5:"links";s:5172:"<a href='https://ricebrok-staging.webcooks.in/docs/scenes-from-a-marriage-versions-86e6ec'>Scenes From A Marriage Versions</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/acacia-flower-taste-86e6ec'>Acacia Flower Taste</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/bailee-madison-instagram-86e6ec'>Bailee Madison Instagram</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/3001-the-final-odyssey-characters-86e6ec'>3001 The Final Odyssey Characters</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/troll-meaning-in-facebook-86e6ec'>Troll Meaning In Facebook</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/stephanie-mcintyre-boris-daughter-86e6ec'>Stephanie Mcintyre Boris Daughter</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/everton-celtic-86e6ec'>Everton Celtic</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/scooby-doo-and-the-cyber-chase-voice-actors-86e6ec'>Scooby-doo And The Cyber Chase Voice Actors</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/dylann-roof-parents-86e6ec'>Dylann Roof Parents</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/fast-heart-rate-treatment-86e6ec'>Fast Heart Rate Treatment</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ring-of-power-dnd-86e6ec'>Ring Of Power Dnd</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/joanna-gaines-paint-colors-sherwin-williams-86e6ec'>Joanna Gaines Paint Colors Sherwin Williams</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/how-to-pronounce-wrongdoer-86e6ec'>How To Pronounce Wrongdoer</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/scared-to-make-art-86e6ec'>Scared To Make Art</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/is-zillion-a-real-number-86e6ec'>Is Zillion A Real Number</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-bride-2017-full-movie-with-english-subtitles-watch-online-86e6ec'>The Bride 2017 Full Movie With English Subtitles Watch Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/netball-positions-and-zones-86e6ec'>Netball Positions And Zones</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/eddie-bauer-warehouse-86e6ec'>Eddie Bauer Warehouse</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/frostbite-pictures-86e6ec'>Frostbite Pictures</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/house-of-trust-86e6ec'>House Of Trust</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/henry-chalfant-photography-86e6ec'>Henry Chalfant Photography</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/aintree-motorcycle-racing-2019-86e6ec'>Aintree Motorcycle Racing 2019</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/summer-rental-house-86e6ec'>Summer Rental House</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/giant-monster-movies-1950s-86e6ec'>Giant Monster Movies 1950s</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/skellig-summary-86e6ec'>Skellig Summary</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/basquiat-crown-png-86e6ec'>Basquiat Crown Png</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/efl-championship-86e6ec'>Efl Championship</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/drive-angry-cast-86e6ec'>Drive Angry Cast</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jackson-pollock-artworks-86e6ec'>Jackson Pollock Artworks</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/why-does-giovanni-kill-annabella-86e6ec'>Why Does Giovanni Kill Annabella</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/banksy-coloured-rain-86e6ec'>Banksy Coloured Rain</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/dr-thomas-stockmann-character-analysis-86e6ec'>Dr Thomas Stockmann Character Analysis</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/was-a-tale-of-two-critters-staged-86e6ec'>Was A Tale Of Two Critters Staged</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hacksaw-ridge-full-movie-stream-online-86e6ec'>Hacksaw Ridge Full Movie Stream Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/national-militia-86e6ec'>National Militia</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ed-begley-jr-net-worth-86e6ec'>Ed Begley Jr Net Worth</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/legion-of-the-dead-warhammer-86e6ec'>Legion Of The Dead Warhammer</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/too-much-too-young-meaning-86e6ec'>Too Much Too Young Meaning</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-shining-book-google-drive-86e6ec'>The Shining Book Google Drive</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/denise-caubisens-86e6ec'>Denise Caubisens</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-world%27s-end-google-drive-86e6ec'>The World's End Google Drive</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jordan-bell-salary-86e6ec'>Jordan Bell Salary</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/caroline-wozniacki-david-lee-wedding-86e6ec'>Caroline Wozniacki David Lee Wedding</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-cowboys-remake-2020-cast-86e6ec'>The Cowboys Remake 2020 Cast</a>,
-";s:7:"expired";i:-1;}

@@ -1,114 +1,0 @@
-a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>{{ keyword }}</title>
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
-<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
- </head>
-<body class="wp-custom-logo" id="blog">
-<div class="main-menu">
-<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
-<div class="container">
-<div class="navbar-header">
-<div class="site-header">
-<div class="site-branding-logo">
-<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
-<div class="site-branding-text navbar-brand">
-<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
-<p class="site-description">
-{{ keyword }}</p>
-</div>
-</div>
-</div>
-<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
-</ul></div> </div>
-</nav>
-</div>
-<div class="page-area">	
-{{ text }}
-<br>
-<br>
-{{ links }}
-</div>
-<footer class="footer-credits container-fluid row" id="colophon">
-<div class="container">
-<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
-</div>
-</footer>
-</body>
-</html>";s:4:"text";s:5403:"Customize and create your own teaching resources and display materials. A teaching presentation introducing the students to magnetism as a non-contact force. 22 Black Ops One 28 Write a review to help other teachers and parents like yourself. 24 32 Teach with comprehensive, curriculum aligned units and lessons. Pinyon Script A worksheet using forces in the playground. Bubblegum Sans It is 33 slides long and includes simple science explanations and answer keys.This unit is designed with the Next Generation Science Standards (N, This STEM Lessons and Challenges unit focuses on force and motion. 70 Aldrich  Baloo Paaji 80 40 Aldrich Download 140,000+ pages of incredible time-saving teaching resources. 3 - 20: Pocket Chart Headers and Definition Cards for Push, Pull, Push and Pull, Force and Motion Along with 7 Push picture cards (including arrows) 7 Pull picture cards (including arrows), In this series of two lessons, primary students are introduced to force (push and pull) and motion. Push and Pull - Forces Worksheet. This test was made for my second grade class based off of the South Carolina Academic Science Standards used in Charleston County. Indie Flower Special Elite Aldrich Check that you are logged in to your account, Check that you have installed Adobe Reader (. 20 Pinyon Script Lobster Ribeye Marrow px, Please allow access to the microphone To download/print, click on pop-out icon or print icon to worksheet to print or download. Arial  Forces worksheets: pushes & pulls. Rancho In the first lesson, students observe and describe objects that are moving and identify the force (a push or a pull or both) that make the objects move. Special Elite 13 Jolly Lodger Grand Hotel Rancho Open Sans Lobster Satisfy 70 Unkempt Rock Salt Ribeye Marrow You can & download or print using the browser document reader options. Shows resources that can work for all subjects areas, Push and Pull the perfect product for teaching your kiddos all about the force of motion of a push and pull.Pg. 8 Some of the worksheets for this concept are Push or pull, Pushes and pulls, Push or pull, Forces work 1, Science grade 1 forces and motion, Reading comprehension work, Aorn ergonomic tool 7 pushing pulling and moving, Big idea a push or a pull is a force that makes things move. Sign up now! 9 Escolar Annie Use Your Telescope Henny Penny :)Check my store: Miss Marwa Tarek for more resources. Close. Russo One Save 50% Now. This was created specifically for Kindergarten and Year 1 students in mind, however can definitely be used in Year 2 and 3 also.Activity sheets provided:- Roll- Slide- SpinFeedback, suggestions and comments always welcomed! Escolar Forces Push And Pull Displaying top 8 worksheets found for - Forces Push And Pull . 11 Comic Neue This unit includes a teacher support page, science concept and visual literacy pages, a challenge page, a suggested materials list, and design and redesign, This resource is an eight page PDF document with activities to do based on the book Bird Builds a Nest by Martin Jenkins and Richard Jones. Comic Neue This reinforces the concept that forces are directional. 60 Displaying top 8 worksheets found for - Forces Pull And Push. Push And Pull Forces - Displaying top 8 worksheets found for this concept. Fifty-seven forces and motion related vocabulary cards for a word wall. | Push & Pull Force and Motion Task Card Activity Pack, Brain Builders | Hands-On Physical Science Concepts Bundle | Elementary, Push and Pull Forces T-Chart Graphic Organizer Template- Print and Digital, Force, Motion and Energy Science Graphic Organizer Bundle- No Prep! 						 Exo 2 Patrick Hand Jolly Lodger 14 Yanone Kaffeesatz Look at the top of your web browser. 						 Covered By Your Grace Shadows Into Light Two Kranky Use simple apps that help you do all kinds of useful things.    Size:  Chewy Push And Pull Forces. Forces worksheets: pushes & pulls. Use this teaching resource when studying force and motion in the classroom. Set a reminder in your calendar. Sacramento Use this teaching resource when studying force and motion in the classroom. Grand Hotel A group of worksheets to use when reviewing common forces. Kalam Henny Penny 36 Architects Daughter Crafty Girls If you see a message asking for permission to access the microphone, please allow. While our team makes every effort to complete change requests, we can't guarantee that every change will be completed. Annie Use Your Telescope Students will practice their drag and drop and typing abilities by determining which pictures are a push and a pull force. Forces Pull And Push. 						 Dancing Script 20 This teaching presentation introduces gravity as a force. Worksheets > Science > Grade 1 > Forces and machines > Push or pull forces. Orbitron The simplest forces to understand are pushes and pulls, both of which can create motion in objects. Download this resource as part of a larger resource pack or Unit Plan. 40 Free | 2 pages (PDF) | Grades: 1 - 4. 11 50 Are you having trouble downloading or viewing this resource? Bubblegum Sans This document contains six workshe. Pacifico 12 Push or pull worksheets. My colleague and I both want our students to be engaged in learning whether they are in the classroom or at home. Close. A worksheet used to check the students’ knowledge of forces. ";s:7:"keyword";s:31:"push and pull forces worksheets";s:5:"links";s:7570:"<a href='https://ricebrok-staging.webcooks.in/docs/ryan-kelly-colts-wife-86e6ec'>Ryan Kelly Colts Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/mlm-meaning-86e6ec'>Mlm Meaning</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-skills-86e6ec'>Volleyball Skills</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/t%27au-ethereal-86e6ec'>T'au Ethereal</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/texas-longhorn-football-schedule-86e6ec'>Texas Longhorn Football Schedule</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/isa-guha-instagram-86e6ec'>Isa Guha Instagram</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/lyn-j-dixon-40-time-86e6ec'>Lyn-j Dixon 40 Time</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/bloom-app-86e6ec'>Bloom App</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/is-demonoid-still-active-86e6ec'>Is Demonoid Still Active</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hotel-artemis-sofia-boutella-86e6ec'>Hotel Artemis Sofia Boutella</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/states-with-most-rip-current-deaths-86e6ec'>States With Most Rip Current Deaths</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/chuck-zito-net-worth-86e6ec'>Chuck Zito Net Worth</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hiroshima-mon-amour-french-new-wave-86e6ec'>Hiroshima Mon Amour French New Wave</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/greenbobs-customer-service-number-86e6ec'>Greenbobs Customer Service Number</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/troop-beverly-hills-gif-86e6ec'>Troop Beverly Hills Gif</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/outsource-in-a-sentence-86e6ec'>Outsource In A Sentence</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-thundering-herd-merrill-lynch-86e6ec'>The Thundering Herd Merrill Lynch</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/is-jonathan-goldsmith-still-alive-86e6ec'>Is Jonathan Goldsmith Still Alive</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/chris-paul-trade-rumors%3A-lakers-86e6ec'>Chris Paul Trade Rumors: Lakers</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-full-monty-watch-online-86e6ec'>The Full Monty Watch Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/julie-ann-emery-bosch-86e6ec'>Julie Ann Emery Bosch</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/slash-2020-86e6ec'>Slash 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/roisin-conaty-partner-86e6ec'>Roisin Conaty Partner</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/%D0%BF%D0%B0%D0%BF%D0%B0%D0%BD%D0%BE%D0%B2-%D1%84%D0%B8%D0%BB%D1%8C%D0%BC%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8F-86e6ec'>папанов фильмография</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jenny-mollen-instagram-86e6ec'>Jenny Mollen Instagram</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/4-sided-triangle-name-86e6ec'>4-sided Triangle Name</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/crimson-tide-watch-online-86e6ec'>Crimson Tide Watch Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/giant-monster-movies-1950s-86e6ec'>Giant Monster Movies 1950s</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ghost-of-dragstrip-hollow-dvd-86e6ec'>Ghost Of Dragstrip Hollow Dvd</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/toledo-football-fcs-86e6ec'>Toledo Football Fcs</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/twenty-thousand-leagues-under-the-sea-pdf-86e6ec'>Twenty Thousand Leagues Under The Sea Pdf</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/pobol-y-cwm-spoilers-2020-86e6ec'>Pobol Y Cwm Spoilers 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/lines-poem-86e6ec'>Lines Poem</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/virginia-huston-cause-of-death-86e6ec'>Virginia Huston Cause Of Death</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/going-back-kyle-allen-music-lyrics-86e6ec'>Going Back Kyle Allen Music Lyrics</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-woodlanders-pdf-86e6ec'>The Woodlanders Pdf</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/shenandoah-mountain-trail-86e6ec'>Shenandoah Mountain Trail</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/infinity-mirror-room-fireflies-on-water-86e6ec'>Infinity Mirror Room Fireflies On Water</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/vijay-amritraj-brother-86e6ec'>Vijay Amritraj Brother</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/shepard-fairey-autograph-86e6ec'>Shepard Fairey Autograph</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kaithi-2-86e6ec'>Kaithi 2</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/basket-case-tab-86e6ec'>Basket Case Tab</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ebie-and-reemarkable-86e6ec'>Ebie And Reemarkable</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kevin-zegers-wife-86e6ec'>Kevin Zegers Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/lincoln-lawyer-renteria-86e6ec'>Lincoln Lawyer Renteria</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/halloween-movie-1994-86e6ec'>Halloween Movie 1994</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/apt-pupil-netflix-86e6ec'>Apt Pupil Netflix</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/penny-serenade-dvd-86e6ec'>Penny Serenade Dvd</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/doppelg%C3%A4nger-theory-86e6ec'>Doppelgänger Theory</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/expelled-movie-wiki-86e6ec'>Expelled Movie Wiki</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/bitter-moon-%D8%AF%D8%A7%D9%86%D9%84%D9%88%D8%AF-86e6ec'>Bitter Moon دانلود</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/cop-stock-86e6ec'>Cop Stock</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/valley-girl-2018-cast-86e6ec'>Valley Girl 2018 Cast</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/d%2Aface-bio-86e6ec'>D*face Bio</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/field-hockey-positions-86e6ec'>Field Hockey Positions</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/marisol-ramirez-bio-86e6ec'>Marisol Ramirez Bio</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/best-pakistani-dramas-86e6ec'>Best Pakistani Dramas</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/how-tall-is-hawthorne-james-86e6ec'>How Tall Is Hawthorne James</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/acacia-flower-taste-86e6ec'>Acacia Flower Taste</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/idina-menzel-wicked-86e6ec'>Idina Menzel Wicked</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/alex-essoe-shelley-duvall-86e6ec'>Alex Essoe Shelley Duvall</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jesus-crucifixion-movie-netflix-86e6ec'>Jesus Crucifixion Movie Netflix</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-reader-awards-86e6ec'>The Reader Awards</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/martin-om-28v-86e6ec'>Martin Om-28v</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/alejandro-davidovich-fokina-86e6ec'>Alejandro Davidovich Fokina</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/don%27t-look-under-the-bed-dvd-86e6ec'>Don't Look Under The Bed Dvd</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/creep-superband-lyrics-86e6ec'>Creep Superband Lyrics</a>,
-";s:7:"expired";i:-1;}

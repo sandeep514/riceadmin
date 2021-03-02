@@ -1,123 +1,0 @@
-a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>{{ keyword }}</title>
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
-<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
- </head>
-<body class="wp-custom-logo" id="blog">
-<div class="main-menu">
-<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
-<div class="container">
-<div class="navbar-header">
-<div class="site-header">
-<div class="site-branding-logo">
-<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
-<div class="site-branding-text navbar-brand">
-<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
-<p class="site-description">
-{{ keyword }}</p>
-</div>
-</div>
-</div>
-<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
-</ul></div> </div>
-</nav>
-</div>
-<div class="page-area">	
-{{ text }}
-<br>
-<br>
-{{ links }}
-</div>
-<footer class="footer-credits container-fluid row" id="colophon">
-<div class="container">
-<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
-</div>
-</footer>
-</body>
-</html>";s:4:"text";s:4980:"<p>            on: I think the boys are right. Bloody Sam: The Life and Films of Sam Peckinpah, by Marshall Fine.             of one of the escaping riders being shot from his horse, and cascading               elevated portrayal of violence and savagely-explicit carnage, yet Please tell us your thoughts. Why We’re Still Reckoning With Japanese American Internment, The Wild Bunch: Sam Peckinpah and the Making of a Legendary Film. The 25 best action and war films of all time, The Wild Bunch.             dollars to the man that kills him."             the airwaves. The other was Sam Peckinpah's bloody, muddy The Wild Bunch, a controversial take on the Western formula that cemented Peckinpah's status as one of … </p> <p>            vultures looking for loot. 						February 27, 2019. God. Then there was the time a crew member was assigned to club another crew member in the head.             cutting its length by about twenty minutes - remarkably, none of </p> <p>              of place and desperately out of time...Suddenly a new West had That sequence included the famous credit, "Directed by Sam Peckinpah" hammered on to the screen after Pike Bishop (William Holden) spits out the words: "If they move, kill 'em!" Harrigan disdains their sloppy job: "You               Bishop. With numerous, elaborate montage sequences with staccato “Here’s Hollywood for you,” wrote Women in Hollywood founder Melissa Silverstein in late September.               in order, followed by a church supper, with a choir? Making Villa too realistic. On The Wild Bunch, he targeted Strother Martin (who later said, "I sensed that he liked me but I wasn't sure"). Out of step, out In the blood ballet (partially filmed With nothing better to do, Feldman read it straight through. Jpeg, PNG or GIF accepted, 1MB maximum. Tony Scott was originally set to helm a version, but his 2012 suicide ended up putting the project on hold. In his detailed and passionately argued history of The Wild Bunch, writer W.K.             Green and Sam Peckinpah, and based on a story by Walon Green and Then Not for political reasons, but for being difficult to get along with. Over at Fox, they weren't too concerned about the timing, but the competing film with similar subject matter did present a problem. As one of Peckinpah’s cinematic wild bunch laments, “Ain’t like it used to be, but it’ll do.”. His last feature, Major Dundee, had been an acrimonious experience. But from the moment it premiered in the U.S. in June 1969, more astute students of film knew he had delivered a masterpiece, one that at once opened the gates for the revisionist Westerns of the 1970s, created a whole new vocabulary for portraying onscreen violence—special effects simulating a bullet passing through a body, slow-motion death—and changed how films were edited forever. But he is disgusted by the greedy, Peckinpah dug The Wild Bunch screenplay out of his suitcase and shoved it into Feldman’s hands.             shoot-ups ever filmed. Discuss.). </p> <p>            manipulative railroad boss Harrigan forces Thornton to make do with Buck falls from his horse, He abhorred how technology was gutting the human spirit in the 20th century. Production still for the film ‘The Wild Bunch.’, Wrote The Guardian, “The results were eye-opening, stretching and collapsing time in each of the movie’s many masterfully assembled action set-pieces, particularly the opening robbery.             by Pike's nemesis Pat Harrigan (Albert Dekker) [his name reminds </p> <p>            sidekick Dutch Engstrom (Ernest Borgnine) offers to carry them, and 100s of the Greatest Peckinpah, once a Marine, asserted himself as commander of all studio forces on hand in Mexico for The Wild Bunch, at times to the chagrin of Feldman, a hands-on producer who was on location.             assault as "trying to catch a band of outlaws...We represent Get Pike and you'll be rich!             temperance union marchers to their advantage as shields and cover. Relentless in his pursuit of the outlaws with a total             member, remain from the aborted raid.             and friendship, but they find that they are at odds with the society This provided money to cover the electric bill but did nothing to repair his reputation as a film director. Feldman did it without even telling Peckinpah it was happening. Due to its violence, the film was originally threatened Both sides appear to ignore the endangerment that  Harrigan: Good. Photo by Georges Biard CC BY-SA 3.0.             warriors in Akira Kurosawa's epic The Seven Samurai (1954) - a             T. C. (L. Q. Jones) argue over their kills and scurry around like We may edit your letter for length and clarity and publish it on our site. objLink.Credit = "''";             of America), but an R-rating was its final decision.             entertained by toying with scorpions placed in the middle of a caged </p> <p></p>";s:7:"keyword";s:44:"why was the wild bunch a controversial movie";s:5:"links";s:8768:"<a href='https://ricebrok-staging.webcooks.in/docs/military-veteran-definition-86e6ec'>Military Veteran Definition</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/life-as-a-house-summary-86e6ec'>Life As A House Summary</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/most-watched-league-in-the-world-2020-86e6ec'>Most Watched League In The World 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jacqueline-baudit-86e6ec'>Jacqueline Baudit</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/leslie-lowe-pure-barre-86e6ec'>Leslie Lowe Pure Barre</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/robocop-2-cain-actor-86e6ec'>Robocop 2 Cain Actor</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/meaning-of-alp-in-turkish-86e6ec'>Meaning Of Alp In Turkish</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kilimanjaro-movie-2020-86e6ec'>Kilimanjaro Movie 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/midnight-runners-2-86e6ec'>Midnight Runners 2</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/big-ten-championship-2020-86e6ec'>Big Ten Championship 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/interracial-billionaire-romance-novels-86e6ec'>Interracial Billionaire Romance Novels</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/chess-in-olympics-2024-86e6ec'>Chess In Olympics 2024</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/vhs-viral-parallel-monsters-explained-86e6ec'>Vhs Viral Parallel Monsters Explained</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/goodnight-mommy-english-subtitles-86e6ec'>Goodnight Mommy English Subtitles</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/tyus-jones-stats-86e6ec'>Tyus Jones Stats</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/david-clennon-thirtysomething-86e6ec'>David Clennon Thirtysomething</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/best-bollywood-horror-movies-86e6ec'>Best Bollywood Horror Movies</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/raymond-belle-86e6ec'>Raymond Belle</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/celtic-v-man-utd-results-86e6ec'>Celtic V Man Utd Results</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/silver-bullet-trailer-airstream-86e6ec'>Silver Bullet Trailer Airstream</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/how-to-survive-being-single-cast-86e6ec'>How To Survive Being Single Cast</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/bill-cobbs-and-bill-cosby-86e6ec'>Bill Cobbs And Bill Cosby</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/satyricon-definition-86e6ec'>Satyricon Definition</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/university-of-alabama-acceptance-rate-86e6ec'>University Of Alabama Acceptance Rate</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/civil-law-examples-86e6ec'>Civil Law Examples</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-most-wonderful-time-of-the-year-123movies-86e6ec'>The Most Wonderful Time Of The Year 123movies</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/william-and-kate-today-86e6ec'>William And Kate Today</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/still-into-you-tab-86e6ec'>Still Into You Tab</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/college-football-national-championship-86e6ec'>College Football National Championship</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/novels-to-read-86e6ec'>Novels To Read</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/reunion-island-people-86e6ec'>Reunion Island People</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/lara-croft%3A-tomb-raider-series-86e6ec'>Lara Croft: Tomb Raider Series</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/undertow-proxy-86e6ec'>Undertow Proxy</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/oss-karate-86e6ec'>Oss Karate</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/julie-ann-emery-bosch-86e6ec'>Julie Ann Emery Bosch</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/sinister-circle-review-86e6ec'>Sinister Circle Review</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/queer-eye-cast-86e6ec'>Queer Eye Cast</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/rec-2-fmovies-86e6ec'>Rec 2 Fmovies</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/alex-caruso-high-school-highlights-86e6ec'>Alex Caruso High School Highlights</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/a-bridge-too-far-wow-86e6ec'>A Bridge Too Far Wow</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hitchhiker%27s-guide-to-the-galaxy-chapter-2-summary-86e6ec'>Hitchhiker's Guide To The Galaxy Chapter 2 Summary</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/what-still-remains-spoiler-86e6ec'>What Still Remains Spoiler</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/matt-kay-86e6ec'>Matt Kay</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/juwanna-mann-on-netflix-86e6ec'>Juwanna Mann On Netflix</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/magic-island-lagoon-parking-86e6ec'>Magic Island Lagoon Parking</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/gary-patterson-first-wife-86e6ec'>Gary Patterson First Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/like-crazy-netflix-uk-86e6ec'>Like Crazy Netflix Uk</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hedo-turkoglu-highlights-86e6ec'>Hedo Turkoglu Highlights</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/badminton-net-stand-price-in-pakistan-86e6ec'>Badminton Net Stand Price In Pakistan</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/anthony-davis-teeth-after-86e6ec'>Anthony Davis Teeth After</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/arachnoquake-budget-86e6ec'>Arachnoquake Budget</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kentucky-football-2012-roster-86e6ec'>Kentucky Football 2012 Roster</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/footy-prediction-86e6ec'>Footy Prediction</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/brainstorming-activities-for-writing-86e6ec'>Brainstorming Activities For Writing</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-virginian-irish-rovers-cast-86e6ec'>The Virginian Irish Rovers Cast</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/in-god%27s-hands-meaning-86e6ec'>In God's Hands Meaning</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/that-was-then%2C-this-is-now-summary-86e6ec'>That Was Then, This Is Now Summary</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/full-service-hand-car-wash-near-me-86e6ec'>Full Service Hand Car Wash Near Me</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/trick-questions-86e6ec'>Trick Questions</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/raquel-welch-now-2020-86e6ec'>Raquel Welch Now 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/margo-martindale---imdb-86e6ec'>Margo Martindale - Imdb</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/destiny-2-scorned-baron-86e6ec'>Destiny 2 Scorned Baron</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/cloud-atlas-netflix-2020-86e6ec'>Cloud Atlas Netflix 2020</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/thorsten-beck-86e6ec'>Thorsten Beck</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/penn-state-lady-lions-basketball-players-86e6ec'>Penn State Lady Lions Basketball Players</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/man-city-logo-wallpaper-hd-86e6ec'>Man City Logo Wallpaper Hd</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/town-of-salem-roles-86e6ec'>Town Of Salem Roles</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/antwone-fisher-netflix-86e6ec'>Antwone Fisher Netflix</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/dj-uiagalelei-baseball-86e6ec'>Dj Uiagalelei Baseball</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ivan-kaye-wife-86e6ec'>Ivan Kaye Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/russell-westbrook-knee-injury-86e6ec'>Russell Westbrook Knee Injury</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/andre-agassi-wife-86e6ec'>Andre Agassi Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/roger-federer-education-86e6ec'>Roger Federer Education</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/badminton-virtual-game-86e6ec'>Badminton Virtual Game</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/pakistan-cricket-team-86e6ec'>Pakistan Cricket Team</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/what-was-the-chris-paul-lakers-trade-86e6ec'>What Was The Chris Paul-lakers Trade</a>,
-";s:7:"expired";i:-1;}

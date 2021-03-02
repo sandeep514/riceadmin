@@ -1,129 +1,0 @@
-a:5:{s:8:"template";s:9184:"<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
-<meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>{{ keyword }}</title>
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed%3A300%2C300i%2C400%2C400i%2C600%2C600i%2C800%2C800i&amp;subset=latin%2Clatin-ext" id="bulk-fonts-css" media="all" rel="stylesheet" type="text/css"/>
-<style rel="stylesheet" type="text/css">@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}@supports ((position:-webkit-sticky) or (position:sticky)){}p.has-drop-cap:not(:focus)::first-letter{float:left;font-size:8.4em;line-height:.68;font-weight:100;margin:.05em .1em 0 0;text-transform:uppercase;font-style:normal}p.has-drop-cap:not(:focus)::after{content:"";display:table;clear:both;padding-top:14px} @font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:300;src:local('Roboto Condensed Light Italic'),local('RobotoCondensed-LightItalic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVg2ZhZI2eCN5jzbjEETS9weq8-19eDpCEoY9Nc.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:italic;font-weight:400;src:local('Roboto Condensed Italic'),local('RobotoCondensed-Italic'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVj2ZhZI2eCN5jzbjEETS9weq8-19eLAQM4.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:300;src:local('Roboto Condensed Light'),local('RobotoCondensed-Light'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVi2ZhZI2eCN5jzbjEETS9weq8-33mZGCoYag.ttf) format('truetype')}@font-face{font-family:'Roboto Condensed';font-style:normal;font-weight:400;src:local('Roboto Condensed'),local('RobotoCondensed-Regular'),url(https://fonts.gstatic.com/s/robotocondensed/v18/ieVl2ZhZI2eCN5jzbjEETS9weq8-19y7CA.ttf) format('truetype')} /*! normalize.css v3.0.3 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}footer,nav{display:block}a{background-color:transparent}a:active,a:hover{outline:0}*{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}:after,:before{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}html{font-size:10px;-webkit-tap-highlight-color:transparent}body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:14px;line-height:1.42857143;color:#333;background-color:#fff}a{color:#337ab7;text-decoration:none}a:focus,a:hover{color:#23527c;text-decoration:underline}a:focus{outline:5px auto -webkit-focus-ring-color;outline-offset:-2px}p{margin:0 0 10px}.text-center{text-align:center}ul{margin-top:0;margin-bottom:10px}.container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}@media (min-width:768px){.container{width:750px}}@media (min-width:992px){.container{width:970px}}@media (min-width:1200px){.container{width:1170px}}.container-fluid{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}.row{margin-left:-15px;margin-right:-15px}.dropdown{position:relative}.dropdown-toggle:focus{outline:0}.nav{margin-bottom:0;padding-left:0;list-style:none}.nav>li{position:relative;display:block}.nav>li>a{position:relative;display:block;padding:10px 15px}.nav>li>a:focus,.nav>li>a:hover{text-decoration:none;background-color:#eee}.navbar{position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent}@media (min-width:768px){.navbar{border-radius:4px}}@media (min-width:768px){.navbar-header{float:left}}.container>.navbar-header{margin-right:-15px;margin-left:-15px}@media (min-width:768px){.container>.navbar-header{margin-right:0;margin-left:0}}.navbar-fixed-top{position:fixed;right:0;left:0;z-index:1030}@media (min-width:768px){.navbar-fixed-top{border-radius:0}}.navbar-fixed-top{top:0;border-width:0 0 1px}.navbar-brand{float:left;padding:15px 15px;font-size:18px;line-height:20px;height:50px}.navbar-brand:focus,.navbar-brand:hover{text-decoration:none}@media (min-width:768px){.navbar>.container .navbar-brand{margin-left:-15px}}.navbar-nav{margin:7.5px -15px}.navbar-nav>li>a{padding-top:10px;padding-bottom:10px;line-height:20px}@media (min-width:768px){.navbar-nav{float:left;margin:0}.navbar-nav>li{float:left}.navbar-nav>li>a{padding-top:15px;padding-bottom:15px}}@media (min-width:768px){.navbar-right{float:right!important;margin-right:-15px}}.navbar-default{background-color:#f8f8f8;border-color:#e7e7e7}.navbar-default .navbar-brand{color:#777}.navbar-default .navbar-brand:focus,.navbar-default .navbar-brand:hover{color:#5e5e5e;background-color:transparent}.navbar-default .navbar-nav>li>a{color:#777}.navbar-default .navbar-nav>li>a:focus,.navbar-default .navbar-nav>li>a:hover{color:#333;background-color:transparent}.container-fluid:after,.container-fluid:before,.container:after,.container:before,.nav:after,.nav:before,.navbar-header:after,.navbar-header:before,.navbar:after,.navbar:before,.row:after,.row:before{content:" ";display:table}.container-fluid:after,.container:after,.nav:after,.navbar-header:after,.navbar:after,.row:after{clear:both}@-ms-viewport{width:device-width}body,html{overflow-x:hidden}body{font-family:'Roboto Condensed',"Helvetica Neue",helvetica,arial,sans-serif;padding:0;color:#404040;font-weight:400;line-height:1.8;font-size:16px;word-wrap:break-word;overflow-x:hidden}a,a:active,a:focus,a:hover{text-decoration:none;color:#0090ff}ul{padding-left:20px}a:active{border-bottom:none}.page-area{padding-top:70px}@media (min-width:768px){.navbar-nav>li>a{padding-top:25px;padding-bottom:25px;transition:all .5s ease-in-out;-moz-transition:all .5s ease-in-out;-webkit-transition:all .5s ease-in-out;-o-transition:all .5s ease-in-out}#site-navigation .container{padding-left:0;padding-right:0}}@media (max-width:767px){.navbar-nav a:focus,.navbar-nav a:hover{color:#fff!important;background-color:#000!important}.menu-container{width:70%;position:absolute;left:0;height:100vh;transform:translate3d(-100%,0,0);overflow-y:auto;overflow-x:auto;background-color:#fff;top:100%}.navbar-brand{padding-right:55px!important}.page-area{left:0;transform:translate3d(0,0,0);transition:transform .5s ease}.navbar-nav{padding:0;margin:0}.navbar-nav a{font-size:14px;padding:12px 10px!important;margin:0!important;line-height:16px!important;float:left!important;margin:0!important;width:100%;text-transform:none!important;word-wrap:break-word;white-space:normal!important}.navbar-nav li{padding:0!important;margin:0!important}}#site-navigation{min-height:70px}.navbar-nav>li>a{border-bottom:0;text-transform:uppercase}.site-title{margin:0;padding:0;font-size:22px;line-height:28px}p.site-description{font-size:13px;line-height:18px;margin:0;-webkit-transition:all .5s ease;transition:all .5s ease}.site-branding-logo{float:left}.site-branding-logo a{border:none;z-index:9999;position:relative}.navbar-brand{padding:10px 15px;height:auto;z-index:99999;position:relative;z-index:1}.navbar{margin-bottom:0}.main-menu{position:relative}.navbar-fixed-top{position:absolute}#site-navigation{background-color:#fff;-webkit-box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);box-shadow:0 10px 20px -12px rgba(0,0,0,.42),0 3px 20px 0 rgba(0,0,0,.12),0 8px 10px -5px rgba(0,0,0,.2);border:none}#site-navigation,nav a{-webkit-transition:all .3s ease;transition:all .3s ease;color:#000}.footer-credits{border-top:1px solid #ccc;padding:15px;clear:both;margin-top:20px;background-color:#fff}</style>
- </head>
-<body class="wp-custom-logo" id="blog">
-<div class="main-menu">
-<nav class="navbar navbar-default navbar-fixed-top" id="site-navigation">
-<div class="container">
-<div class="navbar-header">
-<div class="site-header">
-<div class="site-branding-logo">
-<a class="custom-logo-link" href="#" itemprop="url" rel="home"></a> </div>
-<div class="site-branding-text navbar-brand">
-<p class="site-title"><a href="#" rel="home">{{ keyword }}</a></p>
-<p class="site-description">
-{{ keyword }}</p>
-</div>
-</div>
-</div>
-<div class="menu-container"><ul class="nav navbar-nav navbar-right" id="menu-menu-1"><li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-72 dropdown" id="menu-item-72"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="Projects">Projects</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-73 dropdown" id="menu-item-73"><a class="dropdown-toggle" data-toggle="dropdown" href="#" title="About">About</a>
-</li>
-<li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-74" id="menu-item-74"><a href="#" title="Contacts">Contacts</a></li>
-</ul></div> </div>
-</nav>
-</div>
-<div class="page-area">	
-{{ text }}
-<br>
-<br>
-{{ links }}
-</div>
-<footer class="footer-credits container-fluid row" id="colophon">
-<div class="container">
-<p class="footer-credits-text text-center">{{ keyword }} 2020</p>
-</div>
-</footer>
-</body>
-</html>";s:4:"text";s:4088:"Meanwhile in the tunnel, survivors endured    never escaped my mind one single day," he said.   remembered Park Sung-yong, mother of Koo-pil, a 4-year-old boy and a girl, Koo-hee,  2004. In 1994 Chung, the leader of the survivors group, published a book about the events of 1950, but it received little attention outside South Korea. On April 28, 1998, the Seoul government committee made a final ruling against the No Gun Ri survivors, citing the long-ago expiration of a five-year statute of limitations.[24]:135. "Room for archives?   numbers of its own people, waging a campaign of state terrorism against leftists,    ran into an American soldier.   site.   by inadequate intelligence; some reconnaissance units didn’t even have maps. The US report concluded the U.S. military had killed "an unknown number" of South Korean refugees at No Gun Ri with "small-arms fire, artillery and mortar fire, and strafing that preceded or coincided with the NKPA's advance and the withdrawal of U.S. forces in the vicinity of No Gun Ri during the last week of July 1950" but no orders were issued to fire on the civilians, and the shootings were the result of a perceived enemy threat.   ones began. [nb 1] On the day the No Gun Ri killings began, the Eighth Army ordered[30] all units to stop refugees from crossing their lines. 404 pages. The approach of the Soviet military from the north led the colonial government to believe that the peninsula would ultimately come under Soviet control. [4]:181 With aircraft flying too fast to accurately make a positive identification on a target and with a shortage of TACP’s, friendly fire was always a concern; earlier on the 26th the 1st Battalion of the 7th Cavalry’s regimental command post was attacked by a F-80[4]:97[15]:244 and the strafing of the refugees was dangerously close to US forces. [29] A liaison officer of the sister 8th Cavalry Regiment had relayed word to his unit from 1st Cavalry Division headquarters to fire on refugees trying to cross U.S. front lines. The men of the 7th Cavalry were enjoying the relative ease of occupation duty  But the Americans, who were    at and around a bridge in the hamlet of No Gun RI For nearly half a century,    got her.". An explanation for the refugee strafing was never confirmed by investigators.   to terrify me, but not any longer.   Tailwind scandal. "To date, we  [4]:144  [4]:87, According to the South Korean government’s investigation, over the course of the next three days, dug-in troops of the 2nd Battalion, 7th Cavalry, opened fire on the refugees, some of whom took shelter in a low, narrow culvert beneath the railroad embankment. "1950 "shoot refugees" letter was known to No Gun Ri inquiry, but went undisclosed". By Dana Lindaman and Kyle Ward.   claimed that there were "no orders to kill refugees" at No    also a shortage of non-commissioned officers, and many soldiers were men with  Besides commercial release in South Korea, the movie was screened at international film festivals, including in New York and London. The 7th Cavalry arrived at the front amid one of the greatest debacles in US  "Since No Gun RI I’ve never been able to  [12] In a 2007 German television documentary Yang Hae-chan described the air attack: "Suddenly bombers flew over and opened fire without warning.   refugees to be fired on,” and declared refugees to be “fair game.". Eighth U.S. Army. A collaboration between Rethinking Schools and Teaching for Change It was  The  By Oliver Stone and Peter Kuznick. "The entrance to the tunnel was so thick with bodies strewn everywhere,"  During this meeting, it was decided to warn refugees not to flee south at the risk of being fired on; and to fire on people advancing on positions, after firing warning shots. [15]:99 Beginning that evening and continuing through the early hours of the 27th, the 2/7 was reorganized by Major William Witherspoon the regimental operations officer and ordered to dig in on a ridgeline just east of and overlooking No Gun Ri in a position adjacent to the 1st Battalion, 7th Cavalry. ";s:7:"keyword";s:18:"no gun ri massacre";s:5:"links";s:9526:"<a href='https://ricebrok-staging.webcooks.in/docs/rim-acronym-telecommunications-86e6ec'>Rim Acronym Telecommunications</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ministry-of-social-and-family-development-86e6ec'>Ministry Of Social And Family Development</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/lady-in-cement-filming-locations-86e6ec'>Lady In Cement Filming Locations</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/air-force-football-schedule-86e6ec'>Air Force Football Schedule</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/chris-webber-hall-of-fame-speech-86e6ec'>Chris Webber Hall Of Fame Speech</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/eric-devendorf-high-school-86e6ec'>Eric Devendorf High School</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/secret-in-their-eyes---ending-explained-86e6ec'>Secret In Their Eyes - Ending Explained</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/klay-thompson-injury-surgery-86e6ec'>Klay Thompson Injury Surgery</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/carson-mcallister-birthday-86e6ec'>Carson Mcallister Birthday</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/stevie-wonder%27s-original-musiquarium-i-vinyl-86e6ec'>Stevie Wonder's Original Musiquarium I Vinyl</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/tennessee-vols-basketball-schedule-2020-2021-86e6ec'>Tennessee Vols Basketball Schedule 2020-2021</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/george-sanders-net-worth-86e6ec'>George Sanders Net Worth</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/afresh-trauma-wow-86e6ec'>Afresh Trauma Wow</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/regatta-walking-shoes-review-86e6ec'>Regatta Walking Shoes Review</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/daughters-lyrics-86e6ec'>Daughters Lyrics</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/parasomnia-examples-86e6ec'>Parasomnia Examples</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/da-5-bloods-criticism-86e6ec'>Da 5 Bloods Criticism</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/meet-the-blacks-characters-86e6ec'>Meet The Blacks Characters</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/casper-meaning-86e6ec'>Casper Meaning</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/home-improvement-shows-on-amazon-prime-2019-86e6ec'>Home Improvement Shows On Amazon Prime 2019</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/in-my-father%27s-den-movie-online-86e6ec'>In My Father's Den Movie Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/neo-ned-streaming-86e6ec'>Neo Ned Streaming</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/lebesgue-measure-86e6ec'>Lebesgue Measure</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/chasing-fire-movie-86e6ec'>Chasing Fire Movie</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kowalski-movie-character-86e6ec'>Kowalski Movie Character</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/tunnel-in-the-sky-read-online-86e6ec'>Tunnel In The Sky Read Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-far-country-watch-online-86e6ec'>The Far Country Watch Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-last-exorcism-explained-86e6ec'>The Last Exorcism Explained</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ohio-state-football-roster-2016-86e6ec'>Ohio State Football Roster 2016</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/heartbreak-ridge-quotes-ak-47-86e6ec'>Heartbreak Ridge Quotes Ak-47</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/a-civil-action-movie-guide-86e6ec'>A Civil Action Movie Guide</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/ernesto-valverde-salary-86e6ec'>Ernesto Valverde Salary</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jamie-kennedy-wife-86e6ec'>Jamie Kennedy Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/wendy-carlos-orange-minuet-86e6ec'>Wendy Carlos Orange Minuet</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/john-howard-australia-86e6ec'>John Howard Australia</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/christina%27s-house-parents-guide-86e6ec'>Christina's House Parents Guide</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/shepard-fairey-art-for-sale-86e6ec'>Shepard Fairey Art For Sale</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/13th-congressional-district-ny-86e6ec'>13th Congressional District Ny</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/light-of-my-life-what-happened-to-calvin-86e6ec'>Light Of My Life What Happened To Calvin</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/philip-davies-86e6ec'>Philip Davies</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/in-dreams-lyrics-tomemitsu-86e6ec'>In Dreams Lyrics Tomemitsu</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/enchanted-april-%28play-characters%29-86e6ec'>Enchanted April (play Characters)</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/d%27rose-9-not-done-yet-86e6ec'>D'rose 9 Not Done Yet</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/new-york-knicks-jersey-86e6ec'>New York Knicks Jersey</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/neiko-thorpe-net-worth-86e6ec'>Neiko Thorpe Net Worth</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/highway-cleanup-86e6ec'>Highway Cleanup</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kemar-roofe-injury-86e6ec'>Kemar Roofe Injury</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/gigi-bryant-funeral-86e6ec'>Gigi Bryant Funeral</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/documented-zombie-encounters-86e6ec'>Documented Zombie Encounters</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-shadow-reboot-86e6ec'>The Shadow Reboot</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/deer-habitat-86e6ec'>Deer Habitat</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/alex-essoe-shelley-duvall-86e6ec'>Alex Essoe Shelley Duvall</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-assignment-book-86e6ec'>The Assignment Book</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/contract-agreement-86e6ec'>Contract Agreement</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/star-wars-9-86e6ec'>Star Wars 9</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jordan-hand-size-86e6ec'>Jordan Hand Size</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jim-jones-preaching-86e6ec'>Jim Jones Preaching</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hester-street-painting-86e6ec'>Hester Street Painting</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/black-pirate-website-86e6ec'>Black Pirate Website</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/the-battle-of-stalingrad-was-primarily-fought-with-86e6ec'>The Battle Of Stalingrad Was Primarily Fought With</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/power-rangers-movie-sequel-86e6ec'>Power Rangers Movie Sequel</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/cardinal-sin-band-86e6ec'>Cardinal Sin Band</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/women%27s-tennis-rankings-2018-86e6ec'>Women's Tennis Rankings 2018</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kitty-ssh-for-windows-86e6ec'>Kitty Ssh For Windows</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/steve-johnson-wife-86e6ec'>Steve Johnson Wife</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/soccer-player-meaning-in-tamil-86e6ec'>Soccer Player Meaning In Tamil</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/volleyball-court-dimensions-in-feet-86e6ec'>Volleyball Court Dimensions In Feet</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/kris-kristofferson---why-me-86e6ec'>Kris Kristofferson - Why Me</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/rangers-vs-leverkusen-score-86e6ec'>Rangers Vs Leverkusen Score</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/chromatic-coffee-86e6ec'>Chromatic Coffee</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/madigan-pharmacy-jobs-86e6ec'>Madigan Pharmacy Jobs</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/bring-me-the-head-of-alfredo-garcia-watch-online-86e6ec'>Bring Me The Head Of Alfredo Garcia Watch Online</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/serie-a-20%2F21-86e6ec'>Serie A 20/21</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/spain-tourism-86e6ec'>Spain Tourism</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/hudson-hawk-full-movie-123movies-86e6ec'>Hudson Hawk Full Movie 123movies</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/cheap-ut-football-tickets-86e6ec'>Cheap Ut Football Tickets</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/eyes-of-an-angel-lyrics-86e6ec'>Eyes Of An Angel Lyrics</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/jaylen-waddle-speed-86e6ec'>Jaylen Waddle Speed</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/thank-you-mom%2C-for-teaching-me-86e6ec'>Thank You Mom, For Teaching Me</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/digging-up-the-marrow-theories-86e6ec'>Digging Up The Marrow Theories</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/junko-furuta-grave-86e6ec'>Junko Furuta Grave</a>,
-<a href='https://ricebrok-staging.webcooks.in/docs/erin-williby-now-86e6ec'>Erin Williby Now</a>,
-";s:7:"expired";i:-1;}
