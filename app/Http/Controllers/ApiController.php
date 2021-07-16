@@ -28,7 +28,9 @@
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Hash;
-    
+    use App\FreeTrialMonths;
+    use App\Http\Controllers\MailController;
+
     class ApiController extends Controller
     {
         //Validate
@@ -54,18 +56,16 @@
         {
             
             $url = 'https://fcm.googleapis.com/fcm/send';
-            $fields = array(
-                'registration_ids' => array(
+            $fields = [
+                'registration_ids' => [
                     'cdtlbIZUReSKl4xkn0SfKr:APA91bEezbuCTnLh4E3DxulE_8zYDwJLijd3ksGkdUtV0JFxU_il3Fdim_7FbTfpu1oM0EYdrS2oB05BGZgz6GhnrW8R1i7LEwKffEbFGpxPaNrSR5LHQ23LWKFcsN789FMmzscRyJRH'
-                ),
-                'data' => array(
-                    "message" => $message
-                )
-            );
+                    ],
+                'data' => [ "message" => $message]
+                ];
             $fields = json_encode($fields);
             
             $headers = array(
-                'Authorization: key=AAAA3Rpauec:APA91bGCGLlfPVMmbEOW4AGmb6osPCZtpqoNIZgLUmr8bgbQezWGkIrTBaHMMqUYLj9EeAl_BPcF1f96MxE7ZEmUg0rfGrVLmB7wFPFgCj0sTLyZQDaZgMwZgTAOH5AsOnN1g9lxprTY',
+                'Authorization: key=AAAA10hB_8I:APA91bHVSnAJjacznL6i3p9dWnKvJeceYJlTbwt_rvyq6Nx8tOPsMlxtYPqHzAJRAazC5JJof9PZHaw_uo1qbNkKK4YgJLKN_39ozcIlbCpt3YQ36Y5rT6ftegC0nnEiOZ-dYsYqFWcV',
                 'Content-Type: application/json'
             );
             
@@ -83,6 +83,10 @@
         public function login(Request $request)
         {
             $userModel = User::where(['email' => $request->email])->first();
+            if( $userModel == null ){
+            	$userModel = User::where(['mobile' => $request->email])->first();
+            }
+
             if ($userModel == null) {
                 return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
             }
@@ -90,7 +94,14 @@
             if (Hash::check($request->password, $oldPassword)) {
                 
                 if ($userModel->status == 0) {
-                    
+                    $Newotp = $userModel->otp;
+                    $mobile = $userModel->mobile;
+					file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto='.$mobile.'&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$Newotp.'&PEID=1701160336234687231&templateid=1707161795904090251');
+
+                    if($userModel->email != null){
+                        $response = MailController::generateMailForOTPThanks($userModel->email,'no@replay.in','SNTC GROUP','Thank you for registering on SNTC Rice Live Pricing App.','Thank you for registering on SNTC Rice Live Pricing App.',$Newotp);
+                    }
+
                     return response()->json(['status' => 'success', 'user' => $userModel]);
                 }
                 return response()->json(['status' => 'success', 'user' => $userModel]);
@@ -102,33 +113,27 @@
         public function sendOTP($number,$isOTP = false)
         {
             $otp = rand(1111, 9999);
+            $user = User::where('mobile', $number)->first();
             User::where('mobile', $number)->update(['otp' => $otp]);
 
             $message = "Dear Customer, Your SNTC live pricing premium membership is now active, we are so excited to unlock PREMIUM benefits for you , Enjoy free live prices for the all the rice products. TCA.";
 
             if($isOTP == true){
-                file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=' . urlencode($message)); 
+                file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=' . urlencode($message));
+                if($user->email != null){
+                    $response = MailController::generateMail($user->email,'no@replay.in','SNTC GROUP',$message,'SNTC Live Pricing Premium Membership '); 
+                }
             }
 
             if ($isOTP == false) {
-                file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=your+forgot+password+OTP+is+' . $otp);             
+				file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=Your+forgot+password+OTP+for+SNTC+Rice+Live+Pricing+App+is+' . $otp.'&PEID=1701160336234687231&templateid=1707161848973558040');
+                User::where('mobile', $number)->update(['otp' => $otp]);
+                if($user->email != null){
+                   $response = MailController::generateMailForOTP($user->email,'no@replay.in','SNTC GROUP',null,'SNTC OTP Verification ',$otp);
+                }
             }
-
-            // $url = 'http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=YALERT&sendto='.$number.'&message=your+forgot+password+OTP+is+'.$otp;
-            // $ch = curl_init();
-            // $timeout = 5;
             
-            // curl_setopt($ch, CURLOPT_URL, $url);
-            // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            // curl_setopt($ch, CURLOPT_HEADER, false);
-            // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-            
-            // $data = curl_exec($ch);
-            
-            // curl_close($ch);
-            
-            return response()->json(['error' => null, 'data' => $otp], 200);
+            return response()->json(['error' => null, 'data' => $otp,'mailResponse' => $response], 200);
         }
         
         public function preLoadSampleEntryContent()
@@ -469,10 +474,8 @@
         
         public function getpriceByTimePeriod($state, $riceType, $rice, $timePeriod)
         {
-           
             $state = base64_decode($state);
             $riceType = base64_decode($riceType);
-            
             $rice = base64_decode($rice);
             $timePeriod = base64_decode($timePeriod);
         
@@ -482,12 +485,15 @@
             $max_price = [];
             
             $productType = RiceName::select('type')->where('name', $rice)->first();
+
             $riceName = RiceName::select('id')->where('name', $rice)->first();
             $explodeRiceType = explode('_', $riceType);
             $implodeRiceType = implode(' ', $explodeRiceType);
-            
-            $type = RiceForm::select('id')->where('form_name', $implodeRiceType)->first();
+            $type = RiceForm::select('id')->where('form_name', $implodeRiceType)->where('type' , $productType->type)->first();
+
             $fromDate = $todayDate->format('y-m-d');
+
+
             $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                 'name_rel','form_rel' => function ($query) use ($riceType) {
                     return $query->where('type', $riceType)->get();
@@ -509,6 +515,8 @@
             $responseData = ['errors' => null, 'date' => $created_at, 'prices' => $max_price , 'combinedData' => $combinedData,'productType' => $productType];
             return response()->json($responseData);
             
+
+
             if ($timePeriod == '15_Days') {
                 $fromDate = $todayDate->subDays(15)->format('y-m-d');
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
@@ -767,12 +775,12 @@
         public function saveUser(Request $request)
         {
             $trialPeriod = TrialPeriod::first();
-           
+            $newExpiryDate = FreeTrialMonths::first();
             
             $expiredDate = null;
             if( $trialPeriod ){
                 $trialPeriodMonth = $trialPeriod->month;
-                $month = 3;
+                $month = $newExpiryDate->month;
                 $expiredDate = Carbon::now()->addMonth($month)->format('Y-m-d');
             }
 
@@ -782,7 +790,7 @@
                 'broker' => 7,
                 'guest' => 8
             ];
-            
+
             $hasEmail = User::where(['email' => $request->email])->get();
             if ($hasEmail->count() > 0) {
                 return response()->json(['error' => 'Email already exist.', 'data' => []], 500);
@@ -807,8 +815,51 @@
             ]);
             
             User::where('mobile', $request->mobile)->update(['otp' => $otp]);
-            file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $request->mobile . '&message=your+OTP+for+register+verification+is+' . $otp);
+            file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto='.$request->mobile.'&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$otp.'&PEID=1701160336234687231&templateid=1707161795904090251');
             
+            if ($user) {
+                if($user->email != null){
+                   $response = MailController::generateMailForOTPThanks($user->email,'no@replay.in','SNTC GROUP','Thank you for registering on SNTC Rice Live Pricing App.','Thank you for registering on SNTC Rice Live Pricing App.',$otp);
+                }
+                return response()->json(['error' => null, 'data' => $user], 200);
+            } else {
+                return response()->json(['error' => "Something went wrong.", 'data' => []], 500);
+            }
+        }
+        
+        public function updateUser(Request $request)
+        {
+
+            $data = [
+                'buyer' => 5,
+                'supplier' => 6,
+                'broker' => 7,
+                'guest' => 8,
+                'Buyer' => 5,
+                'Supplier' => 6,
+                'Broker' => 7,
+                'Guest' => 8,
+            ];
+            $hasEmail = User::where(['email' => $request->email])->where('id' , '!=' , $request->userId )->get();
+            if ($hasEmail->count() > 0) {
+                return response()->json(['error' => 'Email already exist.', 'data' => []], 500);
+            }
+            
+            $hasMobile = User::where(['mobile' => $request->mobile])->where('id' ,'!=' , $request->userId)->get();
+            if ($hasMobile->count() > 0) {
+                return response()->json(['error' => 'Mobile Number already exist.', 'data' => []], 500);
+            }
+            
+            $otp = rand(1111, 9999);
+            $user = User::where('id' , $request->userId)->update([
+                'name' => $request->username,
+                'email' => $request->email,
+                'mobile' => $request->mobile,
+                'companyname' => $request->companyname,
+                'role' => $data[$request->userState],
+            ]);
+            
+            $user = User::where('id' , $request->userId)->first();
             if ($user) {
                 return response()->json(['error' => null, 'data' => $user], 200);
             } else {
@@ -822,7 +873,7 @@
             
             if ($userDetails != null) {
                 User::where(['mobile' => $request->mobile, 'otp' => $request->otp])->update(['status' => 1]);
-                $this->sendOTP($request->mobile,false);
+                // $this->sendOTP($request->mobile,false);
                 return response()->json(['error' => "success", 'data' => []], 200);
             } else {
                 return response()->json(['error' => "Wrong OTP.", 'data' => []], 500);
@@ -831,13 +882,11 @@
         
         public function verifyOTP($number, $otp)
         {
-        
             $user = User::where(['mobile' => $number, 'otp' => $otp])->get();
-            
             if ($user->count() > 0) {
-                $this->sendOTP($user[0]->mobile , true);
+                // $this->sendOTP($user[0]->mobile , true);
 
-                return response()->json(['error' => null, 'data' => null], 200);
+                return response()->json(['error' => null, 'data' => $otp], 200);
             } else {
                 return response()->json(['error' => null, 'data' => null], 500);
             }
@@ -1019,17 +1068,34 @@
         // Send Push Notification
         public function sendNotification( $message , $token , $from , $to ){
             $url = "https://fcm.googleapis.com/fcm/send";
-            // $token = "dnOitEw5TCCzKf4z2wxUgg:APA91bHcX46oZw3MYk14Hz4SSItpfWbwEkIBqstfuLAfDATIFZXy-bLSdkYFY6QWMUfzTPNjHV4bEa8xsrhVfcRGffU502DKBX70C33izCJIExfmnOkJv6HBaDopfK6nMEe2n_4qyOxN";
-            $serverKey = 'AAAA3Rpauec:APA91bGCGLlfPVMmbEOW4AGmb6osPCZtpqoNIZgLUmr8bgbQezWGkIrTBaHMMqUYLj9EeAl_BPcF1f96MxE7ZEmUg0rfGrVLmB7wFPFgCj0sTLyZQDaZgMwZgTAOH5AsOnN1g9lxprTY';
+			// $token = "cGzzg20-RwOJ-1HnD5sfaO:APA91bHASbUPacqon9gT3G93vqa10TPBeky599w8lSw5D5KYUT1SXmFq_2iEpArVaMm4eB4-PP-Fs-1hE82JEW3y1k53yhMRPkmZSLTGMG1B-XzFUtyvdiJwA8JDSZ1P2Y2JFRfwGXcd";
+            $serverKey = 'AAAA10hB_8I:APA91bHVSnAJjacznL6i3p9dWnKvJeceYJlTbwt_rvyq6Nx8tOPsMlxtYPqHzAJRAazC5JJof9PZHaw_uo1qbNkKK4YgJLKN_39ozcIlbCpt3YQ36Y5rT6ftegC0nnEiOZ-dYsYqFWcV';
             $title = "Message";
             $body = $message;
-            $notification = array('title' =>$title ,'from' => $from ,'to' => $to, 'data' => ['messageFrom' => $from], 'body' => $body, 'sound' => 'default', 'badge' => '1');
-            $arrayToSend = array('to' => $token, 'data' => [ 'messageFrom' => $from], 'notification' => $notification,'priority'=>'high');
+            
+            $notification = [
+                'title' => $title ,
+                'from' => $from ,
+                'to' => $to,
+                'data' => ['messageFrom' => $from],
+                'body' => $body,
+                'sound' => 'default',
+                'badge' => '1'];
+            
+            $arrayToSend = [
+                'to' => $token,
+                'notification' => $notification,
+                'data' => [ 'messageFrom' => $from],
+                'priority'=>'high'];
+
             $json = json_encode($arrayToSend);
-            $headers = array();
+            
+            $headers = [];
             $headers[] = 'Content-Type: application/json';
             $headers[] = 'Authorization: key='. $serverKey;
+            
             $ch = curl_init();
+            
             curl_setopt($ch, CURLOPT_URL, $url);
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST,"POST");
             curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
@@ -1086,7 +1152,8 @@
         public function getMessagesByIds($from, $to)
         {
             Message::where(['from' => $from ,'to' => $to])->update(['seen' => 1]);
-            
+            Message::where(['from' => $to ,'to' => $from])->update(['seen' => 1]);
+
             $userMessageData = Message::where(['from' => $to ,'to' => $from] )->orWhere(function($query) use ($from , $to){
                 return $query->where(['from' => $from ,'to' => $to]);
             } )->orderBy('created_at', 'ASC')->get()->groupBy(function($date) {
@@ -1120,22 +1187,23 @@
         
         public function getMessageContacts(){
             $data = [];
-            $users = Message::where('from','!=',1)->orderBy('id','DESC')->get()->map(function($query){
+            $users = Message::orderBy('id','DESC')->get()->map(function($query){
                 return $query->from;
             })->toArray();
             $arrayUniqueUsers = array_unique($users);
-            
-            foreach($users as $key => $user){
-                $data[$user]['user'] = $user;
-                $userDetails = User::find($user);
-                if($userDetails){
-                    $unseenMessage = Message::where('from','=',$user)->where('seen' , 0)->get()->count();
-                    $message = Message::where('from','=',$user)->orWhere('to','=',$user)->latest()->first(['message','created_at']);
-                    $data[$user]['name'] = $userDetails->name;
-                    $data[$user]['email'] = $userDetails->email;
-                    $data[$user]['companyname'] = $userDetails->companyname;
-                    $data[$user]['last_message'] = $message->message;
-                    $data[$user]['unseenMessage'] = $unseenMessage;   
+            // dd($arrayUniqueUsers);
+
+            foreach($arrayUniqueUsers as $key => $user){
+                if( $user!= 1 ){
+                    // $data[][$user]['user'] = $user;
+                    $userDetails = User::find($user);
+                    if($userDetails){
+                        $unseenMessage1 = Message::where('from','=',$user)->where('seen' ,0)->get()->count();
+                        $unseenMessage2 = Message::where('to','=',$user)->where('seen' ,0)->get()->count();
+
+                        $message = Message::where('from','=',$user)->orWhere('to','=',$user)->latest()->first(['message','created_at']);
+                        $data[] = ['user' => $user,'name' => $userDetails->name,'email' => $userDetails->email,'companyname' => $userDetails->companyname,'last_message' => $message->message,'unseenMessage' => ($unseenMessage1+$unseenMessage2) ];
+                    }
                 }
             }
             return response()->json(['status' => 'success', 'data' => $data],200);
@@ -1172,7 +1240,7 @@
         public function getPriceStates(){
             
             $lastRecord = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
-            
+
             if( $lastRecord != null ){
                 $lastDate = Carbon::parse($lastRecord->created_at)->format('Y-m-d');
                 
@@ -1182,7 +1250,7 @@
                         return $query->orderBy('id', "ASC")->get();
                     }
                 ])->get()->groupBy('state');    
-                
+
                 return response()->json(['status' => true , 'data' => $prices]);
             }
             return response()->json(['status' => true , 'data' => '']);
@@ -1215,8 +1283,348 @@
             
             return response()->json(['status' => true , 'data' => $port ]);
         }
+
         public function getUserPlan($userId){
             $order = Order::where('user_id' , $userId)->whereDate('end_date' ,'>=',Carbon::now()->format('Y-m-d'))->get();
             return response()->json( ['status' => true , 'data' => $order] );
         }   
+     
+        public function getAllBasmatiPrice($state)
+        {
+            $ricetype = 'basmati';
+            $processedData = [];
+            $lastRecord = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
+
+            if ($lastRecord != null) {
+                $prices = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query) use($ricetype){
+                    return $query->where('type' , $ricetype)->get();
+                },'form_rel' => function ($query) use ($ricetype) {
+                        return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+                    }
+                ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
+                $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
+                ->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
+
+                if (!$lastToLastDate->isEmpty()) {
+
+                    $data = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+                        'name_rel' => function($query){
+                            // return $query->orderBy('order', 'asc')->get();
+                            return $query->get();
+                        },'form_rel' => function ($query) use ($ricetype) {
+                            return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+                        }
+                    ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
+                        $lastRecord->created_at->format('Y-m-d'))->get();
+
+                    foreach ($data->sortBy('name_rel.order') as $k => $v) {
+                        if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                            if ($state == $v->state || strtoupper($state) == $v->state ) {
+                                $replaceHignfn = explode('-', $v->name_rel->type);
+                                $implodeUnderscore = implode('_', $replaceHignfn);
+                                $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                            }
+                        }
+                    }
+
+                    $fiilteredProcessedData = [];
+                    foreach ($data->sortBy('form_rel.order') as $k => $v) {
+                        if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                            if ($state == $v->state || strtoupper($state) == $v->state ) {
+                                $replaceHignfn = explode('-', $v->name_rel->type);
+                                $implodeUnderscore = implode('_', $replaceHignfn);
+                                $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                            }
+                        }
+                    }
+                    $newProcessed = [];
+                    foreach($processedData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $processedData[$k][$kk] = $fiilteredProcessedData[$kk];
+                        }
+                    }
+                    $latstRecord = $lastRecord->created_at->format('Y-m-d');
+
+                    $newProcessedData = [];
+                    foreach ($processedData as $k => $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $key => $value) {
+                                if (is_array($value)) {
+                                    foreach ($value as $ke => $val) {
+                                        if (!array_key_exists($latstRecord, $val)) {
+                                            unset($processedData[$k][$key][$ke]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+
+                    foreach ($processedData as $k => $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $key => $val) {
+                                if (empty($val)) {
+                                    unset($processedData[$k][$key]);
+                                }else{
+                                    foreach($val as $kk => $vv ){
+                                        // dd($processedData[$k][$key][$kk] );
+                                        if( $kk != 0 ){
+                                          $processedData[$k][$key][$kk]['isHide'] = 'true'; 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $newProccessedData = [];
+                    
+                    $newData = collect($processedData)->map(function($item){
+                        return collect($item)->map(function($innerItem) use ($item){
+                            $onlyValues = array_values($innerItem);
+                            $onlyKeys = array_keys($innerItem);
+                            foreach($onlyValues as $k => $v){
+                                if( $k == 0 ){
+                                    $onlyValues[$k]['is_hide'] = 'false';        
+                                }else{
+                                    $onlyValues[$k]['is_hide'] = 'true';
+                                }
+                            }
+                            
+                            
+                            $data = array_combine( $onlyKeys, $onlyValues);
+                            return $data;
+                        });
+                    })->toArray();
+
+                    $order = [];
+                    foreach($newData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $order[$k][] = [ $kk => $vv] ;
+                        }
+                    }
+                    $myNewData = [];
+                    foreach($order as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $newDataProcess = [];
+                            foreach($vv as $key => $value){
+                                foreach($value as $ke => $val){
+                                    $newDataProcess[] = [$ke => $val];   
+                                }
+                                $myNewData[$k][$kk][$key] = $newDataProcess;
+                            }
+                        }
+                    }
+
+                    return response()->json([
+                        'errors' => null,
+                        'prices' => $myNewData,
+                        'latest' => $lastRecord->created_at->format('Y-m-d'),
+                        'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
+                    ]);
+                }
+    
+                foreach ($prices as $k => $v) {
+                    if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                        if ($state == $v->state) {
+                            $replaceHignfn = explode('-', $v->name_rel->type);
+                            $implodeUnderscore = implode('_', $replaceHignfn);
+                            $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                        }
+                        
+                    }
+                }
+                dd("jhuijnk");
+                return response()->json([
+                    'errors' => null,
+                    'prices' => json_encode($processedData),
+                    'latest' => $lastRecord->created_at->format('Y-m-d'),
+                    'oldDate' => ''
+                ]);
+            }    
+        }
+
+        public function getAllNONBasmatiPrice($state){
+            $ricetype = 'non-basmati';
+            $processedData = [];
+            $lastRecord = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
+
+            if ($lastRecord != null) {
+                $prices = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query) use($ricetype){
+                    return $query->where('type' , $ricetype)->get();
+                },'form_rel' => function ($query) use ($ricetype) {
+                        return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+                    }
+                ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
+                $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
+                ->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
+
+                if (!$lastToLastDate->isEmpty()) {
+
+                    $data = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+                        'name_rel' => function($query){
+                            // return $query->orderBy('order', 'asc')->get();
+                            return $query->get();
+                        },'form_rel' => function ($query) use ($ricetype) {
+                            return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+                        }
+                    ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
+                        $lastRecord->created_at->format('Y-m-d'))->get();
+
+                    foreach ($data->sortBy('name_rel.order') as $k => $v) {
+                        if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                            if ($state == $v->state || strtoupper($state) == $v->state ) {
+                                $replaceHignfn = explode('-', $v->name_rel->type);
+                                $implodeUnderscore = implode('_', $replaceHignfn);
+                                $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                            }
+                        }
+                    }
+
+                    $fiilteredProcessedData = [];
+                    foreach ($data->sortBy('form_rel.order') as $k => $v) {
+                        if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                            if ($state == $v->state || strtoupper($state) == $v->state ) {
+                                $replaceHignfn = explode('-', $v->name_rel->type);
+                                $implodeUnderscore = implode('_', $replaceHignfn);
+                                $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                            }
+                        }
+                    }
+                    $newProcessed = [];
+                    foreach($processedData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $processedData[$k][$kk] = $fiilteredProcessedData[$kk];
+                        }
+                    }
+                    $latstRecord = $lastRecord->created_at->format('Y-m-d');
+
+                    $newProcessedData = [];
+                    foreach ($processedData as $k => $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $key => $value) {
+                                if (is_array($value)) {
+                                    foreach ($value as $ke => $val) {
+                                        if (!array_key_exists($latstRecord, $val)) {
+                                            unset($processedData[$k][$key][$ke]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+
+                    foreach ($processedData as $k => $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $key => $val) {
+                                if (empty($val)) {
+                                    unset($processedData[$k][$key]);
+                                }else{
+                                    foreach($val as $kk => $vv ){
+                                        // dd($processedData[$k][$key][$kk] );
+                                        if( $kk != 0 ){
+                                          $processedData[$k][$key][$kk]['isHide'] = 'true'; 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $newProccessedData = [];
+                    
+                    $newData = collect($processedData)->map(function($item){
+                        return collect($item)->map(function($innerItem) use ($item){
+                            $onlyValues = array_values($innerItem);
+                            $onlyKeys = array_keys($innerItem);
+                            foreach($onlyValues as $k => $v){
+                                if( $k == 0 ){
+                                    $onlyValues[$k]['is_hide'] = 'false';        
+                                }else{
+                                    $onlyValues[$k]['is_hide'] = 'true';
+                                }
+                            }
+                            
+                            
+                            $data = array_combine( $onlyKeys, $onlyValues);
+                            return $data;
+                        });
+                    })->toArray();
+
+                    $order = [];
+                    foreach($newData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $order[$k][] = [ $kk => $vv] ;
+                        }
+                    }
+                    $myNewData = [];
+                    foreach($order as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $newDataProcess = [];
+                            foreach($vv as $key => $value){
+                                foreach($value as $ke => $val){
+                                    $newDataProcess[] = [$ke => $val];   
+                                }
+                                $myNewData[$k][$kk][$key] = $newDataProcess;
+                            }
+                        }
+                    }
+
+                    return response()->json([
+                        'errors' => null,
+                        'prices' => $myNewData,
+                        'latest' => $lastRecord->created_at->format('Y-m-d'),
+                        'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
+                    ]);
+                }
+            }
+        }
+        public function getAllStateList()
+        {
+        	$lastRecord = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
+
+            if( $lastRecord != null ){
+                $lastDate = Carbon::parse($lastRecord->created_at)->format('Y-m-d');
+                
+                $prices = LivePrice::whereDate('created_at' , $lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query){
+                    return $query->get();
+                },'form_rel' => function ($query) {
+                        return $query->orderBy('id', "ASC")->get();
+                    }
+                ])->get()->groupBy('state');    
+                $array_keys = array_keys($prices->toArray());
+	
+
+	        	return response()->json([ 'status' => 'success' , 'data' => $array_keys ]);
+            }
+            return response()->json(['status' => true , 'data' => '']);
+
+
+
+        	$livePrice = LivePrice::orderBy('state_order')->where('min_price', '!=', null)->where('max_price', '!=', null)->select('state')->get()->groupBy('state');
+        	dd($livePrice);
+        	$array_keys = array_keys($livePrice->toArray());
+        	return response()->json(['status' => 'success' , 'data' => $array_keys ]);
+        }
+        public function getPricesByState($state = 'PUNJAB-HARYANA')
+        {
+        	$lastPrice  = LivePrice::last();
+        	dd($lastPrice);
+        }
+
+        public function getPortsInOrder(){
+            try {
+        
+                $lastDate = Port::where('price', '!=', 0)->orderByDesc('id')->first('created_at');
+                $ports    = Port::where('price','!=',0)->where('created_at','LIKE','%'.$lastDate->created_at.'%')
+                            ->orderBy('state_order')->get()->groupBy(['state','route']);
+                
+                return response()->json(['status' => true, 'data' => $ports]);
+            
+            }catch (Exception $e) {
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+            }
+        }
     }

@@ -39,11 +39,33 @@
                                     <label><input type="checkbox" name="userType[]" value="8"> Guest</label>
                                 </div>        
                             </div>
+                            @error('userType')
+                                <span class="" style="color: red">
+                                    Please select all required fields.
+                                </span>
+                            @enderror
+                            
+
+                            <div class="form-group">
+                                <label for="comment">Notification Title:</label>
+                                <input type="text" class="form-control" name="title">
+                            </div>
+                            @error('title')
+                                <span class="" style="color: red">
+                                    Please select all required fields.
+                                </span>
+                            @enderror
+                            
 
                             <div class="form-group">
                                 <label for="comment">Message:</label>
                                 <textarea class="form-control" name="message" rows="5"></textarea>
                             </div>
+                            @error('message')
+                                <span class="" style="color: red">
+                                    Please select all required fields.
+                                </span>
+                            @enderror
 
                             <button type="submit" name="submit" value="submit">Submit</button>
                         </form>

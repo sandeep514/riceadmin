@@ -9,6 +9,9 @@ use App\RiceType;
 use App\Port;
 use App\LivePrice;
 use Session;
+use Carbon\Carbon;
+use App\User;
+use App\FreeTrialMonths;
 
 class MasterController extends Controller
 {
@@ -60,7 +63,12 @@ class MasterController extends Controller
 		RiceForm::where('id' , $id)->delete();
 		return back();
 	}
-
+	public function deleteStatePort($state){
+		$portData = Port::where('id' , $state)->first();
+		$portState = $portData->state;
+		Port::where('state' , $portState)->delete();
+		return back();
+	}
 	public function listRiceQuality(){
 		$riceName = RiceName::get();
 		return view('master.listRiceName', compact('riceName'));
@@ -302,5 +310,28 @@ class MasterController extends Controller
 	public function listPort() {
 		$ports = Port::get()->pluck( 'id' , 'state' );
 		return view('master.listState' , compact('ports'));	
+	}
+	public function changedateofexistinguser()
+	{
+		return view('trialPeriod.index');
+	}
+	public function saveTrialPeriod(Request $request)
+	{
+		$carbonNow = Carbon::now()->format('Y-m-d');
+		$updatedDate = Carbon::now()->addMonths($request->trialPeriod)->format('Y-m-d');
+		User::where('id' ,'!=' , 1)->where( 'expired_on'  ,'<=', Carbon::now()->addMonths(1)->format('Y-m-d'))->update(['expired_on' => $updatedDate]);
+ 		return back();
+	}
+	
+	public function changeTrialPeriodDate()
+	{
+		$trialMonth = FreeTrialMonths::where('id' , 1)->first();
+		return view('trialMonth.index' ,compact('trialMonth'));
+	}
+
+	public function trialPeriodMonthSave(Request $request){
+		FreeTrialMonths::where('id' , 1)->update(['month' => $request->trialPeriod]);
+		$trialMonth = FreeTrialMonths::where('id' , 1)->first();
+		return back();
 	}
 }

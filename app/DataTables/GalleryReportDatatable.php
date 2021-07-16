@@ -21,20 +21,20 @@ class GalleryReportDatatable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('title', function($model){
+            ->editColumn('title', function ($model) {
                 return $model->title;
             })
-            ->editColumn('desc', function($model){
+            ->editColumn('desc', function ($model) {
                 return $model->description;
             })
             // ->editColumn('file', function($model){
             //     return '<img src="'.asset('uploads/gallery/'.$model->attachment).'" width="100" />';
             // })
-            ->addColumn('action', function($model){
-                return view('gallery._action',['model'=>$model]);
-            })->editColumn('created_at', function($model){
+            ->addColumn('action', function ($model) {
+                return view('gallery._action', ['model' => $model]);
+            })->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
-            })->rawColumns(['action','file']);
+            })->rawColumns(['action', 'file']);
     }
 
     /**
@@ -56,18 +56,18 @@ class GalleryReportDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('Gallery-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('Gallery-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**

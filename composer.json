@@ -1,4 +1,7 @@
 {
+    "files": [
+        "app/Helpers/MailHelper.php"
+    ],
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
@@ -16,7 +19,8 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "laravelcollective/html": "^6.1",
-        "yajra/laravel-datatables": "^1.5"
+        "yajra/laravel-datatables": "^1.5",
+        "yajra/laravel-datatables-oracle": "^9.15"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

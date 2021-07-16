@@ -49,7 +49,7 @@
                                                                         <a href="{{ route('master.transport.edit.state' , $form) }}"> Edit </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a href="{{ route('master.transport.delete.route' , $form) }}"> Delete </a>
+                                                                        <a href="{{ route('master.delete.transport.route' , $form) }}"> Delete </a>
                                                                     </li>
                                                                 </ul>
                                                             </td>

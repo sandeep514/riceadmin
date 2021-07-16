@@ -26,6 +26,7 @@ Route::get('get/price/states' ,         ['as' => 'get.price.states'         , 'u
 Route::get('get/gallery/list' ,         ['as' => 'get.gallery.details'      , 'uses' => 'ApiController@getGalleryData']);
 Route::get('get/gallery/details/{id}' , ['as' => 'get.gallery.details.id'   , 'uses' => 'ApiController@getGalleryDetails']);
 Route::POST('save/user' ,               ['as' => 'save.user' 			    , 'uses' => 'ApiController@saveUser']);
+Route::POST('update/user' ,               ['as' => 'update.user'            , 'uses' => 'ApiController@updateUser']);
 Route::POST('verify/user' ,             ['as' => 'verify.user'              , 'uses' => 'ApiController@verifyUser']);
 
 Route::POST('change/password' ,         ['as' => 'change.password'          , 'uses' => 'ApiController@changePassword']);
@@ -62,3 +63,12 @@ Route::get('get/transport/states' ,     ['as' => 'get.transport.states' , 'uses'
 Route::get('get/port/details/{state}' , ['as' => 'get.port.details' , 'uses' => 'ApiController@getPortDetails']);
 Route::get('get/user/plan/{user_id}' ,  ['as' => 'get.user.plan' , 'uses' => 'ApiController@getUserPlan']);
 Route::get('get/chat/status' ,          ['as' => 'get.chat.status' , 'uses' => 'ApiController@getChatStatus']);
+
+//TV app
+Route::get('get/all/state/list' , ['as' => 'get.all.basmati' , 'uses' => 'ApiController@getAllStateList']);
+Route::get('get/all/basmati/{state}' , ['as' => 'get.all.basmati' , 'uses' => 'ApiController@getAllBasmatiPrice']);
+Route::get('get/all/nonbasmati/{state}' , ['as' => 'get.all.nonbasmati' , 'uses' => 'ApiController@getAllNONBasmatiPrice']);
+
+//Notification
+Route::get('get/user/notification/{user_id?}', ['as' => 'get.user.notification', 'uses' => 'NotificationController@getUserNotifications']);
+Route::get('get/ports', ['as' => 'get.user.notification', 'uses' => 'ApiController@getPortsInOrder']);

@@ -227,6 +227,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'ChatStatus' => App\Helpers\StatusChat::class,
+        'MailHelper' => App\Helpers\MailHelper::class,
 
     ],
 

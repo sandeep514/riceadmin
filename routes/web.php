@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',function(){
     return redirect()->route('home');
 });
+
+Route::get('sendhtmlemail', 'MailController@html_email');
+
+
 Route::group(['prefix'=>'administrator'], function(){
     Route::group(['middleware'=>'auth'], function(){
         Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
@@ -318,12 +322,21 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('delete/route/{id}' ,        ['as' => 'master.transport.delete.route'    ,'uses' => 'MasterController@deleteRoute' ] );
         Route::put('get/transport/route/{id}' , ['as' => 'master.transport.update.route'    ,'uses' => 'MasterController@updateTransportRoute' ] );
         Route::get('get/route/transport/{id}' , ['as' => 'master.get.transport.route'       ,'uses' => 'MasterController@getTransportRoute' ] );
+        Route::get('delete/route/transport/{id}' , ['as' => 'master.delete.transport.route'       ,'uses' => 'MasterController@deleteStatePort' ] );
 
         //Transport ports
         // Route::get('list/ports' ,            ['as' => 'master.transport.list.ports'    ,'uses' => 'MasterController@listPort' ] );
         // Route::post('create/ports' ,         ['as' => 'master.transport.create.ports'  ,'uses' => 'MasterController@createPort' ] );
         // Route::delete('delete/ports/{id}' ,  ['as' => 'master.transport.delete.ports'  ,'uses' => 'MasterController@deletePort' ] );
 
+
+        // change date of existing user
+        Route::get('change/existing/date' , ['as' => 'change.date.of.existing.user'      ,'uses' => 'MasterController@changeDateofExistingUser' ] );
+        Route::POST('save/trial/period' ,   ['as' => 'trialPeriod.save'      ,'uses' => 'MasterController@saveTrialPeriod' ] );
+
+        // change date of existing user
+        Route::get('change/trial/period/date' , ['as' => 'change.date.trial.period'      ,'uses' => 'MasterController@changeTrialPeriodDate' ] );
+        Route::POST('save/trial/month/period' ,   ['as' => 'trialPeriodMonth.save'      ,'uses' => 'MasterController@trialPeriodMonthSave' ] );
     });
 
     Auth::routes();

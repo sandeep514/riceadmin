@@ -153,6 +153,17 @@
                     <i class="fa fa-address-card-o"></i> <span> Master </span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['change.date.of.existing.user']))?'active':'' }}">
+                <a href="{{ route('change.date.of.existing.user') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Change Date of Existing User</span>
+                </a>
+            </li>
+
+            <li class="{{ (in_array($currentRoute,['change.date.trial.period']))?'active':'' }}">
+                <a href="{{ route('change.date.trial.period') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Change Trial Period</span>
+                </a>
+            </li>
 
         </ul>
     </section>
