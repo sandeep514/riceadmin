@@ -12,6 +12,7 @@ use Session;
 use Carbon\Carbon;
 use App\User;
 use App\FreeTrialMonths;
+use App\Version;
 
 class MasterController extends Controller
 {
@@ -311,10 +312,12 @@ class MasterController extends Controller
 		$ports = Port::get()->pluck( 'id' , 'state' );
 		return view('master.listState' , compact('ports'));	
 	}
+	
 	public function changedateofexistinguser()
 	{
 		return view('trialPeriod.index');
 	}
+
 	public function saveTrialPeriod(Request $request)
 	{
 		$carbonNow = Carbon::now()->format('Y-m-d');
@@ -333,5 +336,30 @@ class MasterController extends Controller
 		FreeTrialMonths::where('id' , 1)->update(['month' => $request->trialPeriod]);
 		$trialMonth = FreeTrialMonths::where('id' , 1)->first();
 		return back();
+	}
+
+	public function createVersion(){
+        return View('version.create');
+	}
+
+	public function saveVersion(Request $request)
+	{
+		$request->validate([
+			'version' => 'required',
+		]);
+		$version = Version::create([
+			'version' => $request->version,
+		]);
+		return back();
+	}
+	public function createCalculator()
+	{
+		$riceName = RiceName::orderBy('order' , 'ASC')->get();
+		return view('calculator.create' , compact('riceName'));
+	}
+	public function saveCalculator(Request $request)
+	{
+
+		dd($request->all());
 	}
 }

@@ -22,6 +22,7 @@
     use App\SubPlan;
     use App\Message;
     use App\TrialPeriod;
+    use App\Version;
     use App\Helpers\StatusChat;
 // use Illuminate\Support\Facades\Hash;
     use Carbon\Carbon;
@@ -1626,5 +1627,9 @@
             }catch (Exception $e) {
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
+        }
+        public function getLatestAndroidVersion(){
+            $version  = Version::orderBy('id' , 'desc')->first();
+            return response()->json(['status' => 'success' , 'data' => $version]);
         }
     }

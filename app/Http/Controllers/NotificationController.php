@@ -26,8 +26,9 @@ class NotificationController extends Controller
             'message'=> 'required',
         ]);
         // dd($request->userType);
-        $users = User::where('id', 224)->get();
-        // $users = User::whereIn('role', $request->userType)->get();
+        //$users = User::whereIn('id', [272,219,224,186,378])->get();
+
+        $users = User::whereIn('role', $request->userType)->get();
         $request->validate([
                 'userType' => 'required|array',
                 'message' => 'required'

@@ -30,7 +30,7 @@
             </div>
         </div>
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+       <!--  <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
@@ -38,14 +38,14 @@
                 </button>
               </span>
             </div>
-        </form>
+        </form> -->
         @php
             $currentRoute = request()->route()->getName();
         @endphp
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header">MAIN NAVIGATION FOR INR </li>
             <li class="{{ ($currentRoute == 'home')?'active':'' }}">
                 <a href="{{ route('home') }}">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -66,6 +66,20 @@
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 3)?'active':'' }}"><a href="{{ route('users','3') }}"><i class="fa fa-circle-o"></i> Employees</a></li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 4)?'active':'' }}"><a href="{{ route('users','4') }}"><i class="fa fa-circle-o"></i> Seller</a></li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 5)?'active':'' }}"><a href="{{ route('users','5') }}"><i class="fa fa-circle-o"></i> Buyer</a></li>
+
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 8)?'active':'' }}">
+                            <a href="{{ route('users','8') }}"><i class="fa fa-circle-o"></i> Guest</a>
+                        </li>
+
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 7)?'active':'' }}">
+                            <a href="{{ route('users','7') }}"><i class="fa fa-circle-o"></i> Broker</a>
+                        </li>
+
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
+                            <a href="{{ route('users','6') }}"><i class="fa fa-circle-o"></i> Supplier</a>
+                        </li>
+
+
                     </ul>
                 </li>
                 <li class="{{ (in_array($currentRoute,['modules','permissions']))?'active':'' }}">
@@ -162,6 +176,30 @@
             <li class="{{ (in_array($currentRoute,['change.date.trial.period']))?'active':'' }}">
                 <a href="{{ route('change.date.trial.period') }}">
                     <i class="fa fa-address-card-o"></i> <span>Change Trial Period</span>
+                </a>
+            </li>
+
+            <li class="{{ (in_array($currentRoute,['create.version']))?'active':'' }}">
+                <a href="{{ route('create.version') }}">
+                    <i class="fa fa-address-card-o"></i> <span> Version </span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['create.calculator']))?'active':'' }}">
+                <a href="{{ route('create.calculator') }}">
+                    <i class="fa fa-address-card-o"></i> <span> Calculator </span>
+                </a>
+            </li>
+
+        </ul>
+
+        <!-- for Dollar $ -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="header">MAIN NAVIGATION FOR DOLLAR </li>
+
+            <li class="{{ (in_array($currentRoute,['dollarExcel','dollarExcel.create','dollarExcel.delete']))?'active':'' }}">
+                <a href="{{ route('dollarExcel.create') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Module 1</span>
                 </a>
             </li>
 

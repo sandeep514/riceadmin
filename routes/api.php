@@ -72,3 +72,6 @@ Route::get('get/all/nonbasmati/{state}' , ['as' => 'get.all.nonbasmati' , 'uses'
 //Notification
 Route::get('get/user/notification/{user_id?}', ['as' => 'get.user.notification', 'uses' => 'NotificationController@getUserNotifications']);
 Route::get('get/ports', ['as' => 'get.user.notification', 'uses' => 'ApiController@getPortsInOrder']);
+
+//version
+Route::get('get/latest/version', ['as' => 'get.latest.version', 'uses' => 'ApiController@getLatestAndroidVersion']);

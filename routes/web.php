@@ -243,6 +243,12 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('plan',['as'=>'plan.create','uses'=>'PlanController@index']);
             Route::post('plan/save',['as'=>'plan.save','uses'=>'PlanController@save']);
             Route::post('plan/update',['as'=>'plan.update','uses'=>'PlanController@updatePlan']);
+
+
+            //dollarExcel
+            Route::get('excel',['as'=>'dollarExcel.create','uses'=>'DollarController@index']);
+            Route::post('dollar/save',['as'=>'dollarExcel.save','uses'=>'DollarController@save']);
+            Route::post('dollar/update',['as'=>'dollarExcel.update','uses'=>'DollarController@update']);
             
             //Ajax Routes
             Route::post('city/save',['as'=>'save.city.modal','uses'=>'AjaxController@saveCity']);
@@ -337,6 +343,14 @@ Route::group(['prefix'=>'administrator'], function(){
         // change date of existing user
         Route::get('change/trial/period/date' , ['as' => 'change.date.trial.period'      ,'uses' => 'MasterController@changeTrialPeriodDate' ] );
         Route::POST('save/trial/month/period' ,   ['as' => 'trialPeriodMonth.save'      ,'uses' => 'MasterController@trialPeriodMonthSave' ] );
+
+        // create.version
+        Route::get('create/version', ['as' => 'create.version', 'uses' => 'MasterController@createVersion']);
+        // save.version
+        Route::post('save/version', ['as' => 'save.version', 'uses' => 'MasterController@saveVersion']);
+
+        Route::get('create.calculator' , ['as' => 'create.calculator' , 'uses' => 'MasterController@createCalculator']);
+        Route::get('save.calculator' , ['as' => 'calculator.save' , 'uses' => 'MasterController@saveCalculator']);
     });
 
     Auth::routes();
