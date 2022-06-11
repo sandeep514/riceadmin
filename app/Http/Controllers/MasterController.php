@@ -13,6 +13,10 @@ use Carbon\Carbon;
 use App\User;
 use App\FreeTrialMonths;
 use App\Version;
+use App\QualityMaster;
+use App\USD_prices;
+use App\USD_defaultmaster;
+use App\Defaultvalue;
 
 class MasterController extends Controller
 {
@@ -354,12 +358,288 @@ class MasterController extends Controller
 	}
 	public function createCalculator()
 	{
-		$riceName = RiceName::orderBy('order' , 'ASC')->get();
-		return view('calculator.create' , compact('riceName'));
+		$riceName = QualityMaster::all();
+		$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->orderBy('id' , 'DESC')->where('status' , 1)->get();
+
+		$defaultValue = Defaultvalue::first();
+
+		$dollarRate = $defaultValue->dollarvalue;
+
+		return view('calculator.create' , compact('riceName' , 'usdPrice','dollarRate'));
+	}
+	public function editRiceQualityUSD($id)
+	{
+		$riceName = QualityMaster::all();
+		$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->where('id' , $id)->first();
+
+		$defaultValue = Defaultvalue::first();
+
+		$dollarRate = $defaultValue->dollarvalue;
+
+		return view('calculator.edit' , compact('riceName' , 'usdPrice','dollarRate'));
 	}
 	public function saveCalculator(Request $request)
 	{
+		$riceName 		= $request->riceName;
+		$ricemin 		= $request->ricemin;
+		$ricemax 		= $request->ricemax;
+		$transportmin 	= $request->portmin;
+		$transportmax 	= $request->portmax;
+		$category 		= $request->bag;
+		$charges 		= $request->charges;
+		$dollarrate 	= $request->dollar;
+		$percentageValue= $request->percentage;
 
-		dd($request->all());
+		if($ricemin == ''){
+            $ricemin = 0;
+        }
+        if($ricemax == ''){
+            $ricemax = 0;
+        }
+        if($transportmin == ''){
+            $transportmin = 0;
+        }
+        if($transportmax == ''){
+            $transportmax = 0;
+        }
+        if( $ricemax < $ricemin ){
+            // alert('Rice max price should be greater than Rice min price.');
+            return false;
+        }
+        if( $transportmax < $transportmin ){
+            // alert('Transport max price should be greater than Transport min price.');
+            return false;
+        }
+
+        if( $ricemin != 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != '' && $charges != ''){
+           
+            $totalMin = (float)((float)($ricemin)+(float)($category)+(float)($transportmin)+(float)($charges));
+            $totalMax = (float)((float)($ricemax)+(float)($category)+(float)($transportmax)+(float)($charges));
+            $exchangeRatemin = (float)(((float)($totalMin) / $dollarrate));
+            $exchangeRatemax = (float)(((float)($totalMax)/ $dollarrate));
+            $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
+            $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
+
+            $total = (($totalMin).' - '.($totalMax));
+            $exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
+            $fob = (($Fobmin).' - '.($Fobmax));
+        }
+
+        if( $ricemin != 0 && $ricemax == 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != ''){
+           
+            $totalMin = (float)((float)($ricemin)+(float)($category)+(float)($transportmin)+(float)($charges));
+            $totalMax = 0;
+            $exchangeRatemin = (float)(((float)($ricemin)+(float)($category)+(float)($transportmin) ) / $dollarrate);
+            $exchangeRatemax = 0;
+            $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
+            $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
+
+            $total = (($totalMin).' - '.($totalMax));
+			$exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
+			$fob = (($Fobmin).' - '.($Fobmax));
+        }
+
+        if( $ricemin == 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != ''){
+           
+            $totalMin = 0;
+            $totalMax = (float)((float)($ricemax)+(float)($category)+(float)($transportmax)+(float)($charges));
+            $exchangeRatemin = 0;
+            $exchangeRatemax = (float)(((float)($ricemax)+(float)($category)+(float)($transportmax) ) / $dollarrate);
+            $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
+            $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
+
+            $total = (($totalMin).' - '.($totalMax));
+            $exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
+            $fob = (($Fobmin).' - '.($Fobmax));
+        }
+        
+
+        $totalMin 			= ( round($totalMin , 2) );
+        $totalMax 			= ( round($totalMax , 2) );
+        $exchangeRatemin 	= ( round($exchangeRatemin , 2) );
+        $exchangeRatemax 	= ( round($exchangeRatemax , 2) );
+        $Fobmin 			= ( round($Fobmin) );
+        $Fobmax 			= ( round($Fobmax) );
+        
+        $qualityMaster = QualityMaster::where('id' , $riceName)->first();        
+        if( $qualityMaster->quality_type_status == 1 ){
+	        $applied_for = 0;
+        }else{
+	        $applied_for = 1;
+        }
+
+		$fiftyKGbagPMT = USD_defaultmaster::where([ 'applied_for' => $applied_for , 'bag_size' => '50kg' ])->first();
+
+		$fiftyKGbagPMTPrice = $fiftyKGbagPMT->PMT_USD;
+
+        $selectedAppliedFor = USD_defaultmaster::where('applied_for' ,$applied_for)->get();
+
+        if($selectedAppliedFor->count() > 0){
+        	foreach($selectedAppliedFor as $k => $v){
+        		$bag_size = $v->bag_size;
+        		$bag_id = $v->id;
+        		$bag_pmt = $v->PMT_USD;
+        		USD_prices::create([
+		        	'rice' => $riceName,
+		        	'ricemin' => $ricemin,
+		        	'ricemax' => $ricemax,
+		        	'transportmin' => $transportmin,
+		        	'transportmax' => $transportmax,
+		        	'category' => $category,
+		        	'charges' => $charges,
+		        	'dollarrate' => $dollarrate,
+		        	'percentageValue' => $percentageValue,
+		        	'totalMin' => $totalMin,
+		        	'totalMax' => $totalMax,
+		        	'exchangeRatemin' => $exchangeRatemin,
+		        	'exchangeRatemax' => $exchangeRatemax,
+		        	'fobmin' => round(((int)$Fobmin - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
+		        	'fobmax' => round(((int)$Fobmax - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
+		        	'status' => 1,
+		        	'usd_defaultMaster_id' => $bag_id,
+		        	'color_status' => $request->color_status
+		        ]);
+        	}
+        }
+
+
+
+        return back();
+	}
+	public function updateCalculator(Request $request)
+	{
+		$riceName 		= $request->riceName;
+		$ricemin 		= $request->ricemin;
+		$ricemax 		= $request->ricemax;
+		$transportmin 	= $request->portmin;
+		$transportmax 	= $request->portmax;
+		$category 		= $request->bag;
+		$charges 		= $request->charges;
+		$dollarrate 	= $request->dollar;
+		$percentageValue= $request->percentage;
+		$colorStatus= $request->color_status;
+
+		if($ricemin == ''){
+            $ricemin = 0;
+        }
+        if($ricemax == ''){
+            $ricemax = 0;
+        }
+        if($transportmin == ''){
+            $transportmin = 0;
+        }
+        if($transportmax == ''){
+            $transportmax = 0;
+        }
+        if( $ricemax < $ricemin ){
+            // alert('Rice max price should be greater than Rice min price.');
+            return false;
+        }
+        if( $transportmax < $transportmin ){
+            // alert('Transport max price should be greater than Transport min price.');
+            return false;
+        }
+
+        if( $ricemin != 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != '' && $charges != ''){
+           
+            $totalMin = (float)((float)($ricemin)+(float)($category)+(float)($transportmin)+(float)($charges));
+            $totalMax = (float)((float)($ricemax)+(float)($category)+(float)($transportmax)+(float)($charges));
+            $exchangeRatemin = (float)(((float)($totalMin) / $dollarrate));
+            $exchangeRatemax = (float)(((float)($totalMax)/ $dollarrate));
+            $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
+            $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
+
+            $total = (($totalMin).' - '.($totalMax));
+            $exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
+            $fob = (($Fobmin).' - '.($Fobmax));
+        }
+
+        if( $ricemin != 0 && $ricemax == 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != ''){
+           
+            $totalMin = (float)((float)($ricemin)+(float)($category)+(float)($transportmin)+(float)($charges));
+            $totalMax = 0;
+            $exchangeRatemin = (float)(((float)($ricemin)+(float)($category)+(float)($transportmin) ) / $dollarrate);
+            $exchangeRatemax = 0;
+            $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
+            $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
+
+            $total = (($totalMin).' - '.($totalMax));
+			$exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
+			$fob = (($Fobmin).' - '.($Fobmax));
+        }
+
+        if( $ricemin == 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != ''){
+           
+            $totalMin = 0;
+            $totalMax = (float)((float)($ricemax)+(float)($category)+(float)($transportmax)+(float)($charges));
+            $exchangeRatemin = 0;
+            $exchangeRatemax = (float)(((float)($ricemax)+(float)($category)+(float)($transportmax) ) / $dollarrate);
+            $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
+            $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
+
+            $total = (($totalMin).' - '.($totalMax));
+            $exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
+            $fob = (($Fobmin).' - '.($Fobmax));
+        }
+        
+
+        $totalMin 			= ( round($totalMin , 2) );
+        $totalMax 			= ( round($totalMax , 2) );
+        $exchangeRatemin 	= ( round($exchangeRatemin , 2) );
+        $exchangeRatemax 	= ( round($exchangeRatemax , 2) );
+        $Fobmin 			= ( round($Fobmin) );
+        $Fobmax 			= ( round($Fobmax) );
+        
+        $qualityMaster = QualityMaster::where('id' , $riceName)->first();        
+        if( $qualityMaster->quality_type_status == 1 ){
+	        $applied_for = 0;
+        }else{
+	        $applied_for = 1;
+        }
+
+		$fiftyKGbagPMT = USD_defaultmaster::where([ 'applied_for' => $applied_for , 'bag_size' => '50kg' ])->first();
+
+		$fiftyKGbagPMTPrice = $fiftyKGbagPMT->PMT_USD;
+
+        $selectedAppliedFor = USD_defaultmaster::where('applied_for' ,$applied_for)->get();
+
+        if($selectedAppliedFor->count() > 0){
+        	foreach($selectedAppliedFor as $k => $v){
+        		$bag_size = $v->bag_size;
+        		$bag_id = $v->id;
+        		$bag_pmt = $v->PMT_USD;
+        		
+        		USD_prices::where(['id' => $request->usdPriceId])->update([
+		        	'rice' => $riceName,
+		        	'ricemin' => $ricemin,
+		        	'ricemax' => $ricemax,
+		        	'transportmin' => $transportmin,
+		        	'transportmax' => $transportmax,
+		        	'category' => $category,
+		        	'charges' => $charges,
+		        	'dollarrate' => $dollarrate,
+		        	'percentageValue' => $percentageValue,
+		        	'totalMin' => $totalMin,
+		        	'totalMax' => $totalMax,
+		        	'exchangeRatemin' => $exchangeRatemin,
+		        	'exchangeRatemax' => $exchangeRatemax,
+		        	'fobmin' => round(((int)$Fobmin - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
+		        	'fobmax' => round(((int)$Fobmax - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
+		        	'status' => 1,
+		        	'usd_defaultMaster_id' => $bag_id,
+		        	'color_status' => $colorStatus
+		        ]);
+        	}
+        }
+
+
+
+        return back();
+	}
+	public function deleteRiceQualityUSD($id)
+	{
+		$usdPrideChangeStatus = USD_prices::where(['id' => $id])->update(['status' => 0]);
+		return back();
+
 	}
 }

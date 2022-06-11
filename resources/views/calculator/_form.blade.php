@@ -17,7 +17,7 @@
             {!! Form::label('Rice','Rice*') !!}
             <select class="form-control" name="riceName" id="riceName">
                 @foreach( $riceName as $k => $v )
-                    <option value="{{ $v->id }}" >{{ $v->name }} ({{ $v->type }})</option>
+                    <option value="{{ $v->id }}" >{{ $v->quality }} {{ $v->quality_name }} ({{ $v->quality_type }})</option>
                 @endforeach
             </select>
         </div>
@@ -93,6 +93,15 @@
             <span id="fob"></span>
         </div>
 
+        <div class="form-group col-md-6">
+            {!! Form::label('color_status','Color') !!}
+            <select class="form-control" name="color_status" id="color_status">
+                <option value="1" >Green</option>
+                <option value="2" >Red</option>
+                <option value="3" selected >Black</option>                
+            </select>
+        </div>
+
     </div>
 </div>
 
@@ -143,8 +152,9 @@
             //     $('#fob').html('$'+Math.round((parseFloat(((exchangeRate*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRate).toFixed(2))).toFixed(2)));
             // })
 
-            $('.calculate').click(function(){
-
+            $('.calculate').click(function(e){
+                e.preventDefault();
+                e.stopPropagation() 
                 let ricemin = $('#ricemin').val();
                 let ricemax = $('#ricemax').val();
                 let transportmin = $('#transportmin').val();
@@ -182,8 +192,10 @@
                    
                     let totalMin = parseFloat(parseFloat(ricemin)+parseFloat(category)+parseFloat(transportmin)+parseFloat(charges)).toFixed(2);
                     let totalMax = parseFloat(parseFloat(ricemax)+parseFloat(category)+parseFloat(transportmax)+parseFloat(charges)).toFixed(2);
-                    let exchangeRatemin = parseFloat((parseFloat(ricemin)+parseFloat(category)+parseFloat(transportmin) ) / $('#dollarrate').val()).toFixed(2);
-                    let exchangeRatemax = parseFloat((parseFloat(ricemax)+parseFloat(category)+parseFloat(transportmax) ) / $('#dollarrate').val()).toFixed(2);
+                    let exchangeRatemin = parseFloat(totalMin / $('#dollarrate').val()).toFixed(2);
+
+                    let exchangeRatemax = parseFloat(totalMax / $('#dollarrate').val()).toFixed(2);
+                    
                     let Fobmin = Math.round((parseFloat(((exchangeRatemin*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemin).toFixed(2))).toFixed(2));
                     let Fobmax = Math.round((parseFloat(((exchangeRatemax*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemax).toFixed(2))).toFixed(2));
 
@@ -196,7 +208,8 @@
                    
                     let totalMin = parseFloat(parseFloat(ricemin)+parseFloat(category)+parseFloat(transportmin)+parseFloat(charges)).toFixed(2);
                     let totalMax = 0;
-                    let exchangeRatemin = parseFloat((parseFloat(ricemin)+parseFloat(category)+parseFloat(transportmin) ) / $('#dollarrate').val()).toFixed(2);
+                    let exchangeRatemin = parseFloat((totalMin / $('#dollarrate').val())).toFixed(2);
+
                     let exchangeRatemax = 0;
                     let Fobmin = Math.round((parseFloat(((exchangeRatemin*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemin).toFixed(2))).toFixed(2));
                     let Fobmax = Math.round((parseFloat(((exchangeRatemax*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemax).toFixed(2))).toFixed(2));
@@ -211,7 +224,8 @@
                     let totalMin = 0;
                     let totalMax = parseFloat(parseFloat(ricemax)+parseFloat(category)+parseFloat(transportmax)+parseFloat(charges)).toFixed(2);
                     let exchangeRatemin = 0;
-                    let exchangeRatemax = parseFloat((parseFloat(ricemax)+parseFloat(category)+parseFloat(transportmax) ) / $('#dollarrate').val()).toFixed(2);
+                    let exchangeRatemax = parseFloat(totalMax / $('#dollarrate').val()).toFixed(2);
+
                     let Fobmin = Math.round((parseFloat(((exchangeRatemin*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemin).toFixed(2))).toFixed(2));
                     let Fobmax = Math.round((parseFloat(((exchangeRatemax*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemax).toFixed(2))).toFixed(2));
 

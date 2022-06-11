@@ -75,3 +75,33 @@ Route::get('get/ports', ['as' => 'get.user.notification', 'uses' => 'ApiControll
 
 //version
 Route::get('get/latest/version', ['as' => 'get.latest.version', 'uses' => 'ApiController@getLatestAndroidVersion']);
+
+//Ocean Freight
+Route::get('get/ocean/freight', ['as' => 'get.ocean.freight', 'uses' => 'ApiController@getOceanFreight']);
+
+//get USD Prices
+Route::get('get/usd/prices/{id}' , ['as' => 'get.usd.prices' , 'uses' => 'ApiController@getUSDPrices']);
+Route::get('get/distinct/region' , ['as' => 'get.distinct.region' , 'uses' => 'ApiController@getDistinctRegion']);
+Route::get('get/quality/details/{id}' , ['as' => 'get.quality.details' , 'uses' => 'ApiController@getQualityDetails']);
+
+Route::get('get/all/ports/{riceQualityId}/{userId}' , ['as' => 'get.all.ports' , 'uses' => 'ApiController@getAllPorts']);
+Route::get('get/data/for/buyer' , ['as' => 'get.data.for.buyer' ,'uses' =>'ApiController@getAllPortsgetDataForBuyer']);
+Route::POST('add/rice/query' , ['as' => 'add.rice.query' ,'uses' =>'ApiController@addRiceQuality']);
+Route::POST('save/bid' , ['as' => 'save.bid' ,'uses' =>'ApiController@saveBid']);
+Route::get('get/buyer/details/{id}' , ['as' => 'get.buyer.details' ,'uses' =>'ApiController@getBuyerDetails']);
+Route::get('get/calculator/data' , ['as' => 'get.calculator.data' ,'uses' =>'ApiController@getCalculatorData']);
+Route::POST('save/usd/prices' , ['as' => 'save.usd.prices' ,'uses' =>'ApiController@saveUSDPrices']);
+Route::get('get/my/bids/{id}' , ['as' => 'get.my.bids' ,'uses' =>'ApiController@getMyBids']);
+Route::POST('save/user/bid' , ['as' => 'save.user.bid' ,'uses' =>'ApiController@saveUserBid']);
+Route::get('get/buyer/list' , ['as' => 'get.buyer.list' ,'uses' =>'ApiController@getAllVendors']);
+
+
+Route::get('get/usd/plans' , ['as' => 'get.usd.plan' ,'uses' =>'ApiController@getUSDPlans']);
+Route::get('get/bag/vendors' , ['as' => 'get.bag.vendors' ,'uses' =>'ApiController@getBagVendors']);
+
+Route::get('get/countries/list' , ['as' => 'get.countries.list' ,'uses' =>'ApiController@getCountryList']);
+Route::get('get/contact/details' , ['as' => 'get.contact.details' ,'uses' =>'ApiController@getContactDetails']);
+Route::get('get/hot/deals/{id}' , ['as' => 'get.hot.deals' ,'uses' =>'ApiController@getHotDeals']);
+Route::POST('update/counter/status' , ['as' => 'update.counter.status' ,'uses' =>'ApiController@updateCounterStatus']);
+Route::POST('update/port' , ['as' => 'update.port' ,'uses' =>'ApiController@updatePort']);
+Route::POST('accept/hot/deal/notification' , ['as' => 'accept.hot.deal.notification' ,'uses' =>'ApiController@acceptHotDealNotification']);

@@ -25,7 +25,6 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
 
         Route::group(['middleware'=>'admin'], function(){
-        
             Route::get('call/is/active' , ['as' => 'is.active.call' , 'uses' => 'PlanController@isActiveCall']);
     
             //plans
@@ -34,10 +33,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::post('create/plans' ,    ['as' => 'create.plan',         'uses' => 'PlanController@createPlan']);
             Route::get('edit/plan/{id}' ,   ['as' => 'edit.plan',           'uses' => 'PlanController@editPlan']);
             Route::post('update/plan' ,     ['as' => 'update.plan',         'uses' => 'PlanController@updatePlan']);
-            Route::get('delete/plan' ,      ['as' => 'delete.plan',         'uses' => 'PlanController@deletePlan']);
-            
-            
-            
+            Route::get('delete/plan' ,      ['as' => 'delete.plan',         'uses' => 'PlanController@deletePlan']);              
             
             //gallery
             Route::get('gallery', ['as' => 'gallery', 'uses' => 'GalleryController@index']);
@@ -50,6 +46,7 @@ Route::group(['prefix'=>'administrator'], function(){
 
             //Users
             //Route::group(['module'=>'users','icon'=>'fa-users'], function(){
+                Route::get('get/new/vendor',['as'=>'get.new.vendors','uses'=>'UsersController@getVendors','action'=>'getVendors']);
                 Route::get('users/{role}',['as'=>'users','uses'=>'UsersController@index','action'=>'view']);
                 Route::get('users/{role}/create',['as'=>'create.user','uses'=>'UsersController@create','action'=>'create']);
                 Route::post('users/save/{role}',['as'=>'save.user','uses'=>'UsersController@save','action'=>'create']);
@@ -247,9 +244,28 @@ Route::group(['prefix'=>'administrator'], function(){
 
             //dollarExcel
             Route::get('excel',['as'=>'dollarExcel.create','uses'=>'DollarController@index']);
-            Route::post('dollar/save',['as'=>'dollarExcel.save','uses'=>'DollarController@save']);
-            Route::post('dollar/update',['as'=>'dollarExcel.update','uses'=>'DollarController@update']);
+            Route::post('excel/save',['as'=>'dollarExcel.save','uses'=>'DollarController@save']);
+
+            Route::get('excel/ocean/freight',['as'=>'dollarExcel.create.ocean.freight','uses'=>'DollarController@indexFreight']);
+            Route::post('dollar/save/ocean/freight',['as'=>'dollarExcel.save.ocean.freight','uses'=>'DollarController@saveOceanFreight']);
             
+            Route::get('excel/quality/master',['as'=>'dollarExcel.create.quality.master','uses'=>'DollarController@qualityMaster']);
+            Route::post('dollar/save/quality/master',['as'=>'dollarExcel.save.quality.master','uses'=>'DollarController@saveQualityMaster']);
+            
+            Route::get('dollarExcel/default/value/master',['as'=>'dollarExcel.default.value.master','uses'=>'DollarController@defaultValueMaster']);
+            Route::post('save/dollarExcel/default/value/master',['as'=>'dollarExcel.default.value.master.save','uses'=>'DollarController@saveDefaultValueMaster']);
+            
+            Route::get('domestic/transport/master',['as'=>'domestic.transport.master','uses'=>'DollarController@domesticTransportMaster']);
+            Route::post('save/domestic/transport/master',['as'=>'domestic.transport.master.save','uses'=>'DollarController@saveDomestictransportMaster']);
+            
+            Route::get('vendor/category/master',['as'=>'vendor.category.master','uses'=>'DollarController@vendorCategoryMaster']);
+            Route::post('save/vendor/category/master',['as'=>'vendor.category.master.save','uses'=>'DollarController@saveVendorCategoryVendor']);
+            
+            Route::get('bag/vendor/master',['as'=>'bag.vendor.master','uses'=>'DollarController@bagVendorMaster']);
+            Route::post('save/bag/vendor/master',['as'=>'bag.vendor.master.save','uses'=>'DollarController@saveBagVendor']);
+            
+
+
             //Ajax Routes
             Route::post('city/save',['as'=>'save.city.modal','uses'=>'AjaxController@saveCity']);
             Route::get('sample/register/{sntc_no}',['as'=>'sample.register.details','uses'=>'AjaxController@getSampleRegisterFromSntc']);
@@ -258,6 +274,11 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::POST('send/push/notification' , ['as' => 'post.push.notification' , 'uses' => 'NotificationController@sendNotification']);
             Route::get('trial/period' , ['as' => 'trial.period' , 'uses' => 'TrialPeriodController@index']);
             Route::post('trial/period/save' , ['as' => 'trialPeriod.save' , 'uses' => 'TrialPeriodController@save']);
+
+
+
+            Route::get('rice/query/master' ,      ['as' => 'rice.query.master',         'uses' => 'Controller@riceQualityMaster']);
+
         });
 
         Route::group(['middleware'=>'field_runner'], function(){
@@ -281,10 +302,6 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('couriers/update/{id}', ['as' => 'update.courier', 'uses' => 'CouriersController@update','action'=>'edit']);
                 Route::delete('couriers/delete/{id}', ['as' => 'delete.courier', 'uses' => 'CouriersController@delete','action'=>'delete']);
             });
-
-
-            
-
         });
 
     });
@@ -303,6 +320,11 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('list/rice/quality' ,            ['as' => 'master.list.rice.quality'     ,'uses' => 'MasterController@listRiceQuality' ] );
         Route::post('create/rice/quality' ,         ['as' => 'master.create.rice.quality'   ,'uses' => 'MasterController@createRiceQuality' ] );
         Route::get('delete/rice/quality/{id}',      ['as' => 'master.delete.rice.quality'   ,'uses' => 'MasterController@deleteRiceQuality' ] );
+
+
+        Route::get('edit/rice/quality/{id}',      ['as' => 'master.edit.rice.quality'   ,'uses' => 'MasterController@editRiceQuality' ] );
+
+
         Route::get('get/rice/quality/{id}' ,        ['as' => 'master.get.rice.quality'      ,'uses' => 'MasterController@getRicequalityById'] );
         Route::POST('update/rice/quality' ,         ['as' => 'master.update.rice.quality'   ,'uses' => 'MasterController@updateRiceQualityById'] );
 
@@ -349,11 +371,40 @@ Route::group(['prefix'=>'administrator'], function(){
         // save.version
         Route::post('save/version', ['as' => 'save.version', 'uses' => 'MasterController@saveVersion']);
 
-        Route::get('create.calculator' , ['as' => 'create.calculator' , 'uses' => 'MasterController@createCalculator']);
-        Route::get('save.calculator' , ['as' => 'calculator.save' , 'uses' => 'MasterController@saveCalculator']);
+        Route::get('create/calculator' , ['as' => 'create.calculator' , 'uses' => 'MasterController@createCalculator']);
+        Route::get('delete/rice/quality/{id}' , ['as' => 'delete.rice.quality' , 'uses' => 'MasterController@deleteRiceQualityUSD']);
+        Route::get('edit/rice/quality/{id}' , ['as' => 'edit.rice.quality' , 'uses' => 'MasterController@editRiceQualityUSD']);
+        Route::POST('save/calculator' , ['as' => 'calculator.save' , 'uses' => 'MasterController@saveCalculator']);
+        Route::POST('update/calculator' , ['as' => 'calculator.update' , 'uses' => 'MasterController@updateCalculator']);
+
+
+        Route::get('get/usd/coupons' , [ 'as' => 'get.usd.coupons' , 'uses' => 'USDPlanController@index']);
+        Route::get('status/usd/coupons/{id}' , [ 'as' => 'change.status.usd.coupon' , 'uses' => 'USDPlanController@ChangeStatus']);
+        Route::POST('save/usd/coupon' , [ 'as' => 'save.usd.coupon' , 'uses' => 'USDPlanController@saveUSDPlan']);
+
+        Route::get('get/usd/plan' , [ 'as' => 'get.usd.plan' , 'uses' => 'USDPlanController@Planindex']);
+        Route::get('status/usd/plan/{id}' , [ 'as' => 'change.status.usd.plan' , 'uses' => 'USDPlanController@PlanChangeStatus']);
+        Route::POST('save/usd/plan' , [ 'as' => 'save.usd.plan' , 'uses' => 'USDPlanController@PlansaveUSDPlan']);
+        
     });
+
+
+    Route::get('contact/detail/master' , ['as' => 'contact.details.master' , 'uses' => 'ContactController@index']);
+    Route::POST('contact/save/master' , ['as' => 'contact.save' , 'uses' => 'ContactController@createContact']);
+
+
+    Route::get('terms/condition' , [ 'as' => 'terms.condition' , 'uses' => 'USDPlanController@termCondition']);
+    Route::POST('save/terms/condition' , [ 'as' => 'save.terms.condition' , 'uses' => 'USDPlanController@saveTermCondition']);
+
+    Route::POST('send/seller/confirm/message', [ 'as' => 'send.seller.confirm.message' , 'uses' => 'USDPlanController@sendSellerConfirmMessage']);
+
 
     Auth::routes();
     Route::POST('change/chat/status' , ['as' => 'change.chat.status' , 'uses' => 'UsersController@changeChatStatus']);
+
+    Route::POST('hot/deal/push/notification' , ['as' => 'post.hot.deal.push.notification' , 'uses' => 'NotificationController@hotDealPushNotification']);
+
+    Route::GET('hot/deal/notification/master' , ['as' => 'hot.deal.notification.master' , 'uses' => 'NotificationController@hotDealIndex']);
+    Route::GET('update/hot/deal/status/{statusType}/{hotDealNotifId}' , ['as' => 'update.hot.deal.status' , 'uses' => 'NotificationController@updateHotDealStatus']);
     Route::get('logout','Auth\LoginController@logout');
 });

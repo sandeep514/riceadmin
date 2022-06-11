@@ -14,23 +14,37 @@
     use App\ChartInterval;
     use App\Port;
     use App\Gallery;
+    use App\Contact;
     use App\RiceName;
     use App\RiceType;
     use App\RiceForm;
     use App\Order;
+    use App\BuyQuery;
     use App\Plan;
     use App\SubPlan;
     use App\Message;
     use App\TrialPeriod;
     use App\Version;
+    use App\OceanFreight;
+    use App\BagVendors;
     use App\Helpers\StatusChat;
+    use App\USD_prices;
 // use Illuminate\Support\Facades\Hash;
     use Carbon\Carbon;
     use Illuminate\Http\Request;
     use Illuminate\Support\Facades\DB;
     use Illuminate\Support\Facades\Hash;
     use App\FreeTrialMonths;
+    use App\QualityMaster;
+    use App\USD_defaultmaster;
+    use App\Defaultvalue;
+    use App\Vendorcategory;
+    use App\Bid;
+    use App\USDPlan;
+    use App\HotDealAccept;
+    use App\HotDealNotification;
     use App\Http\Controllers\MailController;
+    use Illuminate\Support\Str;
 
     class ApiController extends Controller
     {
@@ -83,9 +97,9 @@
         
         public function login(Request $request)
         {
-            $userModel = User::where(['email' => $request->email])->first();
+            $userModel = User::where(['email' => $request->email])->with(['role_rel'])->first();
             if( $userModel == null ){
-            	$userModel = User::where(['mobile' => $request->email])->first();
+            	$userModel = User::where(['mobile' => $request->email])->with(['role_rel'])->first();
             }
 
             if ($userModel == null) {
@@ -93,8 +107,10 @@
             }
             $oldPassword = $userModel->password;
             if (Hash::check($request->password, $oldPassword)) {
-                
+                $random_token = Str::random(60);
                 if ($userModel->status == 0) {
+                    User::where(['email' => $request->email])->update([ 'api_token' => $random_token ]);
+                    
                     $Newotp = $userModel->otp;
                     $mobile = $userModel->mobile;
 					file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto='.$mobile.'&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$Newotp.'&PEID=1701160336234687231&templateid=1707161795904090251');
@@ -409,6 +425,7 @@
                         'errors' => null,
                         'prices' => $myNewData,
                         'latest' => $lastRecord->created_at->format('Y-m-d'),
+                        'lastUpdatedDate' => $lastRecord->created_at->format('d-m-Y | H:i'),
                         'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                     ]);
                 }
@@ -427,7 +444,7 @@
                 return response()->json([
                     'errors' => null,
                     'prices' => json_encode($processedData),
-                    'latest' => $lastRecord->created_at->format('Y-m-d'),
+                    'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
                     'oldDate' => ''
                 ]);
             } else {
@@ -454,6 +471,7 @@
                 return response()->json([
                     'errors' => null,
                     'prices' => $processedData,
+                    'last_updated_record' => $latstRecord,
                     'latest' => '',
                     'oldDate' => ''
                 ]);
@@ -475,10 +493,12 @@
         
         public function getpriceByTimePeriod($state, $riceType, $rice, $timePeriod)
         {
+
             $state = base64_decode($state);
             $riceType = base64_decode($riceType);
             $rice = base64_decode($rice);
             $timePeriod = base64_decode($timePeriod);
+            $rice = str_replace('_', ' ', $rice);
         
             $todayDate = Carbon::now();
             $created_at = [];
@@ -781,8 +801,9 @@
             $expiredDate = null;
             if( $trialPeriod ){
                 $trialPeriodMonth = $trialPeriod->month;
-                $month = $newExpiryDate->month;
-                $expiredDate = Carbon::now()->addMonth($month)->format('Y-m-d');
+                // $month = $newExpiryDate->month;
+                // $expiredDate = Carbon::now()->addMonth($month)->format('Y-m-d');
+                 $expiredDate = Carbon::now()->addMonth(36)->format('Y-m-d');
             }
 
             $data = [
@@ -803,17 +824,37 @@
             }
             
             $otp = rand(1111, 9999);
-            $user = User::create([
-                'name' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'mobile' => $request->mobile,
-                'companyname' => $request->companyname,
-                'role' => $data[$request->userState],
-                'otp' => $otp,
-                'expired_on' => $expiredDate,
-                'status' => 0
-            ]);
+            if($request->has('zipcode')){
+                $user = User::create([
+                    'name' => $request->username,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'mobile' => $request->mobile,
+                    'country' => $request->country,
+                    'zip_code' => $request->zipcode,
+                    'import_port' => $request->import_port,
+                    'address' => $request->address,
+                    'contact_person_name' => $request->contactperson,
+                    'companyname' => $request->companyname,
+                    'role' => $data[$request->userState],
+                    'otp' => $otp,
+                    'bagCategory' => ($request->userState != 8) ? $request->bagCategory : 0,
+                    'expired_on' => $expiredDate,
+                    'status' => 0
+                ]);
+            }else{
+                $user = User::create([
+                    'name' => $request->username,
+                    'email' => $request->email,
+                    'password' => Hash::make($request->password),
+                    'mobile' => $request->mobile,
+                    'companyname' => $request->companyname,
+                    'role' => $data[$request->userState],
+                    'otp' => $otp,
+                    'expired_on' => $expiredDate,
+                    'status' => 0
+                ]);
+            }
             
             User::where('mobile', $request->mobile)->update(['otp' => $otp]);
             file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto='.$request->mobile.'&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$otp.'&PEID=1701160336234687231&templateid=1707161795904090251');
@@ -822,7 +863,7 @@
                 if($user->email != null){
                    $response = MailController::generateMailForOTPThanks($user->email,'no@replay.in','SNTC GROUP','Thank you for registering on SNTC Rice Live Pricing App.','Thank you for registering on SNTC Rice Live Pricing App.',$otp);
                 }
-                return response()->json(['error' => null, 'data' => $user], 200);
+                return response()->json(['error' => null, 'data' => User::where('id' , $user->id)->first()], 200);
             } else {
                 return response()->json(['error' => "Something went wrong.", 'data' => []], 500);
             }
@@ -1009,45 +1050,74 @@
         
         // Update User Token
 
+        // public function saveOrder(Request $request)
+        // {
+        //     $today = Carbon::now();
+        //     $planModel = Plan::find($request->plan_id);
+        //     $subPlanModel = SubPlan::find($request->sub_plan_id);
+        //     $startDate = $today->format('Y-m-d');
+        //     $subPlans = json_decode($planModel->sub_plan, true);
+        //     $subPlanPrice = $subPlans[$request->sub_plan_id]['offerPrice'];
+            
+        //     if ($subPlanModel->name === "1 Year") {
+        //         $endDate = $today->addYear(1)->format('Y-m-d');
+        //     } else {
+        //         if ($subPlanModel->name === "6 Month") {
+                    
+        //             $endDate = $today->addMonth(6)->format('Y-m-d');
+        //         } else {
+        //             $endDate = $today->addMonth(1)->format('Y-m-d');
+        //         }
+        //     }
+            
+        //     $orderModel = new Order;
+        //     $orderModel->user_id = $request->user_id;
+        //     $orderModel->transaction_id = $request->transaction_id;
+        //     $orderModel->plan_id = $request->plan_id;
+        //     $orderModel->sub_plan_id = $request->sub_plan_id;
+        //     $orderModel->plan_name = $planModel->plan_name;
+        //     $orderModel->start_date = $startDate;
+        //     $orderModel->end_date = $endDate;
+        //     $orderModel->sub_plan_name = $subPlanModel->name;
+        //     $orderModel->sub_plan_price = $subPlanPrice;
+        //     $orderModel->status = 1;
+
+        //     if ($orderModel->save()) {
+        //         User::where(['id' => $request->user_id])->update(['expired_on' => $endDate]);
+        //         return response()->json(['status' => 'success', 'last_inserted_id' => $orderModel->id], 200);
+        //     }
+        //     return response()->json(['status' => 'error'], 500);
+        // }
+        
         public function saveOrder(Request $request)
         {
             $today = Carbon::now();
-            $planModel = Plan::find($request->plan_id);
-            $subPlanModel = SubPlan::find($request->sub_plan_id);
+            $planModel = USDPlan::find((int)$request->plan_id);
             $startDate = $today->format('Y-m-d');
-            $subPlans = json_decode($planModel->sub_plan, true);
-            $subPlanPrice = $subPlans[$request->sub_plan_id]['offerPrice'];
-            
-            if ($subPlanModel->name === "1 Year") {
-                $endDate = $today->addYear(1)->format('Y-m-d');
-            } else {
-                if ($subPlanModel->name === "6 Month") {
-                    
-                    $endDate = $today->addMonth(6)->format('Y-m-d');
-                } else {
-                    $endDate = $today->addMonth(1)->format('Y-m-d');
-                }
-            }
+            $endDate = $today->addMonth($planModel['valid_months'])->format('Y-m-d');
+            //  
             
             $orderModel = new Order;
             $orderModel->user_id = $request->user_id;
             $orderModel->transaction_id = $request->transaction_id;
             $orderModel->plan_id = $request->plan_id;
-            $orderModel->sub_plan_id = $request->sub_plan_id;
             $orderModel->plan_name = $planModel->plan_name;
             $orderModel->start_date = $startDate;
             $orderModel->end_date = $endDate;
-            $orderModel->sub_plan_name = $subPlanModel->name;
-            $orderModel->sub_plan_price = $subPlanPrice;
+            $orderModel->payment_type = 'INR';
+            $orderModel->amount = $planModel->discounted_prie;
+            $orderModel->sub_plan_id = 0;
+            $orderModel->sub_plan_name = '0';
+            $orderModel->sub_plan_price = 0;
             $orderModel->status = 1;
 
             if ($orderModel->save()) {
-                User::where(['id' => $request->user_id])->update(['expired_on' => $endDate]);
+                User::where(['id' => $request->user_id])->update(['expired_on' => $endDate , 'import_port' => 'Jebel Ali']);
                 return response()->json(['status' => 'success', 'last_inserted_id' => $orderModel->id], 200);
             }
             return response()->json(['status' => 'error'], 500);
         }
-        
+
         public function updateUserTokenById(Request $request)
         {
             if($request != null){
@@ -1063,7 +1133,6 @@
                      
                 }
             }
-
         }
         
         // Send Push Notification
@@ -1235,7 +1304,14 @@
         
         public function checkUserExpired($userId){
             $user = User::where('id' , $userId)->first();
-            return response()->json(['status' => true , 'data' => $user->expired_on]);
+             $today = Carbon::now();
+            $todayDate = $today->format('Y-m-d');
+            if($user->expired_on > $todayDate){
+                $isExpiry = false;
+            }else{
+                $isExpiry = true;
+            }
+            return response()->json(['status' => true , 'data' => $user->expired_on,'isExpiry' =>$isExpiry]);
         }
         
         public function getPriceStates(){
@@ -1628,8 +1704,537 @@
                 return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
             }
         }
+        
         public function getLatestAndroidVersion(){
             $version  = Version::orderBy('id' , 'desc')->first();
             return response()->json(['status' => 'success' , 'data' => $version]);
+        }
+        
+        public function getOceanFreight()
+        {
+            $oceanfreight = OceanFreight::get();
+            dd($oceanfreight);
+            return response()->json(['status' => 'success' , 'data' => $oceanfreight]);
+        }
+
+        public function getUSDPrices($userId)
+        {
+            $getUSDPrices = USD_prices::select('created_at')->where('status' , 1)->orderBy('id' , 'desc')->first();
+            $latestDateforQuery = $getUSDPrices->created_at->format('Y-m-d');
+            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i');
+
+            // $usdData = USD_defaultmaster::where('bag_size' , '50kg')->with(['getUSDDefaultMaster' => function($query){
+            //     return $query->with('getRiceQuality');
+            // }])->get();
+            // dd($usdData->toArray());
+
+            $usdData = USD_prices::with(['getRiceQuality','getUSDDefaultMaster' => function($query) {
+                return $query->where('bag_size' , '50Kg')->get();
+            }])->whereDate('created_at' ,'like' , '%'.$latestDateforQuery.'%')->orderBy('created_at' , 'ASC')->get();
+
+            $basmatiData = [];
+            $nonbasmatiData = [];
+
+            foreach( $usdData as $k => $v ){
+                if( $v->getUSDDefaultMaster != null ){                    
+                    $stringFob = $v->fobmin;
+                    $stringFobMax = $v->fobmax;
+                    unset($v['fobmin']);
+                    unset($v['fobmax']);
+
+                    $v['fobmin'] = floatval($stringFob);
+                    $v['fobmax'] = floatval($stringFobMax);
+
+                    if( $v->getRiceQuality->quality_type == 'basmati' ){
+                        $basmatiData[$v->rice] = $v;
+                    }else{
+
+                        $nonbasmatiData[$v->rice] = $v;
+                    }
+                }
+                
+            }
+
+            // $distinctUSD = USD_prices::with(['getRiceQuality' , 'getUSDDefaultMaster' => function($query) {
+            //     return $query->where('bag_size' , '50Kg')->get();
+            // }])->where('status' , 1)->orderBy('created_at' , 'DESC')->get()->map( function($query) {
+            //     if( $query->getUSDDefaultMaster != null ){
+            //         return $query;
+            //     }
+            // });
+
+            // $basmatiPrices = [];
+            // $nonbasmatiPrices = [];
+
+            // foreach( $distinctUSD as $k => $v ){
+            //     if( $v != null ){
+            //         if( $v->getUSDDefaultMaster != null ){
+
+            //             $valuableData = [];
+            //             $value = $v->toArray();
+
+            //             $get_rice_quality = $value['get_rice_quality'];
+            //             $fobminString = $value['fobmin'];
+            //             $fobmaxString = $value['fobmax'];
+
+            //             unset($value['get_rice_quality']);
+            //             unset($value['fobmin']);
+            //             unset($value['fobmax']);
+
+            //             $valuableData = $value;
+            //             $valuableData['quality'] = $get_rice_quality['quality']; 
+            //             $valuableData['quality_name'] = $get_rice_quality['quality_name']; 
+            //             $valuableData['fobmin'] = round($fobminString , 2); 
+            //             $valuableData['fobmax'] = round($fobmaxString , 2); 
+
+            //             if( $get_rice_quality['quality_type_status'] == 1 ){
+            //                 $basmatiPrices[$valuableData['rice']] = $valuableData;
+            //             }else{
+            //                 $nonbasmatiPrices[$valuableData['rice']] = $valuableData;
+            //             }
+            //         }
+            //     }
+                
+            // }
+
+            $defalutPort = "Jebel Ali";
+            $userData = User::where('id' , $userId)->first();
+            
+            if( $userData->import_port != null && $userData->import_port != '' ) {
+                $defalutPort = $userData->import_port;
+            }
+
+            $defalutPortDetail = OceanFreight::where('port' , $defalutPort)->get();
+            if( $defalutPortDetail->count() > 0 ){
+                $defalutPortPrice = $defalutPortDetail[0]['freight_25MT_1MT'];
+            }
+            ksort($basmatiData);
+            ksort($nonbasmatiData);
+
+            return response()->json(['status' => true , 'basmatiPrices' => $basmatiData , 'nonbasmatiPrices' => $nonbasmatiData , 'defaultCIFPrice' => floatval($defalutPortPrice),'latestDate' => $latestDate , 'defalutPort' => $defalutPort]);
+        }
+
+        public function USDOceanFreight()
+        {
+            $oceanfreight = OceanFreight::get();
+            dd($oceanfreight);
+        }
+        
+        public function getDistinctRegion()
+        {
+
+            $oceanFreight = OceanFreight::get()->groupBy('region')->map(function($query) {
+                return $query->groupBy('country');
+            })->toArray();
+
+            return response()->json(['status' => true , 'region' => array_keys($oceanFreight) , 'data' => $oceanFreight]);
+        }
+
+        public function getAllPorts($riceQualityId , $userId)
+        {
+            $chartUSDPrice = USD_prices::with(['getRiceQuality' ,'getUSDDefaultMaster'=> function($query){
+                return $query->where('bag_size' , '50kg')->get();
+            }])->orderBy('created_at' , 'DESC')->where('rice' , $riceQualityId)->get();
+            // dd($chartUSDPrice);
+            // $hasRiceType = $chartUSDPrice->getRiceQuality;
+
+
+
+            // $chartUSDPrice = USD_prices::with(['getRiceQuality', 'getUSDDefaultMaster'])->orderBy('created_at' , 'DESC')->where('rice' , $riceQualityId)->get();
+
+            $date = [];
+            $prices = [];
+            $combinedData = [];
+            $usdDefaultMasterId = '';
+            foreach($chartUSDPrice as $k => $v){
+                if( isset($v->getUSDDefaultMaster) ){
+                    if( $v->getUSDDefaultMaster !=  null ){
+                        $usdDefaultMasterId = $v->usd_defaultMaster_id;
+                        if( !array_key_exists( strtotime($v->created_at)."000" , $combinedData ) ){
+                            $date[] = strtotime($v->created_at)."000";
+                            $prices[] = $v->fobmax;
+                            $combinedData[strtotime($v->created_at)."000"] = [round(strtotime($v->created_at)."000" , 2) , round($v->fobmax , 2)];
+                        }
+
+                    }
+
+                }
+            }
+
+            $chartData = ['date' => $date , 'prices' => $prices , 'combinedData' => array_values($combinedData)];
+            $defalutPort = "Jebel Ali";
+            
+            $userData = User::where('id' , $userId)->first();
+            
+            if( $userData->import_port != null && $userData->import_port != '' ) {
+                $defalutPort = $userData->import_port;
+            }
+            $defalutPortDetail = OceanFreight::where('port' , $defalutPort)->get();
+
+            if( $defalutPortDetail->count() > 0 ){
+                $defalutPortPrice = $defalutPortDetail[0]['freight_25MT_1MT'];
+            }
+
+            $riceQualityIdDetails = QualityMaster::where('id' , $riceQualityId)->first();
+
+            if( $riceQualityIdDetails['quality_type_status'] == 2 ){
+                $newAppliedFor = '1';
+            }else{
+                $newAppliedFor = '0';
+            }
+            if( $riceQualityIdDetails['quality_type']== "non-basmati" ){
+                $quality_type_status = 1;
+            }else{
+                $quality_type_status = 0;
+            }
+            $oceanPorts = OceanFreight::get()->groupBy('region')->map(function($query){
+                return $query->groupBy('country')->map(function($query2){
+                    return $query2->groupBy('port');
+                });
+            });
+
+            $getUSDPrices = USD_prices::where('rice' , $riceQualityId )->where('usd_defaultMaster_id' , $usdDefaultMasterId)->where('status' , 1)->orderBy('id' , 'desc')->first();
+
+            $PMT_data = USD_defaultmaster::where('bag_size' , 'like' , '50Kg')->where('applied_for' , $newAppliedFor)->first();
+
+            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i');
+
+            $USD_fiftykg_master = USD_defaultmaster::select('id','bag_size','bag_type','PMT_USD')->where('applied_for' , $newAppliedFor)->where('bag_size' , 'like' , '50Kg')->orderBy('created_at' , 'desc')->first();
+
+            $usdDefaultMaster = USD_defaultmaster::select('bag_size' , 'bag_type' , 'id','PMT_USD')->orderBy('bag_size' , 'DESC')->where('applied_for' , $quality_type_status)->get();
+
+            return response()->json(['status' => true , 'ports' => $oceanPorts->toArray() , 'packing' => $usdDefaultMaster->toArray() , 'riceQuality' => $riceQualityIdDetails , 'PMT_data' => $PMT_data , 'FOB' => $getUSDPrices,'fiftykgMaster' => $USD_fiftykg_master ,'defalutPortPrice' => $defalutPortPrice , 'defalutPort' => $defalutPort , 'chartData' => $chartData , 'defalutPortDetail' => $defalutPortDetail]);
+        }
+        
+        public function getQualityDetails($id)
+        {
+            $qualityMaster = QualityMaster::where('id' , $id)->get();       
+
+            if( $qualityMaster->count() > 0 ){
+                $qualityType = $qualityMaster[0]['quality_type'];
+                $qualityTypeStatus = $qualityMaster[0]['quality_type_status'];
+                $usdDefaultMaster = USD_defaultmaster::select('id','bag_size','bag_type','PMT_USD')->where('applied_for' , $qualityTypeStatus);
+
+                $usdDefaultData = $usdDefaultMaster->get();
+                $fiftykgBagData = $usdDefaultMaster->where('bag_size' , 'like' , '50Kg')->first();
+                $fiftykgBagPMT = $fiftykgBagData->PMT_USD;
+
+                $usdPrices = USD_prices::where('rice' , $qualityMaster[0]->id)->orderBy('created_at' , 'DESC')->get();
+                $fobmin = '';
+                $fobmax ='';
+                if( $usdPrices->count() > 0 ){
+                    $lastUpdatedDate = $usdPrices[0]->created_at;
+                    $fobmin = $usdPrices[0]['fobmin'];
+                    $fobmax = $usdPrices[0]['fobmax'];
+                }
+                $processedData = [];
+                foreach($usdDefaultData as $k => $v){
+                    $v['fobmin'] = (round($fobmin , 2) - round( $fiftykgBagPMT , 2) + round( $v['PMT_USD'] , 2 )) ;
+                    $v['fobmax'] = (round($fobmax , 2) - round( $fiftykgBagPMT , 2) + round( $v['PMT_USD'] , 2 )) ;
+                    $processedData[] = $v->toArray();
+                }
+
+                dd($processedData);
+            }
+        }
+        public function getAllPortsgetDataForBuyer()
+        {
+            $qualityMaster = QualityMaster::get()->groupBy('quality_type');
+            $riceQualityArray = [];
+            $riceQualityDataArray = $qualityMaster->toArray();
+            if( $qualityMaster->count() ){
+                $riceQualityArray = array_keys($qualityMaster->toArray());
+            }
+
+            $usdDefaultMaster = USD_defaultmaster::get()->groupBy('applied_for')->toArray();
+            $usdDefaultMasterArray = [];
+            foreach($usdDefaultMaster as $k => $v){
+                if( $k == 1){
+                    $usdDefaultMasterArray['basmati'] = $v;
+                }else{
+                    $usdDefaultMasterArray['non-basmati'] = $v;
+                }
+            }
+
+            $portObject = OceanFreight::select('id','region','country','port','freight_25MT')->orderBy('port' , 'ASC')->where('port' ,'!=','')->get();
+            $portArray = $portObject->toArray();
+            $data = [ 'status' => true ,'riceQualityType' => $riceQualityArray , 'riceQualityData' => $usdDefaultMasterArray , 'ports' => $portArray , 'riceQualityDataArray' => $riceQualityDataArray];
+
+            return response()->json($data);
+        }
+        public function addRiceQuality(Request $request)
+        { 
+            $validDate = Carbon::now()->addDays($request->validDays);
+
+            $buyerQuery = BuyQuery::create([
+                'PackingType' => $request->changePackingType,
+                'mobile' => $request->mobile,
+                'partyName' => $request->party,
+                'portName' => $request->portName,
+                'qualityName' => $request->quality,
+                'quantity' => $request->quantity,
+                'remarks' => $request->remarks,
+                'validDays' => $request->validDays,
+                'validDate' => $validDate,
+                'qualityType' => $request->selectedQualityType,
+                'user' => $request->user
+            ]);
+            
+            $listUser = User::whereIn('id' , [4 , 6])->get(); 
+            $result = self::sendNotif("Notification" , "Buyer Requirement" , '' , $buyerQuery->id);
+            return false;
+
+            foreach($listUser as $k => $v){
+                $result = self::sendNotif("Notification" , "Buyer Requirement" , $v->user_token);
+            }
+
+            return response()->json(['data' => $request->all()]);
+        }
+        public function sendNotif($title, $message, $token, $buyerQuery)
+        {
+            $token = "c_kAXj3VQO6vUapdES8jMo:APA91bEe_kp_c-B0YcXCFWnwNd-9VzQ0BzKXOJEoSoKP5hxX3qKxGPSugmk6N_VIdurkWVQwSx26t5AlDSggaUWpvLGgPa-dgMSg-a9soUA67e6YipBs84pXQVoM5tzOh_t8W-5Hefbn";
+
+            $url = "https://fcm.googleapis.com/fcm/send";
+            $serverKey = 'AAAA10hB_8I:APA91bHVSnAJjacznL6i3p9dWnKvJeceYJlTbwt_rvyq6Nx8tOPsMlxtYPqHzAJRAazC5JJof9PZHaw_uo1qbNkKK4YgJLKN_39ozcIlbCpt3YQ36Y5rT6ftegC0nnEiOZ-dYsYqFWcV';
+            $body = $message;
+            $notification = ['title' => $title, 'body' => $body, 'sound' => 'default', 'badge' => '1','data' => 'here'];
+            
+            $apns = ['payload' => 
+                        [
+                            'aps' => [
+                                'sound' => 'default' ,
+                                'badge' => 1 ,
+                                'content-available' => 1,
+                                'data' => ['messageFrom' => "here"],
+                            ]
+                        ]
+                    ];
+            
+            $arrayToSend = [
+                    'to' => $token,
+                    'apns' => $apns,
+                    'notification' => $notification,
+                    'data' => 
+                        [ 'notification_forground' => 'true'],
+                        'notification' => $notification,
+                        'priority'=>'high',
+                        'data' => ['buyerQuery' => $buyerQuery]
+                    ];
+
+
+            $json = json_encode($arrayToSend);
+            $headers = [];
+            $headers[] = 'Content-Type: application/json';
+            $headers[] = 'Authorization: key='. $serverKey;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            $response = curl_exec($ch);
+           
+            if ($response === false) {
+                die('FCM Send Error: ' . curl_error($ch));
+            }
+            curl_close($ch);
+            return $response;
+        }
+
+        public function getBuyerDetails($id)
+        {
+            $buyerQuery = BuyQuery::where('id' , $id) ->first();
+            return response()->json(['data' => $buyerQuery]);
+        }
+
+        public function saveBid(Request $request)
+        {
+            $bidPrice = $request->bidPrice;
+            $queryDataId = $request->queryDataId;
+            $user_id = $request->user_id;
+
+            $bid =  Bid::create([
+                        'query_id' => $queryDataId,
+                        'seller_id' => $user_id,
+                        'bid_amount' => $bidPrice
+                    ]);
+            if($bid){
+                return response()->json(['status' => true]);
+            }else{
+                return response()->json(['status' => false]);
+            }
+        }
+        public function getCalculatorData()
+        {
+            $qualityMaster = QualityMaster::where('status' , 1)->get();
+            $defaultValues = Defaultvalue::orderBy('id', 'DESC')->first();
+            $USD_fiftykg_master = USD_defaultmaster::select('id','bag_size','bag_type','PMT_USD')->where('bag_size' , 'like' , '50Kg')->orderBy('created_at' , 'desc')->first();
+            $USD_master = USD_defaultmaster::select('id','bag_size','bag_type','PMT_USD', 'bag_cost')->get();
+
+            return response()->json(['status' => true , 'qualityMaster' => $qualityMaster ,'defaultValues' => $defaultValues ,'fiftykg' => $USD_fiftykg_master , 'USD_master' => $USD_master]);
+        }
+        public function saveUSDPrices(Request $request)
+        {
+            $category            = $request->category;
+            $charges             = $request->charges;
+            $dollarrate          = $request->dollarrate;
+            $exchangeRatemax     = $request->exchangeRatemax;
+            $exchangeRatemin     = $request->exchangeRatemin;
+            $fobmax              = $request->fobmax;
+            $fobmin              = $request->fobmin;
+            $percentageValue     = $request->percentageValue;
+            $rice                = $request->rice;
+            $ricemax             = $request->ricemax;
+            $ricemin             = $request->ricemin;
+            $totalMax            = $request->totalMax;
+            $totalMin            = $request->totalMin;
+            $transportmax        = $request->transportmax;
+            $transportmin        = $request->transportmin;
+            $user_id             = $request->user_id;
+            $usd_defaultMaster_id = $request->usd_defaultMaster_id;
+
+            if( $request->usd_defaultMaster_id == 0 || $request->usd_defaultMaster_id == '0' ){
+                $usd_defaultMaster_id = 48;
+            }
+
+            USD_prices::create([
+                'rice' => $rice,
+                'ricemin' => $ricemin,
+                'ricemax' => $ricemax,
+                'transportmin' => $transportmin,
+                'transportmax' => $transportmax,
+                'category' => $category,
+                'charges' => $charges,
+                'dollarrate' => $dollarrate,
+                'percentageValue' => $percentageValue,
+                'totalMin' => $totalMin,
+                'totalMax' => $totalMax,
+                'exchangeRatemin' => $exchangeRatemin,
+                'exchangeRatemax' => $exchangeRatemax,
+                'fobmin' => $fobmin,
+                'fobmax' => $fobmax,
+                'status' => 1,
+                'user_id' => $user_id,
+                'usd_defaultMaster_id' => $usd_defaultMaster_id
+            ]);
+
+            return response()->json(['statue' => true ]);
+        }
+        
+        public function getMyBids($user_id)
+        {
+            $myBids = BuyQuery::with(['getPackingType' , 'getBids' => function($query) use($user_id) {
+                return $query->orWhere('seller_id' , $user_id)->orWhere('counter_status' , 1)->orderBy('id' , 'desc')->get();
+            }])->orderBy('id' , 'DESC')->get();
+
+            foreach( $myBids as $k => $v ){
+                if( $v['getBids']->count() > 0 ){
+                    foreach($v['getBids'] as $ke => $val){
+                        if( $user_id != $val['seller_id'] ){
+                            if ($val['counter_status'] == 1){
+                                $v['is_bid_closed'] = 'true';
+                                $v['bid_closed_amount'] = $val['counter_amount'];
+                            }else{
+                                $v['is_bid_closed'] = 'false';
+                            }
+                        }else{
+                            if( $val['counter_status'] == 1 && $user_id == $val['seller_id'] ){
+                                $v['is_bid_accepted_by_me'] = 'true';
+                            }
+                            if($val['counter_status'] == 2 && $user_id == $val['seller_id']){
+                                $v['is_bid_accepted_by_me'] = 'false';
+                            }
+                            if($val['counter_amount'] != 0 && $user_id == $val['seller_id'] && $val['counter_status'] == 0){
+                                $v['is_bid_accepted_by_me'] = 'pending';
+                            }
+                            $v['user_bid_amount'] = $val['counter_amount'];
+                            $v['user_bid_date'] = $val['created_at'];
+                        }
+                    }
+                }
+            }
+
+            return response()->json(['statue' => true , 'bids' => $myBids]);
+        }
+
+        public function saveUserBid(Request $request)
+        {
+            Bid::create(['query_id' => $request->buyQueryId,'validTill' => Carbon::now()->addDays($request->validTill), 'seller_id' => $request->userid, 'bid_amount' => $request->amount , 'status' => 1]);
+            $myBids = BuyQuery::with(['getBids' => function($query) {
+                return $query->orderBy('id' , 'desc')->get();
+            }])->orderBy('id' , 'DESC')->get();
+            return response()->json(['status' => true , 'data' => $myBids]);
+        }
+        public function getAllVendors()
+        {
+            $bagVendors = Vendorcategory::with(['getVendorList' => function($query){
+                return $query->where('vendor_name' , '!=' , '')->get();
+            }])->get()->groupBy('name');
+
+            return response()->json(['status' => true , 'data' => $bagVendors]);
+        }
+        public function getUSDPlans()
+        {
+            $USDPlan = USDPlan::orderBy('id' , 'DESC')->get();
+            return response()->json(['status' => true , 'plans' => $USDPlan]);
+        }
+        public function getCountryList()
+        {
+            $countries = OceanFreight::get()->groupBy('country');
+            
+            return response()->json(['status' => true , 'countries' => $countries]);
+        }
+        public function getContactDetails()
+        {
+            $contactus = Contact::first();
+            return response()->json(['status' => true , 'data' => $contactus]);
+        }
+        public function updateCounterStatus(Request $request)
+        {
+            // 1: accept , 2: reject
+            Bid::where(['id'  =>  $request->bid_id ])->update(['counter_status' => $request->counter_status]);
+            return response()->json(['status' => true , 'data' => $request->all()]);
+        }
+        public function updatePort(Request $request)
+        {
+            User::where('id' , $request->id)->update(
+                [
+                    'country' => $request-> country,
+                    'import_port' => $request->port,
+                ]
+            );
+            return response()->json(['status' => true]);
+        }
+        public function getHotDeals($userId)
+        {
+            $hotDealNotif = HotDealNotification::with(['getUSDDefaultMaster','getRiceQuality','HotDealAccept' => function($query) use($userId){
+                return $query->where('buyer_id' , $userId)->get();
+            }])->orderBy('id' , 'desc')->get();
+
+            foreach($hotDealNotif as $k => $v){
+                if( $v->validDate <= Carbon::now()->format('Y-m-d') ){
+                    $v['isExpired'] = 'true';
+                    $v['isExpiredMessage'] = 'Sorry this Deal is expired';
+                }else{
+                    $v['isExpired'] = 'false';
+                }
+                if( $v->HotDealAccept != null ) {
+                    if( $v->HotDealAccept->count() > 0 ){
+                        $v['isDealAcceptedMessage'] = "Thanks for showing interest on this deal,SNTC Team will contact you shortly.";
+                    }
+                }
+            }
+            return response()->json(['status' => true , 'data' => $hotDealNotif]);
+
+        }
+        public function acceptHotDealNotification(Request $request)
+        {
+            HotDealAccept::create(['hotdeal_id' => $request->bid_id, 'buyer_id' => $request->user_id, 'status' => 1]);
+            return response()->json(['status' => true , 'data' => $request->all()]);
+        }
+        public function getBagVendors()
+        {
+            $bagVendorCat = Vendorcategory::select('id' , 'name')->where('status'  , 1)->get();
+            return response()->json(['status' => true , 'data' => $bagVendorCat]);
         }
     }

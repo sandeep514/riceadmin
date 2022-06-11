@@ -15,6 +15,8 @@
             'start_date',
             'end_date',
             'sub_plan_name',
+            'payment_type',
+            'amount',
             'sub_plan_price',
             'status'
         ];

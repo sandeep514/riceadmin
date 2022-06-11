@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','address','phone','mobile','gst_no','city','api_token','state','companyname','role','otp','status','expired_on'
+        'name', 'email', 'password','country','zip_code','import_port','contact_person_name','address','phone','mobile','gst_no','city','api_token','state','companyname','role','bagCategory','otp','status','expired_on','is_usd_active'
     ];
 
     /**
@@ -59,5 +59,8 @@ class User extends Authenticatable
 
     public function buyer_rel(){
         return $this->belongsTo(Buyer::class,'id','user_id');
+    }
+    public function bagVendor(){
+        return $this->belongsTo(Vendorcategory::class,'bagCategory','id');
     }
 }

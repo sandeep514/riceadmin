@@ -18,6 +18,12 @@ class UsersController extends Controller
         return $dataTable->render('users.index');
     }
 
+    public function getVendors()
+    {
+        $vendorUsers = User::where('bagCategory' , '!=' , 0 )->with('bagVendor')->get();
+        return View('users.vendors',compact('vendorUsers'));
+    }
+
 
     public function create()
     {
@@ -35,7 +41,6 @@ class UsersController extends Controller
 
     public function show($id)
     {
-        dd('Show');
     }
 
 

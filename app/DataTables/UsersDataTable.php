@@ -46,7 +46,7 @@ class UsersDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->whereRole(request()->role)->with(['role_rel','field_runner_rel.designation_rel'])->newQuery();
+        return $model->whereRole(request()->role)->with(['bagVendor','role_rel','field_runner_rel.designation_rel'])->newQuery();
     }
 
     /**
@@ -82,6 +82,9 @@ class UsersDataTable extends DataTable
             Column::make('id'),
             Column::make('name'),
         ];
+        if(request()->role == 8){
+            $columnsArray[] = Column::make('bagCategory');   
+        }
         if(request()->role != 3){
             $columnsArray[] = Column::make('email');
         }elseif(request()->role == 3){

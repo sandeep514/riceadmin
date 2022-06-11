@@ -36,7 +36,7 @@
                 <span class="input-group-btn">
                 <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
                 </button>
-              </span>
+             </span>
             </div>
         </form> -->
         @php
@@ -59,7 +59,7 @@
                         <i class="fa fa-users"></i> <span>User Management</span>
                         <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
-                            </span>
+                           </span>
                     </a>
                     <ul class="treeview-menu">
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 2)?'active':'' }}"><a href="{{ route('users','2') }}"><i class="fa fa-circle-o"></i> Admin</a></li>
@@ -77,6 +77,9 @@
 
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('users','6') }}"><i class="fa fa-circle-o"></i> Supplier</a>
+                        </li>
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
+                            <a href="{{ route('get.new.vendors') }}"><i class="fa fa-circle-o"></i> New Vendors</a>
                         </li>
 
 
@@ -110,7 +113,7 @@
                             <i class="fa {{ $module->icon }}"></i> <span>{{ $module->name }}</span>
                             <span class="pull-right-container">
                                 <i class="fa fa-angle-left pull-right"></i>
-                            </span>
+                           </span>
                         </a>
 
                         <ul class="treeview-menu">
@@ -149,22 +152,32 @@
             </li>
             <li class="{{ (in_array($currentRoute,['plan.create']))?'active':'' }}">
                 <a href="{{ route('plan.create') }}">
-                    <i class="fa fa-address-card-o"></i> <span> Plan </span>
+                    <i class="fa fa-address-card-o"></i> <span>Plan</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['plan.create']))?'active':'' }}">
+                <a href="{{ route('get.usd.coupons') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Coupons</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['plan.create']))?'active':'' }}">
+                <a href="{{ route('get.usd.plan') }}">
+                    <i class="fa fa-address-card-o"></i> <span>USD Plans</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['send.push.notification']))?'active':'' }}">
                 <a href="{{ route('send.push.notification') }}">
-                    <i class="fa fa-address-card-o"></i> <span> Push Notification </span>
+                    <i class="fa fa-address-card-o"></i> <span>Push Notification</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['trial.period']))?'active':'' }}">
                 <a href="{{ route('trial.period') }}">
-                    <i class="fa fa-address-card-o"></i> <span> User App Trial </span>
+                    <i class="fa fa-address-card-o"></i> <span>User App Trial</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['master.index']))?'active':'' }}">
                 <a href="{{ route('master.index') }}">
-                    <i class="fa fa-address-card-o"></i> <span> Master </span>
+                    <i class="fa fa-address-card-o"></i> <span>Master</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['change.date.of.existing.user']))?'active':'' }}">
@@ -181,12 +194,12 @@
 
             <li class="{{ (in_array($currentRoute,['create.version']))?'active':'' }}">
                 <a href="{{ route('create.version') }}">
-                    <i class="fa fa-address-card-o"></i> <span> Version </span>
+                    <i class="fa fa-address-card-o"></i> <span>Version</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['create.calculator']))?'active':'' }}">
                 <a href="{{ route('create.calculator') }}">
-                    <i class="fa fa-address-card-o"></i> <span> Calculator </span>
+                    <i class="fa fa-address-card-o"></i> <span>Calculator</span>
                 </a>
             </li>
 
@@ -199,7 +212,64 @@
             <li class="{{ (in_array($currentRoute,['dollarExcel','dollarExcel.create','dollarExcel.delete']))?'active':'' }}">
                 <a href="{{ route('dollarExcel.create') }}">
                     <i class="fa fa-address-card-o"></i> 
-                    <span>Module 1</span>
+                    <span>FOB Cost</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['dollarExcel.create.ocean.freight']))?'active':'' }}">
+                <a href="{{ route('dollarExcel.create.ocean.freight') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Ocean Freight</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['dollarExcel.create.quality.master']))?'active':'' }}">
+                <a href="{{ route('dollarExcel.create.quality.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Quality Master</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['dollarExcel.default.value.master']))?'active':'' }}">
+                <a href="{{ route('dollarExcel.default.value.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Default Values Master</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['domestic.transport.master']))?'active':'' }}">
+                <a href="{{ route('domestic.transport.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Domestic Transport Master</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['vendor.category.master']))?'active':'' }}">
+                <a href="{{ route('vendor.category.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Vendor Category Master</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['bag.vendor.master']))?'active':'' }}">
+                <a href="{{ route('bag.vendor.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Other Services Master</span>
+                </a>
+            </li>
+
+            <li class="{{ (in_array($currentRoute,['rice.query.master']))?'active':'' }}">
+                <a href="{{ route('rice.query.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Rice Queries</span>
+                </a>
+            </li>
+
+            <li class="{{ (in_array($currentRoute,['contact.details.master']))?'active':'' }}">
+                <a href="{{ route('contact.details.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Contact Details</span>
+                </a>
+            </li>
+
+            <li class="{{ (in_array($currentRoute,['hot.deal.notification.master']))?'active':'' }}">
+                <a href="{{ route('hot.deal.notification.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Hot Deal Notification</span>
                 </a>
             </li>
 

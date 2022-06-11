@@ -40,14 +40,16 @@
     <script src="dist/js/adminlte.min.js"></script>
     <!-- AdminLTE for demo purposes -->
     {{--<script src="dist/js/demo.js"></script>--}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
     <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script>
     <script src="plugins/iCheck/icheck.min.js"></script>
     <script type="text/javascript">
-        $(function(){
-            $('.datatable').dataTable();
-        });
+        $(document).ready(function() {
+            $('#example2').DataTable( {
+                pageLength : 25,
+                order: []
+            } );
+        } );
     </script>
     <script type="text/javascript">
         $(document).on('click','.delete-row',function(){
