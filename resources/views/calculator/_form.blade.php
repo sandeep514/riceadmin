@@ -12,7 +12,6 @@
 ?>
 <div class="box-body">
     <div class="row">
-        
         <div class="form-group col-md-6">
             {!! Form::label('Rice','Rice*') !!}
             <select class="form-control" name="riceName" id="riceName">
@@ -21,38 +20,38 @@
                 @endforeach
             </select>
         </div>
-        <div class="form-group col-md-6 ">
+        <div class="form-group col-md-3 ">
             {!! Form::label('rice','Cost of Rice Ex Mill Min price*') !!}
             {!! Form::text('ricemin',null,['class'=>'form-control','id'=>'ricemin' , 'required']) !!}
         </div>
-        <div class="form-group col-md-6 ">
+        <div class="form-group col-md-3 ">
             {!! Form::label('rice','Cost of Rice Ex Mill Max price*') !!}
             {!! Form::text('ricemax',null,['class'=>'form-control','id'=>'ricemax' , 'required']) !!}
         </div>
-        <div class="form-group col-md-6 ">
+        <div class="form-group col-md-3 ">
             {!! Form::label('rice','Transport Min price *') !!}
             {!! Form::text('portmin',null,['class'=>'form-control','id'=>'transportmin' , 'required']) !!}
         </div>
-        <div class="form-group col-md-6 ">
+        <div class="form-group col-md-3 ">
             {!! Form::label('rice','Transport Max price *') !!}
             {!! Form::text('portmax',null,['class'=>'form-control','id'=>'transportmax' , 'required']) !!}
         </div>
-        <div class="form-group col-md-6 ">
+        <div class="form-group col-md-3 ">
             {!! Form::label('bag','Bag Cost including Sortexing & packing labour*') !!}
-            {!! Form::text('bag',1350,['class'=>'form-control','id'=>'category']) !!}
+            {!! Form::text('bag',$defaultValue['bagcost'],['class'=>'form-control','id'=>'category']) !!}
         </div>
 
 
-        <div class="form-group col-md-6 ">
+        <div class="form-group col-md-3 ">
             {!! Form::label('charges','All Local charges( CFS Handling, B/L, THC ), Finance cost*') !!}
-            {!! Form::text('charges',1735,['class'=>'form-control','id'=>'charges']) !!}
+            {!! Form::text('charges',$defaultValue['localcharges'],['class'=>'form-control','id'=>'charges']) !!}
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
             {!! Form::label('dollar',"Today's Dollar rate *") !!}
             {!! Form::text('dollar',$dollarRate,['class'=>'form-control','id'=>'dollarrate']) !!}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-3">
             {!! Form::label('percentage','Supplier Margin+SNTC Service charge (1 - 20%)*') !!}
             <select class="form-control" name="percentage" id="percentage">
                 <option value="0" selected >0</option>
@@ -78,6 +77,14 @@
                 <option value="20" >20</option>
             </select>
         </div>
+        <div class="form-group col-md-3">
+            {!! Form::label('color_status','Color') !!}
+            <select class="form-control" name="color_status" id="color_status">
+                <option value="1" >Green</option>
+                <option value="2" >Red</option>
+                <option value="3" selected >Black</option>                
+            </select>
+        </div>
         <div class="form-group col-md-6">
             {!! Form::label('total','Total: (in ₹) ') !!}
             <span id="total"></span>
@@ -93,14 +100,7 @@
             <span id="fob"></span>
         </div>
 
-        <div class="form-group col-md-6">
-            {!! Form::label('color_status','Color') !!}
-            <select class="form-control" name="color_status" id="color_status">
-                <option value="1" >Green</option>
-                <option value="2" >Red</option>
-                <option value="3" selected >Black</option>                
-            </select>
-        </div>
+        
 
     </div>
 </div>

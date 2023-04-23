@@ -28,6 +28,7 @@
                                     <table id="example2" class="display" style="width: 100%;">
                                         <thead>
                                             <tr>
+                                                <th style="text-align: center ">sno</th>
                                                 <th style="text-align: center ">Party Name</th>
                                                 <th style="text-align: center ">Party Mobile</th>
                                                 <th style="text-align: center ">Quality</th>
@@ -41,6 +42,7 @@
                                         <tbody>
                                             @foreach($buyQueries as $k => $v)
                                                 <tr>
+                                                    <td>{{ $v->id }}</td>
                                                     <td>{{ $v->partyName }}</td>
                                                     <td>{{ $v->mobile }}</td>
                                                     <td>{{ $v->qualityName }}</td>
@@ -50,6 +52,14 @@
 
                                                     <td style="text-align: center;">
                                                         @if($v->getBids->count() > 0)
+                                                            @if( $v->status == 2 )
+                                                                <p> SOLD </p>
+                                                            @endif
+                                                            @if( $v->status != 2 )
+                                                                <a href="{{ route('rice.query.master.sold' , $v->id) }}" class="btn btn-xs btn-success"> Sold </a>
+                                                            @endif
+
+
                                                             <a href="#" data-toggle="modal" data-target="#exampleModal_{{ $v->id }}" class="btn btn-xs btn-info"> View Bids </a>
 
                                                             <div class="modal fade" id="exampleModal_{{ $v->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -77,27 +87,35 @@
 
                                                                             <tbody>
                                                                                 @foreach($v->getBids as $ke => $va)
-                                                                                    @if($va->has('seller'))
+                                                                                    @if($va->has('seller') && $va->seller != null)
                                                                                         <tr>
                                                                                             <td>{{ $va->seller->name }}</td>
                                                                                             <td>{{ $va->seller->email }}</td>
                                                                                             <td>{{ $va->seller->mobile }}</td>
                                                                                             <td>{{ $va->bid_amount }}</td>
                                                                                             <td>{{ $va->counter_amount }}</td>
-                                                                                            <td>{{ ($va->counter_sttaus == 0) ? 'Not yet accepted' : (($va->counter_status == 1) ? 'Accepted' : "Rejected") }}</td>
-                                                                                            <td>
-                                                                                                <form method="POST" action="{{ route('send.seller.confirm.message') }}">
-                                                                                                    @csrf
-                                                                                                    <input type="text" name="price">
-                                                                                                    <input type="hidden" name="user_id" value="{{$va->seller->id}}">
-                                                                                                    <input type="hidden" name="bid_id" value="{{ $v->id }}">
-                                                                                                    <input type="hidden" name="vendor_id" value="">
-                                                                                                    <input type="hidden" name="buyer_id" value="">
-                                                                                                    <input type="hidden" name="negotiation_amount" value="">
+                                                                                            <td>{{ ($va->counter_status == 0) ? ($va->accept_status != 1)?'Not yet accepted' : 'You Accept the bid' : (($va->counter_status == 1) ? 'Accepted' : "Rejected") }}</td>
 
-                                                                                                    <input type="submit" name="submit" class="btn btn-xs btn-primary" value="Send Counter Amount">
-                                                                                                </form>
-                                                                                            </td> 
+                                                                                            @if($va->counter_status == 0)
+                                                                                                <td>
+                                                                                                    @if( $va->accept_status != 1 ) 
+                                                                                                        <form method="POST" action="{{ route('send.seller.confirm.message') }}">
+                                                                                                            @csrf
+                                                                                                            <input type="text" name="price">
+                                                                                                            <input type="hidden" name="user_id" value="{{$va->seller->id}}">
+                                                                                                            <input type="hidden" name="bid_id" value="{{ $v->id }}">
+                                                                                                            <input type="hidden" name="vendor_id" value="">
+                                                                                                            <input type="hidden" name="buyer_id" value="">
+                                                                                                            <input type="hidden" name="negotiation_amount" value="">
+                                                                                                            <input type="submit" name="submit" class="btn btn-xs btn-primary" value="Send Counter Amount">
+                                                                                                        </form>
+                                                                                                    @endif
+                                                                                                    @if( $va->accept_status != 1 ) 
+                                                                                                        <a href="{{ route('rice.query.master.accept' , ['id' => $va->id]) }}" class="btn btn-info btn-xs" >Accept Offer</a>
+                                                                                                    @endif
+                                                                                                </td>
+                                                                                            @endif
+                                                                                             
                                                                                         </tr>
                                                                                     @endif
                                                                                 @endforeach
@@ -126,9 +144,66 @@
                                                             </div>
                                                         @else
                                                             <div>
-                                                                <p style="font-size: 12px;">No Bids Available Yet</p>           
+                                                                <a href="{{ route('rice.query.master.sold' , $v->id) }}" class="btn btn-xs btn-success"> Sold </a>
+
+                                                                <p style="font-size: 12px;">No Bids Available Yet</p> 
+                                                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal_{{$v->id}}">Edit Specs</button>
+
+                                                                <div id="myModal_{{$v->id}}" class="modal fade" role="dialog">
+                                                                    <div class="modal-dialog">
+                                                                        <div class="modal-content">
+                                                                            <div class="modal-header">
+                                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                                <h4 class="modal-title">Update Spec</h4>
+                                                                            </div>
+                                                                            <div class="modal-body">
+                                                                                <form action="{{ route('update.rice.query.master') }}" method="POST">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="buyqueryid" value="{{ $v->id }}">
+                                                                                    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                                                                        <label for="comment">Length:</label>
+                                                                                        <input type="text" value="{{ $v->length }}" name="Length" placeholder="Length" class="form-control">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                                                                        <label for="comment">Purity:</label>
+                                                                                        <input type="text" value="{{ $v->purity }}" name="Purity" placeholder="Purity" class="form-control">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                                                                        <label for="comment">Moisture:</label>
+                                                                                        <input type="text" value="{{ $v->moisture }}" name="Moisture" placeholder="Moisture" class="form-control">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                                                                        <label for="comment">Broken:</label>
+                                                                                        <input type="text" value="{{ $v->broken }}" name="Broken" placeholder="Broken" class="form-control">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                                                                        <label for="comment">Kett:</label>
+                                                                                        <input type="text" value="{{ $v->kett }}" name="Kett" placeholder="Kett" class="form-control">
+                                                                                    </div>
+                                                                                    <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                                                                        <label for="comment">DDs:</label>
+                                                                                        <input type="text" value="{{ $v->dd }}" name="DDs" placeholder="DDs" class="form-control">
+                                                                                    </div>
+                                                                                    <input type="submit" class="btn btn-sm btn-primary" value="update Spec">
+                                                                                </form>
+                                                                            </div>
+                                                                            <div class="modal-footer">
+                                                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>          
                                                             </div>
                                                         @endif
+
+
+                                                        @if($v->status != 2)
+                                                            @if($v->status != 1)
+                                                                <a href='{{ route("activate.query" , $v->id) }}' class="btn btn-primary btn-xs" >Active</a>
+                                                            @endif
+                                                        @endif
+
                                                     </td>
                                                 </tr>
                                                 

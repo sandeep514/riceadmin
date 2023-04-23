@@ -13,10 +13,10 @@
                     <li class="active">Gallery</li>
                 </ol>
             </section>
-            <section class="content">
+            <section class="content" style="margin-bottom: 30px;">
                 <div class="row">
                     <div class="col-xs-12">
-                        <form method="POST" action="{{ route('post.hot.deal.push.notification') }}">
+                        <form method="POST" action="{{ route('post.hot.deal.push.notification') }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="row">
                                 
@@ -58,8 +58,45 @@
                                     <label for="comment">Message*:</label>
                                     <textarea class="form-control" name="message" rows="5">{{ old('message ') }}</textarea>
                                 </div>
+                                <div class="form-group col-md-6 col-sm-6 col-xs-6">
+                                    <label for="comment">Attachment1:</label>
+                                    <input type="file" name="attachment1" class="form-control">
+                                </div>
+                                <div class="form-group col-md-6 col-sm-6 col-xs-6">
+                                    <label for="comment">Attachment2:</label>
+                                    <input type="file" name="attachment2" class="form-control">
+                                </div>
 
-                                
+ 
+
+
+
+
+
+                                <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <label for="comment">Length:</label>
+                                    <input type="text" name="Length" placeholder="Length" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <label for="comment">Purity:</label>
+                                    <input type="text" name="Purity" placeholder="Purity" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <label for="comment">Moisture:</label>
+                                    <input type="text" name="Moisture" placeholder="Moisture" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <label for="comment">Broken:</label>
+                                    <input type="text" name="Broken" placeholder="Broken" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <label for="comment">Kett:</label>
+                                    <input type="text" name="Kett" placeholder="Kett" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4 col-sm-4 col-xs-4">
+                                    <label for="comment">DDs:</label>
+                                    <input type="text" name="DDs" placeholder="DDs" class="form-control">
+                                </div>
                             </div>
 
                             @if($errors->any())
@@ -68,7 +105,7 @@
                                 </span>
                             @endif
 
-                            <button type="submit" name="submit" value="submit">Submit</button>
+                            <button type="submit" name="submit" value="submit" class="btn btn-info">Save Hot Notification</button>
                         </form>
                     </div>
                 </div>
@@ -106,8 +143,8 @@
                                         <td style="text-align: center">{{ date_format($date,"d-m-Y H:i:s") }}</td>
                                         <td style="text-align: center">
                                             @if( $v->status == 1 )
-                                                <a href="{{ route('update.hot.deal.status' , ['2',$v->id]) }}" class="btn btn-xs btn-info" value="{{$v->id}}">Sold</a>
-                                                <a href="{{ route('update.hot.deal.status' , ['0',$v->id])}}" class="btn btn-xs btn-danger" value="{{$v->id}}">Taken</a>
+                                                <a href="javascript:void(0)" attrhref="{{ route('update.hot.deal.status' , ['2',$v->id])}}" class="confirmPopupSold btn btn-xs btn-info" value="{{$v->id}}">Sold</a>
+                                                <a href="javascript:void(0)" attrhref="{{ route('update.hot.deal.status' , ['0',$v->id])}}" class="confirmPopuptaken btn btn-xs btn-danger" value="{{$v->id}}">Taken</a>
                                             @endif
                                             @if($v->status == 0)
                                                 <span>Taken</span>
@@ -141,4 +178,26 @@
 
     @section('scripts')
         <script type="text/javascript" src="{{ asset('js/deals.js') }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(document).on('click' , '.confirmPopupSold' , function(){
+                    let attrhref = $(this).attr('attrhref');
+
+                    if (confirm("Are you sure?") == true) {
+                        window.location.href = attrhref
+                    } else {
+                        return 'false';
+                    }
+                })
+                $(document).on('click' , '.confirmPopuptaken' , function(){
+                    let attrhref = $(this).attr('attrhref');
+
+                    if (confirm("Are you sure?") == true) {
+                        window.location.href = attrhref
+                    } else {
+                        return 'false';
+                    }
+                })
+            })
+        </script>
     @endsection

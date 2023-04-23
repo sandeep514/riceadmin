@@ -1,3 +1,12 @@
+<style type="text/css">
+    .skin-blue .main-header .logo{
+        background-color: red;
+        opacity: 0.7;
+    }
+    .skin-blue .main-header .navbar{
+        background-color: red;
+    }
+</style>
 <aside class="main-sidebar">
     <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
@@ -7,7 +16,7 @@
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>Admin</p>
+                <p>test Admin</p>
                 <!--<a href="#"><i class="fa fa-circle text-success"></i> </a>-->
                 
                 <div>
@@ -200,6 +209,11 @@
             <li class="{{ (in_array($currentRoute,['create.calculator']))?'active':'' }}">
                 <a href="{{ route('create.calculator') }}">
                     <i class="fa fa-address-card-o"></i> <span>Calculator</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['report.calculator']))?'active':'' }}">
+                <a href="{{ route('report.calculator') }}">
+                    <i class="fa fa-address-card-o"></i> <span>USD Pricing Report</span>
                 </a>
             </li>
 

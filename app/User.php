@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','country','zip_code','import_port','contact_person_name','address','phone','mobile','gst_no','city','api_token','state','companyname','role','bagCategory','otp','status','expired_on','is_usd_active'
+        'name', 'email', 'password','country','zip_code','import_port','contact_person_name','address','phone','mobile','gst_no','city','api_token','state','companyname','role','usd_role','bagCategory','otp','status','expired_on','is_usd_active','is_INR_active','transaction_id','planId','stripe_customer_id','stripe_payment_method'
     ];
 
     /**
@@ -41,6 +41,10 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class,'role','id');
     }
 
+    public function role_rel_usd(){
+        return $this->belongsTo(Role::class,'usd_role','id');
+    }
+
     public function field_runner_rel(){
         return $this->belongsTo(FieldRunner::class,'id','user_id');
     }
@@ -62,5 +66,9 @@ class User extends Authenticatable
     }
     public function bagVendor(){
         return $this->belongsTo(Vendorcategory::class,'bagCategory','id');
+    }
+    public function getHotDealStatusBySeller()
+    {
+        return $this->belongsTo(HotDealAccept::class , 'buyer_id', 'id');
     }
 }

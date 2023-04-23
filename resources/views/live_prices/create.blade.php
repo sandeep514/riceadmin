@@ -22,13 +22,14 @@
                             <h3 class="box-title">Price Details</h3>
                         </div>
                         <!-- /.box-header -->
-                        {!! Form::open(['route'=>'save.price']) !!}
+                        {!! Form::open(['route'=>'save.price' , 'id' => 'formCreate']) !!}
                             @include('live_prices._form')
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save Price</button>
                             </div>
                         {!! Form::close() !!}
                     </div>
+                    <a href="javascript:void(0)" class="submitButton" >Submit</a>
                 </div>
             </div>
             <div class="row">
@@ -99,4 +100,32 @@
             </div>
         </section>
     </div>
+@endsection
+@section('javascript')
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('.submitButton').click(function(){
+               var formData = new FormData(document.getElementById("formCreate"));
+               
+               // for (var [key, value] of formData.entries()) { 
+               //    console.log(key, value);
+               //  }
+                var object = {};
+                formData.forEach((value, key) => object[key] = value);
+                var json = JSON.stringify(object);
+
+
+                let formData2 = new FormData();
+                formData2.append('_token' , $('meta[name="csrf-token"]').attr('content') );
+                formData2.append('data' ,json );
+
+                console.log(formData2);
+                const request = new XMLHttpRequest();
+                request.open("POST", "{{route('save.price')}}");
+                request.send((formData2));
+                // console.log(formData);
+
+            })
+        })
+    </script>
 @endsection

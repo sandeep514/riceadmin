@@ -45,6 +45,7 @@
     use App\HotDealNotification;
     use App\Http\Controllers\MailController;
     use Illuminate\Support\Str;
+    use App\Notification;
 
     class ApiController extends Controller
     {
@@ -97,17 +98,37 @@
         
         public function login(Request $request)
         {
-            $userModel = User::where(['email' => $request->email])->with(['role_rel'])->first();
+            $userModel = User::where(['email' => $request->email , 'status' => 1])->with(['role_rel' , 'role_rel_usd'])->first();
             if( $userModel == null ){
-            	$userModel = User::where(['mobile' => $request->email])->with(['role_rel'])->first();
+            	$userModel = User::where(['mobile' => $request->email , 'status' => 1])->with(['role_rel' , 'role_rel_usd'])->first();
             }
 
             if ($userModel == null) {
                 return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
             }
+
+
             $oldPassword = $userModel->password;
+
             if (Hash::check($request->password, $oldPassword)) {
                 $random_token = Str::random(60);
+
+                if( $userModel->is_usd_active == 0 ){
+                    if( $userModel->is_INR_active == 0 ){
+
+                        $checkuser = User::where(['email' => $request->email])->first();
+                        if( $checkuser == null ){
+                            dd("here");
+                            User::where(['mobile' => $request->email])->update(['is_INR_active' => 1]);
+                        }else{
+                            User::where(['email' => $request->email])->update(['is_INR_active' => 1]);
+                        }
+                    }
+                }
+                $userModel = User::where(['email' => $request->email])->with(['role_rel' , 'role_rel_usd'])->first();
+                if( $userModel == null ){
+                    $userModel = User::where(['mobile' => $request->email])->with(['role_rel' , 'role_rel_usd'])->first();
+                }
                 if ($userModel->status == 0) {
                     User::where(['email' => $request->email])->update([ 'api_token' => $random_token ]);
                     
@@ -123,36 +144,59 @@
                 }
                 return response()->json(['status' => 'success', 'user' => $userModel]);
             } else {
-                return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
+                return response()->json(['status' => 'error', 'test' => 1 , 'message' => 'Wrong user detail']);
             }
         }
         
         public function sendOTP($number,$isOTP = false)
         {
             $otp = rand(1111, 9999);
+            $user = User::where('mobile', $number)->where('status' , 1)->first();
+            if( $user != null ){
+                User::where('mobile', $number)->update(['otp' => $otp]);
+
+                $message = "Dear Customer, Your SNTC live pricing premium membership is now active, we are so excited to unlock PREMIUM benefits for you , Enjoy free live prices for the all the rice products. TCA.";
+
+                if($isOTP == true){
+                    file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=' . urlencode($message));
+                    if($user->email != null){
+                        $response = MailController::generateMail($user->email,'no@replay.in','SNTC GROUP',$message,'SNTC Live Pricing Premium Membership '); 
+                    }
+                }
+
+                if ($isOTP == false) {
+                    file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=Your+forgot+password+OTP+for+SNTC+Rice+Live+Pricing+App+is+' . $otp.'&PEID=1701160336234687231&templateid=1707161848973558040');
+                    User::where('mobile', $number)->update(['otp' => $otp]);
+                    if($user->email != null){
+                       $response = MailController::generateMailForOTP($user->email,'no@replay.in','SNTC GROUP',null,'SNTC OTP Verification ',$otp);
+                    }
+                }
+                
+                return response()->json(['error' => null, 'data' => $otp,'mailResponse' => $response , 'user' => $user], 200);
+            }else{
+                return response()->json(['error' => 'No record available for '.$number,'user' => $user], 500);
+            }
+            
+        }
+        
+
+        public function resendOTP($number)
+        {
+            $otp = rand(1111, 9999);
             $user = User::where('mobile', $number)->first();
             User::where('mobile', $number)->update(['otp' => $otp]);
 
-            $message = "Dear Customer, Your SNTC live pricing premium membership is now active, we are so excited to unlock PREMIUM benefits for you , Enjoy free live prices for the all the rice products. TCA.";
 
-            if($isOTP == true){
-                file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=' . urlencode($message));
+            file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto='.$number.'&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$otp.'&PEID=1701160336234687231&templateid=1707161795904090251');
                 if($user->email != null){
-                    $response = MailController::generateMail($user->email,'no@replay.in','SNTC GROUP',$message,'SNTC Live Pricing Premium Membership '); 
+                   $response = MailController::generateMailForOTPThanks($user->email,'no@replay.in','SNTC GROUP','Thank you for registering on SNTC Rice Live Pricing App.','Thank you for registering on SNTC Rice Live Pricing App.',$otp);
                 }
-            }
-
-            if ($isOTP == false) {
-				file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto=' . $number . '&message=Your+forgot+password+OTP+for+SNTC+Rice+Live+Pricing+App+is+' . $otp.'&PEID=1701160336234687231&templateid=1707161848973558040');
-                User::where('mobile', $number)->update(['otp' => $otp]);
-                if($user->email != null){
-                   $response = MailController::generateMailForOTP($user->email,'no@replay.in','SNTC GROUP',null,'SNTC OTP Verification ',$otp);
-                }
-            }
             
             return response()->json(['error' => null, 'data' => $otp,'mailResponse' => $response], 200);
         }
         
+
+
         public function preLoadSampleEntryContent()
         {
             $sellerModel = User::whereRole(4)->pluck('name', 'id');
@@ -263,12 +307,13 @@
         
         public function getPrices($state, $ricetype)
         {
+
             $replacehiphen = explode('-', $ricetype);
             $replaceWithUnderscore = implode('_', $replacehiphen);
             
             $processedData = [];
             $lastRecord = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
-
+            // dd($lastRecord);
             if ($lastRecord != null) {
             
                 $prices = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query) use($ricetype){
@@ -277,8 +322,8 @@
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
                 ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
-                $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
-                ->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
+
+                $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
 
                 if (!$lastToLastDate->isEmpty()) {
                     $pricesprevious = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
@@ -300,8 +345,7 @@
                     ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
                         $lastRecord->created_at->format('Y-m-d'))->orWhere(DB::raw('date(created_at)'),
                         $lastToLastDate[0]->created_at->format('Y-m-d'))->get();
-                    
-                    
+
                     foreach ($data->sortBy('name_rel.order') as $k => $v) {
                         if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
                             if ($state == $v->state) {
@@ -311,10 +355,12 @@
                             }
                         }
                     }
+
                     $fiilteredProcessedData = [];
                     foreach ($data->sortBy('form_rel.order') as $k => $v) {
                         if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
                             if ($state == $v->state) {
+                               
                                 $replaceHignfn = explode('-', $v->name_rel->type);
                                 $implodeUnderscore = implode('_', $replaceHignfn);
                                 $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
@@ -347,7 +393,6 @@
                     //         }    
                     //     }
                     // }
-
                     foreach ($processedData as $k => $v) {
                         if (is_array($v)) {
                             foreach ($v as $key => $value) {
@@ -419,13 +464,14 @@
                             }
                         }
                     }
+
                     // $newData['order'] = $order;
                     // $processedResponse = $newData->toArray();
                     return response()->json([
                         'errors' => null,
                         'prices' => $myNewData,
                         'latest' => $lastRecord->created_at->format('Y-m-d'),
-                        'lastUpdatedDate' => $lastRecord->created_at->format('d-m-Y | H:i'),
+                        'lastUpdatedDate' => $lastRecord->created_at->format('d-m-Y | H:i A'),
                         'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                     ]);
                 }
@@ -447,6 +493,7 @@
                     'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
                     'oldDate' => ''
                 ]);
+
             } else {
                 print_r('kjhnjki');
                 die();
@@ -803,7 +850,7 @@
                 $trialPeriodMonth = $trialPeriod->month;
                 // $month = $newExpiryDate->month;
                 // $expiredDate = Carbon::now()->addMonth($month)->format('Y-m-d');
-                 $expiredDate = Carbon::now()->addMonth(36)->format('Y-m-d');
+                 $expiredDate = Carbon::now()->addDays(7)->format('Y-m-d');
             }
 
             $data = [
@@ -813,48 +860,77 @@
                 'guest' => 8
             ];
 
-            $hasEmail = User::where(['email' => $request->email])->get();
+            $hasEmail = User::where(['email' => $request->email , 'status' => 1])->get();
             if ($hasEmail->count() > 0) {
                 return response()->json(['error' => 'Email already exist.', 'data' => []], 500);
             }
             
-            $hasMobile = User::where(['mobile' => $request->mobile])->get();
+            $hasMobile = User::where(['mobile' => $request->mobile, 'status' => 1])->get();
             if ($hasMobile->count() > 0) {
                 return response()->json(['error' => 'Mobile Number already exist.', 'data' => []], 500);
             }
             
             $otp = rand(1111, 9999);
-            if($request->has('zipcode')){
-                $user = User::create([
-                    'name' => $request->username,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'mobile' => $request->mobile,
-                    'country' => $request->country,
-                    'zip_code' => $request->zipcode,
-                    'import_port' => $request->import_port,
-                    'address' => $request->address,
-                    'contact_person_name' => $request->contactperson,
-                    'companyname' => $request->companyname,
-                    'role' => $data[$request->userState],
-                    'otp' => $otp,
-                    'bagCategory' => ($request->userState != 8) ? $request->bagCategory : 0,
-                    'expired_on' => $expiredDate,
-                    'status' => 0
-                ]);
-            }else{
-                $user = User::create([
-                    'name' => $request->username,
-                    'email' => $request->email,
-                    'password' => Hash::make($request->password),
-                    'mobile' => $request->mobile,
-                    'companyname' => $request->companyname,
-                    'role' => $data[$request->userState],
-                    'otp' => $otp,
-                    'expired_on' => $expiredDate,
-                    'status' => 0
-                ]);
-            }
+            // if( $request->has('registerForm') ){
+            //     $user = User::create([
+            //             'name' => $request->username,
+            //             'email' => $request->email,
+            //             'password' => Hash::make($request->password),
+            //             'mobile' => $request->mobile,
+            //             'address' => $request->address,
+            //             'contact_person_name' => $request->contactperson,
+            //             'companyname' => $request->companyname,
+            //             'role' => 0,
+            //             'otp' => $otp,
+            //             'bagCategory' => $request->bagCategory,
+            //             'expired_on' => $expiredDate,
+            //             'status' => 0,
+            //             'usd_role' => 6,
+            //             'is_INR_active' => 0,
+            //             'is_usd_active' => 1
+            //         ]);
+            // }else{
+                if($request->has('zipcode')){
+                    $user = User::create([
+                        'name' => $request->username,
+                        'email' => $request->email,
+                        'password' => Hash::make($request->password),
+                        'mobile' => $request->mobile,
+                        'country' => $request->country,
+                        'zip_code' => $request->zipcode,
+                        'import_port' => $request->import_port,
+                        'address' => $request->address,
+                        'contact_person_name' => $request->contactperson,
+                        'companyname' => $request->companyname,
+                        'role' => 0,
+                        'otp' => $otp,
+                        'bagCategory' => ($request->userState != 8) ? $request->bagCategory : 0,
+                        'expired_on' => Carbon::now()->addDays(365)->format('Y-m-d'),
+                        'status' => 0,
+                        'usd_role' => $data[$request->userState],
+                        'is_INR_active' => 0,
+                        'is_usd_active' => 1
+                    ]);
+                }else{
+                    $user = User::create([
+                        'name' => $request->username,
+                        'email' => $request->email,
+                        'password' => Hash::make($request->password),
+                        'mobile' => $request->mobile,
+                        'companyname' => $request->companyname,
+                        'role' => $data[$request->userState],
+                        'otp' => $otp,
+                        'expired_on' => Carbon::now()->addMonth(536)->format('Y-m-d'),
+                        'status' => 0,
+                        'usd_role' => 0,
+                        'is_INR_active' => 1,
+                        'is_usd_active' => 0,
+
+
+                    ]);
+                }
+            // }
+            
             
             User::where('mobile', $request->mobile)->update(['otp' => $otp]);
             file_get_contents('http://anysms.in/api.php?username=rijulbajaj&password=662564&sender=SNTCGR&sendto='.$request->mobile.'&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$otp.'&PEID=1701160336234687231&templateid=1707161795904090251');
@@ -871,7 +947,6 @@
         
         public function updateUser(Request $request)
         {
-
             $data = [
                 'buyer' => 5,
                 'supplier' => 6,
@@ -898,7 +973,7 @@
                 'email' => $request->email,
                 'mobile' => $request->mobile,
                 'companyname' => $request->companyname,
-                'role' => $data[$request->userState],
+                // 'role' => $data[$request->userState],
             ]);
             
             $user = User::where('id' , $request->userId)->first();
@@ -950,7 +1025,9 @@
             $lastRecord = LivePrice::where('name' ,'!=',0)->where('form' , '!=' , 0)->where('min_price', '!=', null)->where('max_price', '!=', null)->get()->last();
             if($lastRecord != null){
                 $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
-                
+                // $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
+                //     return $query->state;
+                // });
                 $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('state_order', '!=', null)->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
                     return $query->state;
                 });
@@ -982,6 +1059,10 @@
             $lastRecord = LivePrice::where('name' ,'!=',0)->where('form' , '!=' , 0)->where('min_price', '!=', null)->where('max_price', '!=', null)->get()->last();
             if($lastRecord != null){
                 $lastEnteredRecord = $lastRecord->created_at->format('Y-m-d');
+                
+                // $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
+                //     return $query->state;
+                // });
                 
                 $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('state_order', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
                     return $query->state;
@@ -1112,8 +1193,19 @@
             $orderModel->status = 1;
 
             if ($orderModel->save()) {
-                User::where(['id' => $request->user_id])->update(['expired_on' => $endDate , 'import_port' => 'Jebel Ali']);
-                return response()->json(['status' => 'success', 'last_inserted_id' => $orderModel->id], 200);
+                $userDetails = User::where(['id' => $request->user_id])->get();
+                if( $userDetails->count() > 0 ){
+                    $userUsdRole = $userDetails[0]['usd_role'];
+                    if( $userUsdRole != 0 ){
+                        User::where(['id' => $request->user_id])->update(['expired_on' => $endDate, 'is_usd_active' => 1 , 'transaction_id' => $request->transaction_id,'planId' => $request->plan_id ]);
+                    }else{
+                        User::where(['id' => $request->user_id])->update(['expired_on' => $endDate , 'import_port' => 'Jebel Ali','usd_role' => 6 , 'is_usd_active' => 1 , 'transaction_id' => $request->transaction_id,'planId' => $request->plan_id ]);
+                    }
+                }
+                
+                $userDetailsAfterPlanUpdate = User::where(['id' => $request->user_id])->get();
+
+                return response()->json(['status' => 'success', 'last_inserted_id' => $orderModel->id , 'userDetails' => $userDetailsAfterPlanUpdate], 200);
             }
             return response()->json(['status' => 'error'], 500);
         }
@@ -1304,12 +1396,18 @@
         
         public function checkUserExpired($userId){
             $user = User::where('id' , $userId)->first();
-             $today = Carbon::now();
+            $today = Carbon::now();
             $todayDate = $today->format('Y-m-d');
-            if($user->expired_on > $todayDate){
-                $isExpiry = false;
-            }else{
-                $isExpiry = true;
+            if( $user != null ){
+                if($user->expired_on != null){
+                    if($user->expired_on > $todayDate){
+                        $isExpiry = false;
+                    }else{
+                        $isExpiry = true;
+                    }
+                }else{
+                    $isExpiry = false;
+                }
             }
             return response()->json(['status' => true , 'data' => $user->expired_on,'isExpiry' =>$isExpiry]);
         }
@@ -1681,14 +1779,14 @@
 
 
         	$livePrice = LivePrice::orderBy('state_order')->where('min_price', '!=', null)->where('max_price', '!=', null)->select('state')->get()->groupBy('state');
-        	dd($livePrice);
+        	// dd($livePrice);
         	$array_keys = array_keys($livePrice->toArray());
         	return response()->json(['status' => 'success' , 'data' => $array_keys ]);
         }
         public function getPricesByState($state = 'PUNJAB-HARYANA')
         {
         	$lastPrice  = LivePrice::last();
-        	dd($lastPrice);
+        	// dd($lastPrice);
         }
 
         public function getPortsInOrder(){
@@ -1719,38 +1817,66 @@
 
         public function getUSDPrices($userId)
         {
+            // ht1901
+            $fiftykgbgids = USD_defaultmaster::select('id')->where('bag_size' , '50kg')->get()->map(function($query){
+                                return $query->id;
+                            })->toArray(); 
+            $usdPrices = USD_prices::groupBy('rice')->whereIn('usd_defaultMaster_id' , $fiftykgbgids )->get()->map(function($query) {
+                return $query->rice;
+            });
+
+            $riceArray = $usdPrices->toArray();
+            $usdData = collect();
+            foreach ($riceArray as $key => $value) {
+                $usdData[] = USD_prices::where('rice' , $value)->whereIn('usd_defaultMaster_id' , $fiftykgbgids )->orderBy('id' , 'desc')->first();
+            }
+
+            // dd($usdPrices);
+            // dd($riceArray);
+            // dd($usdPrices->toArray());
+
+
             $getUSDPrices = USD_prices::select('created_at')->where('status' , 1)->orderBy('id' , 'desc')->first();
             $latestDateforQuery = $getUSDPrices->created_at->format('Y-m-d');
-            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i');
+            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i A');
 
-            // $usdData = USD_defaultmaster::where('bag_size' , '50kg')->with(['getUSDDefaultMaster' => function($query){
-            //     return $query->with('getRiceQuality');
-            // }])->get();
-            // dd($usdData->toArray());
 
-            $usdData = USD_prices::with(['getRiceQuality','getUSDDefaultMaster' => function($query) {
-                return $query->where('bag_size' , '50Kg')->get();
-            }])->whereDate('created_at' ,'like' , '%'.$latestDateforQuery.'%')->orderBy('created_at' , 'ASC')->get();
+            // $usdData = USD_prices::with(['getRiceQuality','getUSDDefaultMaster' => function($query) {
+            //     return $query->where('bag_size' , '50Kg')->get();
+            // }])->where('status' , 1)->get();
+
+
+
+            // $usdData = USD_prices::with(['getRiceQuality','getUSDDefaultMaster' => function($query) {
+            //     return $query->where('bag_size' , '50Kg')->get();
+            // }])->where('status' , 1)->orderBy('created_at' , 'ASC')->get();
+
 
             $basmatiData = [];
             $nonbasmatiData = [];
+            $zeroValueRice = [];
 
             foreach( $usdData as $k => $v ){
-                if( $v->getUSDDefaultMaster != null ){                    
-                    $stringFob = $v->fobmin;
-                    $stringFobMax = $v->fobmax;
-                    unset($v['fobmin']);
-                    unset($v['fobmax']);
+                if( $v->ricemin != 0 ){
+                    if( $v->getUSDDefaultMaster != null ){                    
+                        $stringFob = $v->fobmin;
+                        $stringFobMax = $v->fobmax;
+                        unset($v['fobmin']);
+                        unset($v['fobmax']);
 
-                    $v['fobmin'] = floatval($stringFob);
-                    $v['fobmax'] = floatval($stringFobMax);
+                        $v['fobmin'] = floatval($stringFob);
+                        $v['fobmax'] = floatval($stringFobMax);
 
-                    if( $v->getRiceQuality->quality_type == 'basmati' ){
-                        $basmatiData[$v->rice] = $v;
-                    }else{
+                        if( $v->getRiceQuality->quality_type == 'basmati' ){
+                            $basmatiData[$v->getRiceQuality->order][$v->rice] = $v;
+                        }else{
 
-                        $nonbasmatiData[$v->rice] = $v;
+                            $nonbasmatiData[$v->getRiceQuality->order][$v->rice] = $v;
+                        }
+                        
                     }
+                }else{
+                    $zeroValueRice[] = $v['rice'];
                 }
                 
             }
@@ -1811,7 +1937,22 @@
             ksort($basmatiData);
             ksort($nonbasmatiData);
 
-            return response()->json(['status' => true , 'basmatiPrices' => $basmatiData , 'nonbasmatiPrices' => $nonbasmatiData , 'defaultCIFPrice' => floatval($defalutPortPrice),'latestDate' => $latestDate , 'defalutPort' => $defalutPort]);
+            $basData = [];
+            $nonBasData = [];
+            foreach( $basmatiData as $k => $v ){
+                foreach($v as $kk => $vv){
+                    $basData[] = $vv;
+                }   
+            }
+
+            foreach( $nonbasmatiData as $k => $v ){
+                foreach($v as $kk => $vv){
+                    $nonBasData[] = $vv;
+                }   
+            }
+
+
+            return response()->json(['status' => true , 'basmatiPrices' => $basData , 'nonbasmatiPrices' => $nonBasData , 'defaultCIFPrice' => floatval($defalutPortPrice),'latestDate' => $latestDate , 'defalutPort' => $defalutPort ,'test' => 1]);
         }
 
         public function USDOceanFreight()
@@ -1822,8 +1963,7 @@
         
         public function getDistinctRegion()
         {
-
-            $oceanFreight = OceanFreight::get()->groupBy('region')->map(function($query) {
+            $oceanFreight = OceanFreight::where('freight_21MT' , '!=' , 0 )->get()->groupBy('region')->map(function($query) {
                 return $query->groupBy('country');
             })->toArray();
 
@@ -1832,9 +1972,10 @@
 
         public function getAllPorts($riceQualityId , $userId)
         {
+
             $chartUSDPrice = USD_prices::with(['getRiceQuality' ,'getUSDDefaultMaster'=> function($query){
                 return $query->where('bag_size' , '50kg')->get();
-            }])->orderBy('created_at' , 'DESC')->where('rice' , $riceQualityId)->get();
+            }])->orderBy('created_at' , 'DESC')->where('ricemin' , '!=' , 0)->where('ricemax' , '!=' , 0)->where('rice' , $riceQualityId)->get();
             // dd($chartUSDPrice);
             // $hasRiceType = $chartUSDPrice->getRiceQuality;
 
@@ -1887,23 +2028,30 @@
             }else{
                 $quality_type_status = 0;
             }
-            $oceanPorts = OceanFreight::get()->groupBy('region')->map(function($query){
+            $oceanPorts = OceanFreight::where('freight_21MT' , '!=' , 0 )->get()->groupBy('region')->map(function($query){
                 return $query->groupBy('country')->map(function($query2){
                     return $query2->groupBy('port');
                 });
             });
-
-            $getUSDPrices = USD_prices::where('rice' , $riceQualityId )->where('usd_defaultMaster_id' , $usdDefaultMasterId)->where('status' , 1)->orderBy('id' , 'desc')->first();
-
             $PMT_data = USD_defaultmaster::where('bag_size' , 'like' , '50Kg')->where('applied_for' , $newAppliedFor)->first();
 
-            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i');
+            $getUSDPrices = USD_prices::where('rice' , $riceQualityId )->where('ricemin' , '!=' , 0)->where('ricemax' , '!=' , 0)->where ('usd_defaultMaster_id' , $PMT_data->id)->orderBy('id' , 'desc')->first();
+            // $getUSDPrices = USD_prices::where('rice' , $riceQualityId )->where('ricemin' , '!=' , 0)->where('ricemax' , '!=' , 0)->where('status' , 1)->orderBy('id' , 'desc')->first();
+
+
+            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i A');
 
             $USD_fiftykg_master = USD_defaultmaster::select('id','bag_size','bag_type','PMT_USD')->where('applied_for' , $newAppliedFor)->where('bag_size' , 'like' , '50Kg')->orderBy('created_at' , 'desc')->first();
 
-            $usdDefaultMaster = USD_defaultmaster::select('bag_size' , 'bag_type' , 'id','PMT_USD')->orderBy('bag_size' , 'DESC')->where('applied_for' , $quality_type_status)->get();
-
-            return response()->json(['status' => true , 'ports' => $oceanPorts->toArray() , 'packing' => $usdDefaultMaster->toArray() , 'riceQuality' => $riceQualityIdDetails , 'PMT_data' => $PMT_data , 'FOB' => $getUSDPrices,'fiftykgMaster' => $USD_fiftykg_master ,'defalutPortPrice' => $defalutPortPrice , 'defalutPort' => $defalutPort , 'chartData' => $chartData , 'defalutPortDetail' => $defalutPortDetail]);
+            $usdDefaultMaster = USD_defaultmaster::select('bag_size' , 'bag_type' , 'id','PMT_USD')->orderBy('order' , 'ASC')->where('applied_for' , $quality_type_status)->get();
+            $usdDefaultMasterArray = $usdDefaultMaster->toArray();
+            // dd($usdDefaultMasterArray);
+//             $updatedArray = [];
+//             foreach($usdDefaultMasterArray  as $k => $v){
+//                 $updatedArray[$usdDefaultMasterArray[$k]['id']] = $v;
+//             }
+// dd($updatedArray);
+            return response()->json(['status' => true , 'ports' => $oceanPorts->toArray() , 'packing' => $usdDefaultMasterArray , 'riceQuality' => $riceQualityIdDetails , 'PMT_data' => $PMT_data , 'FOB' => $getUSDPrices,'fiftykgMaster' => $USD_fiftykg_master ,'defalutPortPrice' => $defalutPortPrice , 'defalutPort' => $defalutPort , 'chartData' => $chartData , 'defalutPortDetail' => $defalutPortDetail]);
         }
         
         public function getQualityDetails($id)
@@ -1964,8 +2112,7 @@
         }
         public function addRiceQuality(Request $request)
         { 
-            $validDate = Carbon::now()->addDays($request->validDays);
-
+            $validDate = Carbon::now()->addDays(10);
             $buyerQuery = BuyQuery::create([
                 'PackingType' => $request->changePackingType,
                 'mobile' => $request->mobile,
@@ -1974,12 +2121,22 @@
                 'qualityName' => $request->quality,
                 'quantity' => $request->quantity,
                 'remarks' => $request->remarks,
-                'validDays' => $request->validDays,
+                'validDays' => 10,
                 'validDate' => $validDate,
                 'qualityType' => $request->selectedQualityType,
                 'user' => $request->user
             ]);
-            
+
+            $user = User::where('id' , $request->user)->first();
+            $queryData = BuyQuery::with('getPackingType')->where('id' , $buyerQuery->id)->first();
+
+            $data = [ 'country' => $user->country , 'username' =>  $user->name , 'email' => $user->email , 'mobile' => $user->mobile , 'query' => $queryData ];
+
+            $response = MailController::html_email('mailBuyQuery','enquiry@sntcgroup.com','enquiry@sntcgroup.com' , $data); 
+            // $response = MailController::html_email('mailBuyQuery','rbajaj@sntcgroup.com','rbajaj@sntcgroup.com' , $data); 
+            // $response = MailController::html_email('mailBuyQuery','vidula@sntcgroup.com','vidula@sntcgroup.com' , $data); 
+            // $response = MailController::html_email('mailBuyQuery','leena@sntcgroup.com','leena@sntcgroup.com' , $data); 
+
             $listUser = User::whereIn('id' , [4 , 6])->get(); 
             $result = self::sendNotif("Notification" , "Buyer Requirement" , '' , $buyerQuery->id);
             return false;
@@ -2053,11 +2210,29 @@
             $queryDataId = $request->queryDataId;
             $user_id = $request->user_id;
 
+            $userDetails = User::where('id' , $user_id)->first();
+
             $bid =  Bid::create([
                         'query_id' => $queryDataId,
                         'seller_id' => $user_id,
                         'bid_amount' => $bidPrice
                     ]);
+
+            $bidDetail = BuyQuery::where('id' , $queryDataId)->first();
+
+            $data = [ 'user' =>  $userDetails , 'bid' => $bidDetail ];
+
+            $response = MailController::html_email('mailbid','enquiry@sntcgroup.com','enquiry@sntcgroup.com' , $data); 
+            // $response = MailController::html_email('mailbid','rbajaj@sntcgroup.com','rbajaj@sntcgroup.com' , $data); 
+            // $response = MailController::html_email('mailbid','vidula@sntcgroup.com','vidula@sntcgroup.com' , $data); 
+            // $response = MailController::html_email('mailbid','leena@sntcgroup.com','leena@sntcgroup.com' , $data); 
+
+
+            // $response = MailController::html_email('mailbid','rbajaj@sntcgroup.com','rbajaj@sntcgroup.com'); 
+            // $response = MailController::html_email('mailbid','vidula@sntcgroup.com','vidula@sntcgroup.com'); 
+            // $response = MailController::html_email('mailbid','leena@sntcgroup.com','leena@sntcgroup.com'); 
+
+
             if($bid){
                 return response()->json(['status' => true]);
             }else{
@@ -2123,15 +2298,32 @@
         
         public function getMyBids($user_id)
         {
-            $myBids = BuyQuery::with(['getPackingType' , 'getBids' => function($query) use($user_id) {
-                return $query->orWhere('seller_id' , $user_id)->orWhere('counter_status' , 1)->orderBy('id' , 'desc')->get();
-            }])->orderBy('id' , 'DESC')->get();
+            $myBids = BuyQuery::with(['getPackingType' ,'getBidsExtra' => function($query) use($user_id){
+                return $query->where('seller_id' ,'!=', $user_id)->where('counter_status' , 1)->orWhere('accept_status' , 1)->get();
+            }, 'getBids' => function($query) use($user_id) {
+                return $query->where('seller_id' , $user_id)->orderBy('id' , 'desc')->get();
+                // return $query->orWhere('seller_id' , $user_id)->orWhere('counter_status' , 1)->orderBy('id' , 'desc')->get();
+            }])->orderBy('id' , 'DESC')->where('status' , '!=' ,0 )->limit(100)->get();
 
             foreach( $myBids as $k => $v ){
+                // $v['is_bid_accepted_by_me'] = 'false';
                 if( $v['getBids']->count() > 0 ){
                     foreach($v['getBids'] as $ke => $val){
+
+                        if( Carbon::now()->greaterThan(Carbon::parse($val->validTill)) ){
+                            $v['my_bid_expired'] = 'true';
+                        }else{
+                            $v['my_bid_expired'] = 'false';
+                        }
+                        // if( Carbon::parse($val->validTill)->format('d-m-Y') < Carbon::now()->format('d-m-Y') ){
+                        //     $v['my_bid_expired'] = 'true';
+                        // }else{
+                        //     $v['my_bid_expired'] = 'false';
+                        // }
+
+                        $v['is_accepted_by_admin'] = 'false';
                         if( $user_id != $val['seller_id'] ){
-                            if ($val['counter_status'] == 1){
+                            if ($val['counter_status'] == 1 || $val['accept_status'] == 1){
                                 $v['is_bid_closed'] = 'true';
                                 $v['bid_closed_amount'] = $val['counter_amount'];
                             }else{
@@ -2147,36 +2339,61 @@
                             if($val['counter_amount'] != 0 && $user_id == $val['seller_id'] && $val['counter_status'] == 0){
                                 $v['is_bid_accepted_by_me'] = 'pending';
                             }
+
+                            if($val['accept_status'] == 1 ){
+                                $v['is_accepted_by_admin'] = 'true';
+                            }
                             $v['user_bid_amount'] = $val['counter_amount'];
                             $v['user_bid_date'] = $val['created_at'];
-                        }
+                        } 
                     }
+                    $val['validTill'] = date("Y-m-d\TH:i",strtotime($val['validTill']));
+                }
+                if( Carbon::parse($v->validDate)->format('Y-m-d H:i') < Carbon::now()->format('Y-m-d H:i')) {
+                    $v['is_expired'] = 'true';
+                }else{
+                    $v['is_expired'] = 'false';
                 }
             }
-
             return response()->json(['statue' => true , 'bids' => $myBids]);
         }
 
         public function saveUserBid(Request $request)
         {
             Bid::create(['query_id' => $request->buyQueryId,'validTill' => Carbon::now()->addDays($request->validTill), 'seller_id' => $request->userid, 'bid_amount' => $request->amount , 'status' => 1]);
+          
+            $user = User::where('id' , $request->userid)->first();
+            $queryData = BuyQuery::where('id' , $request->buyQueryId)->first();
+
+            $data = [ 'id' => ($queryData->id + 1),'username' =>  $user->name , 'email' => $user->email , 'mobile' => $user->mobile , 'query' => $queryData->qualityName , 'bidAmount' => $request->amount ,'validTill' => Carbon::now()->addDays($request->validTill) ];
+
+            $response = MailController::html_email('mailsupplieroffer' ,'enquiry@sntcgroup.com','enquiry@sntcgroup.com',$data);
+            // $response = MailController::html_email('mailsupplieroffer' ,'rbajaj@sntcgroup.com','rbajaj@sntcgroup.com',$data);
+            // $response = MailController::html_email('mailsupplieroffer' ,'vidula@sntcgroup.com','vidula@sntcgroup.com',$data);
+            // $response = MailController::html_email('mailsupplieroffer' ,'leena@sntcgroup.com','leena@sntcgroup.com',$data);
+
             $myBids = BuyQuery::with(['getBids' => function($query) {
                 return $query->orderBy('id' , 'desc')->get();
             }])->orderBy('id' , 'DESC')->get();
+
             return response()->json(['status' => true , 'data' => $myBids]);
         }
+
         public function getAllVendors()
         {
-            $bagVendors = Vendorcategory::with(['getVendorList' => function($query){
+            $bagVendors = Vendorcategory::where('id' ,'!=', 8)->with(['getVendorList' => function($query){
                 return $query->where('vendor_name' , '!=' , '')->get();
             }])->get()->groupBy('name');
 
             return response()->json(['status' => true , 'data' => $bagVendors]);
         }
+
         public function getUSDPlans()
         {
             $USDPlan = USDPlan::orderBy('id' , 'DESC')->get();
-            return response()->json(['status' => true , 'plans' => $USDPlan]);
+            $DefaultValues = Defaultvalue::first();
+
+            return response()->json(['status' => true , 'plans' => $USDPlan , 'DefaultValues' => $DefaultValues]);
         }
         public function getCountryList()
         {
@@ -2193,6 +2410,28 @@
         {
             // 1: accept , 2: reject
             Bid::where(['id'  =>  $request->bid_id ])->update(['counter_status' => $request->counter_status]);
+            $bidDetails = Bid::where(['id' => $request->bid_id])->first();
+            $QualityName = $bidDetails->qualityName;
+
+            $bidData = Bid::where(['id'  =>  $request->bid_id ])->first();
+            $sellerId = $bidData->seller_id;
+            $userData = User::where('id' , $sellerId)->first();
+
+            $data = [ 'QualityName' => $QualityName, 'sno' => $request->bid_id , 'userData' => $userData ];
+
+
+            if( $request->counter_status == 1 ) {
+                $response = MailController::html_email('mailcounteroffer' ,'enquiry@sntcgroup.com','enquiry@sntcgroup.com',$data); 
+                // $response = MailController::html_email('mailcounteroffer' ,'rbajaj@sntcgroup.com','rbajaj@sntcgroup.com',$data); 
+                // $response = MailController::html_email('mailcounteroffer' ,'vidula@sntcgroup.com','vidula@sntcgroup.com',$data); 
+                // $response = MailController::html_email('mailcounteroffer' ,'leena@sntcgroup.com','leena@sntcgroup.com',$data); 
+            }else{
+                $response = MailController::html_email('mailcounterofferRejected' ,'enquiry@sntcgroup.com','enquiry@sntcgroup.com',$data); 
+                // $response = MailController::html_email('mailcounterofferRejected' ,'rbajaj@sntcgroup.com','rbajaj@sntcgroup.com',$data); 
+                // $response = MailController::html_email('mailcounterofferRejected' ,'vidula@sntcgroup.com','vidula@sntcgroup.com',$data); 
+                // $response = MailController::html_email('mailcounterofferRejected' ,'leena@sntcgroup.com','leena@sntcgroup.com',$data); 
+            }
+
             return response()->json(['status' => true , 'data' => $request->all()]);
         }
         public function updatePort(Request $request)
@@ -2209,27 +2448,36 @@
         {
             $hotDealNotif = HotDealNotification::with(['getUSDDefaultMaster','getRiceQuality','HotDealAccept' => function($query) use($userId){
                 return $query->where('buyer_id' , $userId)->get();
-            }])->orderBy('id' , 'desc')->get();
+            }])->orderBy('id' , 'desc')->take(50)->get();
 
             foreach($hotDealNotif as $k => $v){
-                if( $v->validDate <= Carbon::now()->format('Y-m-d') ){
-                    $v['isExpired'] = 'true';
-                    $v['isExpiredMessage'] = 'Sorry this Deal is expired';
-                }else{
-                    $v['isExpired'] = 'false';
+                $v['isExpired'] = 'false';
+
+                if( $v->status == 1 ){
+                    if( Carbon::parse($v->validDate)->format('Y-m-d H:i') <= Carbon::now()->format('Y-m-d H:i') ){
+                        $v['isExpired'] = 'true';
+                        $v['isExpiredMessage'] = 'Expired';
+                        // $v['isExpiredMessage'] = 'Deal Sold';
+                    }
                 }
+
                 if( $v->HotDealAccept != null ) {
                     if( $v->HotDealAccept->count() > 0 ){
-                        $v['isDealAcceptedMessage'] = "Thanks for showing interest on this deal,SNTC Team will contact you shortly.";
+                        $v['isDealAcceptedMessage'] = "Thanks for showing interest in buying, Team SNTC will get in touch with you shortly.";
                     }
                 }
             }
-            return response()->json(['status' => true , 'data' => $hotDealNotif]);
+            return response()->json(['status' => true ,'tfyh' => "here" ,  'data' => $hotDealNotif]);
 
         }
         public function acceptHotDealNotification(Request $request)
         {
             HotDealAccept::create(['hotdeal_id' => $request->bid_id, 'buyer_id' => $request->user_id, 'status' => 1]);
+            $response = MailController::html_email('mailNotification','enquiry@sntcgroup.com','enquiry@sntcgroup.com'); 
+            // $response = MailController::html_email('mailNotification','rbajaj@sntcgroup.com','rbajaj@sntcgroup.com'); 
+            // $response = MailController::html_email('mailNotification','vidula@sntcgroup.com','vidula@sntcgroup.com'); 
+            // $response = MailController::html_email('mailNotification','leena@sntcgroup.com','leena@sntcgroup.com'); 
+
             return response()->json(['status' => true , 'data' => $request->all()]);
         }
         public function getBagVendors()
@@ -2237,4 +2485,92 @@
             $bagVendorCat = Vendorcategory::select('id' , 'name')->where('status'  , 1)->get();
             return response()->json(['status' => true , 'data' => $bagVendorCat]);
         }
+        public function paymentSuccess(Request $request)
+        {
+            $usdPlans = USDPlan::where('id' , $request->planId)->get();
+            if( $usdPrices->count() > 0 ){
+                $planId = $usdPlans[0]['id'];
+                $validFor = $usdPlans[0]['valid_months'];
+                $ValidMonthDate = Carbon::now()->addMonths($validFor)->format('Y-m-d');
+            }
+            User::where('id' , $request->id)->update(['usd_role' => 7 , 'is_usd_active' => '1' , 'transaction_id' => $request->transaction_id,'planId' => $planId , 'expired_on' => $ValidMonthDate]);
+        }
+        
+        public function startTrialPerid($userId)
+        {
+            $expiredDate = Carbon::now()->addDays(30)->format('Y-m-d');
+            $userHas = User::where('id' , $userId)->first();
+            $userHasUSDRole = $userHas['usd_role'];
+            $setUserRole = 6;
+
+            if( $userHasUSDRole != null && $userHasUSDRole != '' ) {
+                $setUserRole = $userHasUSDRole;
+            }
+            User::where('id' , $userId)->update([ 'transaction_id' => 'trial','expired_on' =>  $expiredDate, 'import_port' => 'Jebel Ali','usd_role' => $setUserRole , 'is_usd_active' => 1]);
+
+            return response()->json(['status' => true , 'data' => ['expired_on' =>$expiredDate, 'import_port' => 'Jebel Ali','usd_role' => $setUserRole , 'is_usd_active' => 1,'transaction_id' => 'trial']]);
+
+        }
+
+        public function userNotification($userId)
+        {
+            $listNotifications = Notification::where('user_id' , $userId)->where('status' , 0)->get();
+            return response()->json([ 'status' => true , 'data' => $listNotifications->count() ] , 200);
+        }
+
+        public function clearNotifications($userId)
+        {
+            Notification::where('user_id' , $userId)->update(['status' => 1]);            
+            return response()->json([ 'status' => true , 'data' => [] ] , 200);
+        }
+
+        public function getRazorpayOrderId(Request $request)
+        {
+            $amount = $request->amount;
+
+            $key_id = 'rzp_live_NY1vm28wpcuCKf';
+            $secret = 'eTqutKKKWKjyq28vTsahFIcl';
+
+            $ch = curl_init();
+
+            curl_setopt($ch, CURLOPT_URL, 'https://api.razorpay.com/v1/orders');
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, '{"amount": '.$amount.',"currency": "INR","receipt": "receipt#1"}');
+            curl_setopt($ch, CURLOPT_USERPWD, 'rzp_live_NY1vm28wpcuCKf' . ':' . 'eTqutKKKWKjyq28vTsahFIcl');
+
+            $headers = array();
+            $headers[] = 'Content-Type: application/json';
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            $result = curl_exec($ch);
+            return response()->json([ 'status' => true , 'data' => $result ] , 200);
+            if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+            }
+            curl_close($ch);
+
+        }
+        public function deleteUser($userId)
+        {
+            User::where('id' , $userId)->update(['status' => 0]);
+            return response()->json([ 'status' => true , 'data' => [] ] , 200);
+
+        }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

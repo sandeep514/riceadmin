@@ -55,7 +55,8 @@
                                 @foreach($usdPrice as $k => $v)
                                     @if($v->getRiceQuality != null && $v->getUSDDefaultMaster != null)
                                         <tr>
-                                            <td>{{$v['getRiceQuality']['quality']}} {{ $v['getRiceQuality']['quality_name'] }}</td>
+                                            <td> 
+                                                {{$v['getRiceQuality']['quality']}} {{ $v['getRiceQuality']['quality_name'] }}</td>
                                             <td>{{ $v->ricemin }} - {{ $v->ricemax }}</td>
                                             <td>{{ $v->getUSDDefaultMaster->bag_size  }}</td>
                                             <td>{{ $v->getUSDDefaultMaster->bag_type  }}</td>
@@ -67,6 +68,7 @@
                                             <td>
                                                 <a href="{{ route('delete.rice.quality' , $v->id) }}" class="btn btn-danger btn-xs">Delete</a>
                                                 <a href="{{ route('edit.rice.quality' , $v->id) }}" class="btn btn-info btn-xs">Edit</a>
+                                                <a href="{{ route('clone.rice.quality' , $v->id) }}" class="btn btn-info btn-xs">Clone</a> 
                                             </td>
                                         </tr>
                                     @endif

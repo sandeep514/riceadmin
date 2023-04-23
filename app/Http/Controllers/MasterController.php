@@ -142,6 +142,7 @@ class MasterController extends Controller
 	public function deleteCity($cityId)
 	{
 		$cityName = base64_decode($cityId);
+
 	}
 
 	public function editCity(Request $request)
@@ -152,8 +153,8 @@ class MasterController extends Controller
 	}
 
 	public function createCity(Request $request){
-
-		LivePrice::create(['name' => 0,'form' => 0 , 'state' => $request->name , 'up_down' => 'up']);
+		$lastCityOrder = LivePrice::orderBy('state_order' , 'desc')->first();
+		LivePrice::create(['name' => 0,'form' => 0 , 'state' => $request->name , 'up_down' => 'up','state_order' => ((int)$lastCityOrder->state_order+1)]);
 		
 		Session::flash('message' , 'City added successfully');
 		return back();
@@ -343,7 +344,8 @@ class MasterController extends Controller
 	}
 
 	public function createVersion(){
-        return View('version.create');
+		$latestVersion = Version::orderBy('id' , 'desc')->first();
+        return View('version.create' , compact('latestVersion')) ;
 	}
 
 	public function saveVersion(Request $request)
@@ -356,17 +358,73 @@ class MasterController extends Controller
 		]);
 		return back();
 	}
+	
 	public function createCalculator()
 	{
+		$threeDaysBackDate = Carbon::now()->format('Y-m-d');
+
+		$query = QualityMaster::get()->map(function($query){
+			return $query->id;
+		});
+		$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->whereDate('created_at', '>=', $threeDaysBackDate)->whereIn('rice' , $query)->orderBy('created_at' , 'DESC')->get();
+
+
+		// $usdPrice = [];
+		// foreach($query as $k => $v){
+		// 	$usdPricing = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->where('rice' , $v)->orderBy('created_at' , 'DESC')->first();
+		// 	if( $usdPricing != null){
+		// 		$usdPrice[] = $usdPricing;
+		// 	}
+		// }
+
+
+		// $data2 = $query->toArray();
+
+		// $processedData = [];
+		// $data = USD_prices::get()->map(function ($query) use ($data2){
+		// 	return $query->where('rice' , $data2)->orderBy('created_at' , 'DESC')->first();
+		// });
+
+
+		// $uniqueArray = array_unique($data);
+		// $arrayValues = array_values($uniqueArray);
+
+		// $lastSecondDate = 0;
+
+		// if( count($arrayValues) > 1 ){
+		// 	$lastSecondDate = $arrayValues[(count($arrayValues) - 2)];
+		// 	$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->orderBy('id' , 'DESC')->whereDate('created_at' , '>=' , $lastSecondDate)->where('status' , 1)->get();
+		// }elseif( count($arrayValues) == 1 ){
+		// 	$lastSecondDate = $arrayValues[(count($arrayValues) - 1)];
+		// 	$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->orderBy('id' , 'DESC')->whereDate('created_at' , '>=' , $lastSecondDate )->where('status' , 1)->get();
+		// }else{
+		// 	$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->orderBy('id' , 'DESC')->where('status' , 1)->get();
+		// }
+
 		$riceName = QualityMaster::all();
-		$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->orderBy('id' , 'DESC')->where('status' , 1)->get();
-
 		$defaultValue = Defaultvalue::first();
-
 		$dollarRate = $defaultValue->dollarvalue;
-
-		return view('calculator.create' , compact('riceName' , 'usdPrice','dollarRate'));
+		
+		return view('calculator.create' , compact('riceName' , 'usdPrice','dollarRate','defaultValue'));
 	}
+
+	public function USDPriceReport()
+	{
+		$threeDaysBackDate = Carbon::now()->subDays(2)->format('Y-m-d');
+
+		$query = QualityMaster::get()->map(function($query){
+			return $query->id;
+		});
+		$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->whereIn('rice' , $query)->orderBy('created_at' , 'DESC')->get();
+
+		$riceName = QualityMaster::all();
+		$defaultValue = Defaultvalue::first();
+		$dollarRate = $defaultValue->dollarvalue;
+		
+		return view('reports.index' , compact('riceName' , 'usdPrice','dollarRate'));
+	}
+	
+
 	public function editRiceQualityUSD($id)
 	{
 		$riceName = QualityMaster::all();
@@ -410,6 +468,12 @@ class MasterController extends Controller
             // alert('Transport max price should be greater than Transport min price.');
             return false;
         }
+		$Fobmin = 0;
+		$Fobmax = 0;
+		$totalMin = 0;
+		$exchangeRatemin = 0;
+		$totalMax = 0;
+        $exchangeRatemax = 0;
 
         if( $ricemin != 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != '' && $charges != ''){
            
@@ -424,13 +488,13 @@ class MasterController extends Controller
             $exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
             $fob = (($Fobmin).' - '.($Fobmax));
         }
+			
 
         if( $ricemin != 0 && $ricemax == 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != ''){
            
             $totalMin = (float)((float)($ricemin)+(float)($category)+(float)($transportmin)+(float)($charges));
-            $totalMax = 0;
+            
             $exchangeRatemin = (float)(((float)($ricemin)+(float)($category)+(float)($transportmin) ) / $dollarrate);
-            $exchangeRatemax = 0;
             $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
             $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
 
@@ -438,12 +502,12 @@ class MasterController extends Controller
 			$exchangeRate = (($exchangeRatemin).' - '.($exchangeRatemax));
 			$fob = (($Fobmin).' - '.($Fobmax));
         }
-
+		
         if( $ricemin == 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != ''){
            
-            $totalMin = 0;
+            
             $totalMax = (float)((float)($ricemax)+(float)($category)+(float)($transportmax)+(float)($charges));
-            $exchangeRatemin = 0;
+            
             $exchangeRatemax = (float)(((float)($ricemax)+(float)($category)+(float)($transportmax) ) / $dollarrate);
             $Fobmin = (((float)((($exchangeRatemin*$percentageValue)/100 )) + (float)((float)($exchangeRatemin))));
             $Fobmax = (((float)((($exchangeRatemax*$percentageValue)/100 )) + (float)((float)($exchangeRatemax))));
@@ -453,9 +517,10 @@ class MasterController extends Controller
             $fob = (($Fobmin).' - '.($Fobmax));
         }
         
+        
 
-        $totalMin 			= ( round($totalMin , 2) );
-        $totalMax 			= ( round($totalMax , 2) );
+        $totalMin 			= $totalMin;
+        $totalMax 			= $totalMax;
         $exchangeRatemin 	= ( round($exchangeRatemin , 2) );
         $exchangeRatemax 	= ( round($exchangeRatemax , 2) );
         $Fobmin 			= ( round($Fobmin) );
@@ -479,6 +544,7 @@ class MasterController extends Controller
         		$bag_size = $v->bag_size;
         		$bag_id = $v->id;
         		$bag_pmt = $v->PMT_USD;
+
         		USD_prices::create([
 		        	'rice' => $riceName,
 		        	'ricemin' => $ricemin,
@@ -508,6 +574,7 @@ class MasterController extends Controller
 	}
 	public function updateCalculator(Request $request)
 	{
+		$defaultData = USD_prices::where(['id' => $request->usdPriceId])->first();
 		$riceName 		= $request->riceName;
 		$ricemin 		= $request->ricemin;
 		$ricemax 		= $request->ricemax;
@@ -540,6 +607,16 @@ class MasterController extends Controller
             return false;
         }
 
+		$totalMin = '';
+		$totalMax = '';
+		$exchangeRatemin = '';
+		$exchangeRatemax = '';
+		$Fobmin = '';
+		$Fobmax = '';
+		$total = '';
+		$exchangeRate = '';
+		$fob = '';
+
         if( $ricemin != 0 && $ricemax != 0 && $transportmin != '' && $transportmax != '' && $category != '' && $transportmin != ''&& $transportmax != '' && $dollarrate != '' && $percentageValue != '' && $charges != ''){
            
             $totalMin = (float)((float)($ricemin)+(float)($category)+(float)($transportmin)+(float)($charges));
@@ -601,36 +678,56 @@ class MasterController extends Controller
 
 		$fiftyKGbagPMTPrice = $fiftyKGbagPMT->PMT_USD;
 
-        $selectedAppliedFor = USD_defaultmaster::where('applied_for' ,$applied_for)->get();
-
-        if($selectedAppliedFor->count() > 0){
-        	foreach($selectedAppliedFor as $k => $v){
-        		$bag_size = $v->bag_size;
-        		$bag_id = $v->id;
-        		$bag_pmt = $v->PMT_USD;
+        $selectedAppliedFor = USD_defaultmaster::where('id' , $defaultData->usd_defaultMaster_id)->first();
+        // dd($selectedAppliedFor);
+        USD_prices::where(['id' => $request->usdPriceId])->update([
+        	'rice' => $riceName,
+        	'ricemin' => $ricemin,
+        	'ricemax' => $ricemax,
+        	'transportmin' => $transportmin,
+        	'transportmax' => $transportmax,
+        	'category' => $category,
+        	'charges' => $charges,
+        	'dollarrate' => $dollarrate,
+        	'percentageValue' => $percentageValue,
+        	'totalMin' => $totalMin,
+        	'totalMax' => $totalMax,
+        	'exchangeRatemin' => $exchangeRatemin,
+        	'exchangeRatemax' => $exchangeRatemax,
+        	'fobmin' => round(((int)$Fobmin - (int)$fiftyKGbagPMTPrice) + (int)$selectedAppliedFor->PMT_USD),
+        	'fobmax' => round(((int)$Fobmax - (int)$fiftyKGbagPMTPrice) + (int)$selectedAppliedFor->PMT_USD),
+        	'status' => 1,
+        	'usd_defaultMaster_id' => $defaultData->usd_defaultMaster_id,
+        	'color_status' => $colorStatus
+        ]);
+        // if($selectedAppliedFor->count() > 0){
+        // 	foreach($selectedAppliedFor as $k => $v){
+        // 		$bag_size = $v->bag_size;
+        // 		$bag_id = $v->id;
+        // 		$bag_pmt = $v->PMT_USD;
         		
-        		USD_prices::where(['id' => $request->usdPriceId])->update([
-		        	'rice' => $riceName,
-		        	'ricemin' => $ricemin,
-		        	'ricemax' => $ricemax,
-		        	'transportmin' => $transportmin,
-		        	'transportmax' => $transportmax,
-		        	'category' => $category,
-		        	'charges' => $charges,
-		        	'dollarrate' => $dollarrate,
-		        	'percentageValue' => $percentageValue,
-		        	'totalMin' => $totalMin,
-		        	'totalMax' => $totalMax,
-		        	'exchangeRatemin' => $exchangeRatemin,
-		        	'exchangeRatemax' => $exchangeRatemax,
-		        	'fobmin' => round(((int)$Fobmin - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
-		        	'fobmax' => round(((int)$Fobmax - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
-		        	'status' => 1,
-		        	'usd_defaultMaster_id' => $bag_id,
-		        	'color_status' => $colorStatus
-		        ]);
-        	}
-        }
+        // 		USD_prices::where(['id' => $request->usdPriceId])->update([
+		//         	'rice' => $riceName,
+		//         	'ricemin' => $ricemin,
+		//         	'ricemax' => $ricemax,
+		//         	'transportmin' => $transportmin,
+		//         	'transportmax' => $transportmax,
+		//         	'category' => $category,
+		//         	'charges' => $charges,
+		//         	'dollarrate' => $dollarrate,
+		//         	'percentageValue' => $percentageValue,
+		//         	'totalMin' => $totalMin,
+		//         	'totalMax' => $totalMax,
+		//         	'exchangeRatemin' => $exchangeRatemin,
+		//         	'exchangeRatemax' => $exchangeRatemax,
+		//         	'fobmin' => round(((int)$Fobmin - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
+		//         	'fobmax' => round(((int)$Fobmax - (int)$fiftyKGbagPMTPrice) + (int)$bag_pmt),
+		//         	'status' => 1,
+		//         	'usd_defaultMaster_id' => $bag_id,
+		//         	'color_status' => $colorStatus
+		//         ]);
+        // 	}
+        // }
 
 
 
@@ -640,6 +737,27 @@ class MasterController extends Controller
 	{
 		$usdPrideChangeStatus = USD_prices::where(['id' => $id])->update(['status' => 0]);
 		return back();
+
+	}
+	public function updateToTodaysCalculation($id)
+	{
+		$usdprice = USD_prices::where('id' , $id)->get();
+		if($usdprice->count() > 0){
+			$usdpriceRice = $usdprice[0]->rice;
+			$usdPriceCreated_at = $usdprice[0]->created_at;
+
+			$formatCarbon = Carbon::parse($usdPriceCreated_at)->format('Y-m-d');
+
+			$formatedCreatedAt = Carbon::parse($usdPriceCreated_at)->format('Y-m-d');
+
+			$insertedData = USD_prices::select('rice','ricemin','ricemax','transportmin','transportmax','category','charges','dollarrate','percentageValue','totalMin','totalMax','exchangeRatemin','exchangeRatemax','fobmin','fobmax','usd_defaultMaster_id','status','user_id','color_status')->where('rice' , $usdpriceRice)->whereDate('created_at' , $formatedCreatedAt)->get()->toArray();
+			foreach($insertedData as $k => $v){
+				USD_prices::create($v);
+			}
+			return back();
+		}else{
+			dd('Something went wrong');
+		}
 
 	}
 }

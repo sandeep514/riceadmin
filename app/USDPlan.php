@@ -14,6 +14,8 @@ class USDPlan extends Model
         'valid_months',
         'actual_price',
         'discounted_prie',
+        'discounted_price_usd',
+        'actual_price_usd',
         'status'
     ];
 

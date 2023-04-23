@@ -34,12 +34,12 @@ class DollarController extends Controller
                                 if( count(array_filter($v)) > 3 ){
 
                                     if( $k > 1 ){
-                                        $countableData = (float)((float)$v[3]+(float)$v[4]+(float)$v[5]+(float)$v[6]+(float)$v[7]);
+                                        $countableData = (float)((float)round($v[3])+(float)$v[4]+(float)$v[5]+(float)$v[6]+(float)$v[7]);
                                         $processedData[] = [
                                             'order'          => $v[0],
                                             'bag_size'          => $v[1],
                                             'bag_type'          => $v[2],
-                                            'bag_cost'          => $v[3],
+                                            'bag_cost'          => round($v[3]),
                                             'local_freight'     =>  $v[4],
                                             'cha'               =>  $v[5],
                                             'bank_charges'      =>  $v[6],
@@ -75,6 +75,7 @@ class DollarController extends Controller
 
     public function saveOceanFreight(Request $request)
     {
+
         $excel = Excel::toArray( [] , $request->file('file'));
         $processedData= [];
         if( count($excel) > 0 ){
@@ -91,8 +92,9 @@ class DollarController extends Controller
                                         'port'          =>  ($v[3] == null)? '' : $v[3],
                                         'freight_21MT'  =>  ($v[4] == null)? 0 : $v[4],
                                         'freight_25MT'  =>  ($v[5] == null)? 0 : $v[5],
-                                        'freight_21MT_1MT' => ($v[4] == null)? 0 : round(((int)$v[4]/21) , 2),
-                                        'freight_25MT_1MT' => ($v[5] == null)? 0 : round(((int)$v[5]/25) , 2)
+                                        'freight_21MT_1MT' => ($v[4] == null)? 0 : round( ( ((int)$v[4])/25) ),
+                                        'freight_25MT_1MT' => ($v[5] == null)? 0 : round( ( ((int)$v[5])/25)),
+                                        'mobile_code' => $v[6]
                                     ];
                                 }
                             }
@@ -102,6 +104,8 @@ class DollarController extends Controller
             }
         }
 
+
+        
         if( count($processedData) > 0 ){
             OceanFreight::truncate();
             // foreach($processedData as $k => $v){
@@ -127,19 +131,22 @@ class DollarController extends Controller
                         if( !in_array( 'Quality' , array_filter($v))  ) {  
                             if( in_array('basmati' , array_filter($v)) ) {
                                 $processedData[] = [
-                                    'quality' => $v[0],
-                                    'quality_name' => $v[1],
+                                    'quality' => $v[1],
+                                    'quality_name' => $v[2],
                                     'quality_type' => 'basmati',
                                     'quality_type_status' => 1,
+                                    'order' => $v[0],
                                     'status' => 1
                                 ];
                             }else{
                                 $processedData[] = [
-                                    'quality' => $v[0],
-                                    'quality_name' => $v[1],
+                                    'quality' => $v[1],
+                                    'quality_name' => $v[2],
                                     'quality_type' => 'non-basmati',
                                     'quality_type_status' => 2,
-                                    'status' => 1
+                                    'status' => 1,
+                                    'order' => $v[0],
+
                                 ];
                             }
                         }

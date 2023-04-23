@@ -32,6 +32,7 @@ Route::POST('verify/user' ,             ['as' => 'verify.user'              , 'u
 Route::POST('change/password' ,         ['as' => 'change.password'          , 'uses' => 'ApiController@changePassword']);
 
 Route::GET('send/otp/{id}' ,            ['as' => 'send.otp'                 , 'uses' => 'ApiController@sendOTP']);
+Route::GET('resend/otp/{mobile}' ,            ['as' => 'resend.otp'                 , 'uses' => 'ApiController@resendOTP']);
 Route::GET('verify/otp/{number}/{id}' , ['as' => 'verify.otp'               , 'uses' => 'ApiController@verifyOTP']);
 
 Route::get('get/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiState']);
@@ -105,3 +106,17 @@ Route::get('get/hot/deals/{id}' , ['as' => 'get.hot.deals' ,'uses' =>'ApiControl
 Route::POST('update/counter/status' , ['as' => 'update.counter.status' ,'uses' =>'ApiController@updateCounterStatus']);
 Route::POST('update/port' , ['as' => 'update.port' ,'uses' =>'ApiController@updatePort']);
 Route::POST('accept/hot/deal/notification' , ['as' => 'accept.hot.deal.notification' ,'uses' =>'ApiController@acceptHotDealNotification']);
+Route::POST('payment/success' , ['as' => 'payment.success' ,'uses' =>'ApiController@paymentSuccess']);
+
+Route::get('start/trial/period/{userId}' , ['as' => 'start.trial.period' , 'uses' => 'ApiController@startTrialPerid']);
+
+Route::get('user/notification/{userId}' , ['as' => 'user.notification' , 'uses' => 'ApiController@userNotification']);
+Route::get('clear/notification/{userId}' , ['as' => 'clear.notification' , 'uses' => 'ApiController@clearNotifications']);
+Route::get('delete/user/{userId}' , ['as' => 'delete.user' , 'uses' => 'ApiController@deleteUser']);
+Route::POST('get/orderid/razorpay' , ['as' => 'get.orderid.razorpay' , 'uses' => 'ApiController@getRazorpayOrderId']);
+
+Route::post('/check/customer', ['as' => 'stripe.customer' , 'uses' => 'StripeController@checkIfCustomer']);
+// Route::get('/stripe-payment', ['as' => 'stripe.pay' , 'uses' => 'StripeController@handleGet']);
+Route::POST('/stripe-payment', ['as' => 'stripe.payment' , 'uses' => 'StripeController@handlePost']);
+
+

@@ -43,15 +43,35 @@
                                     {!! Form::label('plan_name','Valid Month') !!}
                                     {!! Form::number('validmonth', '' ,['class'=>'form-control', 'required' => 'required']) !!}
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-6">
-                                    {!! Form::label('plan_name','Actual Price') !!}
-                                    {!! Form::number('actual_price', '' ,['class'=>'form-control', 'required' => 'required']) !!}
+                                    <div class="row" style="width: 98%;border: 2px solid #e8eaee;padding: 10px;margin: 10px;border-radius: 10px;">
+                                        <div class="col-md-6" style="padding: 0;margin-right: 20px;width: 45%;">
+                                            {!! Form::label('plan_name','Actual Price in INR') !!}
+                                            {!! Form::number('actual_price', '' ,['class'=>'form-control', 'required' => 'required']) !!}
+                                        </div>
+                                        <div class="col-md-6" style="padding: 0;margin-right: 20px;width: 45%;">
+                                            {!! Form::label('plan_name','Discounted Price in INR') !!}
+                                            {!! Form::number('discounted_prie', '' ,['class'=>'form-control', 'required' => 'required']) !!}
+                                        </div>                                    
+                                    </div>
                                 </div>
+
                                 <div class="col-md-6">
-                                    {!! Form::label('plan_name','Discounted Price') !!}
-                                    {!! Form::number('discounted_prie', '' ,['class'=>'form-control', 'required' => 'required']) !!}
+                                    <div class="row" style="width: 98%;border: 2px solid #e8eaee;padding: 10px;margin: 10px;border-radius: 10px;">
+                                        <div class="col-md-6" style="padding: 0;margin-right: 20px;width: 45%;">
+                                            {!! Form::label('plan_name','Actual Price in USD') !!}
+                                            {!! Form::number('actual_price_usd', '' ,['class'=>'form-control', 'required' => 'required']) !!}
+                                        </div>
+                                        <div class="col-md-6" style="padding: 0;margin-right: 20px;width: 45%;">
+                                            {!! Form::label('plan_name','Discounted Price in USD') !!}
+                                            {!! Form::number('discounted_price_usd', '' ,['class'=>'form-control', 'required' => 'required']) !!}
+                                        </div>                                    
+                                    </div>
                                 </div>
                             </div>
+
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -68,8 +88,10 @@
                                     <th>Plan Name</th>
                                     <th>Plan Desc</th>
                                     <th>Valid Months</th>
-                                    <th>Actual Price</th>
-                                    <th>Discounted Price</th>
+                                    <th>Actual Price INR</th>
+                                    <th>Discounted Price INR</th>
+                                    <th>Actual Price USD</th>
+                                    <th>Discounted Price USD</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -80,8 +102,10 @@
                                         <td style="text-transform : uppercase;">{{ $v->plan_name }}</td>
                                         <td style="text-align: center">{{ $v->plan_desc }}</td>
                                         <td style="text-align: center">{{ $v->valid_months  }}</td>
-                                        <td style="text-align: center">{{ $v->actual_price  }}</td>
-                                        <td style="text-align: center">{{ $v->discounted_prie  }}</td>
+                                        <td style="text-align: center">Rs{{ $v->actual_price  }}</td>
+                                        <td style="text-align: center">Rs{{ $v->discounted_prie  }}</td>
+                                        <td style="text-align: center">${{ $v->actual_price_usd  }}</td>
+                                        <td style="text-align: center">${{ $v->discounted_price_usd  }}</td>
                                         <td style="text-align: center"><a href="{{ route('change.status.usd.plan' , $v->id) }}" class="btn {{ ($v->status == 1)? 'btn-danger' : 'btn-info' }} btn-xs" />{{ ($v->status == 1)? 'De-Activate' : 'Activate' }}</td>
                                     </tr>
                                 @endforeach
@@ -92,8 +116,10 @@
                                     <th>Plan Name</th>
                                     <th>Plan Desc</th>
                                     <th>Valid Months</th>
-                                    <th>Actual Price</th>
-                                    <th>Discounted Price</th>
+                                    <th>Actual Price INR</th>
+                                    <th>Discounted Price INR</th>
+                                    <th>Actual Price USD</th>
+                                    <th>Discounted Price USD</th>
                                     <th>Actions</th>
                                 </tr>
                             </tfoot>

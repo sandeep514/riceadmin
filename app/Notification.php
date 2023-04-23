@@ -9,5 +9,5 @@ use Illuminate\Database\Eloquent\Model;
 class Notification extends Model
 {
     public $table = "notification";
-    protected $fillable = [ 'user_id','title', 'message' ];
+    protected $fillable = [ 'user_id','title', 'message','userAppType' ];
 }

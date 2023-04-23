@@ -62,7 +62,7 @@
                                         </div>
                                         <div class="form-group col-md-4" >
                                             {!! Form::label('file','Dollar current Default Value') !!}
-                                            {!! Form::number('dollarvalue',( $defaultvalue != null )? $defaultvalue->dollarvalue : 0 ,[ 'style' => "margin-right: 10px" ,'required' => 'required' ,'class'=>'form-control','id'=>'dollarvalue']) !!}
+                                            {!! Form::text('dollarvalue',( $defaultvalue != null )? $defaultvalue->dollarvalue : 0 ,[ 'style' => "margin-right: 10px" ,'required' => 'required' ,'class'=>'form-control','id'=>'dollarvalue']) !!}
                                         </div>
                                         <div class="form-group col-md-4" >
                                             {!! Form::label('file','Bag Cost') !!}

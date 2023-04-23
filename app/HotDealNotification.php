@@ -12,7 +12,7 @@ use App\QualityMaster;
 class HotDealNotification extends Model
 {
     public $table = "hotdeals";
-    protected $fillable = [ 'title','quality','packing','fob','qty','validdate','message','status' ];
+    protected $fillable = [ 'title','quality','packing','fob','qty','validdate','message','status','attachment1','attachment2','length','purity','moisture','broken','kett','dd'];
 
     public function HotDealAccept()
     {
@@ -26,4 +26,5 @@ class HotDealNotification extends Model
     {
         return $this->belongsTo(QualityMaster::class,'quality','id');
     }
+    
 }

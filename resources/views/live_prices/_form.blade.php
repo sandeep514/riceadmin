@@ -24,6 +24,7 @@
         @if($riceModel->type == 'basmati')
             <div class="responsiveTabs basmatitabs">
                 <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 15px;">
+
                     @foreach( $livePrice as $k => $v )
                         <li class="">
                             <a href="#model{{ str_replace(' ' , '_' , $k) }}" data-toggle="tab">{{ str_replace(' ','_', $k) }}</a>
@@ -104,6 +105,7 @@
                 </ul>
                 <div id="myTabContent" class="tab-content " >
                     @foreach( $livePrice as $keyy => $val )
+
                         <div class="tab-pane fade in" id="model{{ str_replace(' ' , '_' , $keyy) }}">
                             <div class="row">
                                 <div class="col-md-12 text-center">
@@ -111,9 +113,9 @@
                                     <b>Rice Name: </b> {{ $riceModel->name }}
                                     <div class="row text-left" style="margin-top: 20px;">
                                         <div class="col-md-12 inputs">
-                                            {!! Form::label('na','Click For All NA: ') !!}
+{{--                                             {!! Form::label('na','Click For All NA: ') !!}
                                             {!! Form::checkbox('all_na',null,null,['class'=>'check_for_na']) !!}
-                                            <table class="table table-striped">
+ --}}                                            <table class="table table-striped">
                                                 <thead>
                                                 <tr>
                                                     <th>Rice Type</th>
@@ -123,6 +125,8 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+
+
                                                 @foreach($riceForm as $key => $form)
                                                     @php
                                                         $min = null;
@@ -137,6 +141,7 @@
                                                             }
                                                         }
                                                     @endphp
+                                                    
                                                         <tr>
                                                             <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
                                                             <td>

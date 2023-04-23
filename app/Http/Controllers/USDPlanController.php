@@ -8,6 +8,7 @@ use App\Coupon;
 use App\USDPlan;
 use App\Bid;
 use App\User;
+use App\Notification;
 
 class USDPlanController extends Controller
 {
@@ -76,8 +77,11 @@ class USDPlanController extends Controller
 	        'valid_months' 	=> $request->validmonth,
 	        'actual_price'=> $request->actual_price,
 			'discounted_prie'=> $request->discounted_prie,
+			'discounted_price_usd' => $request->discounted_price_usd,
+			'actual_price_usd' => $request->actual_price_usd,
 	        'status' 		=> 1
 	    ];
+	    
 		USDPlan::create($data);
 		return back();
 	}
@@ -102,6 +106,12 @@ class USDPlanController extends Controller
 			$getUserToken = $getUserDetails[0]['api_token'];
 		}
 
+		Notification::create([
+			'user_id' => $bid->buyerQuery['user'],
+			'title' => 'Counter Offer',
+			'message' => 'Admin sent you a counter offer.'
+		]);
+		
 		$message = 'SNTC send you a counter offer of $1800, Would you like to Accept.';
 		if( $getUserToken != null ){
 			$this->sendNotif( 'Counter Amount', $message , $getUserToken );

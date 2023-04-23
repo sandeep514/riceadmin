@@ -29,24 +29,33 @@ class NotificationController extends Controller
             'userType'=> 'required',
             'title'=> 'required',
             'message'=> 'required',
+            'userAppType'=> 'required',
         ]);
 
-        // $users = User::whereIn('id', [272,219,186,1297])->get()->map(function($query) {
-        //     return $query->user_token;
-        // });
-        $users = User::whereIn('role', $request->userType)->pluck('user_token','id');
+
+        if( $request->userAppType == 'usd' ){
+            $users = User::whereIn('usd_role', $request->userType)->where('id' , '!=' , 301 )->pluck('user_token','id');
+        }else{
+            $users = User::whereIn('role', $request->userType)->where('id' , '!=' , 301 )->pluck('user_token','id');
+        }
+
+        // $users = User::whereIn('id', [220,1297,1664,2173])->pluck('user_token','id');
+
         $arrayUsers = $users->toArray();
 
         $arrayFilters = [];
         if($users->count() > 0){
             $arrayFilters = array_filter($users->toArray());
         }
+
         foreach( $arrayFilters as $k => $v ){
-            echo($this->sendNotif($request->title, $request->message, $v));
+            echo($this->sendNotif($request->title, $request->message, $v,$request->userAppType));
             Notification::create([
                     'user_id' => $k,
                     'title' => $request->title,
-                    'message' => $request->message
+                    'message' => $request->message,
+                    'userAppType' => $request->userAppType,
+                    'status' => 1
             ]);
         }
         return back();
@@ -113,10 +122,17 @@ class NotificationController extends Controller
         $headers[] = 'Content-Type: application/json';
         $headers[] = 'Authorization: key='. $serverKey;
         $ch = curl_init();
+
+
         curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
 
         $response = curl_exec($ch);
        
@@ -149,8 +165,25 @@ class NotificationController extends Controller
 
         return view('hotdeals.index' , compact('packing' , 'quality' ,'todayDate' , 'hotDeal'));
     }
+
     public function hotDealPushNotification(Request $request)
     {
+        $attachmentOneName= '';
+        $attachmentTwoName= '';
+
+        if ($request->hasFile('attachment1')) {
+            $image = $request->file('attachment1');
+            $attachmentOneName = time().''.rand('1000' , '9999').'.'.$image->getClientOriginalExtension();            
+            $destinationPath = public_path('/uploads/notifications/');
+            $image->move($destinationPath, $attachmentOneName);
+        }
+
+        if ($request->hasFile('attachment2')) {
+            $image = $request->file('attachment2');
+            $attachmentTwoName = time().''.rand('1000' , '9999').'.'.$image->getClientOriginalExtension();
+            $destinationPath = public_path('/uploads/notifications/');
+            $image->move($destinationPath, $attachmentTwoName);
+        }
         $request->validate([
             "title" => "required",
             "quality" => "required",
@@ -158,7 +191,9 @@ class NotificationController extends Controller
             "fob" => "required",
             "qty" => "required",
             "validdate" => "required",
-            "message" => "required"
+            "message" => "required",
+           
+
         ]);
 
         $hotdeal = HotDealNotification::create([   
@@ -169,7 +204,15 @@ class NotificationController extends Controller
             "qty" => $request->qty,
             "validdate" => $request->validdate,
             "message" => $request->message,
-            'status' => 1
+            'attachment1' => $attachmentOneName,
+            'attachment2' => $attachmentTwoName,
+            'status' => 1,
+            'length' => ($request->has('Length'))? $request->Length : 0 ,
+            'purity' => ($request->has('Purity'))? $request->Purity : 0 ,
+            'moisture' => ($request->has('Moisture'))? $request->Moisture : 0 ,
+            'broken' => ($request->has('Broken'))? $request->Broken : 0 ,
+            'kett' => ($request->has('Kett'))? $request->Kett : 0 ,
+            'dd' => ($request->has('DDs'))? $request->DDs : 0
         ]);
 
         $users = User::select('id' , 'user_token')->where('role', 5)->where('country' , '!=' , null )->where('country' , '!=', 'india' )->get();

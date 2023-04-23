@@ -13,7 +13,6 @@ use Session;
 class LivePricesController extends Controller
 {
     public function index(Request $request, $riceName = null){
-
         $RiceForm= RiceForm::get();
         $RiceName= RiceName::get();
         $livePrice = LivePrice::get()->groupBy('state');
@@ -36,7 +35,7 @@ class LivePricesController extends Controller
         }
 
         if($request->has('date')){
-            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::parse($request->date)->format('Y-m-d'))->get();
+            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->wuesthere(DB::raw('date(created_at)'),Carbon::parse($request->date)->format('Y-m-d'))->get();
         }else{
             $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
         }
@@ -44,10 +43,10 @@ class LivePricesController extends Controller
     }
 
     public function savePrice(Request $request){
-        
-        $todayDate = Carbon::now()->format('Y-m-d');
+        // dd("kjhkn"/);
+        $todayDate = Carbon::now()->format('Y-m-d');   
         $lastAvailableDate ='';
-        $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
+        $lastAvaibleRecord = LivePrice::where('min_price' ,'!=' ,0  )->orderBy('created_at' , "DESC")->first();
         $sortedStateData = [];
         $sortedNameData = [];
         $data_state_order = LivePrice::get()->sortBy('state_order');
@@ -64,12 +63,11 @@ class LivePricesController extends Controller
                 $sortedNameData[$v->name_order] = $v->name; 
             }
         }
-        
+
         
         if( $lastAvaibleRecord != null ){
             $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');    
         }
-
         if( $todayDate == $lastAvailableDate ){
             foreach($request->min as $state => $values){
                 foreach($values as $form => $price){
@@ -84,7 +82,7 @@ class LivePricesController extends Controller
                             'min_price' => $price, 
                             'max_price' => $request->max[$state][$form],
                             'state'     => $state,
-                            'up_down'   => $request->up_down[$state][$form]
+                            'up_down'   => (array_key_exists($form, $request->up_down[$state])? $request->up_down[$state][$form] : 'up' )
                         ]);
                     }
                     
@@ -142,6 +140,7 @@ class LivePricesController extends Controller
         }
         
         LivePrice::where('min_price' , null)->where('max_price' , null)->delete();
+        LivePrice::where('name' , 0)->where('form' , 0)->where('min_price' , 0)->where('max_price' , 0)->delete();
         
         // $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
 

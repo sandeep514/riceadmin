@@ -2,23 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 Route::get('/',function(){
     return redirect()->route('home');
 });
 
 Route::get('sendhtmlemail', 'MailController@html_email');
-
 
 Route::group(['prefix'=>'administrator'], function(){
     Route::group(['middleware'=>'auth'], function(){
@@ -277,7 +265,11 @@ Route::group(['prefix'=>'administrator'], function(){
 
 
 
-            Route::get('rice/query/master' ,      ['as' => 'rice.query.master',         'uses' => 'Controller@riceQualityMaster']);
+            Route::get('rice/query/master' ,            ['as' => 'rice.query.master',           'uses' => 'Controller@riceQualityMaster']);
+            Route::post('update/rice/query/master' ,    ['as' => 'update.rice.query.master',    'uses' => 'Controller@updateRiceQualityMaster']);
+            Route::get('activate/query/{id}' ,          ['as' => 'activate.query',              'uses' => 'Controller@activateQuery']);
+            Route::get('rice/query/master/accept/{id}', ['as' => 'rice.query.master.accept',    'uses' => 'Controller@riceQualityMasterAccept']);
+            Route::get('rice/query/master/sold/{id}', ['as' => 'rice.query.master.sold',    'uses' => 'Controller@updateQueryMasterStatusAsSold']);
 
         });
 
@@ -372,10 +364,13 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::post('save/version', ['as' => 'save.version', 'uses' => 'MasterController@saveVersion']);
 
         Route::get('create/calculator' , ['as' => 'create.calculator' , 'uses' => 'MasterController@createCalculator']);
+        Route::get('report/usd/prices' , ['as' => 'report.calculator' , 'uses' => 'MasterController@USDPriceReport']);
         Route::get('delete/rice/quality/{id}' , ['as' => 'delete.rice.quality' , 'uses' => 'MasterController@deleteRiceQualityUSD']);
         Route::get('edit/rice/quality/{id}' , ['as' => 'edit.rice.quality' , 'uses' => 'MasterController@editRiceQualityUSD']);
         Route::POST('save/calculator' , ['as' => 'calculator.save' , 'uses' => 'MasterController@saveCalculator']);
         Route::POST('update/calculator' , ['as' => 'calculator.update' , 'uses' => 'MasterController@updateCalculator']);
+        
+        Route::GET('clone/calculator/{id}' , ['as' => 'clone.rice.quality' , 'uses' => 'MasterController@updateToTodaysCalculation']);
 
 
         Route::get('get/usd/coupons' , [ 'as' => 'get.usd.coupons' , 'uses' => 'USDPlanController@index']);

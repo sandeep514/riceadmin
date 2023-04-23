@@ -56,15 +56,12 @@ class MailController extends Controller
         }
     }
 
-    public function html_email() {
+    public static function html_email($file, $from , $to , $data = []) {
         try {            
-            $data = array('name'=>"Virat Gandhi");
-            $respose = Mail::send('mail', $data, function($message) {
-                $message->to('jaskaransingh4704@gmail.com', 'Test Mail')->subject('Laravel HTML Testing Mail');
-                $message->from('jaskaransingh5530@gmail.com','Jaskaran Songh');
+            $respose = Mail::send($file, $data, function($message) use ($from , $to) {
+                $message->to($to, 'SNTC')->subject('notifications');
+                $message->from($from,'SNTC');
             });
-            dump($respose);
-            // echo "HTML Email Sent. Check your inbox.";
         } catch (\Throwable $th) {
             //throw $th;
             dd($th);
