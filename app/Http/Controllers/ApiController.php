@@ -46,6 +46,12 @@
     use App\Http\Controllers\MailController;
     use Illuminate\Support\Str;
     use App\Notification;
+    use App\Brand;
+    use App\WandModel;
+    use App\WandTypeModel;
+    use App\SellerPackingINR;
+    use App\RiceFormMilestone3;
+    use App\SellQueriesINR;
 
     class ApiController extends Controller
     {
@@ -2551,26 +2557,97 @@
             curl_close($ch);
 
         }
+        
         public function deleteUser($userId)
         {
             User::where('id' , $userId)->update(['status' => 0]);
             return response()->json([ 'status' => true , 'data' => [] ] , 200);
 
         }
+
+        public function getBrandList()
+        {
+            $brands = Brand::orderBy('name')->with(['getAttachments'])->get();
+            return response()->json(['sttaus' => true , 'data' => $brands] , 200);
+        }
+        public function getRiceQualities($qualityTypeStatus)
+        {
+            $riceQuality = QualityMaster::select('quality' , 'id')->where('status' , 1)->where('quality_type_status' , $qualityTypeStatus)->pluck('id','quality');
+            return response()->json(['status' => true , 'data' => $riceQuality]);
+
+        }
+
+        public function getRiceQualitiesName($getQualities)
+        {
+            $riceQuality = RiceFormMilestone3::orderBy('order' , 'ASC')->get();
+            return response()->json(['status' => true , 'data' => $riceQuality]);
+
+        }
+        public function getRiceWand($riceNameId)
+        {
+            $wand = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->get();
+            return response()->json(['status' => true , 'data' => $wand]);
+        }
+        public function getSellerPackingINR()
+        {
+            $sellerPackingINR = SellerPackingINR::get();
+            return response()->json(['status' => true , 'data' => $sellerPackingINR]);
+        }
+        public function SubmitSellQuery(Request $request)
+        {
+            $data = [];
+
+            $selectedQualityTypeInt = $request->selectedQualityTypeInt;
+            $quality = $request->quality;
+            $qualityForm = $request->qualityForm;
+            $selectedGrade = $request->selectedGrade;
+            $changePackingType = $request->changePackingType;
+            $quantity = $request->quantity;
+            $offerPrice = $request->offerPrice;
+            $validDays = $request->validDays;
+
+            if( isset($_FILES['packageImageFile']) ){
+                $file_name      = $_FILES['packageImageFile']['name'];
+                $file_size      = $_FILES['packageImageFile']['size'];
+                $file_tmp       = $_FILES['packageImageFile']['tmp_name'];
+                $file_type      = $_FILES['packageImageFile']['type'];
+
+                move_uploaded_file($file_tmp,"uploads/".$file_name);
+                $data['packing_file'] = $file_name;
+            }
+
+            if( isset($_FILES['uncookedFile']) ){
+                $file_name      = $_FILES['uncookedFile']['name'];
+                $file_size      = $_FILES['uncookedFile']['size'];
+                $file_tmp       = $_FILES['uncookedFile']['tmp_name'];
+                $file_type      = $_FILES['uncookedFile']['type'];
+
+                move_uploaded_file($file_tmp,"uploads/".$file_name);
+                $data['uncooked_file'] = $file_name;
+            }
+            
+            if( isset($_FILES['cookedImageFile']) ){
+                $file_name      = $_FILES['cookedImageFile']['name'];
+                $file_size      = $_FILES['cookedImageFile']['size'];
+                $file_tmp       = $_FILES['cookedImageFile']['tmp_name'];
+                $file_type      = $_FILES['cookedImageFile']['type'];
+
+                move_uploaded_file($file_tmp,"uploads/".$file_name);
+                $data['cooked_file'] = $file_name;
+            }
+
+            $data['quality_type'] = $selectedQualityTypeInt;
+            $data['quality'] = $quality;
+            $data['qualityForm'] = $qualityForm;
+            $data['grade'] = $selectedGrade;
+            $data['packing'] = $changePackingType;
+            $data['quantity'] = $quantity;
+            $data['offerPrice'] = $offerPrice;
+            $data['validDays'] = $validDays;
+
+
+            SellQueriesINR::create($data);
+
+            
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

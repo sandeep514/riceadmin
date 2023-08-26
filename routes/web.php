@@ -400,6 +400,42 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::POST('hot/deal/push/notification' , ['as' => 'post.hot.deal.push.notification' , 'uses' => 'NotificationController@hotDealPushNotification']);
 
     Route::GET('hot/deal/notification/master' , ['as' => 'hot.deal.notification.master' , 'uses' => 'NotificationController@hotDealIndex']);
+
+    Route::GET('packing/public/master' , ['as' => 'public.packing.master' , 'uses' => 'PublicPackingMasterController@index']);
+    
+    Route::POST('public/packing/master/controller' , ['as' => 'public.packing.master.controller' , 'uses' => 'PublicPackingMasterController@save']);
+
+
     Route::GET('update/hot/deal/status/{statusType}/{hotDealNotifId}' , ['as' => 'update.hot.deal.status' , 'uses' => 'NotificationController@updateHotDealStatus']);
     Route::get('logout','Auth\LoginController@logout');
+
+
+
+    Route::GET('brands' , ['as' => 'master.brand' , 'uses' => 'BrandController@index']);
+    Route::GET('brands/create' , ['as' => 'master.brand.create' , 'uses' => 'BrandController@create']);
+    Route::POST('brands/save' , ['as' => 'master.brand.save' , 'uses' => 'BrandController@save']);
+    Route::GET('brands/edit/{brandId}' , ['as' => 'master.brand.edit' , 'uses' => 'BrandController@edit']);
+    Route::POST('brands/update' , ['as' => 'master.brand.update' , 'uses' => 'BrandController@update']);
+    Route::get('brands/change/status/{brandid}' , ['as' => 'master.brand.change.status' , 'uses' => 'BrandController@changeStatus']);
+
+
+    Route::GET('wand' , ['as' => 'master.wand' , 'uses' => 'WandController@index']);
+    Route::GET('wand/create/{formId}' , ['as' => 'master.wand.create' , 'uses' => 'WandController@create']);
+    Route::POST('wand/save' , ['as' => 'master.wand.save' , 'uses' => 'WandController@save']);
+    Route::GET('wand/edit/{WandId}' , ['as' => 'master.wand.edit' , 'uses' => 'WandController@edit']);
+    Route::POST('wand/update' , ['as' => 'master.wand.update' , 'uses' => 'WandController@update']);
+    Route::get('wand/change/status/{Wandid}' , ['as' => 'master.wand.change.status' , 'uses' => 'WandController@changeStatus']);
+
+
+
+    Route::get('list/sell/queries/INR' , ['as' => 'master.list.sell.queries.INR' , 'uses' => 'MasterController@listSellQueries']);
+
+    // trade
+    Route::GET('trade' , ['as' => 'master.trade' , 'uses' => 'TradeController@index']);
+    Route::GET('trade/create' , ['as' => 'master.trade.create' , 'uses' => 'TradeController@create']);
+    Route::POST('trade/save' , ['as' => 'master.trade.save' , 'uses' => 'TradeController@save']);
+    Route::GET('trade/edit/{tradeId}' , ['as' => 'master.trade.edit' , 'uses' => 'TradeController@edit']);
+    Route::POST('trade/update' , ['as' => 'master.trade.update' , 'uses' => 'TradeController@update']);
+    Route::get('trade/change/status/{tradeid}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
+
 });

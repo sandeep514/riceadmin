@@ -17,6 +17,7 @@ use App\QualityMaster;
 use App\USD_prices;
 use App\USD_defaultmaster;
 use App\Defaultvalue;
+use App\SellQueriesINR;
 
 class MasterController extends Controller
 {
@@ -758,6 +759,15 @@ class MasterController extends Controller
 		}else{
 			dd('Something went wrong');
 		}
+
+	}
+	public function listSellQueries()
+	{
+		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityMaster','RicePacking','riceGrade' => function($query){
+			return $query->with('getWandType')->get();
+		}])->get();		
+
+		return View('sellINR.index' , compact('sellerQueries'));
 
 	}
 }

@@ -120,3 +120,14 @@ Route::post('/check/customer', ['as' => 'stripe.customer' , 'uses' => 'StripeCon
 Route::POST('/stripe-payment', ['as' => 'stripe.payment' , 'uses' => 'StripeController@handlePost']);
 
 
+Route::get('get/brand/list' , ['as' => 'get.brand.list' , 'uses' => 'ApiController@getBrandList']);
+Route::get('get/rice/qualities/{riceType}' , ['as' => 'get.rice.qualities' , 'uses' => 'ApiController@getRiceQualities']);
+Route::get('get/rice/qualities/name/{riceId}' , ['as' => 'get.rice.qualities.name' , 'uses' => 'ApiController@getRiceQualitiesName']);
+Route::get('get/rice/wand/{riceNameId}' , ['as' => 'get.rice.wand' , 'uses' => 'ApiController@getRiceWand']);
+
+
+
+Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
+
+
+Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);

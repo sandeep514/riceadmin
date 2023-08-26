@@ -287,6 +287,37 @@
                 </a>
             </li>
 
+            <li class="{{ (in_array($currentRoute,['public.packing.master']))?'active':'' }}">
+                <a href="{{ route('public.packing.master') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Public Packing</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['master.brand']))?'active':'' }}">
+                <a href="{{ route('master.brand') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Brands</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['master.wand']))?'active':'' }}">
+                <a href="{{ route('master.wand') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Wands</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['master.list.sell.queries.INR']))?'active':'' }}">
+                <a href="{{ route('master.list.sell.queries.INR') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Seller Queries INR</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['master.trade']))?'active':'' }}">
+                <a href="{{ route('master.trade') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Trades</span>
+                </a>
+            </li>
+
         </ul>
     </section>
     <!-- /.sidebar -->
