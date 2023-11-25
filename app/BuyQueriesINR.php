@@ -8,10 +8,10 @@ use App\QualityMaster;
 use App\WandModel;
 use App\SellerPackingINR;
 
-class SellQueriesINR extends Model
+class BuyQueriesINR extends Model
 {
-    protected $table = 'sell_query_milestone3';
-    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','contactperson','contactMobile','warehouselocation','status'];
+    protected $table = 'buy_query_milestone3';
+    protected $fillable = ['quality_type','quality','quality_form','grade','packing_type','packing','quantity','additional_info','status'];
 
     public static $status = [
         0 => 'closed',
@@ -19,9 +19,14 @@ class SellQueriesINR extends Model
         2 => 'Moved to trade'
     ];
 
+    public static $packingTypeStaus = [
+        0 => 'Miller',
+        1 => 'Private'
+    ];
+
     public function RiceFormMilestone3()
     {
-        return $this->belongsTo(RiceFormMilestone3::class , 'qualityForm', 'id');
+        return $this->belongsTo(RiceFormMilestone3::class , 'quality_form', 'id');
     }
 
     public function RiceQualityMaster()

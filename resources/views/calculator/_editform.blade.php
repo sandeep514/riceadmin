@@ -7,7 +7,9 @@
     $result = json_decode($response);
     curl_close($ch); // Close the connection
 
-    $dollarRate = $result->result;
+    // $dollarRate = $result->result;
+        $dollarRate = $dollarRate;
+
 
 ?>
 <div class="box-body">

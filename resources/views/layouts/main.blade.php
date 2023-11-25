@@ -43,7 +43,13 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.0.3/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js" />
+    
 
+
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

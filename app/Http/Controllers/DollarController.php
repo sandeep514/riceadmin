@@ -135,7 +135,7 @@ class DollarController extends Controller
                                     'quality_name' => $v[2],
                                     'quality_type' => 'basmati',
                                     'quality_type_status' => 1,
-                                    'order' => $v[0],
+                                    'order' => $v[4],
                                     'status' => 1
                                 ];
                             }else{
@@ -145,7 +145,7 @@ class DollarController extends Controller
                                     'quality_type' => 'non-basmati',
                                     'quality_type_status' => 2,
                                     'status' => 1,
-                                    'order' => $v[0],
+                                    'order' => $v[4],
 
                                 ];
                             }

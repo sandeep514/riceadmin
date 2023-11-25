@@ -52,6 +52,10 @@
     use App\SellerPackingINR;
     use App\RiceFormMilestone3;
     use App\SellQueriesINR;
+    use App\TradeQueriesINR;
+    use App\Buyerpackinginr;
+    use App\BuyQueriesINR;
+    use Mail;
 
     class ApiController extends Controller
     {
@@ -311,6 +315,227 @@
             return response()->json(['status' => 'success', 'plans' => $listPlans], 200);
         }
         
+        // public function getPrices($state, $ricetype)
+        // {
+
+        //     $replacehiphen = explode('-', $ricetype);
+        //     $replaceWithUnderscore = implode('_', $replacehiphen);
+            
+        //     $processedData = [];
+        //     $lastRecord = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('id' , 'DESC')->first();
+        //     // dd($lastRecord);
+        //     if ($lastRecord != null) {
+            
+        //         $prices = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query) use($ricetype){
+        //             return $query->where('type' , $ricetype)->get();
+        //         },'form_rel' => function ($query) use ($ricetype) {
+        //                 return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+        //             }
+        //         ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
+
+        //         $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
+
+        //         if (!$lastToLastDate->isEmpty()) {
+        //             $pricesprevious = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+        //                 'name_rel' => function($query){
+        //                     return $query->get();
+        //                 }, 'form_rel' => function ($query) use ($ricetype) {
+        //                     return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+        //                 }
+        //             ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
+        //                 $lastToLastDate[0]->created_at->format('Y-m-d'))->get();
+                    
+        //             $data = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+        //                 'name_rel' => function($query){
+        //                     // return $query->orderBy('order', 'asc')->get();
+        //                     return $query->get();
+        //                 },'form_rel' => function ($query) use ($ricetype) {
+        //                     return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+        //                 }
+        //             ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
+        //                 $lastRecord->created_at->format('Y-m-d'))->orWhere(DB::raw('date(created_at)'),
+        //                 $lastToLastDate[0]->created_at->format('Y-m-d'))->get();
+
+        //             foreach ($data->sortBy('name_rel.order') as $k => $v) {
+        //                 if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+        //                     if ($state == $v->state) {
+        //                         $replaceHignfn = explode('-', $v->name_rel->type);
+        //                         $implodeUnderscore = implode('_', $replaceHignfn);
+        //                         $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+        //                     }
+        //                 }
+        //             }
+
+        //             $fiilteredProcessedData = [];
+        //             foreach ($data->sortBy('form_rel.order') as $k => $v) {
+        //                 if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+        //                     if ($state == $v->state) {
+                               
+        //                         $replaceHignfn = explode('-', $v->name_rel->type);
+        //                         $implodeUnderscore = implode('_', $replaceHignfn);
+        //                         $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+        //                     }
+        //                 }
+        //             }
+        //             $newProcessed = [];
+
+        //             foreach($processedData as $k => $v){
+        //                 foreach($v as $kk => $vv){
+        //                     $processedData[$k][$kk] = $fiilteredProcessedData[$kk];
+        //                 }
+        //             }
+                    
+        //             $latstRecord = $lastRecord->created_at->format('Y-m-d');
+
+        //             $newProcessedData = [];
+
+        //             // foreach($processedData as $k => $v){
+        //             //     $riceType = $k;
+        //             //     if( is_array($v) ){
+        //             //         foreach($v as $kk => $vv){
+        //             //             if( $kk != '' ){
+        //             //                 if( is_array($vv) ){
+        //             //                     foreach($vv as $kkk => $vvv){
+        //             //                         $newProcessedData[$riceType][$kkk] = $vvv;    
+        //             //                     }
+        //             //                 }
+        //             //             }
+        //             //         }    
+        //             //     }
+        //             // }
+        //             foreach ($processedData as $k => $v) {
+        //                 if (is_array($v)) {
+        //                     foreach ($v as $key => $value) {
+        //                         if (is_array($value)) {
+        //                             foreach ($value as $ke => $val) {
+        //                                 if (!array_key_exists($latstRecord, $val)) {
+        //                                     unset($processedData[$k][$key][$ke]);
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+                    
+
+        //             foreach ($processedData as $k => $v) {
+        //                 if (is_array($v)) {
+        //                     foreach ($v as $key => $val) {
+        //                         if (empty($val)) {
+        //                             unset($processedData[$k][$key]);
+        //                         }else{
+        //                             foreach($val as $kk => $vv ){
+        //                                 // dd($processedData[$k][$key][$kk] );
+        //                                 if( $kk != 0 ){
+        //                                   $processedData[$k][$key][$kk]['isHide'] = 'true'; 
+        //                                 }
+        //                             }
+        //                         }
+        //                     }
+        //                 }
+        //             }
+
+        //             $newProccessedData = [];
+                    
+        //             $newData = collect($processedData)->map(function($item){
+        //                 return collect($item)->map(function($innerItem) use ($item){
+        //                     $onlyValues = array_values($innerItem);
+        //                     $onlyKeys = array_keys($innerItem);
+        //                     foreach($onlyValues as $k => $v){
+        //                         if( $k == 0 ){
+        //                             $onlyValues[$k]['is_hide'] = 'false';        
+        //                         }else{
+        //                             $onlyValues[$k]['is_hide'] = 'true';
+        //                         }
+        //                     }
+                            
+                            
+        //                     $data = array_combine( $onlyKeys, $onlyValues);
+        //                     return $data;
+        //                 });
+        //             })->toArray();
+                    
+        //             $order = [];
+        //             foreach($newData as $k => $v){
+        //                 foreach($v as $kk => $vv){
+        //                     $order[$k][] = [ $kk => $vv] ;
+        //                 }
+        //             }
+                    
+        //             $myNewData = [];
+        //             foreach($order as $k => $v){
+        //                 foreach($v as $kk => $vv){
+        //                     $newDataProcess = [];
+        //                     foreach($vv as $key => $value){
+        //                         foreach($value as $ke => $val){
+        //                             $newDataProcess[] = [$ke => $val];   
+        //                         }
+        //                         $myNewData[$k][$kk][$key] = $newDataProcess;
+        //                     }
+        //                 }
+        //             }
+
+        //             // $newData['order'] = $order;
+        //             // $processedResponse = $newData->toArray();
+        //             return response()->json([
+        //                 'errors' => null,
+        //                 'prices' => $myNewData,
+        //                 'latest' => $lastRecord->created_at->format('Y-m-d'),
+        //                 'lastUpdatedDate' => $lastRecord->created_at->format('d-m-Y | H:i A'),
+        //                 'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
+        //             ]);
+        //         }
+    
+        //         foreach ($prices as $k => $v) {
+        //             if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+        //                 if ($state == $v->state) {
+        //                     $replaceHignfn = explode('-', $v->name_rel->type);
+        //                     $implodeUnderscore = implode('_', $replaceHignfn);
+        //                     $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+        //                 }
+                        
+        //             }
+        //         }
+
+        //         return response()->json([
+        //             'errors' => null,
+        //             'prices' => json_encode($processedData),
+        //             'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
+        //             'oldDate' => ''
+        //         ]);
+
+        //     } else {
+        //         print_r('kjhnjki');
+        //         die();
+        //         $data = LivePrice::where('state' , $state)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+        //             'name_rel',
+        //             'form_rel' => function ($query) use ($ricetype) {
+        //                 return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
+        //             }
+        //         ])->where(['state' => $state])->where(DB::raw('date(created_at)'),
+        //             Carbon::now()->format('Y-m-d'))->get();
+                
+        //         foreach ($data as $k => $v) {
+        //             if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+        //                 if ($state == $v->state) {
+        //                     $replaceHignfn = explode('-', $v->name_rel->type);
+        //                     $implodeUnderscore = implode('_', $replaceHignfn);
+        //                     $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+        //                 }
+                        
+        //             }
+        //         }
+        //         return response()->json([
+        //             'errors' => null,
+        //             'prices' => $processedData,
+        //             'last_updated_record' => $latstRecord,
+        //             'latest' => '',
+        //             'oldDate' => ''
+        //         ]);
+        //     }
+            
+        // }
+        
         public function getPrices($state, $ricetype)
         {
 
@@ -327,7 +552,7 @@
                 },'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
-                ])->where('state' , $state)->whereDate('created_at',$lastRecord->created_at->format('Y-m-d'))->get();
+                ])->where('state' , $state)->get();
 
                 $lastToLastDate = LivePrice::where('name' ,'!=', '0')->where('form' , '!=' , '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))->get();
 
@@ -477,7 +702,7 @@
                         'errors' => null,
                         'prices' => $myNewData,
                         'latest' => $lastRecord->created_at->format('Y-m-d'),
-                        'lastUpdatedDate' => $lastRecord->created_at->format('d-m-Y | H:i A'),
+                        'lastUpdatedDate' => $lastRecord->updated_at->format('d-m-Y | H:i A'),
                         'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                     ]);
                 }
@@ -532,7 +757,7 @@
             
         }
         
-        
+       
         public function getPorts()
         {
             $lastUpdatedDate = Port::orderBy('created_at' , 'DESC')->first();
@@ -1073,7 +1298,7 @@
                 $livePrice = LivePrice::whereDate('created_at',$lastEnteredRecord)->where('min_price', '!=', null)->where('state_order', '!=', null)->where('max_price', '!=', null)->orderBy('state_order' , 'ASC')->whereIn('name', $ricename)->get()->map(function($query){
                     return $query->state;
                 });
-
+                // dd($livePrice);
                 if( count($livePrice) > 0 ){
                     $livePrice = array_unique($livePrice->toArray());
                     $livePrice = array_values($livePrice);
@@ -1428,7 +1653,7 @@
                 $prices = LivePrice::whereDate('created_at' , $lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with(['name_rel' => function($query){
                     return $query->get();
                 },'form_rel' => function ($query) {
-                        return $query->orderBy('id', "ASC")->get();
+                        return $query->orderBy('order', "ASC")->get();
                     }
                 ])->get()->groupBy('state');    
 
@@ -2581,13 +2806,14 @@
         {
             $riceQuality = RiceFormMilestone3::orderBy('order' , 'ASC')->get();
             return response()->json(['status' => true , 'data' => $riceQuality]);
-
         }
+
         public function getRiceWand($riceNameId)
         {
             $wand = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->get();
             return response()->json(['status' => true , 'data' => $wand]);
         }
+
         public function getSellerPackingINR()
         {
             $sellerPackingINR = SellerPackingINR::get();
@@ -2605,6 +2831,9 @@
             $quantity = $request->quantity;
             $offerPrice = $request->offerPrice;
             $validDays = $request->validDays;
+            $contactperson = $request->contactperson;
+            $contactMobile = $request->contactMobile;
+            $warehouselocation = $request->warehouselocation;
 
             if( isset($_FILES['packageImageFile']) ){
                 $file_name      = $_FILES['packageImageFile']['name'];
@@ -2644,10 +2873,86 @@
             $data['quantity'] = $quantity;
             $data['offerPrice'] = $offerPrice;
             $data['validDays'] = $validDays;
+            $data['contactperson'] = $contactperson;
+            $data['contactMobile'] = $contactMobile;
+            $data['warehouselocation'] = $warehouselocation;
 
 
-            SellQueriesINR::create($data);
+            $sellCreate = SellQueriesINR::create($data);   
 
-            
+            $data = array();
+   
+            $mailTo = "sandy.singh51480@gmail.com";
+            $mailMessage = '';
+            $subject = 'Sell with SNTC';
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
+   
+            $respose = Mail::send('mail.SellQueryReceivedMilestone3', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom,$mailFromName);
+            });
+            return response()->json(['status' => true , 'data' => $sellCreate ]);
         }
+        
+        public function getTrade()
+        {
+            $trade = TradeQueriesINR::with(['RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
+                return $query->with('getWandType')->get();
+            },'RicePacking'])->get();
+            $tradeData = [];
+            
+            // foreach($trade as $k => $v){
+            //     if( $v['tradeType'] == 1 ){
+            //         $tradeData[1][] = $v;
+            //     }else{
+            //         $tradeData[0][] = $v;
+            //     }
+            // }
+            return response()->json(['status' => true , 'data' => $trade]);
+        }
+        public function getBuyerPackingINR()
+        {
+            $buyerPacking = Buyerpackinginr::get();
+            return response()->json(['status' => true , 'data' => $buyerPacking]);   
+        }
+        public function SubmitBuyQuery(Request $request)
+        {
+            $data = [];
+
+            $selectedQualityTypeInt = $request->selectedQualityTypeInt;
+            $quality = $request->quality;
+            $qualityForm = $request->qualityForm;
+            $selectedGrade = $request->selectedGrade;
+            $changePackingType = $request->changePackingType;
+            $packing = $request->packing;
+            $quantity = $request->quantity;
+            $additionalinfo = $request->additionalinfo;
+
+            $data['quality_type'] = $selectedQualityTypeInt;
+            $data['quality'] = $quality;
+            $data['quality_form'] = $qualityForm;
+            $data['grade'] = $selectedGrade;
+            $data['packing_type'] = $changePackingType;
+            $data['packing'] = $packing;
+            $data['quantity'] = $quantity;
+            $data['additional_info'] = $additionalinfo;
+
+
+            $buyerQuery = BuyQueriesINR::create($data);
+            $data = array();
+   
+            $mailTo = "sandy.singh51480@gmail.com";
+            $mailMessage = '';
+            $subject = 'Buy with SNTC';
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
+   
+            $respose = Mail::send('mail.BuyqueryReceivedMilestone3', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom,$mailFromName);
+            });
+            return response()->json(['status' => true , 'data' => $buyerQuery]);
+        }
+
     }

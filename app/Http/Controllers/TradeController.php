@@ -40,6 +40,7 @@ class TradeController extends Controller
         $validDays = $request->validity;
         $additioanlInfo = $request->additioanlInfo;
         $location = $request->location;
+        $tradeType = $request->tradeType;
         
         if( isset($_FILES['packingImage']) ){
             $file_name      = $_FILES['packingImage']['name'];
@@ -81,6 +82,7 @@ class TradeController extends Controller
         $data['validDays'] = $validDays;
         $data['additioanlInfo'] = $additioanlInfo;
         $data['location'] = $location;
+        $data['tradeType'] = $tradeType;
 
 
         TradeQueriesINR::create($data);
@@ -100,7 +102,11 @@ class TradeController extends Controller
     public function update(){
         return View('trade.index');
     }
-    public function changeStatus   (){
-        return View('trade.index');
+    public function changeStatus ( $tradeId , $status ){
+        TradeQueriesINR::where('id' , $tradeId)->update(['status' => $status]);
+        // Session::flash('success','Status changed successfully!');
+        
+        return back();
+
     }
 }

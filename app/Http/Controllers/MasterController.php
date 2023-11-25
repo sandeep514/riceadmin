@@ -18,6 +18,7 @@ use App\USD_prices;
 use App\USD_defaultmaster;
 use App\Defaultvalue;
 use App\SellQueriesINR;
+use App\BuyQueriesINR;
 
 class MasterController extends Controller
 {
@@ -769,5 +770,51 @@ class MasterController extends Controller
 
 		return View('sellINR.index' , compact('sellerQueries'));
 
+	}
+	public function closeSellQueries($sellQueryId)
+	{
+		SellQueriesINR::where('id' , $sellQueryId)->update(['status' => 0]);
+		Session::flash('message' , 'Sell query closed successfully.');
+
+		return back();
+	}
+	public function moveToTradeSellQueries($sellQueryId)
+	{
+		SellQueriesINR::where('id' , $sellQueryId)->update(['status' => 2]);
+
+		// $data = array('name'=>$otp);
+        // $respose = Mail::send('mail', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+        //     $message->to($mailTo, $mailMessage)->subject($subject);
+        //     $message->from($mailFrom,$mailFromName);
+        // });
+
+		Session::flash('message' , 'Sell query moved to trade successfully.');
+		return back();
+	}
+
+	public function listBuyQueries()
+	{
+		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityMaster','RicePacking','riceGrade' => function($query){
+			return $query->with('getWandType')->get();
+		}])->get();		
+
+		
+
+		return View('buyINR.index' , compact('buyQueries'));
+
+	}
+	public function closeBuyQueries($buyQueryId)
+	{
+		BuyQueriesINR::where('id' , $buyQueryId)->update(['status' => 0]);
+		Session::flash('message' , 'Buy query closed successfully.');
+
+		return back();
+	}
+	public function moveToTradeBuyQueries($buyQueryId)
+	{
+		BuyQueriesINR::where('id' , $buyQueryId)->update(['status' => 2]);
+		Session::flash('message' , 'Buy query moved to trade successfully.');
+
+		return back();
 	}
 }

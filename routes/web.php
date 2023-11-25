@@ -430,12 +430,19 @@ Route::group(['prefix'=>'administrator'], function(){
 
     Route::get('list/sell/queries/INR' , ['as' => 'master.list.sell.queries.INR' , 'uses' => 'MasterController@listSellQueries']);
 
+    Route::get('close/sell/queries/{sellQueryId}' , ['as' => 'close.sell.queries' , 'uses' => 'MasterController@closeSellQueries']);
+    Route::get('move/sell/queries/{sellQueryId}' , ['as' => 'move.to.trade.sell.queries' , 'uses' => 'MasterController@moveToTradeSellQueries']);
+
+    Route::get('list/buy/queries/INR' , ['as' => 'master.list.buy.queries.INR' , 'uses' => 'MasterController@listBuyQueries']);
+    Route::get('close/buy/queries/{buyQueryId}' , ['as' => 'close.buy.queries' , 'uses' => 'MasterController@closeBuyQueries']);
+    Route::get('move/buy/queries/{buyQueryId}' , ['as' => 'move.to.trade.buy.queries' , 'uses' => 'MasterController@moveToTradeBuyQueries']);
+
     // trade
     Route::GET('trade' , ['as' => 'master.trade' , 'uses' => 'TradeController@index']);
     Route::GET('trade/create' , ['as' => 'master.trade.create' , 'uses' => 'TradeController@create']);
     Route::POST('trade/save' , ['as' => 'master.trade.save' , 'uses' => 'TradeController@save']);
     Route::GET('trade/edit/{tradeId}' , ['as' => 'master.trade.edit' , 'uses' => 'TradeController@edit']);
     Route::POST('trade/update' , ['as' => 'master.trade.update' , 'uses' => 'TradeController@update']);
-    Route::get('trade/change/status/{tradeid}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
+    Route::get('trade/change/status/{tradeid}/{status}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
 
 });

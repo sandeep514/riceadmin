@@ -12,7 +12,7 @@ use Session;
 class WandController extends Controller
 {
     public function index(){
-        $data = QualityMaster::get()->pluck('id','quality' );
+        $data = QualityMaster::groupBy('quality')->get()->pluck('id','quality' );
         return View('wand.index' , compact('data'));
     }
 
@@ -20,7 +20,7 @@ class WandController extends Controller
         $riceFormDecodeId = base64_decode($riceFormId);
 
         $WandModelData = WandModel::where('RiceNameId' , $riceFormDecodeId )->pluck('value' , 'wandTypeId')->toArray();
-        $wandTypeModal = WandTypeModel::get();
+        $wandTypeModal = WandTypeModel::orderBy('order', 'ASC')->get();
         $riceName = RiceName::distinct('name')->get();
 
         return View('wand.create' , compact('wandTypeModal' , 'riceName','WandModelData'));

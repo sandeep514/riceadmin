@@ -311,6 +311,12 @@
                     <span>Seller Queries INR</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['master.list.buy.queries.INR']))?'active':'' }}">
+                <a href="{{ route('master.list.buy.queries.INR') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Buyer Queries INR</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['master.trade']))?'active':'' }}">
                 <a href="{{ route('master.trade') }}">
                     <i class="fa fa-address-card-o"></i> 

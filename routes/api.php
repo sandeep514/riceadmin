@@ -128,6 +128,15 @@ Route::get('get/rice/wand/{riceNameId}' , ['as' => 'get.rice.wand' , 'uses' => '
 
 
 Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
+Route::get('get/trades' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade']);
 
 
 Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
+Route::PATCH('submit/buy/query' , ['as' => 'submit.buy.query' , 'uses' => 'ApiController@SubmitBuyQuery']);
+
+
+
+
+
+// buy query INR
+Route::get('get/buyer/inr/packing' , ['as' => 'get.buyer.inr.packing' , 'uses' => 'ApiController@getBuyerPackingINR']);

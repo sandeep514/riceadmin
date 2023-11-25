@@ -34,8 +34,8 @@ class LivePricesController extends Controller
             $lastPrices = LivePrice::where(['name'=>$riceName])->with(['form_rel','name_rel'])->whereDate('created_at' , $lastAvailableDate)->get();
         }
 
-        if($request->has('date')){
-            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->wuesthere(DB::raw('date(created_at)'),Carbon::parse($request->date)->format('Y-m-d'))->get();
+        if($request->has('from')){
+            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->whereBetween(DB::raw('date(created_at)'),[Carbon::parse($request->from)->format('Y-m-d'), Carbon::parse($request->to)->format('Y-m-d')])->get();
         }else{
             $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
         }

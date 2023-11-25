@@ -49,8 +49,12 @@
                             {!! Form::open(['method'=>'get']) !!}
                                 <div class="row">
                                     <div class="col-md-6">
-                                        {!! Form::label('date','Date') !!}
-                                        {!! Form::text('date',$date,['class'=> 'datepicker','autocomplete'=>'off']) !!}
+                                        {!! Form::label('from','From') !!}
+                                        {!! Form::text('from',$date,['class'=> 'datepicker','autocomplete'=>'off']) !!}
+
+                                        {!! Form::label('to','To') !!}
+                                        {!! Form::text('to',$date,['class'=> 'datepicker','autocomplete'=>'off']) !!}
+                                        
                                         {!! Form::submit('Show Prices',['class'=> 'btn btn-primary btn-sm','style'=>'margin-top: -4px']) !!}
                                     </div>
                                 </div>
@@ -58,7 +62,7 @@
                             <div class="divider"></div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <table class="table table-striped table-bordered datatable">
+                                    <table class="table table-striped table-bordered datatable" id="example2"> 
                                         <thead>
                                             <tr>
                                                 <th>Sr. No.</th>

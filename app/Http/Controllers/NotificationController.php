@@ -32,32 +32,51 @@ class NotificationController extends Controller
             'userAppType'=> 'required',
         ]);
 
-
         if( $request->userAppType == 'usd' ){
-            $users = User::whereIn('usd_role', $request->userType)->where('id' , '!=' , 301 )->pluck('user_token','id');
+            $users = User::whereIn('usd_role', $request->userType)->where('id' , '!=' , 301 )->where('user_token' , '!=' , null)->pluck('user_token','id');
         }else{
-            $users = User::whereIn('role', $request->userType)->where('id' , '!=' , 301 )->pluck('user_token','id');
+            $users = User::whereIn('role', $request->userType)->where('id' , '!=' , 301 )->where('user_token' , '!=' , null)->pluck('user_token','id');
         }
+        // return true;
 
-        // $users = User::whereIn('id', [220,1297,1664,2173])->pluck('user_token','id');
+        // $users = User::whereIn('id', [2185,220,2176])->where('user_token' , '!=' , null)->pluck('user_token' , 'id');
+        // $users = User::whereIn('id', [220,1297,1664,2173])->where('user_token' , '!=' , null)->get();
 
         $arrayUsers = $users->toArray();
 
+        $registeredTokens =  array_chunk($arrayUsers , 400);
+        
+
+        $postedData = [];
         $arrayFilters = [];
+        
         if($users->count() > 0){
             $arrayFilters = array_filter($users->toArray());
         }
 
+
         foreach( $arrayFilters as $k => $v ){
-            echo($this->sendNotif($request->title, $request->message, $v,$request->userAppType));
-            Notification::create([
+            // $this->sendNotif($request->title, $request->message, $v,$request->userAppType);
+            // Notification::create([
+            //         'user_id' => $k,
+            //         'title' => $request->title,
+            //         'message' => $request->message,
+            //         'userAppType' => $request->userAppType,
+            //         'status' => 1
+            // ]);
+            $postedData[] = [
                     'user_id' => $k,
                     'title' => $request->title,
                     'message' => $request->message,
                     'userAppType' => $request->userAppType,
                     'status' => 1
-            ]);
+            ];
         }
+        Notification::insert($postedData);
+        foreach($registeredTokens as $k => $v){
+            echo $this->sendNotifMultiple($request->title, $request->message, $v,$request->userAppType);
+        }
+        
         return back();
 
         // $request->validate([
@@ -111,6 +130,56 @@ class NotificationController extends Controller
         
         $arrayToSend = [
                     'to' => $token,
+                    'apns' => $apns,
+                    'data' => [ 'notification_forground' => 'true','extra' => [ 'hotDealId' => $payload]],
+                    'notification' => $notification,
+                    'priority'=>'high'
+                ];
+
+        $json = json_encode($arrayToSend);
+        $headers = [];
+        $headers[] = 'Content-Type: application/json';
+        $headers[] = 'Authorization: key='. $serverKey;
+        $ch = curl_init();
+
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $json);
+
+        $response = curl_exec($ch);
+       
+        if ($response === false) {
+            die('FCM Send Error: ' . curl_error($ch));
+        }
+        curl_close($ch);
+        return $response;
+    }
+    public function sendNotifMultiple($title, $message, $tokens , $payload = null)
+    {
+        $url = "https://fcm.googleapis.com/fcm/send";
+
+        $serverKey = 'AAAA10hB_8I:APA91bHVSnAJjacznL6i3p9dWnKvJeceYJlTbwt_rvyq6Nx8tOPsMlxtYPqHzAJRAazC5JJof9PZHaw_uo1qbNkKK4YgJLKN_39ozcIlbCpt3YQ36Y5rT6ftegC0nnEiOZ-dYsYqFWcV';
+        $body = $message;
+        $notification = ['title' => $title, 'body' => $body, 'sound' => 'default', 'badge' => '1' ];
+        
+        $apns = ['payload' => [ 
+                    'aps' => [
+                        'sound' => 'default' ,
+                        'badge' => 1 ,
+                        'content-available' => 1
+                    ]
+                    ]
+                ];
+        
+        $arrayToSend = [
+                    'registration_ids' => $tokens,
                     'apns' => $apns,
                     'data' => [ 'notification_forground' => 'true','extra' => [ 'hotDealId' => $payload]],
                     'notification' => $notification,

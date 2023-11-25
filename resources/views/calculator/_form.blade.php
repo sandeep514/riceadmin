@@ -7,9 +7,10 @@
     $result = json_decode($response);
     curl_close($ch); // Close the connection
 
-    $dollarRate = $result->result;
-
+    // $dollarRate = $result->result;
+    $dollarRate = $dollarRate;
 ?>
+
 <div class="box-body">
     <div class="row">
         <div class="form-group col-md-6">

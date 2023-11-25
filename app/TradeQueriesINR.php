@@ -14,6 +14,8 @@ class TradeQueriesINR extends Model
     protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','additioanlInfo','location'
 ,'status'];
 
+    public static $tradeStatus = [ 3 => "sold", 2 => 'expired' , 1 => 'Pending' ];
+
     public function RiceFormMilestone3()
     {
         return $this->belongsTo(RiceFormMilestone3::class , 'qualityForm', 'id');

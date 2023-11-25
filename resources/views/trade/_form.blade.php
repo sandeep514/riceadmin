@@ -7,6 +7,14 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Trade Type','Trade Type') !!}
+                                <select class="form-control" name="tradeType">
+                                    <option value=""> Select </option>
+                                        <option value="1"> Buy </option>
+                                        <option value="2"> Sell </option>
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}
                                 <select class="form-control" name="category">
                                     <option value=""> Select </option>
@@ -51,11 +59,11 @@
                                 <input type="text" class="form-control" placeholder="Quantity" name="quantity">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Offer Price','Offer Price') !!}
+                                {!! Form::label('Offer Price','Offer Price (₹)') !!}
                                 <input type="text" class="form-control" placeholder="Offer Price" name="price">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Location','Location') !!}
+                                {!! Form::label('Location','Warehouse Location') !!}
                                 <input type="text" class="form-control" placeholder="location" name="location">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
@@ -91,6 +99,7 @@
             $.ajax({
                 url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/'+riceCategory,
                 success : function (res){
+                    $("select[name=quality]").html('');
                     $("select[name=quality]").append('<option value=""> Select </option>');
                     let objectKeys = Object.keys(res.data);
 
@@ -111,6 +120,7 @@
             $.ajax({
                 url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/name/' + riceCategory,
                 success : function (res){
+                    $("select[name=riceform]").html('');
                     $("select[name=riceform]").append('<option value=""> Select </option>');
 
                     console.log(res.data);
@@ -132,6 +142,7 @@
             $.ajax({
                 url : 'https://snjtradelink.com/staging/public/api/get/rice/wand/' + riceNameId,
                 success : function (res){
+                    $("select[name=ricegrade]").html('');
                     $("select[name=ricegrade]").append('<option value=""> Select </option>');
 
                     console.log(res.data);
