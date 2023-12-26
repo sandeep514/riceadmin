@@ -72,7 +72,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 2)?'active':'' }}"><a href="{{ route('users','2') }}"><i class="fa fa-circle-o"></i> Admin</a></li>
-                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 3)?'active':'' }}"><a href="{{ route('users','3') }}"><i class="fa fa-circle-o"></i> Employees</a></li>
+                        <!-- <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 3)?'active':'' }}"><a href="{{ route('users','3') }}"><i class="fa fa-circle-o"></i> Employees</a></li> -->
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 4)?'active':'' }}"><a href="{{ route('users','4') }}"><i class="fa fa-circle-o"></i> Seller</a></li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 5)?'active':'' }}"><a href="{{ route('users','5') }}"><i class="fa fa-circle-o"></i> Buyer</a></li>
 

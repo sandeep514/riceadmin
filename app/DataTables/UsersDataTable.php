@@ -8,6 +8,8 @@ use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Carbon\Carbon;
+
 
 class UsersDataTable extends DataTable
 {
@@ -22,7 +24,10 @@ class UsersDataTable extends DataTable
         $datatable = datatables()
             ->eloquent($query)
             ->editColumn('created_at',function($model){
-                return $model->created_at->diffForHumans();
+                $carbonDate= Carbon::create($model->created_at);
+
+                return ($carbonDate->format('d-m-Y'));
+                // return $model->created_at->diffForHumans();
             })
             ->editColumn('role', function($model){
                 return $model->role_rel->role_name;

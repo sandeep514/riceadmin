@@ -13,7 +13,7 @@ use Session;
 class UsersController extends Controller
 {
 
-    public function index(UsersDataTable $dataTable)
+    public function index(UsersDataTable $dataTable )
     {
         return $dataTable->render('users.index');
     }
@@ -51,11 +51,11 @@ class UsersController extends Controller
             Session::flash('error','Error|No record found!');
             return back();
         }
-        if(request()->role == 4){
+        if(request()->route('role') == 4){
             $userModel->company = $userModel->seller_rel->company_name;
             $userModel->contact_person = $userModel->seller_rel->contact_person;
             $userModel->email_ids = json_decode($userModel->seller_rel->email_ids,true);
-        }elseif(request()->role == 5){
+        }elseif(request()->route('role') == 5){
             $userModel->company = $userModel->buyer_rel->company_name;
             $userModel->contact_person = $userModel->buyer_rel->contact_person;
             $userModel->email_ids = json_decode($userModel->buyer_rel->email_ids,true);
@@ -68,7 +68,7 @@ class UsersController extends Controller
     {
         UserService::updateUser($request, $id);
         Session::flash('success','Success|Record Updated Successfully!');
-        return redirect()->route('users',request()->role);
+        return redirect()->route('users',request()->route('role'));
     }
 
 

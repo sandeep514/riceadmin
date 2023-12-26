@@ -17,6 +17,7 @@ Route::group(['middleware'=>'auth:api'], function(){
 });
 
 Route::get('prices/{state}/{type}','ApiController@getPrices');
+Route::get('prices2/{state}/{type}','ApiController@getPrices2');
 Route::get('list/port',                 ['uses'=>'ApiController@getPorts']);
 Route::get('get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
 Route::get('get/plans' ,                ['as' => 'get.plans'                , 'uses' => 'ApiController@getPlans']);
@@ -82,6 +83,7 @@ Route::get('get/ocean/freight', ['as' => 'get.ocean.freight', 'uses' => 'ApiCont
 
 //get USD Prices
 Route::get('get/usd/prices/{id}' , ['as' => 'get.usd.prices' , 'uses' => 'ApiController@getUSDPrices']);
+Route::get('get/usd/prices2/{id}' , ['as' => 'get.usd.prices' , 'uses' => 'ApiController@getUSDPrices2']);
 Route::get('get/distinct/region' , ['as' => 'get.distinct.region' , 'uses' => 'ApiController@getDistinctRegion']);
 Route::get('get/quality/details/{id}' , ['as' => 'get.quality.details' , 'uses' => 'ApiController@getQualityDetails']);
 

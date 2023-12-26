@@ -50,3 +50,19 @@
         </div>
     </nav>
 </header>
+{{-- <script>
+    const toggleBtn = document.querySelector("a[data-toggle='push-menu']")
+    const body = document.querySelector("body")
+    console.log(body)
+
+    toggleBtn.addEventListener('click', function(){
+        console.log(body.classList)
+        if(body.classList.contains("sidebar-open")){
+            console.log("open")
+            body.classList.remove("sidebar-open")
+        } else {
+            console.log("close")
+            body.classList.add("sidebar-open")
+        }
+    })
+</script> --}}

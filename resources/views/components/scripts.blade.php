@@ -1,6 +1,3 @@
-
-
-
     <!-- jQuery 3 -->
     <script src="https://code.jquery.com/jquery-3.7.0.js" ></script>
 
@@ -54,7 +51,7 @@
     <!-- AdminLTE for demo purposes -->
     {{--<script src="dist/js/demo.js"></script>--}}
     <script src="https://cdn.datatables.net/buttons/1.0.3/js/dataTables.buttons.min.js"></script>
-    <!-- <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script> -->
+    <script src="{{ asset('/vendor/datatables/buttons.server-side.js') }}"></script>
     <script src="plugins/iCheck/icheck.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {

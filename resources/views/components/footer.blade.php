@@ -1,12 +1,4 @@
-<script>
-    $('.sidebar-toggle').click(function(){
-        if($('body').hasClass('sidebar-open')){
-            $('body').removeClass('sidebar-open');
-        }else{
-            $('body').addClass('sidebar-open');
-        }
-    })
-</script>
+
 <footer class="main-footer">
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.4.18

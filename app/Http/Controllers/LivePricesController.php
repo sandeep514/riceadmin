@@ -13,7 +13,7 @@ use Session;
 class LivePricesController extends Controller
 {
     public function index(Request $request, $riceName = null){
-        $RiceForm= RiceForm::get();
+        $RiceForm= RiceForm::where('status' , 1)->get();
         $RiceName= RiceName::get();
         $livePrice = LivePrice::get()->groupBy('state');
 
@@ -23,7 +23,7 @@ class LivePricesController extends Controller
         $lastPrices = null;
         if($riceName != null){
             $riceModel = RiceName::find($riceName);
-            $riceForms = RiceForm::where(['type'=>$riceModel->type])->get();
+            $riceForms = RiceForm::where('status' , 1)->where(['type'=>$riceModel->type])->get();
             if( LivePrice::get()->count() == 0 ){
                 return view('live_prices.create',['prices'=>[],'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
             }

@@ -536,7 +536,7 @@
             
         // }
         
-        public function getPrices($state, $ricetype)
+        public function getPrices_old($state, $ricetype)
         {
 
             $replacehiphen = explode('-', $ricetype);
@@ -750,6 +750,203 @@
                     'errors' => null,
                     'prices' => $processedData,
                     'last_updated_record' => $latstRecord,
+                    'latest' => '',
+                    'oldDate' => ''
+                ]);
+            }
+            
+        }
+
+        public function getPrices($state, $ricetype)
+        {
+
+            $processedData = [];
+            $lastRecord = LivePrice::query()
+                            ->where('name' ,'!=', '0')
+                            ->where('form' , '!=' , '0')
+                            ->whereNotNull('min_price')
+                            ->whereNotNull('max_price')
+                            ->latest('id')
+                            ->first();
+
+            if ($lastRecord != null) {
+
+                $lastToLastDate = LivePrice::query()
+                                    ->where('name' ,'!=', '0')
+                                    ->where('form' , '!=' , '0')
+                                    ->whereNotNull('min_price')
+                                    ->whereNotNull('max_price')
+                                    ->whereDate('created_at', '<',$lastRecord->created_at->format('Y-m-d'))
+                                    ->latest()
+                                    ->first();
+
+                if ($lastToLastDate) {
+                    
+                    $data = LivePrice::query()
+                            ->has('name_rel')
+                            ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+                            ->with([
+                                'name_rel',
+                                'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+                            ])
+                            ->whereNotNull('min_price')
+                            ->whereNotNull('max_price')
+                            ->where(['state' => $state])
+                            ->whereIn(DB::raw('date(created_at)'), [$lastRecord->created_at->format('Y-m-d'), $lastToLastDate->created_at->format('Y-m-d')])
+                            ->get();
+
+                    foreach ($data->sortBy('name_rel.order') as $k => $v) {
+                        $replaceHignfn = explode('-', $v->name_rel->type);
+                        $implodeUnderscore = implode('_', $replaceHignfn);
+                        $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                    }
+
+                    $fiilteredProcessedData = [];
+                    foreach ($data->sortBy('form_rel.order') as $k => $v) {
+                                
+                        $replaceHignfn = explode('-', $v->name_rel->type);
+                        $implodeUnderscore = implode('_', $replaceHignfn);
+                        $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                    }
+
+                    foreach($processedData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $processedData[$k][$kk] = $fiilteredProcessedData[$kk];
+                        }
+                    }
+                    
+                    $latstRecord = $lastRecord->created_at->format('Y-m-d');
+
+                    
+                    foreach ($processedData as $k => $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $key => $value) {
+                                if (is_array($value)) {
+                                    foreach ($value as $ke => $val) {
+                                        if (!array_key_exists($latstRecord, $val)) {
+                                            unset($processedData[$k][$key][$ke]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+
+                    foreach ($processedData as $k => $v) {
+                        if (is_array($v)) {
+                            foreach ($v as $key => $val) {
+                                if (empty($val)) {
+                                    unset($processedData[$k][$key]);
+                                }else{
+                                    foreach($val as $kk => $vv ){
+                                        if( $kk != 0 ){
+                                            $processedData[$k][$key][$kk]['isHide'] = 'true'; 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    $newData = collect($processedData)->map(function($item){
+                        return collect($item)->map(function($innerItem) use ($item){
+                            $onlyValues = array_values($innerItem);
+                            $onlyKeys = array_keys($innerItem);
+                            foreach($onlyValues as $k => $v){
+                                $onlyValues[$k]['is_hide'] = ($k == 0) ? 'false' : 'true';
+                            }
+                            
+                            
+                            $data = array_combine( $onlyKeys, $onlyValues);
+                            return $data;
+                        });
+                    })->toArray();
+                    
+                    $order = [];
+                    foreach($newData as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $order[$k][] = [ $kk => $vv] ;
+                        }
+                    }
+                    
+                    $myNewData = [];
+                    foreach($order as $k => $v){
+                        foreach($v as $kk => $vv){
+                            $newDataProcess = [];
+                            foreach($vv as $key => $value){
+                                foreach($value as $ke => $val){
+                                    $newDataProcess[] = [$ke => $val];   
+                                }
+                                $myNewData[$k][$kk][$key] = $newDataProcess;
+                            }
+                        }
+                    }
+
+                    return response()->json([
+                        'errors' => null,
+                        'prices' => $myNewData,
+                        'latest' => $lastRecord->created_at->format('Y-m-d'),
+                        'lastUpdatedDate' => $lastRecord->updated_at->format('d-m-Y | H:i A'),
+                        'oldDate' => $lastToLastDate->created_at->format('Y-m-d')
+                    ]);
+                }
+
+                $prices = LivePrice::query()
+                            ->where('name' ,'!=', '0')
+                            ->where('form' , '!=' , '0')
+                            ->whereNotNull('min_price')
+                            ->whereNotNull('max_price')
+                            ->whereHas('name_rel', fn($q) => $q->where('type' , $ricetype))
+                            ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+                            ->with([
+                                'name_rel' => fn($q) =>  $q->where('type' , $ricetype),
+                                'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+                            ])
+                            ->where('state' , $state)
+                            ->get();
+
+                foreach ($prices as $k => $v) {
+                    
+                    $replaceHignfn = explode('-', $v->name_rel->type);
+                    $implodeUnderscore = implode('_', $replaceHignfn);
+                    $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                                
+                }
+
+                return response()->json([
+                    'errors' => null,
+                    'prices' => json_encode($processedData),
+                    'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
+                    'oldDate' => ''
+                ]);
+
+            } else {
+                
+                $data = LivePrice::query()
+                        ->where('state' , $state)
+                        ->whereNotNull('min_price')
+                        ->whereNotNull('max_price')
+                        ->with([
+                            'name_rel',
+                            'form_rel' => fn ($q) => $q->orderBy('id', "ASC")->where('type', $ricetype)
+                        ])
+                        ->where(['state' => $state])
+                        ->where(DB::raw('date(created_at)'), now()->format('Y-m-d'))
+                        ->get();
+                
+                foreach ($data as $k => $v) {
+                    if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
+                        $replaceHignfn = explode('-', $v->name_rel->type);
+                        $implodeUnderscore = implode('_', $replaceHignfn);
+                        $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                        
+                    }
+                }
+                return response()->json([
+                    'errors' => null,
+                    'prices' => $processedData,
+                    'last_updated_record' => $lastRecord,
                     'latest' => '',
                     'oldDate' => ''
                 ]);
@@ -1544,8 +1741,8 @@
         
         public function getMessagesByIds($from, $to)
         {
-            Message::where(['from' => $from ,'to' => $to])->update(['seen' => 1]);
-            Message::where(['from' => $to ,'to' => $from])->update(['seen' => 1]);
+            Message::where(['from' => $from ,'to' => $to])->orWhere(['from' => $to ,'to' => $from])->update(['seen' => 1]);
+            // Message::where(['from' => $to ,'to' => $from])->update(['seen' => 1]);
 
             $userMessageData = Message::where(['from' => $to ,'to' => $from] )->orWhere(function($query) use ($from , $to){
                 return $query->where(['from' => $from ,'to' => $to]);
@@ -1580,9 +1777,24 @@
         
         public function getMessageContacts(){
             $data = [];
-            $users = Message::orderBy('id','DESC')->get()->map(function($query){
-                return $query->from;
-            })->toArray();
+
+            // $users = Message::orderBy('created_at','DESC')->has('user_rel')->with(['user_rel'=>function($query){
+            //     return $query->select(['id' , 'name','email'])->get();
+            // }])->groupBy('from')->get();
+            $users = Message::orderBy('created_at' ,'DESC')->where('from' ,'!=' ,1 )->has('user_rel')->with(['user_rel'=>function($query){
+                return $query->select(['id' , 'name','email'])->get();
+            }])
+                ->whereIn(DB::raw("CONCAT(`from`, created_at)"), function ($query) {
+                    $query->select(DB::raw("CONCAT(`from`, MAX(created_at)) as hdate"))
+                        ->from('messages')
+                        ->groupBy('from');
+                })
+                ->get();
+
+
+            return response()->json(['status' => 'success', 'data' => $users],200);
+
+            dd($users);
             $arrayUniqueUsers = array_unique($users);
             // dd($arrayUniqueUsers);
 
@@ -1591,11 +1803,13 @@
                     // $data[][$user]['user'] = $user;
                     $userDetails = User::find($user);
                     if($userDetails){
-                        $unseenMessage1 = Message::where('from','=',$user)->where('seen' ,0)->get()->count();
-                        $unseenMessage2 = Message::where('to','=',$user)->where('seen' ,0)->get()->count();
+                        $unseenMessage1 = Message::where(['from' => 1 ,'to' => $user] )->where('seen' , 0)->orWhere(function($query) use ($user ){
+                            return $query->where(['from' => $user ,'to' => 1])->where('seen' , 0);
+                        } )->get()->count();
+                        // $unseenMessage2 = Message::where('to','=',$user)->where('seen' ,0)->get()->count();
 
                         $message = Message::where('from','=',$user)->orWhere('to','=',$user)->latest()->first(['message','created_at']);
-                        $data[] = ['user' => $user,'name' => $userDetails->name,'email' => $userDetails->email,'companyname' => $userDetails->companyname,'last_message' => $message->message,'unseenMessage' => ($unseenMessage1+$unseenMessage2) ];
+                        $data[] = ['user' => $user,'name' => $userDetails->name,'email' => $userDetails->email,'companyname' => $userDetails->companyname,'last_message' => "hello",'unseenMessage' => 0 ];
                     }
                 }
             }
@@ -2046,7 +2260,7 @@
             return response()->json(['status' => 'success' , 'data' => $oceanfreight]);
         }
 
-        public function getUSDPrices($userId)
+        public function getUSDPrices_old($userId)
         {
             // ht1901
             $fiftykgbgids = USD_defaultmaster::select('id')->where('bag_size' , '50kg')->get()->map(function($query){
@@ -2153,6 +2367,95 @@
             //     }
                 
             // }
+
+            $defalutPort = "Jebel Ali";
+            $userData = User::where('id' , $userId)->first();
+            
+            if( $userData->import_port != null && $userData->import_port != '' ) {
+                $defalutPort = $userData->import_port;
+            }
+
+            $defalutPortDetail = OceanFreight::where('port' , $defalutPort)->get();
+            if( $defalutPortDetail->count() > 0 ){
+                $defalutPortPrice = $defalutPortDetail[0]['freight_25MT_1MT'];
+            }
+            ksort($basmatiData);
+            ksort($nonbasmatiData);
+
+            $basData = [];
+            $nonBasData = [];
+            foreach( $basmatiData as $k => $v ){
+                foreach($v as $kk => $vv){
+                    $basData[] = $vv;
+                }   
+            }
+
+            foreach( $nonbasmatiData as $k => $v ){
+                foreach($v as $kk => $vv){
+                    $nonBasData[] = $vv;
+                }   
+            }
+
+
+            return response()->json(['status' => true , 'basmatiPrices' => $basData , 'nonbasmatiPrices' => $nonBasData , 'defaultCIFPrice' => floatval($defalutPortPrice),'latestDate' => $latestDate , 'defalutPort' => $defalutPort ,'test' => 1]);
+        }
+
+        public function getUSDPrices($userId)
+        {
+            $fiftykgbgids = USD_defaultmaster::query()
+                            ->select('id')
+                            ->where('bag_size' , '50kg')
+                            ->pluck('id')
+                            ->toArray(); 
+
+
+            $latestRecords = USD_prices::whereIn('usd_defaultMaster_id', $fiftykgbgids)
+                ->select('id', 'rice', \DB::raw('MAX(id) as max_id'))
+                ->groupBy('rice');
+
+            $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
+                $join->on('USD_prices.id', '=', 'latest_records.max_id');
+            })
+            ->mergeBindings($latestRecords->getQuery())
+            ->select('USD_prices.*')
+            ->orderBy('USD_prices.rice', 'ASC')
+            ->orderBy('USD_prices.id', 'DESC')
+            ->get();
+
+
+
+            $getUSDPrices = USD_prices::select('created_at')->where('status' , 1)->latest('id')->first();
+            $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i A');
+
+            $basmatiData = [];
+            $nonbasmatiData = [];
+            $zeroValueRice = [];
+
+            foreach( $usdData as $k => $v ){
+                if( $v->ricemin != 0 ){
+                    if( $v->getUSDDefaultMaster != null ){                    
+                        $stringFob = $v->fobmin;
+                        $stringFobMax = $v->fobmax;
+                        unset($v['fobmin']);
+                        unset($v['fobmax']);
+
+                        $v['fobmin'] = floatval($stringFob);
+                        $v['fobmax'] = floatval($stringFobMax);
+
+                        if( $v->getRiceQuality->quality_type == 'basmati' ){
+                            $basmatiData[$v->getRiceQuality->order][$v->rice] = $v;
+                        }else{
+
+                            $nonbasmatiData[$v->getRiceQuality->order][$v->rice] = $v;
+                        }
+                        
+                    }
+                }
+                else{
+                    $zeroValueRice[] = $v['rice'];
+                }
+                
+            }
 
             $defalutPort = "Jebel Ali";
             $userData = User::where('id' , $userId)->first();

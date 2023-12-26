@@ -13,6 +13,6 @@ class LivePrice extends Model
     }
 
     public function form_rel(){
-        return $this->belongsTo(RiceForm::class,'form','id');
+        return $this->belongsTo(RiceForm::class,'form','id')->where('status' , 1);
     }
 }

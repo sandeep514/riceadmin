@@ -6,6 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Rice Brokerage::Admin Panel</title>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.7 -->
@@ -91,6 +93,7 @@
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
 </div>
+
 <!-- ./wrapper -->
 <script type="text/javascript">
     window.route = "{{ url('/') }}/administrator";
@@ -111,9 +114,30 @@
 </style>
 <script>
     $(document).ready(function(){
+        $('.sidebar-toggle').click(function(){
+            const body = $('body')
+            if(body.hasClass('sidebar-open')){
+                console.log("removing")
+                body.removeClass('sidebar-open');
+            }else{
+                console.log("adding")
+                body.addClass('sidebar-open');
+            }
+        })
         setTimeout(() =>{
             $('.alert').fadeOut()
         } , 3000);
+
+        $(document).on('click', '.sidebar-toggle',function(){
+            if( window.screen.width <= 600){
+                if($('body').hasClass('sidebar-open')){
+                    $('body').removeClass('sidebar-open sidebar-collapse');
+                }else{
+                    $('body').addClass('sidebar-open sidebar-collapse');
+                }
+            }
+        })
+
     });
 </script>
 
