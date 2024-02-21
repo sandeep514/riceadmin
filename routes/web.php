@@ -41,6 +41,9 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('users/edit/{id}/{role}',['as'=>'edit.user','uses'=>'UsersController@edit','action'=>'edit']);
                 Route::put('users/update/{id}/{role}',['as'=>'update.user','uses'=>'UsersController@update','action'=>'edit']);
                 Route::delete('users/delete/{id}/{role}',['as'=>'delete.user','uses'=>'UsersController@delete','action'=>'delete']);
+
+                Route::get('get/all/users',['as'=>'get.total.users','uses'=>'UsersController@getTotalUsers','action'=>'getUsers']);
+                Route::get('get/total/users/filter',['as'=>'get.total.users.with.date.filter','uses'=>'UsersController@getTotalUsersWithDateFilter','action'=>'getUsersWithFilter']);
             //});
 
             //Roles
@@ -223,7 +226,9 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('ports',['as'=>'ports','uses'=>'PortsController@index','action'=>'create']);
                 Route::post('ports/save',['as'=>'ports.save','uses'=>'PortsController@save','action'=>'create']);
             });
-            
+            Route::POST('upload/ports' , ['as' => 'upload.image.state' , 'uses' => 'PortsController@uploadStateImage']);
+
+
             //Plan
             Route::get('plan',['as'=>'plan.create','uses'=>'PlanController@index']);
             Route::post('plan/save',['as'=>'plan.save','uses'=>'PlanController@save']);
@@ -271,6 +276,13 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('rice/query/master/accept/{id}', ['as' => 'rice.query.master.accept',    'uses' => 'Controller@riceQualityMasterAccept']);
             Route::get('rice/query/master/sold/{id}', ['as' => 'rice.query.master.sold',    'uses' => 'Controller@updateQueryMasterStatusAsSold']);
 
+
+
+            Route::get('rice/name/order', ['as' => 'rice.name.order',    'uses' => 'Controller@riceNameOrder']);
+            Route::POST('update/rice/name/order', ['as' => 'update.rice.name.order',    'uses' => 'Controller@updateRiceNameOrder']);
+
+            Route::get('rice/form/order', ['as' => 'rice.form.order',    'uses' => 'Controller@riceFormOrder']);
+            Route::POST('update/rice/form/order', ['as' => 'update.rice.form.order',    'uses' => 'Controller@updateRiceFormOrder']);
         });
 
         Route::group(['middleware'=>'field_runner'], function(){
@@ -380,6 +392,10 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('get/usd/plan' , [ 'as' => 'get.usd.plan' , 'uses' => 'USDPlanController@Planindex']);
         Route::get('status/usd/plan/{id}' , [ 'as' => 'change.status.usd.plan' , 'uses' => 'USDPlanController@PlanChangeStatus']);
         Route::POST('save/usd/plan' , [ 'as' => 'save.usd.plan' , 'uses' => 'USDPlanController@PlansaveUSDPlan']);
+
+        Route::get('news/runner' , [ 'as' => 'master.news.runner' , 'uses' => 'NewsRunnerController@index']);
+        Route::post('create/news/runner' , [ 'as' => 'master.post.news.runner' , 'uses' => 'NewsRunnerController@create']);
+        Route::get('update/news/status/{newsId}/{status}' , [ 'as' => 'master.news.change.status' , 'uses' => 'NewsRunnerController@updateStatus']);
         
     });
 
@@ -417,6 +433,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::GET('brands/edit/{brandId}' , ['as' => 'master.brand.edit' , 'uses' => 'BrandController@edit']);
     Route::POST('brands/update' , ['as' => 'master.brand.update' , 'uses' => 'BrandController@update']);
     Route::get('brands/change/status/{brandid}' , ['as' => 'master.brand.change.status' , 'uses' => 'BrandController@changeStatus']);
+    Route::get('delete/banner/attachment/{bannerId}' , ['as'=>'delete.banner.attachment' , 'uses' => 'BrandController@deleteBrand']);
 
 
     Route::GET('wand' , ['as' => 'master.wand' , 'uses' => 'WandController@index']);
@@ -444,5 +461,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::GET('trade/edit/{tradeId}' , ['as' => 'master.trade.edit' , 'uses' => 'TradeController@edit']);
     Route::POST('trade/update' , ['as' => 'master.trade.update' , 'uses' => 'TradeController@update']);
     Route::get('trade/change/status/{tradeid}/{status}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
+    Route::GET('update/trade/status/{tradeStatus}', ['as' => 'master.update.trade.create',    'uses' => 'TradeController@updateTradeStatus']);
+
 
 });

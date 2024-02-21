@@ -27,7 +27,7 @@ class MasterController extends Controller
 	}
 
 	public function listRiceType(){
-		$riceForm = RiceForm::get();
+		$riceForm = RiceForm::where('status' , 1)->get();
 		return view('master.listRiceForm' , compact('riceForm'));
 	}
 

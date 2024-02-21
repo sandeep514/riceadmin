@@ -12,7 +12,7 @@ use Session;
 class WandController extends Controller
 {
     public function index(){
-        $data = QualityMaster::groupBy('quality')->get()->pluck('id','quality' );
+        $data = RiceName::groupBy('name')->get()->pluck('id','name' );
         return View('wand.index' , compact('data'));
     }
 

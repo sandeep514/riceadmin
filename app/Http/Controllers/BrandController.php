@@ -24,6 +24,7 @@ class BrandController extends Controller
         $file = $request->file('brand_logo');
         $filename = $file->getCLientOriginalName();
         $fileExtension = $file->getCLientOriginalExtension();
+        
         $acceptedFileType = ['png' , 'jpg', 'jpeg'];
 
         if( in_array($fileExtension , $acceptedFileType) ) {
@@ -98,8 +99,13 @@ class BrandController extends Controller
             Brand::where('id' , $brandDecodedId)->update(['status' => 1]);
         }
         Session::flash('sucess', 'Status updated successfully.');
-        return back();
+        return back();    
+    }
 
-        
+    public function deleteBrand($brandId)
+    {
+        Brandattachmentmodel::where('id' , $brandId)->delete();
+        Session::flash('sucess', 'Brand attachment deleted successfully.');
+        return back();
     }
 }

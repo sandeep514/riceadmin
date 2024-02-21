@@ -24,4 +24,9 @@ class RiceName extends Model
         }
         return $namesArray;
     }
+
+    public function wand()
+    {
+        return $this->hasMany(WandModel::class , 'id' , 'RiceNameId');
+    }
 }

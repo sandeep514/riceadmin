@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\UsersDataTable;
+use App\DataTables\AllUsersDatatable;
 use App\Http\Requests\UserRequest;
 use App\Services\UserService;
 use App\User;
@@ -87,5 +88,13 @@ class UsersController extends Controller
     public function changeChatStatus(Request $request){
         ChatStatus::where('id' , 1)->update(['status' => $request->status]);
         return back();
+    }
+    public function getTotalUsers( AllUsersDatatable $dataTable )
+    {
+        return $dataTable->render('users.allUsers');
+    }
+    public function getTotalUsersWithDateFilter( AllUsersDatatable $dataTable,Request $request )
+    {
+        return $dataTable->render('users.allUsers' );
     }
 }

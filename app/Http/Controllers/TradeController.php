@@ -109,4 +109,14 @@ class TradeController extends Controller
         return back();
 
     }
+    public function updateTradeStatus($tradeStatus)
+    {
+        // 1: open
+        // 11: close
+        // 12: hold
+        TradeQueriesINR::whereIn('status' , [1 , 11, 12])->update(['status' => $tradeStatus]);
+        
+        Session::flash('success','Success|Trade status updated successfully!');
+        return back();
+    }
 }

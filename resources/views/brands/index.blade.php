@@ -20,6 +20,9 @@
                 <li><a href="{{ route('documents') }}">Brand</a></li>
             </ol>
         </section>
+        <section class="content-header">
+            <a href="{{ route('master.brand.create') }}" class="btn btn-primary btn-sm">Create</a>
+        </section>
 
         <section class="content">
             <div class="box-body">

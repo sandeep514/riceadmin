@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LivePrice extends Model
 {
-    protected $fillable = ['name','form','min_price','max_price','state','up_down','state_order','status'];
+    protected $fillable = ['name','form','cropGrade','cropYear','min_price','max_price','state','up_down','state_order','status'];
 
     public function name_rel(){
         return $this->belongsTo(RiceName::class,'name','id')->orderBy('order','ASC');

@@ -22,9 +22,20 @@
                             <h3 class="box-title">Trade</h3>
                         </div>
                         <div class="row">
-                            <div class="col-md-11">
-                            
+                            <div class="col-md-11" style="display: inline-flex;">
+                                <div>
+                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 1 ]) }}" class="btn btn-info btn-sm">Open Market</a>
+                                </div>
+
+                                <div>
+                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 11 ]) }}" class="btn btn-info btn-sm">Close Market</a>
+                                </div>
+
+                                <div>
+                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 12 ]) }}" class="btn btn-info btn-sm">Hold Market</a>
+                                </div>
                             </div>
+
                             <div class="col-md-1">
                                 <a href="{{ route('master.trade.create') }}" class="btn btn-info btn-sm">Create</a>
                             </div>
@@ -37,6 +48,7 @@
                                         <thead>
                                             <tr>
                                                 <!-- <th style="text-align: center ">sno</th> -->
+                                                <th style="text-align: center ">Trade ID</th>
                                                 <th style="text-align: center ">Quality Type</th>
                                                 <th style="text-align: center ">Quality</th>
                                                 <th style="text-align: center ">QualityForm</th>
@@ -57,14 +69,15 @@
                                             @foreach($sellQueries as $k => $v)
                                                 <tr>
                                                     <!-- <td>{{ $v->id }}</td> -->
+                                                    <td>Trade_{{ $v->id }}</td>
                                                     <td>{{ ($v->quality_type == 1)? 'Basmati' : 'Non-Basmati'  }}</td>
-                                                    <td>{{ $v->RiceQualityMaster->quality }}</td>
-                                                    <td>{{ $v->RiceFormMilestone3->name }}</td>
-                                                    <td>{{ $v->riceGrade->getWandType[0]['type'] }} {{ $v->riceGrade->value }}</td>
-                                                    <td>{{ $v->RicePacking->packing }}</td>
-                                                    <td>{{ $v->quantity }}</td>
-                                                    <td>{{ $v->offerPrice }}</td>
-                                                    <td>{{ $v->validDays }}</td>
+                                                    <td>{{ ($v->RiceQualityMaster->quality )?? '--'}}</td>
+                                                    <td>{{ ($v->RiceFormMilestone3->name )?? '--'}}</td>
+                                                    <td>{{ ($v->riceGrade->getWandType['type'])?? '--' }} {{ ($v->riceGrade->value )?? '--'}}</td>
+                                                    <td>{{ ($v->RicePacking->packing )?? '--'}}</td>
+                                                    <td>{{ ($v->quantity )?? '--'}}</td>
+                                                    <td>{{ ($v->offerPrice )?? '--'}}</td>
+                                                    <td>{{ ($v->validDays )?? '--'}}</td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></div></td>
@@ -76,6 +89,18 @@
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 3]) }}">Sold</a>
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' , ['tradeid' => $v->id , 'status'=> 2]) }}">Expired</a>
                                                         @endif
+
+                                                        @if($v->status != 6)
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 6]) }}">Active</a>
+                                                        @endif
+
+                                                        @if($v->status != 4)
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 4]) }}">In-process</a>
+                                                        @endif
+                                                        
+                                                        @if($v->status != 5)
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 5]) }}">De-Active</a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 
@@ -84,6 +109,7 @@
                                         
                                         <tfoot>
                                             <tr>
+                                                <th style="text-align: center ">Trade ID</th>
                                                 <th style="text-align: center ">Quality Type</th>
                                                 <th style="text-align: center ">Quality</th>
                                                 <th style="text-align: center ">QualityForm</th>

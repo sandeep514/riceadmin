@@ -11,6 +11,6 @@ class WandModel extends Model
 
     public function getWandType()
     {
-        return $this->hasMany(WandTypeModel::class , 'id' , 'wandTypeId');
+        return $this->belongsTo(WandTypeModel::class , 'wandTypeId', 'id' );
     }
 }

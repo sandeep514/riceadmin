@@ -8,6 +8,8 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use App\BuyQuery;
 use App\Bid;
+use App\RiceName;
+use App\RiceForm;
 use App\Notification;
 use Illuminate\Http\Request;
 
@@ -79,5 +81,33 @@ class Controller extends BaseController
             ]);
             echo $charge;
     }
+    public function riceNameOrder()
+    {
+        $data = RiceName::all();
+        return view('changeOrders.rice.index' , compact('data'));
+    }
+    public function updateRiceNameOrder(Request $request)
+    {
+        $order = $request['order'];
+        $nameId = $request['nameId'];
+        RiceName::where(['id' => $nameId])->update(['order' => $order]);
+        return back()->withMessage('success' , 'Order updated successfully');
+
+    }
+
+
+    public function riceFormOrder()
+    {
+        $data = RiceForm::orderBy('order')->get();
+        return view('changeOrders.riceForm.index' , compact('data'));
+    }
+    public function updateRiceFormOrder(Request $request)
+    {
+        $order = $request['order'];
+        $nameId = $request['nameId'];
+        RiceForm::where(['id' => $nameId])->update(['order' => $order]);
+        return back()->withMessage('success' , 'Order updated successfully');
+    }
+   
 }
  

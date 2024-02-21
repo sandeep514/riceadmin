@@ -31,6 +31,9 @@
             @enderror
             @foreach($brand->getAttachments as $k => $v)
                 <div style="width: 100px;border: 2px solid #ededed;margin: 10px;border-radius: 10px;float: left;">
+                    <div style="text-align: right;padding: 0px 10px;">
+                        <a href="{{ route('delete.banner.attachment' ,['bannerId' => $v->id]) }}">X</a>
+                    </div>
                     <img src="{{ asset('uploads/brandlogo/brandAttachment/'.$v->attachment) }}" style="width: 100px;padding: 10px;">
                 </div>
             @endForeach

@@ -46,6 +46,8 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Rice Type</th>
+                                                        <th>Crop Year</th>
+                                                        <th>Crop Grade</th>
                                                         <th>Min Price</th>
                                                         <th>Max Price</th>
                                                         <th>Up/Down</th>
@@ -57,6 +59,8 @@
                                                             $min = null;
                                                             $max = null;
                                                             $upDown = null;
+                                                            $cropYear = null;
+                                                            $cropGrade = null;
                                                             
                                                             if($lastPrices != null){
                                                                 $details = $lastPrices->where('form',$form->id)->where('state', str_replace(' ' , '_' , $keyy) )->first();
@@ -64,12 +68,33 @@
                                                                     $min = $details->min_price;
                                                                     $max = $details->max_price;
                                                                     $upDown = $details->up_down;
+                                                                    $cropYear = $details->cropYear;
+                                                                    $cropGrade = $details->cropGrade;
                                                                 }
                                                             }
-                                                            
                                                         @endphp
                                                             <tr>
                                                                 <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
+                                                                <td>
+                                                                        
+                                                                    
+                                                                    <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+
+                                                                        @foreach($lastYears as $k => $v)
+                                                                            <option value="{{ $v }}" {{ ($cropYear == $v)?'selected':'' }}>{{$v}}</option>
+                                                                        @endforeach
+                                                                    </select>
+
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                    <select name="cropGrade[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+                                                                        @foreach(App\RiceForm::$grade as $k => $v)
+                                                                            <option value="{{ $k }}" {{ ($cropGrade == $v)?'selected':'' }}>{{$v}}</option>
+                                                                        @endforeach
+                                                                    </select>
+
+                                                                </td>
                                                                 <td>
                                                                     {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
                                                                 </td>
@@ -119,6 +144,8 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Rice Type</th>
+                                                    <th>Crop Year</th>
+                                                    <th>Crop Grade</th>
                                                     <th>Min Price</th>
                                                     <th>Max Price</th>
                                                     <th>Up/Down</th>
@@ -132,18 +159,41 @@
                                                         $min = null;
                                                         $max = null;
                                                         $upDown = null;
+                                                        $cropYear = null;
+                                                        $cropGrade = null;
+
                                                         if($lastPrices != null){
                                                             $details = $lastPrices->where('form',$form->id)->where('state', str_replace(' ' , '_' , $keyy))->first();
                                                             if($details != null){
                                                                 $min = $details->min_price;
                                                                 $max = $details->max_price;
                                                                 $upDown = $details->up_down;
+                                                                $cropYear = $details->cropYear;
+                                                                $cropGrade = $details->cropGrade;
                                                             }
                                                         }
                                                     @endphp
                                                     
                                                         <tr>
                                                             <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
+                                                            <td>
+                                                                
+                                                                <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+                                                                    @foreach($lastYears as $k => $v)
+                                                                        <option value="{{ $v }}" {{ ($cropYear == $v)?'selected':'' }}>{{$v}}</option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                            </td>
+                                                            <td>
+                                                                
+                                                                <select name="cropGrade[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+                                                                    @foreach(App\RiceForm::$grade as $k => $v)
+                                                                        <option value="{{ $k }}" {{ ($cropGrade == $v)?'selected':'' }}>{{$v}}</option>
+                                                                    @endforeach
+                                                                </select>
+
+                                                            </td>
                                                             <td>
                                                                 {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
                                                             </td>

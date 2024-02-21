@@ -87,8 +87,12 @@
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('users','6') }}"><i class="fa fa-circle-o"></i> Supplier</a>
                         </li>
-                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user','get.new.vendors']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('get.new.vendors') }}"><i class="fa fa-circle-o"></i> New Vendors</a>
+                        </li>
+
+                        <li class="{{ (in_array($currentRoute, ['get.total.users']) && request()->role == 6)?'active':'' }}">
+                            <a href="{{ route('get.total.users') }}"><i class="fa fa-circle-o"></i> Total Users </a>
                         </li>
 
 
@@ -206,14 +210,26 @@
                     <i class="fa fa-address-card-o"></i> <span>Version</span>
                 </a>
             </li>
+            
             <li class="{{ (in_array($currentRoute,['create.calculator']))?'active':'' }}">
                 <a href="{{ route('create.calculator') }}">
                     <i class="fa fa-address-card-o"></i> <span>Calculator</span>
                 </a>
             </li>
+
             <li class="{{ (in_array($currentRoute,['report.calculator']))?'active':'' }}">
                 <a href="{{ route('report.calculator') }}">
                     <i class="fa fa-address-card-o"></i> <span>USD Pricing Report</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['rice.name.order']))?'active':'' }}">
+                <a href="{{ route('rice.name.order') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Rice Name Order</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['rice.form.order']))?'active':'' }}">
+                <a href="{{ route('rice.form.order') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Rice Form Order</span>
                 </a>
             </li>
 
@@ -321,6 +337,12 @@
                 <a href="{{ route('master.trade') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Trades</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['master.news.runner']))?'active':'' }}">
+                <a href="{{ route('master.news.runner') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>News Runner</span>
                 </a>
             </li>
 

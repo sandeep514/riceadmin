@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Session;
 use App\Port;
+use App\PortImages;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,7 @@ class PortsController extends Controller
 {
     public function index(Request $request)
     {
+        $portImages = PortImages::get()->groupBy('port')->toArray();
 
         $todayPrice = collect();
 
@@ -36,7 +38,7 @@ class PortsController extends Controller
                 $todayPrice = Port::where('route','!=','0')->get()->groupBy('state');
             }
         }
-        return view('ports.create', ['prices' => $todayPrice]);
+        return view('ports.create', ['prices' => $todayPrice,'portImages' => $portImages]);
     }
 
     public function save(Request $request)
@@ -93,5 +95,24 @@ class PortsController extends Controller
 
         Session::flash('success', 'Success|Ports saved successfully!');
         return back();
+    }
+    public function uploadStateImage(Request $request)
+    {
+        $file = $request->file('file');
+        $filename = $file->getCLientOriginalName();
+        $fileExtension = $file->getCLientOriginalExtension();
+        
+        $acceptedFileType = ['png' , 'jpg', 'jpeg'];
+
+        if( in_array($fileExtension , $acceptedFileType) ) {
+            PortImages::updateOrCreate(['port' => $request->image_state] , [ 'attachment' => $filename,'status' => 1]);
+            $destinationPath = 'uploads/port';
+            $file->move($destinationPath,$filename);
+
+            Session::flash('sucess' , 'Port Image uploaded successfully.');
+        }else{
+            Session::flash('error', 'File not supported.');
+        }
+        return back();;
     }
 }

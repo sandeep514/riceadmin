@@ -17,6 +17,12 @@
             <div class="col-md-12">
                 <div class="group-panel">
                     <label class="group-title">{{ $k }}</label>
+                    @if(array_key_exists($k,$portImages))
+                        <div style="width: 70px;">
+                            <img src="{{ asset('uploads/port/'.$portImages[$k][0]['attachment']) }}" style="width: 100%">
+                        </div>
+                    @endIf
+                    
                     <div class="group-content">
                         <div class="row">
                             @foreach( $v->groupBy('route') as $kk => $vv )
@@ -25,6 +31,7 @@
                                     $route = explode('_', $latestRoute->route);
                                     $route = implode(' ' , $route);
                                 @endphp
+
                                 <div class="col-md-4">
                                     {!! Form::label($latestRoute->route,$route) !!}
                                     {!! Form::text(ucfirst($k).'['.$latestRoute->route.']',$latestRoute->price,['class'=>'form-control']) !!}

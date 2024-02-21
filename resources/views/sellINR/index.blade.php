@@ -55,8 +55,8 @@
                                                     <td>{{ ($v->quality_type == 1)? 'Basmati' : 'Non-Basmati'  }}</td>
                                                     <td>{{ $v->RiceQualityMaster->quality }}</td>
                                                     <td>{{ $v->RiceFormMilestone3->name }}</td>
-                                                    <td>{{ $v->riceGrade->getWandType[0]['type'] }} {{ $v->riceGrade->value }}</td>
-                                                    <td>{{ $v->RicePacking->packing }}</td>
+                                                    <td>{{ $v->riceGrade->getWandType['type'] }} {{ $v->riceGrade->value }}</td>
+                                                    <td>{{ ($v->RicePacking->packing)?? '--' }}</td>
                                                     <td>{{ $v->quantity }}</td>
                                                     <td>{{ $v->offerPrice }}</td>
                                                     <td>{{ $v->validDays }}</td>

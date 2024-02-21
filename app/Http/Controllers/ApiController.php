@@ -13,6 +13,7 @@
     use App\User;
     use App\ChartInterval;
     use App\Port;
+    use App\PortImages;
     use App\Gallery;
     use App\Contact;
     use App\RiceName;
@@ -53,9 +54,15 @@
     use App\RiceFormMilestone3;
     use App\SellQueriesINR;
     use App\TradeQueriesINR;
+    use App\TradeStatusMessages;
     use App\Buyerpackinginr;
     use App\BuyQueriesINR;
+    use App\TradeLike;
+    use App\TradeIntrested;
     use Mail;
+    use Auth;
+    use App\NewsRunner;
+
 
     class ApiController extends Controller
     {
@@ -974,6 +981,7 @@
             $rice = base64_decode($rice);
             $timePeriod = base64_decode($timePeriod);
             $rice = str_replace('_', ' ', $rice);
+            // dd($rice);
         
             $todayDate = Carbon::now();
             $created_at = [];
@@ -981,7 +989,7 @@
             $max_price = [];
             
             $productType = RiceName::select('type')->where('name', $rice)->first();
-
+            // dd($productType);
             $riceName = RiceName::select('id')->where('name', $rice)->first();
             $explodeRiceType = explode('_', $riceType);
             $implodeRiceType = implode(' ', $explodeRiceType);
@@ -1015,7 +1023,57 @@
 
             if ($timePeriod == '15_Days') {
                 $fromDate = $todayDate->subDays(15)->format('y-m-d');
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
+            }
+            
+            if ($timePeriod == '1_Month') {
+                $fromDate = $todayDate->subDays(30)->format('y-m-d');
+            }
+        
+            if ($timePeriod == '2_Month') {
+                $fromDate = $todayDate->subDays(60)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '3_Month') {
+                $fromDate = $todayDate->subDays(90)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '4_Month') {
+                $fromDate = $todayDate->subDays(120)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '5_Month') {
+                $fromDate = $todayDate->subDays(150)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '6_Month') {
+                $fromDate = $todayDate->subDays(180)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '7_Month') {
+                $fromDate = $todayDate->subDays(210)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '8_Month') {
+                $fromDate = $todayDate->subDays(240)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '9_Month') {
+                $fromDate = $todayDate->subDays(270)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '10_Month') {
+                $fromDate = $todayDate->subDays(300)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '11_Month') {
+                $fromDate = $todayDate->subDays(330)->format('y-m-d');
+            }
+            
+            if ($timePeriod == '12_Month') {
+                $fromDate = $todayDate->subDays(360)->format('y-m-d');
+            }
+            
+            $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel','form_rel' => function ($query) use ($riceType) {
                         return $query->where('type', $riceType)->get();
                     }
@@ -1027,224 +1085,6 @@
                 foreach ($prices as $key => $value) {
                     $max_price[] = $value->max_price;
                 }
-            }
-            
-            if ($timePeriod == '1_Month') {
-                $fromDate = $todayDate->subDays(30)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-        
-            if ($timePeriod == '2_Month') {
-                $fromDate = $todayDate->subDays(60)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '3_Month') {
-                $fromDate = $todayDate->subDays(90)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '4_Month') {
-                $fromDate = $todayDate->subDays(120)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '5_Month') {
-                $fromDate = $todayDate->subDays(150)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '6_Month') {
-                $fromDate = $todayDate->subDays(180)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '7_Month') {
-                $fromDate = $todayDate->subDays(210)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '8_Month') {
-                $fromDate = $todayDate->subDays(240)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '9_Month') {
-                $fromDate = $todayDate->subDays(270)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '10_Month') {
-                $fromDate = $todayDate->subDays(300)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '11_Month') {
-                $fromDate = $todayDate->subDays(330)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
-            if ($timePeriod == '12_Month') {
-                $fromDate = $todayDate->subDays(360)->format('y-m-d');
-                
-                $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
-                    'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
-                
-                foreach ($prices as $k => $v) {
-                    $created_at[] = $v->created_at->format('y-m-d');
-                }
-                foreach ($prices as $key => $value) {
-                    $max_price[] = $value->max_price;
-                }
-            }
-            
             $responseData = ['errors' => null, 'date' => $created_at, 'prices' => $max_price];
             return response()->json($responseData);
         }
@@ -1781,9 +1621,10 @@
             // $users = Message::orderBy('created_at','DESC')->has('user_rel')->with(['user_rel'=>function($query){
             //     return $query->select(['id' , 'name','email'])->get();
             // }])->groupBy('from')->get();
+
             $users = Message::orderBy('created_at' ,'DESC')->where('from' ,'!=' ,1 )->has('user_rel')->with(['user_rel'=>function($query){
                 return $query->select(['id' , 'name','email'])->get();
-            }])
+            }])->whereDate('created_at' ,'>', Carbon::now()->subDays(30)->format('Y-m-d'))
                 ->whereIn(DB::raw("CONCAT(`from`, created_at)"), function ($query) {
                     $query->select(DB::raw("CONCAT(`from`, MAX(created_at)) as hdate"))
                         ->from('messages')
@@ -1895,13 +1736,15 @@
         
         public function getPortDetails($state){
             $lastUpdatedDate = Port::orderBy('id' , 'DESC')->first();
+
             if( $lastUpdatedDate != null ){
                 $lastDate = ($lastUpdatedDate->created_at)->format('Y-m-d');   
             }
             
             $port = Port::whereDate( 'created_at' , $lastDate )->where( 'state' , $state )->where( 'price' ,'!=' , '0' )->where( 'route' ,'!=' ,'0' )->get();
-            
-            return response()->json(['status' => true , 'data' => $port ]);
+            $portImage = PortImages::where( 'port' , $state )->first();
+           
+            return response()->json(['status' => true , 'data' => $port ,'portImage' => $portImage]);
         }
 
         public function getUserPlan($userId){
@@ -2528,7 +2371,7 @@
                         if( !array_key_exists( strtotime($v->created_at)."000" , $combinedData ) ){
                             $date[] = strtotime($v->created_at)."000";
                             $prices[] = $v->fobmax;
-                            $combinedData[strtotime($v->created_at)."000"] = [round(strtotime($v->created_at)."000" , 2) , round($v->fobmax , 2)];
+                            $combinedData[strtotime($v->created_at)."000"] = [(int)((strtotime($v->created_at))*1000)  , (int)($v->fobmax) ];
                         }
 
                     }
@@ -3099,8 +2942,13 @@
             return response()->json(['sttaus' => true , 'data' => $brands] , 200);
         }
         public function getRiceQualities($qualityTypeStatus)
-        {
-            $riceQuality = QualityMaster::select('quality' , 'id')->where('status' , 1)->where('quality_type_status' , $qualityTypeStatus)->pluck('id','quality');
+        {       
+            $type = "non-basmati";     
+            if( $qualityTypeStatus == 1 ){
+                $type = 'basmati';
+            }
+            // $riceQuality = QualityMaster::select('quality' , 'id')->where('status' , 1)->where('quality_type_status' , $qualityTypeStatus)->pluck('id','quality');
+            $riceQuality = RiceName::select('name' , 'id')->where('status' , 1)->where('type' , $type)->pluck('id','name');
             return response()->json(['status' => true , 'data' => $riceQuality]);
 
         }
@@ -3185,7 +3033,7 @@
 
             $data = array();
    
-            $mailTo = "sandy.singh51480@gmail.com";
+            $mailTo = "enquiry@sntcgroup.com";
             $mailMessage = '';
             $subject = 'Sell with SNTC';
             $mailFrom = 'info@sntcgroup.com';
@@ -3198,12 +3046,27 @@
             return response()->json(['status' => true , 'data' => $sellCreate ]);
         }
         
-        public function getTrade()
+        public function getTrade($userId)
         {
-            $trade = TradeQueriesINR::with(['RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
+            $trade = TradeQueriesINR::with(['TradeInterest','TradeLikeAll' => function($query) use($userId){
+                return $query->where('userId' , $userId);
+            },'RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
                 return $query->with('getWandType')->get();
-            },'RicePacking'])->get();
-            $tradeData = [];
+            },'RicePacking'])->withCount('TradeLikeAll')->get()->groupBy('tradeType');
+
+            $currentStatus = 1;
+            $TradeStatusMessages = '';
+            if(count($trade[1]->where('status' , 12 ))){
+                $currentStatus = 12;
+                $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 12)->first()->message;
+            }elseif(count($trade[1]->where('status' , 11 ))){
+                $currentStatus = 11;
+                $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 11)->first()->message;
+            }
+
+            
+
+            // $tradeData = [];
             
             // foreach($trade as $k => $v){
             //     if( $v['tradeType'] == 1 ){
@@ -3212,6 +3075,15 @@
             //         $tradeData[0][] = $v;
             //     }
             // }
+            return response()->json(['status' => true , 'data' => $trade , 'currentStatus' => $currentStatus , 'statusMessage' => $TradeStatusMessages]);
+        }
+
+        public function getTradeDetail($tradeId)
+        {
+            $trade = TradeQueriesINR::where('id', $tradeId)->with(['RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
+                return $query->with('getWandType')->get();
+            },'RicePacking'])->first();
+
             return response()->json(['status' => true , 'data' => $trade]);
         }
         public function getBuyerPackingINR()
@@ -3245,7 +3117,7 @@
             $buyerQuery = BuyQueriesINR::create($data);
             $data = array();
    
-            $mailTo = "sandy.singh51480@gmail.com";
+            $mailTo = "enquiry@sntcgroup.com";
             $mailMessage = '';
             $subject = 'Buy with SNTC';
             $mailFrom = 'info@sntcgroup.com';
@@ -3258,4 +3130,55 @@
             return response()->json(['status' => true , 'data' => $buyerQuery]);
         }
 
+        public function likeTrade(Request $request)
+        {
+            $tradeId = $request->tradeId;
+            $userId = $request->userId;
+
+
+            $tradeLike = TradeLike::create(['tradeId' => $tradeId, 'userId' => $userId]);
+            if($tradeLike){
+                return response()->json(['status' => true , 'data' => []],200);
+            }else{
+                return response()->json(['status' => false , 'data' => []],500);
+            }
+        }
+
+        public function tradeintrested(Request $request)
+        {
+            $tradeId = $request->tradeId;
+            $userId = $request->userId;
+
+            $userDetails = User::where(['id' => $userId])->first();
+
+            $mailTo = "sandy.singh51480@gmail.com";
+            // $mailTo = "enquiry@sntcgroup.com";
+            $mailMessage = '';
+            $subject = 'Notification of trade interested SNTC';
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
+
+            $data = ['username' => $userDetails->name , 'email' => $userDetails->email , 'mobile' => $userDetails->mobile,'tradeId' => $tradeId,'companyName' => $userDetails->companyname];
+   
+            $respose = Mail::send('mail.TradeRequest', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom,$mailFromName);
+            });
+
+            $tradeLike = TradeIntrested::create(['tradeId' => $tradeId, 'userId' => $userId]);
+            if($tradeLike){
+                return response()->json(['status' => true , 'data' => []],200);
+            }else{
+                return response()->json(['status' => false , 'data' => []],500);
+            }
+        }
+
+        public function NewsRunner()
+        {
+            $news = NewsRunner::where('status' , 1)->orderBy('id', 'desc')->get()->groupBy('type')->map(function($query) {
+                return $query->take(1);
+            });
+            return response()->json(['status' => true , 'data' => $news],200);
+
+        }
     }

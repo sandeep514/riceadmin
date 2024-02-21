@@ -7,14 +7,14 @@ use App\RiceFormMilestone3;
 use App\QualityMaster;
 use App\WandModel;
 use App\SellerPackingINR;
+use App\TradeLike;
 
 class TradeQueriesINR extends Model
 {
     protected $table = 'trade_query_milestone3';
-    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','additioanlInfo','location'
-,'status'];
+    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','additioanlInfo','location','status'];
 
-    public static $tradeStatus = [ 3 => "sold", 2 => 'expired' , 1 => 'Pending' ];
+    public static $tradeStatus = [ 3 => "sold", 2 => 'expired' , 1 => 'Pending',6=>'Active',4=>'In-Process',5=>'De-active',11 => 'close', 12=> 'hold'];
 
     public function RiceFormMilestone3()
     {
@@ -32,5 +32,17 @@ class TradeQueriesINR extends Model
     public function RicePacking()
     {
         return $this->belongsTo(SellerPackingINR::class , 'packing', 'id');
+    }
+    public function TradeLike()
+    {
+        return $this->belongsTo(TradeLike::class, 'id' , 'tradeId');
+    }
+    public function TradeLikeAll()
+    {
+        return $this->hasMany(TradeLike::class, 'tradeId', 'id' );
+    }
+    public function TradeInterest()
+    {
+        return $this->belongsTo(TradeIntrested::class, 'id' , 'tradeId');
     }
 }

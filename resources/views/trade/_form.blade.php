@@ -147,7 +147,7 @@
 
                     console.log(res.data);
                     for(let i = 0; i < res.data.length ; i++){
-                        $("select[name=ricegrade]").append('<option value="'+res.data[i].id+'"> '+res.data[i].get_wand_type[0]['type']+' '+res.data[i]['value'] +'</option>');
+                        $("select[name=ricegrade]").append('<option value="'+res.data[i].id+'"> '+res.data[i].get_wand_type['type']+' '+res.data[i]['value'] +'</option>');
                     }
                 },
                 error: function (err){

@@ -21,6 +21,15 @@ class LivePricesController extends Controller
         $riceForms = null;
         $todaysPrices = null;
         $lastPrices = null;
+        $todayYear = Carbon::now()->format('Y');
+        $lastFiveYear = Carbon::now()->subYear(5)->format('Y');
+
+        $lastYears = [];
+
+        for($i = $todayYear; $i >= $lastFiveYear; $i--){
+            $lastYears[] = (int)$i;
+        }
+
         if($riceName != null){
             $riceModel = RiceName::find($riceName);
             $riceForms = RiceForm::where('status' , 1)->where(['type'=>$riceModel->type])->get();
@@ -39,10 +48,11 @@ class LivePricesController extends Controller
         }else{
             $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
         }
-        return view('live_prices.create',['livePrice'=>$livePrice,'prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
+        return view('live_prices.create',['lastYears' => $lastYears,'livePrice'=>$livePrice,'prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
     }
 
     public function savePrice(Request $request){
+
         // dd("kjhkn"/);
         $todayDate = Carbon::now()->format('Y-m-d');   
         $lastAvailableDate ='';
@@ -52,6 +62,10 @@ class LivePricesController extends Controller
         $data_state_order = LivePrice::get()->sortBy('state_order');
         $data_name_order = LivePrice::with(['name_rel' , 'form_rel'])->get()->sortBy('name_order');
         
+        $cropYear  = (int)$request->cropYear;
+        $cropGrade = (int)$request->cropGrade;
+
+
         foreach($data_state_order as $k => $v){
             if( $v->state_order != null ){
                 $sortedStateData[$v->state_order] = $v->state; 
@@ -68,18 +82,22 @@ class LivePricesController extends Controller
         if( $lastAvaibleRecord != null ){
             $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');    
         }
+        // dd($request->all());
         if( $todayDate == $lastAvailableDate ){
             foreach($request->min as $state => $values){
                 foreach($values as $form => $price){
+                    
                     $userDetails = LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->first();
 
                     if( $userDetails ){
-                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([ 'min_price' => $price , 'max_price' => $request->max[$state][$form] , 'up_down' => $request->up_down[$state][$form] ]);    
+                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update(['cropYear'  => $request->cropYear[$state][$form], 'cropGrade' => $request->cropGrade[$state][$form], 'min_price' => $price , 'max_price' => $request->max[$state][$form] , 'up_down' => $request->up_down[$state][$form] ]);    
                     }else{
                         LivePrice::create([
                             'name'      => $request->name,
                             'form'      => $form,
                             'min_price' => $price, 
+                            'cropYear'  => $request->cropYear[$state][$form],
+                            'cropGrade' => $request->cropGrade[$state][$form],
                             'max_price' => $request->max[$state][$form],
                             'state'     => $state,
                             'up_down'   => (array_key_exists($form, $request->up_down[$state])? $request->up_down[$state][$form] : 'up' )
@@ -93,16 +111,18 @@ class LivePricesController extends Controller
 
             if( $lastUpdatedPrice->count() > 0 ){
                 foreach( $lastUpdatedPrice as $k => $v ){
+
                     LivePrice::create([
                         'name'      => $v->name, 
                         'form'      => $v->form,
                         'min_price' => $v->min_price,
                         'max_price' => $v->max_price,
+                        'cropYear'  => $v->cropYear,
+                        'cropGrade' => $v->cropGrade,
                         'state'     => $v->state,
                         'up_down'   => $v->up_down
                     ]);
                 }     
-            
                 foreach($request->min as $state => $values){
                     foreach($values as $form => $price){
                         // $priceModel = LivePrice::where(DB::raw('date(+)'),Carbon::now()->format('Y-m-d'))->firstOrNew(['state'=>$state,'name'=>$request->name,'form'=>$form]);
@@ -114,7 +134,7 @@ class LivePricesController extends Controller
                         // $priceModel->up_down = $request->up_down[$state][$form];
                         // $priceModel->save();
                         
-                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([ 'min_price' => $price , 'max_price' => $request->max[$state][$form] , 'up_down' => $request->up_down[$state][$form] ]);
+                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update(['cropYear'  => $request->cropYear[$state][$form], 'cropGrade' => $request->cropGrade[$state][$form],'min_price' => $price , 'max_price' => $request->max[$state][$form] , 'up_down' => $request->up_down[$state][$form] ]);
                     }
                 }
                 
@@ -125,6 +145,8 @@ class LivePricesController extends Controller
                         $priceModel->name = $request->name;
                         $priceModel->form = $form;
                         $priceModel->min_price = $price;
+                        $priceModel->cropYear  = $cropYear;
+                        $priceModel->cropGrade = $cropGrade;
                         $priceModel->max_price = $request->max[$state][$form];
                         $priceModel->state = $state;
                         $priceModel->up_down = $request->up_down[$state][$form];

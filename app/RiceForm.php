@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class RiceForm extends Model
 {
     protected $fillable = ['form_name','type'];
+    public static $grade = [1=>'' ,2=>'A' , 3=>'A+'];
+
 
     public static function riceForms(){
         $formsArray = [];

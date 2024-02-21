@@ -23,6 +23,28 @@
                             <h3 class="box-title">Price Details</h3>
                         </div>
                         <!-- /.box-header -->
+                        
+                            <div>
+                                <form method="POST" action="{{ route('upload.image.state') }}" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <select name="image_state" class="form-control">
+                                                @foreach($prices as $k => $v)
+                                                    <option value="{{ $k }}"> {{ $k }}</option>
+                                                @endforeach
+                                            </select>        
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="file" name="file">                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input type="submit" name="submit" value="Submit">                                            
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
                         {!! Form::open(['route'=>'ports.save']) !!}
                             @include('ports._form')
                             @if(!request()->has('date'))

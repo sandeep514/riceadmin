@@ -24,11 +24,11 @@
                         </div>
                         <!-- /.box-header -->
                         {!! Form::open(['route'=>'master.brand.update','files' => true]) !!}
-                        @include('brands._editform')
-                        <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <a href="{{ route('roles') }}" class="btn btn-danger">Cancel</a>
-                        </div>
+                            @include('brands._editform')
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <a href="{{ route('roles') }}" class="btn btn-danger">Cancel</a>
+                            </div>
                         {!! Form::close() !!}
                     </div>
 
