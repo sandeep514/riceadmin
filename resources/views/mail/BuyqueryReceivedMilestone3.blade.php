@@ -4,7 +4,7 @@
       <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Greetings from SNTC!</a>
     </div>
     <p style="font-size:1.1em">Hi,</p>
-    <p>We have received your Trade Offer. Our Team will verify it and share listing confirmation on the trade portal shortly.</p>
+    <p>You got a new Buy Query.</p>
     <p>Thank you for your patience.</p>
     <br>
     <hr style="border:none;border-top:1px solid #eee" />

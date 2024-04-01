@@ -14,5 +14,11 @@ class WandTypeModel extends Model
     public function wand()
     {
         return $this->hasMany(WandModel::class, 'WandTypeId' , 'id' );
+        // return $this->hasMany(WandModel::class, 'WandTypeId' , 'id' )->orderBy('order' , 'ASC');
+    }
+    public function wandData()
+    {
+        return $this->belongsTo(WandModel::class , 'WandTypeId' , 'id');
+        // return $this->hasMany(WandModel::class, 'WandTypeId' , 'id' )->orderBy('order' , 'ASC');
     }
 }

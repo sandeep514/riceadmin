@@ -12,20 +12,36 @@ use Session;
 use App\User;
 use App\TrialPeriod;
 use App\QualityMaster;
+use App\RiceName;
 use App\PublicPacking;
 use App\TradeQueriesINR;
+use App\TradeCurrentStatus;
 
 class TradeController extends Controller
 {
     public function index(){
-        $sellQueries = TradeQueriesINR::get();
-        return View('trade.index' , compact('sellQueries'));
+        $sellQueries = TradeQueriesINR::with(['RiceNameData' , 'RiceFormMilestone3','RicePackingBuyer' ,'RicePackingSeller','riceGrade' => function($query){
+            return $query->with('getWandType');
+        }])->orderBy('id' , 'DESC')->get();
+        
+        $tradeStatus = [1=> 'open' , 11=> 'close', 12 => 'hold'];
+        $tradeCurrentStatus = TradeCurrentStatus::first();
+        $currentTrade = $tradeStatus[$tradeCurrentStatus->id];
+
+        return View('trade.index' , compact('sellQueries' , 'currentTrade'));
+
     }
+
     public function create(){
-        $qualityMaster = QualityMaster::pluck('quality_type_status' , 'quality_type');
+        // $qualityMaster = QualityMaster::pluck('quality_type_status' , 'quality_type');
+        // dd($qualityMaster);
+
+        $qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
+
         return View('trade.create' , compact('qualityMaster','packing'));
     }
+    
     public function save(Request $request){
 
         $data = [];
@@ -41,7 +57,8 @@ class TradeController extends Controller
         $additioanlInfo = $request->additioanlInfo;
         $location = $request->location;
         $tradeType = $request->tradeType;
-        
+        $isHotdeal = $request->hotdeal;
+
         if( isset($_FILES['packingImage']) ){
             $file_name      = $_FILES['packingImage']['name'];
             $file_size      = $_FILES['packingImage']['size'];
@@ -83,39 +100,40 @@ class TradeController extends Controller
         $data['additioanlInfo'] = $additioanlInfo;
         $data['location'] = $location;
         $data['tradeType'] = $tradeType;
+        $data['crop'] = $request->crop;
+        $data['hotdeal'] = $isHotdeal;
 
 
         TradeQueriesINR::create($data);
         Session::flash('success','Success|Trade saved successfully!');
 
         return back();
-
-
-
-
-        dd($request->all());
         return View('trade.index');
     }
+    
     public function edit(){
         return View('trade.edit');
     }
+    
     public function update(){
         return View('trade.index');
     }
+    
     public function changeStatus ( $tradeId , $status ){
         TradeQueriesINR::where('id' , $tradeId)->update(['status' => $status]);
         // Session::flash('success','Status changed successfully!');
         
         return back();
-
     }
+
     public function updateTradeStatus($tradeStatus)
     {
         // 1: open
         // 11: close
         // 12: hold
-        TradeQueriesINR::whereIn('status' , [1 , 11, 12])->update(['status' => $tradeStatus]);
-        
+        $status = [1=> 'open' , 11=> 'Market closed', 12 => 'Market on hold.'];
+
+        TradeCurrentStatus::where('id' , 1)->update(['currentStatus' => $tradeStatus , 'message' => $status[$tradeStatus] ]);
         Session::flash('success','Success|Trade status updated successfully!');
         return back();
     }

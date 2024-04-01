@@ -8,7 +8,7 @@
                         <div class="col-md-12">
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Trade Type','Trade Type') !!}
-                                <select class="form-control" name="tradeType">
+                                <select class="form-control" required name="tradeType">
                                     <option value=""> Select </option>
                                         <option value="1"> Buy </option>
                                         <option value="2"> Sell </option>
@@ -16,7 +16,7 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}
-                                <select class="form-control" name="category">
+                                <select class="form-control" required name="category">
                                     <option value=""> Select </option>
                                     @foreach($qualityMaster as $k => $v)
                                         <option value="{{ $v }}"> {{ strtoupper($k) }} </option>
@@ -25,29 +25,28 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Quality','Quality') !!}
-                                <select class="form-control" name="quality">
+                                <select class="form-control" required name="quality">
 
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Form','Rice Form') !!}
-                                <select class="form-control" name="riceform">
+                                <select class="form-control" required name="riceform">
 
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Grade','Grade') !!}
-                                <select class="form-control" name="ricegrade">
+                                <select class="form-control" required name="ricegrade">
 
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing') !!}
-                                <select class="form-control" name="ricepacking">
-                                    <option>Select</option>
-                                    @foreach($packing as $k => $v)
+                                <select class="form-control" required name="ricepacking">
+                                  {{--   @foreach($packing as $k => $v)
                                         <option value="{{ $v->id }}">{{ $v->size }} {{ $v->packing }}</option>
-                                    @endforeach
+                                    @endforeach --}}
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
@@ -56,11 +55,11 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Quantity','Quantity') !!}
-                                <input type="text" class="form-control" placeholder="Quantity" name="quantity">
+                                <input type="text" class="form-control" required placeholder="Quantity" name="quantity">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Offer Price','Offer Price (₹)') !!}
-                                <input type="text" class="form-control" placeholder="Offer Price" name="price">
+                                <input type="text" class="form-control" required placeholder="Offer Price" name="price">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Location','Warehouse Location') !!}
@@ -68,7 +67,8 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Validity','Validity') !!}
-                                <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity">
+                                <input type="datetime-local" id="validity" name="validity" class="form-control">
+                                {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
@@ -77,6 +77,17 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Cooked image','Cooked image') !!}
                                 <input type="file" class="form-control" name="cookedFiles">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Crop','Crop') !!}
+                                <input type="text" class="form-control" name="crop">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('hotdeal','Hot Deal') !!}
+                                <select class="form-control" name="hotdeal" id="hotdeal">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
                             </div>
                              <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Additional Info','Additional Info') !!}
@@ -93,7 +104,26 @@
 </div>
 @section('javascript')
 <script type="text/javascript">
+
     $(document).ready(function() {
+        $('select[name=tradeType]').change(function(event){
+            let tradeType = $('select[name=tradeType] :selected').val();
+            $.ajax({
+                url : 'https://snjtradelink.com/staging/public/api/get/packing/by/'+tradeType,
+                success : function (res){
+                    $("select[name=ricepacking]").html('');
+                    $("select[name=ricepacking]").append('<option value=""> Select </option>');
+                    let objectKeys = Object.keys(res.data);
+
+                    for(let i = 0; i < Object.keys(res.data).length ; i++){
+                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'"> '+res.data[i].packing+' '+res.data[i].description+' </option>');
+                    }
+                },
+                error: function (err){
+                    console.log(err);
+                }
+            })
+        })
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
             $.ajax({
@@ -101,10 +131,10 @@
                 success : function (res){
                     $("select[name=quality]").html('');
                     $("select[name=quality]").append('<option value=""> Select </option>');
-                    let objectKeys = Object.keys(res.data);
+                    let objectKeys = res.data;
 
-                    for(let i = 0; i < Object.keys(res.data).length ; i++){
-                        $("select[name=quality]").append('<option value="'+res.data[objectKeys[i]]+'"> '+objectKeys[i]+' </option>');
+                    for(let i = 0; i < objectKeys.length ; i++){
+                        $("select[name=quality]").append('<option value="'+objectKeys[i].id+'"> '+objectKeys[i].name+' </option>');
                     }
                 },
                 error: function (err){

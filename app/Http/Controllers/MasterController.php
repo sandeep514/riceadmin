@@ -19,6 +19,7 @@ use App\USD_defaultmaster;
 use App\Defaultvalue;
 use App\SellQueriesINR;
 use App\BuyQueriesINR;
+use Mail;
 
 class MasterController extends Controller
 {
@@ -764,9 +765,9 @@ class MasterController extends Controller
 	}
 	public function listSellQueries()
 	{
-		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityMaster','RicePacking','riceGrade' => function($query){
+		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
 			return $query->with('getWandType')->get();
-		}])->get();		
+		}])->orderBy('id', 'DESC')->get();		
 
 		return View('sellINR.index' , compact('sellerQueries'));
 
@@ -782,11 +783,21 @@ class MasterController extends Controller
 	{
 		SellQueriesINR::where('id' , $sellQueryId)->update(['status' => 2]);
 
-		// $data = array('name'=>$otp);
-        // $respose = Mail::send('mail', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-        //     $message->to($mailTo, $mailMessage)->subject($subject);
-        //     $message->from($mailFrom,$mailFromName);
-        // });
+		$userBuyer = SellQueriesINR::where('id' , $sellQueryId)->first();
+		$userId = $userBuyer->created_by;
+		$userDetail = User::where('id' , $userId)->first();
+
+		$data = [];
+		$mailTo = $userDetail->email;
+        $mailMessage = '';
+        $subject = 'Trade with SNTC';
+        $mailFrom = 'info@sntcgroup.com';
+        $mailFromName = 'SNTC Team - India';
+
+		$respose = Mail::send('mail.TradeSellQueryToUser', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+            $message->to($mailTo, $mailMessage)->subject($subject);
+            $message->from($mailFrom,$mailFromName);
+        });
 
 		Session::flash('message' , 'Sell query moved to trade successfully.');
 		return back();
@@ -794,11 +805,9 @@ class MasterController extends Controller
 
 	public function listBuyQueries()
 	{
-		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityMaster','RicePacking','riceGrade' => function($query){
+		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
 			return $query->with('getWandType')->get();
-		}])->get();		
-
-		
+		}])->orderBy('id' ,'DESC')->get();
 
 		return View('buyINR.index' , compact('buyQueries'));
 
@@ -812,7 +821,23 @@ class MasterController extends Controller
 	}
 	public function moveToTradeBuyQueries($buyQueryId)
 	{
+
+		$userBuyer = BuyQueriesINR::where('id' , $buyQueryId)->first();
+		$userId = $userBuyer->created_by;
+		$userDetail = User::where('id' , $userId)->first();
 		BuyQueriesINR::where('id' , $buyQueryId)->update(['status' => 2]);
+
+		$data = [];
+		$mailTo = $userDetail->email;
+        $mailMessage = '';
+        $subject = 'Trade with SNTC';
+        $mailFrom = 'info@sntcgroup.com';
+        $mailFromName = 'SNTC Team - India';
+
+		$respose = Mail::send('mail.TradeQueryToUser', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+            $message->to($mailTo, $mailMessage)->subject($subject);
+            $message->from($mailFrom,$mailFromName);
+        });
 		Session::flash('message' , 'Buy query moved to trade successfully.');
 
 		return back();

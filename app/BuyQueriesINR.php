@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\RiceFormMilestone3;
 use App\QualityMaster;
 use App\WandModel;
+use App\User;
 use App\SellerPackingINR;
+use App\Buyerpackinginr;
 
 class BuyQueriesINR extends Model
 {
     protected $table = 'buy_query_milestone3';
-    protected $fillable = ['quality_type','quality','quality_form','grade','packing_type','packing','quantity','additional_info','status'];
+    protected $fillable = ['quality_type','quality','quality_form','grade','packing_type','packing','quantity','additional_info','created_by','status'];
 
     public static $status = [
         0 => 'closed',
@@ -33,12 +35,20 @@ class BuyQueriesINR extends Model
     {
         return $this->belongsTo(QualityMaster::class , 'quality', 'id');
     }
+    public function RiceQualityRiceNames()
+    {
+        return $this->belongsTo(RiceName::class , 'quality', 'id');
+    }
     public function riceGrade()
     {
         return $this->belongsTo(WandModel::class , 'grade', 'id');
     }
     public function RicePacking()
     {
-        return $this->belongsTo(SellerPackingINR::class , 'packing', 'id');
+        return $this->belongsTo(Buyerpackinginr::class , 'packing', 'id');
+    }
+    public function UserDetail()
+    {
+        return $this->belongsTo(User::class , 'created_by', 'id');
     }
 }

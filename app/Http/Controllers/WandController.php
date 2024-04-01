@@ -34,10 +34,12 @@ class WandController extends Controller
         $filterWandData = array_filter($wandData);
         foreach($filterWandData as $k => $v){
             $checkIfHasWand = WandModel::where(['RiceNameId' => $wandType,'wandTypeId' => $k])->first();
+            $wandTypeDetails = WandTypeModel::where('id' , $k)->first();
+
             if( $checkIfHasWand != null && $checkIfHasWand != '' ){
-                WandModel::where(['RiceNameId' => $wandType,'wandTypeId' => $k])->update(['value' => $v,'status' => 1]);
+                WandModel::where(['RiceNameId' => $wandType,'wandTypeId' => $k])->update(['value' => $v,'status' => 1,'order' => $wandTypeDetails->order]);
             }else{
-                WandModel::create(['RiceNameId' => $wandType,'wandTypeId' => $k,'value' => $v,'status' => 1]);
+                WandModel::create(['RiceNameId' => $wandType,'wandTypeId' => $k,'value' => $v,'status' => 1,'order' => $wandTypeDetails->order]);
             }
             
         }

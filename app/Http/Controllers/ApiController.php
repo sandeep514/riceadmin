@@ -62,6 +62,7 @@
     use Mail;
     use Auth;
     use App\NewsRunner;
+    use App\TradeCurrentStatus;
 
 
     class ApiController extends Controller
@@ -2464,7 +2465,8 @@
         }
         public function getAllPortsgetDataForBuyer()
         {
-            $qualityMaster = QualityMaster::get()->groupBy('quality_type');
+            $riceQualityMaster = QualityMaster::get()->groupBy('quality_type');
+            $qualityMaster = RiceName::get()->groupBy('type');
             $riceQualityArray = [];
             $riceQualityDataArray = $qualityMaster->toArray();
             if( $qualityMaster->count() ){
@@ -2483,7 +2485,7 @@
 
             $portObject = OceanFreight::select('id','region','country','port','freight_25MT')->orderBy('port' , 'ASC')->where('port' ,'!=','')->get();
             $portArray = $portObject->toArray();
-            $data = [ 'status' => true ,'riceQualityType' => $riceQualityArray , 'riceQualityData' => $usdDefaultMasterArray , 'ports' => $portArray , 'riceQualityDataArray' => $riceQualityDataArray];
+            $data = [ 'status' => true,'riceQualityMasterArray'=> $riceQualityMaster->toArray(),'riceQualityType' => $riceQualityArray , 'riceQualityData' => $usdDefaultMasterArray , 'ports' => $portArray , 'riceQualityDataArray' => $riceQualityDataArray];
 
             return response()->json($data);
         }
@@ -2947,8 +2949,9 @@
             if( $qualityTypeStatus == 1 ){
                 $type = 'basmati';
             }
-            // $riceQuality = QualityMaster::select('quality' , 'id')->where('status' , 1)->where('quality_type_status' , $qualityTypeStatus)->pluck('id','quality');
-            $riceQuality = RiceName::select('name' , 'id')->where('status' , 1)->where('type' , $type)->pluck('id','name');
+            // $riceQuality = RiceName::select('name' , 'id')->orderBy('order', 'ASC')->where('status' , 1)->where('type' , $type)->pluck('id','name');
+            $riceQuality = RiceName::select('name' , 'id')->orderBy('order', 'ASC')->where('status' , 1)->where('type' , $type)->get();
+
             return response()->json(['status' => true , 'data' => $riceQuality]);
 
         }
@@ -2961,7 +2964,7 @@
 
         public function getRiceWand($riceNameId)
         {
-            $wand = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->get();
+            $wand = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->orderBy('order' , 'ASC')->get();
             return response()->json(['status' => true , 'data' => $wand]);
         }
 
@@ -2970,6 +2973,7 @@
             $sellerPackingINR = SellerPackingINR::get();
             return response()->json(['status' => true , 'data' => $sellerPackingINR]);
         }
+        
         public function SubmitSellQuery(Request $request)
         {
             $data = [];
@@ -2985,6 +2989,7 @@
             $contactperson = $request->contactperson;
             $contactMobile = $request->contactMobile;
             $warehouselocation = $request->warehouselocation;
+            $userId = $request->userId;
 
             if( isset($_FILES['packageImageFile']) ){
                 $file_name      = $_FILES['packageImageFile']['name'];
@@ -3027,6 +3032,7 @@
             $data['contactperson'] = $contactperson;
             $data['contactMobile'] = $contactMobile;
             $data['warehouselocation'] = $warehouselocation;
+            $data['created_by'] = $userId;
 
 
             $sellCreate = SellQueriesINR::create($data);   
@@ -3048,21 +3054,41 @@
         
         public function getTrade($userId)
         {
-            $trade = TradeQueriesINR::with(['TradeInterest','TradeLikeAll' => function($query) use($userId){
-                return $query->where('userId' , $userId);
-            },'RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
-                return $query->with('getWandType')->get();
-            },'RicePacking'])->withCount('TradeLikeAll')->get()->groupBy('tradeType');
+            // $trade = TradeQueriesINR::with(['TradeInterest','TradeLikeAll' => function($query) use($userId){
+            //     return $query->where('userId' , $userId);
+            // },'RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
+            //     return $query->with('getWandType')->get();
+            // },'RicePacking'])->withCount('TradeLikeAll')->get()->groupBy('tradeType');
+            
+            $now = Carbon::now();
+            $date = Carbon::parse($now)->toDateString();
+            $time = Carbon::parse($now)->format('H:i');
 
-            $currentStatus = 1;
-            $TradeStatusMessages = '';
-            if(count($trade[1]->where('status' , 12 ))){
-                $currentStatus = 12;
-                $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 12)->first()->message;
-            }elseif(count($trade[1]->where('status' , 11 ))){
-                $currentStatus = 11;
-                $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 11)->first()->message;
-            }
+            // dd(Carbon::parse($now)->format('Y-m-d H:i'));
+            // dd($time);
+            // dd(TradeQueriesINR::whereIn('status' , [1,6,4,5,11,12])->where('validDays' ,'<=', Carbon::parse($now)->format('Y-m-d H:i'))->get());
+            
+            TradeQueriesINR::whereIn('status' , [1,6,4,5,11,12])->where('validDays' ,'<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
+
+            $trade = TradeQueriesINR::orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
+                return $query->where('userId' , $userId)->get();
+            },'RiceNameData','TradeLikeAll' => function($query) use($userId){
+                return $query->where('userId' , $userId);
+            },'RiceFormMilestone3','riceGrade' => function($query){
+                return $query->with('getWandType')->get();
+            },'RicePackingBuyer','RicePackingSeller'])->where('status' ,'!=',5)->withCount('TradeLikeAll')->get()->groupBy('tradeType');
+
+
+            $tradeStatus = TradeCurrentStatus::first();
+            // $currentStatus = 1;
+            // $TradeStatusMessages = '';
+            // if(count($trade[1]->where('status' , 12 ))){
+            //     $currentStatus = 12;
+            //     $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 12)->first()->message;
+            // }elseif(count($trade[1]->where('status' , 11 ))){
+            //     $currentStatus = 11;
+            //     $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 11)->first()->message;
+            // }
 
             
 
@@ -3075,7 +3101,7 @@
             //         $tradeData[0][] = $v;
             //     }
             // }
-            return response()->json(['status' => true , 'data' => $trade , 'currentStatus' => $currentStatus , 'statusMessage' => $TradeStatusMessages]);
+            return response()->json(['status' => true , 'data' => $trade , 'currentStatus' => $tradeStatus['currentStatus'] , 'statusMessage' => $tradeStatus['message']]);
         }
 
         public function getTradeDetail($tradeId)
@@ -3103,6 +3129,7 @@
             $packing = $request->packing;
             $quantity = $request->quantity;
             $additionalinfo = $request->additionalinfo;
+            $userId = $request->user_id;
 
             $data['quality_type'] = $selectedQualityTypeInt;
             $data['quality'] = $quality;
@@ -3112,6 +3139,7 @@
             $data['packing'] = $packing;
             $data['quantity'] = $quantity;
             $data['additional_info'] = $additionalinfo;
+            $data['created_by'] = $userId;
 
 
             $buyerQuery = BuyQueriesINR::create($data);
@@ -3151,8 +3179,8 @@
 
             $userDetails = User::where(['id' => $userId])->first();
 
-            $mailTo = "sandy.singh51480@gmail.com";
-            // $mailTo = "enquiry@sntcgroup.com";
+            // $mailTo = "sandy.singh51480@gmail.com";
+            $mailTo = "enquiry@sntcgroup.com";
             $mailMessage = '';
             $subject = 'Notification of trade interested SNTC';
             $mailFrom = 'info@sntcgroup.com';
@@ -3180,5 +3208,15 @@
             });
             return response()->json(['status' => true , 'data' => $news],200);
 
+        }
+
+        public function getPackingByTradeType($tradeType)
+        {
+            if( $tradeType == 2 ){
+                $packingType  = Buyerpackinginr::get();
+            }else{
+                $packingType  = SellerPackingINR::get();
+            }
+            return response()->json(['status' => true , 'data' => $packingType],200);            
         }
     }

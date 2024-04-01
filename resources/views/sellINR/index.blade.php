@@ -44,29 +44,32 @@
                                                 <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Phone</th>
                                                 <th style="text-align: center ">Status</th>
+                                                <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Action</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             @foreach($sellerQueries as $k => $v)
+
                                                 <tr>
                                                     <!-- <td>{{ $v->id }}</td> -->
-                                                    <td>{{ ($v->quality_type == 1)? 'Basmati' : 'Non-Basmati'  }}</td>
-                                                    <td>{{ $v->RiceQualityMaster->quality }}</td>
+                                                    <td>{{ ($v->RiceQualityRiceNames->type)??'---'  }}</td>
+                                                    <td>{{ ($v->RiceQualityRiceNames->name)??'---' }}</td>
                                                     <td>{{ $v->RiceFormMilestone3->name }}</td>
-                                                    <td>{{ $v->riceGrade->getWandType['type'] }} {{ $v->riceGrade->value }}</td>
+                                                    <td>{{ ($v->riceGrade->getWandType['type'])??'--' }} {{ ($v->riceGrade->value)??'--' }}</td>
                                                     <td>{{ ($v->RicePacking->packing)?? '--' }}</td>
                                                     <td>{{ $v->quantity }}</td>
                                                     <td>{{ $v->offerPrice }}</td>
                                                     <td>{{ $v->validDays }}</td>
-                                                    <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></div></td>
-                                                    <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></div></td>
-                                                    <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></div></td>
+                                                    <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->packing_file) }}" download><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></a></div></td>
+                                                    <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->uncooked_file) }}" download><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></a></div></td>
+                                                    <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->cooked_file) }}" download><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></a></div></td>
                                                     <td>{{ $v->warehouselocation }}</td>
                                                     <td>{{ $v->contactperson }}</td>
                                                     <td>{{ $v->contactMobile }}</td>
-                                                    <td> {{ App\SellQueriesINR::$status[$v->status] }}</td>
+                                                    <td>{{ App\SellQueriesINR::$status[$v->status] }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($v->created_at)->format('d-m-Y') }}</td>
 
                                                     <td style="text-align: center;">
                                                         @if( $v->status == 1)
@@ -97,6 +100,7 @@
                                                 <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Phone</th>
                                                 <th style="text-align: center ">Status</th>
+                                                <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Action</th>
                                             </tr>
                                         </tfoot>

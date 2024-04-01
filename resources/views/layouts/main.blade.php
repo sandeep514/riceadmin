@@ -50,6 +50,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js" />
     
 
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css" />
+
 
     
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

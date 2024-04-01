@@ -49,6 +49,7 @@
                                             <tr>
                                                 <!-- <th style="text-align: center ">sno</th> -->
                                                 <th style="text-align: center ">Trade ID</th>
+                                                <th style="text-align: center ">Trade Type</th>
                                                 <th style="text-align: center ">Quality Type</th>
                                                 <th style="text-align: center ">Quality</th>
                                                 <th style="text-align: center ">QualityForm</th>
@@ -61,6 +62,7 @@
                                                 <th style="text-align: center ">Uncooked File</th>
                                                 <th style="text-align: center ">Cooked File</th>
                                                 <th style="text-align: center ">Status</th>
+                                                <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Action</th>
                                             </tr>
                                         </thead>
@@ -70,11 +72,12 @@
                                                 <tr>
                                                     <!-- <td>{{ $v->id }}</td> -->
                                                     <td>Trade_{{ $v->id }}</td>
+                                                    <td>{{ ($v->tradeType == 1)? 'Buy' : 'Sell' }}</td>
                                                     <td>{{ ($v->quality_type == 1)? 'Basmati' : 'Non-Basmati'  }}</td>
-                                                    <td>{{ ($v->RiceQualityMaster->quality )?? '--'}}</td>
+                                                    <td>{{ ($v->RiceNameData->name )?? '--'}}</td>
                                                     <td>{{ ($v->RiceFormMilestone3->name )?? '--'}}</td>
-                                                    <td>{{ ($v->riceGrade->getWandType['type'])?? '--' }} {{ ($v->riceGrade->value )?? '--'}}</td>
-                                                    <td>{{ ($v->RicePacking->packing )?? '--'}}</td>
+                                                    <td>{{ ($v->riceGrade->getWandType['type']) ?? '--' }} {{ ($v->riceGrade->value )?? '--'}}</td>
+                                                    <td>{{  ($v->tradeType == 2) ? $v->RicePackingBuyer->packing.' '.$v->RicePackingBuyer->description : $v->RicePackingSeller->description }}</td>
                                                     <td>{{ ($v->quantity )?? '--'}}</td>
                                                     <td>{{ ($v->offerPrice )?? '--'}}</td>
                                                     <td>{{ ($v->validDays )?? '--'}}</td>
@@ -82,6 +85,7 @@
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></div></td>
                                                     <td>{{ App\TradeQueriesINR::$tradeStatus[$v->status] }}</td>
+                                                    <td>{{ $v->created_at }}</td>
 
 
                                                     <td style="text-align: center;">
@@ -110,6 +114,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align: center ">Trade ID</th>
+                                                <th style="text-align: center ">Trade Type</th>
                                                 <th style="text-align: center ">Quality Type</th>
                                                 <th style="text-align: center ">Quality</th>
                                                 <th style="text-align: center ">QualityForm</th>
@@ -122,6 +127,7 @@
                                                 <th style="text-align: center ">Uncooked File</th>
                                                 <th style="text-align: center ">Cooked File</th>
                                                 <th style="text-align: center ">Status</th>
+                                                <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Action</th>
                                             </tr>
                                         </tfoot>

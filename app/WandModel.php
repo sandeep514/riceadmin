@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class WandModel extends Model
 {
     protected $table = "wand";
-    protected $fillable = [ 'RiceNameId','wandTypeId' , 'value' , 'status' ];
+    protected $fillable = [ 'RiceNameId','wandTypeId' , 'value' ,'order', 'status' ];
 
     public function getWandType()
     {

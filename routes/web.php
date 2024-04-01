@@ -6,6 +6,7 @@ Route::get('/',function(){
     return redirect()->route('home');
 });
 
+
 Route::get('sendhtmlemail', 'MailController@html_email');
 
 Route::group(['prefix'=>'administrator'], function(){
@@ -323,7 +324,7 @@ Route::group(['prefix'=>'administrator'], function(){
         // rice Quality
         Route::get('list/rice/quality' ,            ['as' => 'master.list.rice.quality'     ,'uses' => 'MasterController@listRiceQuality' ] );
         Route::post('create/rice/quality' ,         ['as' => 'master.create.rice.quality'   ,'uses' => 'MasterController@createRiceQuality' ] );
-        Route::get('delete/rice/quality/{id}',      ['as' => 'master.delete.rice.quality'   ,'uses' => 'MasterController@deleteRiceQuality' ] );
+        Route::get('delete/rice/qualitie/{id}',      ['as' => 'master.delete.rice.quality'   ,'uses' => 'MasterController@deleteRiceQuality' ] );
 
 
         Route::get('edit/rice/quality/{id}',      ['as' => 'master.edit.rice.quality'   ,'uses' => 'MasterController@editRiceQuality' ] );
