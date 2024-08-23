@@ -92,7 +92,7 @@ class MasterController extends Controller
 			return back();
 		}
 
-		RiceName::create(['name' => $request->name , 'type' => $request->riceType ]);
+		RiceName::create(['name' => $request->name , 'type' => $request->riceType , 'type_status' => ($request->riceType == 'basmati')? 1: 2 ]);
 		return back();
 	}
 

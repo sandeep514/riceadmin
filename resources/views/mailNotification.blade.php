@@ -5,6 +5,13 @@
     </div>
     <p style="font-size:1.1em">Hi,</p>
     <p>Dear Team, Someone interested in your hot deal, Please visit portal. </p>
+    <ul>
+        <li>Title: {{ $data['title'] }} </li>
+        <li>Fob: {{ $data['fob'] }} </li>
+        <li>Qty: {{ $data['qty'] }} </li>
+        <li>Created_at: {{ $data['created_at'] }} </li>
+        
+    </ul>
     <p style="font-size:0.9em;">Regards,<br />SNJ Tradelink Pvt. Ltd.</p>
     <hr style="border:none;border-top:1px solid #eee" />
     <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
@@ -14,4 +21,4 @@
 		<p>India</p>
     </div>
   </div>
-</div>Ω
+</div>

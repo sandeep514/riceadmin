@@ -24,11 +24,11 @@
                             <h3 class="box-title">Price Details</h3>
                         </div>
                         <!-- /.box-header -->
-                        {!! Form::open(['route'=>'plan.update']) !!}
-                            @include('plans.edit_form')
+                         {!! Form::open(['route'=>'master.trade.update', 'files' => true]) !!}
+                            @include('trade.edit_form')
                             @if(!request()->has('date'))
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary">Update Plan</button>
+                                    <button type="submit" class="btn btn-primary">Update Trade</button>
                                 </div>
                             @endif
                         {!! Form::close() !!}

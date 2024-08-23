@@ -422,11 +422,8 @@ Route::group(['prefix'=>'administrator'], function(){
     
     Route::POST('public/packing/master/controller' , ['as' => 'public.packing.master.controller' , 'uses' => 'PublicPackingMasterController@save']);
 
-
     Route::GET('update/hot/deal/status/{statusType}/{hotDealNotifId}' , ['as' => 'update.hot.deal.status' , 'uses' => 'NotificationController@updateHotDealStatus']);
     Route::get('logout','Auth\LoginController@logout');
-
-
 
     Route::GET('brands' , ['as' => 'master.brand' , 'uses' => 'BrandController@index']);
     Route::GET('brands/create' , ['as' => 'master.brand.create' , 'uses' => 'BrandController@create']);
@@ -464,5 +461,6 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('trade/change/status/{tradeid}/{status}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
     Route::GET('update/trade/status/{tradeStatus}', ['as' => 'master.update.trade.create',    'uses' => 'TradeController@updateTradeStatus']);
 
-
+    //paid email
+    Route::GET('get/latest/date/live/prices', ['as' => 'master.get.latest.price',    'uses' => 'Controller@getLatestPrices']);
 });

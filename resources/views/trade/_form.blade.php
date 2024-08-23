@@ -14,6 +14,7 @@
                                         <option value="2"> Sell </option>
                                 </select>
                             </div>
+
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}
                                 <select class="form-control" required name="category">
@@ -70,13 +71,42 @@
                                 <input type="datetime-local" id="validity" name="validity" class="form-control">
                                 {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
                             </div>
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                <input type="file" class="form-control" name="uncookedFiles" >
+                            <div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
                             </div>
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Cooked image','Cooked image') !!}
-                                <input type="file" class="form-control" name="cookedFiles">
+                            <div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Crop','Crop') !!}
@@ -88,6 +118,36 @@
                                     <option value="0">No</option>
                                     <option value="1">Yes</option>
                                 </select>
+                            </div>
+
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0;padding: 0px 20px;">
+                                <div class="row">
+                                    <h3>Spec</h3>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('moisture','Moisture') !!}
+                                        <input type="text" class="form-control" name="moisture">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('kett','Kett') !!}
+                                        <input type="text" class="form-control" name="kett">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('broken','Broken') !!}
+                                        <input type="text" class="form-control" name="broken">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('dd','DD') !!}
+                                        <input type="text" class="form-control" name="dd">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('admixture','Admixture') !!}
+                                        <input type="text" class="form-control" name="admixture">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('elongation','Elongation') !!}
+                                        <input type="text" class="form-control" name="elongation">
+                                    </div>
+                                </div>
                             </div>
                              <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Additional Info','Additional Info') !!}
@@ -126,6 +186,7 @@
         })
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
+            console.log(riceCategory)
             $.ajax({
                 url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/'+riceCategory,
                 success : function (res){

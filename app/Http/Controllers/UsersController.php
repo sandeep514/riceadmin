@@ -14,10 +14,17 @@ use Session;
 class UsersController extends Controller
 {
 
-    public function index(UsersDataTable $dataTable )
+    public function index($role )
     {
-        return $dataTable->render('users.index');
+        $users = User::where('role' , $role)->get();
+        return View('users.users',compact('users'));
+
+        // return $dataTable->render('users.index');
     }
+    // public function index(UsersDataTable $dataTable )
+    // {
+    //     return $dataTable->render('users.index');
+    // }
 
     public function getVendors()
     {

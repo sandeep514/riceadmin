@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RiceName extends Model
 {
-    protected $fillable = ['name','type'];
+    protected $fillable = ['name','type','type_status'];
 
     public static function qualityNames(){
         $namesArray = [];

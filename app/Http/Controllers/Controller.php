@@ -12,7 +12,11 @@ use App\RiceName;
 use App\RiceForm;
 use App\Notification;
 use Illuminate\Http\Request;
-
+use App\LivePrice;
+use Carbon\Carbon;
+use Excel;
+use App\Export\LivePricesExport;
+use Mail;
 
 class Controller extends BaseController
 {
@@ -107,6 +111,25 @@ class Controller extends BaseController
         $nameId = $request['nameId'];
         RiceForm::where(['id' => $nameId])->update(['order' => $order]);
         return back()->withMessage('success' , 'Order updated successfully');
+    }
+    public function getLatestPrices()
+    {   
+        $fileName = Carbon::now()->format('dmY')."_pricelist.xlsx";
+        Excel::store(new LivePricesExport, $fileName, 'publicexcel');
+
+        $date= Carbon::now()->format('d-m-Y');
+
+        // $emails = ['sandy.singh51480@gmail.com'];
+        $emails = ['sandy.singh51480@gmail.com','enquiry@sntcgroup.com'];
+        // $emails = ['sandy.singh51480@gmail.com','rbajaj@sntcgroup.com','enquiry@sntcgroup.com'];
+
+        Mail::send('mail.mailToVendor', ['date' => $date], function($message) use ($emails,$fileName)
+        {
+            $message->from('info@sntcgroup.com');
+            $message->to($emails)->subject('SNTC : Indian Rice Live Pricing');
+            $message->attach(public_path('/excel/'.$fileName));
+           
+        });
     }
    
 }

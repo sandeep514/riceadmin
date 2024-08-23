@@ -57,8 +57,8 @@ class MailController extends Controller
     }
 
     public static function html_email($file, $from , $to , $data = []) {
-        try {            
-            $respose = Mail::send($file, $data, function($message) use ($from , $to) {
+        try {
+            $respose = Mail::send($file, ['data' => $data], function($message) use ($from , $to) {
                 $message->to($to, 'SNTC')->subject('notifications');
                 $message->from($from,'SNTC');
             });

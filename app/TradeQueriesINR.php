@@ -15,7 +15,7 @@ class TradeQueriesINR extends Model
 {
     protected $table = 'trade_query_milestone3';
 
-    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','additioanlInfo','location','crop','hotdeal','tradeType','status'];
+    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','uncooked_file1','uncooked_file2','uncooked_file3','cooked_file','cooked_file1','cooked_file2','cooked_file3','additioanlInfo','location','crop','hotdeal','tradeType','moisture','kett','broken','dd','admixture','elongation','status'];
 
     public static $tradeStatus = [ 3 => "sold", 2 => 'expired' , 1 => 'Pending',6=>'Active',4=>'In-Process',5=>'De-active',11 => 'close', 12=> 'hold'];
 

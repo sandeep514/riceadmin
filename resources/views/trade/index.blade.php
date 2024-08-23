@@ -94,8 +94,8 @@
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' , ['tradeid' => $v->id , 'status'=> 2]) }}">Expired</a>
                                                         @endif
 
-                                                        @if($v->status != 6)
-                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 6]) }}">Active</a>
+                                                        @if($v->status != 1)
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 1]) }}">Active</a>
                                                         @endif
 
                                                         @if($v->status != 4)
@@ -105,6 +105,7 @@
                                                         @if($v->status != 5)
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 5]) }}">De-Active</a>
                                                         @endif
+                                                        <a href="{{ route('master.trade.edit' , $v->id) }}" class="btn btn-success">Edit</a>
                                                     </td>
                                                 </tr>
                                                 

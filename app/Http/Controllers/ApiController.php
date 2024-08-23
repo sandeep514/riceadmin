@@ -1191,9 +1191,10 @@
                         'otp' => $otp,
                         'expired_on' => Carbon::now()->addMonth(536)->format('Y-m-d'),
                         'status' => 0,
-                        'usd_role' => 0,
+                        // 'usd_role' => 0,
+                        'usd_role' => 6,
                         'is_INR_active' => 1,
-                        'is_usd_active' => 0,
+                        'is_usd_active' => 1,
 
 
                     ]);
@@ -2852,7 +2853,8 @@
         public function acceptHotDealNotification(Request $request)
         {
             HotDealAccept::create(['hotdeal_id' => $request->bid_id, 'buyer_id' => $request->user_id, 'status' => 1]);
-            $response = MailController::html_email('mailNotification','enquiry@sntcgroup.com','enquiry@sntcgroup.com'); 
+            $hotDealNotif = HotDealNotification::where('id' ,$request->bid_id )->first()->toArray();
+            $response = MailController::html_email('mailNotification','enquiry@sntcgroup.com','enquiry@sntcgroup.com',$hotDealNotif); 
             // $response = MailController::html_email('mailNotification','rbajaj@sntcgroup.com','rbajaj@sntcgroup.com'); 
             // $response = MailController::html_email('mailNotification','vidula@sntcgroup.com','vidula@sntcgroup.com'); 
             // $response = MailController::html_email('mailNotification','leena@sntcgroup.com','leena@sntcgroup.com'); 
@@ -3070,38 +3072,29 @@
             
             TradeQueriesINR::whereIn('status' , [1,6,4,5,11,12])->where('validDays' ,'<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
-            $trade = TradeQueriesINR::orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
+            // $todayExpired = TradeQueriesINR::orderBy('status' , 'ASC')->where('status' , 2)->get();
+            $allTrade = TradeQueriesINR::orderBy('status' , 'ASC')->where('status' , '!=' , 2)->limit(75)->orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
                 return $query->where('userId' , $userId)->get();
             },'RiceNameData','TradeLikeAll' => function($query) use($userId){
                 return $query->where('userId' , $userId);
             },'RiceFormMilestone3','riceGrade' => function($query){
                 return $query->with('getWandType')->get();
-            },'RicePackingBuyer','RicePackingSeller'])->where('status' ,'!=',5)->withCount('TradeLikeAll')->get()->groupBy('tradeType');
+            },'RicePackingBuyer','RicePackingSeller'])->where('status' ,'!=',5)->withCount('TradeLikeAll')->get();
+
+            // $allTrade = TradeQueriesINR::orderBy('status' , 'ASC')->limit(75)->orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
+            //     return $query->where('userId' , $userId)->get();
+            // },'RiceNameData','TradeLikeAll' => function($query) use($userId){
+            //     return $query->where('userId' , $userId);
+            // },'RiceFormMilestone3','riceGrade' => function($query){
+            //     return $query->with('getWandType')->get();
+            // },'RicePackingBuyer','RicePackingSeller'])->where('status' ,'!=',5)->withCount('TradeLikeAll')->get();
+
+            $trade = $allTrade->groupBy('tradeType');
 
 
             $tradeStatus = TradeCurrentStatus::first();
-            // $currentStatus = 1;
-            // $TradeStatusMessages = '';
-            // if(count($trade[1]->where('status' , 12 ))){
-            //     $currentStatus = 12;
-            //     $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 12)->first()->message;
-            // }elseif(count($trade[1]->where('status' , 11 ))){
-            //     $currentStatus = 11;
-            //     $TradeStatusMessages = TradeStatusMessages::where('trade_status' , 11)->first()->message;
-            // }
-
             
-
-            // $tradeData = [];
-            
-            // foreach($trade as $k => $v){
-            //     if( $v['tradeType'] == 1 ){
-            //         $tradeData[1][] = $v;
-            //     }else{
-            //         $tradeData[0][] = $v;
-            //     }
-            // }
-            return response()->json(['status' => true , 'data' => $trade , 'currentStatus' => $tradeStatus['currentStatus'] , 'statusMessage' => $tradeStatus['message']]);
+            return response()->json(['status' => true , 'data' => $trade ,'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'] , 'statusMessage' => $tradeStatus['message']]);
         }
 
         public function getTradeDetail($tradeId)

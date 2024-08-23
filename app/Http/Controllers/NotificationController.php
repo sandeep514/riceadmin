@@ -39,7 +39,7 @@ class NotificationController extends Controller
         }
         // return true;
 
-        // $users = User::whereIn('id', [2185,220,2176])->where('user_token' , '!=' , null)->pluck('user_token' , 'id');
+        // $users = User::whereIn('id', [224])->where('user_token' , '!=' , null)->pluck('user_token' , 'id');
         // $users = User::whereIn('id', [220,1297,1664,2173])->where('user_token' , '!=' , null)->get();
 
         $arrayUsers = $users->toArray();
@@ -69,7 +69,9 @@ class NotificationController extends Controller
                     'title' => $request->title,
                     'message' => $request->message,
                     'userAppType' => $request->userAppType,
-                    'status' => 1
+                    'status' => 1,
+                    'created_at' => Carbon::now()->format('Y-m-d H:i:s'), 
+                    'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
             ];
         }
         Notification::insert($postedData);
@@ -225,6 +227,7 @@ class NotificationController extends Controller
         }
         return response()->json(['status'=>true,'data'=> $notifications->toArray()], 200);
     }
+
     public function hotDealIndex()
     {
         $todayDate = Carbon::now()->format('Y-m-d');

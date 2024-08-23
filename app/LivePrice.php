@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class LivePrice extends Model
 {
@@ -15,4 +16,13 @@ class LivePrice extends Model
     public function form_rel(){
         return $this->belongsTo(RiceForm::class,'form','id')->where('status' , 1);
     }
+
+    public function lastWeekRecord(){
+        return $this->hasOne(LivePrice::class, 'id')
+        ->where('name', $this->name)
+        ->where('state', $this->state)
+        ->where('cropGrade', $this->cropGrade);
+        // ->whereDate('created_at', $this->created_at->subDays(7)->format('Y-m-d'));
+    }
+
 }

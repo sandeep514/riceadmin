@@ -68,7 +68,6 @@ return [
     */
 
     'timezone' => 'Asia/Kolkata',
-
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -228,7 +227,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'ChatStatus' => App\Helpers\StatusChat::class,
         'MailHelper' => App\Helpers\MailHelper::class,
-	'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+	       'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
