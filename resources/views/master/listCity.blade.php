@@ -31,35 +31,45 @@
                                 <div class="col-md-12 text-center">
                                     <div class="row text-left" style="margin-top: 20px;">
                                         <div class="col-md-12 inputs">
-                                            <table class="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th>Name</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($cities as $key => $value)
+                                            <form method="post" action="{{ route('master.update.city.order') }}">
+                                                @csrf
+                                                <table class="table table-striped">
+                                                    <thead>
                                                         <tr>
-                                                            <td style="text-transform: capitalize;">{{ str_replace('_', ' ', $key) }}</td>
-                                                            <td>
-                                                                <ul style="list-style: none;display: inline-flex;padding: 0">
-                                                                    {{-- <li>
-                                                                        <a class="btn btn-sm btn-{{ ( $value == 1 ) ? 'primary' : 'info' }}" href="{{ route('master.city.changeStatus' , base64_encode($key)) }}"> {{ ($value == 1) ? 'Disable' : 'Enable' }} </a>
-                                                                    </li> --}}
-
-                                                                    <li style="margin-left: 20px">
-                                                                        <a class="btn btn-sm btn-info" href="{{ route('master.get.city' , base64_encode($key)) }}"> Edit </a>
-                                                                    </li>
-                                                                    <li style="margin-left: 20px">
-                                                                        <a class="btn btn-sm btn-danger" href="{{ route('master.delete.city' , base64_encode($key)) }}"> Delete </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td>
+                                                            <th>Order</th>
+                                                            <th>Name</th>
+                                                            <th>Actions</th>
                                                         </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($cities as $key => $value)
+                                                            <tr>
+                                                                <td style="text-transform: capitalize;">
+                                                                    <input type="hidden" name="state[]" value="{{ ($value['state']) }}" >
+                                                                    <input type="text" name="order[]" value="{{ $value['state_order'] }}">
+                                                                </td>
+                                                                <td style="text-transform: capitalize;">{{ str_replace('_', ' ', ($value['state'])) }}</td>
+                                                                <td>
+                                                                    <ul style="list-style: none;display: inline-flex;padding: 0">
+                                                                        {{-- <li>
+                                                                            <a class="btn btn-sm btn-{{ ( $value == 1 ) ? 'primary' : 'info' }}" href="{{ route('master.city.changeStatus' , base64_encode($key)) }}"> {{ ($value == 1) ? 'Disable' : 'Enable' }} </a>
+                                                                        </li> --}}
+
+                                                                        <li style="margin-left: 20px">
+                                                                            <a class="btn btn-sm btn-info" href="{{ route('master.get.city' , base64_encode($key)) }}"> Edit </a>
+                                                                        </li>
+                                                                        <li style="margin-left: 20px">
+                                                                            <a class="btn btn-sm btn-danger" href="{{ route('master.delete.city' , base64_encode($key)) }}"> Delete </a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>    
+                                                <input type="submit" name="button" value="Change Order" class="btn btn-primary btn-sm">
+                                            </form>
+                                            
                                         </div>
                                     </div>
                                 </div>

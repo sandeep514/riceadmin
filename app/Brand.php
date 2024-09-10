@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Brand extends Model
 {
     protected $table = "brands_milestone3";
-    protected $fillable = ['name', 'image','status'];
+    protected $fillable = ['name', 'image','orders','status'];
 
 
     public function getAttachments()

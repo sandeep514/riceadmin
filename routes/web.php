@@ -339,7 +339,9 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('delete/city/{id}' ,         ['as' => 'master.delete.city'   ,'uses' => 'MasterController@deleteCity' ] );
         Route::get('get/rice/city/{id}' ,       ['as' => 'master.get.city'      ,'uses' => 'MasterController@getCityById'] );
         Route::POST('update/rice/city' ,        ['as' => 'master.update.city'   ,'uses' => 'MasterController@updateCityById'] );
+        Route::POST('update/city/order' ,        ['as' => 'master.update.city.order'   ,'uses' => 'MasterController@changeCityOrder'] );
         Route::get('city/status/{city}' ,       ['as' => 'master.city.changeStatus'   ,'uses' => 'MasterController@statusCity'] );
+
 
         //Transport States
         Route::get('list/state' ,               ['as' => 'master.transport.list.state'    ,'uses' => 'MasterController@listPort' ] );
@@ -432,6 +434,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::POST('brands/update' , ['as' => 'master.brand.update' , 'uses' => 'BrandController@update']);
     Route::get('brands/change/status/{brandid}' , ['as' => 'master.brand.change.status' , 'uses' => 'BrandController@changeStatus']);
     Route::get('delete/banner/attachment/{bannerId}' , ['as'=>'delete.banner.attachment' , 'uses' => 'BrandController@deleteBrand']);
+    Route::POST('change/brand/order' , ['as'=>'change.brand.order' , 'uses' => 'BrandController@changeBrandOrder']);
 
 
     Route::GET('wand' , ['as' => 'master.wand' , 'uses' => 'WandController@index']);

@@ -26,10 +26,11 @@ class BrandController extends Controller
         $fileExtension = $file->getCLientOriginalExtension();
         
         $acceptedFileType = ['png' , 'jpg', 'jpeg'];
-
+        $lastAddedBrandOrder = Brand::orderBy('orders' , 'DESC')->first();
+        
         if( in_array($fileExtension , $acceptedFileType) ) {
 
-            Brand::create(['name' => $request->brand_name, 'image' => $filename]);
+            Brand::create(['name' => $request->brand_name, 'image' => $filename , 'orders' => ((int)$lastAddedBrandOrder+1)]);
             $destinationPath = 'uploads/brandlogo';
             $file->move($destinationPath,$filename);
 
@@ -106,6 +107,15 @@ class BrandController extends Controller
     {
         Brandattachmentmodel::where('id' , $brandId)->delete();
         Session::flash('sucess', 'Brand attachment deleted successfully.');
+        return back();
+    }
+    public function changeBrandOrder(Request $request)
+    {
+        $data = array_combine($request->id, $request->brand_order);
+        foreach($data as $id => $order){
+            Brand::where('id' , $id)->update([ 'orders' => $order ]);
+        }
+        Session::flash('sucess', 'Brand order updated successfully.');
         return back();
     }
 }

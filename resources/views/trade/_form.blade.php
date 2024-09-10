@@ -113,6 +113,10 @@
                                 <input type="text" class="form-control" name="crop">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Heart','Heart Count') !!}
+                                <input type="text" class="form-control" name="heart">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('hotdeal','Hot Deal') !!}
                                 <select class="form-control" name="hotdeal" id="hotdeal">
                                     <option value="0">No</option>

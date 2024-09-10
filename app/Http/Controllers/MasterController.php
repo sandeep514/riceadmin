@@ -138,7 +138,8 @@ class MasterController extends Controller
 	}
 
 	public function listCity(){
-		$cities = LivePrice::get()->pluck( 'status' ,'state');
+		$cities = LivePrice::select('id' , 'state_order' , 'state')->groupBy('state')->get()->toArray();
+		// $cities = LivePrice::get()->pluck( 'status' ,'state');
 		return view('master.listCity' , compact('cities'));
 	}
 
@@ -840,6 +841,16 @@ class MasterController extends Controller
         });
 		Session::flash('message' , 'Buy query moved to trade successfully.');
 
+		return back();
+	}
+	public function changeCityOrder(Request $request)
+	{
+		$newArray = array_combine( $request['state'] , $request['order'] );
+		foreach( $newArray as $k => $v ){
+			LivePrice::where([ 'state' => $k ])->update(['state_order' => $v]);	
+		}
+		Session::flash('message' , 'Order updated successfully.');
+		
 		return back();
 	}
 }

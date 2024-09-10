@@ -1499,6 +1499,50 @@
         
         // Send Push Notification
         public function sendNotification( $message , $token , $from , $to ){
+            // $url = 'https://fcm.googleapis.com/v1/projects/sntc-73467/messages:send'
+
+            // $notif = [
+            //     "message" => [
+            //         "token" => "cGzzg20-RwOJ-1HnD5sfaO:APA91bHASbUPacqon9gT3G93vqa10TPBeky599w8lSw5D5KYUT1SXmFq_2iEpArVaMm4eB4-PP-Fs-1hE82JEW3y1k53yhMRPkmZSLTGMG1B-XzFUtyvdiJwA8JDSZ1P2Y2JFRfwGXcd",
+            //         "data" => [
+            //             "body" => "Body of Your Notification in data",
+            //             "title" => "Title of Your Notification in data",
+            //             "key_1" => "Value for key_1",
+            //             "key_2" => "Value for key_2"
+            //         ]
+            //     ]
+            // ];
+
+
+            // $ch = curl_init();
+
+            // curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/sntc-73467/messages:send');
+            // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // curl_setopt($ch, CURLOPT_POST, 1);
+            // curl_setopt($ch, CURLOPT_POSTFIELDS, "{\n\"message\": {\n\"token\": \"cGzzg20-RwOJ-1HnD5sfaO:APA91bHASbUPacqon9gT3G93vqa10TPBeky599w8lSw5D5KYUT1SXmFq_2iEpArVaMm4eB4-PP-Fs-1hE82JEW3y1k53yhMRPkmZSLTGMG1B-XzFUtyvdiJwA8JDSZ1P2Y2JFRfwGXcd\",\n\"data\": {\n\"body\": \"Body of Your Notification in data\",\n\"title\": \"Title of Your Notification in data\",\n\"key_1\": \"Value for key_1\",\n\"key_2\": \"Value for key_2\"\n}\n}\n}");
+
+            // $headers = array();
+            // $headers[] = 'Authorization: Bearer <Access token>';
+            // $headers[] = 'Content-Type: application/json';
+            // curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+            // $result = curl_exec($ch);
+            // if (curl_errno($ch)) {
+            //     echo 'Error:' . curl_error($ch);
+            // }
+            // curl_close($ch);
+
+
+
+
+            // return false;
+
+
+
+
+
+
+
             $url = "https://fcm.googleapis.com/fcm/send";
 			// $token = "cGzzg20-RwOJ-1HnD5sfaO:APA91bHASbUPacqon9gT3G93vqa10TPBeky599w8lSw5D5KYUT1SXmFq_2iEpArVaMm4eB4-PP-Fs-1hE82JEW3y1k53yhMRPkmZSLTGMG1B-XzFUtyvdiJwA8JDSZ1P2Y2JFRfwGXcd";
             $serverKey = 'AAAA10hB_8I:APA91bHVSnAJjacznL6i3p9dWnKvJeceYJlTbwt_rvyq6Nx8tOPsMlxtYPqHzAJRAazC5JJof9PZHaw_uo1qbNkKK4YgJLKN_39ozcIlbCpt3YQ36Y5rT6ftegC0nnEiOZ-dYsYqFWcV';
@@ -2533,6 +2577,8 @@
 
             $url = "https://fcm.googleapis.com/fcm/send";
             $serverKey = 'AAAA10hB_8I:APA91bHVSnAJjacznL6i3p9dWnKvJeceYJlTbwt_rvyq6Nx8tOPsMlxtYPqHzAJRAazC5JJof9PZHaw_uo1qbNkKK4YgJLKN_39ozcIlbCpt3YQ36Y5rT6ftegC0nnEiOZ-dYsYqFWcV';
+
+            // firebase setup on zipzap.seo@gmail.com
             $body = $message;
             $notification = ['title' => $title, 'body' => $body, 'sound' => 'default', 'badge' => '1','data' => 'here'];
             
@@ -3073,7 +3119,7 @@
             TradeQueriesINR::whereIn('status' , [1,6,4,5,11,12])->where('validDays' ,'<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
             // $todayExpired = TradeQueriesINR::orderBy('status' , 'ASC')->where('status' , 2)->get();
-            $allTrade = TradeQueriesINR::orderBy('status' , 'ASC')->where('status' , '!=' , 2)->limit(75)->orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
+            $allTrade = TradeQueriesINR::where('status' , '!=' , 2)->limit(75)->orderByRaw('FIELD(status,6,4,3)')->with(['TradeInterest'=> function($query) use($userId){
                 return $query->where('userId' , $userId)->get();
             },'RiceNameData','TradeLikeAll' => function($query) use($userId){
                 return $query->where('userId' , $userId);

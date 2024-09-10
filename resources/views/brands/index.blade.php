@@ -34,9 +34,12 @@
                                 <div class="col-md-12 text-center">
                                     <div class="row text-left" style="margin-top: 20px;">
                                         <div class="col-md-12 inputs">
+                                            <form action="{{ route('change.brand.order') }}" method="post">
+                                                @csrf
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
+                                                    <th>Order</th>
                                                     <th>Brand</th>
                                                     <th>logo</th>
                                                     <th>Action</th>
@@ -45,6 +48,7 @@
                                                 <tbody>
                                                     @foreach($data as $key => $value)
                                                         <tr>
+                                                            <td style="text-transform: capitalize;"><input type="number" name="brand_order[]" value="{{ $value->orders }}"><input type="hidden" name="id[]" value="{{ $value->id }}"></td>
                                                             <td style="text-transform: capitalize;">{{ str_replace('_', ' ', $value->name) }}</td>
                                                             <td style="text-transform: capitalize;">
                                                                 <img src="{{ asset('uploads/brandlogo/'.$value->image)}}" style="width: 100px">
@@ -74,6 +78,8 @@
                                                     @endforeach
                                                 </tbody>
                                             </table>
+                                            <input type="submit" name="submit" value="Change Orders" class="btn btn-primary btn-sm">
+                                        </form>
                                         </div>
                                     </div>
                                 </div>

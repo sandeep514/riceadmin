@@ -21,6 +21,7 @@ use App\WandModel;
 use App\SellerPackingINR;
 use App\Buyerpackinginr;
 use App\WandTypeModel;
+use App\TradeLike;
 
 class TradeController extends Controller
 {
@@ -119,8 +120,17 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
 
 
-        TradeQueriesINR::create($data);
+        $tradeQuery = TradeQueriesINR::create($data);
         Session::flash('success','Success|Trade saved successfully!');
+        if( $request->has('heart') ){
+            for( $i = 1 ; $i <= $request->heart ;$i++ ){
+                TradeLike::create([
+                    'tradeId' => $tradeQuery->id,
+                    'userId' => 224,   
+                    'status' => 1
+                ]);
+            }
+        }
 
         return back();
         return View('trade.index');
