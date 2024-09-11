@@ -21,15 +21,15 @@ class QualitiesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('name', function($model){
-                return ucwords(str_replace('-',' ',$model->type))
-                    .' - '.$model->name.' '.$model->form_name.' ('.$model->type_name.')';
+            ->editColumn('name', function ($model) {
+                return ucwords(str_replace('-', ' ', $model->type))
+                    . ' - ' . $model->name . ' ' . $model->form_name . ' (' . $model->type_name . ')';
             })
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->addColumn('action', function($model){
-                return view('qualities._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('qualities._actions', ['model' => $model]);
             });
     }
 
@@ -49,9 +49,9 @@ class QualitiesDataTable extends DataTable
             'rice_forms.form_name as form_name',
             'rice_types.name as type_name',
             'qualities.created_at'
-        ])->leftJoin('rice_names','qualities.name','=','rice_names.id')
-            ->leftJoin('rice_forms','qualities.type','=','rice_forms.id')
-            ->leftJoin('rice_types','qualities.category','=','rice_types.id');
+        ])->leftJoin('rice_names', 'qualities.name', '=', 'rice_names.id')
+            ->leftJoin('rice_forms', 'qualities.type', '=', 'rice_forms.id')
+            ->leftJoin('rice_types', 'qualities.category', '=', 'rice_types.id');
     }
 
     /**
@@ -62,21 +62,21 @@ class QualitiesDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('qualities-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(0,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make([
-                            'text' => '<i class="fa fa-upload" aria-hidden="true"></i> &nbsp; Import'
-                        ])->action('window.location="'.route('import.quality').'"'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('qualities-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make([
+                    'text' => '<i class="fa fa-upload" aria-hidden="true"></i> &nbsp; Import'
+                ])->action('window.location="' . route('import.quality') . '"'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
 
@@ -89,7 +89,7 @@ class QualitiesDataTable extends DataTable
     {
         return [
             Column::make('id')->searchable(false),
-            'name'=>['name'=>'rice_names.name'],
+            'name' => ['name' => 'rice_names.name'],
             Column::make('created_at'),
             Column::computed('action')
                 ->exportable(false)
@@ -104,7 +104,7 @@ class QualitiesDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Qualities_' . date('YmdHis');
     }

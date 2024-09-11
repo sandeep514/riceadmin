@@ -21,11 +21,11 @@ class PaymentReminderDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->craeted_at->diffForHumans();
             })
-            ->addColumn('action', function($model){
-                return view('payment-reminder._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('payment-reminder._actions', ['model' => $model]);
             });
     }
 
@@ -48,18 +48,18 @@ class PaymentReminderDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('paymentreminder-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('paymentreminder-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -91,7 +91,7 @@ class PaymentReminderDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'PaymentReminder_' . date('YmdHis');
     }

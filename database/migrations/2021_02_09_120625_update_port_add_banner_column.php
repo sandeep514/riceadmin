@@ -13,9 +13,9 @@ class UpdatePortAddBannerColumn extends Migration
      */
     public function up()
     {
-        Schema::table('ports' , function(Blueprint $table){
+        Schema::table('ports', function (Blueprint $table) {
             $table->text('banner')->after('id')->nullable();
-        })
+        });
     }
 
     /**
@@ -25,7 +25,7 @@ class UpdatePortAddBannerColumn extends Migration
      */
     public function down()
     {
-        Schema::table('ports' , function(Blueprint $table){
+        Schema::table('ports', function (Blueprint $table) {
             $table->drop('banner');
         });
     }

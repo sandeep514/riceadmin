@@ -21,11 +21,11 @@ class DesignationsDatatable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->addColumn('action', function($model){
-                return view('designations._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('designations._actions', ['model' => $model]);
             });
     }
 
@@ -48,18 +48,18 @@ class DesignationsDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('designationsdatatable-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('designationsdatatable-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -86,7 +86,7 @@ class DesignationsDatatable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Designations_' . date('YmdHis');
     }

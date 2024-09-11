@@ -21,14 +21,14 @@ class DealLabReportsDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('sntc_no', function($model){
-                return str_pad($model->sntc_no, 5,0,STR_PAD_LEFT);
+            ->editColumn('sntc_no', function ($model) {
+                return str_pad($model->sntc_no, 5, 0, STR_PAD_LEFT);
             })
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->addColumn('action', function($model){
-                return view('deal-lab-report._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('deal-lab-report._actions', ['model' => $model]);
             });
     }
 
@@ -51,18 +51,18 @@ class DealLabReportsDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('deallabreports-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('deallabreports-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -92,7 +92,7 @@ class DealLabReportsDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'DealLabReports_' . date('YmdHis');
     }

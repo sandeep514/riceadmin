@@ -21,26 +21,26 @@ class SampleRegistersDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('sntc_no', function($model){
-                return str_pad($model->sntc_no, 5,0,STR_PAD_LEFT);
+            ->editColumn('sntc_no', function ($model) {
+                return str_pad($model->sntc_no, 5, 0, STR_PAD_LEFT);
             })
-            ->editColumn('supplier', function($model){
+            ->editColumn('supplier', function ($model) {
                 return $model->supplier_rel->name;
             })
-            ->editColumn('quality', function($model){
+            ->editColumn('quality', function ($model) {
                 return '<a href="javascript:void(0)"
-                            data-nameType="'.ucwords(str_replace('-',' ',$model->quality_rel->nameRel->type)).'"
-                            data-name="'.$model->quality_rel->nameRel->name.'"
-                            data-formName="'.$model->quality_rel->formRel->form_name.'"
-                            data-type="'.$model->quality_rel->typeRel->name.'"
+                            data-nameType="' . ucwords(str_replace('-', ' ', $model->quality_rel->nameRel->type)) . '"
+                            data-name="' . $model->quality_rel->nameRel->name . '"
+                            data-formName="' . $model->quality_rel->formRel->form_name . '"
+                            data-type="' . $model->quality_rel->typeRel->name . '"
                             class="view_quality_details">View Details</a>';
             })
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->addColumn('action', function($model){
-                return view('sample-registers._actions',['model'=>$model]);
-            })->rawColumns(['action','quality']);
+            ->addColumn('action', function ($model) {
+                return view('sample-registers._actions', ['model' => $model]);
+            })->rawColumns(['action', 'quality']);
     }
 
     /**
@@ -51,7 +51,7 @@ class SampleRegistersDataTable extends DataTable
      */
     public function query(SampleRegister $model)
     {
-        return $model->with(['supplier_rel','quality_rel'])->newQuery();
+        return $model->with(['supplier_rel', 'quality_rel'])->newQuery();
     }
 
     /**
@@ -62,18 +62,18 @@ class SampleRegistersDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('sampleregisters-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('sampleregisters-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -105,7 +105,7 @@ class SampleRegistersDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'SampleRegisters_' . date('YmdHis');
     }

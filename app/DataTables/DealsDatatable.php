@@ -21,29 +21,29 @@ class DealsDatatable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->editColumn('is_direct_deal', function($model){
-                return ($model->is_direct_deal == 1)?'Yes':'No';
+            ->editColumn('is_direct_deal', function ($model) {
+                return ($model->is_direct_deal == 1) ? 'Yes' : 'No';
             })
-            ->editColumn('sntc_no', function($model){
-                if($model->sntc_no == 0){
+            ->editColumn('sntc_no', function ($model) {
+                if ($model->sntc_no == 0) {
                     return '<i>Direct Deal</i>';
-                }else{
-                    return str_pad($model->sntc_no, 5,0,STR_PAD_LEFT);
+                } else {
+                    return str_pad($model->sntc_no, 5, 0, STR_PAD_LEFT);
                 }
             })
-            ->editColumn('seller', function($model){
+            ->editColumn('seller', function ($model) {
                 return $model->seller_rel->name;
             })
-            ->editColumn('buyer', function($model){
+            ->editColumn('buyer', function ($model) {
                 return $model->buyer_rel->name;
             })
-            ->addColumn('action', function($model){
-                return view('deals._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('deals._actions', ['model' => $model]);
             })
-            ->rawColumns(['action','quality','sntc_no']);
+            ->rawColumns(['action', 'quality', 'sntc_no']);
     }
 
     /**
@@ -54,7 +54,7 @@ class DealsDatatable extends DataTable
      */
     public function query(Deal $model)
     {
-        return $model->newQuery()->with(['seller_rel','buyer_rel']);
+        return $model->newQuery()->with(['seller_rel', 'buyer_rel']);
     }
 
     /**
@@ -65,18 +65,18 @@ class DealsDatatable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('dealsdatatable-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('dealsdatatable-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -108,7 +108,7 @@ class DealsDatatable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Deals_' . date('YmdHis');
     }

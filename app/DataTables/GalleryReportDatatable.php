@@ -96,7 +96,7 @@ class GalleryReportDatatable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Gallery_' . date('YmdHis');
     }

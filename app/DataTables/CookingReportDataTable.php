@@ -21,17 +21,17 @@ class CookingReportDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('sntc_no', function($model){
-                return str_pad($model->sntc_no + 1, 5,0,STR_PAD_LEFT);
+            ->editColumn('sntc_no', function ($model) {
+                return str_pad($model->sntc_no + 1, 5, 0, STR_PAD_LEFT);
             })
-            ->editColumn('image', function($model){
-                return '<img src="'.asset('cooking_images/'.$model->image).'" width="100" />';
+            ->editColumn('image', function ($model) {
+                return '<img src="' . asset('cooking_images/' . $model->image) . '" width="100" />';
             })
-            ->addColumn('action', function($model){
-                return view('cooking._actions',['model'=>$model]);
-            })->editColumn('created_at', function($model){
+            ->addColumn('action', function ($model) {
+                return view('cooking._actions', ['model' => $model]);
+            })->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
-            })->rawColumns(['action','image']);
+            })->rawColumns(['action', 'image']);
     }
 
     /**
@@ -53,18 +53,18 @@ class CookingReportDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('cookingreport-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('cookingreport-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -93,7 +93,7 @@ class CookingReportDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'CookingReport_' . date('YmdHis');
     }

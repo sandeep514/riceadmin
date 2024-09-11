@@ -22,32 +22,32 @@ class SamplesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-//            ->editColumn('photo', function($model){
-//                return '<img src="'.asset('sample-images/'.$model->photo).'" width="100" />';
-//            })
-            ->editColumn('supplier', function($model){
+            //            ->editColumn('photo', function($model){
+            //                return '<img src="'.asset('sample-images/'.$model->photo).'" width="100" />';
+            //            })
+            ->editColumn('supplier', function ($model) {
                 return $model->supplier_rel->name;
             })
-            ->editColumn('quality', function($model){
+            ->editColumn('quality', function ($model) {
                 return '<a href="javascript:void(0)"
-                            data-nameType="'.ucwords(str_replace('-',' ',$model->quality_rel->nameRel->type)).'"
-                            data-name="'.$model->quality_rel->nameRel->name.'"
-                            data-formName="'.$model->quality_rel->formRel->form_name.'"
-                            data-type="'.$model->quality_rel->typeRel->name.'"
+                            data-nameType="' . ucwords(str_replace('-', ' ', $model->quality_rel->nameRel->type)) . '"
+                            data-name="' . $model->quality_rel->nameRel->name . '"
+                            data-formName="' . $model->quality_rel->formRel->form_name . '"
+                            data-type="' . $model->quality_rel->typeRel->name . '"
                             class="view_quality_details">View Details</a>';
             })
-            ->editColumn('packing', function($model){
+            ->editColumn('packing', function ($model) {
                 return $model->packing_rel->code;
             })
-            ->editColumn('packing_type', function($model){
+            ->editColumn('packing_type', function ($model) {
                 return $model->packing_type_rel->name;
             })
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->addColumn('action', function($model){
-                return view('samples._actions',['model'=>$model]);
-            })->rawColumns(['action','photo','quality']);
+            ->addColumn('action', function ($model) {
+                return view('samples._actions', ['model' => $model]);
+            })->rawColumns(['action', 'photo', 'quality']);
     }
 
     /**
@@ -58,7 +58,7 @@ class SamplesDataTable extends DataTable
      */
     public function query(Sample $model)
     {
-        return $model->with(['supplier_rel','packing_rel','quality_rel','packing_type_rel'])->newQuery();
+        return $model->with(['supplier_rel', 'packing_rel', 'quality_rel', 'packing_type_rel'])->newQuery();
     }
 
     /**
@@ -71,18 +71,18 @@ class SamplesDataTable extends DataTable
         $columns = $this->getColumns();
         unset($columns[0]);
         return $this->builder()
-                    ->setTableId('smaples-table')
-                    ->columns($columns)
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(0,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('smaples-table')
+            ->columns($columns)
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -99,7 +99,7 @@ class SamplesDataTable extends DataTable
             Column::make('quality'),
             Column::make('packing'),
             Column::make('qty'),
-//            Column::make('photo'),
+            //            Column::make('photo'),
             Column::make('created_at'),
             Column::computed('action')
                 ->exportable(false)
@@ -114,7 +114,7 @@ class SamplesDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Smaples_' . date('YmdHis');
     }

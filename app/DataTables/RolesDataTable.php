@@ -21,10 +21,10 @@ class RolesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
-            })->addColumn('action', function($model){
-                return view('roles._Actions',['model'=>$model]);
+            })->addColumn('action', function ($model) {
+                return view('roles._Actions', ['model' => $model]);
             });
     }
 
@@ -47,18 +47,18 @@ class RolesDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('roles-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(0,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('roles-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -86,7 +86,7 @@ class RolesDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Roles_' . date('YmdHis');
     }

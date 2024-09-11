@@ -22,20 +22,20 @@ class CouriersDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->editColumn('samples', function($model){
-                $samples = Sample::with(['quality_rel','supplier_rel','packing_rel','packing_type_rel'])
-                    ->whereIn('id',array_keys(json_decode($model->samples,true)))->get();
-                return view('couriers.samples-modal',['samples'=>$samples,'model'=>$model]);
+            ->editColumn('samples', function ($model) {
+                $samples = Sample::with(['quality_rel', 'supplier_rel', 'packing_rel', 'packing_type_rel'])
+                    ->whereIn('id', array_keys(json_decode($model->samples, true)))->get();
+                return view('couriers.samples-modal', ['samples' => $samples, 'model' => $model]);
             })
-            ->editColumn('sent_via',function($model){
+            ->editColumn('sent_via', function ($model) {
                 return Courier::$sentVia[$model->sent_via];
             })
-            ->addColumn('action', function($model){
-                return view('couriers._actions',['model'=>$model]);
-            })->rawColumns(['action','samples']);
+            ->addColumn('action', function ($model) {
+                return view('couriers._actions', ['model' => $model]);
+            })->rawColumns(['action', 'samples']);
     }
 
     /**
@@ -63,16 +63,16 @@ class CouriersDataTable extends DataTable
             Button::make('reset'),
             Button::make('reload')
         ];
-        if($hasPermissionForCreate){
-            array_unshift($buttons,Button::make('create'));
+        if ($hasPermissionForCreate) {
+            array_unshift($buttons, Button::make('create'));
         }
         return $this->builder()
-                    ->setTableId('couriers-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->buttons($buttons);
+            ->setTableId('couriers-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(1)
+            ->buttons($buttons);
     }
 
     /**
@@ -103,7 +103,7 @@ class CouriersDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Couriers_' . date('YmdHis');
     }

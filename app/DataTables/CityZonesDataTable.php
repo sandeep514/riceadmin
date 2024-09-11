@@ -21,14 +21,14 @@ class CityZonesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at', function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHumans();
             })
-            ->editColumn('city', function($model){
+            ->editColumn('city', function ($model) {
                 return $model->city_rel->city_name;
             })
-            ->addColumn('action', function($model){
-                return view('cityzones._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('cityzones._actions', ['model' => $model]);
             });
     }
 
@@ -51,18 +51,18 @@ class CityZonesDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('cityzones-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(0,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('cityzones-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -90,7 +90,7 @@ class CityZonesDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'CityZones_' . date('YmdHis');
     }

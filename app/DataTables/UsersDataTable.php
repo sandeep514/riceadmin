@@ -23,20 +23,20 @@ class UsersDataTable extends DataTable
     {
         $datatable = datatables()
             ->eloquent($query)
-            ->editColumn('created_at',function($model){
-                $carbonDate= Carbon::create($model->created_at);
+            ->editColumn('created_at', function ($model) {
+                $carbonDate = Carbon::create($model->created_at);
 
                 return ($carbonDate->format('d-m-Y'));
                 // return $model->created_at->diffForHumans();
             })
-            ->editColumn('role', function($model){
+            ->editColumn('role', function ($model) {
                 return $model->role_rel->role_name;
             })
-            ->addColumn('action', function($model){
-                return view('users._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('users._actions', ['model' => $model]);
             });
-        if(request()->role == 3){
-            $datatable->editColumn('designation', function($model){
+        if (request()->role == 3) {
+            $datatable->editColumn('designation', function ($model) {
                 return $model->field_runner_rel->designation_rel->designation;
             });
         }
@@ -51,7 +51,7 @@ class UsersDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->whereRole(request()->role)->with(['bagVendor','role_rel','field_runner_rel.designation_rel'])->newQuery();
+        return $model->whereRole(request()->role)->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])->newQuery();
     }
 
     /**
@@ -62,18 +62,18 @@ class UsersDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('users-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(0,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('users-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -87,12 +87,12 @@ class UsersDataTable extends DataTable
             Column::make('id'),
             Column::make('name'),
         ];
-        if(request()->role == 8){
-            $columnsArray[] = Column::make('bagCategory');   
+        if (request()->role == 8) {
+            $columnsArray[] = Column::make('bagCategory');
         }
-        if(request()->role != 3){
+        if (request()->role != 3) {
             $columnsArray[] = Column::make('email');
-        }elseif(request()->role == 3){
+        } elseif (request()->role == 3) {
             $columnsArray[] = Column::make('designation');
         }
         $columnsArray[] = Column::make('role');
@@ -111,7 +111,7 @@ class UsersDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'Users_' . date('YmdHis');
     }

@@ -21,11 +21,11 @@ class PackingTypesDataTable extends DataTable
     {
         return datatables()
             ->eloquent($query)
-            ->editColumn('created_at',function($model){
+            ->editColumn('created_at', function ($model) {
                 return $model->created_at->diffForHUmans();
             })
-            ->addColumn('action', function($model){
-                return view('packing-types._actions',['model'=>$model]);
+            ->addColumn('action', function ($model) {
+                return view('packing-types._actions', ['model' => $model]);
             });
     }
 
@@ -48,18 +48,18 @@ class PackingTypesDataTable extends DataTable
     public function html()
     {
         return $this->builder()
-                    ->setTableId('packingtypes-table')
-                    ->columns($this->getColumns())
-                    ->minifiedAjax()
-                    ->dom('Bfrtip')
-                    ->orderBy(0,'desc')
-                    ->buttons(
-                        Button::make('create'),
-                        Button::make('export'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    );
+            ->setTableId('packingtypes-table')
+            ->columns($this->getColumns())
+            ->minifiedAjax()
+            ->dom('Bfrtip')
+            ->orderBy(0, 'desc')
+            ->buttons(
+                Button::make('create'),
+                Button::make('export'),
+                Button::make('print'),
+                Button::make('reset'),
+                Button::make('reload')
+            );
     }
 
     /**
@@ -86,7 +86,7 @@ class PackingTypesDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'PackingTypes_' . date('YmdHis');
     }
