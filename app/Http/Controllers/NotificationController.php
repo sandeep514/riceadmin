@@ -17,6 +17,9 @@ use App\HotDealAccept;
 use App\Notifications\SNTCNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
+use Kreait\Laravel\Firebase\Facades\Firebase;
+use Kreait\Firebase\Messaging\CloudMessage;
+
 
 class NotificationController extends Controller
 {
@@ -33,6 +36,7 @@ class NotificationController extends Controller
             'message' => 'required',
             'userAppType' => 'required',
         ]);
+
 
         if ($request->userAppType == 'usd') {
             $users = User::query()
@@ -96,11 +100,11 @@ class NotificationController extends Controller
         //     echo $this->sendNotifMultiple($request->title, $request->message, $v, $request->userAppType);
         // }
 
-        $this->sendNotifMultiple($request->title, $request->message, $users, $request->userAppType);
+        $results = $this->sendNotifMultiple($request->title, $request->message, $users, $request->userAppType);
 
-        // dd("success");
+        $message = "Notification sent successfully to {$results['success']} users";
 
-        return back()->with('message', 'Notification sent successfully');
+        return back()->with('message', $message);
 
         // $request->validate([
         //         'userType' => 'required|array',
@@ -287,14 +291,34 @@ class NotificationController extends Controller
 
     public function sendNotifMultiple($title, $message, $users, $payload = null)
     {
-        foreach ($users as $user) {
-            try {
-                $user->notify(new SNTCNotification($title, $message, $payload));
-            } catch (\Throwable $th) {
-                //throw $th;
-                Log::error("Error in sending '$title' notification to User Id: {$user->id}" . $th->getMessage());
-            }
-        }
+        // foreach ($users as $user) {
+        //     try {
+        //         $user->notify(new SNTCNotification($title, $message, $payload));
+        //     } catch (\Throwable $th) {
+        //         //throw $th;
+        //         Log::error("Error in sending '$title' notification to User Id: {$user->id}" . $th->getMessage());
+        //     }
+        // }
+
+        $messaging = Firebase::messaging();
+
+        // Create a notification message
+        $message = CloudMessage::new()
+            ->withNotification([
+                'title' => $title,
+                'body' => $message,
+            ]);
+
+        $tokens = $users->pluck('user_token')->toArray();
+
+        // Send the message to multiple devices (FCM tokens)
+        $response = $messaging->sendMulticast($message, $tokens);
+
+        // Return the result details
+        return ([
+            'success' => $response->successes()->count(),
+            'failure' => $response->failures()->count(),
+        ]);
     }
 
     public function getUserNotifications($user_id = null)
