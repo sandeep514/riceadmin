@@ -120,7 +120,7 @@ class Controller extends BaseController
         $date= Carbon::now()->format('d-m-Y');
 
         // $emails = ['sandy.singh51480@gmail.com'];
-        $emails = ['sandy.singh51480@gmail.com','enquiry@sntcgroup.com'];
+        $emails = ['rbajaj@snjtradelink.com','enquiry@sntcgroup.com','sandy.singh51480@gmail.com'];
         // $emails = ['sandy.singh51480@gmail.com','rbajaj@sntcgroup.com','enquiry@sntcgroup.com'];
 
         Mail::send('mail.mailToVendor', ['date' => $date], function($message) use ($emails,$fileName)

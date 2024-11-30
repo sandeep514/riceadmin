@@ -16,7 +16,7 @@ class UsersController extends Controller
 
     public function index($role )
     {
-        $users = User::where('role' , $role)->get();
+        $users = User::where('role' , $role)->where('status' , 1)->get();
         return View('users.users',compact('users'));
 
         // return $dataTable->render('users.index');

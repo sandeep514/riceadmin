@@ -39,7 +39,7 @@
                                                 <td style="text-align: center">{{ $v->name }}</td>
                                                 <td style="text-align: center">{{ $v->email  }}</td>
                                                 <td style="text-align: center">{{ $v->country  }}</td>
-                                                <td style="text-align: center">{{ $v->bagVendor->name  }}</td>
+                                                {{-- <td style="text-align: center">{{ $v->bagVendor->name  }}</td> --}}
                                             </tr>
                                         @endforeach
                                     </tbody>

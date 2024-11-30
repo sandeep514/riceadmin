@@ -15,6 +15,7 @@ class LivePricesController extends Controller
     public function index(Request $request, $riceName = null){
         $RiceForm= RiceForm::where('status' , 1)->get();
         $RiceName= RiceName::get();
+
         $livePrice = LivePrice::get()->groupBy('state');
 
         $riceModel = null;

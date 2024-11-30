@@ -21,7 +21,7 @@ class LivePricesExport implements FromCollection, WithHeadings, WithStyles
     public function headings(): array
     {
         return [
-            "Rice", "State", "Crop Year", "Min Price", "Max Price","Last Seven Day Avg%","Last Month Day Avg%"
+            "Rice", "State", "Crop Year", "Min Price", "Max Price","Last One Day Avg%","Last Month Day Avg%"
         ];
     }
 
@@ -81,7 +81,7 @@ class LivePricesExport implements FromCollection, WithHeadings, WithStyles
                             ->whereColumn('lw.name', 'live_prices.name')
                             ->whereColumn('lw.state', 'live_prices.state')
                             ->whereColumn('lw.form', 'live_prices.form')
-                            ->whereRaw('DATEDIFF(live_prices.created_at,lw.created_at)=7')
+                            ->whereRaw('DATEDIFF(live_prices.created_at,lw.created_at)=1')
                             ->limit(1);
                     }, 'last_week_price_change')
                     ->selectSub(function ($query) {

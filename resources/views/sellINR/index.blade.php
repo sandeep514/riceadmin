@@ -43,6 +43,7 @@
                                                 <th style="text-align: center ">Warehouse Location</th>
                                                 <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Phone</th>
+                                                <th style="text-align: center ">Remarks</th>
                                                 <th style="text-align: center ">Status</th>
                                                 <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Action</th>
@@ -68,6 +69,16 @@
                                                     <td>{{ $v->warehouselocation }}</td>
                                                     <td>{{ $v->contactperson }}</td>
                                                     <td>{{ $v->contactMobile }}</td>
+                                                    <td>
+                                                        <form method="POST" action="{{ route('master.update.remarks.saleOrder') }}">
+                                                            @csrf
+                                                            <div class="form-group">
+                                                                <input type="hidden" name="saleId" value="{{ $v->id }}">
+                                                                <textarea name="remarks" class="form-control" style="width: 300px">{{ $v->remarks }}</textarea>
+                                                                <button type="submit" class="btn btn-xs btn-info">Save</button>
+                                                            </div>
+                                                        </form>
+                                                    </td>
                                                     <td>{{ App\SellQueriesINR::$status[$v->status] }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($v->created_at)->format('d-m-Y') }}</td>
 

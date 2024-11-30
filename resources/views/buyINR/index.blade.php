@@ -39,6 +39,7 @@
                                                 <th style="text-align: center ">Created By</th>
                                                 <th style="text-align: center ">Contact Number</th>
                                                 <th style="text-align: center ">Created at</th>
+                                                <th style="text-align: center ">Remarks</th>
                                                 <th style="text-align: center ">Status</th>
                                                 <th style="text-align: center ">Action</th>
                                             </tr>
@@ -58,6 +59,16 @@
                                                     <td>{{ ($v->UserDetail->name)?? '--' }}</td>
                                                     <td>{{ ($v->UserDetail->mobile)?? '--' }}</td>
                                                     <td>{{ (\Carbon\Carbon::parse($v->created_at)->format('d-m-Y'))?? '--' }}</td>
+                                                    <td>
+                                                        <form method="POST" action="{{ route('master.update.remarks.buyOrder') }}">
+                                                            @csrf
+                                                            <div class="form-group">
+                                                                <input type="hidden" name="buyId" value="{{ $v->id }}">
+                                                                <textarea name="remarks" class="form-control" style="width: 300px">{{ $v->remarks }}</textarea>
+                                                                <button type="submit" class="btn btn-xs btn-info">Save</button>
+                                                            </div>
+                                                        </form>
+                                                    </td>
                                                     <td> {{ App\BuyQueriesINR::$status[$v->status] }}</td>
 
                                                     <td style="text-align: center;">

@@ -267,7 +267,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('push/notification' , ['as' => 'send.push.notification' , 'uses' => 'NotificationController@index']);
             Route::POST('send/push/notification' , ['as' => 'post.push.notification' , 'uses' => 'NotificationController@sendNotification']);
             Route::get('trial/period' , ['as' => 'trial.period' , 'uses' => 'TrialPeriodController@index']);
-            Route::post('trial/period/save' , ['as' => 'trialPeriod.save' , 'uses' => 'TrialPeriodController@save']);
+            Route::post('trial/period/save' , ['as' => 'trialPeriod.savee' , 'uses' => 'TrialPeriodController@save']);
 
 
 
@@ -396,6 +396,10 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('status/usd/plan/{id}' , [ 'as' => 'change.status.usd.plan' , 'uses' => 'USDPlanController@PlanChangeStatus']);
         Route::POST('save/usd/plan' , [ 'as' => 'save.usd.plan' , 'uses' => 'USDPlanController@PlansaveUSDPlan']);
 
+        Route::get('other/rice/forms' , [ 'as' => 'master.rice.form.milestone3' , 'uses' => 'MasterController@riceFormMilestone']);
+        Route::get('create/other/rice/forms' , [ 'as' => 'master.create.rice.form.milestone3' , 'uses' => 'MasterController@createRiceFormMilestone']);
+        Route::POST('save/other/rice/forms' , [ 'as' => 'master.save.rice.form.milestone3' , 'uses' => 'MasterController@SaveRiceFormMilestone']);
+
         Route::get('news/runner' , [ 'as' => 'master.news.runner' , 'uses' => 'NewsRunnerController@index']);
         Route::post('create/news/runner' , [ 'as' => 'master.post.news.runner' , 'uses' => 'NewsRunnerController@create']);
         Route::get('update/news/status/{newsId}/{status}' , [ 'as' => 'master.news.change.status' , 'uses' => 'NewsRunnerController@updateStatus']);
@@ -447,6 +451,8 @@ Route::group(['prefix'=>'administrator'], function(){
 
 
     Route::get('list/sell/queries/INR' , ['as' => 'master.list.sell.queries.INR' , 'uses' => 'MasterController@listSellQueries']);
+    Route::POST('update/remarks/sale/query' , ['as' => 'master.update.remarks.saleOrder' , 'uses' => 'MasterController@updateRemarksSaleQuery']);
+    Route::POST('update/remarks/buy/query' , ['as' => 'master.update.remarks.buyOrder' , 'uses' => 'MasterController@updateRemarksBuyQuery']);
 
     Route::get('close/sell/queries/{sellQueryId}' , ['as' => 'close.sell.queries' , 'uses' => 'MasterController@closeSellQueries']);
     Route::get('move/sell/queries/{sellQueryId}' , ['as' => 'move.to.trade.sell.queries' , 'uses' => 'MasterController@moveToTradeSellQueries']);

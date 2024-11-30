@@ -12,7 +12,7 @@ use App\User;
 class SellQueriesINR extends Model
 {
     protected $table = 'sell_query_milestone3';
-    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','contactperson','contactMobile','warehouselocation','created_by','status'];
+    protected $fillable = ['quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','cooked_file','contactperson','contactMobile','warehouselocation','created_by','remarks','status'];
 
     public static $status = [
         0 => 'closed',

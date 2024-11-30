@@ -19,6 +19,7 @@ use App\USD_defaultmaster;
 use App\Defaultvalue;
 use App\SellQueriesINR;
 use App\BuyQueriesINR;
+use App\RiceFormMilestone3;
 use Mail;
 
 class MasterController extends Controller
@@ -764,6 +765,7 @@ class MasterController extends Controller
 		}
 
 	}
+	
 	public function listSellQueries()
 	{
 		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
@@ -771,8 +773,22 @@ class MasterController extends Controller
 		}])->orderBy('id', 'DESC')->get();		
 
 		return View('sellINR.index' , compact('sellerQueries'));
-
 	}
+
+	public function updateRemarksSaleQuery(Request $request)
+	{
+		SellQueriesINR::where('id' , $request->saleId)->update(['remarks' => $request->remarks]);
+		Session::flash('message' , 'Remarks updated successfully.');
+		return back();
+	}
+	
+	public function updateRemarksBuyQuery(Request $request)
+	{
+		BuyQueriesINR::where('id' , $request->buyId)->update(['remarks' => $request->remarks]);
+		Session::flash('message' , 'Remarks updated successfully.');
+		return back();
+	}
+	
 	public function closeSellQueries($sellQueryId)
 	{
 		SellQueriesINR::where('id' , $sellQueryId)->update(['status' => 0]);
@@ -780,6 +796,7 @@ class MasterController extends Controller
 
 		return back();
 	}
+
 	public function moveToTradeSellQueries($sellQueryId)
 	{
 		SellQueriesINR::where('id' , $sellQueryId)->update(['status' => 2]);
@@ -852,5 +869,24 @@ class MasterController extends Controller
 		Session::flash('message' , 'Order updated successfully.');
 		
 		return back();
+	}
+	public function riceFormMilestone()
+	{
+		$forms = RiceFormMilestone3::get();
+		return view('riceFormMilestone3.listRiceForm' , compact('forms') );
+	}
+	public function createRiceFormMilestone()
+	{
+		return view('riceFormMilestone3.create');
+	}
+	public function SaveRiceFormMilestone(Request $request)
+	{
+		$lastOrder = RiceFormMilestone3::orderBy('order','desc')->first();
+		RiceFormMilestone3::create([
+			'name' => $request->name,
+			'order' => ($lastOrder->order+1)
+		]);
+		Session::flash('message' , 'Form generated successfully.');
+		return view('riceFormMilestone3.create');
 	}
 }

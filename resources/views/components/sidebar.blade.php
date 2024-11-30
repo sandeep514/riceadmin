@@ -345,6 +345,12 @@
                     <span>News Runner</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['master.rice.form.milestone3']))?'active':'' }}">
+                <a href="{{ route('master.rice.form.milestone3') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Rice Form Milestone3</span>
+                </a>
+            </li>
 
         </ul>
     </section>
