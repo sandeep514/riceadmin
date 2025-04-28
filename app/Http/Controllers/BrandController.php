@@ -29,8 +29,7 @@ class BrandController extends Controller
         $lastAddedBrandOrder = Brand::orderBy('orders' , 'DESC')->first();
         
         if( in_array($fileExtension , $acceptedFileType) ) {
-
-            Brand::create(['name' => $request->brand_name, 'image' => $filename , 'orders' => ((int)$lastAddedBrandOrder+1)]);
+            Brand::create(['name' => $request->brand_name, 'image' => $filename , 'orders' => (int)($lastAddedBrandOrder->orders)+1]);
             $destinationPath = 'uploads/brandlogo';
             $file->move($destinationPath,$filename);
 

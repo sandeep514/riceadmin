@@ -10,6 +10,8 @@ class GalleryController extends Controller
 {
 	public function index(GalleryReportDatatable $dataTable)
 	{
+		$gallery = Gallery::get();
+		return View('gallery.index' , compact('gallery'));
 		return $dataTable->render('gallery.index');
 	}
 

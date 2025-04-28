@@ -353,6 +353,8 @@
             </li>
 
         </ul>
+        <!-- for Dollar $ -->
+      
     </section>
     <!-- /.sidebar -->
 </aside>

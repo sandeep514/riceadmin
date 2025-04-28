@@ -117,9 +117,9 @@ class ApiController extends Controller
 
     public function login(Request $request)
     {
-        $userModel = User::where(['email' => $request->email])->with(['role_rel', 'role_rel_usd'])->first();
+        $userModel = User::where(['email' => $request->email , 'userType' => 1])->with(['role_rel', 'role_rel_usd'])->first();
         if ($userModel == null) {
-            $userModel = User::where(['mobile' => $request->email])->with(['role_rel', 'role_rel_usd'])->first();
+            $userModel = User::where(['mobile' => $request->email , 'userType' => 1])->with(['role_rel', 'role_rel_usd'])->first();
         }
 
         if ($userModel == null) {
@@ -135,22 +135,22 @@ class ApiController extends Controller
             if ($userModel->is_usd_active == 0) {
                 if ($userModel->is_INR_active == 0) {
 
-                    $checkuser = User::where(['email' => $request->email])->first();
+                    $checkuser = User::where(['email' => $request->email , 'userType' => 1])->first();
                     if ($checkuser == null) {
                         dd("here");
-                        User::where(['mobile' => $request->email])->update(['is_INR_active' => 1]);
+                        User::where(['mobile' => $request->email , 'userType' => 1])->update(['is_INR_active' => 1]);
                     } else {
-                        User::where(['email' => $request->email])->update(['is_INR_active' => 1]);
+                        User::where(['email' => $request->email , 'userType' => 1])->update(['is_INR_active' => 1]);
                     }
                 }
             }
             
-            $userModel = User::where(['email' => $request->email])->with(['role_rel', 'role_rel_usd'])->first();
+            $userModel = User::where(['email' => $request->email , 'userType' => 1])->with(['role_rel', 'role_rel_usd'])->first();
             if ($userModel == null) {
-                $userModel = User::where(['mobile' => $request->email])->with(['role_rel', 'role_rel_usd'])->first();
+                $userModel = User::where(['mobile' => $request->email , 'userType' => 1])->with(['role_rel', 'role_rel_usd'])->first();
             }
             if ($userModel->status == 0) {
-                User::where(['email' => $request->email, 'status' => 1])->update(['api_token' => $random_token]);
+                User::where(['email' => $request->email, 'status' => 1 ,'userType' => 1])->update(['api_token' => $random_token]);
 
                 $Newotp = $userModel->otp;
                 $mobile = $userModel->mobile;
@@ -1136,12 +1136,12 @@ class ApiController extends Controller
             'guest' => 8
         ];
 
-        $hasEmail = User::where(['email' => $request->email, 'status' => 1])->get();
+        $hasEmail = User::where(['email' => $request->email, 'status' => 1,'userType' => 1])->get();
         if ($hasEmail->count() > 0) {
             return response()->json(['error' => 'Email already exist.', 'data' => []], 500);
         }
 
-        $hasMobile = User::where(['mobile' => $request->mobile, 'status' => 1])->get();
+        $hasMobile = User::where(['mobile' => $request->mobile, 'status' => 1 , 'userType' => 1])->get();
         if ($hasMobile->count() > 0) {
             return response()->json(['error' => 'Mobile Number already exist.', 'data' => []], 500);
         }
@@ -1184,6 +1184,7 @@ class ApiController extends Controller
                 'bagCategory' => ($request->userState != 8) ? $request->bagCategory : 0,
                 'expired_on' => Carbon::now()->addDays(365)->format('Y-m-d'),
                 'status' => 0,
+                'userType' => 1,
                 'usd_role' => $data[$request->userState],
                 'is_INR_active' => 0,
                 'is_usd_active' => 1
@@ -1199,6 +1200,7 @@ class ApiController extends Controller
                 'otp' => $otp,
                 'expired_on' => Carbon::now()->addMonth(536)->format('Y-m-d'),
                 'status' => 0,
+                'userType' => 1,
                 // 'usd_role' => 0,
                 'usd_role' => 6,
                 'is_INR_active' => 1,
@@ -1235,18 +1237,18 @@ class ApiController extends Controller
             'Broker' => 7,
             'Guest' => 8,
         ];
-        $hasEmail = User::where(['email' => $request->email])->where('id', '!=', $request->userId)->get();
+        $hasEmail = User::where(['email' => $request->email ,'userType' => 1])->where('id', '!=', $request->userId)->get();
         if ($hasEmail->count() > 0) {
             return response()->json(['error' => 'Email already exist.', 'data' => []], 500);
         }
 
-        $hasMobile = User::where(['mobile' => $request->mobile])->where('id', '!=', $request->userId)->get();
+        $hasMobile = User::where(['mobile' => $request->mobile , 'userType' => 1])->where('id', '!=', $request->userId)->get();
         if ($hasMobile->count() > 0) {
             return response()->json(['error' => 'Mobile Number already exist.', 'data' => []], 500);
         }
 
         $otp = rand(1111, 9999);
-        $user = User::where('id', $request->userId)->update([
+        $user = User::where('id', $request->userId)->where('userType' , 1)->update([
             'name' => $request->username,
             'email' => $request->email,
             'mobile' => $request->mobile,
@@ -1254,7 +1256,7 @@ class ApiController extends Controller
             // 'role' => $data[$request->userState],
         ]);
 
-        $user = User::where('id', $request->userId)->first();
+        $user = User::where('userType' , 1)->where('id', $request->userId)->first();
         if ($user) {
             return response()->json(['error' => null, 'data' => $user], 200);
         } else {
@@ -1264,10 +1266,10 @@ class ApiController extends Controller
 
     public function verifyUser(Request $request)
     {
-        $userDetails = User::where(['mobile' => $request->mobile, 'otp' => $request->otp])->first();
+        $userDetails = User::where(['mobile' => $request->mobile, 'otp' => $request->otp,'userType' => 1])->first();
 
         if ($userDetails != null) {
-            User::where(['mobile' => $request->mobile, 'otp' => $request->otp])->update(['status' => 1]);
+            User::where(['mobile' => $request->mobile, 'otp' => $request->otp,'userType' => 1])->update(['status' => 1]);
             // $this->sendOTP($request->mobile,false);
             return response()->json(['error' => "success", 'data' => []], 200);
         } else {
@@ -1277,7 +1279,7 @@ class ApiController extends Controller
 
     public function verifyOTP($number, $otp)
     {
-        $user = User::where(['mobile' => $number, 'otp' => $otp])->get();
+        $user = User::where(['mobile' => $number, 'otp' => $otp,'userType' => 1])->get();
         if ($user->count() > 0) {
             // $this->sendOTP($user[0]->mobile , true);
 
@@ -1289,7 +1291,7 @@ class ApiController extends Controller
 
     public function changePassword(Request $request)
     {
-        $user = User::where(['mobile' => $request->number])->update(['password' => Hash::make($request->password)]);
+        $user = User::where(['mobile' => $request->number,'userType' => 1])->update(['password' => Hash::make($request->password)]);
         if ($user != '') {
             return response()->json(['error' => null, 'data' => null]);
         } else {
@@ -1418,7 +1420,7 @@ class ApiController extends Controller
 
     public function updateUserToken(Request $request)
     {
-        User::where(['id' => $request->id])->update(['userToken' => $request->userToken]);
+        User::where(['id' => $request->id,'userType' => 1])->update(['userToken' => $request->userToken]);
         return response()->json(['error' => null, 'message' => "Token updated successfully..."]);
     }
 
@@ -1486,17 +1488,17 @@ class ApiController extends Controller
         $orderModel->status = 1;
 
         if ($orderModel->save()) {
-            $userDetails = User::where(['id' => $request->user_id])->get();
+            $userDetails = User::where(['id' => $request->user_id,'userType' => 1])->get();
             if ($userDetails->count() > 0) {
                 $userUsdRole = $userDetails[0]['usd_role'];
                 if ($userUsdRole != 0) {
-                    User::where(['id' => $request->user_id])->update(['expired_on' => $endDate, 'is_usd_active' => 1, 'transaction_id' => $request->transaction_id, 'planId' => $request->plan_id]);
+                    User::where(['id' => $request->user_id,'userType' => 1])->update(['expired_on' => $endDate, 'is_usd_active' => 1, 'transaction_id' => $request->transaction_id, 'planId' => $request->plan_id]);
                 } else {
-                    User::where(['id' => $request->user_id])->update(['expired_on' => $endDate, 'import_port' => 'Jebel Ali', 'usd_role' => 6, 'is_usd_active' => 1, 'transaction_id' => $request->transaction_id, 'planId' => $request->plan_id]);
+                    User::where(['id' => $request->user_id,'userType' => 1])->update(['expired_on' => $endDate, 'import_port' => 'Jebel Ali', 'usd_role' => 6, 'is_usd_active' => 1, 'transaction_id' => $request->transaction_id, 'planId' => $request->plan_id]);
                 }
             }
 
-            $userDetailsAfterPlanUpdate = User::where(['id' => $request->user_id])->get();
+            $userDetailsAfterPlanUpdate = User::where(['id' => $request->user_id,'userType' => 1])->get();
 
             return response()->json(['status' => 'success', 'last_inserted_id' => $orderModel->id, 'userDetails' => $userDetailsAfterPlanUpdate], 200);
         }
@@ -1614,7 +1616,7 @@ class ApiController extends Controller
     // Save Message
     public function saveMessage(Request $request)
     {
-        $userTo = User::where('id', $request->to)->first();
+        $userTo = User::where('id', $request->to)->where('userType' , 1)->first();
         $required = ['from', 'to', 'message'];
         $response = self::apiValidation($request->all(), $required);
         if ($response == null) {
@@ -1760,7 +1762,7 @@ class ApiController extends Controller
     public function checkUserExpired($userId)
     {
         $isExpiry = false;
-        $user = User::where('id', $userId)->first();
+        $user = User::where('id', $userId)->where('userType' , 1)->first();
         $today = Carbon::now();
         $todayDate = $today->format('Y-m-d');
         if ($user != null) {
@@ -2308,7 +2310,7 @@ class ApiController extends Controller
         // }
 
         $defalutPort = "Jebel Ali";
-        $userData = User::where('id', $userId)->first();
+        $userData = User::where('id', $userId)->where('userType' , 1)->first();
 
         if ($userData->import_port != null && $userData->import_port != '') {
             $defalutPort = $userData->import_port;
@@ -2394,7 +2396,7 @@ class ApiController extends Controller
         }
 
         $defalutPort = "Jebel Ali";
-        $userData = User::where('id', $userId)->first();
+        $userData = User::where('id', $userId)->where('userType' , 1)->first();
 
         if ($userData->import_port != null && $userData->import_port != '') {
             $defalutPort = $userData->import_port;
@@ -2473,7 +2475,7 @@ class ApiController extends Controller
         $chartData = ['date' => $date, 'prices' => $prices, 'combinedData' => array_values($combinedData)];
         $defalutPort = "Jebel Ali";
 
-        $userData = User::where('id', $userId)->first();
+        $userData = User::where('id', $userId)->where('userType' , 1)->first();
 
         if ($userData->import_port != null && $userData->import_port != '') {
             $defalutPort = $userData->import_port;
@@ -2596,7 +2598,7 @@ class ApiController extends Controller
             'user' => $request->user
         ]);
 
-        $user = User::where('id', $request->user)->first();
+        $user = User::where('id', $request->user)->where('userType' , 1)->first();
         $queryData = BuyQuery::with('getPackingType')->where('id', $buyerQuery->id)->first();
 
         $data = ['country' => $user->country, 'username' =>  $user->name, 'email' => $user->email, 'mobile' => $user->mobile, 'query' => $queryData];
@@ -2606,7 +2608,7 @@ class ApiController extends Controller
         // $response = MailController::html_email('mailBuyQuery','vidula@sntcgroup.com','vidula@sntcgroup.com' , $data); 
         // $response = MailController::html_email('mailBuyQuery','leena@sntcgroup.com','leena@sntcgroup.com' , $data); 
 
-        $listUser = User::whereIn('id', [4, 6])->get();
+        $listUser = User::whereIn('id', [4, 6])->where('userType' , 1)->get();
         $result = self::sendNotif("Notification", "Buyer Requirement", '', $buyerQuery->id);
         return false;
 
@@ -2682,7 +2684,7 @@ class ApiController extends Controller
         $queryDataId = $request->queryDataId;
         $user_id = $request->user_id;
 
-        $userDetails = User::where('id', $user_id)->first();
+        $userDetails = User::where('id', $user_id)->where('userType' , 1)->first();
 
         $bid =  Bid::create([
             'query_id' => $queryDataId,
@@ -2834,7 +2836,7 @@ class ApiController extends Controller
     {
         Bid::create(['query_id' => $request->buyQueryId, 'validTill' => Carbon::now()->addDays($request->validTill), 'seller_id' => $request->userid, 'bid_amount' => $request->amount, 'status' => 1]);
 
-        $user = User::where('id', $request->userid)->first();
+        $user = User::where('id', $request->userid)->where('userType' , 1)->first();
         $queryData = BuyQuery::where('id', $request->buyQueryId)->first();
 
         $data = ['id' => ($queryData->id + 1), 'username' =>  $user->name, 'email' => $user->email, 'mobile' => $user->mobile, 'query' => $queryData->qualityName, 'bidAmount' => $request->amount, 'validTill' => Carbon::now()->addDays($request->validTill)];
@@ -2887,7 +2889,7 @@ class ApiController extends Controller
 
         $bidData = Bid::where(['id'  =>  $request->bid_id])->first();
         $sellerId = $bidData->seller_id;
-        $userData = User::where('id', $sellerId)->first();
+        $userData = User::where('id', $sellerId)->where('userType' , 1)->first();
 
         $data = ['QualityName' => $QualityName, 'sno' => $request->bid_id, 'userData' => $userData];
 
@@ -2971,7 +2973,7 @@ class ApiController extends Controller
     public function startTrialPerid($userId)
     {
         $expiredDate = Carbon::now()->addDays(30)->format('Y-m-d');
-        $userHas = User::where('id', $userId)->first();
+        $userHas = User::where('id', $userId)->where('userType' , 1)->first();
         $userHasUSDRole = $userHas['usd_role'];
         $setUserRole = 6;
 
@@ -3030,7 +3032,7 @@ class ApiController extends Controller
 
     public function getBrandList()
     {
-        $brands = Brand::orderBy('name')->with(['getAttachments'])->get();
+        $brands = Brand::orderBy('name')->with(['getAttachments'])->where('status' , 1)->get();
         return response()->json(['sttaus' => true, 'data' => $brands], 200);
     }
     public function getRiceQualities($qualityTypeStatus)
@@ -3257,7 +3259,7 @@ class ApiController extends Controller
         $tradeId = $request->tradeId;
         $userId = $request->userId;
 
-        $userDetails = User::where(['id' => $userId])->first();
+        $userDetails = User::where(['id' => $userId,'userType' => 1])->first();
 
         // $mailTo = "sandy.singh51480@gmail.com";
         $mailTo = "enquiry@sntcgroup.com";

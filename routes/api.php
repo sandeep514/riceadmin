@@ -155,7 +155,7 @@ use Illuminate\Support\Facades\Route;
     Route::get('get/news/runner' , ['as' => 'get.news.runner' , 'uses' => 'ApiController@NewsRunner']);
 
 
-
+    require __DIR__ . '/portal.php';
 
 
 // });

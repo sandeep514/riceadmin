@@ -41,6 +41,7 @@ class User extends Authenticatable
         'is_INR_active',
         'transaction_id',
         'planId',
+        'userType',
         'stripe_customer_id',
         'stripe_payment_method'
     ];
@@ -110,5 +111,14 @@ class User extends Authenticatable
     public function getHotDealStatusBySeller()
     {
         return $this->belongsTo(HotDealAccept::class, 'buyer_id', 'id');
+    }
+    public function getWebPersonalDetails(){
+        return $this->belongsTo(WebPersonalDetails::class , 'id', 'user_id' );
+    }
+    public function getWebBusinessDetails(){
+        return $this->belongsTo(WebBusinessDetails::class  , 'id', 'user_id');
+    }
+    public function getWebUserAttachment(){
+        return $this->belongsTo(WebUserAttachment::class  , 'id', 'user_id');
     }
 }
