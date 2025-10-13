@@ -39,9 +39,15 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('users/{role}',['as'=>'users','uses'=>'UsersController@index','action'=>'view']);
                 Route::get('users/{role}/create',['as'=>'create.user','uses'=>'UsersController@create','action'=>'create']);
                 Route::post('users/save/{role}',['as'=>'save.user','uses'=>'UsersController@save','action'=>'create']);
+                Route::get('users/view/{id}',['as'=>'view.user','uses'=>'UsersController@view','action'=>'view']);
                 Route::get('users/edit/{id}/{role}',['as'=>'edit.user','uses'=>'UsersController@edit','action'=>'edit']);
                 Route::put('users/update/{id}/{role}',['as'=>'update.user','uses'=>'UsersController@update','action'=>'edit']);
                 Route::delete('users/delete/{id}/{role}',['as'=>'delete.user','uses'=>'UsersController@delete','action'=>'delete']);
+
+
+                Route::get('list/web/change/status/user/{userId}', ['as' => 'list.web.change.status.user', 'uses' => 'UsersController@listWebChangeSttausUser']);
+
+
 
                 Route::get('get/all/users',['as'=>'get.total.users','uses'=>'UsersController@getTotalUsers','action'=>'getUsers']);
                 Route::get('get/total/users/filter',['as'=>'get.total.users.with.date.filter','uses'=>'UsersController@getTotalUsersWithDateFilter','action'=>'getUsersWithFilter']);
@@ -284,6 +290,28 @@ Route::group(['prefix'=>'administrator'], function(){
 
             Route::get('rice/form/order', ['as' => 'rice.form.order',    'uses' => 'Controller@riceFormOrder']);
             Route::POST('update/rice/form/order', ['as' => 'update.rice.form.order',    'uses' => 'Controller@updateRiceFormOrder']);
+
+
+
+            //paddy
+            Route::get('list/web/paddy/state',      ['as' => 'list.web.paddy.state',    'uses' => 'PaddyStateController@listWebPaddyState']);
+            Route::get('create/web/paddy/state',      ['as' => 'create.web.paddy.state',    'uses' => 'PaddyStateController@createWebPaddyState']);
+            Route::POST('save/web/paddy/state',   ['as' => 'save.web.paddy.state',    'uses' => 'PaddyStateController@saveWebPaddyState']);
+            Route::get('edit/web/paddy/state/{paddyStateId}',      ['as' => 'edit.web.paddy.state',    'uses' => 'PaddyStateController@editWebPaddyState']);
+            Route::POST('update/web/paddy/state',   ['as' => 'update.web.paddy.state',    'uses' => 'PaddyStateController@updateWebPaddyState']);
+            Route::get('update/status/web/paddy/state/{paddyStateId}',   ['as' => 'update.status.web.paddy.state',    'uses' => 'PaddyStateController@updateState']);
+
+                        
+            Route::get('list/web/paddy/mandi',                  ['as' => 'list.web.paddy.mandi',    'uses' => 'PaddyMandiController@listWebPaddyMandi']);
+            Route::get('create/web/paddy/mandi',                ['as' => 'create.web.paddy.mandi',    'uses' => 'PaddyMandiController@createWebPaddyMandi']);
+            Route::POST('save/web/paddy/mandi',                 ['as' => 'save.web.paddy.mandi',    'uses' => 'PaddyMandiController@saveWebPaddyMandi']);
+            Route::get('edit/web/paddy/mandi/{paddyMandiId}',   ['as' => 'edit.web.paddy.mandi',    'uses' => 'PaddyMandiController@editWebPaddyMandi']);
+            Route::POST('update/web/paddy/mandi',               ['as' => 'update.web.paddy.mandi',    'uses' => 'PaddyMandiController@updateWebPaddyMandi']);
+            Route::get('update/status/web/paddy/mandi/{paddyMandiId}',   ['as' => 'update.status.web.paddy.mandi',    'uses' => 'PaddyMandiController@updateStatus']);
+
+
+
+
         });
 
         Route::group(['middleware'=>'field_runner'], function(){
@@ -451,13 +479,18 @@ Route::group(['prefix'=>'administrator'], function(){
 
 
     Route::get('list/sell/queries/INR' , ['as' => 'master.list.sell.queries.INR' , 'uses' => 'MasterController@listSellQueries']);
+    Route::get('list/future/sell/queries/INR' , ['as' => 'master.future.list.sell.queries.INR' , 'uses' => 'MasterController@listFutureSellQueries']);
+
+
     Route::POST('update/remarks/sale/query' , ['as' => 'master.update.remarks.saleOrder' , 'uses' => 'MasterController@updateRemarksSaleQuery']);
     Route::POST('update/remarks/buy/query' , ['as' => 'master.update.remarks.buyOrder' , 'uses' => 'MasterController@updateRemarksBuyQuery']);
 
     Route::get('close/sell/queries/{sellQueryId}' , ['as' => 'close.sell.queries' , 'uses' => 'MasterController@closeSellQueries']);
     Route::get('move/sell/queries/{sellQueryId}' , ['as' => 'move.to.trade.sell.queries' , 'uses' => 'MasterController@moveToTradeSellQueries']);
+    Route::get('convert/queries/{type}/{id}' , ['as' => 'convert.to.trade.queries' , 'uses' => 'MasterController@convertToTradeQueries']);
 
     Route::get('list/buy/queries/INR' , ['as' => 'master.list.buy.queries.INR' , 'uses' => 'MasterController@listBuyQueries']);
+    Route::get('list/future/buy/queries/INR' , ['as' => 'master.future.list.buy.queries.INR' , 'uses' => 'MasterController@listFutureBuyQueries']);
     Route::get('close/buy/queries/{buyQueryId}' , ['as' => 'close.buy.queries' , 'uses' => 'MasterController@closeBuyQueries']);
     Route::get('move/buy/queries/{buyQueryId}' , ['as' => 'move.to.trade.buy.queries' , 'uses' => 'MasterController@moveToTradeBuyQueries']);
 
@@ -472,4 +505,57 @@ Route::group(['prefix'=>'administrator'], function(){
 
     //paid email
     Route::GET('get/latest/date/live/prices', ['as' => 'master.get.latest.price',    'uses' => 'Controller@getLatestPrices']);
+
+
+
+    Route::get('web/plans/keys' , ['as' => 'list.web.plans.keys' , 'uses' => 'WebPlanController@indexKeys']);
+    Route::get('web/plans/keys/create' , ['as' => 'list.web.plans.keys.create' , 'uses' => 'WebPlanController@createKeys']);
+    Route::post('web/plans/keys/save' , ['as' => 'web.plans.keys.save' , 'uses' => 'WebPlanController@saveKeys']);
+    Route::get('web/plans/keys/edit/{webPlanKeyId}' , ['as' => 'web.plans.keys.edit' , 'uses' => 'WebPlanController@editKeys']);
+    Route::post('web/plans/keys/update' , ['as' => 'web.plans.keys.update' , 'uses' => 'WebPlanController@updateKeys']);
+
+
+
+    Route::get('web/plans' , ['as' => 'list.web.plans' , 'uses' => 'WebPlanController@indexPlan']);
+    Route::get('web/plans/create' , ['as' => 'list.web.plans.create' , 'uses' => 'WebPlanController@createPlan']);
+    Route::post('web/plans/save' , ['as' => 'web.plans.save' , 'uses' => 'WebPlanController@savePlan']);
+    Route::get('web/plans/edit/{webPlanId}' , ['as' => 'web.plans.edit' , 'uses' => 'WebPlanController@editPlan']);
+    Route::post('web/plans/update' , ['as' => 'web.plans.update' , 'uses' => 'WebPlanController@updatePlan']);
+
+
+
+    Route::get('testimonial', ['as' => 'testimonial.index' , 'uses' => 'TestimonialController@index']);
+    Route::POST('testimonial/show', ['as' => 'testimonial.show' , 'uses' => 'TestimonialController@show']);
+    Route::get('testimonial/create', ['as' => 'testimonial.create' , 'uses' => 'TestimonialController@create']);
+    Route::POST('testimonial/save', ['as' => 'testimonial.save' , 'uses' => 'TestimonialController@save']);
+    Route::get('testimonial/edit/{id}', ['as' => 'testimonial.edit' , 'uses' => 'TestimonialController@edit']);
+    Route::POST('testimonial/update', ['as' => 'testimonial.update' , 'uses' => 'TestimonialController@update']);
+    Route::get('testimonial/delete', ['as' => 'testimonial.delete' , 'uses' => 'TestimonialController@delete']);
+
+
+    Route::get('testimonial/video', ['as' => 'testimonial.video.index' , 'uses' => 'TestimonialController@videoIndex']);
+    Route::POST('testimonial/video/show', ['as' => 'testimonial.video.show' , 'uses' => 'TestimonialController@videoShow']);
+    Route::get('testimonial/video/create', ['as' => 'testimonial.video.create' , 'uses' => 'TestimonialController@videoCreate']);
+    Route::POST('testimonial/video/save', ['as' => 'testimonial.video.save' , 'uses' => 'TestimonialController@videoSave']);
+    Route::get('testimonial/video/edit/{id}', ['as' => 'testimonial.video.edit' , 'uses' => 'TestimonialController@videoEdit']);
+    Route::POST('testimonial/video/update', ['as' => 'testimonial.video.update' , 'uses' => 'TestimonialController@videoUpdate']);
+    Route::get('testimonial/video/delete/{testimonialId}', ['as' => 'testimonial.video.delete' , 'uses' => 'TestimonialController@videoDelete']);
+
+
+    Route::get('rice/grade', ['as' => 'rice.grade', 'uses' => 'GradeController@index']);
+    Route::get('rice/grade/create', ['as' => 'create.rice.grade', 'uses' => 'GradeController@create']);
+    Route::post('rice/grade/save', ['as' => 'save.rice.grade', 'uses' => 'GradeController@save']);
+    Route::get('rice/grade/edit/{id}', ['as' => 'edit.rice.grade', 'uses' => 'GradeController@editGrade']);
+    Route::put('rice/grade/update/{id}', ['as' => 'update.rice.grade', 'uses' => 'GradeController@GradeUpdate']);
+    Route::delete('rice/grade/delete/{id}', ['as' => 'delete.rice.grade', 'uses' => 'GradeController@deleteGrade']);
+
+
+    // routes/web.php (add these routes)
+    Route::get('paddy-prices', ['as' => 'list.paddy.price', 'uses' => 'PaddyPriceController@index']);
+    Route::get('create/paddy-prices', ['as' => 'create.paddy.price', 'uses' => 'PaddyPriceController@create']);
+    Route::post('save/paddy-prices', ['as' => 'save.paddy.price', 'uses' => 'PaddyPriceController@store']);
+    Route::get('paddy-prices/{id}', ['as' => 'edit.paddy.price', 'uses' => 'PaddyPriceController@edit']);
+    Route::put('update/paddy-prices', ['as' => 'update.paddy.price', 'uses' => 'PaddyPriceController@update']);
+    // Route::delete('paddy-prices/{id}', ['as' => 'delete.rice.grade', 'uses' => 'PaddyPriceController@deleteGrade']);
+
 });

@@ -7,11 +7,35 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Trade For','Trade For') !!}
+                                <select class="form-control" required name="tradeFor">
+                                    <option value=""> Select </option>
+                                        <option value="1"> App </option>
+                                        <option value="2"> Web </option>
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Trade Type','Trade Type') !!}
                                 <select class="form-control" required name="tradeType">
                                     <option value=""> Select </option>
-                                        <option value="1"> Buy </option>
-                                        <option value="2"> Sell </option>
+                                        <option value="1" {{ (in_array("buy" , $explodeURL))?'selected' : '' }}> Buy </option>
+                                        <option value="2" {{ (in_array("sell" , $explodeURL))?'selected' : '' }}> Sell </option>
+                                        <option value="3" {{ (in_array("futurebuying" , $explodeURL))?'selected' : '' }}> Future Buying </option>
+                                        <option value="4" {{ (in_array("futureselling" , $explodeURL))?'selected' : '' }}> Future Selling </option>
+                                </select>
+                            </div>
+
+                            @if( in_array('convert' , $explodeURL) )
+                                {{-- <input type="hidden" name="tradeType" value="sell" /> --}}
+                                <input type="hidden" name="queryId" value="{{ $explodeURL[count($explodeURL) - 1] }}" /> 
+                            @endif
+                            
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Farming Type','Farming Type') !!}
+                                <select class="form-control" required name="farmingType">
+                                    <option value=""> Select </option>
+                                        <option value="1"> Conventional </option>
+                                        <option value="2"> Compliance / Organic </option>
                                 </select>
                             </div>
 
@@ -45,9 +69,9 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing') !!}
                                 <select class="form-control" required name="ricepacking">
-                                  {{--   @foreach($packing as $k => $v)
+                                  @foreach($packing as $k => $v)
                                         <option value="{{ $v->id }}">{{ $v->size }} {{ $v->packing }}</option>
-                                    @endforeach --}}
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
@@ -151,11 +175,26 @@
                                         {!! Form::label('elongation','Elongation') !!}
                                         <input type="text" class="form-control" name="elongation">
                                     </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Rice Size','Rice Size') !!}
+                                        @php use App\TradeQueriesINR; @endphp
+
+                                        <select class="form-control" required name="riceSize">
+                                            <option value=""> Select </option>
+                                            @foreach(TradeQueriesINR::$riceSize as $k => $v)
+                                                <option value="{{ $k }}"> {{$v}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                              <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Additional Info','Additional Info') !!}
                                 <textarea class="form-control" placeholder="Additional Info" rows="5" name="additioanlInfo"></textarea>
+                            </div>
+                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('personal_remark','Personal Remarks') !!}
+                                <textarea class="form-control" placeholder="Personal Remarks" rows="5" name="personal_remarks"></textarea>
                             </div>
                         </div>
                     </div>

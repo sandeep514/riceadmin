@@ -8,17 +8,13 @@
     }
 </style>
 <aside class="main-sidebar">
-    <!-- sidebar: style can be found in sidebar.less -->
     <section class="sidebar">
-        <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
                 <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
                 <p>test Admin</p>
-                <!--<a href="#"><i class="fa fa-circle text-success"></i> </a>-->
-                
                 <div>
                     <div class="">
                         @if( ChatStatus::getStatus() == 0 )
@@ -39,7 +35,7 @@
             </div>
         </div>
         <!-- search form -->
-       <!--  <form action="#" method="get" class="sidebar-form">
+        <!--  <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
@@ -81,11 +77,23 @@
                         </li>
 
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 7)?'active':'' }}">
+                            <a href="{{ route('users','6') }}"><i class="fa fa-circle-o"></i> Supplier</a>
+                        </li>
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 7)?'active':'' }}">
                             <a href="{{ route('users','7') }}"><i class="fa fa-circle-o"></i> Broker</a>
                         </li>
 
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
-                            <a href="{{ route('users','6') }}"><i class="fa fa-circle-o"></i> Supplier</a>
+                            <a href="{{ route('users','9') }}"><i class="fa fa-circle-o"></i> Buyer & Seller</a>
+                        </li>
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
+                            <a href="{{ route('users','10') }}"><i class="fa fa-circle-o"></i> Farmer</a>
+                        </li>
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
+                            <a href="{{ route('users','11') }}"><i class="fa fa-circle-o"></i> Vendor</a>
+                        </li>
+                        <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
+                            <a href="{{ route('users','12') }}"><i class="fa fa-circle-o"></i> Service Provider</a>
                         </li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user','get.new.vendors']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('get.new.vendors') }}"><i class="fa fa-circle-o"></i> New Vendors</a>
@@ -103,11 +111,7 @@
                         <i class="fa fa-users"></i> <span>Modules & Permissions</span>
                     </a>
                 </li>
-                <li class="{{ (in_array($currentRoute,['designations','create.designation','edit.designation']))?'active':'' }}">
-                    <a href="{{ route('designations') }}">
-                        <i class="fa fa-address-card-o"></i> <span>Designations</span>
-                    </a>
-                </li>
+                
             @endif
 
             @php
@@ -232,6 +236,11 @@
                     <i class="fa fa-address-card-o"></i> <span>Rice Form Order</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['designations','create.designation','edit.designation']))?'active':'' }}">
+                <a href="{{ route('designations') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Designations</span>
+                </a>
+            </li>
 
         </ul>
 
@@ -327,10 +336,22 @@
                     <span>Seller Queries INR</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['master.future.list.sell.queries.INR']))?'active':'' }}">
+                <a href="{{ route('master.future.list.sell.queries.INR') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Future Seller Queries INR</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['master.list.buy.queries.INR']))?'active':'' }}">
                 <a href="{{ route('master.list.buy.queries.INR') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Buyer Queries INR</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['master.future.list.buy.queries.INR']))?'active':'' }}">
+                <a href="{{ route('master.future.list.buy.queries.INR') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Future Buyer Queries INR</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['master.trade']))?'active':'' }}">
@@ -349,6 +370,62 @@
                 <a href="{{ route('master.rice.form.milestone3') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Rice Form Milestone3</span>
+                </a>
+            </li>
+
+            <li class="{{ (in_array($currentRoute,['testimonial.index']))?'active':'' }}">
+                <a href="{{ route('testimonial.index') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Testimonial</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['testimonial.video.index']))?'active':'' }}">
+                <a href="{{ route('testimonial.video.index') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Testimonial Video</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['rice.grade']))?'active':'' }}">
+                <a href="{{ route('rice.grade') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Grade</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['rice.grade']))?'active':'' }}">
+                <a href="{{ route('rice.grade') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Rice Opening / Closing</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['list.web.plans.keys']))?'active':'' }}">
+                <a href="{{ route('list.web.plans.keys') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Web Plans Keys</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['list.web.plans']))?'active':'' }}">
+                <a href="{{ route('list.web.plans') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Web Plans</span>
+                </a>
+            </li>
+            <li class="header">PADDY</li>
+            <li class="{{ (in_array($currentRoute,['list.web.paddy.state']))?'active':'' }}">
+                <a href="{{ route('list.web.paddy.state') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Paddy State </span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['list.web.paddy.mandi']))?'active':'' }}">
+                <a href="{{ route('list.web.paddy.mandi') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Paddy Mandi </span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['list.paddy.price']))?'active':'' }}">
+                <a href="{{ route('list.paddy.price') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Paddy Prices </span>
                 </a>
             </li>
 

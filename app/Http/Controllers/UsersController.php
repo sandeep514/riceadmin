@@ -18,9 +18,9 @@ class UsersController extends Controller
     {
         $users = User::where('role' , $role)->where('status' , 1)->get();
         return View('users.users',compact('users'));
-
         // return $dataTable->render('users.index');
     }
+
     // public function index(UsersDataTable $dataTable )
     // {
     //     return $dataTable->render('users.index');
@@ -103,5 +103,39 @@ class UsersController extends Controller
     public function getTotalUsersWithDateFilter( AllUsersDatatable $dataTable,Request $request )
     {
         return $dataTable->render('users.allUsers' );
+    }
+
+    public function view($userId)
+    {
+        $user = User::with(['getWebPersonalDetails','getWebBusinessDetails' , 'getWebUserAttachment' , 'getWebUserSubscription'])->find($userId)->toArray();
+
+        return view('users.view',['user' => $user]);
+    }
+
+    public function listWebChangeSttausUser($userId)
+    {
+        $user = User::where('id' , $userId);
+        $userDetail = $user->first();
+
+        $user->update([ 'is_active_by_admin' => ($userDetail->is_active_by_admin) ? 0 : 1]);
+
+        if($userDetail->status == 0){
+            $data = [];
+            $data['user_name'] = $userDetail->name;
+
+            $mailTo = $userDetail->email;
+            $mailMessage = '';
+            $subject = 'User Activated';
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
+
+            $respose = Mail::send('mail.activeUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
+        }
+
+        Session::flash('success','Success|User status updated successfully!');
+        return back();
     }
 }

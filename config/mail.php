@@ -49,8 +49,8 @@ return [
             'host' => "smtp.gmail.com",
             'port' => 587,
             'encryption' => 'tls',
-            'username' => "info@sntcgroup.com",
-            'password' => "sntc123456",
+            'username' => env('MAIL_USERNAME'),
+            'password' => env('MAIL_PASSWORD'),
             'timeout' => null,
         ],
         

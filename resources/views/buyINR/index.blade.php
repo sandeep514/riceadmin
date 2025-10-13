@@ -73,6 +73,7 @@
 
                                                     <td style="text-align: center;">
                                                         @if( $v->status == 1)
+                                                            <a href="{{ route('convert.to.trade.queries' ,['type' => 'buy' , 'id' => $v->id]) }}" class="btn btn-success btn-xs">Convert to trade</a>
                                                             <a href="{{ route('move.to.trade.buy.queries' , $v->id) }}" class="btn btn-info btn-xs">Moved to trade</a>
                                                             <a href="{{ route('close.buy.queries' , $v->id) }}" class="btn btn-danger btn-xs">Close deal</a>
                                                         @endif

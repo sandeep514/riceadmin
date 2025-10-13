@@ -7,6 +7,7 @@ use App\RiceForm;
 use App\RiceName;
 use App\RiceType;
 use App\Port;
+use App\PublicPacking;
 use App\LivePrice;
 use Session;
 use Carbon\Carbon;
@@ -18,7 +19,9 @@ use App\USD_prices;
 use App\USD_defaultmaster;
 use App\Defaultvalue;
 use App\SellQueriesINR;
+use App\FutureSellQueriesINR;
 use App\BuyQueriesINR;
+use App\FutureBuyQueriesINR;
 use App\RiceFormMilestone3;
 use Mail;
 
@@ -100,6 +103,7 @@ class MasterController extends Controller
 	public function getCityById($id)
 	{
 		$decoded = base64_decode($id);
+
 		$livePrices = LivePrice::where('state' , $decoded)->first();
 		return view('master.editPriceState' , compact('livePrices'));
 	}
@@ -129,7 +133,7 @@ class MasterController extends Controller
 			Session::flash('message' , 'Type field is required.');
 			return back();
 		}
-		RiceName::where('id' , $request->id)->update([ 'name' => $request->name , 'type' => $request->riceType ]);
+		RiceName::where('id' , $request->id)->update([ 'name' => $request->name ,'from_month' => $request->from_month??'','end_month' => $request->end_month??'', 'type' => $request->riceType ]);
 		return back();
 	}
 	
@@ -775,6 +779,15 @@ class MasterController extends Controller
 		return View('sellINR.index' , compact('sellerQueries'));
 	}
 
+	public function listFutureSellQueries()
+	{
+		$sellerQueries = FutureSellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
+			return $query->with('getWandType')->get();
+		}])->orderBy('id', 'DESC')->get();		
+
+		return View('futuresellINR.index' , compact('sellerQueries'));
+	}
+
 	public function updateRemarksSaleQuery(Request $request)
 	{
 		SellQueriesINR::where('id' , $request->saleId)->update(['remarks' => $request->remarks]);
@@ -821,6 +834,14 @@ class MasterController extends Controller
 		return back();
 	}
 
+	public function convertToTradeQueries($type  , $id)
+	{
+		$qualityMaster = RiceName::pluck('type_status' , 'type');
+        $packing = PublicPacking::get();
+		return View('trade.create' , compact('type' , 'id', 'qualityMaster' , 'packing'));
+		dd($type , $id);
+	}
+
 	public function listBuyQueries()
 	{
 		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
@@ -828,6 +849,14 @@ class MasterController extends Controller
 		}])->orderBy('id' ,'DESC')->get();
 
 		return View('buyINR.index' , compact('buyQueries'));
+
+	}
+	public function listFutureBuyQueries()
+	{
+		$buyQueries = FutureBuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
+			return $query->with('getWandType')->get();
+		}])->orderBy('id' ,'DESC')->get();
+		return View('futurebuyINR.index' , compact('buyQueries'));
 
 	}
 	public function closeBuyQueries($buyQueryId)

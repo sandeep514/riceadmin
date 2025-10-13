@@ -46,6 +46,10 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Rice Type</th>
+                                                        <th>Opening</th>
+                                                        <th>Closing</th>
+                                                        <th>Month Start</th>
+                                                        <th>Month End</th>
                                                         <th>Crop Year</th>
                                                         <th>Crop Grade</th>
                                                         <th>Min Price</th>
@@ -58,14 +62,23 @@
                                                         @php
                                                             $min = null;
                                                             $max = null;
+                                                            $opening = null;
+                                                            $closing = null;
                                                             $upDown = null;
                                                             $cropYear = null;
                                                             $cropGrade = null;
+                                                            $monthStart = null;
+                                                            $monthEnd = null;
                                                             
                                                             if($lastPrices != null){
                                                                 $details = $lastPrices->where('form',$form->id)->where('state', str_replace(' ' , '_' , $keyy) )->first();
                                                                 if($details != null){
                                                                     $min = $details->min_price;
+                                                                    $max = $details->max_price;
+                                                                    $opening = $details->opening;
+                                                                    $closing = $details->closing;
+                                                                    $monthStart = $details->monthStart;
+                                                                    $monthEnd = $details->monthEnd;
                                                                     $max = $details->max_price;
                                                                     $upDown = $details->up_down;
                                                                     $cropYear = $details->cropYear;
@@ -74,34 +87,45 @@
                                                             }
                                                         @endphp
                                                             <tr>
-                                                                <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
-                                                                <td>
-                                                                        
-                                                                    
-                                                                    <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+                                                                <td class="col-md-2">
+                                                                    <input type="checkbox" name="check" class="check_user_templete">{{$form->id}} {{ $form->form_name }}
+                                                                </td>
+                                                                <td class="col-md-1">
+                                                                    <input type="text" value="{{ $opening }}" name="opening[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Opening" class="form-control" > 
+                                                                </td>
+                                                                <td class="col-md-1"> 
+                                                                    <input type="text" value="{{ $closing }}" name="closing[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Closing" class="form-control" > 
+                                                                </td>
 
+                                                                <td class="col-md-1">
+                                                                    <input type="number" min="1" max="12" value="{{ $monthStart }}" name="monthStart[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month Start" class="form-control" > 
+                                                                </td>
+                                                                <td class="col-md-1"> 
+                                                                    <input type="number" min="1" max="12" value="{{ $monthEnd }}" name="monthEnd[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month End" class="form-control" > 
+                                                                </td>
+
+
+                                                                <td class="col-md-1">
+                                                                    <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
                                                                         @foreach($lastYears as $k => $v)
                                                                             <option value="{{ $v }}" {{ ($cropYear == $v)?'selected':'' }}>{{$v}}</option>
                                                                         @endforeach
                                                                     </select>
-
                                                                 </td>
-                                                                <td>
-                                                                    
+                                                                <td class="col-md-1">
                                                                     <select name="cropGrade[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
                                                                         @foreach(App\RiceForm::$grade as $k => $v)
                                                                             <option value="{{ $k }}" {{ ($cropGrade == $v)?'selected':'' }}>{{$v}}</option>
                                                                         @endforeach
                                                                     </select>
-
                                                                 </td>
-                                                                <td>
+                                                                <td class="col-md-1">
                                                                     {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
                                                                 </td>
-                                                                <td>
+                                                                <td class="col-md-1">
                                                                     {!! Form::text('max['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$max,['class'=>'form-control']) !!}
                                                                 </td>
-                                                                <td>
+                                                                <td class="col-md-1">
                                                                     {!! Form::select('up_down['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
                                                                 </td>
                                                             </tr>
@@ -144,6 +168,10 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Rice Type</th>
+                                                    <th>Opening</th>
+                                                    <th>Closing</th>
+                                                    <th>Month Start</th>
+                                                    <th>Month End</th>
                                                     <th>Crop Year</th>
                                                     <th>Crop Grade</th>
                                                     <th>Min Price</th>
@@ -158,6 +186,10 @@
                                                     @php
                                                         $min = null;
                                                         $max = null;
+                                                        $opening = null;
+                                                        $closing = null;
+                                                        $monthStart = null;
+                                                        $monthEnd = null;
                                                         $upDown = null;
                                                         $cropYear = null;
                                                         $cropGrade = null;
@@ -167,6 +199,10 @@
                                                             if($details != null){
                                                                 $min = $details->min_price;
                                                                 $max = $details->max_price;
+                                                                $opening = $details->opening;
+                                                                $closing = $details->closing;
+                                                                $monthStart = $details->monthStart;
+                                                                $monthEnd = $details->monthEnd;
                                                                 $upDown = $details->up_down;
                                                                 $cropYear = $details->cropYear;
                                                                 $cropGrade = $details->cropGrade;
@@ -176,8 +212,19 @@
                                                     
                                                         <tr>
                                                             <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
+                                                            <td class="col-md-1">
+                                                                <input type="text" value="{{ $opening }}" name="opening[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Opening" class="form-control" > 
+                                                            </td>
+                                                            <td class="col-md-1"> 
+                                                                <input type="text" value="{{ $closing }}" name="closing[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Closing" class="form-control" > 
+                                                            </td>
+                                                            <td class="col-md-1">
+                                                                <input type="number" min="1" max="12" value="{{ $monthStart }}" name="monthStart[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month Start" class="form-control" > 
+                                                            </td>
+                                                            <td class="col-md-1"> 
+                                                                <input type="number" min="1" max="12" value="{{ $monthEnd }}" name="monthEnd[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month End" class="form-control" > 
+                                                            </td>
                                                             <td>
-                                                                
                                                                 <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
                                                                     @foreach($lastYears as $k => $v)
                                                                         <option value="{{ $v }}" {{ ($cropYear == $v)?'selected':'' }}>{{$v}}</option>

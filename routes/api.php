@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
     });
 
     Route::get('prices/{state}/{type}','ApiController@getPrices');
+    Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb');
+    Route::get('get/price/by/year/{state}/{type}','ApiController@getPricesByYear');
+    
     Route::get('prices2/{state}/{type}','ApiController@getPrices2');
     Route::get('list/port',                 ['uses'=>'ApiController@getPorts']);
     Route::get('get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
@@ -34,7 +37,7 @@ use Illuminate\Support\Facades\Route;
     Route::POST('change/password' ,         ['as' => 'change.password'          , 'uses' => 'ApiController@changePassword']);
 
     Route::GET('send/otp/{id}' ,            ['as' => 'send.otp'                 , 'uses' => 'ApiController@sendOTP']);
-    Route::GET('resend/otp/{mobile}' ,            ['as' => 'resend.otp'                 , 'uses' => 'ApiController@resendOTP']);
+    Route::GET('resend/otp/{mobile}' ,      ['as' => 'resend.otp'               , 'uses' => 'ApiController@resendOTP']);
     Route::GET('verify/otp/{number}/{id}' , ['as' => 'verify.otp'               , 'uses' => 'ApiController@verifyOTP']);
 
     Route::get('get/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiState']);
@@ -125,21 +128,38 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('get/brand/list' , ['as' => 'get.brand.list' , 'uses' => 'ApiController@getBrandList']);
     Route::get('get/packing/by/{tradeType}' , ['as' => 'get.packing.tradeType' , 'uses' => 'ApiController@getPackingByTradeType']);
+    Route::get('get/packing/type' , ['as' => 'get.packing.type' , 'uses' => 'ApiController@getBagPacking']);
     Route::get('get/rice/qualities/{riceType}' , ['as' => 'get.rice.qualities' , 'uses' => 'ApiController@getRiceQualities']);
     Route::get('get/rice/qualities/name/{riceId}' , ['as' => 'get.rice.qualities.name' , 'uses' => 'ApiController@getRiceQualitiesName']);
     Route::get('get/rice/wand/{riceNameId}' , ['as' => 'get.rice.wand' , 'uses' => 'ApiController@getRiceWand']);
 
 
 
+    Route::get('get/designation' , ['as' => 'get.designation' , 'uses' => 'ApiController@getDesignation']);
+
+
     Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
     Route::get('get/trades/{userId}' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade']);
+    Route::get('get/personal/trades/{userId}' , ['as' => 'get.personal.trade' , 'uses' => 'ApiController@getPersonalTrade']);
+    Route::get('get/all/trades/count' , ['as' => 'get.personal.trades.count' , 'uses' => 'ApiController@getTradeCounts']);
+    Route::get('get/personal/query/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQuery']);
+    Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade']);
+
+
+    Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount']);
+
 
     //get trade details
     Route::get('get/trade/details/{tradeId}' , ['as' => 'get.trade.details' , 'uses' => 'ApiController@getTradeDetail']);
 
 
     Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
+    Route::post('submit/sell/query/web' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
     Route::PATCH('submit/buy/query' , ['as' => 'submit.buy.query' , 'uses' => 'ApiController@SubmitBuyQuery']);
+    Route::POST('submit/buy/query/web' , ['as' => 'submit.buy.query.web' , 'uses' => 'ApiController@SubmitBuyQuery']);
+
+    Route::post('future/submit/sell/query' , ['as' => 'future.submit.sell.query' , 'uses' => 'ApiController@FutureSubmitSellQuery']);
+    Route::post('future/submit/buy/query' , ['as' => 'future.submit.buy.query' , 'uses' => 'ApiController@FutureSubmitBuyQuery']);
 
 
 
@@ -149,14 +169,23 @@ use Illuminate\Support\Facades\Route;
     Route::get('get/buyer/inr/packing' , ['as' => 'get.buyer.inr.packing' , 'uses' => 'ApiController@getBuyerPackingINR']);
     Route::POST('like/trade' , ['as' => 'post.like.trade' , 'uses' => 'ApiController@likeTrade']);
     Route::POST('intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@tradeintrested']);
+    Route::POST('get/my/trades' , ['as' => 'get.personal.trades' , 'uses' => 'ApiController@getMyTrades']);
 
 
 
     Route::get('get/news/runner' , ['as' => 'get.news.runner' , 'uses' => 'ApiController@NewsRunner']);
+    Route::get('get/testimonial' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonial']);
+    Route::get('get/testimonial/videos' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonialVideos']);
+    Route::get('get/grades' , ['as' => 'list.grade' , 'uses' => 'ApiController@listGrade']);
+    Route::POST('contact/us' , ['as' => 'contact.us' , 'uses' => 'ApiController@contactUs']);
 
+
+    Route::get('list/web/paddy/state',      ['as' => 'list.web.paddy.state',    'uses' => 'PaddyApiController@listPaddy']);
+    Route::get('list/web/paddy/mandi/{stateId}',      ['as' => 'list.web.paddy.state.mandi',    'uses' => 'PaddyApiController@listPaddyMandi']);
+
+    Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
+    Route::get('get/category/role/{roleId}',      ['as' => 'get.category.role',    'uses' => 'ApiController@getCategoryByRole']);
 
     require __DIR__ . '/portal.php';
-
-
 // });
 

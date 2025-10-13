@@ -40,6 +40,7 @@
                                 <a href="{{ route('master.trade.create') }}" class="btn btn-info btn-sm">Create</a>
                             </div>
                         </div>
+                        
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">
@@ -47,28 +48,29 @@
                                     <table id="example2" class="display" style="width: 100%;">
                                         <thead>
                                             <tr>
-                                                <!-- <th style="text-align: center ">sno</th> -->
-                                                <th style="text-align: center ">Trade ID</th>
-                                                <th style="text-align: center ">Trade Type</th>
-                                                <th style="text-align: center ">Quality Type</th>
-                                                <th style="text-align: center ">Quality</th>
-                                                <th style="text-align: center ">QualityForm</th>
-                                                <th style="text-align: center ">Grade</th>
-                                                <th style="text-align: center ">Packing</th>
-                                                <th style="text-align: center ">Quantity</th>
-                                                <th style="text-align: center ">OfferPrice</th>
-                                                <th style="text-align: center ">ValidDays</th>
-                                                <th style="text-align: center ">Packing File</th>
-                                                <th style="text-align: center ">Uncooked File</th>
-                                                <th style="text-align: center ">Cooked File</th>
-                                                <th style="text-align: center ">Status</th>
-                                                <th style="text-align: center ">Created at</th>
-                                                <th style="text-align: center ">Action</th>
+                                                <!-- <th style="text-align: center">sno</th> -->
+                                                <th style="text-align: center">Trade ID</th>
+                                                <th style="text-align: center">Trade Type</th>
+                                                <th style="text-align: center">Quality Type</th>
+                                                <th style="text-align: center">Quality</th>
+                                                <th style="text-align: center">QualityForm</th>
+                                                <th style="text-align: center">Grade</th>
+                                                <th style="text-align: center">Packing</th>
+                                                <th style="text-align: center">Quantity</th>
+                                                <th style="text-align: center">OfferPrice</th>
+                                                <th style="text-align: center">ValidDays</th>
+                                                <th style="text-align: center">Packing File</th>
+                                                <th style="text-align: center">Uncooked File</th>
+                                                <th style="text-align: center">Cooked File</th>
+                                                <th style="text-align: center">Status</th>
+                                                <th style="text-align: center">Created at</th>
+                                                <th style="text-align: center">Action</th>
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             @foreach($sellQueries as $k => $v)
+
                                                 <tr>
                                                     <!-- <td>{{ $v->id }}</td> -->
                                                     <td>Trade_{{ $v->id }}</td>
@@ -114,22 +116,22 @@
                                         
                                         <tfoot>
                                             <tr>
-                                                <th style="text-align: center ">Trade ID</th>
-                                                <th style="text-align: center ">Trade Type</th>
-                                                <th style="text-align: center ">Quality Type</th>
-                                                <th style="text-align: center ">Quality</th>
-                                                <th style="text-align: center ">QualityForm</th>
-                                                <th style="text-align: center ">Grade</th>
-                                                <th style="text-align: center ">Packing</th>
-                                                <th style="text-align: center ">Quantity</th>
-                                                <th style="text-align: center ">OfferPrice</th>
-                                                <th style="text-align: center ">ValidDays</th>
-                                                <th style="text-align: center ">Packing File</th>
-                                                <th style="text-align: center ">Uncooked File</th>
-                                                <th style="text-align: center ">Cooked File</th>
-                                                <th style="text-align: center ">Status</th>
-                                                <th style="text-align: center ">Created at</th>
-                                                <th style="text-align: center ">Action</th>
+                                                <th style="text-align: center">Trade ID</th>
+                                                <th style="text-align: center">Trade Type</th>
+                                                <th style="text-align: center">Quality Type</th>
+                                                <th style="text-align: center">Quality</th>
+                                                <th style="text-align: center">QualityForm</th>
+                                                <th style="text-align: center">Grade</th>
+                                                <th style="text-align: center">Packing</th>
+                                                <th style="text-align: center">Quantity</th>
+                                                <th style="text-align: center">OfferPrice</th>
+                                                <th style="text-align: center">ValidDays</th>
+                                                <th style="text-align: center">Packing File</th>
+                                                <th style="text-align: center">Uncooked File</th>
+                                                <th style="text-align: center">Cooked File</th>
+                                                <th style="text-align: center">Status</th>
+                                                <th style="text-align: center">Created at</th>
+                                                <th style="text-align: center">Action</th>
                                             </tr>
                                         </tfoot>
                                     </table>

@@ -56,6 +56,20 @@ class MailController extends Controller
         }
     }
 
+    public static function sendContactUsMail($mailTo,$mailFrom,$mailFromName,$mailMessage,$subject,$data) {
+        try {
+            $respose = Mail::send('mail.contactUsMail', ['data' => $data], function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom,$mailFromName);
+            });
+            return $respose;
+
+        } catch (\Throwable $th) {
+            //throw $th;
+            dd($th);
+        }
+    }
+
     public static function html_email($file, $from , $to , $data = []) {
         try {
             $respose = Mail::send($file, ['data' => $data], function($message) use ($from , $to) {

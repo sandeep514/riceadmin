@@ -52,14 +52,14 @@
                                                                 <td>
                                                                     <ul style="list-style: none;display: inline-flex;padding: 0">
                                                                         {{-- <li>
-                                                                            <a class="btn btn-sm btn-{{ ( $value == 1 ) ? 'primary' : 'info' }}" href="{{ route('master.city.changeStatus' , base64_encode($key)) }}"> {{ ($value == 1) ? 'Disable' : 'Enable' }} </a>
+                                                                            <a class="btn btn-sm btn-{{ ( $value == 1 ) ? 'primary' : 'info' }}" href="{{ route('master.city.changeStatus' , base64_encode($value['id'])) }}"> {{ ($value == 1) ? 'Disable' : 'Enable' }} </a>
                                                                         </li> --}}
 
                                                                         <li style="margin-left: 20px">
-                                                                            <a class="btn btn-sm btn-info" href="{{ route('master.get.city' , base64_encode($key)) }}"> Edit </a>
+                                                                            <a class="btn btn-sm btn-info" href="{{ route('master.get.city' , base64_encode($value['state'])) }}"> Edit </a>
                                                                         </li>
                                                                         <li style="margin-left: 20px">
-                                                                            <a class="btn btn-sm btn-danger" href="{{ route('master.delete.city' , base64_encode($key)) }}"> Delete </a>
+                                                                            <a class="btn btn-sm btn-danger" href="{{ route('master.delete.city' , base64_encode($value['state'])) }}"> Delete </a>
                                                                         </li>
                                                                     </ul>
                                                                 </td>

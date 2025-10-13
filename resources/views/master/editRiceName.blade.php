@@ -34,6 +34,14 @@
                                         {!! Form::label('name','Rice name*') !!}
                                         {!! Form::text('name' , $riceName->name , ['class' => 'form-control']) !!}
                                     </div>
+                                    <div class="form-group col-md-4 ">
+                                        {!! Form::label('from_month','Start Month') !!}
+                                        {!! Form::text('from_month' , $riceName->from_month , ['placeholder' => 'Start month', 'class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group col-md-4 ">
+                                        {!! Form::label('end_month','End Month') !!}
+                                        {!! Form::text('end_month' , $riceName->end_month , ['placeholder' => 'End month', 'class' => 'form-control']) !!}
+                                    </div>
                                     <input type="hidden" name="id" value="{{ $riceName->id }}">
                                 </div>
 

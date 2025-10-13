@@ -26,17 +26,35 @@ use App\TradeLike;
 class TradeController extends Controller
 {
     public function index(){
-        $sellQueries = TradeQueriesINR::with(['RiceNameData' , 'RiceFormMilestone3','RicePackingBuyer' ,'RicePackingSeller','riceGrade' => function($query){
-            return $query->with('getWandType');
-        }])->orderBy('id' , 'DESC')->get();
+        // $sellQueries = TradeQueriesINR::with(['RiceNameData' , 'RiceFormMilestone3','RicePackingBuyer' ,'RicePackingSeller','riceGrade' => function($query){
+        //     return $query->with('getWandType');
+        // }])->orderBy('id' , 'DESC')->get();
+
+        $sellQueries = TradeQueriesINR::with([
+            'RiceNameData',
+            'RiceFormMilestone3',
+            'RicePackingBuyer',
+            'RicePackingSeller',
+            'riceGrade' => function ($query) {
+                return $query->with('getWandType');
+            }
+        ])
+        ->orderByRaw("FIELD(status, 1,4,6,5,2,3,11,12)")
+        ->orderBy('id', 'DESC')
+        ->get();
+
         
         $tradeStatus = [1=> 'open' , 11=> 'close', 12 => 'hold'];
         $tradeCurrentStatus = TradeCurrentStatus::first();
         $currentTrade = $tradeStatus[$tradeCurrentStatus->id];
 
-        return View('trade.index' , compact('sellQueries' , 'currentTrade'));
 
+
+
+        return View('trade.index' , compact('sellQueries' , 'currentTrade'));
     }
+
+    
 
     public function create(){
         // $qualityMaster = QualityMaster::pluck('quality_type_status' , 'quality_type');
@@ -48,8 +66,10 @@ class TradeController extends Controller
     }
     
     public function save(Request $request){
+
         $data = [];
         $selectedQualityTypeInt = $request->category;
+        $queryId = $request->queryId??'';
         $quality = $request->quality;
         $qualityForm = $request->riceform;
         $selectedGrade = $request->ricegrade;
@@ -61,6 +81,7 @@ class TradeController extends Controller
         $location = $request->location;
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
+        $personal_remarks = $request->personal_remarks??'';
 
         if( isset($_FILES['packingImage']) ){
             $file_name      = $_FILES['packingImage']['name'];
@@ -100,6 +121,7 @@ class TradeController extends Controller
 
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
+        $data['queryId'] = $queryId;
         $data['qualityForm'] = $qualityForm;
         $data['grade'] = $selectedGrade;
         $data['packing'] = $changePackingType;
@@ -111,6 +133,7 @@ class TradeController extends Controller
         $data['tradeType'] = $tradeType;
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
+        $data['personal_remarks'] = $personal_remarks;
 
         $data['moisture'] = $request->moisture;
         $data['kett'] = $request->kett;
@@ -118,6 +141,8 @@ class TradeController extends Controller
         $data['dd'] = $request->dd;
         $data['admixture'] = $request->admixture;
         $data['elongation'] = $request->elongation;
+        $data['tradeFor'] = $request->tradeFor;
+        $data['farmingType'] = $request->farmingType;
 
 
         $tradeQuery = TradeQueriesINR::create($data);
@@ -172,6 +197,7 @@ class TradeController extends Controller
         $location = $request->location;
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
+        $personal_remarks = $request->personal_remarks;
 
         if( $request->packingImage != '' && isset($_FILES['packingImage']) ){
             $file_name      = $_FILES['packingImage']['name'];
@@ -239,6 +265,7 @@ class TradeController extends Controller
         $data['tradeType'] = $tradeType;
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
+        $data['personal_remarks'] = $personal_remarks;
 
         $data['moisture'] = $request->moisture;
         $data['kett'] = $request->kett;

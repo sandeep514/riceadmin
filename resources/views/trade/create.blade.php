@@ -25,6 +25,10 @@
                         </div>
                         <!-- /.box-header -->
                         {!! Form::open(['route'=>'master.trade.save', 'files' => true]) !!}
+                            @php
+                                $url = $_SERVER['REQUEST_URI'];
+                                $explodeURL = explode('/' , $url);
+                            @endphp
                             @include('trade._form')
                             @if(!request()->has('date'))
                                 <div class="box-footer">

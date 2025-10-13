@@ -70,6 +70,8 @@
                                                 <th>Form</th>
                                                 <th>Min Price</th>
                                                 <th>Max Price</th>
+                                                <th>Opening</th>
+                                                <th>Closing</th>
                                                 <th>State</th>
                                                 <th>Up/Down</th>
                                                 <th>Created At</th>
@@ -85,9 +87,12 @@
                                                         <td>{{ $price->form_rel->form_name }} ({{ ucfirst($price->form_rel->type) }})</td>
                                                         <td>{{ $price->min_price }}</td>
                                                         <td>{{ $price->max_price }}</td>
+                                                        <td>{{ $price->opening }}</td>
+                                                        <td>{{ $price->closing }}</td>
                                                         <td>{{ ucwords(str_replace('_',' ',$price->state)) }}</td>
                                                         <td>{{ $price->up_down }}</td>
-                                                        <td>{{ $price->created_at->diffForHumans() }}</td>
+                                                        <td>{{ $price->created_at }}</td>
+                                                        {{-- <td>{{ $price->created_at->diffForHumans() }}</td> --}}
                                                         <td>
                                                             <a href="{{ route('delete.price',$price->id) }}" onclick="return confirm('Are you sure to delete this price?')" class="btn btn-danger btn-xs">Delete</a>
                                                         </td>

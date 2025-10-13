@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Carbon\Carbon;
 
 class User extends Authenticatable
 {
@@ -39,6 +40,7 @@ class User extends Authenticatable
         'expired_on',
         'is_usd_active',
         'is_INR_active',
+        'is_active_by_admin',
         'transaction_id',
         'planId',
         'userType',
@@ -113,12 +115,15 @@ class User extends Authenticatable
         return $this->belongsTo(HotDealAccept::class, 'buyer_id', 'id');
     }
     public function getWebPersonalDetails(){
-        return $this->belongsTo(WebPersonalDetails::class , 'id', 'user_id' );
+        return $this->belongsTo(WebPersonalDetails::class  , 'id' , 'user_id');
     }
     public function getWebBusinessDetails(){
-        return $this->belongsTo(WebBusinessDetails::class  , 'id', 'user_id');
+        return $this->belongsTo(WebBusinessDetails::class  , 'id' , 'user_id');
     }
     public function getWebUserAttachment(){
-        return $this->belongsTo(WebUserAttachment::class  , 'id', 'user_id');
+        return $this->belongsTo(WebUserAttachment::class  , 'id' , 'user_id');
+    }
+    public function getWebUserSubscription(){
+        return $this->hasOne(WebUserSubscriptionModel::class  , 'user_id' , 'id')->orderBy('id' , 'desc')->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
     }
 }

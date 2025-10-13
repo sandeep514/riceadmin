@@ -30,6 +30,7 @@
                                             <th style="text-align: center">Email </th>
                                             <th style="text-align: center">Phone</th>
                                             <th style="text-align: center">Created At</th>
+                                            <th style="text-align: center">Action</th>
                                         </tr>
                                     </thead>
 
@@ -40,6 +41,9 @@
                                                 <td style="text-align: center">{{ $v->email  }}</td>
                                                 <td style="text-align: center">{{ $v->mobile  }}</td>
                                                 <td style="text-align: center">{{ $v->created_at  }}</td>
+                                                <td style="text-align: center">
+                                                    <a href="{{ route('view.user' , $v->id) }}" class="btn btn-info btn-xs">View </a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -50,6 +54,7 @@
                                             <th style="text-align: center">Email </th>
                                             <th style="text-align: center">Phone</th>
                                             <th style="text-align: center">Created At</th>
+                                            <th style="text-align: center">Action</th>
                                         </tr>
                                     </tfoot>
                                 </table>

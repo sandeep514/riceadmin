@@ -22,19 +22,37 @@
                             <h3 class="box-title">List of designations</h3>
                         </div>
                         <!-- /.box-header -->
-                        <div class="box-body">
-                            <div class="table-responsive">
-                                {!! $dataTable->table(['class'=>'table table-bordered table-striped datatable','width'=>'100%']) !!}
-                            </div>
-                        </div>
+                        <table id="example2" class="display" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Designation</th>
+                                    <th style="text-align: center">Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach($designation as $k => $v)
+                                    <tr>
+                                        <td style="text-align: center">{{ $v->designation }}</td>
+                                        <td style="text-align: center">
+                                            <a href="{{ route('edit.designation' , $v->id) }}" class="btn btn-info btn-xs">Edit</a>
+                                            {{-- <a href="" class="btn btn-danger btn-xs">Delete</a> --}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            
+                            <tfoot>
+                                <tr>
+                                    <th style="text-align: center">Designation</th>
+                                    <th style="text-align: center">Action</th>
+                                </tr>
+                            </tfoot>
+                        </table>
                         <!-- /.box-body -->
                     </div>
                 </div>
             </div>
         </section>
     </div>
-@endsection
-
-@section('scripts')
-    {!! $dataTable->scripts() !!}
 @endsection

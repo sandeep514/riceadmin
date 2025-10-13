@@ -34,6 +34,8 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Rice Quality</th>
+                                                    <th>From Month</th>
+                                                    <th>End Month</th>
                                                     <th>Type</th>
                                                     <th>Actions</th>
                                                 </tr>
@@ -42,6 +44,8 @@
                                                     @foreach($riceName as $key => $form)
                                                         <tr>
                                                             <td>{{ $form->name }}</td>
+                                                            <td>{{ $form->from_month }}</td>
+                                                            <td>{{ $form->end_month }}</td>
                                                             <td>{{ $form->type }}</td>
                                                             <td>
                                                                 <ul>

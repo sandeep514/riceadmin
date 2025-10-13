@@ -13,7 +13,7 @@ use App\Buyerpackinginr;
 class BuyQueriesINR extends Model
 {
     protected $table = 'buy_query_milestone3';
-    protected $fillable = ['quality_type','quality','quality_form','grade','packing_type','packing','quantity','additional_info','created_by','remarks','status'];
+    protected $fillable = ['quality_type','quality','quality_form','grade','packing_type','packing','quantity','additional_info','created_by','remarks','type','farming','contactPerson','contactMobile','status'];
 
     public static $status = [
         0 => 'closed',

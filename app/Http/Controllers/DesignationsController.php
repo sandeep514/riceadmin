@@ -11,7 +11,9 @@ use Session;
 class DesignationsController extends Controller
 {
     public function index(DesignationsDatatable $datatable){
-        return $datatable->render('designations.index');
+        // return $datatable->render('designations.index');
+        $designation = Designation::all();
+        return View('designations.index' , compact('designation'));
     }
 
     public function create(){

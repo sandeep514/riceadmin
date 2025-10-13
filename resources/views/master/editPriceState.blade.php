@@ -21,10 +21,10 @@
                             <h3 class="box-title">Quality Details</h3>
                         </div>
                         {!! Form::open(['route'=>'master.update.city','method'=>'post']) !!}
-                            <input type="hidden" name="id" value="{{ $livePrices->id }}">
+                            <input type="hidden" name="id" value="{{ $livePrices->id??'' }}">
                             <div class="form-group col-md-4 ">
                                 {!! Form::label('state','State*') !!}
-                                {!! Form::text('state' ,$livePrices->state , ['class' => 'form-control']) !!}
+                                {!! Form::text('state' ,$livePrices->state??'' , ['class' => 'form-control']) !!}
                             </div>
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>

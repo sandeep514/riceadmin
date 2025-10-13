@@ -172,6 +172,10 @@
                                 {!! Form::label('Additional Info','Additional Info') !!}
                                 <textarea class="form-control" placeholder="Additional Info" rows="5" name="additioanlInfo">{{ $tradequeriesinr->additioanlInfo }}</textarea>
                             </div>
+                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('personal_remarks','Personal Remarks') !!}
+                                <textarea class="form-control" placeholder="Personal Remarks" rows="5" name="personal_remarks">{{ $tradequeriesinr->personal_remarks }}</textarea>
+                            </div>
                         </div>
                     </div>
                     
