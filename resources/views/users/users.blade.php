@@ -20,6 +20,7 @@
                         <div class="box-header">
                             <h3 class="box-title">List of vendor users</h3>
                         </div>
+
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">
@@ -29,6 +30,7 @@
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">Email </th>
                                             <th style="text-align: center">Phone</th>
+                                            <th style="text-align: center">User From</th>
                                             <th style="text-align: center">Created At</th>
                                             <th style="text-align: center">Action</th>
                                         </tr>
@@ -40,6 +42,7 @@
                                                 <td style="text-align: center">{{ $v->name }}</td>
                                                 <td style="text-align: center">{{ $v->email  }}</td>
                                                 <td style="text-align: center">{{ $v->mobile  }}</td>
+                                                <td style="text-align: center">{{ ($v->userType == 1) ? 'App' : 'Web' }}</td>
                                                 <td style="text-align: center">{{ $v->created_at  }}</td>
                                                 <td style="text-align: center">
                                                     <a href="{{ route('view.user' , $v->id) }}" class="btn btn-info btn-xs">View </a>
@@ -53,6 +56,7 @@
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">Email </th>
                                             <th style="text-align: center">Phone</th>
+                                            <th style="text-align: center">User From</th>
                                             <th style="text-align: center">Created At</th>
                                             <th style="text-align: center">Action</th>
                                         </tr>

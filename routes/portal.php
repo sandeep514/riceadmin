@@ -15,9 +15,13 @@
 
         Route::get('plans' , [PortalApiController::class , 'getPlans']);
         Route::POST('web/user/subscription' , [PortalApiController::class , 'webUserSubscription']);
-        Route::POST('web/portal/create-order' , [PortalApiController::class , 'webCreateOrder']);
+        Route::POST('web/create-order' , [PortalApiController::class , 'webCreateOrder']);
+        Route::POST('web/verify-payment' , [PortalApiController::class , 'webVerifyPayment']);
 
 
         Route::get('get/web/plans' , [PortalApiController::class , 'getWebPlans']);
+
+        
+        Route::get('get/latest/updated/count' , [PortalApiController::class , 'getLatestUpdatedCount']);
 
     });

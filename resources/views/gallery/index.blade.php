@@ -21,7 +21,7 @@
                             <div class="box-header">
                                 <h3 class="box-title">List of Gallery</h3>
                             </div>
-                            
+                            <a href="{{ route('gallery.create') }}" class="btn btn-primary">Create</a>
                             <div class="box-body">
                                 <div class="table-responsive">
                                      {{-- {!! $dataTable->table(['class'=>'table table-bordered table-striped datatable','width'=>'100%']) !!} --}}
@@ -50,7 +50,8 @@
                                                     <img src="{{ asset('uploads/gallery/'.$v->attachment2)  }}" style="width: 50px; height: 50px;" />
                                                 </td>
                                                 <td style="text-align: center">
-                                                    <a href="{{ route('gallery.delete' , [ 'id' => $v->id ] )}}" >Delete</a>
+                                                    <a href="{{ route('gallery.delete' , [ 'id' => $v->id ] )}}" class="btn btn-danger">Delete</a>
+                                                    <a href="{{ route('gallery.edit' , [ 'id' => $v->id ] )}}" class="btn btn-info">edit</a>
                                                 </td>
                                             </tr>
                                         @endforeach

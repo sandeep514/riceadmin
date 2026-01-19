@@ -27,6 +27,7 @@ class WandController extends Controller
     }
 
     public function save(Request $request){
+        
         $wandType = $request->wandType;
         $wandValues = $request->wandValue;
 

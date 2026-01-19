@@ -17,7 +17,7 @@ class CategoryRoleMap extends Model
 
     public function category_rel()
     {
-        return $this->belongsTo(Category::class, 'category' , 'id');
+        return $this->belongsTo(Category::class, 'category' , 'id')->orderBy('order');
     }
 
 }

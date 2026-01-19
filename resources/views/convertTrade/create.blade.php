@@ -1,0 +1,44 @@
+@extends('layouts.main')
+
+@section('content')
+   
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Trade
+                <small>Create</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li><a href="#">Convert to Trade</a></li>
+                <li class="active">Create</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Trade</h3>
+                        </div>
+                        <!-- /.box-header -->
+                        {!! Form::open(['route'=>'master.trade.save', 'files' => true]) !!}
+                            @php
+                                $url = $_SERVER['REQUEST_URI'];
+                                $explodeURL = explode('/' , $url);
+                            @endphp
+                            @include('convertTrade._form')
+                            @if(!request()->has('date'))
+                                <div class="box-footer">
+                                    <button type="submit" class="btn btn-primary">Save Trade</button>
+                                </div>
+                            @endif
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+@endsection

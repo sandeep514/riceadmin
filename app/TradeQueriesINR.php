@@ -15,7 +15,7 @@ class TradeQueriesINR extends Model
 {
     protected $table = 'trade_query_milestone3';
 
-    protected $fillable = ['tradeFor','queryId','farmingType','quality_type','quality','qualityForm','grade','packing','quantity','offerPrice','validDays','packing_file','uncooked_file','uncooked_file1','uncooked_file2','uncooked_file3','cooked_file','cooked_file1','cooked_file2','cooked_file3','additioanlInfo','location','crop','hotdeal','tradeType','moisture','kett','broken','dd','admixture','elongation','riceSize','status'];
+    protected $fillable = ['tradeFor','queryId','farmingType','quality_type','quality','qualityForm' ,'qualityFormLinkWithLivePrice','stateLinkWithLivePrice' ,'grade','packing','quantity','offerPrice','validDays','packing_file','packingStreamType','uncooked_file','uncooked_file1','uncooked_file2','uncooked_file3','cooked_file','cooked_file1','cooked_file2','cooked_file3','additioanlInfo','personal_remarks','location','crop','hotdeal','tradeType','moisture','kett','broken','dd','admixture','elongation','riceSize','sntcLotNo','sold_at','status'];
 
     public static $tradeStatus = [ 
         3 => "sold", 
@@ -37,7 +37,7 @@ class TradeQueriesINR extends Model
         4 => 'Future Selling'
     ];
     public static $riceSize = [ 
-        1 => 'Full Grane',
+        1 => 'Full Grain',
         2 => 'Broken',
         3 => 'Sizer',
         4 => 'Resort',
@@ -59,6 +59,10 @@ class TradeQueriesINR extends Model
     public function RiceNameData()
     {
         return $this->belongsTo(RiceName::class , 'quality', 'id');
+    }
+    public function RiceFormData()
+    {
+        return $this->belongsTo(RiceForm::class , 'qualityFormLinkWithLivePrice', 'id');
     }
 
     public function riceGrade()

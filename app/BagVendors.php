@@ -18,7 +18,13 @@ class BagVendors extends Model
             5 => 'Clearing agents',
             6 => 'Forwarders',
             7 => 'Inspection Agencies',
-            8 => 'Exports Bad Debts recover agencies'        
+            8 => 'Exports Bad Debts recover agencies',   
+            9 => 'Machinery Equipment',
+            10 => 'Rice Lab Equipment Supplier',
+            11 => 'Rice Sorters / Packing Services',
+            12 => 'Warehouse Service',
+            13 => 'Financing',
+            14 => 'Resources'
         ];
     }
 }

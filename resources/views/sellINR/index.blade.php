@@ -57,14 +57,26 @@
                                                     <!-- <td>{{ $v->id }}</td> -->
                                                     <td>{{ ($v->RiceQualityRiceNames->type)??'---'  }}</td>
                                                     <td>{{ ($v->RiceQualityRiceNames->name)??'---' }}</td>
-                                                    <td>{{ $v->RiceFormMilestone3->name }}</td>
+                                                    <td>{{ $v->RiceFormMilestone3->name ?? '--' }}</td>
                                                     <td>{{ ($v->riceGrade->getWandType['type'])??'--' }} {{ ($v->riceGrade->value)??'--' }}</td>
                                                     <td>{{ ($v->RicePacking->packing)?? '--' }}</td>
                                                     <td>{{ $v->quantity }}</td>
                                                     <td>{{ $v->offerPrice }}</td>
                                                     <td>{{ $v->validDays }}</td>
-                                                    <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->packing_file) }}" download><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></a></div></td>
-                                                    <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->uncooked_file) }}" download><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></a></div></td>
+                                                    <td>
+                                                        <div style="width: 100px;height: 100px">
+                                                            <a href="{{ asset('uploads/'.$v->packing_file) }}" download>
+                                                                <img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" />
+                                                            </a>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div style="width: 100px;height: 100px">
+                                                            <a href="{{ asset('uploads/'.$v->uncooked_file) }}" download>
+                                                                <img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" />
+                                                            </a>
+                                                        </div>
+                                                    </td>
                                                     <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->cooked_file) }}" download><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></a></div></td>
                                                     <td>{{ $v->warehouselocation }}</td>
                                                     <td>{{ $v->contactperson }}</td>

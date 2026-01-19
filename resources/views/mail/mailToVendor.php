@@ -9,6 +9,7 @@
         <p>Pls find the Indian Rice Prices for <?php echo $date; ?> in the below attached file.</p>
 
 
-        <p style="font-size:0.9em;">Regards,<br />SNTC Group</p>
+        <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
+        <hr style="border:none;border-top:1px solid #eee" />
     </div>
 </div>

@@ -32,7 +32,8 @@ class LivePrice extends Model
     public function trades()
     {
         return $this->hasMany(TradeQueriesINR::class, 'quality', 'name')
-            ->whereColumn('trade_query_milestone3.qualityForm', $this->getTable().'.form')->whereIn('status' , [1,6,4]);
+            ->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', $this->getTable().'.form')->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , $this->getTable().'.state')->whereIn('status' , [1,6,4]);
+            // ->whereColumn('trade_query_milestone3.qualityForm', $this->getTable().'.form')->whereIn('status' , [1,6,4]);
             // ->whereColumn('trade_query_milestone3.qualityForm', $this->getTable().'.form')->whereIn('status' , [1,6,4,3]);
     }
 

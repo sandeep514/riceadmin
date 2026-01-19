@@ -49,11 +49,14 @@
                                         <thead>
                                             <tr>
                                                 <!-- <th style="text-align: center">sno</th> -->
+                                                <th style="text-align: center">SNTC Lot No</th>
                                                 <th style="text-align: center">Trade ID</th>
                                                 <th style="text-align: center">Trade Type</th>
                                                 <th style="text-align: center">Quality Type</th>
                                                 <th style="text-align: center">Quality</th>
                                                 <th style="text-align: center">QualityForm</th>
+                                                <th style="text-align: center">Link With Live Price</th>
+                                                <th style="text-align: center">Link With Live Price state</th>
                                                 <th style="text-align: center">Grade</th>
                                                 <th style="text-align: center">Packing</th>
                                                 <th style="text-align: center">Quantity</th>
@@ -70,14 +73,16 @@
 
                                         <tbody>
                                             @foreach($sellQueries as $k => $v)
-
                                                 <tr>
                                                     <!-- <td>{{ $v->id }}</td> -->
+                                                    <td>{{ $v->sntcLotNo }}</td>
                                                     <td>Trade_{{ $v->id }}</td>
                                                     <td>{{ ($v->tradeType == 1)? 'Buy' : 'Sell' }}</td>
                                                     <td>{{ ($v->quality_type == 1)? 'Basmati' : 'Non-Basmati'  }}</td>
                                                     <td>{{ ($v->RiceNameData->name )?? '--'}}</td>
                                                     <td>{{ ($v->RiceFormMilestone3->name )?? '--'}}</td>
+                                                    <td>{{ ($v->RiceFormData->form_name )?? '--'}}</td>
+                                                    <td>{{ ($v->stateLinkWithLivePrice )?? '--'}}</td>
                                                     <td>{{ ($v->riceGrade->getWandType['type']) ?? '--' }} {{ ($v->riceGrade->value )?? '--'}}</td>
                                                     <td>{{  ($v->tradeType == 2) ? $v->RicePackingBuyer->packing.' '.$v->RicePackingBuyer->description : $v->RicePackingSeller->description }}</td>
                                                     <td>{{ ($v->quantity )?? '--'}}</td>
@@ -94,6 +99,9 @@
                                                         @if($v->status != 2 && $v->status != 3)
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' ,[ 'tradeid' => $v->id , 'status'=> 3]) }}">Sold</a>
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' , ['tradeid' => $v->id , 'status'=> 2]) }}">Expired</a>
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' , ['tradeid' => $v->id , 'status'=> 6]) }}">Active</a>
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' , ['tradeid' => $v->id , 'status'=> 11]) }}">close</a>
+                                                            <a class="btn btn-info btn-sm" href="{{ route('master.trade.change.status' , ['tradeid' => $v->id , 'status'=> 12]) }}">Hold</a>
                                                         @endif
 
                                                         @if($v->status != 1)
@@ -121,6 +129,8 @@
                                                 <th style="text-align: center">Quality Type</th>
                                                 <th style="text-align: center">Quality</th>
                                                 <th style="text-align: center">QualityForm</th>
+                                                <th style="text-align: center">Link With Live Price</th>
+                                                <th style="text-align: center">Link With Live Price state</th>
                                                 <th style="text-align: center">Grade</th>
                                                 <th style="text-align: center">Packing</th>
                                                 <th style="text-align: center">Quantity</th>

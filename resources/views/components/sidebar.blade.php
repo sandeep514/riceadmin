@@ -360,6 +360,12 @@
                     <span>Trades</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['web.master.news.runner']))?'active':'' }}">
+                <a href="{{ route('web.master.news.runner') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Web News Runner</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['master.news.runner']))?'active':'' }}">
                 <a href="{{ route('master.news.runner') }}">
                     <i class="fa fa-address-card-o"></i> 
@@ -428,7 +434,21 @@
                     <span>Paddy Prices </span>
                 </a>
             </li>
+            <li class="header">Web Brands</li>
+            <li class="{{ (in_array($currentRoute,['get.web.brands.list']))?'active':'' }}">
+                <a href="{{ route('get.web.brands.list') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span>Web Brands</span>
+                </a>
+            </li>
 
+            <li class="{{ (in_array($currentRoute,['web.user']))?'active':'' }}">
+                <a href="{{ route('web.user') }}">
+                    <i class="fa fa-address-card-o"></i> 
+                    <span style="display: inline-flex;">Web Users &nbsp; <div style="background: white; height: 10px;width: 10px;border-radius: 100px;display: none;" id="hasNewUser"></div></span>
+                </a>
+            </li>
+            
         </ul>
         <!-- for Dollar $ -->
       

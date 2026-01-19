@@ -1,18 +1,24 @@
 <div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
   <div style="margin:50px auto;width:70%;padding:20px 0">
     <div style="border-bottom:1px solid #eee">
-      <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Greetings from SNTC!</a>
+      <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">
+        Greetings from SNTC!
+      </a>
     </div>
     <p style="font-size:1.1em">Hi,</p>
-    <p>You got a new Buy Query.</p>
-    <p>Thank you for your patience.</p>
+    <p>You got a new Buy Query form:</p>
+    
+    <p><strong>Contact Person:</strong> {{ $contactPerson }}</p>
+    <p><strong>Contact Mobile:</strong> {{ $contactMobile }}</p>
+
     <br>
+    <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
     <hr style="border:none;border-top:1px solid #eee" />
-    <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
-		<p>SNJ Tradelink Pvt. Ltd.</p>
-		<p>5593/94, 3rd Floor Lahori Gate,</p>
-		<p>Naya Bazar, Delhi-110006</p>
-		<p>India</p>
-    </div>
+    <!-- <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
+      <p>SNJ Tradelink Pvt. Ltd.</p>
+      <p>5593/94, 3rd Floor Lahori Gate,</p>
+      <p>Naya Bazar, Delhi-110006</p>
+      <p>India</p>
+    </div> -->
   </div>
 </div>

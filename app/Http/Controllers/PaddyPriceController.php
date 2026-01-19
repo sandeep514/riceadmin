@@ -49,37 +49,21 @@ class PaddyPriceController extends Controller
         $mandiData = PaddyMandiModel::where('id' , $request->mandi)->first();
         $todayDate = Carbon::today()->format('Y-m-d');
 
-        $lastEnterRow = PaddyPrice::orderBy('created_at' , 'desc')->first();
-        if( $lastEnterRow ){
-            $lastEnterDate = $lastEnterRow->created_at->format('Y-m-d');
+        // $lastEnterRow = PaddyPrice::orderBy('created_at' , 'desc')->first();
+        // if( $lastEnterRow ){
+        //     $lastEnterDate = $lastEnterRow->created_at->format('Y-m-d');
 
             
-            if( $lastEnterDate != $todayDate ){
-                $lastEnteredRecords = PaddyPrice::select("mandi","state","quality_id","hand_cutting_price","machine_cutting_price","moisture","total_arrivals","change","status")->whereDate('created_at' , $lastEnterDate)->get()
-                    ->map(function ($item) {
-                        $item['created_at'] = now();
-                        return $item;
-                    })
-                    ->toArray();
-                PaddyPrice::insert($lastEnteredRecords);
-            }
-
-            // PaddyPrice::updateOrCreate(
-            //     [
-            //         'mandi' => $request->mandi,
-            //         'state' => $mandiData->state_id,
-            //         'quality_id' => $request->quality_id,
-            //     ],
-            //     [
-            //         'hand_cutting_price' => $request->handCutting ?? '----',
-            //         'machine_cutting_price' => $request->machineCutting ?? '----',
-            //         'moisture' => $request->moisture ?? '----',
-            //         'total_arrivals' => $request->bags ?? '----',
-            //         'change' => $request->change ?? '----',
-            //         'status' => 1
-            //     ]
-            // );
-        }
+        //     if( $lastEnterDate != $todayDate ){
+        //         $lastEnteredRecords = PaddyPrice::select("mandi","state","quality_id","hand_cutting_price","machine_cutting_price","moisture","total_arrivals","change","status")->whereDate('created_at' , $lastEnterDate)->get()
+        //             ->map(function ($item) {
+        //                 $item['created_at'] = now();
+        //                 return $item;
+        //             })
+        //             ->toArray();
+        //         PaddyPrice::insert($lastEnteredRecords);
+        //     }
+        // }
         $paddy = PaddyPrice::where('mandi', $request->mandi)
             ->where('state', $mandiData->state_id)
             ->where('quality_id', $request->quality_id)

@@ -24,7 +24,6 @@
         @if($riceModel->type == 'basmati')
             <div class="responsiveTabs basmatitabs">
                 <ul id="myTab" class="nav nav-tabs" style="margin-bottom: 15px;">
-
                     @foreach( $livePrice as $k => $v )
                         <li class="">
                             <a href="#model{{ str_replace(' ' , '_' , $k) }}" data-toggle="tab">{{ str_replace(' ','_', $k) }}</a>
@@ -37,7 +36,7 @@
                             <div class="row">
                                 <div class="col-md-12 text-center">
                                     <h3>Price Details</h3>
-                                    <b>Rice Name: </b> {{ $riceModel->name }}                                   
+                                    <b>Rice Name: </b> {{ $riceModel->name }}
                                         <div class="row text-left" style="margin-top: 20px;">
                                             <div class="col-md-12 inputs">
                                                 {!! Form::label('na','Click For All NA: ') !!}
@@ -55,6 +54,7 @@
                                                         <th>Min Price</th>
                                                         <th>Max Price</th>
                                                         <th>Up/Down</th>
+                                                        <th>Action</th>
                                                     </tr>
                                                     </thead>
                                                     <tbody>
@@ -87,48 +87,59 @@
                                                             }
                                                         @endphp
                                                             <tr>
-                                                                <td class="col-md-2">
-                                                                    <input type="checkbox" name="check" class="check_user_templete">{{$form->id}} {{ $form->form_name }}
-                                                                </td>
-                                                                <td class="col-md-1">
-                                                                    <input type="text" value="{{ $opening }}" name="opening[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Opening" class="form-control" > 
-                                                                </td>
-                                                                <td class="col-md-1"> 
-                                                                    <input type="text" value="{{ $closing }}" name="closing[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Closing" class="form-control" > 
-                                                                </td>
+                                                                <!-- {!! Form::open(['route'=>'save.price' , 'id' => 'formCreate']) !!} -->
+                                                                    <td class="col-md-2">
+                                                                        <input type="checkbox" name="check" class="check_user_templete">{{ $form->form_name }}
+                                                                    </td>
+                                                                    
+                                                                    <input type="hidden" name="state" value="{{str_replace(' ' , '_' , $keyy)}}">
+                                                                    <input type="hidden" name="form" value="{{$form->id}}">
+                                                                    <input type="hidden" name="name" value="{{$riceModel->id}}">
 
-                                                                <td class="col-md-1">
-                                                                    <input type="number" min="1" max="12" value="{{ $monthStart }}" name="monthStart[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month Start" class="form-control" > 
-                                                                </td>
-                                                                <td class="col-md-1"> 
-                                                                    <input type="number" min="1" max="12" value="{{ $monthEnd }}" name="monthEnd[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month End" class="form-control" > 
-                                                                </td>
+                                                                    <td class="col-md-1">
+                                                                        <input type="text" value="{{ $opening }}" name="opening[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Opening" class="form-control" > 
+                                                                    </td>
+                                                                    <td class="col-md-1"> 
+                                                                        <input type="text" value="{{ $closing }}" name="closing[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Closing" class="form-control" > 
+                                                                    </td>
+
+                                                                    <td class="col-md-1">
+                                                                        <input type="number" min="1" max="12" value="{{ $monthStart }}" name="monthStart[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month Start" class="form-control" > 
+                                                                    </td>
+                                                                    <td class="col-md-1"> 
+                                                                        <input type="number" min="1" max="12" value="{{ $monthEnd }}" name="monthEnd[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Month End" class="form-control" > 
+                                                                    </td>
 
 
-                                                                <td class="col-md-1">
-                                                                    <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
-                                                                        @foreach($lastYears as $k => $v)
-                                                                            <option value="{{ $v }}" {{ ($cropYear == $v)?'selected':'' }}>{{$v}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </td>
-                                                                <td class="col-md-1">
-                                                                    <select name="cropGrade[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
-                                                                        @foreach(App\RiceForm::$grade as $k => $v)
-                                                                            <option value="{{ $k }}" {{ ($cropGrade == $v)?'selected':'' }}>{{$v}}</option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </td>
-                                                                <td class="col-md-1">
-                                                                    {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
-                                                                </td>
-                                                                <td class="col-md-1">
-                                                                    {!! Form::text('max['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$max,['class'=>'form-control']) !!}
-                                                                </td>
-                                                                <td class="col-md-1">
-                                                                    {!! Form::select('up_down['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
-                                                                </td>
+                                                                    <td class="col-md-1">
+                                                                        <select name="cropYear[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+                                                                            @foreach($lastYears as $k => $v)
+                                                                                <option value="{{ $v }}" {{ ($cropYear == $v)?'selected':'' }}>{{$v}}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="col-md-1">
+                                                                        <select name="cropGrade[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" class='form-control'>
+                                                                            @foreach(App\RiceForm::$grade as $k => $v)
+                                                                                <option value="{{ $k }}" {{ ($cropGrade == $v)?'selected':'' }}>{{$v}}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </td>
+                                                                    <td class="col-md-1">
+                                                                        {!! Form::text('min['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$min,['class'=>'form-control']) !!}
+                                                                    </td>
+                                                                    <td class="col-md-1">
+                                                                        {!! Form::text('max['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',$max,['class'=>'form-control']) !!}
+                                                                    </td>
+                                                                    <td class="col-md-1">
+                                                                        {!! Form::select('up_down['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
+                                                                    </td>
+                                                                    <td class="col-md-1">
+                                                                        <input type="submit" name="submitPrice" id="submitPrice" value="Submit">
+                                                                    </td>
+                                                                <!-- {!! Form::close() !!} -->
                                                             </tr>
+
 
                                                     @endforeach
                                                     </tbody>
@@ -162,9 +173,9 @@
                                     <b>Rice Name: </b> {{ $riceModel->name }}
                                     <div class="row text-left" style="margin-top: 20px;">
                                         <div class="col-md-12 inputs">
-{{--                                             {!! Form::label('na','Click For All NA: ') !!}
-                                            {!! Form::checkbox('all_na',null,null,['class'=>'check_for_na']) !!}
- --}}                                            <table class="table table-striped">
+                                    {{-- {!! Form::label('na','Click For All NA: ') !!}
+                                            {!! Form::checkbox('all_na',null,null,['class'=>'check_for_na']) !!} --}}
+                                            <table class="table table-striped">
                                                 <thead>
                                                 <tr>
                                                     <th>Rice Type</th>
@@ -212,6 +223,9 @@
                                                     
                                                         <tr>
                                                             <td> <input type="checkbox" name="check" class="check_user_templete"> {{ $form->form_name }}</td>
+                                                            <input type="hidden" name="state" value="{{str_replace(' ' , '_' , $keyy)}}">
+                                                            <input type="hidden" name="form" value="{{$form->id}}">
+                                                            <input type="hidden" name="name" value="{{$riceModel->id}}">
                                                             <td class="col-md-1">
                                                                 <input type="text" value="{{ $opening }}" name="opening[{{str_replace(' ' , '_' , $keyy)}}][{{$form->id}}]" placeholder="Opening" class="form-control" > 
                                                             </td>
@@ -250,6 +264,10 @@
                                                             <td>
                                                                 {!! Form::select('up_down['.str_replace(' ' , '_' , $keyy).']['.$form->id.']',['up'=>'Up','down'=>'Down','stable'=>'Stable'],$upDown,['class'=>'form-control']) !!}
                                                             </td>
+
+                                                            <td class="col-md-1">
+                                                                <input type="submit" name="submitPrice" id="submitPrice" value="Submit">
+                                                            </td>
                                                         </tr>
                                                 @endforeach
                                                 </tbody>
@@ -272,6 +290,50 @@
     <script>
         $(document).ready(function(){
             $('#myTab li:first-child a').click();
+
+            $(document).on('click', '#submitPrice', function (e) {
+                e.preventDefault();
+
+                let $row = $(this).closest('tr'); // current row
+                let formData = new FormData();
+
+                // checkbox
+                let checked = $row.find('.check_user_templete').is(':checked');
+                formData.append('checked', checked ? 1 : 0);
+                formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
+
+                // all inputs & selects in this row
+                $row.find('input, select').each(function () {
+                    let name = $(this).attr('name');
+                    if (!name) return;
+
+                    if ($(this).attr('type') === 'checkbox') {
+                        formData.append(name, $(this).is(':checked') ? 1 : 0);
+                    } else {
+                        formData.append(name, $(this).val());
+                    }
+                });
+
+                // Debug
+                // for (let pair of formData.entries()) {
+                //     console.log(pair[0] + ' => ' + pair[1]);
+                // }
+                
+
+                $.ajax({
+                    url: '{{ route("save.price.for.single") }}',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        alert("price updated");
+                    },error: function(err){
+                        alert('something went wrong')
+                    }
+                });
+            });
+
         });
     </script>
 @endsection

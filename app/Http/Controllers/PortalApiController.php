@@ -17,6 +17,7 @@ use App\PortImages;
 use App\Role;
 use App\Gallery;
 use App\Contact;
+use App\PaddyPrice;
 use App\RiceName;
 use App\RiceType;
 use App\RiceForm;
@@ -71,7 +72,9 @@ use App\WebPlanKeysModel;
 use App\WebUserSubscriptionModel;
 use App\VendorUserMap;
 use App\ServiceProviderUserMap;
-
+use Razorpay\Api\Api;
+use Exception;
+use Illuminate\Support\Facades\File;
 
 class PortalApiController extends Controller
 {
@@ -113,16 +116,22 @@ class PortalApiController extends Controller
             $Newotp = rand(1000, 9999);
 
             if (!$user) {
-                $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2]);
+                $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2,"user_from" => "web"]);
             } else {
                 $user->update(['otp' => $Newotp]);
             }
 
             $hasBasicDetails = false;
 
-            if ($user) {
-                file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+' . $Newotp . '.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
 
+            $message = "SNTC rice sourcing OTP is $Newotp. Do not share this with anyone. - SNTC AGRO TECHNOLOGY";
+
+            $url = "http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto="
+                  . $mobile
+                  . "&message=" . urlencode($message)
+                  . "&PEID=1701172916686910712&templateid=1707176544745633588";
+            if ($user) {
+                file_get_contents($url);
                 return response()->json(['status' => true, 'message' => 'OTP sent successfully','data' => $user], 200);
             } else {
                 return response()->json(['status' => false, 'message' => 'Wrong user credentials'], 401);
@@ -154,7 +163,9 @@ class PortalApiController extends Controller
             $hasBasicDetails = false;
 
             if ($user->first()) {
-                $data = $user->with(['getWebPersonalDetails', 'getWebBusinessDetails', 'getWebUserAttachment','getWebUserSubscription' => function($q){
+                $data = $user->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+                    return $q->with(['getCategoryDetails:id,category']);
+                }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
                     return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
                 }])->first();
 
@@ -186,15 +197,21 @@ class PortalApiController extends Controller
     {
         $mobile = $request['mobile'];
         $Newotp = rand(1000, 9999);
-        $user = User::where(['mobile' => $mobile, 'userType' => 2])->first();
+        $user = User::where(['mobile' => $mobile, 'userType' => 2,'user_from' => 'web'])->first();
         if (!$user) {
-            $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2]);
+            $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2,'user_from' => 'web']);
         } else {
             $user->update(['otp' => $Newotp]);
             // return response()->json(['status' => false , 'message' => 'User already available', 'isVerified' => ($user->is_INR_active == 1)? true: false ] , 401);
         }
-        file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+' . $Newotp . '.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
+        // file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+' . $Newotp . '.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
+        $message = "SNTC rice sourcing OTP is $Newotp. Do not share this with anyone. - SNTC AGRO TECHNOLOGY";
 
+        $url = "http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto="
+              . $mobile
+              . "&message=" . urlencode($message)
+              . "&PEID=1701172916686910712&templateid=1707176544745633588";
+        file_get_contents($url);
         return response()->json(['status' => true, 'message' => 'OTP sent successfully on ' . $mobile, 'data' => ['user_id' => $user->id], 'isVerified' => ($user->is_INR_active == 1) ? true : false], 200);
     }
 
@@ -210,7 +227,10 @@ class PortalApiController extends Controller
 
             if ($isOTPSame) {
                 $user->update(['is_INR_active' => 1]);
-                $data = $user->with(['getWebPersonalDetails', 'getWebBusinessDetails', 'getWebUserAttachment','getWebUserSubscription' => function($q){
+
+                $data = $user->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+                    return $q->with(['getCategoryDetails:id,category']);
+                }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
                     return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
                 }])->first();
                 
@@ -218,7 +238,9 @@ class PortalApiController extends Controller
                 if( $data->getWebUserSubscription ){
                     $hasActivePlan = true;
                 }
+                
                 // return response()->json(['status' => true, 'message' => 'OTP verified successfully', 'hasBasicDetails' => $data,'hasActivePlan' => false], 200);
+                
                 if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
                     $hasBasicDetails = true;
                 }
@@ -250,7 +272,16 @@ class PortalApiController extends Controller
             if ($user->first()) {
                 $user->update(['otp' => $otp]);
                 $mobile = ($user->first()->mobile);
-                file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+' . $otp . '.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
+
+                $message = "SNTC rice sourcing OTP is $otp. Do not share this with anyone. - SNTC AGRO TECHNOLOGY";
+
+                $url = "http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto="
+                      . $mobile
+                      . "&message=" . urlencode($message)
+                      . "&PEID=1701172916686910712&templateid=1707176544745633588";
+                file_get_contents($url);
+
+                // file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+' . $otp . '.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
 
                 return response()->json(['status' => true, 'message' =>  'OTP send successfully'], 200);
             } else {
@@ -276,11 +307,19 @@ class PortalApiController extends Controller
             User::where('id' , $user_id)->update(['name' => $name,'email' => $email]);
 
             if (array_key_exists('avatar', $personalDetails)) {
-                $dirname = 'webPortal/' . $user_id . '/attachments/avatar/';
-                if (!$dirname) {
-                    mkdir(asset($dirname, 0755));
+
+                // Define real filesystem path
+                $basePath = public_path('webPortal/' . $user_id . '/attachments/avatar/');
+
+                // Recursively create directories if not exist
+                if (!File::isDirectory($basePath)) {
+                    File::makeDirectory($basePath, 0755, true, true);
                 }
-                $file = $this->uploadAttachments($personalDetails['avatar'], $dirname, ['jpeg', 'jpg', 'png']);
+
+                // Upload file to this directory
+                $file = $this->uploadAttachments($personalDetails['avatar'], $basePath, ['jpeg', 'jpg', 'png']);
+
+                // Save only the file name or relative path
                 $personalDetails['avatar'] = $file;
             }
 
@@ -354,7 +393,7 @@ class PortalApiController extends Controller
                 mkdir(asset($dirname, 0755));
             }
             $file = $this->uploadAttachments($request->file('documents.fssai_file'), $dirname, ['jpeg', 'jpg', 'png', 'pdf']);
-            WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['fssai' => $file]);
+            WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['fssaiCard' => $file]);
         }
         
         
@@ -365,18 +404,27 @@ class PortalApiController extends Controller
     public function getUserDetails($userId)
     {
         if ($userId != null) {
-            $user = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails', 'getWebUserAttachment'])->first();
+            $user = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+                return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category' , 'getBagVendorWeb:id,category']);
+            }, 'getWebUserAttachment','getWebUserSubscription','role_rel'])->first()->toArray();
+
+            if( $user['role'] == 12 ){
+                $user['get_web_business_details']['get_category_details'] =  $user['get_web_business_details']['get_bag_vendor_web'];
+            }
+            unset($user['get_web_business_details']['get_bag_vendor_web']);
+
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
                 'gst' => 'webPortal/' . $userId . '/attachments/gst',
                 'pan' => 'webPortal/' . $userId . '/attachments/pan',
                 'fssai' => 'webPortal/' . $userId . '/attachments/fssai'
             ]], 200);
+
+
         } else {
             return response()->json(['status' => false, 'message' => 'required field is missing', 'data' => []], 401);
         }
     }
-
 
     public function deleteUser($userId)
     {
@@ -423,7 +471,157 @@ class PortalApiController extends Controller
         return response()->json(['status' => true, 'message' => 'Role get successfully', 'data' => $role], 200);
     }
 
+    // POST /api/portal/create-order
+    public function webCreateOrder(Request $request) {
 
+        $userId = $request->user_id;
+        $planId = $request->plan_id;
+        $amount = $request->amount;
+        $currency = $request->currency ?? 'INR';
+        $billingPeriod = $request->billing_period;
+
+        $api = new Api(
+            config('services.razorpay.key'),
+            config('services.razorpay.secret')
+        );
+
+        $order = $api->order->create([
+            'amount' => $amount * 100, // amount in paise
+            'currency' => $currency,
+            'receipt' => 'receipt_' . $userId . '_' . time(),
+            'notes' => [
+                'user_id' => $userId,
+                'plan_id' => $planId,
+                'billing_period' => $billingPeriod,
+            ],
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'order_id' => $order['id'],
+            'amount' => $amount,
+            'currency' => $currency,
+        ]);
+    }
+
+
+    public function webVerifyPayment(Request $request)
+    {
+        $razorpayPaymentId = $request->razorpay_payment_id;
+        $razorpayOrderId   = $request->razorpay_order_id;
+        $razorpaySignature = $request->razorpay_signature;
+        $userId            = $request->user_id;
+        $planId            = $request->plan_id;
+
+        // Initialize Razorpay API with correct credentials
+        $api = new Api(
+            config('services.razorpay.key'),
+            config('services.razorpay.secret')
+        );
+
+        // Prepare attributes for verification
+        $attributes = [
+            'razorpay_order_id'   => $razorpayOrderId,
+            'razorpay_payment_id' => $razorpayPaymentId,
+            'razorpay_signature'  => $razorpaySignature
+        ];
+
+        try {
+            // Verify payment signature
+            $api->utility->verifyPaymentSignature($attributes);
+            $addedDays  = 7;
+            if( $request->subscription_type =='trial' ){
+                $addedDays = 7;
+            }elseif( $request->subscription_type =='monthly' ){
+                $addedDays = 30;
+            }elseif( $request->subscription_type =='half_yearly' ){
+                $addedDays = 183;
+            }elseif( $request->subscription_type =='yearly' ){
+                $addedDays = 365;
+            }
+
+            // ✅ Signature matched successfully — store the subscription/payment
+            $subscription = WebUserSubscriptionModel::create([
+                'user_id'      => $userId,
+                'plan_id'      => $planId,
+                'payment_id'   => $razorpayPaymentId,
+                'order_id'     => $razorpayOrderId,
+                'status'       => 'active',
+                'period_start' => now(),
+                'period_end'   => now()->addDays($addedDays) ,
+                'subscription_type' => $request->subscription_type,
+                'status' => 1
+            ]);
+
+            $userDetails = User::where(['id' => $userId])->first();
+            if( $request->subscription_type =='trial' ){
+                // send trial mail
+                $mailTo = $userDetails->email;
+                $mailMessage = '';
+                $subject = 'Your SNTC 7-Day Free Trial is Now Active.';
+                $mailFrom = 'info@sntcgroup.com';
+                $mailFromName = 'SNTC Team - India';
+
+
+                $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
+
+
+                $respose = Mail::send('mail.sendTrailMailToUser', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                    $message->to($mailTo, $mailMessage)->subject($subject);
+                    $message->from($mailFrom, $mailFromName);
+                });
+
+            }else{
+                
+                $mailTo = $userDetails->email;
+                $mailMessage = '';
+                $subject = 'Subscription Activated – Welcome to SNTC';
+                $mailFrom = 'info@sntcgroup.com';
+                $mailFromName = 'SNTC Team - India';
+                
+                $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
+                $respose = Mail::send('mail.AccrountActiveWebMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                    $message->to($mailTo, $mailMessage)->subject($subject);
+                    $message->from($mailFrom, $mailFromName);
+                });
+                
+            }
+
+            $mailTo = 'info@sntcgroup.com';
+            $respose = Mail::send('mail.newUserAdded', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
+
+            return response()->json([
+                'status'  => true,
+                'message' => '✅ Payment verified and subscription activated.',
+                'data'    => $subscription
+            ]);
+
+        } catch (Exception $e) {
+            // ❌ Signature verification failed
+            return response()->json([
+                'status'  => false,
+                'message' => '❌ Payment verification failed.',
+                'error'   => $e->getMessage(),
+            ], 400);
+        }
+    }
+
+    public function getLatestUpdatedCount()
+    {
+        $todayDate = Carbon::now()->format('Y-m-d');
+        $livePricesCount = LivePrice::whereDate('created_at' ,  $todayDate)->count();
+        $paddyMandiCount = PaddyPrice::whereDate('created_at' , $todayDate)->count();
+        $tradeCount = TradeQueriesINR::whereDate('created_at' , $todayDate)->count();
+
+        return response()->json([
+                'status'  => true,
+                'message' => 'count get successfully',
+                'data' => ['liveCount' => $livePricesCount , 'paddyCount' => $paddyMandiCount , 'tradeCount' => $tradeCount ] 
+            ], 200);
+    }
 
 }
 

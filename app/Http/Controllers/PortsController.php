@@ -66,7 +66,8 @@ class PortsController extends Controller
             $getBanner = Port::where('state' , $k)->first();
             if( $getBanner != null ){
                 $getBannerUrl = $getBanner->banner; 
-                Port::where('state' , $k)->update(['state_order' => $v , 'banner' => $getBannerUrl ]);
+                $getweb_images = $getBanner->web_images; 
+                Port::where('state' , $k)->update(['state_order' => $v , 'banner' => $getBannerUrl ,'web_images' => $getweb_images]);
             }else{
                 Port::where( 'state' , $k )->update([ 'state_order' => $v ]);
             }

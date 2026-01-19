@@ -1,0 +1,372 @@
+<div class="box-body">
+    <div class="row margin-top-10">
+        <div class="col-md-12">
+            <div class="group-panel">
+                <label class="group-title">Create Trade</label>
+                <div class="group-content">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('SNTC lot no','SNTC lot no') !!}
+                                <input type="text" class="form-control" placeholder="SNTC Lot no" name="sntcLotNo">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Trade For','Trade For') !!}
+                                <select class="form-control" required name="tradeFor">
+                                    <option value=""> Select </option>
+                                        <option value="1"> App </option>
+                                        <option value="2"> Web </option>
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Trade Type','Trade Type') !!}
+                                <select class="form-control" required name="tradeType">
+                                    <option value=""> Select </option>
+                                        <option value="1" {{ (in_array("sell" , $explodeURL))?'selected' : '' }}> Buy </option>
+                                        <option value="2" {{ (in_array("buy" , $explodeURL))?'selected' : '' }}> Sell </option>
+                                        <option value="3" {{ (in_array("futureselling" , $explodeURL))?'selected' : '' }}> Future Buying </option>
+                                        <option value="4" {{ (in_array("futurebuying" , $explodeURL))?'selected' : '' }}> Future Selling </option>
+                                </select>
+                            </div>
+
+                            @if( in_array('convert' , $explodeURL) )
+                                {{-- <input type="hidden" name="tradeType" value="sell" /> --}}
+                                <input type="hidden" name="queryId" value="{{ $explodeURL[count($explodeURL) - 1] }}" /> 
+                            @endif
+
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Farming Type','Farming Type') !!}
+                                <select class="form-control" required name="farmingType">
+                                    <option value=""> Select </option>
+                                        <option value="1" {{ ($query->farming == 'Conventional') ? 'selected' : '' }}> Conventional </option>
+                                        <option value="2" {{ ($query->farming != 'Conventional') ? 'selected' : '' }}> Compliance / Organic </option>
+                                </select>
+                            </div>
+                           
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Rice Category','Rice Category') !!}
+                                <select class="form-control" required name="category">
+                                    <option value=""> Select </option>
+                                    @foreach($qualityMaster as $k => $v)
+                                        <option value="{{ $v }}"  {{ ($query->quality_type == $v)? 'selected' : '' }}>
+                                            {{ strtoupper($k) }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Quality','Quality') !!}
+                                <select class="form-control" required name="quality">
+
+                                </select>
+                            </div>
+
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Rice Form','Rice Form') !!}
+                                <select class="form-control" required name="riceform">
+
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Grade','Grade') !!}
+                                <select class="form-control" required name="ricegrade">
+
+                                </select>
+                            </div>
+
+                            <p><strong>Selected Packing Type: </strong>{{ ($query->packing_type == 0) ? "Miller" : 'Private Label' }}</p>
+
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Packing','Packing') !!}
+                                <select class="form-control" required name="ricepacking">
+                                    @foreach($packing as $k => $v)
+                                        <option value="{{ $v->id }}" >{{ $v->size }} {{ $v->packing }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Packing','Packing Image') !!}
+                                <input type="file" class="form-control" name="packingImage">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Quantity','Quantity') !!}
+                                <input type="text" class="form-control" required placeholder="Quantity" name="quantity" value="{{ $query->quantity??0 }}">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Offer Price','Offer Price (₹)') !!}<p style="color: gray; font-size: 12px;">eg. 6300/ QTL (CD 2%)</p>
+                                <input type="text" class="form-control" placeholder="Offer Price" name="price">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Location','Warehouse Location') !!}
+                                <input type="text" class="form-control" placeholder="location" name="location">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Validity','Validity') !!}
+                                <input type="datetime-local" id="validity" name="validity" class="form-control">
+                                {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
+                            </div>
+                            <div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                    <input type="file" class="form-control" name="uncookedFiles[]" >
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Cooked image','Cooked image') !!}
+                                    <input type="file" class="form-control" name="cookedFiles[]">
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Crop','Crop') !!}
+                                <input type="text" class="form-control" name="crop">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Heart','Heart Count') !!}
+                                <input type="text" class="form-control" name="heart">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('hotdeal','Hot Deal') !!}
+                                <select class="form-control" name="hotdeal" id="hotdeal">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0;padding: 0px 20px;">
+                                <div class="row">
+                                    <h3>Spec</h3>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('moisture','Moisture') !!}
+                                        <input type="text" class="form-control" name="moisture">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('kett','Kett') !!}
+                                        <input type="text" class="form-control" name="kett">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('broken','Broken') !!}
+                                        <input type="text" class="form-control" name="broken">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('dd','DD') !!}
+                                        <input type="text" class="form-control" name="dd">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('admixture','Admixture') !!}
+                                        <input type="text" class="form-control" name="admixture">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('elongation','Elongation') !!}
+                                        <input type="text" class="form-control" name="elongation">
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Rice Size','Rice Size') !!}
+                                        @php use App\TradeQueriesINR; @endphp
+
+                                        <select class="form-control" required name="riceSize">
+                                            <option value=""> Select </option>
+                                            @foreach(TradeQueriesINR::$riceSize as $k => $v)
+                                                <option value="{{ $k }}"> {{$v}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Additional Info','Additional Info') !!}
+                                <textarea class="form-control" placeholder="Additional Info" rows="5"  name="additioanlInfo">{{ $query->additional_info }}</textarea>
+                            </div>
+                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('personal_remark','Personal Remarks') !!}
+                                <textarea class="form-control" placeholder="Personal Remarks" rows="5" name="personal_remarks"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section('javascript')
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        // let tradeType = $('select[name=tradeType] :selected').val();
+
+        let tradeType = "<?php echo $query->type; ?>";
+        let packingType = "<?php echo $query->packing_type; ?>";
+        let packing = "<?php echo $query->packing; ?>";
+
+        let millerPacking = <?php echo json_encode(App\Packing::$millerPacking); ?>;
+
+        let url = '';
+
+        if (packingType == 0) {
+            url = 'https://snjtradelink.com/staging/public/api/get/packing/by/' + tradeType;
+        } else {
+            url = 'https://snjtradelink.com/staging/public/api/get/buyer/inr/packing';
+        }
+
+        console.log(packingType);
+
+       $.ajax({
+            url: url,
+            success: function (res) {
+
+                $("select[name=ricepacking]").html('');
+                $("select[name=ricepacking]").append('<option value=""> Select </option>');
+
+                for (let i = 0; i < res.data.length; i++) {
+
+                    let selected =
+                        (
+                            ( packingType == 0 &&
+                                (
+                                    (packing == 0 && res.data[i].id == 2) ||
+                                    (packing == 1 && res.data[i].id == 1)
+                                )
+                            )
+                            ||
+                            ((packingType == 1) && (packing == res.data[i].id))
+                        ) ? "selected" : (packingType == '') ? (packing == res.data[i].id)? 'selected' : '' : '';
+
+
+                    // FIXED — wrap whole ternary inside parentheses
+                    let label = (packingType == 0)
+                        ? res.data[i].packing
+                        : res.data[i].packing + ' ' + res.data[i].description;
+
+
+                    $("select[name=ricepacking]").append(`
+                        <option value="${res.data[i].id}" ${selected}>
+                            ${label}
+                        </option>
+                    `);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        });
+
+        
+        $.ajax({
+            url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/'+<?php echo $query->quality_type ?>,
+            success : function (res){
+                $("select[name=quality]").html('');
+                $("select[name=quality]").append('<option value=""> Select </option>');
+                let objectKeys = res.data;
+                let selectedQuality = "<?php echo $query->quality; ?>";
+
+                for(let i = 0; i < objectKeys.length ; i++){
+                    let selected = (selectedQuality == res.data[i].id) ? "selected" : "";
+
+                    $("select[name=quality]").append('<option value="'+objectKeys[i].id+'" '+ selected +'> '+objectKeys[i].name+' </option>');
+                }
+            },
+            error: function (err){
+                console.log(err);
+            }
+        })
+
+
+        $.ajax({
+            url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/name/' + <?php echo $query->quality ?>,
+            success : function (res){
+                
+                let selectedQuality = "<?php echo ($query->quality_form) ?? $query->qualityForm; ?>";
+
+                $("select[name=riceform]").html('');
+                $("select[name=riceform]").append('<option value=""> Select </option>');
+
+                for(let i = 0; i < res.data.length ; i++){
+                    
+                    let selected = (selectedQuality == res.data[i].id) ? "selected" : "";
+
+                    $("select[name=riceform]").append(
+                        '<option value="'+ res.data[i].id +'" '+ selected +'>'+ res.data[i].name +'</option>'
+                    );
+                }
+            },
+            error: function (err){
+                console.log(err);
+            }
+        });          
+
+
+        // "get/rice/wand/" + riceNameId
+
+        let riceNameId = "<?php echo $query->quality; ?>";
+        // let riceNameId = $('select[name=quality] :selected').val();
+        $.ajax({
+            url : 'https://snjtradelink.com/staging/public/api/get/rice/wand/' + riceNameId,
+            success : function (res){
+                $("select[name=ricegrade]").html('');
+                $("select[name=ricegrade]").append('<option value=""> Select </option>');
+                let selectedGrade = "<?php echo $query->grade; ?>";
+
+                for(let i = 0; i < res.data.length ; i++){
+                let selected = (selectedGrade == res.data[i].id) ? "selected" : "";
+
+                    $("select[name=ricegrade]").append('<option value="'+res.data[i].id +'" '+ selected +'> '+res.data[i].get_wand_type['type']+' '+res.data[i]['value'] +'</option>');
+                }
+            },
+            error: function (err){
+                console.log(err);
+            }
+        })
+
+
+        // 'get/seller/inr/packing'
+        //     $.ajax({
+        //         url : 'https://snjtradelink.com/staging/public/api/get/seller/inr/packing',
+        //         success : function (res){
+        //             $("select[name=ricepacking]").append('<option value=""> Select </option>');
+
+        //             console.log(res.data);
+        //             for(let i = 0; i < res.data.length ; i++){
+        //                 $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'"> '+res.data[i]['packing']+' </option>');
+        //             }
+        //         },
+        //         error: function (err){
+        //             console.log(err);
+        //         }
+        // })
+
+
+
+
+
+
+    })
+</script>
+@endsection

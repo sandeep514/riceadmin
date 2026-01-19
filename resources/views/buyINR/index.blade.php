@@ -37,6 +37,7 @@
                                                 <th style="text-align: center ">Qualtity</th>
                                                 <th style="text-align: center ">Additional Info</th>
                                                 <th style="text-align: center ">Created By</th>
+                                                <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Number</th>
                                                 <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Remarks</th>
@@ -44,7 +45,6 @@
                                                 <th style="text-align: center ">Action</th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
                                             @foreach($buyQueries as $k => $v)
                                                 <tr>
@@ -52,12 +52,20 @@
                                                     <td>{{ $v->RiceQualityRiceNames->name ?? '' }} {{ $v->RiceFormMilestone3->name ?? '' }}</td>
                                                     <td>{{ $v->riceGrade->getWandType['type'] }} {{ $v->riceGrade->value }}</td>
                                                     <td>{{ App\BuyQueriesINR::$packingTypeStaus[$v->packing_type] }}</td>
-                                                    <td>{{ ($v->RicePacking != null) ? $v->RicePacking->packing.' '.$v->RicePacking->description  : '' }}</td>
+
+                                                    <td>@if($v->packing_type == 1 && $v->RicePacking)
+                                                            {{ $v->RicePacking->packing.' '.$v->RicePacking->description }}
+                                                        @endif
+                                                        @if($v->packing_type != 1)
+                                                            {{ isset(App\Packing::$millerPacking[$v->packing]) ? App\Packing::$millerPacking[$v->packing] : '' }}
+                                                        @endif
+                                                    </td>
 
                                                     <td>{{ $v->quantity }}</td>
                                                     <td>{{ $v->additional_info }}</td>
-                                                    <td>{{ ($v->UserDetail->name)?? '--' }}</td>
-                                                    <td>{{ ($v->UserDetail->mobile)?? '--' }}</td>
+                                                    <td>{{ ($v->UserDetail->name)?? '--' }} - {{ ($v->UserDetail->mobile)?? '--' }}</td>
+                                                    <td>{{ ($v->contactPerson)?? '--' }}</td>
+                                                    <td>{{ ($v->contactMobile)?? '--' }}</td>
                                                     <td>{{ (\Carbon\Carbon::parse($v->created_at)->format('d-m-Y'))?? '--' }}</td>
                                                     <td>
                                                         <form method="POST" action="{{ route('master.update.remarks.buyOrder') }}">
@@ -80,7 +88,6 @@
                                                        
                                                     </td>
                                                 </tr>
-                                                
                                             @endforeach
                                         </tbody>
                                         
@@ -94,6 +101,7 @@
                                                 <th style="text-align: center ">Qualtity</th>
                                                 <th style="text-align: center ">Additional Info</th>
                                                 <th style="text-align: center ">Created By</th>
+                                                <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Number</th>
                                                 <th style="text-align: center ">Created at</th>
                                                 <th style="text-align: center ">Status</th>

@@ -19,6 +19,7 @@
         "laravel/ui": "^4.0",
         "laravelcollective/html": "^6.1",
         "maatwebsite/excel": "^3.1",
+        "razorpay/razorpay": "^2.9",
         "stripe/stripe-php": "^10.0",
         "twig/twig": "^3.10",
         "yajra/laravel-datatables": "^10.0",

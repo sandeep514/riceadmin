@@ -155,4 +155,24 @@
     
     @show
 
+    <script>
+        $(document).ready(function(){
+
+            $.ajax({
+                url : '{{ route("admin.is.viewed.by.admin") }}',
+                method: 'GET',
+                success : function(res){
+                    if( res.count > 0 ){
+                        $('#hasNewUser').css({'display' : 'block'})
+                    }
+                },
+                error : function(err){
+
+                }
+            })
+        });
+    </script>
+
+
+
     @yield('javascripts')

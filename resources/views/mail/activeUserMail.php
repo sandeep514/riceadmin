@@ -66,31 +66,25 @@
     <div class="header">
       <h1>🎉 Congratulations!</h1>
     </div>
+
     <div class="content">
-      <h2>Your SNTC Account is Now Active</h2>
       <p>
-        Dear <strong>{{ $user_name ?? 'User' }}</strong>,
+        Dear <strong><?php echo $user_name ?? 'User' ?></strong>,
       </p>
       <p>
-        Great news! Your SNTC account has been successfully activated.  
-        You can now <strong>post your Buy and Sell queries</strong> and connect with other members of our trading community.
+        Great news! Your SNTC account is now activated. You can start exploring the platform and grow your business with SNTC..
       </p>
       <p>
-        Start exploring the marketplace and grow your business with ease.
+        If you need any assistance, feel free to reach us at <strong><a href="mailto:info@sntcgroup.com">info@sntcgroup.com</a></strong>
       </p>
 
-      <!-- <a href="{{ $login_url ?? '#' }}" class="cta-button">Go to My Account</a> -->
 
       <p style="margin-top: 25px;">
-        If you have any questions or need help, feel free to contact our support team at  
-        <a href="mailto:support@sntc.com">support@sntc.com</a>.
+        Welcome to the SNTC family!
       </p>
-      <p>Welcome to the SNTC family!</p>
     </div>
-    <div class="footer">
-      © {{ date('Y') }} SNTC. All rights reserved.  
-      <br>Empowering smart trade connections.
-    </div>
+    <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
+    <hr style="border:none;border-top:1px solid #eee" />
   </div>
 
 </body>

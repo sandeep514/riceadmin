@@ -5,9 +5,10 @@
         </div>
 
         <p style="font-size:1.1em">Hi,</p>
-        <p>Someone send you a query, Please get back to user. You can find the details of user as under:<br><br><strong>Name:</strong> {{$data['fullName']; }} <br><strong>Email:</strong> {{$data['email']; }} <br><strong>Phone:</strong> {{$data['phone']; }} <br><strong>Message:</strong> {{$data['message']; }}
-</p>
+        <p>Someone send you a query, Please get back to user. You can find the details of user as under:<br><br><strong>Name:</strong> {{$data['fullName']; }} <br><strong> Email:</strong> {{$data['email']; }} <br><strong>Phone:</strong> {{$data['phone']; }} <br><strong>Message:</strong> {{$data['message']; }}
+        </p>
 
-        <p style="font-size:0.9em;">Regards,<br />SNTC Group</p>
+        <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
+        <hr style="border:none;border-top:1px solid #eee" />
     </div>
 </div>

@@ -13,7 +13,7 @@ use App\Buyerpackinginr;
 class FutureBuyQueriesINR extends Model
 {
     protected $table = 'future_buy_query_milestone3';
-    protected $fillable = ["selectedQualityTypeInt","year","quality","quality_form","grade","packing","packing_type","warehouselocation","contactperson","contactMobile","userId","expectedPackingSchedule","bagStatus","expectedBagDelivery","quantity","offerPrice","created_by","validDays","uncookedFile","cookedImageFile",'farming','contactPerson','contactMobile','status'];
+    protected $fillable = ["selectedQualityTypeInt" , 'quality_type',"year","quality","quality_form","grade","packing","packing_type","warehouselocation","contactperson","contactMobile","userId","expectedPackingSchedule","bagStatus","expectedBagDelivery","quantity","offerPrice","created_by","validDays","uncookedFile","cookedImageFile",'farming','contactPerson','contactMobile','additional_info','status'];
 
     public static $status = [
         0 => 'closed',
@@ -47,6 +47,29 @@ class FutureBuyQueriesINR extends Model
     {
         return $this->belongsTo(Buyerpackinginr::class , 'packing', 'id');
     }
+    // public function getRicePackingAttribute()
+    // {
+    //     // Custom packing logic
+    //     if ($this->packing_type == 0 && $this->packing == 0) {
+    //         return [
+    //             'id' => 0,
+    //             'packing' => '50 kg PP',
+    //             'description' => null
+    //         ];
+    //     }
+
+    //     if ($this->packing_type == 0 && $this->packing == 1) {
+    //         return [
+    //             'id' => 1,
+    //             'packing' => '55 kg PP',
+    //             'description' => null
+    //         ];
+    //     }
+
+    //     // Default DB relation (if exists)
+    //     return $this->RicePacking;
+    // }
+
     public function UserDetail()
     {
         return $this->belongsTo(User::class , 'created_by', 'id');

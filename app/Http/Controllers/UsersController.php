@@ -10,13 +10,15 @@ use App\User;
 use App\ChatStatus;
 use Illuminate\Http\Request;
 use Session;
+use Mail;
+
 
 class UsersController extends Controller
 {
 
     public function index($role )
     {
-        $users = User::where('role' , $role)->where('status' , 1)->get();
+        $users = User::where('role' , $role)->get();
         return View('users.users',compact('users'));
         // return $dataTable->render('users.index');
     }
@@ -107,9 +109,35 @@ class UsersController extends Controller
 
     public function view($userId)
     {
-        $user = User::with(['getWebPersonalDetails','getWebBusinessDetails' , 'getWebUserAttachment' , 'getWebUserSubscription'])->find($userId)->toArray();
+        $user = User::with(['getWebPersonalDetails','getWebBusinessDetails' => function($q){
+            return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name']);
+        } , 'getWebUserAttachment' , 'getWebUserSubscription'])->find($userId)->toArray();
 
         return view('users.view',['user' => $user]);
+    }
+
+    public function rejectUser(Request $request)
+    {
+        $userId = $request->userId;
+        $mailmessage = $request->message ?? 'No reason added by admin';
+
+        User::where( ['id' => $userId  ])->update([ 'message' => $mailmessage , 'status' => 0 ]);
+        $userDetail = User::where( ['id' => $userId  ])->first();
+
+        $data = [ 'userName' => $userDetail['name'] , 'mailmessage' => $mailmessage ] ; 
+
+        $mailTo = $userDetail->email;
+        $subject = 'Account on Hold';
+        $mailFrom = 'info@sntcgroup.com';
+        $mailFromName = 'SNTC Team - India';
+
+        $respose = Mail::send('mail.rejectedUserMail', $data, function ($message) use ($mailTo, $mailmessage, $subject, $mailFrom, $mailFromName) {
+            $message->to($mailTo, $mailmessage)->subject($subject);
+            $message->from($mailFrom, $mailFromName);
+        });
+        Session::flash('success','Success|User rejected successfully!');
+        return back();
+
     }
 
     public function listWebChangeSttausUser($userId)
@@ -119,7 +147,7 @@ class UsersController extends Controller
 
         $user->update([ 'is_active_by_admin' => ($userDetail->is_active_by_admin) ? 0 : 1]);
 
-        if($userDetail->status == 0){
+        if($userDetail->is_active_by_admin == 0){
             $data = [];
             $data['user_name'] = $userDetail->name;
 
@@ -137,5 +165,21 @@ class UsersController extends Controller
 
         Session::flash('success','Success|User status updated successfully!');
         return back();
+    }
+
+    public function webusers()
+    {
+        $vendorUsers = User::where('user_from' , 'web')->with(['getWebPersonalDetails' , 'getWebBusinessDetails' => function($q){
+            return $q->with(['getCategoryDetails:id,category']);
+        }])->get();
+        return view('users.webUser' , compact('vendorUsers'));
+    }
+
+    public function markAsViewed()
+    {
+        User::where(['user_from' => 'web', 'is_viewed_by_admin' => 0])->update(['is_viewed_by_admin' => 1]);
+        Session::flash('success' , 'Success|Users marked as viewed');
+        return back();
+
     }
 }

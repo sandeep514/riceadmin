@@ -13,12 +13,14 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::group(['middleware'=>'auth'], function(){
         Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
 
+        Route::get('clone/previous/day/record', ['as' => 'clone.previous.day.record', 'uses' => 'HomeController@clonePreviousDayRecord']);
+
         Route::group(['middleware'=>'admin'], function(){
             Route::get('call/is/active' , ['as' => 'is.active.call' , 'uses' => 'PlanController@isActiveCall']);
-    
+            
             //plans
             Route::get('list/plans' ,       ['as' => 'list.plan',           'uses' => 'PlanController@index']);
-            Route::get('plan/create' ,['as' => 'list.plan.create',    'uses' => 'PlanController@create']);
+            Route::get('plan/create' ,      ['as' => 'list.plan.create',    'uses' => 'PlanController@create']);
             Route::post('create/plans' ,    ['as' => 'create.plan',         'uses' => 'PlanController@createPlan']);
             Route::get('edit/plan/{id}' ,   ['as' => 'edit.plan',           'uses' => 'PlanController@editPlan']);
             Route::post('update/plan' ,     ['as' => 'update.plan',         'uses' => 'PlanController@updatePlan']);
@@ -39,6 +41,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('users/{role}',['as'=>'users','uses'=>'UsersController@index','action'=>'view']);
                 Route::get('users/{role}/create',['as'=>'create.user','uses'=>'UsersController@create','action'=>'create']);
                 Route::post('users/save/{role}',['as'=>'save.user','uses'=>'UsersController@save','action'=>'create']);
+                Route::post('users/reject',['as'=>'reject.user','uses'=>'UsersController@rejectUser']);
                 Route::get('users/view/{id}',['as'=>'view.user','uses'=>'UsersController@view','action'=>'view']);
                 Route::get('users/edit/{id}/{role}',['as'=>'edit.user','uses'=>'UsersController@edit','action'=>'edit']);
                 Route::put('users/update/{id}/{role}',['as'=>'update.user','uses'=>'UsersController@update','action'=>'edit']);
@@ -225,6 +228,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::group(['module'=>'live_prices','icon'=>'fa-inr'], function(){
                 Route::match(['get','post'],'live/price/{rice_name?}',['as'=>'live_prices','uses'=>'LivePricesController@index','action'=>'create']);
                 Route::post('live/prices/save/',['as'=>'save.price','uses'=>'LivePricesController@savePrice','action'=>'create']);
+                Route::post('live/prices/save/for/single',['as'=>'save.price.for.single','uses'=>'LivePricesController@savePriceSingle']);
                 Route::get('price/delete/{id}',['as'=>'delete.price','uses'=>'LivePricesController@delete','action'=>'delete']);
             });
 
@@ -354,6 +358,11 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::post('create/rice/quality' ,         ['as' => 'master.create.rice.quality'   ,'uses' => 'MasterController@createRiceQuality' ] );
         Route::get('delete/rice/qualitie/{id}',      ['as' => 'master.delete.rice.quality'   ,'uses' => 'MasterController@deleteRiceQuality' ] );
 
+        // rice brand forms
+        Route::get('brand/list/rice/quality' ,            ['as' => 'master.list.rice.brand.quality'     ,'uses' => 'MasterController@listRiceBrandQuality' ] );
+        Route::post('brand/create/rice/quality' ,         ['as' => 'master.create.rice.brand.quality'   ,'uses' => 'MasterController@createRiceBrandQuality' ] );
+        Route::get('brand/delete/rice/qualitie/{id}',      ['as' => 'master.delete.rice.brand.quality'   ,'uses' => 'MasterController@deleteRiceBrandQuality' ] );
+
 
         Route::get('edit/rice/quality/{id}',      ['as' => 'master.edit.rice.quality'   ,'uses' => 'MasterController@editRiceQuality' ] );
 
@@ -431,6 +440,10 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('news/runner' , [ 'as' => 'master.news.runner' , 'uses' => 'NewsRunnerController@index']);
         Route::post('create/news/runner' , [ 'as' => 'master.post.news.runner' , 'uses' => 'NewsRunnerController@create']);
         Route::get('update/news/status/{newsId}/{status}' , [ 'as' => 'master.news.change.status' , 'uses' => 'NewsRunnerController@updateStatus']);
+
+        Route::get('web/news/runner' , [ 'as' => 'web.master.news.runner' , 'uses' => 'NewsRunnerController@webIndex']);
+        Route::post('web/create/news/runner' , [ 'as' => 'web.master.post.news.runner' , 'uses' => 'NewsRunnerController@webCreate']);
+        Route::get('web/update/news/status/{newsId}/{status}' , [ 'as' => 'web.master.news.change.status' , 'uses' => 'NewsRunnerController@webUpdateStatus']);
         
     });
 
@@ -557,5 +570,15 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('paddy-prices/{id}', ['as' => 'edit.paddy.price', 'uses' => 'PaddyPriceController@edit']);
     Route::put('update/paddy-prices', ['as' => 'update.paddy.price', 'uses' => 'PaddyPriceController@update']);
     // Route::delete('paddy-prices/{id}', ['as' => 'delete.rice.grade', 'uses' => 'PaddyPriceController@deleteGrade']);
+
+
+
+    Route::get('get/web/brands' , ['as' => 'get.web.brands.list' , 'uses' => 'WebBrandController@showBrandsToAdmin']);
+    Route::get('toggle/web/brands/status/{id}' , ['as' => 'toggle.web.brands.status' , 'uses' => 'WebBrandController@toggleWebBrandsStatus']);
+
+
+
+    Route::get('web/users' , ['as' => 'web.user' , 'uses' => 'UsersController@webusers']);
+    Route::get('mark/as/viewed' , ['as' => 'mark.as.viewed' , 'uses' => 'UsersController@markAsViewed']);
 
 });

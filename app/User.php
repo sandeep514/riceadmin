@@ -35,14 +35,17 @@ class User extends Authenticatable
         'role',
         'usd_role',
         'bagCategory',
+        'message',
         'otp',
         'status',
+        'is_viewed_by_admin',
         'expired_on',
         'is_usd_active',
         'is_INR_active',
         'is_active_by_admin',
         'transaction_id',
         'planId',
+        'user_from',
         'userType',
         'stripe_customer_id',
         'stripe_payment_method'
@@ -124,6 +127,7 @@ class User extends Authenticatable
         return $this->belongsTo(WebUserAttachment::class  , 'id' , 'user_id');
     }
     public function getWebUserSubscription(){
-        return $this->hasOne(WebUserSubscriptionModel::class  , 'user_id' , 'id')->orderBy('id' , 'desc')->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
+        return $this->hasOne(WebUserSubscriptionModel::class  , 'user_id' , 'id')->orderBy('id' , 'desc');
+        // return $this->hasOne(WebUserSubscriptionModel::class  , 'user_id' , 'id')->orderBy('id' , 'desc')->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
     }
 }

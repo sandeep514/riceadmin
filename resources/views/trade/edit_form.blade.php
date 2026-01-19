@@ -6,6 +6,10 @@
                 <div class="group-content">
                     <div class="row">
                         <div class="col-md-12">
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('SNTC lot no','SNTC lot no') !!}
+                                <input type="text" class="form-control" placeholder="SNTC Lot no" name="sntcLotNo" value="{{ $tradequeriesinr->sntcLotNo??'' }}">
+                            </div>
                             <input type="hidden" name="id" value="{{ $tradequeriesinr->id }}">
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Trade Type','Trade Type') !!}
@@ -42,12 +46,41 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <div  style="padding: 0px 100px" >
+                                <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('Rice Form','Rice Form (Link with live price)') !!}
+                                    <select class="form-control" required name="riceformLinkWithLivePrice">
+                                        <option>Select any</option>
+                                        @foreach($ricefm as $k => $v)
+                                            <option {{ ($tradequeriesinr->qualityFormLinkWithLivePrice == $v)?'selected' : '' }} value="{{ $v }}"> {{ strtoupper($k) }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                    {!! Form::label('state','State (Link with live price)') !!}
+                                    <select class="form-control" required name="stateLinkWithLivePrice">
+                                        <option>Select any</option>
+                                        @foreach($livePricesStates as $k => $v)
+                                            <option {{ ($tradequeriesinr->stateLinkWithLivePrice == $v->state)? 'selected' : '' }} value="{{ $v->state }}"> {{ $v->state }} </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Grade','Grade') !!}
                                 <select class="form-control" required name="ricegrade">
                                     @foreach($wandModel as $k => $v)
                                         <option {{ ($tradequeriesinr->grade == $v->id)?'selected' : '' }} value="{{ $v->id }}"> {{ $v->getWandType->type.' '.$v->value }} </option>
                                     @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Packing Type','Packing Type') !!}
+                                <select class="form-control" required name="packingStreamType">
+                                    <option {{ ($tradequeriesinr->packingStreamType == 1)?'selected': '' }} value="1">Bulk (50 | 55KG) </option>
+                                    <option {{ ($tradequeriesinr->packingStreamType == 2)?'selected': '' }} value="2">Branded | Labeled: (30 - 26KG) </option>
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
@@ -68,8 +101,8 @@
                                 <input type="text" class="form-control" required placeholder="Quantity" name="quantity" value="{{ $tradequeriesinr->quantity }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Offer Price','Offer Price (₹)') !!}
-                                <input type="text" class="form-control" required placeholder="Offer Price" name="price" value="{{ $tradequeriesinr->offerPrice }}">
+                                {!! Form::label('Offer Price','Offer Price (₹)') !!}<p style="color: gray; font-size: 12px;">eg. 6300/ QTL (CD 2%)</p>
+                                <input type="text" class="form-control" placeholder="Offer Price" name="price" value="{{ $tradequeriesinr->offerPrice }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Location','Warehouse Location') !!}
@@ -81,7 +114,7 @@
                                 {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
                             </div>
 
-                            <div>
+                            <div class="row" style="padding: 0px 20px">
                                 <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                     {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
                                     <input type="file" class="form-control" name="uncookedFiles[]" >
@@ -103,7 +136,8 @@
                                     <img src="{{ asset('uploads/'.$tradequeriesinr->uncooked_file3) }}" style="width: 100px" />
                                 </div>
                             </div>
-                            <div>
+
+                            <div class="row" style="padding: 0px 20px">
                                 <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                     {!! Form::label('Cooked image','Cooked image') !!}
                                     <input type="file" class="form-control" name="cookedFiles[]">
@@ -131,6 +165,7 @@
                                 {!! Form::label('Crop','Crop') !!}
                                 <input type="text" class="form-control" name="crop" value="{{ $tradequeriesinr->crop }}">
                             </div>
+                            
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('hotdeal','Hot Deal') !!}
                                 <select class="form-control" name="hotdeal" id="hotdeal">
@@ -166,7 +201,22 @@
                                         {!! Form::label('elongation','Elongation') !!}
                                         <input type="text" class="form-control" name="elongation" value="{{$tradequeriesinr->elongation}}">
                                     </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Rice Size','Rice Size') !!}
+                                        @php use App\TradeQueriesINR; @endphp
+
+                                        <select class="form-control" required name="riceSize">
+                                            <option value=""> Select </option>
+                                            @foreach(TradeQueriesINR::$riceSize as $k => $v)
+                                                <option value="{{ $k }}" {{ ($tradequeriesinr->riceSize == $k)?'selected' : '' }} > {{$v}} </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
+                            </div>
+                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Sold at','sold_at') !!}
+                                <input type="text" class="form-control" placeholder="Sold at (Rs)" min="0" value="{{ $tradequeriesinr->sold_at }}" name="sold_at" />
                             </div>
                              <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Additional Info','Additional Info') !!}
@@ -178,13 +228,12 @@
                             </div>
                         </div>
                     </div>
-                    
-                    
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 @section('javascript')
 <script type="text/javascript">
 

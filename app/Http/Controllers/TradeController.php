@@ -17,11 +17,13 @@ use App\PublicPacking;
 use App\TradeQueriesINR;
 use App\TradeCurrentStatus;
 use App\RiceFormMilestone3;
+use App\RiceForm;
 use App\WandModel;
 use App\SellerPackingINR;
 use App\Buyerpackinginr;
 use App\WandTypeModel;
 use App\TradeLike;
+use App\LivePrice;
 
 class TradeController extends Controller
 {
@@ -31,6 +33,7 @@ class TradeController extends Controller
         // }])->orderBy('id' , 'DESC')->get();
 
         $sellQueries = TradeQueriesINR::with([
+            'RiceFormData',
             'RiceNameData',
             'RiceFormMilestone3',
             'RicePackingBuyer',
@@ -43,13 +46,9 @@ class TradeController extends Controller
         ->orderBy('id', 'DESC')
         ->get();
 
-        
         $tradeStatus = [1=> 'open' , 11=> 'close', 12 => 'hold'];
         $tradeCurrentStatus = TradeCurrentStatus::first();
         $currentTrade = $tradeStatus[$tradeCurrentStatus->id];
-
-
-
 
         return View('trade.index' , compact('sellQueries' , 'currentTrade'));
     }
@@ -57,31 +56,36 @@ class TradeController extends Controller
     
 
     public function create(){
-        // $qualityMaster = QualityMaster::pluck('quality_type_status' , 'quality_type');
-        // dd($qualityMaster);        
         $qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
+        $livePricesStates =  LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
 
-        return View('trade.create' , compact('qualityMaster','packing'));
+        return View('trade.create' , compact('qualityMaster','packing','livePricesStates'));
     }
-    
-    public function save(Request $request){
 
+
+    public function save(Request $request){
         $data = [];
         $selectedQualityTypeInt = $request->category;
         $queryId = $request->queryId??'';
         $quality = $request->quality;
         $qualityForm = $request->riceform;
+        $riceformLinkWithLivePrice = $request->riceformLinkWithLivePrice ?? '';
+        $stateLinkWithLivePrice = $request->stateLinkWithLivePrice ?? '';
+        $packingStreamType = $request->packingStreamType ?? '';
+
         $selectedGrade = $request->ricegrade;
         $changePackingType = $request->ricepacking;
         $quantity = $request->quantity;
-        $offerPrice = $request->price;
+        $offerPrice = $request->price ?? 0;
         $validDays = $request->validity;
         $additioanlInfo = $request->additioanlInfo;
         $location = $request->location;
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
+        $riceSize = $request->riceSize;
         $personal_remarks = $request->personal_remarks??'';
+        $sntcLotNo = $request->sntcLotNo??'';
 
         if( isset($_FILES['packingImage']) ){
             $file_name      = $_FILES['packingImage']['name'];
@@ -118,11 +122,13 @@ class TradeController extends Controller
             } 
         }
 
-
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
         $data['queryId'] = $queryId;
         $data['qualityForm'] = $qualityForm;
+        $data['qualityFormLinkWithLivePrice'] = $riceformLinkWithLivePrice??'';
+        $data['stateLinkWithLivePrice'] = $request->stateLinkWithLivePrice ?? '';
+        $data['packingStreamType'] = $request->packingStreamType ?? '';
         $data['grade'] = $selectedGrade;
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
@@ -131,9 +137,11 @@ class TradeController extends Controller
         $data['additioanlInfo'] = $additioanlInfo;
         $data['location'] = $location;
         $data['tradeType'] = $tradeType;
+        $data['riceSize'] = $riceSize;
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
         $data['personal_remarks'] = $personal_remarks;
+        $data['sntcLotNo'] = $sntcLotNo;
 
         $data['moisture'] = $request->moisture;
         $data['kett'] = $request->kett;
@@ -162,12 +170,17 @@ class TradeController extends Controller
     }
     
     public function edit($id){
+        $livePricesStates =  LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
+
         $tradequeriesinr = TradeQueriesINR::where('id' , $id)->first();
         $tradeType = $tradequeriesinr->tradeType;
         $type = $tradequeriesinr->quality_type;
         $riceNameId = $tradequeriesinr->quality;
+
         $riceName = RiceName::orderBy('order', 'ASC')->where('status' , 1)->where('type_status' , $type)->pluck('id','name');
-        $riceForm = RiceFormMilestone3::orderBy('order' , 'ASC')->pluck('id','name');
+        $riceForm = RiceFormMilestone3::orderBy('order' , 'ASC')->where('status' , 1)->pluck('id','name');
+        $ricefm = RiceForm::orderBy('order' , 'ASC')->where('type' , ($type == 1)? 'basmati' : 'non-basmati')->where('status' ,1)->pluck('id','form_name');
+
         $WandType = (WandTypeModel::pluck('id' , 'type'));
         $wandModel = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->orderBy('order' , 'ASC')->get();
 
@@ -176,28 +189,35 @@ class TradeController extends Controller
         }else{
             $packingType  = SellerPackingINR::get();
         }
+
         $qualityMaster = RiceName::pluck('type_status' , 'type');
         // $packing = PublicPacking::get();
 
-        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','wandModel','packingType','WandType'));
+        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates'));
+
     }
     
     public function update(Request $request){
         $data = [];
-
         $selectedQualityTypeInt = $request->category;
         $quality = $request->quality;
         $qualityForm = $request->riceform;
+        $riceformLinkWithLivePrice = $request->riceformLinkWithLivePrice ?? '';
+        $stateLinkWithLivePrice = $request->stateLinkWithLivePrice ?? '';
+        $packingStreamType = $request->packingStreamType ?? '';
         $selectedGrade = $request->ricegrade;
         $changePackingType = $request->ricepacking;
         $quantity = $request->quantity;
         $offerPrice = $request->price;
         $validDays = $request->validity;
+        $riceSize = $request->riceSize;
         $additioanlInfo = $request->additioanlInfo;
         $location = $request->location;
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
         $personal_remarks = $request->personal_remarks;
+        $sntcLotNo = $request->sntcLotNo;
+        $sold_at = $request->sold_at;
 
         if( $request->packingImage != '' && isset($_FILES['packingImage']) ){
             $file_name      = $_FILES['packingImage']['name'];
@@ -228,6 +248,7 @@ class TradeController extends Controller
         //     move_uploaded_file($file_tmp,"uploads/".$file_name);
         //     $data['cooked_file'] = $file_name;
         // }
+
         foreach($_FILES["cookedFiles"]["tmp_name"] as $key=>$tmp_name) {
             $file_name=$_FILES["cookedFiles"]["name"][$key];
             $file_tmp=$_FILES["cookedFiles"]["tmp_name"][$key];
@@ -255,17 +276,23 @@ class TradeController extends Controller
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
         $data['qualityForm'] = $qualityForm;
+        $data['qualityFormLinkWithLivePrice'] = $riceformLinkWithLivePrice;
+        $data['stateLinkWithLivePrice'] = $stateLinkWithLivePrice;
+        $data['packingStreamType'] = $packingStreamType;
         $data['grade'] = $selectedGrade;
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
         $data['validDays'] = $validDays;
+        $data['riceSize'] = $riceSize;
         $data['additioanlInfo'] = $additioanlInfo;
         $data['location'] = $location;
         $data['tradeType'] = $tradeType;
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
         $data['personal_remarks'] = $personal_remarks;
+        $data['sntcLotNo'] = $sntcLotNo;
+        $data['sold_at'] = ($sold_at != null)? $sold_at : 0;
 
         $data['moisture'] = $request->moisture;
         $data['kett'] = $request->kett;
@@ -274,7 +301,8 @@ class TradeController extends Controller
         $data['admixture'] = $request->admixture;
         $data['elongation'] = $request->elongation;
 
-        TradeQueriesINR::where('id' , $request['id'])->update(array_filter($data));
+        $data = array_filter($data);
+        TradeQueriesINR::where('id' , $request['id'])->update(($data));
         Session::flash('success','Success|Trade saved successfully!');
 
         return back();

@@ -87,6 +87,47 @@
                     </div>
                 </div>
 
+
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Rice Brand Form</h3>
+                        </div>
+                        {!! Form::open(['route'=>'master.create.rice.brand.quality']) !!}
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        {!! Form::label('riceType','Rice Brand Form*') !!}
+                                        <select class="form-control" name="riceType">
+                                            <option value="basmati">Basmati</option>
+                                            <option value="non-basmati">Non Basmati</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {!! Form::label('name','Rice Brand Form*') !!} <small>(eg: Raw, Steam )</small>
+                                        {!! Form::text('name' , '' , ['class' => 'form-control']) !!}
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="box-footer">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary">Save name</button>
+                                    </div>
+                                    <div class="col-md-8 " style="height: 35px">
+                                        
+                                    </div>
+                                    <div class="col-md-2">
+                                        <a class="btn btn-info" href="{{ route('master.list.rice.brand.quality') }}">List Rice Brand Form</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">

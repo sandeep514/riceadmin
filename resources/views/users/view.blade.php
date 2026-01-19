@@ -40,25 +40,33 @@
 				<tr><th>Last Name</th><td>{{ $user['get_web_personal_details']['lastname'] ?? '-' }}</td></tr>
 				<tr><th>Email</th><td>{{ $user['get_web_personal_details']['email'] ?? '-' }}</td></tr>
 				<tr><th>Phone Number</th><td>{{ $user['get_web_personal_details']['phone_number'] ?? '-' }}</td></tr>
-				<tr><th>State</th><td>{{ $user['get_web_personal_details']['state'] ?? '-' }}</td></tr>
+			<!-- 	<tr><th>State</th><td>{{ $user['get_web_personal_details']['state'] ?? '-' }}</td></tr>
 				<tr><th>District</th><td>{{ $user['get_web_personal_details']['district'] ?? '-' }}</td></tr>
-				<tr><th>Address</th><td>{{ $user['get_web_personal_details']['address'] ?? '-' }}</td></tr>
+				<tr><th>Address</th><td>{{ $user['get_web_personal_details']['address'] ?? '-' }}</td></tr> -->
 
 				{{-- PAN Card --}}
 				<tr>
 					<th>PAN Card</th>
 					<td>
 						@if (!empty($user['get_web_user_attachment']['panCard']))
-							<img 
-								src="{{ asset('webPortal/' . $user['id'] . '/attachments/pan/' . $user['get_web_user_attachment']['panCard']) }}" 
-								alt="PAN Card" 
-								width="120"
-								class="img-thumbnail"
-								style="cursor:pointer"
-								data-bs-toggle="modal" 
-								data-bs-target="#imageModal" 
-								data-image="{{ asset('webPortal/' . $user['id'] . '/attachments/pan/' . $user['get_web_user_attachment']['panCard']) }}"
-							>
+							@php
+								$filename = $user['get_web_user_attachment']['panCard'];
+							@endphp
+
+							@if (preg_match('/\.(png|jpe?g)$/i', $filename))
+								<img 
+									src="{{ asset('webPortal/' . $user['id'] . '/attachments/pan/' . $user['get_web_user_attachment']['panCard']) }}" 
+									alt="PAN Card" 
+									width="120"
+									class="img-thumbnail"
+									style="cursor:pointer"
+									data-bs-toggle="modal" 
+									data-bs-target="#imageModal" 
+									data-image="{{ asset('webPortal/' . $user['id'] . '/attachments/pan/' . $user['get_web_user_attachment']['panCard']) }}"
+								>
+							@else
+								<a href="{{ asset('webPortal/' . $user['id'] . '/attachments/pan/' . $user['get_web_user_attachment']['panCard']) }}">View</a>
+							@endif
 						@else
 							--
 						@endif
@@ -70,16 +78,26 @@
 					<th>GST Card</th>
 					<td>
 						@if (!empty($user['get_web_user_attachment']['gstCard']))
-							<img 
-								src="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}" 
-								alt="GST Card" 
-								width="120"
-								class="img-thumbnail"
-								style="cursor:pointer"
-								data-bs-toggle="modal" 
-								data-bs-target="#imageModal" 
-								data-image="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}"
-							>
+
+							@php
+								$filename = $user['get_web_user_attachment']['gstCard'];
+							@endphp
+
+							@if (preg_match('/\.(png|jpe?g)$/i', $filename)) {
+								<img 
+									src="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}" 
+									alt="GST Card" 
+									width="120"
+									class="img-thumbnail"
+									style="cursor:pointer"
+									data-bs-toggle="modal" 
+									data-bs-target="#imageModal" 
+									data-image="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}"
+								>
+							@else
+								<a href="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}" target="_blank">View</a>
+							@endif
+							
 						@else
 							--
 						@endif
@@ -100,8 +118,8 @@
 				<tr><th>Company Name</th><td>{{ $user['get_web_business_details']['company_name'] ?? '-' }}</td></tr>
 				<tr><th>Selected Category</th><td>{{ $user['get_web_business_details']['selected_category'] ?? '-' }}</td></tr>
 				<tr><th>Address</th><td>{{ $user['get_web_business_details']['address'] ?? '-' }}</td></tr>
-				<tr><th>State</th><td>{{ $user['get_web_business_details']['state'] ?? '-' }}</td></tr>
-				<tr><th>City</th><td>{{ $user['get_web_business_details']['city'] ?? '-' }}</td></tr>
+				<tr><th>City</th><td>{{ $user['get_web_business_details']['city_rel']['city_name'] ?? '-' }}</td></tr>
+				<tr><th>State</th><td>{{ $user['get_web_business_details']['state_rel']['state_name'] ?? '-' }}</td></tr>
 			</table>
 		</div>
 		@endif
@@ -117,10 +135,32 @@
 					<div>
 						<div>
 							@if( $user['is_active_by_admin'] == 0 )
-								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-info">Activate this user</a>
+							<div>
+								<div>
+									<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-info">
+										Activate this user
+									</a>
+								</div>
+								
+							</div>
 							@else
 								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-danger">De-Activate this user</a>
 							@endif
+							<div class="row">
+								<div class="col-md-6">
+									<form class="" method="POST" action="{{ route('reject.user') }}">
+										<input type="hidden" name="userId" value="{{ $user['id'] }}">
+										@csrf
+										<div class="form-group">
+										    <label for="message">Reason of Rejection:</label>
+										    <input type="text" class="form-control" id="message" name="message">
+										</div>
+										<div>
+											<input type="submit" class="btn btn-info btn-sm" name="submit" value="submit">	
+										</div>
+									</form>									
+								</div>
+							</div>
 						</div>
 					</div>
 				@endif

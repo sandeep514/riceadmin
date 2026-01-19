@@ -22,17 +22,23 @@
                             <h3 class="box-title">Price Details</h3>
                         </div>
                         <!-- /.box-header -->
-                        {!! Form::open(['route'=>'save.price' , 'id' => 'formCreate']) !!}
+
+                        @if($today_price != null)
                             @include('live_prices._form')
-                            <div class="box-footer">
+                        @else
+                            <a href="{{ route('clone.previous.day.record') }}" class="btn btn-primary">
+                                Clone previous day record
+                            </a>
+                        @endif
+
+<!--                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save Price</button>
                             </div>
-                        {!! Form::close() !!}
-                    </div>
-                    <a href="javascript:void(0)" class="submitButton" >Submit</a>
+ -->                    </div>
+                    <!-- <a href="javascript:void(0)" class="submitButton" >Submit</a> -->
                 </div>
             </div>
-            <div class="row">
+           <!--  <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
@@ -106,7 +112,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </section>
     </div>
 @endsection

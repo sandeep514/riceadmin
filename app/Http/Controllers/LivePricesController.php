@@ -13,47 +13,145 @@ use Session;
 
 class LivePricesController extends Controller
 {
-    public function index(Request $request, $riceName = null){
-        $RiceForm= RiceForm::where('status' , 1)->get();
-        $RiceName= RiceName::get();
+    // public function index(Request $request, $riceName = null){
+    //     $RiceForm= RiceForm::where('status' , 1)->get();
+    //     $RiceName= RiceName::get();
 
-        $livePrice = LivePrice::get()->groupBy('state');
+    //     $livePrice = LivePrice::get()->groupBy('state');
 
-        $riceModel = null;
-        $riceForms = null;
-        $todaysPrices = null;
-        $lastPrices = null;
-        $todayYear = Carbon::now()->format('Y');
-        $lastFiveYear = Carbon::now()->subYear(5)->format('Y');
+    //     $riceModel = null;
+    //     $riceForms = null;
+    //     $todaysPrices = null;
+    //     $lastPrices = null;
+    //     $todayYear = Carbon::now()->format('Y');
+    //     $lastFiveYear = Carbon::now()->subYear(5)->format('Y');
 
-        $lastYears = [];
+    //     $lastYears = [];
 
-        for($i = $todayYear; $i >= $lastFiveYear; $i--){
-            $lastYears[] = (int)$i;
-        }
+    //     for($i = $todayYear; $i >= $lastFiveYear; $i--){
+    //         $lastYears[] = (int)$i;
+    //     }
 
-        if($riceName != null){
-            $riceModel = RiceName::find($riceName);
-            $riceForms = RiceForm::where('status' , 1)->where(['type'=>$riceModel->type])->get();
-            if( LivePrice::get()->count() == 0 ){
-                return view('live_prices.create',['prices'=>[],'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
-            }
-            $todaysPrices = LivePrice::where(['name'=>$riceName])->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
-            $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
+    //     if($riceName != null){
+    //         $riceModel = RiceName::find($riceName);
+    //         $riceForms = RiceForm::where('status' , 1)->where(['type'=>$riceModel->type])->get();
+    //         if( LivePrice::get()->count() == 0 ){
+    //             return view('live_prices.create',['prices'=>[],'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
+    //         }
+    //         $todaysPrices = LivePrice::where(['name'=>$riceName])->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
+    //         $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();
             
-            $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');
-            $lastPrices = LivePrice::where(['name'=>$riceName])->with(['form_rel','name_rel'])->whereDate('created_at' , $lastAvailableDate)->get();
+    //         $lastAvailableDate = date_format(date_create($lastAvaibleRecord->created_at) , 'Y-m-d');
+    //         $lastPrices = LivePrice::where(['name'=>$riceName])->with(['form_rel','name_rel'])->whereDate('created_at' , $lastAvailableDate)->get();
+    //     }
+
+    //     if($request->has('from')){
+    //         $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->whereBetween(DB::raw('date(created_at)'),[Carbon::parse($request->from)->format('Y-m-d'), Carbon::parse($request->to)->format('Y-m-d')])->get();
+    //     }else{
+    //         $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
+    //     }
+    //     return view('live_prices.create',['lastYears' => $lastYears,'livePrice'=>$livePrice,'prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
+    // }
+
+    // 11 nov 2025
+
+    public function index(Request $request, $riceName = null)
+    {
+        $RiceForm = RiceForm::where('status', 1)->get();       // all active forms
+        $RiceName = RiceName::all();                          // all rice names
+
+        // lightweight grouped live prices (select only necessary columns)
+        // $livePrice = LivePrice::select('id','state','min_price','max_price')->get()->groupBy('state');
+        $livePrice = LivePrice::selectRaw('state, MIN(min_price) as min_price, MAX(max_price) as max_price')
+            ->where('min_price', '>', 0)
+            ->where('max_price', '>', 0)
+            ->groupBy('state')
+            ->get()
+            ->keyBy('state');
+
+        // init variables
+        $riceModel = null;
+        $riceForm  = null;        // note: singular key expected by your view
+        $today_price = null;
+        $lastPrices  = null;
+
+
+         // today's prices for this rice
+        $today_price = LivePrice::whereDate('created_at', Carbon::now()->format('Y-m-d'))
+            ->first();
+
+
+        // years list (current -> current-5)
+        $lastYears = range(Carbon::now()->year, Carbon::now()->subYears(5)->year);
+
+        // If riceName provided
+        if ($riceName !== null) {
+            $riceModel = RiceName::find($riceName);
+            if (!$riceModel) {
+                abort(404, 'Rice not found');
+            }
+
+            // get forms for this rice type
+            $riceForm = RiceForm::where('status', 1)->where('type', $riceModel->type)->get();
+
+            // if no live prices at all, show empty create view
+            if (!LivePrice::exists()) {
+                return view('live_prices.create', [
+                    'prices'     => [],
+                    'riceModel'  => $riceModel,
+                    'riceForm'   => $riceForm,
+                    'today_price'=> $today_price,
+                    'lastPrices' => $lastPrices,
+                    'livePrice'  => $livePrice,
+                    'lastYears'  => $lastYears
+                ]);
+            }
+
+
+            // last available record's date (safe)
+            $lastAvaibleRecord = LivePrice::latest('created_at')->first();
+
+            if ($lastAvaibleRecord) {
+                $lastAvailableDate = Carbon::parse($lastAvaibleRecord->created_at)->format('Y-m-d');
+
+                $lastPrices = LivePrice::where('name', $riceName)
+                    ->with(['form_rel','name_rel'])
+                    ->whereDate('created_at', $lastAvailableDate)
+                    ->get();
+            }
         }
 
-        if($request->has('from')){
-            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->whereBetween(DB::raw('date(created_at)'),[Carbon::parse($request->from)->format('Y-m-d'), Carbon::parse($request->to)->format('Y-m-d')])->get();
-        }else{
-            $prices = LivePrice::with(['name_rel','form_rel'])->where('min_price' ,'!=', 0)->where('max_price' ,'!=', 0)->where(DB::raw('date(created_at)'),Carbon::now()->format('Y-m-d'))->get();
-        }
-        return view('live_prices.create',['lastYears' => $lastYears,'livePrice'=>$livePrice,'prices'=>$prices,'riceModel'=>$riceModel,'riceForm'=>$riceForms,'today_price'=>$todaysPrices,'lastPrices' => $lastPrices]);
+        // Build base query for price list
+        // $query = LivePrice::with(['name_rel','form_rel'])
+        //     ->where('min_price', '!=', 0)
+        //     ->where('max_price', '!=', 0);
+
+        // if ($request->has('from') && $request->has('to')) {
+        //     $from = Carbon::parse($request->from)->startOfDay();
+        //     $to   = Carbon::parse($request->to)->endOfDay();
+        //     $query->whereBetween('created_at', [$from, $to]);
+        // } else {
+        //     $query->whereDate('created_at', Carbon::today());
+        // }
+
+        // $prices = $query->get();
+        $prices = collect();
+        return view('live_prices.create', [
+            'lastYears'  => $lastYears,
+            'livePrice'  => $livePrice,
+            'prices'     => $prices,
+            'riceModel'  => $riceModel,
+            'riceForm'   => $riceForm,      // singular key for the view
+            'today_price'=> $today_price,
+            'lastPrices' => $lastPrices,
+            'RiceForm'   => $RiceForm,
+            'RiceName'   => $RiceName
+        ]);
     }
 
 
+
+    // 11 nov 2025
     public function savePrice(Request $request){
         $todayDate = Carbon::now()->format('Y-m-d');
         $lastAvailableDate ='';
@@ -133,7 +231,6 @@ class LivePricesController extends Controller
                 }
             }
         }else{
-
             $lastUpdatedPrice = LivePrice::whereDate( 'created_at' , $lastAvailableDate )->get();
 
             if( $lastUpdatedPrice->count() > 0 ){
@@ -256,10 +353,10 @@ class LivePricesController extends Controller
         // }
         
         foreach($sortedStateData as $k => $v){
-            LivePrice::where('state' , $v)->update(['state_order' => $k]);
+            LivePrice::where('state' , $v)->whereDate('created_at' , $todayDate)->update(['state_order' => $k]);
         }
         foreach($sortedNameData as $k => $v){
-            LivePrice::where('name' , $v)->update(['name_order' => $k]);    
+            LivePrice::where('name' , $v)->where('created_at' , $todayDate)->update(['name_order' => $k]);    
         }
 
         
@@ -268,9 +365,17 @@ class LivePricesController extends Controller
 
         // foreach($openingOrClosing as $k => $v){
             LivePricesOpeningClosing::upsert(
-                $openingOrClosing, 
-                ['name', 'state', 'form', 'cropYear'], 
-                ['opening', 'closing']
+                $openingOrClosing,
+                ['name', 'state', 'form', 'cropYear'],
+                [
+                    'opening',
+                    'closing' => DB::raw("
+                        COALESCE(
+                            NULLIF(VALUES(closing), ''),
+                            closing
+                        )
+                    ")
+                ]
             );
         // }/
 
@@ -280,7 +385,70 @@ class LivePricesController extends Controller
     }
 
 
+    public function savePriceSingle(Request $request)
+    {
+        $state          =   $request->state;
+        $name           =   $request->name;
+        $form           =   $request->form;
+        $min_price      =   $request->min[$state][$form]; 
+        $max_price      =   $request->max[$state][$form];
 
+        $cropYear       =   $request->cropYear[$state][$form];
+        $cropGrade      =   $request->cropGrade[$state][$form];
+        $opening        =   $request->opening[$state][$form]??'';
+        $closing        =   $request->closing[$state][$form]??'';
+        $monthStart     =   $request->monthStart[$state][$form]??'';
+        $monthEnd       =   $request->monthEnd[$state][$form]??'';
+        $up_down        =   (array_key_exists($form, $request->up_down[$state])? $request->up_down[$state][$form] : 'up' );
+
+
+        $todayDate = Carbon::now()->format('Y-m-d');
+        $updatedTime = Carbon::now()->format('Y-m-d H:i:s');
+
+        $livePrices = LivePrice::where([
+                'name'      => $name,
+                'form'      => $form,
+                'cropYear'  => $cropYear,
+                'state'     => $state
+            ])->whereDate('created_at' , $todayDate);
+
+        if( $livePrices->first() ){
+            $livePrices->update([
+                'min_price'   => $min_price,
+                'max_price'   => $max_price,
+                'cropGrade'   => $cropGrade,
+                'opening'     => $opening,
+                'closing'     => $closing,
+                'monthStart'  => $monthStart,
+                'monthEnd'    => $monthEnd,
+                'up_down'     => $up_down,
+                'updated_at'  => $updatedTime
+            ]);
+        }else{
+            LivePrice::create([
+                'min_price'   => $min_price,
+                'max_price'   => $max_price,
+                'cropGrade'   => $cropGrade,
+                'opening'     => $opening,
+                'closing'     => $closing,
+                'monthStart'  => $monthStart,
+                'monthEnd'    => $monthEnd,
+                'up_down'     => $up_down,
+                'name'      => $name,
+                'form'      => $form,
+                'cropYear'  => $cropYear,
+                'state'     => $state,
+                'created_at' , $todayDate,
+                'updated_at'  => $updatedTime,
+            ]);
+        }
+
+        
+
+        LivePrice::whereDate('created_at' , $todayDate)->update(['updated_at'  => $updatedTime]);
+
+        return response()->json(['status' => true , 'message' => 'data uploaded successfully']);
+    }
 
 
 

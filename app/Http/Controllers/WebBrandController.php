@@ -1,0 +1,428 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\WebVendorCategory;
+use App\CategoryRoleMap;
+use App\Courier;
+use App\LivePrice;
+use App\LivePricesOpeningClosing;
+use App\MillStatus;
+use App\Packing;
+use App\PackingType;
+use App\Quality;
+use App\Repositories\CourierRepository;
+use App\Sample;
+use App\User;
+use App\Designation;
+use App\ChartInterval;
+use App\Port;
+use App\PortImages;
+use App\Gallery;
+use App\Grade;
+use App\Contact;
+use App\RiceName;
+use App\RiceType;
+use App\Testimonial;
+use App\TestimonialVideo;
+use App\RiceForm;
+use App\Order;
+use App\BuyQuery;
+use App\Plan;
+use App\SubPlan;
+use App\Message;
+use App\TrialPeriod;
+use App\Version;
+use App\WebBrandVariant;
+use App\OceanFreight;
+use App\BagVendors;
+use App\FutureBuyQueriesINR;
+use App\FutureSellQueriesINR;
+use App\Helpers\StatusChat;
+use App\USD_prices;
+// use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\FreeTrialMonths;
+use App\QualityMaster;
+use App\USD_defaultmaster;
+use App\Defaultvalue;
+use App\Vendorcategory;
+use App\Bid;
+use App\USDPlan;
+use App\HotDealAccept;
+use App\HotDealNotification;
+use App\Http\Controllers\MailController;
+use Illuminate\Support\Str;
+use App\Notification;
+use App\Brand;
+use App\WandModel;
+use App\WandTypeModel;
+use App\SellerPackingINR;
+use App\RiceFormMilestone3;
+use App\SellQueriesINR;
+use App\TradeQueriesINR;
+use App\TradeStatusMessages;
+use App\Buyerpackinginr;
+use App\BuyQueriesINR;
+use App\TradeLike;
+use App\TradeIntrested;
+use Mail;
+use Auth;
+use App\NewsRunner;
+use App\TradeCurrentStatus;
+use App\WebBrands;
+use Illuminate\Support\Facades\Validator;
+use Session;
+use App\RiceBrandForm;
+use App\WebBusinessDetails;
+use App\BrandAvailability;
+
+class WebBrandController extends Controller
+{
+    public function index($userId)
+    {
+        $imagePre = asset('brands');
+        $webBrands = WebBrands::where('user_id' , $userId)->with(['RiceName:id,name' , 'getVariants:id,brand_id'])->get();
+        return response()->json(['status' => 'success', 'message' => "Brand get successfully" ,'imagePre' => $imagePre ,'data' => $webBrands]);
+    }
+
+    public function brandsForDistributers($userId)
+    {
+        $imagePre = asset('brands');
+        $userDetails = WebBusinessDetails::where('user_id' , $userId)->first();
+        if( $userDetails )  {
+            $stateId = $userDetails->state;
+            $cityId = $userDetails->city;
+
+            $brandsId = BrandAvailability::where('city_id' , $cityId)->pluck('brand_id')->toArray();
+            $nearCityBrands = WebBrands::whereIn('id' , $brandsId)->get();
+            $otherBrands = WebBrands::whereNotIn('id' , $brandsId)->get();
+        }else{
+            $nearCityBrands = collect();
+            $otherBrands = WebBrands::get();    
+        }
+        
+        return response()->json(['status' => 'success', 'message' => "Brand get successfully" ,'imagePre' => $imagePre ,'nearCityBrands' => $nearCityBrands , 'otherBrands' => $otherBrands]);
+        
+    }
+
+    public function create(Request $request)
+    {
+        $data = $request->all();
+        $validator = Validator::make($request->all(), [
+            'name'         => 'required|string|max:255',
+            'quality'      => 'integer',
+            // 'brand_year'   => 'digits:4|integer|min:1900|max:' . date('Y'),
+            'address'      => 'string',
+            'product_mode' => 'string',
+            'logo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        if (isset($_FILES['logo'])) {
+            $file_tmp  = $_FILES['logo']['tmp_name'];
+            $file_name = $_FILES['logo']['name'];
+            $file_ext  = pathinfo($file_name, PATHINFO_EXTENSION);
+
+            // Generate new unique filename
+            $new_name = time() . '_' . uniqid() . '.' . strtolower($file_ext);
+
+            // Create directory if not exists
+            if (!is_dir('brands')) {
+                mkdir('brands', 0777, true);
+            }
+
+            // Move file
+            if (move_uploaded_file($file_tmp, "brands/" . $new_name)) {
+                $data['logo'] = $new_name;
+            } else {
+                $data['logo'] = null; // fallback if move fails
+            }
+        }
+        $data['status'] = 0;
+
+        $webBrands = WebBrands::create($data);
+        return response()->json(['status' => 'success', 'message' => "Brand added successfully"]);
+    }
+
+    public function edit(Request $request)
+    {
+        
+        $data = $request->all();
+        $validator = Validator::make($request->all(), [
+            'brand_id'     => 'required|integer',
+            'name'         => 'required|string|max:255',
+            'quality'      => 'integer',
+            'address'      => 'string',
+            'product_mode' => 'string',
+            'logo'         => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        if (isset($_FILES['logo'])) {
+            $file_tmp  = $_FILES['logo']['tmp_name'];
+            $file_name = $_FILES['logo']['name'];
+            $file_ext  = pathinfo($file_name, PATHINFO_EXTENSION);
+
+            // Generate new unique filename
+            $new_name = time() . '_' . uniqid() . '.' . strtolower($file_ext);
+
+            // Create directory if not exists
+            if (!is_dir('brands')) {
+                mkdir('brands', 0777, true);
+            }
+
+            // Move file
+            if (move_uploaded_file($file_tmp, "brands/" . $new_name)) {
+                $data['logo'] = $new_name;
+            } else {
+                $data['logo'] = null; // fallback if move fails
+            }
+        }
+
+        // $data['status'] = 0;
+        unset($data['brand_id']);
+        $webBrands = WebBrands::where('id' , $request->brand_id)->update($data);
+        return response()->json(['status' => 'success', 'message' => "Brand updated successfully"]);
+    }
+
+    public function getQualities(Request $request)
+    {
+        $quality = RiceName::select(['id' , 'name' ,'status'])->where('status' , 1);
+        if( isset($request->type) ){
+            $quality = $quality->where('type_status' , $request->type);
+        }
+
+        if( $request->has('search') ){
+            $searchValue = $request->search;
+            $quality = $quality->where('name' , 'like' , '%'.$searchValue.'%');
+        }
+        $quality = $quality->get();
+
+        return response()->json(['status' => 'success', 'message' => "Quality get successfully" , 'data' => $quality]);
+
+    }
+
+    public function showBrandsToAdmin()
+    {
+        $brands = webBrands::orderBy('id' , 'desc')->get();
+
+        return View('webBrands.list' , compact('brands'));
+    }
+
+    public function toggleWebBrandsStatus($id)
+    {
+        $brand = WebBrands::find($id);
+
+        if ($brand) {
+            $newStatus = $brand->status == 1 ? 0 : 1; // toggle 1→0 or 0→1
+            $brand->update(['status' => $newStatus]);
+
+            Session::flash('success' , 'Success|Status updated successfully');
+        }
+        Session::flash('error' , 'Error|Something went wrong');
+        return back();
+
+    }
+
+    public function indexVariant($brandId){
+        $WebBrandVariant = WebBrandVariant::select('id','variant','brand_id','quality_id','form_id','grade','packing','image','cut_image')->with(['qualityRel:id,name' , 'formRel:id,form_name'])->where('brand_id' , $brandId)->where('status' , 1)->get();
+
+        $imagesPath = asset('brands/' . $brandId . '/variant/');
+        return response()->json([
+            'status' => true,
+            'message' => 'Variants get successfully.',
+            'imagePath' => $imagesPath,
+            'data' => $WebBrandVariant
+        ], 200);
+    }
+
+    public function createVariant(Request $request)
+    {
+        $variants = $request->input('variants');
+
+        if (!is_array($variants) || empty($variants)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No variant data provided.'
+            ], 400);
+        }
+
+        $insertData = [];
+
+        foreach ($variants as $index => $variant) {
+            // Validate each variant
+            $validator = Validator::make($variant, [
+                'variant'       => 'required|string|max:255',
+                'brand_id'      => 'required|integer',
+                'quality_id'    => 'nullable|integer',
+                'form_id'       => 'nullable|integer',
+                'grade'         => 'nullable|string|max:255',
+                'packing'       => 'nullable|string|max:255',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'errors' => $validator->errors(),
+                    'index'  => $index
+                ], 422);
+            }
+
+            $data = $variant;
+
+            // ✅ Handle image upload safely (Laravel way)
+            if ($request->hasFile("variants.$index.image")) {
+                $file = $request->file("variants.$index.image");
+                $fileExt = $file->getClientOriginalExtension();
+                $newName = time() . '_' . uniqid() . '.' . strtolower($fileExt);
+
+                $folder = public_path('brands/' . $variant['brand_id'] . '/variant');
+                if (!is_dir($folder)) mkdir($folder, 0777, true);
+
+                $file->move($folder, $newName);
+                $data['image'] = $newName;
+            } else {
+                $data['image'] = null;
+            }
+
+            if ($request->hasFile("variants.$index.cut_image")) {
+                $file = $request->file("variants.$index.cut_image");
+                $fileExt = $file->getClientOriginalExtension();
+                $newName = time() . '_' . uniqid() . '.' . strtolower($fileExt);
+
+                $folder = public_path('brands/' . $variant['brand_id'] . '/variant');
+                if (!is_dir($folder)) mkdir($folder, 0777, true);
+
+                $file->move($folder, $newName);
+                $data['cut_image'] = $newName;
+            } else {
+                $data['cut_image'] = null;
+            }
+
+            // Add timestamps (insert() doesn’t do this automatically)
+            $data['created_at'] = now();
+            $data['updated_at'] = now();
+
+            $insertData[] = $data;
+        }
+
+        // ✅ One-time bulk insert
+        WebBrandVariant::insert($insertData);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'All variants inserted successfully.',
+            'count' => count($insertData)
+        ], 201);
+    }
+
+    public function editVariant(Request $request)
+    {
+        $data = $request->all();
+
+        $validator = Validator::make($request->all(), [
+            'variant'       => 'required|string|max:255',
+            'brand_id'      => 'required|integer',
+            'quality_id'    => 'nullable|integer',
+            'form_id'       => 'nullable|integer',
+            'grade'         => 'nullable|string|max:255',
+            'packing'       => 'nullable|string|max:255',
+            'variantId'     => 'integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+                'index'  => $index
+            ], 422);
+        }
+
+        if ($request->hasfile("image")) {
+            $file = $request->file("image");
+            $fileext = $file->getclientoriginalextension();
+            $newname = time() . '_' . uniqid() . '.' . strtolower($fileext);
+
+            $folder = public_path('brands/' . $data['brand_id'] . '/variant');
+            if (!is_dir($folder)) mkdir($folder, 0777, true);
+
+            $file->move($folder, $newname);
+            $data['image'] = $newname;
+        } 
+
+        if ($request->hasfile("cut_image")) {
+            $file = $request->file("cut_image");
+            $fileext = $file->getclientoriginalextension();
+            $newname = time() . '_' . uniqid() . '.' . strtolower($fileext);
+
+            $folder = public_path('brands/' . $data['brand_id'] . '/variant');
+            if (!is_dir($folder)) mkdir($folder, 0777, true);
+
+            $file->move($folder, $newname);
+            $data['cut_image'] = $newname;
+        } 
+        unset($data['variantId']);
+
+        WebBrandVariant::where(['id' => $request->variantId])->update($data);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Variants updated successfully.',
+            'data'  => $data
+        ], 201);
+    }
+
+    public function deleteVariant($variantId)
+    {
+        $webBrandVariant = WebBrandVariant::where('id' , $variantId)->update(['status' => 0]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Variants deleted successfully.'
+        ], 200);
+    }
+
+    public function vendorType()
+    {
+        $vendorType = BagVendors::vendorType();
+        $selectedType = [];
+        foreach( $vendorType as $k => $v ){
+            if( $k != 8 ){
+                $selectedType[$k] = $v;
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendor type get successfully.',
+            'data' => $selectedType
+        ], 200);
+    }
+
+    public function vendorList($vendorType)
+    {
+        $bagVendors = BagVendors::select(['id','vendor_name','email','vendor_address','contact_person','contact_number','specialised','vendor_type','status'])->where(['vendor_type' => $vendorType])->get();
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendors get successfully.',
+            'data' => $bagVendors
+        ], 200);
+    }
+
+}

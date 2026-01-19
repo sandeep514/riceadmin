@@ -7,18 +7,17 @@
         <p style="font-size:1.1em">Hi,</p>
             <p>Congratulations, Your offer has been listed to trade portal.</p>
         <br>
-        <br>
-
        
-
-        <p style="font-size:0.9em;">Regards,<br />SNJ Tradelink Pvt. Ltd.</p>
+        <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
         <hr style="border:none;border-top:1px solid #eee" />
-
+      <!--   <p style="font-size:0.9em;">Regards,<br />SNJ Tradelink Pvt. Ltd.</p>
+        <hr style="border:none;border-top:1px solid #eee" /> -->
+<!-- 
         <div style="float:right;padding:8px 0;color:#aaa;font-size:0.8em;line-height:1;font-weight:300">
             <p>SNJ Tradelink Pvt. Ltd.</p>
             <p>5593/94, 3rd Floor Lahori Gate,</p>
             <p>Naya Bazar, Delhi-110006</p>
             <p>India</p>
-        </div>
+        </div> -->
     </div>
 </div>

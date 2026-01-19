@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BrandInterestController;
 
 // Route::group(['middleware' => 'cors'], function () {
 
@@ -17,6 +18,9 @@ use Illuminate\Support\Facades\Route;
         Route::post('millstatus/save',          ['uses'=>'ApiController@saveMillStatus']);
     });
 
+    Route::post('web/brand-interest', [BrandInterestController::class, 'store']);
+
+
     Route::get('prices/{state}/{type}','ApiController@getPrices');
     Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb');
     Route::get('get/price/by/year/{state}/{type}','ApiController@getPricesByYear');
@@ -26,6 +30,8 @@ use Illuminate\Support\Facades\Route;
     Route::get('get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
     Route::get('get/plans' ,                ['as' => 'get.plans'                , 'uses' => 'ApiController@getPlans']);
     Route::get('get/price/states' ,         ['as' => 'get.price.states'         , 'uses' => 'ApiController@getPriceStates']);
+
+    Route::get('get/web/other/services' ,         ['as' => 'get.web.other.service'         , 'uses' => 'ApiController@getWebOtherServices']);
 
 
     Route::get('get/gallery/list' ,         ['as' => 'get.gallery.details'      , 'uses' => 'ApiController@getGalleryData']);
@@ -41,7 +47,9 @@ use Illuminate\Support\Facades\Route;
     Route::GET('verify/otp/{number}/{id}' , ['as' => 'verify.otp'               , 'uses' => 'ApiController@verifyOTP']);
 
     Route::get('get/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiState']);
+    Route::get('get/web/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiStateForWeb']);
     Route::get('get/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiState']);
+    Route::get('get/web/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiStateForWeb']);
     Route::get('get/images/for/dashboard' , ['as' => 'get.images.for.dashboard' , 'uses' => 'ApiController@getImagesForDashboard']);
 
     Route::post('send/message' ,            ['as' => 'send.message'             , 'uses' => 'MessageController@sendMessage']);
@@ -84,6 +92,7 @@ use Illuminate\Support\Facades\Route;
 
     //Ocean Freight
     Route::get('get/ocean/freight', ['as' => 'get.ocean.freight', 'uses' => 'ApiController@getOceanFreight']);
+    Route::get('get/rice/forms', ['as' => 'get.rice.forms', 'uses' => 'ApiController@getRiceForms']);
 
     //get USD Prices
     Route::get('get/usd/prices/{id}' , ['as' => 'get.usd.prices' , 'uses' => 'ApiController@getUSDPrices']);
@@ -140,10 +149,15 @@ use Illuminate\Support\Facades\Route;
 
     Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
     Route::get('get/trades/{userId}' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade']);
+    Route::get('web/get/trades/{userId}' , ['as' => 'web.get.trade' , 'uses' => 'ApiController@getWebTrades']);
     Route::get('get/personal/trades/{userId}' , ['as' => 'get.personal.trade' , 'uses' => 'ApiController@getPersonalTrade']);
-    Route::get('get/all/trades/count' , ['as' => 'get.personal.trades.count' , 'uses' => 'ApiController@getTradeCounts']);
+    Route::match(['get', 'post'], 'get/all/trades/count', [
+        'as' => 'get.personal.trades.count',
+        'uses' => 'ApiController@getTradeCounts'
+    ]);
     Route::get('get/personal/query/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQuery']);
     Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade']);
+    Route::post('web/get/trades/filter/{userId}' , ['as' => 'web.get.trade.filter' , 'uses' => 'ApiController@webFilterTrade']);
 
 
     Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount']);
@@ -169,11 +183,13 @@ use Illuminate\Support\Facades\Route;
     Route::get('get/buyer/inr/packing' , ['as' => 'get.buyer.inr.packing' , 'uses' => 'ApiController@getBuyerPackingINR']);
     Route::POST('like/trade' , ['as' => 'post.like.trade' , 'uses' => 'ApiController@likeTrade']);
     Route::POST('intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@tradeintrested']);
+    Route::POST('web/intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@webTradeintrested']);
     Route::POST('get/my/trades' , ['as' => 'get.personal.trades' , 'uses' => 'ApiController@getMyTrades']);
 
 
 
     Route::get('get/news/runner' , ['as' => 'get.news.runner' , 'uses' => 'ApiController@NewsRunner']);
+    Route::get('get/web/news/runner' , ['as' => 'get.web.news.runner' , 'uses' => 'ApiController@getWebNewsRunner']);
     Route::get('get/testimonial' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonial']);
     Route::get('get/testimonial/videos' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonialVideos']);
     Route::get('get/grades' , ['as' => 'list.grade' , 'uses' => 'ApiController@listGrade']);
@@ -184,7 +200,51 @@ use Illuminate\Support\Facades\Route;
     Route::get('list/web/paddy/mandi/{stateId}',      ['as' => 'list.web.paddy.state.mandi',    'uses' => 'PaddyApiController@listPaddyMandi']);
 
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
+    Route::get('get/paddy/prices/by/paddy/{stateId}/{paddyId}',      ['as' => 'get.paddy.prices.by.paddy',    'uses' => 'PaddyApiController@getPaddyPricesByPaddy']);
+    Route::get('get/states/by/paddy/{stateId}',      ['as' => 'get.paddy.states',    'uses' => 'PaddyApiController@getPaddyQualities']);
+    Route::get('get/paddy/map/data/{mandi_id}/{state_id}/{quality_id}',      ['as' => 'get.paddy.pricess',    'uses' => 'PaddyApiController@GetPaddyMapData']);
+
     Route::get('get/category/role/{roleId}',      ['as' => 'get.category.role',    'uses' => 'ApiController@getCategoryByRole']);
+
+    Route::get('web/quality/list' , ['as' => 'web.quality.list' , 'uses' => 'WebBrandController@getQualities' ]); 
+    Route::get('web/brand/index/{userId}' , ['as' => 'web.brand.index' , 'uses' => 'WebBrandController@index' ]); 
+    Route::get('web/brand/availability/{userId}' , ['as' => 'web.brand.index' , 'uses' => 'WebBrandController@brandsForDistributers' ]); 
+    Route::post('web/brand/create' , ['as' => 'web.brand.create' , 'uses' => 'WebBrandController@create' ]); 
+    Route::post('web/brand/edit' , ['as' => 'web.brand.edit' , 'uses' => 'WebBrandController@edit' ]); 
+
+
+    Route::get('web/vendor/type' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorType' ]); 
+    Route::get('web/vendor/list/{vendorType}' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorList' ]); 
+
+    
+
+
+
+    Route::get('web/brand/variant/{brandId}' , ['as' => 'web.variant.index' , 'uses' => 'WebBrandController@indexVariant' ]); 
+    Route::get('web/brand/variant/delete/{variantId}' , ['as' => 'web.variant.delete' , 'uses' => 'WebBrandController@deleteVariant' ]); 
+    Route::POST('web/brand/variant/edit' , ['as' => 'web.variant.edit' , 'uses' => 'WebBrandController@editVariant' ]); 
+    Route::post('web/variant/create' , ['as' => 'web.variant.create' , 'uses' => 'WebBrandController@createVariant' ]); 
+
+
+    Route::get('get/web/states' , ['as' => 'web.get.web.states' , 'uses' => 'WebStatesController@getStatesList']);
+    Route::get('get/web/cities/{stateId}' , ['as' => 'web.get.web.cities.stateId' , 'uses' => 'WebStatesController@getCityFromStateId']);
+    
+
+    Route::get('get/web/brand/form' , ['as' => 'web.get.brand.form' , 'uses' => 'WebStatesController@getWebBrandForm']);
+
+
+
+
+    Route::POST('save/brand/availability' , ['as' => 'save.brand.availability' , 'uses' => 'ApiController@saveBrandAvailability']);
+    Route::GET('get/brand/availability/{brandId}' , ['as' => 'get.brand.availability' , 'uses' => 'ApiController@getBrandAvailability']);
+
+
+
+    Route::GET('admin/is/viewed/by/admin' , ['as' => 'admin.is.viewed.by.admin' , 'uses' => 'ApiController@adminIsViewedByAdmin']);
+
+
+
+
 
     require __DIR__ . '/portal.php';
 // });

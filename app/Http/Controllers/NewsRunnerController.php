@@ -11,6 +11,7 @@ use Session;
 
 use Carbon\Carbon;
 use App\NewsRunner;
+use App\WebNewsRunner;
 
 class NewsRunnerController extends Controller
 {
@@ -36,5 +37,29 @@ class NewsRunnerController extends Controller
         Session::flash('message' , 'Status updated successfully');
         return back();
 
+    }
+
+    public function webIndex()
+    {
+        $news = WebNewsRunner::limit(10)->orderBy('id', 'desc')->get();
+        return View('webnewsrunner.index' , compact('news'));
+    }
+
+    public function webCreate(Request $request)
+    {   
+        $data = [];
+        foreach ($request->type as $key => $value) {
+            $data[] = [ 'type' => $value , 'title' => $request->title , 'newsType' => $request->newsType ];
+        }
+        Session::flash('message' , 'News updated successfully');
+        WebNewsRunner::insert($data);
+        return back();
+    }
+
+    public function webUpdateStatus($newsId , $status)
+    {
+        WebNewsRunner::whereId($newsId)->update(['status'=> $status]);
+        Session::flash('message' , 'Status updated successfully');
+        return back();
     }
 }

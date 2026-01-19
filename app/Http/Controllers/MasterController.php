@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\RiceForm;
 use App\RiceName;
 use App\RiceType;
+use App\RiceBrandForm;
 use App\Port;
 use App\PublicPacking;
 use App\LivePrice;
@@ -168,6 +169,51 @@ class MasterController extends Controller
 		Session::flash('message' , 'City added successfully');
 		return back();
 	}
+
+
+
+	public function listRiceBrandQuality(){
+		$riceForm = RiceBrandForm::select('id','form_name','type','status')->get();
+
+		return view('master.listRiceBrandForm' , compact('riceForm'));
+	}
+
+
+	public function createRiceBrandQuality(Request $request){
+
+		if( !$request->has('name') || $request->name == null ){
+			Session::flash('message' , 'Form is required.');
+			return back();
+		}
+		if( !$request->has('riceType') || $request->riceType == null ){
+			Session::flash('message' , 'Type is required.');
+			return back();
+		}
+
+		$save = ['form_name' => $request->name,'type' => $request->riceType];
+		RiceBrandForm::create($save);
+
+		Session::flash('message' , 'Rice brand form added successfully');
+		return back();		
+	}
+
+
+	public function deleteRiceBrandQuality($id){
+		$formStatus = 0;
+		$form = RiceBrandForm::where('id' , $id);
+		if( $form->first()->status == 0 ){
+			$formStatus = 1;
+		}
+
+		$form->update(['status' => $formStatus]);
+		Session::flash('message' , 'Rice brand form status updated successfully');
+		return back();
+	}
+
+
+
+
+
 
 	public function statusCity($cityId)
 	{
@@ -836,10 +882,23 @@ class MasterController extends Controller
 
 	public function convertToTradeQueries($type  , $id)
 	{
+		if( $type == 'buy' ){
+			$query = BuyQueriesINR::where('id' , $id)->first();
+		}elseif($type == 'sell'){
+			$query = SellQueriesINR::where('id' , $id)->first();
+		}elseif($type == 'futurebuying'){
+			$query = FutureBuyQueriesINR::where('id' , $id)->first();
+		}elseif($type == 'futureselling'){
+			$query = FutureSellQueriesINR::where('id' , $id)->first();
+		}else{
+			dd("here");
+		}
+
+
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
-		return View('trade.create' , compact('type' , 'id', 'qualityMaster' , 'packing'));
-		dd($type , $id);
+
+		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query'));
 	}
 
 	public function listBuyQueries()
