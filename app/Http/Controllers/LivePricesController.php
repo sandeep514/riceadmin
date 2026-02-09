@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\LivePrice;
 use App\RiceForm;
 use App\RiceName;
+use App\LivePriceStatusMessage;
 use App\LivePricesOpeningClosing;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -135,17 +136,20 @@ class LivePricesController extends Controller
         // }
 
         // $prices = $query->get();
+        $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
+        
         $prices = collect();
         return view('live_prices.create', [
             'lastYears'  => $lastYears,
             'livePrice'  => $livePrice,
             'prices'     => $prices,
             'riceModel'  => $riceModel,
-            'riceForm'   => $riceForm,      // singular key for the view
+            'riceForm'   => $riceForm,   
             'today_price'=> $today_price,
             'lastPrices' => $lastPrices,
             'RiceForm'   => $RiceForm,
-            'RiceName'   => $RiceName
+            'RiceName'   => $RiceName,
+            'LivePriceStatusMessage' => $LivePriceStatusMessage
         ]);
     }
 
@@ -188,7 +192,18 @@ class LivePricesController extends Controller
                     $userDetails = LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->first();
 
                     if( $userDetails ){
-                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update(['cropYear'  => $request->cropYear[$state][$form], 'cropGrade' => $request->cropGrade[$state][$form], 'min_price' => $price , 'max_price' => $request->max[$state][$form] , 'up_down' => $request->up_down[$state][$form],'monthStart' => $request->monthStart[$state][$form]??'','monthEnd' => $request->monthEnd[$state][$form]??'','opening' => $request->opening[$state][$form]??'','closing' => $request->closing[$state][$form]??'' ]); 
+                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([
+                            'cropYear'  => $request->cropYear[$state][$form], 
+                            'cropGrade' => $request->cropGrade[$state][$form], 
+                            'min_price' => $price,
+                            'is_updated_by_admin'   => 1,
+                            'max_price' => $request->max[$state][$form] , 
+                            'up_down' => $request->up_down[$state][$form],
+                            'monthStart' => $request->monthStart[$state][$form]??'',
+                            'monthEnd' => $request->monthEnd[$state][$form]??'',
+                            'opening' => $request->opening[$state][$form]??'',
+                            'closing' => $request->closing[$state][$form]??'' 
+                        ]); 
 
                             if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
                                 $openingOrClosing[] = [
@@ -206,6 +221,7 @@ class LivePricesController extends Controller
                             'name'      => $request->name,
                             'form'      => $form,
                             'min_price' => $price, 
+                            'is_updated_by_admin' => 1,
                             'cropYear'  => $request->cropYear[$state][$form],
                             'cropGrade' => $request->cropGrade[$state][$form],
                             'max_price' => $request->max[$state][$form],
@@ -239,6 +255,7 @@ class LivePricesController extends Controller
                     LivePrice::create([
                         'name'      => $v->name, 
                         'form'      => $v->form,
+                        'is_updated_by_admin' => 1,
                         'min_price' => $v->min_price,
                         'max_price' => $v->max_price,
                         'cropYear'  => $v->cropYear,
@@ -276,7 +293,8 @@ class LivePricesController extends Controller
                         LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([
                             'cropYear'  => $request->cropYear[$state][$form], 
                             'cropGrade' => $request->cropGrade[$state][$form],
-                            'min_price' => $price , 
+                            'min_price' => $price ,
+                            'is_updated_by_admin' => 1, 
                             'max_price' => $request->max[$state][$form] , 
                             'up_down'   => $request->up_down[$state][$form],
                             'opening'   => $request->opening[$state][$form]??'',
@@ -416,6 +434,7 @@ class LivePricesController extends Controller
             $livePrices->update([
                 'min_price'   => $min_price,
                 'max_price'   => $max_price,
+                'is_updated_by_admin'   => 1,
                 'cropGrade'   => $cropGrade,
                 'opening'     => $opening,
                 'closing'     => $closing,
@@ -428,6 +447,7 @@ class LivePricesController extends Controller
             LivePrice::create([
                 'min_price'   => $min_price,
                 'max_price'   => $max_price,
+                'is_updated_by_admin'   => 1,
                 'cropGrade'   => $cropGrade,
                 'opening'     => $opening,
                 'closing'     => $closing,
@@ -628,6 +648,19 @@ class LivePricesController extends Controller
 
     public function delete($id){
         LivePrice::find($id)->delete();
+        Session::flash('success','Success|Record deleted successfully!');
+        return back();
+    }
+
+    public function updateMarketStatus($status)
+    {
+        $stausArray = [
+            'open' => 1,
+            'closed' => 2,
+            'hold' => 3
+        ]; 
+
+        LivePriceStatusMessage::where('id' , 1)->update(['currentStatus' => $stausArray[$status], 'message' => $status]);
         Session::flash('success','Success|Record deleted successfully!');
         return back();
     }

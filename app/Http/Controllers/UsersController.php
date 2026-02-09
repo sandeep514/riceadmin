@@ -121,7 +121,7 @@ class UsersController extends Controller
         $userId = $request->userId;
         $mailmessage = $request->message ?? 'No reason added by admin';
 
-        User::where( ['id' => $userId  ])->update([ 'message' => $mailmessage , 'status' => 0 ]);
+        User::where( ['id' => $userId  ])->update([ 'message' => $mailmessage,'has_validation' => $mailmessage , 'status' => 0 ]);
         $userDetail = User::where( ['id' => $userId  ])->first();
 
         $data = [ 'userName' => $userDetail['name'] , 'mailmessage' => $mailmessage ] ; 
@@ -156,6 +156,8 @@ class UsersController extends Controller
             $subject = 'User Activated';
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
+
+            $user->update([ 'has_validation' => '']);
 
             $respose = Mail::send('mail.activeUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
                 $message->to($mailTo, $mailMessage)->subject($subject);

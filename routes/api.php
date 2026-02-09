@@ -24,6 +24,7 @@ use App\Http\Controllers\BrandInterestController;
     Route::get('prices/{state}/{type}','ApiController@getPrices');
     Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb');
     Route::get('get/price/by/year/{state}/{type}','ApiController@getPricesByYear');
+
     
     Route::get('prices2/{state}/{type}','ApiController@getPrices2');
     Route::get('list/port',                 ['uses'=>'ApiController@getPorts']);
@@ -168,7 +169,7 @@ use App\Http\Controllers\BrandInterestController;
 
 
     Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
-    Route::post('submit/sell/query/web' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
+    Route::post('submit/sell/query/web' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQueryWeb']);
     Route::PATCH('submit/buy/query' , ['as' => 'submit.buy.query' , 'uses' => 'ApiController@SubmitBuyQuery']);
     Route::POST('submit/buy/query/web' , ['as' => 'submit.buy.query.web' , 'uses' => 'ApiController@SubmitBuyQuery']);
 

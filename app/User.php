@@ -38,6 +38,7 @@ class User extends Authenticatable
         'message',
         'otp',
         'status',
+        'has_validation',
         'is_viewed_by_admin',
         'expired_on',
         'is_usd_active',

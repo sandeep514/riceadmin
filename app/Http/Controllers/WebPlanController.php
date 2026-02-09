@@ -76,6 +76,14 @@ class WebPlanController extends Controller
         return View('webplans.index' , compact('webPlanKeys'));
     }
 
+    public function updateStatus($id)
+    {
+        $webPlan = WebPlanModel::findOrFail($id);
+        $webPlan->update(['status' => !$webPlan->status]);
+
+        return redirect()->route('webplans.index')->with('success', 'Status updated successfully');
+    }
+
     public function createPlan(){
         $WebPlanKeysModel = WebPlanKeysModel::get();
         return View('webplans.create',compact('WebPlanKeysModel'));
@@ -123,7 +131,7 @@ class WebPlanController extends Controller
     public function updatePlan(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'plan' => 'required',
+            'planKey' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -134,7 +142,7 @@ class WebPlanController extends Controller
         }
 
         $WebPlanModel = WebPlanModel::where('id' , $request->id)->update([
-            'title' => $request->plan
+            'title' => $request->planKey
         ]);
         $planKeyMap = [];
         if( $request->available  ){

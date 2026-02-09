@@ -13,7 +13,7 @@ use App\Buyerpackinginr;
 class FutureSellQueriesINR extends Model
 {
     protected $table = 'future_sell_query_milestone3';
-    protected $fillable = ['farming','quality_type','year','quality','quality_form','grade','packing_type','packing','quantity','contactPerson','contactMobile','type','additional_info','created_by','status'];
+    protected $fillable = ['farming','quality_type','year','quality','quality_form','grade','packing_type','packing','quantity','contactPerson','contactMobile','type','additional_info','extra_file','created_by','status'];
 
     public static $status = [
         0 => 'closed',

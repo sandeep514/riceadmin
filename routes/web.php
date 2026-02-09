@@ -237,7 +237,10 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('ports',['as'=>'ports','uses'=>'PortsController@index','action'=>'create']);
                 Route::post('ports/save',['as'=>'ports.save','uses'=>'PortsController@save','action'=>'create']);
             });
+
             Route::POST('upload/ports' , ['as' => 'upload.image.state' , 'uses' => 'PortsController@uploadStateImage']);
+
+            Route::get('update/live/price/market/status/{status}',['as'=>'update.live.price.market.status','uses'=>'LivePricesController@updateMarketStatus']);
 
 
             //Plan
@@ -534,6 +537,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::post('web/plans/save' , ['as' => 'web.plans.save' , 'uses' => 'WebPlanController@savePlan']);
     Route::get('web/plans/edit/{webPlanId}' , ['as' => 'web.plans.edit' , 'uses' => 'WebPlanController@editPlan']);
     Route::post('web/plans/update' , ['as' => 'web.plans.update' , 'uses' => 'WebPlanController@updatePlan']);
+    Route::get('web/plans/status/update/{id}' , ['as' => 'web.status' , 'uses' => 'WebPlanController@updateStatus']);
 
 
 

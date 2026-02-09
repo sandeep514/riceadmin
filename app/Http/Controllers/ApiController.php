@@ -63,6 +63,7 @@ use App\WandModel;
 use App\WandTypeModel;
 use App\SellerPackingINR;
 use App\RiceFormMilestone3;
+use App\LivePriceStatusMessage;
 use App\SellQueriesINR;
 use App\TradeQueriesINR;
 use App\TradeStatusMessages;
@@ -1666,40 +1667,263 @@ class ApiController extends Controller
     // }
 
 
+
+    //6 feb 2026 change by sandeep for form_order sort
+    // public function getPricesWeb(Request $request ,$state, $ricetype)
+    // {
+    //     $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
+    //     $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
+    //     $latestCropYear = $latestCropYearRecord->cropYear;
+
+    //     $states = [];
+    //     $todayDate = Carbon::now();
+    //     $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
+
+    //     $year = ( $todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear ;
+    //     $date = $todayDate->day;
+    //     $month = $todayDate->month;
+
+    //     // $todayDate = Carbon::now();
+
+    //     // $cropYear = (request()->has('year')) ? request()->get('year') : $today->year;
+    //     // $year = $cropYear;
+    //     // $date = $todayDate->day;
+    //     // $month = $todayDate->month;
+
+    //     $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
+
+    //     $lastRecord = LivePrice::query()
+    //             ->where('name', '!=', '0')
+    //             ->where('form', '!=', '0')
+    //             ->whereNotNull('min_price')
+    //             ->whereNotNull('max_price')
+    //             ->where('state', $state)
+    //             ->whereDate('created_at' , $lastEnteredRecord)
+    //             ->where('cropYear' , $cropYear)
+    //             ->latest('id');
+
+    //     if( !$lastRecord->exists() ){
+    //         $lastRecord = LivePrice::query()
+    //             ->where('name', '!=', '0')
+    //             ->where('form', '!=', '0')
+    //             ->whereNotNull('min_price')
+    //             ->whereNotNull('max_price')
+    //             ->where('state', $state)
+    //             ->where('cropYear' , $cropYear)
+    //             ->whereDate('created_at' ,'<', $lastEnteredRecord)
+    //             ->latest('id');
+
+    //     }
+
+    //     $lastEnteredRecord = $lastRecord->first();
+
+    //     $data = LivePrice::query()
+    //             ->has('name_rel')
+    //             ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC"))
+    //             ->with([
+    //                 'name_rel',
+    //                 'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC")
+    //                 // 'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+    //             ])
+    //             ->withCount([
+    //                 'trades as tradeCount' => function ($q) {
+    //                     $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form')->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
+    //                     // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
+    //                 }
+    //             ])
+    //             ->whereNotNull('min_price')
+    //             ->whereNotNull('max_price')
+    //             ->where('state', $state)
+    //             ->where('cropYear' , $cropYear)
+    //             ->orderBy('name_order')
+    //             ->orderBy('form_order')
+    //             ->whereDate('created_at',$lastEnteredRecord->created_at)->get();
+
+
+    //             $latestIds = LivePricesOpeningClosing::selectRaw('MAX(id) as id')
+    //                 ->where('cropYear', $cropYear)
+    //                 ->where('state', $state)
+    //                 ->whereNotNull('closing')
+    //                 ->where('closing', '!=', '')
+    //                 ->groupBy('name', 'form', 'cropYear', 'state');
+
+    //             $livePricesClosingOpening = LivePricesOpeningClosing::select([
+    //                     "id",
+    //                     "trade_for",
+    //                     "farming_type",
+    //                     "name",
+    //                     "form",
+    //                     "cropYear",
+    //                     "state",
+    //                     "opening",
+    //                     "closing"
+    //                 ])
+    //                 ->whereIn('id', $latestIds)
+    //                 ->whereHas('name_rel', fn ($q) => $q->where('type', $ricetype))
+    //                 ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype)->orderBy('order', "ASC"))
+    //                 ->with([
+    //                     'name_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
+    //                     'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('order', 'ASC'),
+    //                     // 'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
+    //                 ])
+    //                 ->orderBy('id', 'DESC')
+    //                 ->get(); 
+    //             // $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
+    //             //     ->where('cropYear' , $cropYear)
+    //             //     ->where('state', $state)
+    //             //     ->where(function ($q) {
+    //             //         $q->whereNotNull('closing')->where('closing', '!=', '');
+    //             //     })
+    //             //     ->whereHas('name_rel', fn($q) => $q->where('type', $ricetype))
+    //             //     // ->whereHas('form_rel')
+    //             //     ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+    //             //     ->with([
+    //             //         'name_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC"),
+    //             //         // 'form_rel'
+    //             //         'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+    //             //     ])
+    //             //     ->get();
+
+    //             $hasClosingName = $livePricesClosingOpening->pluck('name');
+    //             $hasClosingForm = $livePricesClosingOpening->pluck('form');
+
+    //             $hasOpenigClosingConcade = [];
+    //             foreach ($hasClosingName as $index => $key) {
+    //                 $hasOpenigClosingConcade[] = strtolower($key . '_' . $hasClosingForm[$index]);
+    //             }
+
+    //         $processedData = [];
+    //         $temp = [];
+
+    //         if( $cropYear == 2023 ){
+    //             // foreach ($data as $k => $val) {
+    //             //     if (!str_contains(strtolower($val['form_rel']['form_name']), 'new') && $cropYear == "2023") {
+    //             //         $riceNameForm[] = $val->name.'_'.$val->form;
+    //             //         $states[] = $val['state'];
+    //             //     }
+    //             // }
+
+
+    //             foreach ($data as $v) {
+    //                 if (!str_contains(strtolower($v['form_rel']['form_name']), 'new crop') && $cropYear == "2023") {
+    //                     if ( count($hasOpenigClosingConcade) > 0 ){
+    //                         $combineNameForm = $v->name.'_'.$v->form;
+    //                         if( !in_array($combineNameForm, $hasOpenigClosingConcade) ) {
+    //                             $riceType = $v->name_rel->name;      
+    //                             $formName = $v->form_rel->form_name; 
+    //                             $date     = Carbon::parse($v->created_at)->format('Y-m-d');
+
+    //                             $replaceHignfn = explode('-', $v->name_rel->type);
+    //                             $implodeUnderscore = implode('_', $replaceHignfn);
+    //                             $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
+    //                         }
+    //                     }else{
+    //                         $riceType = $v->name_rel->name;      
+    //                         $formName = $v->form_rel->form_name; 
+    //                         $date     = Carbon::parse($v->created_at)->format('Y-m-d');
+
+    //                         $replaceHignfn = explode('-', $v->name_rel->type);
+    //                         $implodeUnderscore = implode('_', $replaceHignfn);
+    //                         $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
+    //                     }
+    //                 }
+    //             }
+    //         }else{
+    //             // dd($data->toArray());
+    //             foreach ($data as $v) {
+    //                 if ( count($hasOpenigClosingConcade) > 0 ){
+    //                     $combineNameForm = $v->name.'_'.$v->form;
+    //                     if( !in_array($combineNameForm, $hasOpenigClosingConcade) ) {
+    //                         $riceType = $v->name_rel->name;      
+    //                         $formName = $v->form_rel->form_name; 
+    //                         $date     = Carbon::parse($v->created_at)->format('Y-m-d');
+                            
+    //                         $replaceHignfn = explode('-', $v->name_rel->type);
+    //                         $implodeUnderscore = implode('_', $replaceHignfn);
+
+    //                         $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
+    //                     }
+    //                 }else{
+
+    //                     $riceType = $v->name_rel->name;      
+    //                     $formName = $v->form_rel->form_name; 
+    //                     $date     = Carbon::parse($v->created_at)->format('Y-m-d');
+
+    //                     $replaceHignfn = explode('-', $v->name_rel->type);
+    //                     $implodeUnderscore = implode('_', $replaceHignfn);
+
+    //                     $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
+    //                 }
+    //             }
+    //         }
+
+
+    //         /*
+    //         |--------------------------------------------------------------------------
+    //         | Convert temp structure to REQUIRED final response
+    //         |--------------------------------------------------------------------------
+    //         */
+    //         $replaceHignfn = explode('-', $ricetype);
+    //         $implodeUnderscore = implode('_', $replaceHignfn);
+
+    //         if( array_key_exists($implodeUnderscore , $temp) ){
+    //             foreach ($temp[$implodeUnderscore] as $riceType => $forms) {
+
+    //                 $formArray = [];
+
+    //                 foreach ($forms as $formName => $dates) {
+    //                     $formArray[] = [
+    //                         $formName => $dates
+    //                     ];
+    //                 }
+
+    //                 $processedData[$implodeUnderscore][] = [
+    //                     $riceType => $formArray
+    //                 ];
+    //             }
+    //         }
+            
+    //     // $lastToLastDate = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
+    //     //         ->whereDate('created_at', '<', $lastRecord->first()->created_at->format('Y-m-d'))->get();
+    //     $latestEnteredRecord = LivePrice::orderBy('id', 'desc')->first();
+    //     return response()->json([
+    //             'errors' => null,
+    //             'livePriceStatusMessage' => $LivePriceStatusMessage,
+    //             'prices' => $processedData,
+    //             'closing' => [$ricetype => $livePricesClosingOpening],
+    //             'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
+    //             'lastUpdatedDate' => ($latestEnteredRecord->updated_at)? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
+    //             // 'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
+    //         ]);
+    // }
+    //6 feb 2026 change by sandeep for form_order sort
+
     public function getPricesWeb(Request $request ,$state, $ricetype)
     {
-
+        $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
         $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
         $latestCropYear = $latestCropYearRecord->cropYear;
 
-        $states = [];
         $todayDate = Carbon::now();
         $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
 
-        $year = ( $todayDate->year > $latestCropYear) ? $todayDate->year : $cropYear ;
+        $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
         $date = $todayDate->day;
         $month = $todayDate->month;
-
-        // $todayDate = Carbon::now();
-
-        // $cropYear = (request()->has('year')) ? request()->get('year') : $today->year;
-        // $year = $cropYear;
-        // $date = $todayDate->day;
-        // $month = $todayDate->month;
 
         $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
 
         $lastRecord = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->whereNotNull('min_price')
-                ->whereNotNull('max_price')
-                ->where('state', $state)
-                ->whereDate('created_at' , $lastEnteredRecord)
-                ->where('cropYear' , $cropYear)
-                ->latest('id');
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('state', $state)
+            ->whereDate('created_at' , $lastEnteredRecord)
+            ->where('cropYear' , $cropYear)
+            ->latest('id');
 
-        if( !$lastRecord->exists() ){
+        if(!$lastRecord->exists()){
             $lastRecord = LivePrice::query()
                 ->where('name', '!=', '0')
                 ->where('form', '!=', '0')
@@ -1709,196 +1933,209 @@ class ApiController extends Controller
                 ->where('cropYear' , $cropYear)
                 ->whereDate('created_at' ,'<', $lastEnteredRecord)
                 ->latest('id');
-
         }
 
         $lastEnteredRecord = $lastRecord->first();
 
+        /*
+        |--------------------------------------------------------------------------
+        | MAIN DATA QUERY
+        |--------------------------------------------------------------------------
+        */
+
         $data = LivePrice::query()
-                ->has('name_rel')
-                ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+            ->has('name_rel')
+            ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC"))
+            ->with([
+                'name_rel',
+                'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC")
+            ])
+            ->withCount([
+                'trades as tradeCount' => function ($q) {
+                    $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form')
+                      ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
+                }
+            ])
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('state', $state)
+            ->where('cropYear' , $cropYear)
+            ->orderBy('name_order')
+            ->orderBy('form_order')
+            ->whereDate('created_at',$lastEnteredRecord->created_at)
+            ->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | ✅ EXTRA SORT (form_order + name_order)
+        |--------------------------------------------------------------------------
+        */
+
+        $data = $data->sortBy([
+            ['name_order', 'asc'],
+            ['form_order', 'asc'],
+        ])->values();
+
+        /*
+        |--------------------------------------------------------------------------
+        | OPENING / CLOSING (UNCHANGED)
+        |--------------------------------------------------------------------------
+        */
+
+        $latestIds = LivePricesOpeningClosing::selectRaw('MAX(id) as id')
+            ->where('cropYear', $cropYear)
+            ->where('state', $state)
+            ->whereNotNull('closing')
+            ->where('closing', '!=', '')
+            ->groupBy('name', 'form', 'cropYear', 'state');
+
+            $stateOrder = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
+
+            $livePricesClosingOpening = LivePricesOpeningClosing::query()
+                ->select('live_price_closing.*')
+                ->join('rice_names as rn', 'rn.id', '=', 'live_price_closing.name')
+                ->join('rice_forms as rf', 'rf.id', '=', 'live_price_closing.form')
+
+                ->whereIn('live_price_closing.id', $latestIds)
+                ->where('rn.type', $ricetype)
+                ->where('rf.type', $ricetype)
+
+                /* 1️⃣ State custom order */
+                ->orderByRaw(
+                    "FIELD(live_price_closing.state, '" . implode("','", $stateOrder) . "')"
+                )
+
+                /* 2️⃣ Name order */
+                ->orderBy('rn.order', 'ASC')
+
+                /* 3️⃣ Form order */
+                ->orderBy('rf.order', 'ASC')
+
+                /* 4️⃣ Optional fallback */
+                ->orderBy('live_price_closing.id', 'DESC')
+
                 ->with([
-                    'name_rel',
-                    'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC")
-                    // 'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+                    'name_rel:id,name,order,type',
+                    'form_rel:id,form_name,order,type'
                 ])
-                ->withCount([
-                    'trades as tradeCount' => function ($q) {
-                        $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form')->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
-                        // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                    }
-                ])
-                ->whereNotNull('min_price')
-                ->whereNotNull('max_price')
-                ->where('state', $state)
-                ->where('cropYear' , $cropYear)
-                ->orderBy('name_order')
-                ->orderBy('form_order')
-                ->whereDate('created_at',$lastEnteredRecord->created_at)->get();
+                ->get();
 
+        // $livePricesClosingOpening = LivePricesOpeningClosing::select([
+        //         "id","trade_for","farming_type","name","form","cropYear","state","opening","closing"
+        //     ])
+        //     ->whereIn('id', $latestIds)
+        //     ->whereHas('name_rel', fn ($q) => $q->where('type', $ricetype))
+        //     ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype)->orderBy('order', "ASC"))
+        //     ->with([
+        //         'name_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
+        //         'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('order', 'ASC'),
+        //     ])
+        //     ->orderBy('id', 'DESC')
+        //     ->get();
 
-                $latestIds = LivePricesOpeningClosing::selectRaw('MAX(id) as id')
-                    ->where('cropYear', $cropYear)
-                    ->where('state', $state)
-                    ->whereNotNull('closing')
-                    ->where('closing', '!=', '')
-                    ->groupBy('name', 'form', 'cropYear', 'state');
+        /*
+        |--------------------------------------------------------------------------
+        | ✅ SORT CLOSING BY form_order
+        |--------------------------------------------------------------------------
+        */
 
-                $livePricesClosingOpening = LivePricesOpeningClosing::select([
-                        "id",
-                        "trade_for",
-                        "farming_type",
-                        "name",
-                        "form",
-                        "cropYear",
-                        "state",
-                        "opening",
-                        "closing"
-                    ])
-                    ->whereIn('id', $latestIds)
-                    ->whereHas('name_rel', fn ($q) => $q->where('type', $ricetype))
-                    ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
-                    ->with([
-                        'name_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
-                        'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('order', 'ASC'),
-                        // 'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
-                    ])
-                    ->orderBy('id', 'DESC')
-                    ->get(); 
-                // $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
-                //     ->where('cropYear' , $cropYear)
-                //     ->where('state', $state)
-                //     ->where(function ($q) {
-                //         $q->whereNotNull('closing')->where('closing', '!=', '');
-                //     })
-                //     ->whereHas('name_rel', fn($q) => $q->where('type', $ricetype))
-                //     // ->whereHas('form_rel')
-                //     ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
-                //     ->with([
-                //         'name_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC"),
-                //         // 'form_rel'
-                //         'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
-                //     ])
-                //     ->get();
+        $livePricesClosingOpening = $livePricesClosingOpening
+            ->sortBy(fn ($row) => $row->form_order ?? 999)
+            ->values();
 
-                $hasClosingName = $livePricesClosingOpening->pluck('name');
-                $hasClosingForm = $livePricesClosingOpening->pluck('form');
+            
 
-                $hasOpenigClosingConcade = [];
-                foreach ($hasClosingName as $index => $key) {
-                    $hasOpenigClosingConcade[] = strtolower($key . '_' . $hasClosingForm[$index]);
-                }
+        $hasClosingName = $livePricesClosingOpening->pluck('name');
+        $hasClosingForm = $livePricesClosingOpening->pluck('form');
 
-            $processedData = [];
-            $temp = [];
+        $hasOpenigClosingConcade = [];
 
-            if( $cropYear == 2023 ){
-                // foreach ($data as $k => $val) {
-                //     if (!str_contains(strtolower($val['form_rel']['form_name']), 'new') && $cropYear == "2023") {
-                //         $riceNameForm[] = $val->name.'_'.$val->form;
-                //         $states[] = $val['state'];
-                //     }
-                // }
+        foreach ($hasClosingName as $index => $key) {
+            $hasOpenigClosingConcade[] = strtolower($key . '_' . $hasClosingForm[$index]);
+        }
 
+        /*
+        |--------------------------------------------------------------------------
+        | EXISTING TEMP PROCESSING (UNCHANGED)
+        |--------------------------------------------------------------------------
+        */
 
-                foreach ($data as $v) {
-                    if (!str_contains(strtolower($v['form_rel']['form_name']), 'new crop') && $cropYear == "2023") {
-                        if ( count($hasOpenigClosingConcade) > 0 ){
-                            $combineNameForm = $v->name.'_'.$v->form;
-                            if( !in_array($combineNameForm, $hasOpenigClosingConcade) ) {
-                                $riceType = $v->name_rel->name;      
-                                $formName = $v->form_rel->form_name; 
-                                $date     = Carbon::parse($v->created_at)->format('Y-m-d');
+        $temp = [];
 
-                                $replaceHignfn = explode('-', $v->name_rel->type);
-                                $implodeUnderscore = implode('_', $replaceHignfn);
-                                $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
-                            }
-                        }else{
-                            $riceType = $v->name_rel->name;      
-                            $formName = $v->form_rel->form_name; 
-                            $date     = Carbon::parse($v->created_at)->format('Y-m-d');
+        foreach ($data as $v) {
 
-                            $replaceHignfn = explode('-', $v->name_rel->type);
-                            $implodeUnderscore = implode('_', $replaceHignfn);
-                            $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
-                        }
-                    }
-                }
-            }else{
-                // dd($data->toArray());
-                foreach ($data as $v) {
-                    if ( count($hasOpenigClosingConcade) > 0 ){
-                        $combineNameForm = $v->name.'_'.$v->form;
-                        if( !in_array($combineNameForm, $hasOpenigClosingConcade) ) {
-                            $riceType = $v->name_rel->name;      
-                            $formName = $v->form_rel->form_name; 
-                            $date     = Carbon::parse($v->created_at)->format('Y-m-d');
-                            
-                            $replaceHignfn = explode('-', $v->name_rel->type);
-                            $implodeUnderscore = implode('_', $replaceHignfn);
-
-                            $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
-                        }
-                    }else{
-
-                        $riceType = $v->name_rel->name;      
-                        $formName = $v->form_rel->form_name; 
-                        $date     = Carbon::parse($v->created_at)->format('Y-m-d');
-
-                        $replaceHignfn = explode('-', $v->name_rel->type);
-                        $implodeUnderscore = implode('_', $replaceHignfn);
-
-                        $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
-                    }
-                }
+            if(count($hasOpenigClosingConcade) > 0){
+                $combineNameForm = $v->name.'_'.$v->form;
+                if(in_array($combineNameForm,$hasOpenigClosingConcade)) continue;
             }
 
+            $riceType = $v->name_rel->name;
+            $formName = $v->form_rel->form_name;
+            $date     = Carbon::parse($v->created_at)->format('Y-m-d');
 
-            /*
-            |--------------------------------------------------------------------------
-            | Convert temp structure to REQUIRED final response
-            |--------------------------------------------------------------------------
-            */
-            $replaceHignfn = explode('-', $ricetype);
+            $replaceHignfn = explode('-', $v->name_rel->type);
             $implodeUnderscore = implode('_', $replaceHignfn);
 
-            if( array_key_exists($implodeUnderscore , $temp) ){
-                foreach ($temp[$implodeUnderscore] as $riceType => $forms) {
+            $temp[$implodeUnderscore][$riceType][$formName][$date] = $v;
+        }
 
-                    $formArray = [];
+        /*
+        |--------------------------------------------------------------------------
+        | FINAL RESPONSE FORMAT (UNCHANGED)
+        |--------------------------------------------------------------------------
+        */
 
-                    foreach ($forms as $formName => $dates) {
-                        $formArray[] = [
-                            $formName => $dates
-                        ];
-                    }
+        $processedData = [];
+        $replaceHignfn = explode('-', $ricetype);
+        $implodeUnderscore = implode('_', $replaceHignfn);
 
-                    $processedData[$implodeUnderscore][] = [
-                        $riceType => $formArray
+        if(array_key_exists($implodeUnderscore , $temp)){
+            foreach ($temp[$implodeUnderscore] as $riceType => $forms) {
+
+                uksort($forms, function ($a, $b) use ($data) {
+                    $aOrder = optional(
+                        $data->first(fn($x) => $x->form_rel->form_name == $a)
+                    )->form_order ?? 999;
+
+                    $bOrder = optional(
+                        $data->first(fn($x) => $x->form_rel->form_name == $b)
+                    )->form_order ?? 999;
+
+                    return $aOrder <=> $bOrder;
+                });
+
+                $formArray = [];
+
+                foreach ($forms as $formName => $dates) {
+                    $formArray[] = [
+                        $formName => $dates
                     ];
                 }
+
+                $processedData[$implodeUnderscore][] = [
+                    $riceType => $formArray
+                ];
             }
-            
-        // $lastToLastDate = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
-        //         ->whereDate('created_at', '<', $lastRecord->first()->created_at->format('Y-m-d'))->get();
+        }
+
         $latestEnteredRecord = LivePrice::orderBy('id', 'desc')->first();
+
         return response()->json([
-                'errors' => null,
-                'prices' => $processedData,
-                'closing' => [$ricetype => $livePricesClosingOpening],
-                'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
-                'lastUpdatedDate' => ($latestEnteredRecord->updated_at)? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
-                // 'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
-            ]);
+            'errors' => null,
+            'livePriceStatusMessage' => $LivePriceStatusMessage,
+            'prices' => $processedData,
+            'closing' => [$ricetype => $livePricesClosingOpening],
+            'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
+            'lastUpdatedDate' => ($latestEnteredRecord->updated_at)
+                ? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A')
+                : '',
+        ]);
     }
-
-
 
 
     public function getDesignation()
     {
-        $designation = Designation::get();
+        $designation = Designation::orderBy('orders')->get();
         return response()->json([
             'errors' => null,
             'data' => $designation
@@ -2006,9 +2243,10 @@ class ApiController extends Controller
             foreach ($combine as $kk => $vv) {
                 $combinedData[] = [$kk * 1000, (int)$vv];
             }
+
             $counts = array_count_values($prices->pluck('max_price')->toArray());
             $maxCount = max($counts);
-
+            
             $mostFrequentValues = array_keys($counts, $maxCount);
             if( count($mostFrequentValues) > 0 ){
                 $constantValue = $mostFrequentValues[0];
@@ -2370,11 +2608,10 @@ class ApiController extends Controller
         $todayDate = Carbon::now();
 
         $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
+        $year = ( $todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear ;
 
-        $year = ( $todayDate->year > $latestCropYear) ? $todayDate->year : $cropYear ;
         $date = $todayDate->day;
         $month = $todayDate->month;
-
 
         $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
 
@@ -2434,8 +2671,11 @@ class ApiController extends Controller
                         // 'form_rel'
                         'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
                     ])
+                    // ->orderBy('state_order')
                     ->get();
-
+                
+                $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
+                // dd($sortArray);
                 $closingCropSates = $livePricesClosingOpening->pluck('state')->toArray();
 
                 $hasClosingName = $livePricesClosingOpening->pluck('name');
@@ -2471,11 +2711,9 @@ class ApiController extends Controller
                   if ( count($hasOpenigClosingConcade) > 0 ){
                     $combineNameForm = $v->name.'_'.$v->form;
                     if( !in_array($combineNameForm, $hasOpenigClosingConcade) ) {
-
                         $states[] = $v->state;
                     }
                 }else{
-
                     $states[] = $v->state;
                 }
 
@@ -2485,6 +2723,10 @@ class ApiController extends Controller
             $closingAndOpenCropStates = array_merge($states , $closingCropSates);
 
             $states = array_values(array_unique( $closingAndOpenCropStates ));
+
+            usort($states, function ($a, $b) use ($sortArray) {
+                return array_search($a, $sortArray) <=> array_search($b, $sortArray);
+            });
 
            return response()->json(['error' => null, 'data' => $states], 200);
     }
@@ -2671,7 +2913,7 @@ class ApiController extends Controller
 
         $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
 
-        $year = ( $todayDate->year > $latestCropYear) ? $todayDate->year : $cropYear ;
+        $year = ( $todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear ;
         $date = $todayDate->day;
         $month = $todayDate->month;
 
@@ -2696,7 +2938,6 @@ class ApiController extends Controller
                 ->where('cropYear' , $cropYear)
                 ->whereDate('created_at' ,'<', $lastEnteredRecord)
                 ->latest('id');
-
         }
 
         $lastEnteredRecord = $lastRecord->first();
@@ -2720,30 +2961,33 @@ class ApiController extends Controller
                 ->orderBy('name_order')
                 ->whereDate('created_at',$lastEnteredRecord->created_at)->get();
 
-                $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
-                    ->where('cropYear' , $cropYear)
-                    ->where(function ($q) {
-                        $q->whereNotNull('closing')->where('closing', '!=', '');
-                    })
-                    ->whereHas('name_rel', fn($q) => $q->where('type', $ricetype))
-                    // ->whereHas('form_rel')
-                    ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
-                    ->with([
-                        'name_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC"),
-                        // 'form_rel'
-                        'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
-                    ])
-                    ->get();
 
-                $closingCropSates = $livePricesClosingOpening->pluck('state')->toArray();
+            $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
+                ->where('cropYear' , $cropYear)
+                ->where(function ($q) {
+                    $q->whereNotNull('closing')->where('closing', '!=', '');
+                })
+                ->whereHas('name_rel', fn($q) => $q->where('type', $ricetype))
+                // ->whereHas('form_rel')
+                ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+                ->with([
+                    'name_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC"),
+                    // 'form_rel'
+                    'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+                ])
+                ->get();
 
-                $hasClosingName = $livePricesClosingOpening->pluck('name');
-                $hasClosingForm = $livePricesClosingOpening->pluck('form');
+            $closingCropSates = $livePricesClosingOpening->pluck('state')->toArray();
 
-                $hasOpenigClosingConcade = [];
-                foreach ($hasClosingName as $index => $key) {
-                    $hasOpenigClosingConcade[] = strtolower($key . '_' . $hasClosingForm[$index]);
-                }
+            $hasClosingName = $livePricesClosingOpening->pluck('name');
+            $hasClosingForm = $livePricesClosingOpening->pluck('form');
+            
+            $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
+
+            $hasOpenigClosingConcade = [];
+            foreach ($hasClosingName as $index => $key) {
+                $hasOpenigClosingConcade[] = strtolower($key . '_' . $hasClosingForm[$index]);
+            }
 
             $processedData = [];
             $temp = [];
@@ -2784,7 +3028,9 @@ class ApiController extends Controller
             $closingAndOpenCropStates = array_merge($states , $closingCropSates);
 
             $states = array_values(array_unique( $closingAndOpenCropStates ));
-
+            usort($states, function ($a, $b) use ($sortArray) {
+                return array_search($a, $sortArray) <=> array_search($b, $sortArray);
+            });
            return response()->json(['error' => null, 'data' => $states], 200);
 
         /*
@@ -5036,6 +5282,106 @@ dd("kjnik");
         return response()->json(['status' => true, 'data' => $sellCreate]);
     }
 
+
+
+    public function SubmitSellQueryWeb(Request $request)
+    {
+        $data = [];
+
+        $selectedQualityTypeInt = $request->selectedQualityTypeInt;
+        $quality = $request->quality;
+        $qualityForm = $request->qualityForm;
+        $selectedGrade = $request->selectedGrade;
+        $changePackingType = $request->changePackingType;
+        $quantity = $request->quantity;
+        $offerPrice = $request->offerPrice;
+        $validDays = $request->validDays;
+        $contactperson = $request->contactperson;
+        $contactMobile = $request->contactMobile;
+        $warehouselocation = $request->warehouselocation;
+        $userId = $request->userId;
+        $farming = $request->farming;
+        $riceSize = $request->riceSize;
+
+        $type = $request->type ?? 'app';
+
+        if (isset($_FILES['packageImageFile'])) {
+            $file_name      = $_FILES['packageImageFile']['name'];
+            $file_size      = $_FILES['packageImageFile']['size'];
+            $file_tmp       = $_FILES['packageImageFile']['tmp_name'];
+            $file_type      = $_FILES['packageImageFile']['type'];
+
+            move_uploaded_file($file_tmp, "uploads/" . $file_name);
+            $data['packing_file'] = $file_name;
+        }
+
+        if (isset($_FILES['uncookedFile'])) {
+            $file_name      = $_FILES['uncookedFile']['name'];
+            $file_size      = $_FILES['uncookedFile']['size'];
+            $file_tmp       = $_FILES['uncookedFile']['tmp_name'];
+            $file_type      = $_FILES['uncookedFile']['type'];
+
+            move_uploaded_file($file_tmp, "uploads/" . $file_name);
+            $data['uncooked_file'] = $file_name;
+        }
+
+        if (isset($_FILES['cookedImageFile'])) {
+            $file_name      = $_FILES['cookedImageFile']['name'];
+            $file_size      = $_FILES['cookedImageFile']['size'];
+            $file_tmp       = $_FILES['cookedImageFile']['tmp_name'];
+            $file_type      = $_FILES['cookedImageFile']['type'];
+
+            move_uploaded_file($file_tmp, "uploads/" . $file_name);
+            $data['cooked_file'] = $file_name;
+        }
+
+        if (isset($_FILES['extra_file'])) {
+            $file_name      = $_FILES['extra_file']['name'];
+            $file_size      = $_FILES['extra_file']['size'];
+            $file_tmp       = $_FILES['extra_file']['tmp_name'];
+            $file_type      = $_FILES['extra_file']['type'];
+
+            move_uploaded_file($file_tmp, "uploads/" . $file_name);
+            $data['extra_file'] = $file_name;
+        }
+
+
+        $data['quality_type'] = $selectedQualityTypeInt;
+        $data['quality'] = $quality;
+        $data['qualityForm'] = $qualityForm;
+        $data['grade'] = $selectedGrade;
+        $data['packing'] = $changePackingType;
+        $data['quantity'] = $quantity;
+        $data['offerPrice'] = $offerPrice;
+        $data['validDays'] = $validDays;
+        $data['contactperson'] = $contactperson;
+        $data['contactMobile'] = $contactMobile;
+        $data['warehouselocation'] = $warehouselocation;
+        $data['created_by'] = $userId;
+        $data['farming'] = $farming;
+        $data['type'] = $type;
+        $data['riceSize'] = $riceSize;
+
+
+        $sellCreate = SellQueriesINR::create($data);
+
+        $data = array();
+
+        $mailTo = "enquiry@sntcgroup.com";
+        $mailMessage = '';
+        $subject = 'Sell with SNTC - Web version';
+        $mailFrom = 'info@sntcgroup.com';
+        $mailFromName = 'SNTC Team - India';
+
+        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+            $message->to($mailTo, $mailMessage)->subject($subject);
+            $message->from($mailFrom, $mailFromName);
+        });
+        return response()->json(['status' => true, 'data' => $sellCreate]);
+    }
+
+
+
     public function getTrade($userId)
     {
         // $trade = TradeQueriesINR::with(['TradeInterest','TradeLikeAll' => function($query) use($userId){
@@ -5124,13 +5470,17 @@ dd("kjnik");
             SellQueriesINR::where('created_by', $userId)
                 ->selectRaw("
                     sell_query_milestone3.*,
-                    contactperson AS contactPerson,
-                    CASE 
-                        WHEN quality_type = 1 THEN 2
-                        WHEN quality_type = 0 THEN 1
-                        ELSE quality_type
-                    END AS quality_type
+                    contactperson AS contactPerson
                 ")
+                // ->selectRaw("
+                //     sell_query_milestone3.*,
+                //     contactperson AS contactPerson,
+                //     // CASE 
+                //     //     WHEN quality_type = 1 THEN 2
+                //     //     WHEN quality_type = 0 THEN 1
+                //     //     ELSE quality_type
+                //     // END AS quality_type
+                // ")
                 ->with([
                     'RiceFormMilestone3:id,name',
                     'RiceQualityRiceNames:id,name',
@@ -5156,13 +5506,17 @@ dd("kjnik");
             FutureSellQueriesINR::where('created_by', $userId)
              ->selectRaw("
                     future_sell_query_milestone3.*,
-                    contactperson AS contactPerson,
-                    CASE 
-                        WHEN quality_type = 1 THEN 2
-                        WHEN quality_type = 0 THEN 1
-                        ELSE quality_type
-                    END AS quality_type
+                    contactperson AS contactPerson
                 ")
+              // ->selectRaw("
+              //       future_sell_query_milestone3.*,
+              //       contactperson AS contactPerson,
+              //       // CASE 
+              //       //     WHEN quality_type = 1 THEN 2
+              //       //     WHEN quality_type = 0 THEN 1
+              //       //     ELSE quality_type
+              //       // END AS quality_type
+              //   ")
                 ->with([
                     'RiceQualityRiceNames:id,name',
                     'riceGrade:id,value',
@@ -5620,7 +5974,7 @@ dd("kjnik");
     public function getTestimonialVideos()
     {
         $testimonial = TestimonialVideo::get();
-        return response()->json(['status' => true, 'data' => $testimonial , 'basePath' => 'uploads/testimonial/video'], 200);
+        return response()->json(['status' => true,'basePath' => 'uploads/testimonial/video','data' => $testimonial ], 200);
     }
     public function contactUs(Request $request)
     {
@@ -5667,21 +6021,26 @@ dd("kjnik");
 
     public function getCategoryByRole($roleId)
     {   
-        if( $roleId == 11 ){
-            $categoryRole = WebVendorCategory::select('id' , 'name')->where('status' , 1)->get();
-        }else{
+        // if( $roleId == 11 ){
+        //     $categoryRole = WebVendorCategory::select('id' , 'name')->where('status' , 1)->get();
+        // }else{
             $categoryRole = CategoryRoleMap::select(['id', 'role', 'category'])
+                ->whereHas('category_rel', function ($q) {
+                    $q->where('status', 1);
+                })
                 ->with([
                     'role_rel:id,role_name',
-                    'category_rel:id,category,order'
+                    'category_rel' => function ($q){
+                        $q->select('id' , 'category')->where('status' , 1);
+                    }
                 ])
                 ->where('role', $roleId)
                 ->orderBy(
                     Category::select('order')
                         ->whereColumn('id', 'category_role_map.category')
-                )
+                )->where('status' , 1)
                 ->get();
-        }
+        // }
         
         return response()->json(['status' => true , 'message' => 'category role get successfully' , 'data' => $categoryRole]);
     }

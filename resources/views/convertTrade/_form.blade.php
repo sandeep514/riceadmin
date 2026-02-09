@@ -42,11 +42,11 @@
                                         <option value="2" {{ ($query->farming != 'Conventional') ? 'selected' : '' }}> Compliance / Organic </option>
                                 </select>
                             </div>
-                           
+
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}
                                 <select class="form-control" required name="category">
-                                    <option value=""> Select </option>
+                                    <option value=""> Select {{ $query->quality_type }}</option>
                                     @foreach($qualityMaster as $k => $v)
                                         <option value="{{ $v }}"  {{ ($query->quality_type == $v)? 'selected' : '' }}>
                                             {{ strtoupper($k) }}
@@ -94,11 +94,11 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Offer Price','Offer Price (₹)') !!}<p style="color: gray; font-size: 12px;">eg. 6300/ QTL (CD 2%)</p>
-                                <input type="text" class="form-control" placeholder="Offer Price" name="price">
+                                <input type="text" class="form-control" placeholder="Offer Price" value="{{ $query->offerPrice ?? '' }}" name="price">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Location','Warehouse Location') !!}
-                                <input type="text" class="form-control" placeholder="location" name="location">
+                                <input type="text" class="form-control" placeholder="location" value="{{ $query->warehouselocation ?? '' }}" name="location">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Validity','Validity') !!}

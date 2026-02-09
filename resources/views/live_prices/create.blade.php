@@ -19,6 +19,19 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
+                            <h3 class="box-title">Live Price Market Status: <strong> {{ $LivePriceStatusMessage->message }} </strong></h3>
+                        </div>
+
+                        <a class="btn btn-primary" href="{{ route('update.live.price.market.status' , 'open') }}">Open</a>
+                        <a class="btn btn-info" href="{{ route('update.live.price.market.status' , 'closed') }}">Closed</a>
+                        <a class="btn btn-danger" href="{{ route('update.live.price.market.status' , 'hold') }}">Hold</a>
+
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
                             <h3 class="box-title">Price Details</h3>
                         </div>
                         <!-- /.box-header -->

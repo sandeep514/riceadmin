@@ -11,6 +11,7 @@ use App\MillStatus;
 use App\Packing;
 use App\PackingType;
 use App\Quality;
+use App\Category;
 use App\Repositories\CourierRepository;
 use App\Sample;
 use App\User;
@@ -398,31 +399,68 @@ class WebBrandController extends Controller
         ], 200);
     }
 
+    // public function vendorType()
+    // {
+    //     $vendorType = BagVendors::vendorType();
+    //     $selectedType = [];
+    //     foreach( $vendorType as $k => $v ){
+    //         if( $k != 8 ){
+    //             $selectedType[$k] = $v;
+    //         }
+    //     }
+
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Vendor type get successfully.',
+    //         'data' => $selectedType
+    //     ], 200);
+    // }
+
+
     public function vendorType()
     {
-        $vendorType = BagVendors::vendorType();
-        $selectedType = [];
-        foreach( $vendorType as $k => $v ){
-            if( $k != 8 ){
-                $selectedType[$k] = $v;
-            }
-        }
+        $role = [11,12];
+        $categories = CategoryRoleMap::whereIn('role' , $role)->where('status' , 1)->pluck('category');
+        $category = Category::whereIn('id' , $categories)->select('category' , 'id' , 'image')->where('status' , 1)->get();
 
         return response()->json([
             'status' => true,
             'message' => 'Vendor type get successfully.',
-            'data' => $selectedType
+            'filePath' => asset('bagimages/'),
+            'data' => $category,
+
         ], 200);
     }
 
+
+
+    // public function vendorList($vendorType)
+    // {
+    //     $bagVendors = BagVendors::select(['id','vendor_name','email','vendor_address','contact_person','contact_number','specialised','vendor_type','status'])->where(['vendor_type' => $vendorType])->get();
+    //     return response()->json([
+    //         'status' => true,
+    //         'message' => 'Vendors get successfully.',
+    //         'data' => $bagVendors
+    //     ], 200);
+    // }
+
+
+
+
     public function vendorList($vendorType)
     {
-        $bagVendors = BagVendors::select(['id','vendor_name','email','vendor_address','contact_person','contact_number','specialised','vendor_type','status'])->where(['vendor_type' => $vendorType])->get();
+
+        $webBusinessDetails = WebBusinessDetails::select(["company_name","product","contactPerson","contactMobile","address"])->where('selected_category' , $vendorType)->get();
+        // dd($webBusinessDetails);
+
+        // $bagVendors = BagVendors::select(['id','vendor_name','email','vendor_address','contact_person','contact_number','specialised','vendor_type','status'])->where(['vendor_type' => $vendorType])->get();
         return response()->json([
             'status' => true,
             'message' => 'Vendors get successfully.',
-            'data' => $bagVendors
+            'data' => $webBusinessDetails
         ], 200);
     }
+
+
 
 }

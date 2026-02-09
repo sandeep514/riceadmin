@@ -40,6 +40,7 @@
                                                 <th style="text-align: center ">Packing File</th>
                                                 <th style="text-align: center ">Uncooked File</th>
                                                 <th style="text-align: center ">Cooked File</th>
+                                                <th style="text-align: center ">Extra File</th>
                                                 <th style="text-align: center ">Warehouse Location</th>
                                                 <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Phone</th>
@@ -65,8 +66,9 @@
                                                     <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->packing_file) }}" download><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></a></div></td>
                                                     <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->uncooked_file) }}" download><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></a></div></td>
                                                     <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->cooked_file) }}" download><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></a></div></td>
+                                                    <td><div style="width: 100px;height: 100px"><a href="{{ asset('uploads/'.$v->extra_file) }}" download><img src="{{ asset('uploads/'.$v->extra_file) }}" style="width: 70px" /></a></div></td>
                                                     <td>{{ $v->warehouselocation }}</td>
-                                                    <td>{{ $v->contactperson }}</td>
+                                                    <td>{{ $v->contactPerson }}</td>
                                                     <td>{{ $v->contactMobile }}</td>
                                                     <td>
                                                         <form method="POST" action="{{ route('master.update.remarks.saleOrder') }}">
@@ -109,6 +111,7 @@
                                                 <th style="text-align: center ">Packing File</th>
                                                 <th style="text-align: center ">Uncooked File</th>
                                                 <th style="text-align: center ">Cooked File</th>
+                                                <th style="text-align: center ">Extra File</th>
                                                 <th style="text-align: center ">Warehouse Location</th>
                                                 <th style="text-align: center ">Contact Person</th>
                                                 <th style="text-align: center ">Contact Phone</th>

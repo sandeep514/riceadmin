@@ -299,11 +299,14 @@ class PortalApiController extends Controller
 
         $personalDetails = [];
         $businessDetails = [];
+        $userEmailForMail = '';
         if ($request->has('personal_details')) {
             $personalDetails = $request->personal_details;
 
             $name = $personalDetails['firstname'].' '.$personalDetails['lastname'];
             $email = $personalDetails['email'];
+            $userEmailForMail = $personalDetails['email'];
+
             User::where('id' , $user_id)->update(['name' => $name,'email' => $email]);
 
             if (array_key_exists('avatar', $personalDetails)) {
@@ -335,7 +338,7 @@ class PortalApiController extends Controller
             $businessDetails['user_id'] = $request['user_id'];
             WebBusinessDetails::updateOrCreate(['user_id' => $user_id], $businessDetails);
 
-            if( isset($request['business_details']['selected_category']) && $request['business_details']['selected_category'] =='Vendor' ) {
+            if( $request->has('role') && $request->role == 11 ) {
                 $vendorDetails = [
                     'user_id' => $user_id,
                     'type' => $request['vendorDetails']['type']??'--',
@@ -346,8 +349,8 @@ class PortalApiController extends Controller
                 ];
                 VendorUserMap::create($vendorDetails);
             }
-            
-            if( isset($request['business_details']['selected_category']) && $request['business_details']['selected_category'] =='Service Provider' ) { 
+
+            if( $request->has('role') && $request->role == 12 ) { 
                $serviceProviderDetails = [
                     'user_id' => $user_id,
                     'type' => $request['serviceProviderDetails']['type']??'--',
@@ -396,7 +399,21 @@ class PortalApiController extends Controller
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['fssaiCard' => $file]);
         }
         
-        
+
+        $mailTo = 'info@sntcgroup.com';
+        $mailMessage = '';
+        $subject = 'User update the profile';
+        $mailFrom = 'info@sntcgroup.com';
+        $mailFromName = 'SNTC Team - India';
+
+
+        $data = ['userEmail' => $userEmailForMail];
+
+        $respose = Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+            $message->to($mailTo, $mailMessage)->subject($subject);
+            $message->from($mailFrom, $mailFromName);
+        });
+
 
         return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => ['personalDetails' => $personalDetails, 'businessDetails' => $businessDetails]], 200);
     }
@@ -408,9 +425,9 @@ class PortalApiController extends Controller
                 return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category' , 'getBagVendorWeb:id,category']);
             }, 'getWebUserAttachment','getWebUserSubscription','role_rel'])->first()->toArray();
 
-            if( $user['role'] == 12 ){
-                $user['get_web_business_details']['get_category_details'] =  $user['get_web_business_details']['get_bag_vendor_web'];
-            }
+            // if( $user['role'] == 12 ){
+            //     $user['get_web_business_details']['get_category_details'] =  $user['get_web_business_details']['get_bag_vendor_web'];
+            // }
             unset($user['get_web_business_details']['get_bag_vendor_web']);
 
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
@@ -555,6 +572,9 @@ class PortalApiController extends Controller
 
             $userDetails = User::where(['id' => $userId])->first();
             if( $request->subscription_type =='trial' ){
+
+                User::where(['id' => $userId])->update(['has_validation' => "Your profile is under review. We will notify you once approved."]);
+
                 // send trial mail
                 $mailTo = $userDetails->email;
                 $mailMessage = '';
@@ -565,12 +585,18 @@ class PortalApiController extends Controller
 
                 $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
 
-
                 $respose = Mail::send('mail.sendTrailMailToUser', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
                     $message->to($mailTo, $mailMessage)->subject($subject);
                     $message->from($mailFrom, $mailFromName);
                 });
 
+                $subject = 'New User Registration-Webversion';
+                $mailTo = 'info@sntcgroup.com';
+                $respose = Mail::send('mail.newUserAdded', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                    $message->to($mailTo, $mailMessage)->subject($subject);
+                    $message->from($mailFrom, $mailFromName);
+                });
+                
             }else{
                 
                 $mailTo = $userDetails->email;
@@ -584,14 +610,9 @@ class PortalApiController extends Controller
                     $message->to($mailTo, $mailMessage)->subject($subject);
                     $message->from($mailFrom, $mailFromName);
                 });
-                
             }
 
-            $mailTo = 'info@sntcgroup.com';
-            $respose = Mail::send('mail.newUserAdded', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
+            
 
             return response()->json([
                 'status'  => true,

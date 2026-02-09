@@ -8,7 +8,7 @@ use Carbon\Carbon;
 class LivePrice extends Model
 {
     protected $table = 'live_prices';
-    protected $fillable = ['name', 'form', 'cropGrade', 'cropYear', 'min_price', 'max_price', 'state', 'up_down', 'state_order','opening','closing','monthStart','monthEnd', 'status'];
+    protected $fillable = ['name', 'form', 'cropGrade', 'cropYear', 'min_price', 'max_price', 'state', 'up_down', 'state_order','opening','closing','monthStart','monthEnd','is_updated_by_admin', 'status'];
 
     public function name_rel()
     {

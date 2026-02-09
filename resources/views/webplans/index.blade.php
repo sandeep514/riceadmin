@@ -45,6 +45,11 @@
                                                             <td style="text-transform: capitalize;">{{ $value->title??'--' }}</td>
                                                             <td>
                                                                 <a class="btn btn-sm btn-info" href="{{ route('web.plans.edit' , $value->id ) }}"> Edit </a>
+                                                                @if($value->status == 0)
+                                                                    <a class="btn btn-sm btn-info" href="{{ route('web.status' , $value->id ) }}"> Active </a>
+                                                                @else
+                                                                    <a class="btn btn-sm btn-danger" href="{{ route('web.status' , $value->id ) }}"> De-active </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
