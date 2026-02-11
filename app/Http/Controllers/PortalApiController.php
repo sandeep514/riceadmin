@@ -571,9 +571,16 @@ class PortalApiController extends Controller
             ]);
 
             $userDetails = User::where(['id' => $userId])->first();
-            if( $request->subscription_type =='trial' ){
 
-                User::where(['id' => $userId])->update(['has_validation' => "Your profile is under review. We will notify you once approved."]);
+            if( $request->subscription_type =='trial' ){
+                $webUserAttachment = WebUserAttachment::where(['user_id' => $userId])->first();
+
+                if($webUserAttachment == null || $webUserAttachment->panCard == null || $webUserAttachment->gstCard == null || $webUserAttachment->fssaiCard == null || $webUserAttachment->farmer_file == null ){
+                    User::where(['id' => $userId])->update(['has_validation' => "Please submit your documents to complete your profile."]);
+                }else{
+                    User::where(['id' => $userId])->update(['has_validation' => "Your profile is under review. We will notify you once approved."]);
+                }
+                
 
                 // send trial mail
                 $mailTo = $userDetails->email;

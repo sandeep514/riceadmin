@@ -126,6 +126,30 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('packing-types/delete/{id}', ['as' => 'delete.packing-type', 'uses' => 'PackingTypesController@delete','action'=>'delete']);
             });
 
+            //Web Side Menu
+            Route::group(['module'=>'web_side_menu','icon'=>'fa-bars'], function() {
+                Route::get('web-side-menu', ['as' => 'web-side-menu', 'uses' => 'WebSideMenuController@index','action'=>'view']);
+                Route::get('web-side-menu/data', ['as' => 'web-side-menu.data', 'uses' => 'WebSideMenuController@getData']);
+                Route::get('web-side-menu/create', ['as' => 'create.web-side-menu', 'uses' => 'WebSideMenuController@create','action'=>'create']);
+                Route::post('web-side-menu/save', ['as' => 'save.web-side-menu', 'uses' => 'WebSideMenuController@save','action'=>'create']);
+                Route::get('web-side-menu/edit/{id}', ['as' => 'edit.web-side-menu', 'uses' => 'WebSideMenuController@edit','action'=>'edit']);
+                Route::put('web-side-menu/update/{id}', ['as' => 'update.web-side-menu', 'uses' => 'WebSideMenuController@update','action'=>'edit']);
+                Route::delete('web-side-menu/delete/{id}', ['as' => 'delete.web-side-menu', 'uses' => 'WebSideMenuController@delete','action'=>'delete']);
+                Route::post('web-side-menu/update-sort-order', ['as' => 'update.web-side-menu.sort-order', 'uses' => 'WebSideMenuController@updateSortOrder']);
+            });
+
+            //Web Access
+            Route::group(['module'=>'web_access','icon'=>'fa-lock'], function() {
+                Route::get('web-access', ['as' => 'web-access', 'uses' => 'WebAccessController@index','action'=>'view']);
+                Route::get('web-access/data', ['as' => 'web-access.data', 'uses' => 'WebAccessController@getData']);
+                Route::get('web-access/create', ['as' => 'create.web-access', 'uses' => 'WebAccessController@create','action'=>'create']);
+                Route::post('web-access/save', ['as' => 'save.web-access', 'uses' => 'WebAccessController@save','action'=>'create']);
+                Route::get('web-access/edit/{id}', ['as' => 'edit.web-access', 'uses' => 'WebAccessController@edit','action'=>'edit']);
+                Route::put('web-access/update/{id}', ['as' => 'update.web-access', 'uses' => 'WebAccessController@update','action'=>'edit']);
+                Route::delete('web-access/delete/{id}', ['as' => 'delete.web-access', 'uses' => 'WebAccessController@delete','action'=>'delete']);
+                Route::get('web-access/get-categories', ['as' => 'web-access.get-categories', 'uses' => 'WebAccessController@getCategoriesByRole']);
+            });
+
             //Sample Registers
             Route::group(['module'=>'sample_register','icon'=>'fa-database'], function() {
                 Route::get('sample-registers', ['as' => 'sample-registers', 'uses' => 'SampleRegistersController@index','action'=>'view']);

@@ -13,9 +13,11 @@ class AlterUsersTableAddUserToken extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table){
-            $table->text('api_token')->after('remember_token')->nullable();
-        });
+        if (!Schema::hasColumn('users', 'api_token')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->text('api_token')->after('remember_token')->nullable();
+            });
+        }
     }
 
     /**

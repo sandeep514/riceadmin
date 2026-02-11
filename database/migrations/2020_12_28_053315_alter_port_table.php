@@ -13,9 +13,11 @@ class AlterPortTable extends Migration
      */
     public function up()
     {
-        Schema::table('ports', function(Blueprint $table){
-            $table->integer('status')->default(1)->after('price');
-        });
+        if (!Schema::hasColumn('ports', 'status')) {
+            Schema::table('ports', function(Blueprint $table){
+                $table->integer('status')->default(1)->after('price');
+            });
+        }
     }
 
     /**

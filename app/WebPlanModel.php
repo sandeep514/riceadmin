@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class WebPlanModel extends Model
 {
     protected $table = 'web_plan';
-    protected $fillable = ['title' ,'short_description' ,'description' ,'is_INR' ,'is_USD' ,'status'];
+    protected $fillable = ['title' ,'short_description' ,'description' ,'amount' ,'discount_percentage' ,'is_INR' ,'is_USD' ,'status'];
 
     public function getPlanKeyMap()
     {

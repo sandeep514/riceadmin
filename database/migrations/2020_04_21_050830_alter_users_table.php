@@ -13,15 +13,41 @@ class AlterUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function(Blueprint $table){
-            $table->text('address')->after('password')->nullable();
-            $table->string('phone')->after('address')->nullable();
-            $table->string('mobile')->after('phone');
-            $table->string('gst_no')->after('mobile')->nullable();
-            $table->string('state')->after('gst_no')->nullable();
-            $table->string('city')->after('gst_no')->nullable();
-            $table->unsignedBigInteger('role')->index()->after('city');
-        });
+        if (!Schema::hasColumn('users', 'address')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->text('address')->after('password')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('users', 'phone')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->string('phone')->after('address')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('users', 'mobile')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->string('mobile')->after('phone');
+            });
+        }
+        if (!Schema::hasColumn('users', 'gst_no')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->string('gst_no')->after('mobile')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('users', 'state')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->string('state')->after('gst_no')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('users', 'city')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->string('city')->after('gst_no')->nullable();
+            });
+        }
+        if (!Schema::hasColumn('users', 'role')) {
+            Schema::table('users', function(Blueprint $table){
+                $table->unsignedBigInteger('role')->index()->after('city');
+            });
+        }
     }
 
     /**

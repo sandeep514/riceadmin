@@ -111,7 +111,6 @@
                         <i class="fa fa-users"></i> <span>Modules & Permissions</span>
                     </a>
                 </li>
-                
             @endif
 
             @php
@@ -413,6 +412,18 @@
                 <a href="{{ route('list.web.plans') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Web Plans</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['web-side-menu','create.web-side-menu','edit.web-side-menu']))?'active':'' }}">
+                <a href="{{ route('web-side-menu') }}">
+                    <i class="fa fa-bars"></i> 
+                    <span>Web Side Menu</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['web-access','create.web-access','edit.web-access']))?'active':'' }}">
+                <a href="{{ route('web-access') }}">
+                    <i class="fa fa-lock"></i> 
+                    <span>Web Access</span>
                 </a>
             </li>
             <li class="header">PADDY</li>

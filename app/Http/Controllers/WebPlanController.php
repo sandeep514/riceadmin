@@ -103,7 +103,9 @@ class WebPlanController extends Controller
         }
 
         $WebPlanModel = WebPlanModel::create([
-            'title' => $request->plan
+            'title' => $request->plan,
+            'amount' => $request->amount,
+            'discount_percentage' => $request->discount_percentage
         ]);
         $planKeyMap = [];
         if( $request->available  ){
@@ -142,7 +144,9 @@ class WebPlanController extends Controller
         }
 
         $WebPlanModel = WebPlanModel::where('id' , $request->id)->update([
-            'title' => $request->planKey
+            'title' => $request->planKey,
+            'amount' => $request->amount,
+            'discount_percentage' => $request->discount_percentage
         ]);
         $planKeyMap = [];
         if( $request->available  ){

@@ -14,9 +14,11 @@ class AlterLivePriceTable extends Migration
     public function up()
     {
         //Add new status column in live_prices
-        Schema::table('live_prices' , function(Blueprint $table){
-            $table->integer('status' )->after('up_down')->default(1);
-        });
+        if (!Schema::hasColumn('live_prices', 'status')) {
+            Schema::table('live_prices' , function(Blueprint $table){
+                $table->integer('status' )->after('up_down')->default(1);
+            });
+        }
     }
 
     /**
