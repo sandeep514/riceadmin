@@ -166,7 +166,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production'),
 
     /*
     |--------------------------------------------------------------------------
@@ -194,6 +194,9 @@ return [
     |
     */
 
-    'same_site' => 'lax',
+    // ⚠️ For cross-origin AJAX requests, SameSite=Lax may not send cookies
+    // Using null for local dev (browser default, usually Lax but more lenient)
+    // For production with HTTPS, we'll use 'none' which requires Secure=true
+    'same_site' => env('APP_ENV') === 'production' ? 'none' : null,
 
 ];

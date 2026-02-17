@@ -138,6 +138,12 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::post('web-side-menu/update-sort-order', ['as' => 'update.web-side-menu.sort-order', 'uses' => 'WebSideMenuController@updateSortOrder']);
             });
 
+            //SQL Import
+            Route::group(['module'=>'sql_import','icon'=>'fa-database'], function() {
+                Route::get('sql-import', ['as' => 'sql-import', 'uses' => 'SqlImportController@index','action'=>'view']);
+                Route::post('sql-import/import', ['as' => 'sql-import.import', 'uses' => 'SqlImportController@import','action'=>'create']);
+            });
+
             //Web Access
             Route::group(['module'=>'web_access','icon'=>'fa-lock'], function() {
                 Route::get('web-access', ['as' => 'web-access', 'uses' => 'WebAccessController@index','action'=>'view']);

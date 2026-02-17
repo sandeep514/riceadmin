@@ -112,12 +112,15 @@ class PortalApiController extends Controller
         }
         if ($request->has('mobile') ) {
             $mobile = $request->mobile;
-            $user = User::where(['mobile' => $mobile, 'userType' => 2])->first();
+            // ✅ Ensure we're finding/creating the correct user with proper scoping
+            $user = User::where(['mobile' => $mobile, 'userType' => 2, 'user_from' => 'web'])->first();
             $Newotp = rand(1000, 9999);
 
             if (!$user) {
-                $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2,"user_from" => "web"]);
+                // ✅ Create new user if not found
+                $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2, 'user_from' => 'web']);
             } else {
+                // ✅ Update OTP for existing user (only updates the specific user found)
                 $user->update(['otp' => $Newotp]);
             }
 
@@ -155,36 +158,57 @@ class PortalApiController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        if ($request->has('mobile') ) {
+        if ($request->has('mobile')) {
             $mobile = $request->mobile;
             $otp = $request->otp;
-            $user = User::where(['mobile' => $mobile,'otp' => $otp]);
+            $user = User::where(['mobile' => $mobile, 'otp' => $otp, 'userType' => 2])->first();
 
-            $hasBasicDetails = false;
-
-            if ($user->first()) {
-                $data = $user->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+            if ($user) {
+                // ✅ Create Laravel session using 'web' guard (sets httpOnly cookie automatically)
+                auth('web')->login($user);
+                
+                // ✅ Ensure session is saved so Set-Cookie header is sent
+                $request->session()->save();
+                
+                // ✅ Reload user with relationships using the user ID to ensure we get the correct user
+                $data = User::where('id', $user->id)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
                     return $q->with(['getCategoryDetails:id,category']);
                 }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
                     return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
-                }])->first();
+                }, 'role_rel'])->first();
+                
+                // Check if user data was found
+                if (!$data) {
+                    return response()->json(['status' => false, 'message' => 'User not found'], 404);
+                }
 
                 $hasActivePlan = false;
-                if( $data->getWebUserSubscription ){
+                if($data->getWebUserSubscription){
                     $hasActivePlan = true;
                 }
+                
+                $hasBasicDetails = false;
                 if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
                     $hasBasicDetails = true;
                 }
 
-                $checkIfTrailDone = WebUserSubscriptionModel::where('user_id' , $user->first()->id)->where('subscription_type' , 'trial')->first();
+                $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
                 
                 $hasTrialDone = false;
-                if( $checkIfTrailDone ){
+                if($checkIfTrailDone){
                     $hasTrialDone = true;
                 }
 
-                return response()->json(['status' => true, 'message' => 'Success', 'hasBasicDetails' => $hasBasicDetails,'hasTrialDone' => $hasTrialDone,'hasActivePlan' => $hasActivePlan,'planDetails' => $data->getWebUserSubscription , 'data' => $data], 200);
+                // ✅ Return response with session cookie
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'Success', 
+                    'hasBasicDetails' => $hasBasicDetails,
+                    'hasTrialDone' => $hasTrialDone,
+                    'hasActivePlan' => $hasActivePlan,
+                    'planDetails' => $data->getWebUserSubscription, 
+                    'data' => $data
+                ], 200);
             } else {
                 return response()->json(['status' => false, 'message' => 'Wrong user credentials'], 401);
             }
@@ -220,40 +244,56 @@ class PortalApiController extends Controller
         if ($request->has('user_id') && $request->has('otp') && $request->user_id != '' && $request->otp != '') {
             $user_id = $request->user_id;
             $otp = $request->otp;
-            $user = User::where(['id' => $user_id]);
+            $user = User::where(['id' => $user_id, 'otp' => $otp, 'userType' => 2])->first();
 
-            $isOTPSame = $user->where(['otp' => $otp])->first();
-            $hasBasicDetails = false;
-
-            if ($isOTPSame) {
+            if ($user) {
                 $user->update(['is_INR_active' => 1]);
+                
+                // ✅ Create session after OTP verification using 'web' guard
+                auth('web')->login($user);
+                
+                // ✅ Ensure session is saved so Set-Cookie header is sent
+                $request->session()->save();
 
-                $data = $user->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+                // ✅ Reload user with relationships using the user ID to ensure we get the correct user
+                $data = User::where('id', $user->id)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
                     return $q->with(['getCategoryDetails:id,category']);
                 }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
                     return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
-                }])->first();
+                }, 'role_rel'])->first();
+                
+                // Check if user data was found
+                if (!$data) {
+                    return response()->json(['status' => false, 'message' => 'User not found'], 404);
+                }
                 
                 $hasActivePlan = false;
-                if( $data->getWebUserSubscription ){
+                if($data->getWebUserSubscription){
                     $hasActivePlan = true;
                 }
                 
-                // return response()->json(['status' => true, 'message' => 'OTP verified successfully', 'hasBasicDetails' => $data,'hasActivePlan' => false], 200);
-                
+                $hasBasicDetails = false;
                 if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
                     $hasBasicDetails = true;
                 }
 
-                $checkIfTrailDone = WebUserSubscriptionModel::where('user_id' , $isOTPSame->id)->where('subscription_type' , 'trial')->first();
+                $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
                 
                 $hasTrialDone = false;
-                if( $checkIfTrailDone ){
+                if($checkIfTrailDone){
                     $hasTrialDone = true;
                 }
 
-
-                return response()->json(['status' => true, 'message' => 'OTP verified successfullyy', 'hasBasicDetails' => $hasBasicDetails,'hasActivePlan' => $hasActivePlan,'hasTrialDone' => $hasTrialDone,'planDetails' => $data->getWebUserSubscription , 'data' => $data], 200);
+                // ✅ Return response with session cookie
+                return response()->json([
+                    'status' => true, 
+                    'message' => 'OTP verified successfully', 
+                    'hasBasicDetails' => $hasBasicDetails,
+                    'hasActivePlan' => $hasActivePlan,
+                    'hasTrialDone' => $hasTrialDone,
+                    'planDetails' => $data->getWebUserSubscription, 
+                    'data' => $data
+                ], 200);
             } else {
                 return response()->json(['status' => false, 'message' => 'Wrong OTP'], 401);
             }
@@ -423,12 +463,20 @@ class PortalApiController extends Controller
         if ($userId != null) {
             $user = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
                 return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category' , 'getBagVendorWeb:id,category']);
-            }, 'getWebUserAttachment','getWebUserSubscription','role_rel'])->first()->toArray();
+            }, 'getWebUserAttachment','getWebUserSubscription','role_rel'])->first();
+
+            if (!$user) {
+                return response()->json(['status' => false, 'message' => 'User not found', 'data' => []], 404);
+            }
+
+            $user = $user->toArray();
 
             // if( $user['role'] == 12 ){
             //     $user['get_web_business_details']['get_category_details'] =  $user['get_web_business_details']['get_bag_vendor_web'];
             // }
-            unset($user['get_web_business_details']['get_bag_vendor_web']);
+            if (isset($user['get_web_business_details']['get_bag_vendor_web'])) {
+                unset($user['get_web_business_details']['get_bag_vendor_web']);
+            }
 
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
@@ -649,6 +697,103 @@ class PortalApiController extends Controller
                 'message' => 'count get successfully',
                 'data' => ['liveCount' => $livePricesCount , 'paddyCount' => $paddyMandiCount , 'tradeCount' => $tradeCount ] 
             ], 200);
+    }
+
+    /**
+     * Get current user session from cookie
+     * GET /api/portal/session
+     */
+    public function getSession(Request $request)
+    {
+        // Debug: Check if cookie is being sent and session is being read
+        \Log::info('=== Session Debug ===');
+        \Log::info('Cookie Header: ' . ($request->header('Cookie') ?? 'NOT SENT'));
+        \Log::info('Session ID: ' . $request->session()->getId());
+        \Log::info('Session All: ' . json_encode($request->session()->all()));
+        \Log::info('Auth Check: ' . (auth('web')->check() ? 'TRUE' : 'FALSE'));
+        \Log::info('Origin: ' . $request->header('Origin'));
+        
+        // ✅ Use 'web' guard explicitly to ensure we're using session-based auth
+        // Check if user is authenticated via session
+        if (auth('web')->check()) {
+            $user = auth('web')->user();
+            
+            // Ensure it's a web user (userType = 2)
+            if ($user->userType != 2) {
+                return response()->json(['status' => false, 'message' => 'Invalid user type'], 401);
+            }
+            
+            // ✅ Reload user with relationships (can't use with() on existing model instance)
+            $data = User::where('id', $user->id)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+                return $q->with(['getCategoryDetails:id,category']);
+            }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
+                return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
+            }, 'role_rel'])->first();
+
+            // Check if user was found
+            if (!$data) {
+                return response()->json(['status' => false, 'message' => 'User not found'], 404);
+            }
+
+            $hasActivePlan = false;
+            if($data->getWebUserSubscription){
+                $hasActivePlan = true;
+            }
+            
+            $hasBasicDetails = false;
+            if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
+                $hasBasicDetails = true;
+            }
+
+            $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
+            
+            $hasTrialDone = false;
+            if($checkIfTrailDone){
+                $hasTrialDone = true;
+            }
+
+            // Return same format as getUserDetails for consistency
+            $userArray = $data->toArray();
+            if (isset($userArray['get_web_business_details']['get_bag_vendor_web'])) {
+                unset($userArray['get_web_business_details']['get_bag_vendor_web']);
+            }
+
+            return response()->json([
+                'status' => true, 
+                'message' => 'Session restored',
+                'hasBasicDetails' => $hasBasicDetails,
+                'hasTrialDone' => $hasTrialDone,
+                'hasActivePlan' => $hasActivePlan,
+                'planDetails' => $data->getWebUserSubscription,
+                'data' => $userArray,
+                'prefix' => [
+                    'avatar' => 'webPortal/' . $user->id . '/attachments/avatar',
+                    'gst' => 'webPortal/' . $user->id . '/attachments/gst',
+                    'pan' => 'webPortal/' . $user->id . '/attachments/pan',
+                    'fssai' => 'webPortal/' . $user->id . '/attachments/fssai'
+                ]
+            ], 200);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Not authenticated'], 401);
+        }
+    }
+
+    /**
+     * Logout user and clear session
+     * POST /api/portal/logout
+     */
+    public function logout(Request $request)
+    {
+        auth('web')->logout();
+        
+        // Clear the session
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return response()->json([
+            'status' => true,
+            'message' => 'Logged out successfully'
+        ], 200);
     }
 
 }

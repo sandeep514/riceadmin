@@ -462,6 +462,16 @@
             
         </ul>
         <!-- for Dollar $ -->
+        
+        <!-- SQL Import Module -->
+        <ul class="sidebar-menu" data-widget="tree">
+            <li class="{{ (in_array($currentRoute,['sql-import']))?'active':'' }}">
+                <a href="{{ route('sql-import') }}">
+                    <i class="fa fa-database"></i> 
+                    <span>SQL Import</span>
+                </a>
+            </li>
+        </ul>
       
     </section>
     <!-- /.sidebar -->
