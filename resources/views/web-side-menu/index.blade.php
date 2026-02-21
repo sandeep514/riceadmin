@@ -36,6 +36,7 @@
                                             <th>Order</th>
                                             <th>Title</th>
                                             <th>Sub Title</th>
+                                            <th>Slug</th>
                                             <th>Create URL</th>
                                             <th>Read URL</th>
                                             <th>Update URL</th>
@@ -67,6 +68,15 @@
 @endsection
 
 @section('javascript')
+    <style>
+        /* Gray background for slug column (not changeable) */
+        #web-side-menu-table td.slug-column {
+            background-color: #f5f5f5 !important;
+        }
+        #web-side-menu-table th.slug-column {
+            background-color: #e0e0e0 !important;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             // Initialize DataTable
@@ -82,6 +92,7 @@
                     {data: 'sort_order', name: 'sort_order', orderable: true, searchable: false},
                     {data: 'title', name: 'title'},
                     {data: 'sub_title', name: 'sub_title'},
+                    {data: 'slug', name: 'slug', className: 'slug-column'},
                     {data: 'create_url', name: 'create_url'},
                     {data: 'read_url', name: 'read_url'},
                     {data: 'update_url', name: 'update_url'},

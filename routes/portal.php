@@ -36,4 +36,7 @@
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
         
         Route::get('get/latest/updated/count', [PortalApiController::class, 'getLatestUpdatedCount']);
+        
+        // ✅ Get web access permissions for user
+        Route::post('web-access', [PortalApiController::class, 'getWebAccess']);
     });

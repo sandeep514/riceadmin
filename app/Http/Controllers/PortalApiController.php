@@ -70,6 +70,7 @@ use App\WebUserAttachment;
 use App\WebPlanModel;
 use App\WebPlanKeysModel;
 use App\WebUserSubscriptionModel;
+use App\WebAccess;
 use App\VendorUserMap;
 use App\ServiceProviderUserMap;
 use Razorpay\Api\Api;
@@ -793,6 +794,156 @@ class PortalApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Logged out successfully'
+        ], 200);
+    }
+
+    /**
+     * Get web access permissions for a user
+     * POST /api/portal/web-access
+     * Payload: { "user_id": 123 }
+     */
+    public function getWebAccess(Request $request)
+    {
+        // Validate input
+        $validator = \Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $userId = $request->user_id;
+
+        // Get user with relationships
+        $user = User::where('id', $userId)
+            ->where('userType', 2)
+            ->with([
+                'getWebBusinessDetails' => function($q) {
+                    return $q->with(['getCategoryDetails:id,category']);
+                },
+                'getWebUserSubscription' => function($q) {
+                    return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+                        ->orderBy('id', 'desc');
+                },
+                'role_rel:id,role_name'
+            ])
+            ->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Get user's role
+        $roleId = $user->role;
+        if (!$roleId) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User role not found'
+            ], 404);
+        }
+
+        // Get user's category from business details
+        $categoryId = null;
+        if ($user->getWebBusinessDetails && $user->getWebBusinessDetails->selected_category) {
+            $categoryId = $user->getWebBusinessDetails->selected_category;
+        }
+
+        // Check for active subscription (period_end >= today)
+        $subscription = WebUserSubscriptionModel::where('user_id', $userId)
+            ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->first();
+        
+        if (!$subscription) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No active plan available'
+            ], 200);
+        }
+
+        // Get plan_id from active subscription
+        $planId = $subscription->plan_id;
+
+        // Build query for web_access
+        $webAccessQuery = WebAccess::where('role_id', $roleId)
+            ->where('plan_id', $planId)
+            ->where('status', 1)
+            ->with(['webSideMenu:id,title,sub_title,slug,create_url,read_url,update_url,delete_url,sort_order']);
+
+        // Add category filter if category exists
+        if ($categoryId) {
+            $webAccessQuery->where(function($q) use ($categoryId) {
+                $q->where('category_id', $categoryId)
+                  ->orWhereNull('category_id');
+            });
+        } else {
+            $webAccessQuery->whereNull('category_id');
+        }
+
+        // Get web access permissions and order by menu sort_order
+        $webAccess = $webAccessQuery->get()->sortBy(function($access) {
+            // Sort by menu's sort_order, then by menu id if sort_order is same
+            if ($access->webSideMenu) {
+                return [$access->webSideMenu->sort_order ?? 999999, $access->webSideMenu->id ?? 999999];
+            }
+            return [999999, 999999]; // Put items without menu at the end
+        })->values(); // Reset keys after sorting
+
+        // Format response (already sorted by sort_order)
+        $permissions = $webAccess->map(function($access) {
+            return [
+                'menu_id' => $access->web_side_menu_id,
+                'menu_title' => $access->webSideMenu ? $access->webSideMenu->title : null,
+                'menu_sub_title' => $access->webSideMenu ? $access->webSideMenu->sub_title : null,
+                'menu_slug' => $access->webSideMenu ? $access->webSideMenu->slug : null,
+                'menu_sort_order' => $access->webSideMenu ? $access->webSideMenu->sort_order : null,
+                'urls' => [
+                    'create_url' => $access->webSideMenu ? $access->webSideMenu->create_url : null,
+                    'read_url' => $access->webSideMenu ? $access->webSideMenu->read_url : null,
+                    'update_url' => $access->webSideMenu ? $access->webSideMenu->update_url : null,
+                    'delete_url' => $access->webSideMenu ? $access->webSideMenu->delete_url : null,
+                ],
+                'permissions' => [
+                    'can_create' => (bool) $access->can_create,
+                    'can_read' => (bool) $access->can_read,
+                    'can_update' => (bool) $access->can_update,
+                    'can_delete' => (bool) $access->can_delete,
+                ]
+            ];
+        });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Web access permissions retrieved successfully',
+            'data' => [
+                'user_id' => $userId,
+                'role' => [
+                    'id' => $roleId,
+                    'name' => $user->role_rel ? $user->role_rel->role_name : null
+                ],
+                'category' => [
+                    'id' => $categoryId,
+                    'name' => $user->getWebBusinessDetails && $user->getWebBusinessDetails->getCategoryDetails 
+                        ? $user->getWebBusinessDetails->getCategoryDetails->category 
+                        : null
+                ],
+                'plan' => [
+                    'id' => $planId,
+                    'subscription_type' => $subscription->subscription_type,
+                    'period_start' => $subscription->period_start,
+                    'period_end' => $subscription->period_end
+                ],
+                'web_access' => $permissions
+            ]
         ], 200);
     }
 

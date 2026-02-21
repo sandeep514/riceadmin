@@ -12,6 +12,19 @@ class Module extends Model
     public static function modulesList(){
         $user = Auth::user();
 
+        // ✅ Admin (role 2) sees all modules - bypass permission check
+        if($user->role == 2){
+            $modulesEnabledInRole = collect(json_decode($user->role_rel->modules,true));
+            $modulesEnabledInRole = $modulesEnabledInRole->filter(function($module){
+                if($module == 'on'){
+                    return $module;
+                }
+            });
+            return self::with(['permissions'])
+                ->whereIn('slug',$modulesEnabledInRole->keys())
+                ->get();
+        }
+
         $where = ['role_id'=>Auth::user()->role,'status'=>1];
         if($user->role == 3){
             $where['designation'] = $user->field_runner_rel->designation;
