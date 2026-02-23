@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-{{ dd("jimk") }}
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
