@@ -69,6 +69,13 @@ class WebPlanController extends Controller
         return back();
     }
 
+    public function updateKeyStatus($id)
+    {
+        $webPlanKey = WebPlanKeysModel::findOrFail($id);
+        $webPlanKey->update(['status' => !$webPlanKey->status]);
+
+        return redirect()->route('list.web.plans.keys')->with('success', 'Key status updated successfully');
+    }
 
 
     public function indexPlan(){

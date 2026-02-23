@@ -36,15 +36,29 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Key</th>
-                                                    <th>Action</th>
+                                                    <th>Status</th>
+                                                    <th style="white-space: nowrap;">Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach($webPlanKeys as $key => $value)
+                                                        @php $isActive = (int)($value->status ?? 0) === 1; @endphp
                                                         <tr>
                                                             <td style="text-transform: capitalize;">{{ $value->key }}</td>
                                                             <td>
+                                                                @if($isActive)
+                                                                    <span class="label label-success">Active</span>
+                                                                @else
+                                                                    <span class="label label-default">Inactive</span>
+                                                                @endif
+                                                            </td>
+                                                            <td style="white-space: nowrap;">
                                                                 <a class="btn btn-sm btn-info" href="{{ route('web.plans.keys.edit' , $value->id ) }}"> Edit </a>
+                                                                @if($isActive)
+                                                                    <a class="btn btn-sm btn-danger" href="{{ route('web.plans.keys.status.update' , $value->id ) }}"> De-active </a>
+                                                                @else
+                                                                    <a class="btn btn-sm btn-success" href="{{ route('web.plans.keys.status.update' , $value->id ) }}"> Active </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach

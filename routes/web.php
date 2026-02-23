@@ -559,6 +559,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::post('web/plans/keys/save' , ['as' => 'web.plans.keys.save' , 'uses' => 'WebPlanController@saveKeys']);
     Route::get('web/plans/keys/edit/{webPlanKeyId}' , ['as' => 'web.plans.keys.edit' , 'uses' => 'WebPlanController@editKeys']);
     Route::post('web/plans/keys/update' , ['as' => 'web.plans.keys.update' , 'uses' => 'WebPlanController@updateKeys']);
+    Route::get('web/plans/keys/status/update/{id}' , ['as' => 'web.plans.keys.status.update' , 'uses' => 'WebPlanController@updateKeyStatus']);
 
 
 

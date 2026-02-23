@@ -9,10 +9,12 @@ class TrustProxies extends Middleware
 {
     /**
      * The trusted proxies for this application.
+     * Use '*' when behind a reverse proxy (Apache/Nginx/load balancer) so
+     * X-Forwarded-Host/Proto are used and session cookies use the correct domain.
      *
      * @var array|string
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.

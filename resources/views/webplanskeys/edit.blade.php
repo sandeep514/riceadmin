@@ -1,6 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
+{{ dd("jimk") }}
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
@@ -24,10 +25,10 @@
                         </div>
                         <!-- /.box-header -->
                         {!! Form::open(['route'=>'web.plans.keys.update']) !!}
-                            @include('webplans._editForm')
+                            @include('webplanskeys._editForm')
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
-                                <a href="{{ route('roles') }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('list.web.plans.keys') }}" class="btn btn-danger">Cancel</a>
                             </div>
                         {!! Form::close() !!}
                     </div>
