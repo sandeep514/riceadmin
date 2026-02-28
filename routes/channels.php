@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+
+Broadcast::channel('private-admin-events', function ($user = null) {
+    return true;
+});
+
+Broadcast::channel('admin-events', function ($user = null) {
+    return true;
+});
+
+Broadcast::channel('presence-admin-events', function ($user = null) {
+    return [
+        'id' => $user->id ?? 0,
+        'name' => $user->name ?? 'Guest',
+    ];
+});

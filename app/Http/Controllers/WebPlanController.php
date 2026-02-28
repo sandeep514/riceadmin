@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\WebPlanModel;
 use App\WebPlanKeysModel;
 use App\WebPlanKeysMapModel;
+use App\Events\AdminEvent;
 use Illuminate\Support\Facades\Validator;
 
 use Session;
@@ -74,6 +75,12 @@ class WebPlanController extends Controller
         $webPlanKey = WebPlanKeysModel::findOrFail($id);
         $webPlanKey->update(['status' => !$webPlanKey->status]);
 
+        broadcast(new AdminEvent('plan_key_updated', [
+            'id' => $webPlanKey->id,
+            'key' => $webPlanKey->key,
+            'status' => (int) $webPlanKey->status,
+        ]))->toOthers();
+
         return redirect()->route('list.web.plans.keys')->with('success', 'Key status updated successfully');
     }
 
@@ -100,6 +107,12 @@ class WebPlanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'plan' => 'required',
+            'monthly_price' => 'required|numeric|min:0',
+            'quarterly_price' => 'required|numeric|min:0',
+            'yearly_price' => 'required|numeric|min:0',
+            'monthly_discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'quarterly_discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'yearly_discount_percentage' => 'nullable|numeric|min:0|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -109,10 +122,26 @@ class WebPlanController extends Controller
             ], 422);
         }
 
+        $mDisc = (float) ($request->monthly_discount_percentage ?? 0);
+        $qDisc = (float) ($request->quarterly_discount_percentage ?? 0);
+        $yDisc = (float) ($request->yearly_discount_percentage ?? 0);
+        $monthlyFinal = $request->monthly_price !== null ? round($request->monthly_price - ($request->monthly_price * $mDisc / 100), 2) : null;
+        $quarterlyFinal = $request->quarterly_price !== null ? round($request->quarterly_price - ($request->quarterly_price * $qDisc / 100), 2) : null;
+        $yearlyFinal = $request->yearly_price !== null ? round($request->yearly_price - ($request->yearly_price * $yDisc / 100), 2) : null;
+
         $WebPlanModel = WebPlanModel::create([
             'title' => $request->plan,
-            'amount' => $request->amount,
-            'discount_percentage' => $request->discount_percentage
+            'amount' => $request->monthly_price,
+            'discount_percentage' => null,
+            'monthly_price' => $request->monthly_price,
+            'quarterly_price' => $request->quarterly_price,
+            'yearly_price' => $request->yearly_price,
+            'monthly_final_amount' => $monthlyFinal,
+            'quarterly_final_amount' => $quarterlyFinal,
+            'yearly_final_amount' => $yearlyFinal,
+            'monthly_discount_percentage' => $request->monthly_discount_percentage,
+            'quarterly_discount_percentage' => $request->quarterly_discount_percentage,
+            'yearly_discount_percentage' => $request->yearly_discount_percentage,
         ]);
         $planKeyMap = [];
         if( $request->available  ){
@@ -141,6 +170,12 @@ class WebPlanController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'planKey' => 'required',
+            'monthly_price' => 'required|numeric|min:0',
+            'quarterly_price' => 'required|numeric|min:0',
+            'yearly_price' => 'required|numeric|min:0',
+            'monthly_discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'quarterly_discount_percentage' => 'nullable|numeric|min:0|max:100',
+            'yearly_discount_percentage' => 'nullable|numeric|min:0|max:100',
         ]);
 
         if ($validator->fails()) {
@@ -150,10 +185,26 @@ class WebPlanController extends Controller
             ], 422);
         }
 
+        $mDisc = (float) ($request->monthly_discount_percentage ?? 0);
+        $qDisc = (float) ($request->quarterly_discount_percentage ?? 0);
+        $yDisc = (float) ($request->yearly_discount_percentage ?? 0);
+        $monthlyFinal = $request->monthly_price !== null ? round($request->monthly_price - ($request->monthly_price * $mDisc / 100), 2) : null;
+        $quarterlyFinal = $request->quarterly_price !== null ? round($request->quarterly_price - ($request->quarterly_price * $qDisc / 100), 2) : null;
+        $yearlyFinal = $request->yearly_price !== null ? round($request->yearly_price - ($request->yearly_price * $yDisc / 100), 2) : null;
+
         $WebPlanModel = WebPlanModel::where('id' , $request->id)->update([
             'title' => $request->planKey,
-            'amount' => $request->amount,
-            'discount_percentage' => $request->discount_percentage
+            'amount' => $request->monthly_price,
+            'discount_percentage' => null,
+            'monthly_price' => $request->monthly_price,
+            'quarterly_price' => $request->quarterly_price,
+            'yearly_price' => $request->yearly_price,
+            'monthly_final_amount' => $monthlyFinal,
+            'quarterly_final_amount' => $quarterlyFinal,
+            'yearly_final_amount' => $yearlyFinal,
+            'monthly_discount_percentage' => $request->monthly_discount_percentage,
+            'quarterly_discount_percentage' => $request->quarterly_discount_percentage,
+            'yearly_discount_percentage' => $request->yearly_discount_percentage,
         ]);
         $planKeyMap = [];
         if( $request->available  ){

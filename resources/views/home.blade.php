@@ -12,6 +12,14 @@
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li class="active">Dashboard </li>
             </ol>
+            <div style="margin-top: 10px;">
+                {!! Form::open(['route' => 'send.reverb.notification', 'method' => 'POST', 'style' => 'display:inline-block;']) !!}
+                    <input type="text" name="message" class="form-control" style="display:inline-block; width: 280px; margin-right: 8px;" placeholder="Optional message for React app" value="">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fa fa-bolt"></i> Send Reverb notification to React
+                    </button>
+                {!! Form::close() !!}
+            </div>
         </section>
 
         <!-- Main content -->

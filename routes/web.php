@@ -14,6 +14,7 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('/',['as'=>'home','uses'=>'HomeController@index']);
 
         Route::get('clone/previous/day/record', ['as' => 'clone.previous.day.record', 'uses' => 'HomeController@clonePreviousDayRecord']);
+        Route::post('send/reverb/notification', ['as' => 'send.reverb.notification', 'uses' => 'HomeController@sendReverbNotification']);
 
         Route::group(['middleware'=>'admin'], function(){
             Route::get('call/is/active' , ['as' => 'is.active.call' , 'uses' => 'PlanController@isActiveCall']);

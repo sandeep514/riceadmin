@@ -10,6 +10,7 @@ use App\LivePrice;
 use App\OceanFreight;
 use App\QualityMaster;
 use App\Defaultvalue;
+use App\Events\AdminEvent;
 use Session;
 use Carbon\Carbon;
 
@@ -37,6 +38,22 @@ class HomeController extends Controller
 
         LivePrice::insert($lastInsertedData);
         Session::flash('success','Success|Price cloned successfully!');
+        return back();
+    }
+
+    /**
+     * Send a test Reverb notification to the React app (admin-events channel).
+     */
+    public function sendReverbNotification(Request $request)
+    {
+        $message = $request->input('message', 'Test notification from admin dashboard at ' . now()->format('H:i:s'));
+
+        broadcast(new AdminEvent('admin_notification', [
+            'message' => $message,
+            'source' => 'admin_dashboard',
+        ]))->toOthers();
+
+        Session::flash('success', 'Success|Reverb notification sent. Check your React app.');
         return back();
     }
 }

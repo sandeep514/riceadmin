@@ -122,14 +122,18 @@
             };
             @if(session()->has('success'))
             @php
-                $message = explode('|',session('success'));
+                $parts = explode('|', session('success'), 2);
+                $title = count($parts) === 2 ? $parts[0] : 'Success';
+                $body = $parts[1] ?? $parts[0];
             @endphp
-            toastr.success('{{ $message[1] }}','{{ $message[0] }}')
+            toastr.success('{{ addslashes($body) }}','{{ addslashes($title) }}')
             @elseif(session()->has('error'))
             @php
-                $message = explode('|',session('error'));
+                $parts = explode('|', session('error'), 2);
+                $title = count($parts) === 2 ? $parts[0] : 'Error';
+                $body = $parts[1] ?? $parts[0];
             @endphp
-            toastr.error('{{ $message[1] }}','{{ $message[0] }}')
+            toastr.error('{{ addslashes($body) }}','{{ addslashes($title) }}')
             @endif
         });
     </script>

@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BrandInterestController;
+use Illuminate\Support\Facades\Broadcast;
+use Pusher\Pusher;
 
 // Route::group(['middleware' => 'cors'], function () {
 
@@ -242,11 +244,73 @@ use App\Http\Controllers\BrandInterestController;
 
 
     Route::GET('admin/is/viewed/by/admin' , ['as' => 'admin.is.viewed.by.admin' , 'uses' => 'ApiController@adminIsViewedByAdmin']);
+    // Public broadcasting auth for dev (signs without requiring a logged-in user)
+    Route::post('/broadcasting/auth', function (Request $request) {
+        $channel = $request->input('channel_name');
+        $socketId = $request->input('socket_id');
 
+        if (! $channel || ! $socketId) {
+            return response()->json(['message' => 'Invalid request'], 422);
+        }
+
+        $driver = config('broadcasting.default', 'pusher');
+        if ($driver === 'reverb') {
+            $cfg = [
+                'key' => config('broadcasting.connections.reverb.key'),
+                'secret' => config('broadcasting.connections.reverb.secret'),
+                'app_id' => config('broadcasting.connections.reverb.app_id'),
+                'options' => config('broadcasting.connections.reverb.options') ?? [],
+            ];
+        } else {
+            $cfg = config('broadcasting.connections.pusher');
+        }
+        if (! $cfg) {
+            return response()->json(['message' => 'Pusher not configured'], 500);
+        }
+        $options = $cfg['options'] ?? [];
+        $pusher = new Pusher(
+            $cfg['key'] ?? '',
+            $cfg['secret'] ?? '',
+            $cfg['app_id'] ?? '',
+            $options
+        );
+
+        try {
+            if (str_starts_with($channel, 'private')) {
+                $resp = method_exists($pusher, 'authorizeChannel')
+                    ? $pusher->authorizeChannel($channel, $socketId)
+                    : $pusher->socket_auth($channel, $socketId);
+                return response()->json(json_decode($resp, true));
+            }
+            if (str_starts_with($channel, 'presence')) {
+                $userId = 'guest-'.bin2hex(random_bytes(4));
+                $userInfo = ['name' => 'Guest'];
+                $resp = method_exists($pusher, 'authorizePresenceChannel')
+                    ? $pusher->authorizePresenceChannel($channel, $socketId, $userId, $userInfo)
+                    : $pusher->presence_auth($channel, $socketId, $userId, $userInfo);
+                return response()->json(json_decode($resp, true));
+            }
+            // Public channels do not need auth
+            return response()->json(['status' => 'ok']);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Broadcast auth error', ['error' => $e->getMessage()]);
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+    })->middleware(['api'])->name('broadcasting.auth');
+
+    // Quick test endpoint to emit a broadcast for debugging
+    Route::get('/broadcast/test', function () {
+        try {
+            event(new \App\Events\AdminEvent('debug', ['message' => 'hello from api /broadcast/test']));
+            return response()->json(['ok' => true]);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Broadcast test failed', ['error' => $e->getMessage()]);
+            return response()->json(['ok' => false, 'error' => $e->getMessage()], 500);
+        }
+    });
 
 
 
 
     require __DIR__ . '/portal.php';
 // });
-
