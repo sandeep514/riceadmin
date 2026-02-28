@@ -504,11 +504,50 @@ class PortalApiController extends Controller
 
     public function getPlans()
     {
+        $webKeys = WebPlanKeysModel::select(["id","key","status"])
+            ->where(['status'  =>  1])
+            ->get()
+            ->pluck('key','id');
 
-        $webKeys = WebPlanKeysModel::select(["id","key","status"])->where(['status'  =>  1])->get()->pluck('key','id');
-        $plans = WebPlanModel::select(["id","title","short_description","description","status"])->where('title' ,'!=' , '')->with(['getPlanKeyMap:key_id,plan_id'])->where(['status' => 1])->get()->map(function($q){
-            return ['plan' => ['id' => $q->id,'title' => $q->title,'short_description' => $q->short_description,'description' => $q->description,'status' => $q->status], 'availableKeys' => $q->getPlanKeyMap->pluck('key_id')];
-        })->toArray();
+        $plans = WebPlanModel::select([
+                "id","title","short_description","description","status",
+                "monthly_price","quarterly_price","yearly_price",
+                "monthly_discount_percentage","quarterly_discount_percentage","yearly_discount_percentage",
+                "monthly_final_amount","quarterly_final_amount","yearly_final_amount"
+            ])
+            ->where('title' ,'!=' , '')
+            ->with(['getPlanKeyMap:key_id,plan_id'])
+            ->where(['status' => 1])
+            ->get()
+            ->map(function($q){
+                return [
+                    'plan' => [
+                        'id' => $q->id,
+                        'title' => $q->title,
+                        'short_description' => $q->short_description,
+                        'description' => $q->description,
+                        'status' => $q->status
+                    ],
+                    'pricing' => [
+                        'monthly' => [
+                            'price' => $q->monthly_price,
+                            'discount_percentage' => $q->monthly_discount_percentage,
+                            'final_amount' => $q->monthly_final_amount
+                        ],
+                        'quarterly' => [
+                            'price' => $q->quarterly_price,
+                            'discount_percentage' => $q->quarterly_discount_percentage,
+                            'final_amount' => $q->quarterly_final_amount
+                        ],
+                        'yearly' => [
+                            'price' => $q->yearly_price,
+                            'discount_percentage' => $q->yearly_discount_percentage,
+                            'final_amount' => $q->yearly_final_amount
+                        ],
+                    ],
+                    'availableKeys' => $q->getPlanKeyMap->pluck('key_id')
+                ];
+            })->toArray();
         return response()->json(['status' => true, 'message' => 'Web Plans', 'data' => ['plans' => $plans , 'webKeys' => $webKeys]], 200);
     }
 
@@ -948,4 +987,3 @@ class PortalApiController extends Controller
     }
 
 }
-
