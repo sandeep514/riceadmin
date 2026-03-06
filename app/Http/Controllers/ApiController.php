@@ -2355,7 +2355,7 @@ class ApiController extends Controller
             $trialPeriodMonth = $trialPeriod->month;
             // $month = $newExpiryDate->month;
             // $expiredDate = Carbon::now()->addMonth($month)->format('Y-m-d');
-            $expiredDate = Carbon::now()->addDays(7)->format('Y-m-d');
+            $expiredDate = Carbon::now()->addDays(30)->format('Y-m-d');
         }
 
         $data = [
