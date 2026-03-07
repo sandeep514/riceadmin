@@ -46,6 +46,35 @@
             @enderror
         </div>
     </div>
+    @php
+        $currentYear = now()->year;
+        $lastFiveYears = [$currentYear, $currentYear-1, $currentYear-2, $currentYear-3, $currentYear-4];
+        $selectedYears = [];
+        if(isset($accesses) && $accesses->count() > 0){
+            $selectedYears = $accesses->first()->allowed_years ?? [];
+        } elseif(isset($access) && isset($access->allowed_years)) {
+            $selectedYears = $access->allowed_years ?? [];
+        }
+    @endphp
+    <div class="row">
+        <div class="form-group col-md-12 @error('allowed_years') has-error @enderror">
+            <label>Allowed Years (last 5 years)</label>
+            <div class="checkbox">
+                @foreach($lastFiveYears as $y)
+                    <label style="margin-right: 12px;">
+                        <input type="checkbox" name="allowed_years[]" value="{{ $y }}" {{ in_array($y, $selectedYears ?? []) ? 'checked' : '' }}>
+                        {{ $y }}
+                    </label>
+                @endforeach
+            </div>
+            <small class="help-block">Select years this role/category/plan can access.</small>
+            @error('allowed_years')
+                <span class="help-block text-danger" role="alert">
+                    {{ $message }}
+                </span>
+            @enderror
+        </div>
+    </div>
     <div class="row">
         <div class="form-group col-md-12">
             <label>Menu Items & CRUD Permissions*</label>
@@ -108,4 +137,3 @@
         </div>
     </div>
 </div>
-

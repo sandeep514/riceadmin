@@ -26,6 +26,7 @@ class WebAccessRepository
                     'can_update' => isset($permissions['can_update']) ? 1 : 0,
                     'can_delete' => isset($permissions['can_delete']) ? 1 : 0,
                     'status' => $request->status ?? 1,
+                    'allowed_years' => $request->allowed_years ? array_values(array_map('intval', (array) $request->allowed_years)) : null,
                 ]);
             }
         }
@@ -76,4 +77,3 @@ class WebAccessRepository
         return $query->delete();
     }
 }
-

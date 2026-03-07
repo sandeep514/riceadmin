@@ -576,6 +576,50 @@ class PortalApiController extends Controller
         return response()->json(['status' => true, 'message' => 'Role get successfully', 'data' => $role], 200);
     }
 
+    /**
+     * GET /api/portal/years/closure-status
+     * Returns last 5 years with is_closed true/false depending on whether
+     * all active rice forms have a closing recorded for that cropYear.
+     */
+    public function getYearClosureStatus()
+    {
+        // Take last 3 distinct crop years present in live_prices (desc)
+        $years = \App\LivePrice::query()
+            ->whereNotNull('cropYear')
+            ->select('cropYear')
+            ->distinct()
+            ->orderBy('cropYear', 'desc')
+            ->limit(3)
+            ->pluck('cropYear')
+            ->map(fn($y) => (int) $y)
+            ->toArray();
+
+        $data = array_map(function ($year) {
+            // All (name, form) pairs that have any live price for this year
+            $requiredPairs = \App\LivePrice::query()
+                ->where('cropYear', $year)
+                ->where('status', 1)
+                ->whereNotNull('name')
+                ->whereNotNull('form')
+                ->where('closing', '!=', null)
+                ->where('closing', '>', 0)
+                ->first();
+
+                $isClosed = ($year == 2023) ? true : ($requiredPairs !== null);
+
+            return [
+                'year' => (int) $year,
+                'is_closed' => (bool) $isClosed,
+            ];
+        }, $years);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Years closure status',
+            'data' => $data
+        ], 200);
+    }
+
     // POST /api/portal/create-order
     public function webCreateOrder(Request $request) {
 
@@ -636,7 +680,7 @@ class PortalApiController extends Controller
             $api->utility->verifyPaymentSignature($attributes);
             $addedDays  = 7;
             if( $request->subscription_type =='trial' ){
-                $addedDays = 7;
+                $addedDays = 30;
             }elseif( $request->subscription_type =='monthly' ){
                 $addedDays = 30;
             }elseif( $request->subscription_type =='half_yearly' ){
@@ -673,7 +717,7 @@ class PortalApiController extends Controller
                 // send trial mail
                 $mailTo = $userDetails->email;
                 $mailMessage = '';
-                $subject = 'Your SNTC 7-Day Free Trial is Now Active.';
+                $subject = 'Your SNTC 30-Day Free Trial is Now Active.';
                 $mailFrom = 'info@sntcgroup.com';
                 $mailFromName = 'SNTC Team - India';
 

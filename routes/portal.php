@@ -34,6 +34,7 @@
         Route::post('web/verify-payment', [PortalApiController::class, 'webVerifyPayment']);
 
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
+        Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
         
         Route::get('get/latest/updated/count', [PortalApiController::class, 'getLatestUpdatedCount']);
         

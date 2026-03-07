@@ -17,7 +17,8 @@ class WebAccess extends Model
         'can_read',
         'can_update',
         'can_delete',
-        'status'
+        'status',
+        'allowed_years'
     ];
 
     protected $casts = [
@@ -25,7 +26,8 @@ class WebAccess extends Model
         'can_read' => 'boolean',
         'can_update' => 'boolean',
         'can_delete' => 'boolean',
-        'status' => 'integer'
+        'status' => 'integer',
+        'allowed_years' => 'array'
     ];
 
     public function role()
@@ -48,4 +50,3 @@ class WebAccess extends Model
         return $this->belongsTo(WebSideMenu::class, 'web_side_menu_id', 'id');
     }
 }
-

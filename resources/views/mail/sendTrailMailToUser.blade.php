@@ -6,7 +6,7 @@
 
         <p>Dear {{$userName}},</p>
         <p>Welcome to SNTC!</p>
-        <p>Your 7-day free trial has been successfully activated. You can now explore the platform.</p>
+        <p>Your 30-day free trial has been successfully activated. You can now explore the platform.</p>
         
         <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
         <hr style="border:none;border-top:1px solid #eee" />

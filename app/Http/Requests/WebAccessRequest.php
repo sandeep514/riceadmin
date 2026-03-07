@@ -31,8 +31,9 @@ class WebAccessRequest extends FormRequest
             'menu_permissions.*.can_read' => 'nullable|boolean',
             'menu_permissions.*.can_update' => 'nullable|boolean',
             'menu_permissions.*.can_delete' => 'nullable|boolean',
-            'status' => 'nullable|integer|in:0,1'
+            'status' => 'nullable|integer|in:0,1',
+            'allowed_years' => 'nullable|array',
+            'allowed_years.*' => 'integer|min:2000|max:2100'
         ];
     }
 }
-
