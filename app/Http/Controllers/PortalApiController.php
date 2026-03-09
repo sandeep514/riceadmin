@@ -1004,11 +1004,46 @@ class PortalApiController extends Controller
             ];
         });
 
+        // Last 4 crop years from live_prices and access per plan (allowed_years)
+        $lastYears = \App\LivePrice::query()
+            ->whereNotNull('cropYear')
+            ->select('cropYear')
+            ->distinct()
+            ->orderBy('cropYear', 'desc')
+            ->limit(4)
+            ->pluck('cropYear')
+            ->map(fn($y) => (int) $y)
+            ->toArray();
+        $allowedYearsUnion = collect($webAccess)->pluck('allowed_years')->filter()->flatten()->map(fn($y) => (int) $y)->unique()->toArray();
+        $yearsAccess = array_map(function($y) use ($allowedYearsUnion){
+            $closedRow = \App\LivePrice::query()
+                ->where('cropYear', $y)
+                ->where('status', 1)
+                ->whereNotNull('name')
+                ->whereNotNull('form')
+                ->where('closing', '!=', null)
+                ->where('closing', '>', 0)
+                ->first();
+            return [
+                'year' => (int)$y,
+                'has_access' => in_array((int)$y, $allowedYearsUnion),
+                'is_closed' => $closedRow !== null
+            ];
+        }, $lastYears);
+
+        // Fetch plan name
+        $planTitle = null;
+        if ($planId) {
+            $planTitle = \App\WebPlanModel::where('id', $planId)->value('title');
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Web access permissions retrieved successfully',
             'data' => [
                 'user_id' => $userId,
+                'plan_id' => $planId,
+                'plan_name' => $planTitle,
                 'role' => [
                     'id' => $roleId,
                     'name' => $user->role_rel ? $user->role_rel->role_name : null
@@ -1025,7 +1060,8 @@ class PortalApiController extends Controller
                     'period_start' => $subscription->period_start,
                     'period_end' => $subscription->period_end
                 ],
-                'web_access' => $permissions
+                'web_access' => $permissions,
+                'years' => $yearsAccess
             ]
         ], 200);
     }
