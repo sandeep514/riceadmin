@@ -36,22 +36,61 @@ class WebAccessRepository
 
     public static function updateWebAccess($request, $roleId, $categoryId = null, $planId = null)
     {
-        // Delete all existing access records for this role/category/plan combination
-        $query = WebAccess::where('role_id', $roleId);
-        if ($categoryId) {
-            $query->where('category_id', $categoryId);
-        } else {
-            $query->whereNull('category_id');
+        $menuPermissions = $request->menu_permissions ?? [];
+        $allowedYears = $request->allowed_years ? array_values(array_map('intval', (array) $request->allowed_years)) : null;
+
+        foreach ($menuPermissions as $menuId => $permissions) {
+            $hasAnyPermission =
+                isset($permissions['can_create']) ||
+                isset($permissions['can_read']) ||
+                isset($permissions['can_update']) ||
+                isset($permissions['can_delete']);
+
+            $recordQuery = WebAccess::where('role_id', $roleId)
+                ->where('web_side_menu_id', $menuId);
+
+            if ($categoryId) {
+                $recordQuery->where('category_id', $categoryId);
+            } else {
+                $recordQuery->whereNull('category_id');
+            }
+
+            if ($planId) {
+                $recordQuery->where('plan_id', $planId);
+            } else {
+                $recordQuery->whereNull('plan_id');
+            }
+
+            $existing = $recordQuery->first();
+
+            if ($hasAnyPermission) {
+                $payload = [
+                    'role_id' => $roleId,
+                    'category_id' => $categoryId,
+                    'plan_id' => $planId,
+                    'web_side_menu_id' => $menuId,
+                    'can_create' => isset($permissions['can_create']) ? 1 : 0,
+                    'can_read' => isset($permissions['can_read']) ? 1 : 0,
+                    'can_update' => isset($permissions['can_update']) ? 1 : 0,
+                    'can_delete' => isset($permissions['can_delete']) ? 1 : 0,
+                    'status' => $request->status ?? 1,
+                    'allowed_years' => $allowedYears,
+                ];
+
+                if ($existing) {
+                    $existing->update($payload);
+                } else {
+                    WebAccess::create($payload);
+                }
+            } else {
+                // No permissions checked for this menu; remove existing record if present
+                if ($existing) {
+                    $existing->delete();
+                }
+            }
         }
-        if ($planId) {
-            $query->where('plan_id', $planId);
-        } else {
-            $query->whereNull('plan_id');
-        }
-        $query->delete();
-        
-        // Create new records using the same logic as save
-        return self::saveWebAccess($request);
+
+        return true;
     }
 
     public static function deleteWebAccess($id)
