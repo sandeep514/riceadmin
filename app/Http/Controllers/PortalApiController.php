@@ -1010,7 +1010,7 @@ class PortalApiController extends Controller
             ->select('cropYear')
             ->distinct()
             ->orderBy('cropYear', 'desc')
-            ->limit(4)
+            ->limit(3)
             ->pluck('cropYear')
             ->map(fn($y) => (int) $y)
             ->toArray();
