@@ -90,6 +90,24 @@ class WebAccessRepository
             }
         }
 
+        // Also remove any existing records for menus that are no longer present in the request
+        $submittedMenuIds = array_map('intval', array_keys($menuPermissions));
+        $cleanupQuery = WebAccess::where('role_id', $roleId);
+        if ($categoryId) {
+            $cleanupQuery->where('category_id', $categoryId);
+        } else {
+            $cleanupQuery->whereNull('category_id');
+        }
+        if ($planId) {
+            $cleanupQuery->where('plan_id', $planId);
+        } else {
+            $cleanupQuery->whereNull('plan_id');
+        }
+        if (!empty($submittedMenuIds)) {
+            $cleanupQuery->whereNotIn('web_side_menu_id', $submittedMenuIds);
+        }
+        $cleanupQuery->delete();
+
         return true;
     }
 
