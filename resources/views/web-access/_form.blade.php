@@ -47,20 +47,31 @@
         </div>
     </div>
     @php
-        $currentYear = now()->year;
-        $lastFiveYears = [$currentYear, $currentYear-1, $currentYear-2, $currentYear-3, $currentYear-4];
         $selectedYears = [];
         if(isset($accesses) && $accesses->count() > 0){
             $selectedYears = $accesses->first()->allowed_years ?? [];
         } elseif(isset($access) && isset($access->allowed_years)) {
             $selectedYears = $access->allowed_years ?? [];
         }
+        $yearsFromDb = \App\LivePrice::query()
+            ->whereNotNull('cropYear')
+            ->select('cropYear')
+            ->distinct()
+            ->orderBy('cropYear', 'desc')
+            ->limit(5)
+            ->pluck('cropYear')
+            ->map(fn($y) => (int) $y)
+            ->toArray();
+        if (empty($yearsFromDb)) {
+            $currentYear = now()->year;
+            $yearsFromDb = [$currentYear, $currentYear-1, $currentYear-2, $currentYear-3, $currentYear-4];
+        }
     @endphp
     <div class="row">
         <div class="form-group col-md-12 @error('allowed_years') has-error @enderror">
-            <label>Allowed Years (last 5 years)</label>
+            <label>Allowed Years</label>
             <div class="checkbox">
-                @foreach($lastFiveYears as $y)
+                @foreach($yearsFromDb as $y)
                     <label style="margin-right: 12px;">
                         <input type="checkbox" name="allowed_years[]" value="{{ $y }}" {{ in_array($y, $selectedYears ?? []) ? 'checked' : '' }}>
                         {{ $y }}
