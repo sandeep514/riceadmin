@@ -2923,7 +2923,7 @@ class ApiController extends Controller
             $livePrice = $livePrice->whereDate('created_at', $lastEnteredRecord);
         }
 
-            $states = $livePrice->distinct()->pluck('state');
+            $states = $livePrice->distinct()->pluck('state')->values()->all();
             $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state', 'state_order')->toArray();
             $orderByState = array_flip($sortArray); // state => order
             usort($states, function ($a, $b) use ($orderByState) {
