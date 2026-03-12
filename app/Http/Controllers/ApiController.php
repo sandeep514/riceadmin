@@ -2745,11 +2745,13 @@ class ApiController extends Controller
 
             $closingAndOpenCropStates = array_merge($states , $closingCropSates);
 
-            $states = array_values(array_unique( $closingAndOpenCropStates ));
-            usort($states, function ($a, $b) use ($sortArray) {
-                return array_search($a, $sortArray) <=> array_search($b, $sortArray);
+            $states = array_values(array_unique($closingAndOpenCropStates));
+            $orderByState = array_flip($sortArray); // state => order
+            usort($states, function ($a, $b) use ($orderByState) {
+                $oa = isset($orderByState[$a]) ? (int)$orderByState[$a] : PHP_INT_MAX;
+                $ob = isset($orderByState[$b]) ? (int)$orderByState[$b] : PHP_INT_MAX;
+                return $oa <=> $ob;
             });
-            $orderByState = array_flip($sortArray);
             $sortedWithOrder = array_map(function($s) use ($orderByState){
                 return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
             }, $states);
@@ -2922,11 +2924,13 @@ class ApiController extends Controller
         }
 
             $states = $livePrice->distinct()->pluck('state');
-            $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
-            usort($states, function ($a, $b) use ($sortArray) {
-                return array_search($a, $sortArray) <=> array_search($b, $sortArray);
+            $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state', 'state_order')->toArray();
+            $orderByState = array_flip($sortArray); // state => order
+            usort($states, function ($a, $b) use ($orderByState) {
+                $oa = isset($orderByState[$a]) ? (int)$orderByState[$a] : PHP_INT_MAX;
+                $ob = isset($orderByState[$b]) ? (int)$orderByState[$b] : PHP_INT_MAX;
+                return $oa <=> $ob;
             });
-            $orderByState = array_flip($sortArray);
             $sortedWithOrder = array_map(function($s) use ($orderByState){
                 return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
             }, $states);
