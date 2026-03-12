@@ -2746,12 +2746,14 @@ class ApiController extends Controller
             $closingAndOpenCropStates = array_merge($states , $closingCropSates);
 
             $states = array_values(array_unique( $closingAndOpenCropStates ));
-
             usort($states, function ($a, $b) use ($sortArray) {
                 return array_search($a, $sortArray) <=> array_search($b, $sortArray);
             });
-
-           return response()->json(['error' => null, 'data' => $states], 200);
+            $orderByState = array_flip($sortArray);
+            $sortedWithOrder = array_map(function($s) use ($orderByState){
+                return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
+            }, $states);
+            return response()->json(['error' => null, 'data' => $states, 'sorted' => $sortedWithOrder], 200);
     }
     
 
@@ -2919,9 +2921,16 @@ class ApiController extends Controller
             $livePrice = $livePrice->whereDate('created_at', $lastEnteredRecord);
         }
 
-        $states = $livePrice->distinct()->pluck('state');
-
-        return response()->json(['error' => null, 'data' => $states], 200);
+            $states = $livePrice->distinct()->pluck('state');
+            $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
+            usort($states, function ($a, $b) use ($sortArray) {
+                return array_search($a, $sortArray) <=> array_search($b, $sortArray);
+            });
+            $orderByState = array_flip($sortArray);
+            $sortedWithOrder = array_map(function($s) use ($orderByState){
+                return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
+            }, $states);
+            return response()->json(['error' => null, 'data' => $states, 'sorted' => $sortedWithOrder], 200);
     }
 
     public function getNONBasmatiStateForWeb(Request $request)
@@ -3052,7 +3061,11 @@ class ApiController extends Controller
             usort($states, function ($a, $b) use ($sortArray) {
                 return array_search($a, $sortArray) <=> array_search($b, $sortArray);
             });
-           return response()->json(['error' => null, 'data' => $states], 200);
+            $orderByState = array_flip($sortArray);
+            $sortedWithOrder = array_map(function($s) use ($orderByState){
+                return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
+            }, $states);
+            return response()->json(['error' => null, 'data' => $states, 'sorted' => $sortedWithOrder], 200);
 
         /*
         |--------------------------------------------------------------------------
