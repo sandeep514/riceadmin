@@ -2217,8 +2217,8 @@ class ApiController extends Controller
                     }
                 ])->where(['state' => $state])->whereBetween(DB::raw('date(created_at)'), [$todayDate->subDays($timePeriod) , $fromDate ])->get();
             }
-
         }
+
         foreach ($prices as $k => $v) {
             $created_at[] = strtotime($v->created_at->format('y-m-d'));
         }
@@ -2227,6 +2227,7 @@ class ApiController extends Controller
         }
 
         $combine = array_combine($created_at, $max_price);
+
         $maxCount = 0;
         if( $combine ){
             $lowValue = min($combine);
@@ -2240,20 +2241,42 @@ class ApiController extends Controller
                     ->setTimezone('Asia/Kolkata')
                     ->format('d-m-Y');
 
-            foreach ($combine as $kk => $vv) {
+            // Ensure chronological order by timestamp key before building series
+            $sortedCombine = $combine;
+            ksort($sortedCombine);
+            $combinedData = [];
+            foreach ($sortedCombine as $kk => $vv) {
                 $combinedData[] = [$kk * 1000, (int)$vv];
             }
-
-            $counts = array_count_values($prices->pluck('max_price')->toArray());
-            $maxCount = max($counts);
-            
-            $mostFrequentValues = array_keys($counts, $maxCount);
-            if( count($mostFrequentValues) > 0 ){
-                $constantValue = $mostFrequentValues[0];
+            $seq = array_values($sortedCombine);
+            $arrayValuesPrices = $seq;
+            $bestVal = null;
+            $bestLen = 0;
+            $currVal = null;
+            $currLen = 0;
+            foreach ($seq as $val) {
+                $num = is_numeric($val) ? (float) $val : null;
+                if ($num === null || $num <= 0) {
+                    $currVal = null;
+                    $currLen = 0;
+                    continue;
+                }
+                if ($currVal === null || $num != $currVal) {
+                    $currVal = $num;
+                    $currLen = 1;
+                } else {
+                    $currLen++;
+                }
+                if ($currLen > $bestLen) {
+                    $bestLen = $currLen;
+                    $bestVal = $num;
+                }
             }
+            $constantValue = $bestVal !== null ? $bestVal : 0;
+            $maxCount = $bestLen;
             
         }
-        $responseData = ['errors' => null, 'date' => $created_at, 'prices' => $max_price, 'combinedData' => $combinedData, 'productType' => $productType , 'lowValue' => $lowValue,'lowDate' => $lowDate  , 'highDate' => $highDate , 'highValue' => $highValue , 'constantValue' => $constantValue,'maxCountConstant' => $maxCount];
+        $responseData = ['errors' => null, 'date' => $created_at, 'prices' => $arrayValuesPrices, 'combinedData' => $combinedData, 'productType' => $productType , 'lowValue' => $lowValue,'lowDate' => $lowDate  , 'highDate' => $highDate , 'highValue' => $highValue , 'constantValue' => $constantValue,'maxCountConstant' => $maxCount];
 
         return response()->json($responseData);
 
@@ -3014,11 +3037,9 @@ class ApiController extends Controller
                   if ( count($hasOpenigClosingConcade) > 0 ){
                     $combineNameForm = $v->name.'_'.$v->form;
                     if( !in_array($combineNameForm, $hasOpenigClosingConcade) ) {
-
                         $states[] = $v->state;
                     }
                 }else{
-
                     $states[] = $v->state;
                 }
 
