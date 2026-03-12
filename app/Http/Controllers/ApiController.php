@@ -2752,10 +2752,16 @@ class ApiController extends Controller
                 $ob = isset($orderByState[$b]) ? (int)$orderByState[$b] : PHP_INT_MAX;
                 return $oa <=> $ob;
             });
-            $sortedWithOrder = array_map(function($s) use ($orderByState){
-                return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
-            }, $states);
-            return response()->json(['error' => null, 'data' => $states, 'sorted' => $sortedWithOrder], 200);
+            $sortedMap = [];
+            foreach ($states as $s) {
+                if (isset($orderByState[$s])) {
+                    $sortedMap[(string) $orderByState[$s]] = $s;
+                }
+            }
+            
+            ksort($sortedMap, SORT_NATURAL);
+            $states = array_values($sortedMap);
+            return response()->json(['error' => null, 'data' => $states], 200);
     }
     
 
@@ -2931,10 +2937,13 @@ class ApiController extends Controller
                 $ob = isset($orderByState[$b]) ? (int)$orderByState[$b] : PHP_INT_MAX;
                 return $oa <=> $ob;
             });
-            $sortedWithOrder = array_map(function($s) use ($orderByState){
-                return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
-            }, $states);
-            return response()->json(['error' => null, 'data' => $states, 'sorted' => $sortedWithOrder], 200);
+            $sortedMap = [];
+            foreach ($states as $s) {
+                if (isset($orderByState[$s])) {
+                    $sortedMap[(string) $orderByState[$s]] = $s;
+                }
+            }
+            return response()->json(['error' => null, 'data' => $states, 'sorted' => [$sortedMap]], 200);
     }
 
     public function getNONBasmatiStateForWeb(Request $request)
@@ -3061,15 +3070,22 @@ class ApiController extends Controller
 
             $closingAndOpenCropStates = array_merge($states , $closingCropSates);
 
-            $states = array_values(array_unique( $closingAndOpenCropStates ));
-            usort($states, function ($a, $b) use ($sortArray) {
-                return array_search($a, $sortArray) <=> array_search($b, $sortArray);
+           $states = array_values(array_unique($closingAndOpenCropStates));
+            $orderByState = array_flip($sortArray); // state => order
+            usort($states, function ($a, $b) use ($orderByState) {
+                $oa = isset($orderByState[$a]) ? (int)$orderByState[$a] : PHP_INT_MAX;
+                $ob = isset($orderByState[$b]) ? (int)$orderByState[$b] : PHP_INT_MAX;
+                return $oa <=> $ob;
             });
-            $orderByState = array_flip($sortArray);
-            $sortedWithOrder = array_map(function($s) use ($orderByState){
-                return ['state' => $s, 'sortingOrder' => $orderByState[$s] ?? null];
-            }, $states);
-            return response()->json(['error' => null, 'data' => $states, 'sorted' => $sortedWithOrder], 200);
+            $sortedMap = [];
+            foreach ($states as $s) {
+                if (isset($orderByState[$s])) {
+                    $sortedMap[(string) $orderByState[$s]] = $s;
+                }
+            }
+            $statesArray = ksort($sortedMap, SORT_NATURAL);
+            $states = array_values($sortedMap);
+            return response()->json(['error' => null, 'data' => $states], 200);
 
         /*
         |--------------------------------------------------------------------------
