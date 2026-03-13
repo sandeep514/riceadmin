@@ -5452,7 +5452,7 @@ dd("kjnik");
         // dd($time);
         // dd(TradeQueriesINR::whereIn('status' , [1,6,4,5,11,12])->where('validDays' ,'<=', Carbon::parse($now)->format('Y-m-d H:i'))->get());
 
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
+        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
         // $todayExpired = TradeQueriesINR::orderBy('status' , 'ASC')->where('status' , 2)->get();
         $allTrade = TradeQueriesINR::where('status', '!=', 2)
@@ -5487,11 +5487,11 @@ dd("kjnik");
         $date = Carbon::parse($now)->toDateString();
         $time = Carbon::parse($now)->format('H:i');
 
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
+        TradeQueriesINR::whereIn('status', [1, 6, 4, 5,11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
         $allTrade = TradeQueriesINR::where('status', '!=', 2)
         // ->limit(75)
-        ->orderByRaw('FIELD(status,6,4,12,3)')->with(['TradeInterest' => function ($query) use ($userId) {
+        ->orderByRaw('FIELD(status,6,4,12,11,3)')->with(['TradeInterest' => function ($query) use ($userId) {
             return $query->where('userId', $userId)->get();
         }, 'RiceNameData', 'TradeLikeAll' => function ($query) use ($userId) {
             return $query->select(['id' ,'tradeId'])->where('userId', $userId);
@@ -5831,7 +5831,7 @@ dd("kjnik");
                   });
             })
             // ->limit(75)
-            ->orderByRaw('FIELD(status,6,4,3)')
+            ->orderByRaw('FIELD(status,6,4,12,11,3)')
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
