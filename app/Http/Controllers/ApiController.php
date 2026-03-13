@@ -5500,7 +5500,7 @@ dd("kjnik");
         }, 'RicePackingBuyer', 'RicePackingSeller'])
         ->where('status', '!=', 5)
         ->where(function($q){
-            $twoDaysAgo = Carbon::now()->subDays(15)->toDateString();
+            $twoDaysAgo = Carbon::now()->subDays(30)->toDateString();
             $q->where('status', '!=', 3)
               ->orWhere(function($qq) use ($twoDaysAgo){
                   $qq->where('status', 3)
@@ -5823,7 +5823,7 @@ dd("kjnik");
                 // Add more filters as needed
             })
             ->where(function($q){
-                $twoDaysAgo = Carbon::now()->subDays(15)->toDateString();
+                $twoDaysAgo = Carbon::now()->subDays(30)->toDateString();
                 $q->where('status', '!=', 3)
                   ->orWhere(function($qq) use ($twoDaysAgo){
                       $qq->where('status', 3)
