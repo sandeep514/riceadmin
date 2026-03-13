@@ -5775,7 +5775,7 @@ dd("kjnik");
 
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
-        $allTrade = TradeQueriesINR::whereIn('status',[ 1,6,4,3])
+        $allTrade = TradeQueriesINR::whereNotIn('status',[2,5])
             ->where(function($query) use ($request) {
                 if ($request->has('trade_type')) {
                     $query->where('tradeType', $request->trade_type);
