@@ -5481,7 +5481,6 @@ dd("kjnik");
         return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
-
     public function getWebTrades($userId)
     {
         $now = Carbon::now();
@@ -5500,7 +5499,8 @@ dd("kjnik");
             return $query->with('getWandType')->get();
         }, 'RicePackingBuyer', 'RicePackingSeller'])->where('status', '!=', 5)->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
 
-        $trade = $allTrade->groupBy('tradeType');
+        $trade = $allTrade;
+        // $trade = $allTrade->groupBy('tradeType');
         $tradeStatus = TradeCurrentStatus::first();
 
         return response()->json(['status' => true, 'data' => $trade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
