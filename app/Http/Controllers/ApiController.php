@@ -5497,7 +5497,17 @@ dd("kjnik");
             return $query->select(['id' ,'tradeId'])->where('userId', $userId);
         }, 'RiceFormMilestone3', 'riceGrade' => function ($query) {
             return $query->with('getWandType')->get();
-        }, 'RicePackingBuyer', 'RicePackingSeller'])->where('status', '!=', 5)->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
+        }, 'RicePackingBuyer', 'RicePackingSeller'])
+        ->where('status', '!=', 5)
+        ->where(function($q){
+            $twoDaysAgo = Carbon::now()->subDays(2)->toDateString();
+            $q->where('status', '!=', 3)
+              ->orWhere(function($qq) use ($twoDaysAgo){
+                  $qq->where('status', 3)
+                     ->whereDate('created_at', '>=', $twoDaysAgo);
+              });
+        })
+        ->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
 
         $trade = $allTrade;
         // $trade = $allTrade->groupBy('tradeType');
@@ -5811,6 +5821,14 @@ dd("kjnik");
                 //     $query->where('packing' , $request->packing);
                 // }
                 // Add more filters as needed
+            })
+            ->where(function($q){
+                $twoDaysAgo = Carbon::now()->subDays(2)->toDateString();
+                $q->where('status', '!=', 3)
+                  ->orWhere(function($qq) use ($twoDaysAgo){
+                      $qq->where('status', 3)
+                         ->whereDate('created_at', '>=', $twoDaysAgo);
+                  });
             })
             // ->limit(75)
             ->orderByRaw('FIELD(status,6,4,3)')
