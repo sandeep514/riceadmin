@@ -5490,7 +5490,7 @@ dd("kjnik");
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5,11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
         $allTrade = TradeQueriesINR::where('status', '!=', 2)
-        // ->limit(75)
+        ->limit(75)
         ->orderByRaw('FIELD(status,6,4,12,11,3)')->with(['TradeInterest' => function ($query) use ($userId) {
             return $query->where('userId', $userId)->get();
         }, 'RiceNameData', 'TradeLikeAll' => function ($query) use ($userId) {
@@ -5499,6 +5499,7 @@ dd("kjnik");
             return $query->with('getWandType')->get();
         }, 'RicePackingBuyer', 'RicePackingSeller'])
         ->where('status', '!=', 5)
+
         // ->where(function($q){
         //     $twoDaysAgo = Carbon::now()->subDays(30)->toDateString();
         //     $q->where('status', '!=', 3)
@@ -5669,7 +5670,7 @@ dd("kjnik");
                 }
                 // Add more filters as needed
             })
-            // ->limit(75)
+            ->limit(75)
             ->orderByRaw('FIELD(status,6,4,3)')
             ->orderBy('id', 'DESC')
             ->get();
