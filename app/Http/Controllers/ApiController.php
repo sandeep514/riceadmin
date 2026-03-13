@@ -5833,7 +5833,8 @@ dd("kjnik");
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
 
-        $trade = $allTrade->groupBy('tradeType');
+        $trade = $allTrade;
+        // $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
 
