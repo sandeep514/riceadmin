@@ -14,8 +14,14 @@
     </section>
     <section class="content">
         <div class="box box-primary">
-            <div class="box-header with-border">
+            <div class="box-header with-border" style="display:flex;justify-content:space-between;align-items:center;">
                 <h3 class="box-title">Filter</h3>
+                <div>
+                    <a class="btn btn-success"
+                       href="{{ route('reports.live-prices', array_merge(request()->query(), ['export' => 'csv'])) }}">
+                        <i class="fa fa-download"></i> Export CSV (Full)
+                    </a>
+                </div>
             </div>
             <div class="box-body">
                 <form method="GET" action="{{ route('reports.live-prices') }}" class="form-inline">
@@ -49,7 +55,7 @@
                 <h3 class="box-title">Results</h3>
             </div>
             <div class="box-body table-responsive">
-                <table id="example2" class="table table-bordered table-striped" width="100%">
+                <table id="live-prices-table" class="table table-bordered table-striped" width="100%">
                     <thead>
                         <tr>
                             <th>Rice Name</th>
@@ -77,6 +83,9 @@
                         @endforeach
                     </tbody>
                 </table>
+                <div class="text-center">
+                    {{ $rows->appends(request()->query())->links() }}
+                </div>
             </div>
         </div>
     </section>
