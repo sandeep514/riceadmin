@@ -46,6 +46,7 @@ class GalleryController extends Controller
 
 				if ($request->key != null && $request->value != null) {
 					if (count($request->key) == count($request->value)) {
+						
 						$destinationPath = 'uploads/gallery';
 
 						$file->move($destinationPath, $galleryCounter . '_' . $filename);
@@ -56,6 +57,7 @@ class GalleryController extends Controller
 							$fileextension2 = $file2->getClientOriginalExtension();
 
 							if ($fileextension2 == "png" ||  $fileextension == "JPG" ||  $fileextension == "JPEG" || $fileextension2 == "jpg" || $fileextension2 == "jpeg") {
+								
 								$destinationPath2 = 'uploads/gallery';
 								$file2->move($destinationPath2, $galleryCounter . '_' . $filename2);
 							} else {
@@ -136,6 +138,7 @@ class GalleryController extends Controller
 
 				if ($request->key != null && $request->value != null) {
 					if (count($request->key) == count($request->value)) {
+						
 						$destinationPath = 'uploads/gallery';
 						$file->move($destinationPath, $galleryCounter . '_' . $filename);
 
@@ -159,6 +162,7 @@ class GalleryController extends Controller
 				$fileextension2 = $file2->getClientOriginalExtension();
 
 				if ($fileextension2 == "png" || $fileextension2 == "jpg" || $fileextension2 == "jpeg" ||  $fileextension == "JPG" ||  $fileextension == "JPEG") {
+					
 					$destinationPath2 = 'uploads/gallery';
 					$file2->move($destinationPath2, $galleryCounter . '_' . $filename2);
 

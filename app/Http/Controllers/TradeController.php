@@ -92,7 +92,9 @@ class TradeController extends Controller
             $file_size      = $_FILES['packingImage']['size'];
             $file_tmp       = $_FILES['packingImage']['tmp_name'];
             $file_type      = $_FILES['packingImage']['type'];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             $data['packing_file'] = $file_name;
         }
@@ -101,7 +103,9 @@ class TradeController extends Controller
         foreach($_FILES["cookedFiles"]["tmp_name"] as $key=>$tmp_name) {
             $file_name=$_FILES["cookedFiles"]["name"][$key];
             $file_tmp=$_FILES["cookedFiles"]["tmp_name"][$key];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             if( $key == 0 ) {
                 $data['cooked_file'] = $file_name;
@@ -113,7 +117,9 @@ class TradeController extends Controller
         foreach($_FILES["uncookedFiles"]["tmp_name"] as $key=>$tmp_name) {
             $file_name=$_FILES["uncookedFiles"]["name"][$key];
             $file_tmp=$_FILES["uncookedFiles"]["tmp_name"][$key];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             if( $key == 0 ) {
                 $data['uncooked_file'] = $file_name;
@@ -224,7 +230,9 @@ class TradeController extends Controller
             $file_size      = $_FILES['packingImage']['size'];
             $file_tmp       = $_FILES['packingImage']['tmp_name'];
             $file_type      = $_FILES['packingImage']['type'];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             $data['packing_file'] = $file_name;
         }
@@ -234,7 +242,9 @@ class TradeController extends Controller
         //     $file_size      = $_FILES['uncookedFiles']['size'];
         //     $file_tmp       = $_FILES['uncookedFiles']['tmp_name'];
         //     $file_type      = $_FILES['uncookedFiles']['type'];
-
+        if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
         //     move_uploaded_file($file_tmp,"uploads/".$file_name);
         //     $data['uncooked_file'] = $file_name;
         // }
@@ -244,7 +254,9 @@ class TradeController extends Controller
         //     $file_size      = $_FILES['cookedFiles']['size'];
         //     $file_tmp       = $_FILES['cookedFiles']['tmp_name'];
         //     $file_type      = $_FILES['cookedFiles']['type'];
-
+        if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
         //     move_uploaded_file($file_tmp,"uploads/".$file_name);
         //     $data['cooked_file'] = $file_name;
         // }
@@ -252,7 +264,9 @@ class TradeController extends Controller
         foreach($_FILES["cookedFiles"]["tmp_name"] as $key=>$tmp_name) {
             $file_name=$_FILES["cookedFiles"]["name"][$key];
             $file_tmp=$_FILES["cookedFiles"]["tmp_name"][$key];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             if( $key == 0 ) {
                 $data['cooked_file'] = $file_name;
@@ -264,7 +278,9 @@ class TradeController extends Controller
         foreach($_FILES["uncookedFiles"]["tmp_name"] as $key=>$tmp_name) {
             $file_name=$_FILES["uncookedFiles"]["name"][$key];
             $file_tmp=$_FILES["uncookedFiles"]["tmp_name"][$key];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             if( $key == 0 ) {
                 $data['uncooked_file'] = $file_name;

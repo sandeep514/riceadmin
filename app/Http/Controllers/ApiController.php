@@ -2069,6 +2069,14 @@ class ApiController extends Controller
                 if(in_array($combineNameForm,$hasOpenigClosingConcade)) continue;
             }
 
+            // If created_at or updated_at is not today, treat as not updated by admin
+            $todayStr = $todayDate->format('Y-m-d');
+            $createdNotToday = $v->created_at ? $v->created_at->format('Y-m-d') !== $todayStr : true;
+            $updatedNotToday = $v->updated_at ? $v->updated_at->format('Y-m-d') !== $todayStr : true;
+            if ($createdNotToday || $updatedNotToday) {
+                $v->is_updated_by_admin = 0;
+            }
+
             $riceType = $v->name_rel->name;
             $formName = $v->form_rel->form_name;
             $date     = Carbon::parse($v->created_at)->format('Y-m-d');
@@ -5134,7 +5142,9 @@ dd("kjnik");
             $file_size      = $_FILES['extra_file']['size'];
             $file_tmp       = $_FILES['extra_file']['tmp_name'];
             $file_type      = $_FILES['extra_file']['type'];
-
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['extra_file'] = $file_name;
         }
@@ -5266,7 +5276,9 @@ dd("kjnik");
             $file_size      = $_FILES['packageImageFile']['size'];
             $file_tmp       = $_FILES['packageImageFile']['tmp_name'];
             $file_type      = $_FILES['packageImageFile']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['packing_file'] = $file_name;
         }
@@ -5276,7 +5288,9 @@ dd("kjnik");
             $file_size      = $_FILES['uncookedFile']['size'];
             $file_tmp       = $_FILES['uncookedFile']['tmp_name'];
             $file_type      = $_FILES['uncookedFile']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['uncooked_file'] = $file_name;
         }
@@ -5286,7 +5300,9 @@ dd("kjnik");
             $file_size      = $_FILES['cookedImageFile']['size'];
             $file_tmp       = $_FILES['cookedImageFile']['tmp_name'];
             $file_type      = $_FILES['cookedImageFile']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['cooked_file'] = $file_name;
         }
@@ -5296,7 +5312,9 @@ dd("kjnik");
             $file_size      = $_FILES['extra_file']['size'];
             $file_tmp       = $_FILES['extra_file']['tmp_name'];
             $file_type      = $_FILES['extra_file']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['extra_file'] = $file_name;
         }
@@ -5364,7 +5382,9 @@ dd("kjnik");
             $file_size      = $_FILES['packageImageFile']['size'];
             $file_tmp       = $_FILES['packageImageFile']['tmp_name'];
             $file_type      = $_FILES['packageImageFile']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['packing_file'] = $file_name;
         }
@@ -5374,7 +5394,9 @@ dd("kjnik");
             $file_size      = $_FILES['uncookedFile']['size'];
             $file_tmp       = $_FILES['uncookedFile']['tmp_name'];
             $file_type      = $_FILES['uncookedFile']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['uncooked_file'] = $file_name;
         }
@@ -5384,7 +5406,9 @@ dd("kjnik");
             $file_size      = $_FILES['cookedImageFile']['size'];
             $file_tmp       = $_FILES['cookedImageFile']['tmp_name'];
             $file_type      = $_FILES['cookedImageFile']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['cooked_file'] = $file_name;
         }
@@ -5394,7 +5418,9 @@ dd("kjnik");
             $file_size      = $_FILES['extra_file']['size'];
             $file_tmp       = $_FILES['extra_file']['tmp_name'];
             $file_type      = $_FILES['extra_file']['type'];
-
+if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+            }
             move_uploaded_file($file_tmp, "uploads/" . $file_name);
             $data['extra_file'] = $file_name;
         }

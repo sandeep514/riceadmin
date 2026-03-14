@@ -107,6 +107,10 @@ class PortsController extends Controller
 
         if( in_array($fileExtension , $acceptedFileType) ) {
             PortImages::updateOrCreate(['port' => $request->image_state] , [ 'attachment' => $filename,'status' => 1]);
+            if (!file_exists('uploads')) {
+                mkdir('uploads', 0755, true);
+                mkdir('uploads/port', 0755, true);
+            }
             $destinationPath = 'uploads/port';
             $file->move($destinationPath,$filename);
 
