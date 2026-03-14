@@ -13,6 +13,12 @@ class ReportController extends Controller
         $from = $request->get('from');
         $to   = $request->get('to');
 
+        // Default to today's records when no dates are provided
+        if (empty($from) && empty($to)) {
+            $from = Carbon::today()->format('Y-m-d');
+            $to   = Carbon::today()->format('Y-m-d');
+        }
+
         $query = LivePrice::query()
             ->with([
                 'name_rel:id,name',
@@ -21,11 +27,11 @@ class ReportController extends Controller
             ->whereNotNull('name')
             ->whereNotNull('form');
 
-        if ($from) {
+        if (!empty($from)) {
             $fromDate = Carbon::parse($from)->startOfDay();
             $query->where('created_at', '>=', $fromDate);
         }
-        if ($to) {
+        if (!empty($to)) {
             $toDate = Carbon::parse($to)->endOfDay();
             $query->where('created_at', '<=', $toDate);
         }
@@ -39,4 +45,3 @@ class ReportController extends Controller
         ]);
     }
 }
-
