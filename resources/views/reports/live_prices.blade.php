@@ -27,6 +27,19 @@
                         <label for="to">To</label>
                         <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
                     </div>
+                    <div class="form-group" style="margin-left:10px;">
+                        <label for="crop_year">Crop Year</label>
+                        <select id="crop_year" name="crop_year" class="form-control">
+                            <option value="">All</option>
+                            @if(!empty($cropYears))
+                                @foreach($cropYears as $y)
+                                    <option value="{{ $y }}" {{ (isset($cropYear) && (int)$cropYear === (int)$y) ? 'selected' : '' }}>
+                                        {{ $y }}
+                                    </option>
+                                @endforeach
+                            @endif
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary" style="margin-left:10px;">Apply</button>
                 </form>
             </div>
@@ -69,4 +82,3 @@
     </section>
 </div>
 @endsection
-

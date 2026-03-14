@@ -12,12 +12,23 @@ class ReportController extends Controller
     {
         $from = $request->get('from');
         $to   = $request->get('to');
+        $cropYear = $request->get('crop_year');
 
         // Default to today's records when no dates are provided
         if (empty($from) && empty($to)) {
             $from = Carbon::today()->format('Y-m-d');
             $to   = Carbon::today()->format('Y-m-d');
         }
+
+        // Distinct crop years for filter
+        $cropYears = LivePrice::query()
+            ->whereNotNull('cropYear')
+            ->select('cropYear')
+            ->distinct()
+            ->orderBy('cropYear', 'desc')
+            ->pluck('cropYear')
+            ->map(fn($y) => (int) $y)
+            ->toArray();
 
         $query = LivePrice::query()
             ->with([
@@ -36,12 +47,18 @@ class ReportController extends Controller
             $query->where('created_at', '<=', $toDate);
         }
 
-        $rows = $query->orderBy('created_at', 'desc')->limit(5000)->get();
+        if (!empty($cropYear)) {
+            $query->where('cropYear', (int) $cropYear);
+        }
+
+        $rows = $query->orderBy('created_at', 'desc')->get();
 
         return view('reports.live_prices', [
             'rows' => $rows,
             'from' => $from,
-            'to'   => $to
+            'to'   => $to,
+            'cropYears' => $cropYears,
+            'cropYear' => $cropYear
         ]);
     }
 }
