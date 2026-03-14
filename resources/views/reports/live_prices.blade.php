@@ -85,6 +85,7 @@
                 </table>
                 <div class="text-center">
                     <p>Page {{ $rows->currentPage() }} of {{ $rows->lastPage() }} — Total {{ $rows->total() }}</p>
+                    {{ $rows->onEachSide(1)->links() }}
                 </div>
             </div>
         </div>
