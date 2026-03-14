@@ -32,29 +32,32 @@ class ReportController extends Controller
             ->toArray();
 
         $query = LivePrice::query()
-            ->with([
-                'name_rel:id,name',
-                'form_rel:id,form_name'
-            ])
-            ->whereNotNull('name')
-            ->whereNotNull('form');
+            ->leftJoin('rice_names', 'live_prices.name', '=', 'rice_names.id')
+            ->leftJoin('rice_forms', 'live_prices.form', '=', 'rice_forms.id')
+            ->whereNotNull('live_prices.name')
+            ->whereNotNull('live_prices.form')
+            ->select([
+                'live_prices.*',
+                'rice_names.name as rice_name',
+                'rice_forms.form_name as rice_form_name'
+            ]);
 
         if (!empty($from)) {
             $fromDate = Carbon::parse($from)->startOfDay();
-            $query->where('created_at', '>=', $fromDate);
+            $query->where('live_prices.created_at', '>=', $fromDate);
         }
         if (!empty($to)) {
             $toDate = Carbon::parse($to)->endOfDay();
-            $query->where('created_at', '<=', $toDate);
+            $query->where('live_prices.created_at', '<=', $toDate);
         }
 
         if (!empty($cropYear)) {
-            $query->where('cropYear', (int) $cropYear);
+            $query->where('live_prices.cropYear', (int) $cropYear);
         }
 
         // Full export (CSV) with all matching rows, ignoring pagination
         if (!empty($export) && $export === 'csv') {
-            $allRows = $query->orderBy('created_at', 'desc')->get();
+            $allRows = $query->orderBy('live_prices.created_at', 'desc')->get();
             $filename = 'live_prices_' . ($from ?? 'start') . '_' . ($to ?? 'end') . ($cropYear ? '_'.$cropYear : '') . '.csv';
             $headers = [
                 'Content-Type' => 'text/csv',
@@ -66,8 +69,8 @@ class ReportController extends Controller
                 fputcsv($out, ['Rice Name','Rice Form','Date','Crop Year','Min Price','Max Price','Opening','Closing']);
                 foreach ($allRows as $r) {
                     fputcsv($out, [
-                        optional($r->name_rel)->name,
-                        optional($r->form_rel)->form_name,
+                        $r->rice_name,
+                        $r->rice_form_name,
                         Carbon::parse($r->created_at)->format('Y-m-d'),
                         $r->cropYear,
                         $r->min_price,
@@ -82,7 +85,7 @@ class ReportController extends Controller
         }
 
         // Paginated table for screen
-        $rows = $query->orderBy('created_at', 'desc')->paginate(50);
+        $rows = $query->orderBy('live_prices.created_at', 'desc')->paginate(50)->withQueryString();
 
         return view('reports.live_prices', [
             'rows' => $rows,

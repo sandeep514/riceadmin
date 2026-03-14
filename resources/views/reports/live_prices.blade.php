@@ -71,8 +71,8 @@
                     <tbody>
                         @foreach($rows as $r)
                             <tr>
-                                <td>{{ optional($r->name_rel)->name }}</td>
-                                <td>{{ optional($r->form_rel)->form_name }}</td>
+                                <td>{{ $r->rice_name }}</td>
+                                <td>{{ $r->rice_form_name }}</td>
                                 <td>{{ \Carbon\Carbon::parse($r->created_at)->format('Y-m-d') }}</td>
                                 <td>{{ $r->cropYear }}</td>
                                 <td>{{ $r->min_price }}</td>
@@ -84,7 +84,7 @@
                     </tbody>
                 </table>
                 <div class="text-center">
-                    {{ $rows->appends(request()->query())->links() }}
+                    <p>Page {{ $rows->currentPage() }} of {{ $rows->lastPage() }} — Total {{ $rows->total() }}</p>
                 </div>
             </div>
         </div>
