@@ -5135,7 +5135,7 @@ dd("kjnik");
         $contactMobile = $request->contactMobile;
         $userId = $request->user_id;
         $farming = $request->farming;
-        $type = $request->type ?? 'app';
+        $type = $request->type ?? 'app'; 
 
         if (isset($_FILES['extra_file'])) {
             $file_name      = $_FILES['extra_file']['name'];
