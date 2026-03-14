@@ -195,6 +195,9 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::put('loading/reports/update/{id}',['as'=>'update.loading-report','uses'=>'LoadingReportController@update']);
             Route::delete('loading/reports/delete/{id}',['as'=>'delete.loading-report','uses'=>'LoadingReportController@delete']);
 
+            // Live Prices Report
+            Route::get('reports/live-prices', [\App\Http\Controllers\ReportController::class, 'livePrices'])->name('reports.live-prices');
+
             //Sample Lab Report
             Route::group(['module'=>'sample_analysis_report','icon'=>'fa-flask'], function() {
                 Route::get('sample-lab/reports', ['as' => 'sample-lab-reports', 'uses' => 'SampleLabReportController@index','action'=>'view']);

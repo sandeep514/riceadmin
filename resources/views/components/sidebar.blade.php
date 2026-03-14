@@ -426,6 +426,20 @@
                     <span>Web Access</span>
                 </a>
             </li>
+            <li class="treeview {{ (in_array($currentRoute,['reports.live-prices']))?'active':'' }}">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-file-text-o"></i>
+                    <span>Reports</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ ($currentRoute == 'reports.live-prices') ? 'active' : '' }}">
+                        <a href="{{ route('reports.live-prices') }}"><i class="fa fa-circle-o"></i> Live Prices Report</a>
+                    </li>
+                </ul>
+            </li>
             <li class="header">PADDY</li>
             <li class="{{ (in_array($currentRoute,['list.web.paddy.state']))?'active':'' }}">
                 <a href="{{ route('list.web.paddy.state') }}">
