@@ -2099,31 +2099,31 @@ class ApiController extends Controller
 
         if(array_key_exists($implodeUnderscore , $temp)){
 
-            // Sort outer keys (rice names) by name_order
-            uksort($temp[$implodeUnderscore], function ($a, $b) use ($data) {
-                $aOrder = optional(
-                    $data->first(fn($x) => $x->name_rel && $x->name_rel->name == $a)
-                )->name_order ?? 999;
+            // Build fast lookup maps for numeric ordering
+            $nameOrderMap = [];
+            $formOrderMap = [];
+            foreach ($data as $row) {
+                if ($row->name_rel && isset($row->name_rel->name)) {
+                    $nameOrderMap[$row->name_rel->name] = (int) ($row->name_order ?? 999);
+                }
+                if ($row->form_rel && isset($row->form_rel->form_name)) {
+                    $formOrderMap[$row->form_rel->form_name] = (int) ($row->form_order ?? 999);
+                }
+            }
 
-                $bOrder = optional(
-                    $data->first(fn($x) => $x->name_rel && $x->name_rel->name == $b)
-                )->name_order ?? 999;
-
+            // Sort outer keys (rice names) by numeric name_order
+            uksort($temp[$implodeUnderscore], function ($a, $b) use ($nameOrderMap) {
+                $aOrder = $nameOrderMap[$a] ?? 999;
+                $bOrder = $nameOrderMap[$b] ?? 999;
                 return $aOrder <=> $bOrder;
             });
 
             foreach ($temp[$implodeUnderscore] as $riceType => $forms) {
 
-                // Sort inner keys (form names) by form_order
-                uksort($forms, function ($a, $b) use ($data) {
-                    $aOrder = optional(
-                        $data->first(fn($x) => $x->form_rel && $x->form_rel->form_name == $a)
-                    )->form_order ?? 999;
-
-                    $bOrder = optional(
-                        $data->first(fn($x) => $x->form_rel && $x->form_rel->form_name == $b)
-                    )->form_order ?? 999;
-
+                // Sort inner keys (form names) by numeric form_order
+                uksort($forms, function ($a, $b) use ($formOrderMap) {
+                    $aOrder = $formOrderMap[$a] ?? 999;
+                    $bOrder = $formOrderMap[$b] ?? 999;
                     return $aOrder <=> $bOrder;
                 });
 
