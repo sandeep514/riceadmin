@@ -1956,24 +1956,27 @@ class ApiController extends Controller
                       ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
                 }
             ])
+            ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
+            ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
+            ->select('live_prices.*')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
-            ->where('state', $state)
-            ->where('cropYear' , $cropYear)
-            ->orderByRaw('ISNULL(name_order) ASC, name_order ASC')
-            ->orderByRaw('ISNULL(form_order) ASC, form_order ASC')
-            ->whereDate('created_at',$lastEnteredRecord->created_at)
+            ->where('live_prices.state', $state)
+            ->where('live_prices.cropYear' , $cropYear)
+            ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
+            ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
+            ->whereDate('live_prices.created_at',$lastEnteredRecord->created_at)
             ->get();
 
         /*
         |--------------------------------------------------------------------------
-        | ✅ EXTRA SORT (name_order + form_order) — nulls last
+        | ✅ EXTRA SORT (name_rel.order + form_rel.order) — nulls last
         |--------------------------------------------------------------------------
         */
 
         $data = $data->sortBy([
-            [fn($x) => $x->name_order ?? 999, 'asc'],
-            [fn($x) => $x->form_order ?? 999, 'asc'],
+            [fn($x) => $x->name_rel->order ?? 999, 'asc'],
+            [fn($x) => $x->form_rel->order ?? 999, 'asc'],
         ])->values();
 
         /*
@@ -2099,15 +2102,15 @@ class ApiController extends Controller
 
         if(array_key_exists($implodeUnderscore , $temp)){
 
-            // Build fast lookup maps for numeric ordering
+            // Build fast lookup maps using rice_names.order and rice_forms.order
             $nameOrderMap = [];
             $formOrderMap = [];
             foreach ($data as $row) {
                 if ($row->name_rel && isset($row->name_rel->name)) {
-                    $nameOrderMap[$row->name_rel->name] = (int) ($row->name_order ?? 999);
+                    $nameOrderMap[$row->name_rel->name] = (int) ($row->name_rel->order ?? 999);
                 }
                 if ($row->form_rel && isset($row->form_rel->form_name)) {
-                    $formOrderMap[$row->form_rel->form_name] = (int) ($row->form_order ?? 999);
+                    $formOrderMap[$row->form_rel->form_name] = (int) ($row->form_rel->order ?? 999);
                 }
             }
 
