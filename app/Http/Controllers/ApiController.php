@@ -1960,20 +1960,20 @@ class ApiController extends Controller
             ->whereNotNull('max_price')
             ->where('state', $state)
             ->where('cropYear' , $cropYear)
-            ->orderBy('name_order')
-            ->orderBy('form_order')
+            ->orderByRaw('ISNULL(name_order) ASC, name_order ASC')
+            ->orderByRaw('ISNULL(form_order) ASC, form_order ASC')
             ->whereDate('created_at',$lastEnteredRecord->created_at)
             ->get();
 
         /*
         |--------------------------------------------------------------------------
-        | ✅ EXTRA SORT (form_order + name_order)
+        | ✅ EXTRA SORT (name_order + form_order) — nulls last
         |--------------------------------------------------------------------------
         */
 
         $data = $data->sortBy([
-            ['name_order', 'asc'],
-            ['form_order', 'asc'],
+            [fn($x) => $x->name_order ?? 999, 'asc'],
+            [fn($x) => $x->form_order ?? 999, 'asc'],
         ])->values();
 
         /*
