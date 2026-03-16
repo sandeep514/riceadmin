@@ -63,14 +63,15 @@ class LivePricesController extends Controller
 
         // lightweight grouped live prices (select only necessary columns)
         // $livePrice = LivePrice::select('id','state','min_price','max_price')->get()->groupBy('state');
-        $livePrice = LivePrice::selectRaw('state, MIN(min_price) as min_price, MAX(max_price) as max_price')
+        $livePrice = LivePrice::selectRaw('state_order,state, MIN(min_price) as min_price, MAX(max_price) as max_price')
             ->where('min_price', '>', 0)
             ->where('max_price', '>', 0)
+            ->orderBy('state_order')
             ->groupBy('state')
             ->get()
             ->keyBy('state');
 
-        // init variables
+            // init variables
         $riceModel = null;
         $riceForm  = null;        // note: singular key expected by your view
         $today_price = null;
@@ -139,6 +140,7 @@ class LivePricesController extends Controller
         $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
         
         $prices = collect();
+
         return view('live_prices.create', [
             'lastYears'  => $lastYears,
             'livePrice'  => $livePrice,
