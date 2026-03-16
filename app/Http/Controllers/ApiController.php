@@ -2098,15 +2098,30 @@ class ApiController extends Controller
         $implodeUnderscore = implode('_', $replaceHignfn);
 
         if(array_key_exists($implodeUnderscore , $temp)){
+
+            // Sort outer keys (rice names) by name_order
+            uksort($temp[$implodeUnderscore], function ($a, $b) use ($data) {
+                $aOrder = optional(
+                    $data->first(fn($x) => $x->name_rel && $x->name_rel->name == $a)
+                )->name_order ?? 999;
+
+                $bOrder = optional(
+                    $data->first(fn($x) => $x->name_rel && $x->name_rel->name == $b)
+                )->name_order ?? 999;
+
+                return $aOrder <=> $bOrder;
+            });
+
             foreach ($temp[$implodeUnderscore] as $riceType => $forms) {
 
+                // Sort inner keys (form names) by form_order
                 uksort($forms, function ($a, $b) use ($data) {
                     $aOrder = optional(
-                        $data->first(fn($x) => $x->form_rel->form_name == $a)
+                        $data->first(fn($x) => $x->form_rel && $x->form_rel->form_name == $a)
                     )->form_order ?? 999;
 
                     $bOrder = optional(
-                        $data->first(fn($x) => $x->form_rel->form_name == $b)
+                        $data->first(fn($x) => $x->form_rel && $x->form_rel->form_name == $b)
                     )->form_order ?? 999;
 
                     return $aOrder <=> $bOrder;
@@ -2235,7 +2250,7 @@ class ApiController extends Controller
         }
 
         $combine = array_combine($created_at, $max_price);
-
+        $arrayValuesPrices = '';
         $maxCount = 0;
         if( $combine ){
             $lowValue = min($combine);

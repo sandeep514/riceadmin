@@ -464,7 +464,7 @@ class PortalApiController extends Controller
         if ($userId != null) {
             $user = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
                 return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category' , 'getBagVendorWeb:id,category']);
-            }, 'getWebUserAttachment','getWebUserSubscription','role_rel'])->first();
+            }, 'getWebUserAttachment','getWebUserSubscription.planRel','role_rel'])->first();
 
             if (!$user) {
                 return response()->json(['status' => false, 'message' => 'User not found', 'data' => []], 404);

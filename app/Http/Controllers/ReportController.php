@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\LivePrice;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -34,12 +35,15 @@ class ReportController extends Controller
         $query = LivePrice::query()
             ->leftJoin('rice_names', 'live_prices.name', '=', 'rice_names.id')
             ->leftJoin('rice_forms', 'live_prices.form', '=', 'rice_forms.id')
+            ->leftJoin('rice_form_milestone3 as rfm3', 'live_prices.form', '=', 'rfm3.id')
             ->whereNotNull('live_prices.name')
             ->whereNotNull('live_prices.form')
+            ->where('live_prices.name', '>', 0)
+            ->where('live_prices.form', '>', 0)
             ->select([
                 'live_prices.*',
                 'rice_names.name as rice_name',
-                'rice_forms.form_name as rice_form_name'
+                DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name')
             ]);
 
         if (!empty($from)) {
