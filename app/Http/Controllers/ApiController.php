@@ -5955,8 +5955,8 @@ if (!file_exists('uploads')) {
         ];
         // $data = array();
 
-        // $mailTo = "enquiry@sntcgroup.com";
-        $mailTo = "sandy.singh51480@gmail.com";
+        $mailTo = "enquiry@sntcgroup.com";
+        // $mailTo = "sandy.singh51480@gmail.com";
         $mailMessage = '';
         $subject = 'Buy with SNTC - Web Version' ;
         $mailFrom = 'info@sntcgroup.com';
