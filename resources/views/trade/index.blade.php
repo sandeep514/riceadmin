@@ -40,6 +40,45 @@
                                 <a href="{{ route('master.trade.create') }}" class="btn btn-info btn-sm">Create</a>
                             </div>
                         </div>
+
+                        <div class="row" style="margin-top:10px;">
+                            <div class="col-md-12" style="display:flex; gap:10px; flex-wrap: wrap;">
+                                <a href="javascript:void(0)" class="btn btn-default js-trade-note" data-type="closing">
+                                    Closing <span class="badge">{{ $closingCount ?? 0 }}</span>
+                                </a>
+                                <a href="javascript:void(0)" class="btn btn-default js-trade-note" data-type="sold">
+                                    Sold <span class="badge">{{ $soldCount ?? 0 }}</span>
+                                </a>
+                                <a href="javascript:void(0)" class="btn btn-default js-trade-note" data-type="expired">
+                                    Expired <span class="badge">{{ $expiredCount ?? 0 }}</span>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="modal fade" id="tradeNoteModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title">Notice</h4>
+                                    </div>
+                                    <form id="tradePurgeForm" method="POST" action="{{ route('master.trade.purge.old') }}">
+                                        @csrf
+                                        <input type="hidden" name="type" id="purgeType" value="">
+                                        <div class="modal-body">
+                                            <p id="tradeNoteText"></p>
+                                            <p class="text-danger"><small>Note: Do you realy want to delete the records ?</small></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-danger">Confirm Update</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -91,7 +130,7 @@
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></div></td>
-                                                    <td>{{ App\TradeQueriesINR::$tradeStatus[$v->status] }}</td>
+                                                    <td>{{ App\TradeQueriesINR::$tradeStatus[$v->status] ?? 'Archived' }}</td>
                                                     <td>{{ $v->created_at }}</td>
 
 
@@ -154,6 +193,17 @@
             </div>
         </section>
     </div>
+@endsection
+@section('scripts')
+<script>
+    $(document).on('click','.js-trade-note',function(){
+        var type = $(this).data('type');
+        var label = type.charAt(0).toUpperCase() + type.slice(1);
+        $('#tradeNoteText').text('This action will delete  '+ label +' records older than 30 days.');
+        $('#purgeType').val(type);
+        $('#tradeNoteModal').modal('show');
+    });
+</script>
 @endsection
 
 @section('scripts')

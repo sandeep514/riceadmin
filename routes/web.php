@@ -552,6 +552,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::POST('trade/update' , ['as' => 'master.trade.update' , 'uses' => 'TradeController@update']);
     Route::get('trade/change/status/{tradeid}/{status}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
     Route::GET('update/trade/status/{tradeStatus}', ['as' => 'master.update.trade.create',    'uses' => 'TradeController@updateTradeStatus']);
+    Route::POST('trade/purge-old', ['as' => 'master.trade.purge.old', 'uses' => 'TradeController@purgeOldByStatus']);
 
     //paid email
     Route::GET('get/latest/date/live/prices', ['as' => 'master.get.latest.price',    'uses' => 'Controller@getLatestPrices']);

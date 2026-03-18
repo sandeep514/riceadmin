@@ -8,7 +8,7 @@ use App\Sample;
 use App\Notification;
 use App\Services\SampleService;
 use Illuminate\Http\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 use App\User;
 use App\TrialPeriod;
 use App\QualityMaster;
@@ -24,6 +24,8 @@ use App\Buyerpackinginr;
 use App\WandTypeModel;
 use App\TradeLike;
 use App\LivePrice;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class TradeController extends Controller
 {
@@ -42,6 +44,7 @@ class TradeController extends Controller
                 return $query->with('getWandType');
             }
         ])
+        ->where('status', '>', 0)
         ->orderByRaw("FIELD(status, 1,4,6,5,2,3,11,12)")
         ->orderBy('id', 'DESC')
         ->get();
@@ -50,9 +53,35 @@ class TradeController extends Controller
         $tradeCurrentStatus = TradeCurrentStatus::first();
         $currentTrade = $tradeStatus[$tradeCurrentStatus->id];
 
-        return View('trade.index' , compact('sellQueries' , 'currentTrade'));
+        $cutoff = Carbon::now()->subDays(30)->startOfDay();
+
+        $closingCount = TradeQueriesINR::where('status', 11)->where('created_at', '<=', $cutoff)->count();
+        $soldCount    = TradeQueriesINR::where('status', 3)->where('created_at', '<=', $cutoff)->count();
+        $expiredCount = TradeQueriesINR::where('status', 2)->where('created_at', '<=', $cutoff)->count();
+
+        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount'));
     }
 
+    public function purgeOldByStatus(Request $request)
+    {
+        $type = $request->input('type'); // closing | sold | expired
+        $map = [
+            'closing' => 11,
+            'sold'    => 3,
+            'expired' => 2,
+        ];
+        if (!array_key_exists($type, $map)) {
+            Session::flash('error','Error|Invalid type selected.');
+            return back();
+        }
+        $status = $map[$type];
+        $cutoff = Carbon::now()->subDays(30)->startOfDay();
+        $updated = TradeQueriesINR::where('status', $status)
+            ->where('created_at', '<=', $cutoff)
+            ->update(['status' => 0]);
+        Session::flash('success','Success|Records deleted for '.$updated.' records of '.$type.' older than 30 days.');
+        return back();
+    }
     
 
     public function create(){
