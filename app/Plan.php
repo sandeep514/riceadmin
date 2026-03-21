@@ -7,7 +7,7 @@ use App\SubPlan;
 
 class Plan extends Model
 {
-    protected $fillable = ['plan_name' , 'sub_plan','chart_int','price'];
+    protected $fillable = ['plan_name', 'role_id', 'category_id', 'sub_plan', 'chart_int', 'price'];
     protected $table = "plan";
     
     public function sub_plan(){

@@ -155,6 +155,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('web-access/update/{id}', ['as' => 'update.web-access', 'uses' => 'WebAccessController@update','action'=>'edit']);
                 Route::delete('web-access/delete/{id}', ['as' => 'delete.web-access', 'uses' => 'WebAccessController@delete','action'=>'delete']);
                 Route::get('web-access/get-categories', ['as' => 'web-access.get-categories', 'uses' => 'WebAccessController@getCategoriesByRole']);
+                Route::get('web-access/get-plan', ['as' => 'web-access.get-plan', 'uses' => 'WebAccessController@getPlanByRoleCategory']);
             });
 
             //Sample Registers

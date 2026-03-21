@@ -19,6 +19,8 @@ use App\RiceForm;
 use App\SubPlan;
 use App\Plan;
 use App\ChartInterval;
+use App\Role;
+use App\CategoryRoleMap;
 use App\DataTables\PlanDataTable;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -60,17 +62,30 @@ class PlanController extends Controller
     public function create(){
         $SubPlan = SubPlan::get();
         $ChartInterval = ChartInterval::get();
+        $roles = Role::pluck('role_name', 'id');
         
-        return view('plans.create', compact('SubPlan','ChartInterval'));
+        return view('plans.create', compact('SubPlan', 'ChartInterval', 'roles'));
     }
    
    public function save(Request $request){
-        $name = $request->plan_name;
-        $chartint = array_filter($request->chartint);
-        $subplan = array_filter($request->subplan);
+        $roleId = $request->role_id;
+        $categoryId = $request->category_id;
+
+        // Build plan_name as roleName_categoryName combination
+        $role = Role::find($roleId);
+        $category = CategoryRoleMap::with('category_rel')->where('role', $roleId)->where('category', $categoryId)->first();
+        
+        $roleName = $role ? strtolower(str_replace(' ', '_', $role->role_name)) : 'unknown';
+        $categoryName = ($category && $category->category_rel) ? strtolower(str_replace(' ', '_', $category->category_rel->category)) : 'unknown';
+        $name = $roleName . '_' . $categoryName;
+
+        $chartint = array_filter($request->chartint ?? []);
+        $subplan = array_filter($request->subplan ?? []);
        
         $plan = Plan::create([
                     'plan_name' => $name,
+                    'role_id'   => $roleId,
+                    'category_id' => $categoryId,
                     'sub_plan' => json_encode($subplan),
                     'chart_int' => json_encode($chartint),
                     'price' => 0
@@ -82,6 +97,7 @@ class PlanController extends Controller
    public function editPlan($id){
         $plan = Plan::whereId($id)->get();
         $ChartInterval = ChartInterval::get();
+        $roles = Role::pluck('role_name', 'id');
         
         $SubPlans = SubPlan::get();
         $sub_plan = [];
@@ -108,18 +124,29 @@ class PlanController extends Controller
         $chartInt = ChartInterval::select('id')->whereIn('id' , array_values($chart_int))->get()->pluck('id');
         $chartIntArray = $chartInt->toArray();
         
-        return view('plans.edit', compact('data' ,'SubPlans' , 'SubPlan', 'ChartInterval', 'plan' , 'chartInt','chartIntArray'));
+        return view('plans.edit', compact('data' ,'SubPlans' , 'SubPlan', 'ChartInterval', 'plan' , 'chartInt','chartIntArray', 'roles'));
     }
     
     public function updatePlan(Request $request){
 
         $id = $request->plan_id;
-        $name = $request->plan_name;
-        $chartint = array_filter($request->chartint);
-        $subplan = array_filter($request->subplan);
+        $roleId = $request->role_id;
+        $categoryId = $request->category_id;
+
+        // Re-generate plan_name from role + category
+        $role = Role::find($roleId);
+        $category = CategoryRoleMap::with('category_rel')->where('role', $roleId)->where('category', $categoryId)->first();
+        $roleName = $role ? strtolower(str_replace(' ', '_', $role->role_name)) : 'unknown';
+        $categoryName = ($category && $category->category_rel) ? strtolower(str_replace(' ', '_', $category->category_rel->category)) : 'unknown';
+        $name = $roleName . '_' . $categoryName;
+
+        $chartint = array_filter($request->chartint ?? []);
+        $subplan = array_filter($request->subplan ?? []);
 
         $plan = Plan::where('id' , $id)->update([
                                                 'plan_name' => $name,
+                                                'role_id'   => $roleId,
+                                                'category_id' => $categoryId,
                                                 'sub_plan' => json_encode($subplan),
                                                 'chart_int' => json_encode($chartint),
                                                 'price' => 0

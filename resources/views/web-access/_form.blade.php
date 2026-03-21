@@ -31,19 +31,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="form-group col-md-6 @error('plan_id') has-error @enderror">
+        <div class="form-group col-md-6">
             {!! Form::label('plan_id','Plan') !!}
             @if(isset($access))
-                {!! Form::select('plan_id', ['' => 'Select Plan'] + $plans, $access->plan_id, ['class'=>'form-control','id'=>'plan_id','disabled'=>'disabled']) !!}
-                {!! Form::hidden('plan_id', $access->plan_id) !!}
+                {!! Form::hidden('plan_id', $access->plan_id, ['id'=>'plan_id']) !!}
             @else
-                {!! Form::select('plan_id', ['' => 'Select Plan'] + $plans, old('plan_id'), ['class'=>'form-control','id'=>'plan_id']) !!}
+                <input type="hidden" name="plan_id" id="plan_id" value="">
             @endif
-            @error('plan_id')
-                <span class="help-block text-danger" role="alert">
-                    {{ $message }}
-                </span>
-            @enderror
+            <input type="text" id="plan_display"
+                   class="form-control"
+                   value="{{ isset($access) && $access->plan ? $access->plan->title : '' }}"
+                   placeholder="Auto-filled from Role + Category"
+                   readonly disabled
+                   style="background:#f5f5f5; cursor:not-allowed;">
+            <small class="help-block">Automatically selected based on Role &amp; Category.</small>
         </div>
     </div>
     @php

@@ -41,16 +41,44 @@
 @section('javascript')
     <script>
         $(document).ready(function() {
+
+            function loadPlan(roleId, categoryId) {
+                if (roleId && categoryId) {
+                    $.ajax({
+                        url: "{{ route('web-access.get-plan') }}",
+                        type: "GET",
+                        data: { role_id: roleId, category_id: categoryId },
+                        success: function(data) {
+                            if (data && data.found) {
+                                $('#plan_id').val(data.id);
+                                $('#plan_display').val(data.title);
+                            } else {
+                                $('#plan_id').val('');
+                                $('#plan_display').val('No plan found for this Role + Category');
+                            }
+                        },
+                        error: function() {
+                            $('#plan_id').val('');
+                            $('#plan_display').val('Error loading plan');
+                        }
+                    });
+                } else {
+                    $('#plan_id').val('');
+                    $('#plan_display').val('');
+                }
+            }
+
             // Load categories when role is selected
             $('#role_id').on('change', function() {
                 var roleId = $(this).val();
                 var categorySelect = $('#category_id');
+
+                // Reset plan
+                $('#plan_id').val('');
+                $('#plan_display').val('');
                 
                 if(roleId) {
-                    // Enable category dropdown
                     categorySelect.prop('disabled', false);
-                    
-                    // Show loading state
                     categorySelect.html('<option value="">Loading categories...</option>');
                     
                     $.ajax({
@@ -75,11 +103,17 @@
                         }
                     });
                 } else {
-                    // Disable and clear category dropdown
                     categorySelect.prop('disabled', true);
                     categorySelect.empty();
                     categorySelect.append('<option value="">Select Category</option>');
                 }
+            });
+
+            // Load plan when category is selected
+            $('#category_id').on('change', function() {
+                var roleId     = $('#role_id').val();
+                var categoryId = $(this).val();
+                loadPlan(roleId, categoryId);
             });
         });
     </script>

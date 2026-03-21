@@ -7,6 +7,8 @@ use App\WebPlanModel;
 use App\WebPlanKeysModel;
 use App\WebPlanKeysMapModel;
 use App\Events\AdminEvent;
+use App\Role;
+use App\CategoryRoleMap;
 use Illuminate\Support\Facades\Validator;
 
 use Session;
@@ -100,13 +102,15 @@ class WebPlanController extends Controller
 
     public function createPlan(){
         $WebPlanKeysModel = WebPlanKeysModel::get();
-        return View('webplans.create',compact('WebPlanKeysModel'));
+        $roles = Role::where('type', 'web')->pluck('role_name', 'id');
+        return View('webplans.create', compact('WebPlanKeysModel', 'roles'));
     }
 
     public function savePlan(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'plan' => 'required',
+            'role_id'    => 'required',
+            'category_id' => 'required',
             'monthly_price' => 'required|numeric|min:0',
             'quarterly_price' => 'required|numeric|min:0',
             'yearly_price' => 'required|numeric|min:0',
@@ -122,15 +126,35 @@ class WebPlanController extends Controller
             ], 422);
         }
 
+        // Build title from role + category
+        $role = Role::find($request->role_id);
+        $categoryMap = CategoryRoleMap::with('category_rel')
+            ->where('role', $request->role_id)
+            ->where('category', $request->category_id)
+            ->first();
+        $roleName = $role ? strtolower(str_replace(' ', '_', $role->role_name)) : 'unknown';
+        $categoryName = ($categoryMap && $categoryMap->category_rel) ? strtolower(str_replace(' ', '_', $categoryMap->category_rel->category)) : 'unknown';
+        $planTitle = $roleName . '_' . $categoryName;
+
         $mDisc = (float) ($request->monthly_discount_percentage ?? 0);
         $qDisc = (float) ($request->quarterly_discount_percentage ?? 0);
         $yDisc = (float) ($request->yearly_discount_percentage ?? 0);
-        $monthlyFinal = $request->monthly_price !== null ? round($request->monthly_price - ($request->monthly_price * $mDisc / 100), 2) : null;
-        $quarterlyFinal = $request->quarterly_price !== null ? round($request->quarterly_price - ($request->quarterly_price * $qDisc / 100), 2) : null;
-        $yearlyFinal = $request->yearly_price !== null ? round($request->yearly_price - ($request->yearly_price * $yDisc / 100), 2) : null;
+        $mGst  = (float) ($request->monthly_gst ?? 0);
+        $qGst  = (float) ($request->quarterly_gst ?? 0);
+        $yGst  = (float) ($request->yearly_gst ?? 0);
+
+        $monthlyAfterDisc   = $request->monthly_price   !== null ? $request->monthly_price   - ($request->monthly_price   * $mDisc / 100) : null;
+        $quarterlyAfterDisc = $request->quarterly_price !== null ? $request->quarterly_price - ($request->quarterly_price * $qDisc / 100) : null;
+        $yearlyAfterDisc    = $request->yearly_price    !== null ? $request->yearly_price    - ($request->yearly_price    * $yDisc / 100) : null;
+
+        $monthlyFinal   = $monthlyAfterDisc   !== null ? round($monthlyAfterDisc   + ($monthlyAfterDisc   * $mGst / 100), 2) : null;
+        $quarterlyFinal = $quarterlyAfterDisc !== null ? round($quarterlyAfterDisc + ($quarterlyAfterDisc * $qGst / 100), 2) : null;
+        $yearlyFinal    = $yearlyAfterDisc    !== null ? round($yearlyAfterDisc    + ($yearlyAfterDisc    * $yGst / 100), 2) : null;
 
         $WebPlanModel = WebPlanModel::create([
-            'title' => $request->plan,
+            'title' => $planTitle,
+            'role_id' => $request->role_id,
+            'category_id' => $request->category_id,
             'amount' => $request->monthly_price,
             'discount_percentage' => null,
             'monthly_price' => $request->monthly_price,
@@ -142,6 +166,9 @@ class WebPlanController extends Controller
             'monthly_discount_percentage' => $request->monthly_discount_percentage,
             'quarterly_discount_percentage' => $request->quarterly_discount_percentage,
             'yearly_discount_percentage' => $request->yearly_discount_percentage,
+            'monthly_gst' => $request->monthly_gst,
+            'quarterly_gst' => $request->quarterly_gst,
+            'yearly_gst' => $request->yearly_gst,
         ]);
         $planKeyMap = [];
         if( $request->available  ){
@@ -163,7 +190,8 @@ class WebPlanController extends Controller
         }])->first();
         $selectedMapKeys = $data->getPlanKeyMap->pluck( 'value' , 'key_id' );
         $WebPlanKeysModel = WebPlanKeysModel::get();
-        return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel'));
+        $roles = Role::where('type', 'web')->pluck('role_name', 'id');
+        return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel','roles'));
     }
 
     public function updatePlan(Request $request)
@@ -188,9 +216,17 @@ class WebPlanController extends Controller
         $mDisc = (float) ($request->monthly_discount_percentage ?? 0);
         $qDisc = (float) ($request->quarterly_discount_percentage ?? 0);
         $yDisc = (float) ($request->yearly_discount_percentage ?? 0);
-        $monthlyFinal = $request->monthly_price !== null ? round($request->monthly_price - ($request->monthly_price * $mDisc / 100), 2) : null;
-        $quarterlyFinal = $request->quarterly_price !== null ? round($request->quarterly_price - ($request->quarterly_price * $qDisc / 100), 2) : null;
-        $yearlyFinal = $request->yearly_price !== null ? round($request->yearly_price - ($request->yearly_price * $yDisc / 100), 2) : null;
+        $mGst  = (float) ($request->monthly_gst ?? 0);
+        $qGst  = (float) ($request->quarterly_gst ?? 0);
+        $yGst  = (float) ($request->yearly_gst ?? 0);
+
+        $monthlyAfterDisc   = $request->monthly_price   !== null ? $request->monthly_price   - ($request->monthly_price   * $mDisc / 100) : null;
+        $quarterlyAfterDisc = $request->quarterly_price !== null ? $request->quarterly_price - ($request->quarterly_price * $qDisc / 100) : null;
+        $yearlyAfterDisc    = $request->yearly_price    !== null ? $request->yearly_price    - ($request->yearly_price    * $yDisc / 100) : null;
+
+        $monthlyFinal   = $monthlyAfterDisc   !== null ? round($monthlyAfterDisc   + ($monthlyAfterDisc   * $mGst / 100), 2) : null;
+        $quarterlyFinal = $quarterlyAfterDisc !== null ? round($quarterlyAfterDisc + ($quarterlyAfterDisc * $qGst / 100), 2) : null;
+        $yearlyFinal    = $yearlyAfterDisc    !== null ? round($yearlyAfterDisc    + ($yearlyAfterDisc    * $yGst / 100), 2) : null;
 
         $WebPlanModel = WebPlanModel::where('id' , $request->id)->update([
             'title' => $request->planKey,
@@ -205,6 +241,9 @@ class WebPlanController extends Controller
             'monthly_discount_percentage' => $request->monthly_discount_percentage,
             'quarterly_discount_percentage' => $request->quarterly_discount_percentage,
             'yearly_discount_percentage' => $request->yearly_discount_percentage,
+            'monthly_gst' => $request->monthly_gst,
+            'quarterly_gst' => $request->quarterly_gst,
+            'yearly_gst' => $request->yearly_gst,
         ]);
         $planKeyMap = [];
         if( $request->available  ){

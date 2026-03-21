@@ -157,5 +157,42 @@ class WebAccessController extends Controller
         return response()->json($categories);
     }
 
+    public function getPlanByRoleCategory(Request $request)
+    {
+        $roleId     = $request->role_id;
+        $categoryId = $request->category_id;
+
+        // 1. Try exact match by role_id + category_id
+        $plan = WebPlanModel::where('role_id', $roleId)
+            ->where('category_id', $categoryId)
+            ->where('status', 1)
+            ->first(['id', 'title']);
+
+        // 2. Fallback: match by auto-generated title pattern (roleName_categoryName)
+        if (!$plan) {
+            $role        = Role::find($roleId);
+            $categoryMap = CategoryRoleMap::with('category_rel')
+                ->where('role', $roleId)
+                ->where('category', $categoryId)
+                ->first();
+
+            if ($role && $categoryMap && $categoryMap->category_rel) {
+                $slug = strtolower(str_replace(' ', '_', $role->role_name))
+                      . '_'
+                      . strtolower(str_replace(' ', '_', $categoryMap->category_rel->category));
+
+                $plan = WebPlanModel::where('title', $slug)
+                    ->where('status', 1)
+                    ->first(['id', 'title']);
+            }
+        }
+
+        if ($plan) {
+            return response()->json(['found' => true, 'id' => $plan->id, 'title' => $plan->title]);
+        }
+
+        return response()->json(['found' => false, 'id' => null, 'title' => null]);
+    }
+
 }
 

@@ -9,6 +9,8 @@ class WebPlanModel extends Model
     protected $table = 'web_plan';
     protected $fillable = [
         'title',
+        'role_id',
+        'category_id',
         'short_description',
         'description',
         'amount',
@@ -22,6 +24,9 @@ class WebPlanModel extends Model
         'monthly_discount_percentage',
         'quarterly_discount_percentage',
         'yearly_discount_percentage',
+        'monthly_gst',
+        'quarterly_gst',
+        'yearly_gst',
         'is_INR',
         'is_USD',
         'status'

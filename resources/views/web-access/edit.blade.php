@@ -42,10 +42,39 @@
     <script>
         $(document).ready(function() {
             var selectedCategoryId = "{{ $access->category_id ?? '' }}";
-            
+
+            function loadPlan(roleId, categoryId) {
+                if (roleId && categoryId) {
+                    $.ajax({
+                        url: "{{ route('web-access.get-plan') }}",
+                        type: "GET",
+                        data: { role_id: roleId, category_id: categoryId },
+                        success: function(data) {
+                            if (data && data.found) {
+                                $('#plan_id').val(data.id);
+                                $('#plan_display').val(data.title);
+                            } else {
+                                $('#plan_id').val('');
+                                $('#plan_display').val('No plan found for this Role + Category');
+                            }
+                        },
+                        error: function() {
+                            $('#plan_id').val('');
+                            $('#plan_display').val('Error loading plan');
+                        }
+                    });
+                } else {
+                    $('#plan_id').val('');
+                    $('#plan_display').val('');
+                }
+            }
+
             // Load categories when role is selected
             $('#role_id').on('change', function() {
                 var roleId = $(this).val();
+                $('#plan_id').val('');
+                $('#plan_display').val('');
+
                 if(roleId) {
                     $.ajax({
                         url: "{{ route('web-access.get-categories') }}",
@@ -58,6 +87,10 @@
                                 var selected = (key == selectedCategoryId) ? 'selected' : '';
                                 $('#category_id').append('<option value="'+key+'" '+selected+'>'+value+'</option>');
                             });
+                            // After loading categories, load plan for pre-selected category
+                            if (selectedCategoryId) {
+                                loadPlan(roleId, selectedCategoryId);
+                            }
                         }
                     });
                 } else {
@@ -65,7 +98,12 @@
                     $('#category_id').append('<option value="">Select Category</option>');
                 }
             });
-            
+
+            // Load plan when category changes
+            $('#category_id').on('change', function() {
+                loadPlan($('#role_id').val(), $(this).val());
+            });
+
             // Trigger on page load if role is already selected
             if($('#role_id').val()) {
                 $('#role_id').trigger('change');

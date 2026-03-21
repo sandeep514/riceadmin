@@ -38,3 +38,58 @@
         </section>
     </div>
 @endsection
+
+@section('javascript')
+<script>
+$(document).ready(function() {
+    function slugify(text) {
+        return text.toString().toLowerCase().trim().replace(/\s+/g, '_').replace(/[^\w_]/g, '');
+    }
+
+    function updatePlanTitle() {
+        var roleText = $('#role_id option:selected').text().trim();
+        var catText  = $('#category_id option:selected').text().trim();
+        var invalid  = ['', 'Select Role', 'Select Role first', 'Select Category', 'No categories available', 'Loading...'];
+        if (invalid.indexOf(roleText) === -1 && invalid.indexOf(catText) === -1) {
+            $('#plan_title').val(slugify(roleText) + '_' + slugify(catText));
+        } else {
+            $('#plan_title').val('');
+        }
+    }
+
+    $('#role_id').on('change', function() {
+        var roleId = $(this).val();
+        var catSel = $('#category_id');
+        catSel.empty().append('<option value="">Loading...</option>');
+        $('#plan_title').val('');
+
+        if (roleId) {
+            $.ajax({
+                url: "{{ route('web-access.get-categories') }}",
+                type: 'GET',
+                data: { role_id: roleId },
+                success: function(data) {
+                    catSel.empty().append('<option value="">Select Category</option>');
+                    if (Object.keys(data).length > 0) {
+                        $.each(data, function(key, value) {
+                            catSel.append('<option value="' + key + '">' + value + '</option>');
+                        });
+                    } else {
+                        catSel.append('<option value="">No categories available</option>');
+                    }
+                },
+                error: function() {
+                    catSel.empty().append('<option value="">Error loading categories</option>');
+                }
+            });
+        } else {
+            catSel.empty().append('<option value="">Select Role first</option>');
+        }
+    });
+
+    $('#category_id').on('change', function() {
+        updatePlanTitle();
+    });
+});
+</script>
+@endsection
