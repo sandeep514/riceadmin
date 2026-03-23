@@ -147,6 +147,8 @@ class WebAccessController extends Controller
             ->with('category_rel')
             ->get();
         
+        return response()->json($categoryMaps);
+
         $categories = [];
         foreach($categoryMaps as $map) {
             if($map->category_rel) {

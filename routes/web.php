@@ -158,6 +158,10 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('web-access/get-plan', ['as' => 'web-access.get-plan', 'uses' => 'WebAccessController@getPlanByRoleCategory']);
             });
 
+            // Role Category Map
+            Route::get('role-category-map', ['as' => 'role-category-map.index', 'uses' => 'RoleCategoryMapController@index']);
+            Route::post('role-category-map/save', ['as' => 'role-category-map.save', 'uses' => 'RoleCategoryMapController@save']);
+
             //Sample Registers
             Route::group(['module'=>'sample_register','icon'=>'fa-database'], function() {
                 Route::get('sample-registers', ['as' => 'sample-registers', 'uses' => 'SampleRegistersController@index','action'=>'view']);

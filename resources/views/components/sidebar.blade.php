@@ -426,6 +426,12 @@
                     <span>Web Access</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['role-category-map.index']))?'active':'' }}">
+                <a href="{{ route('role-category-map.index') }}">
+                    <i class="fa fa-sitemap"></i>
+                    <span>Role Category Map</span>
+                </a>
+            </li>
             <li class="treeview {{ (in_array($currentRoute,['reports.live-prices']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-file-text-o"></i>
