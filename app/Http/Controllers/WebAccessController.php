@@ -146,8 +146,6 @@ class WebAccessController extends Controller
             ->where('status', 1)
             ->with('category_rel')
             ->get();
-        
-        return response()->json($categoryMaps);
 
         $categories = [];
         foreach($categoryMaps as $map) {
@@ -155,7 +153,7 @@ class WebAccessController extends Controller
                 $categories[$map->category_rel->id] = $map->category_rel->category;
             }
         }
-        
+
         return response()->json($categories);
     }
 
