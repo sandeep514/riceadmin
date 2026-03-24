@@ -577,6 +577,62 @@ class PortalApiController extends Controller
     }
 
     /**
+     * POST /api/portal/web/plans/by-role-category
+     * Payload: { "role": 4, "category": 2 }
+     */
+    public function getWebPlansByRoleCategory(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'role' => 'required|integer|exists:roles,id',
+            'category' => 'required|integer|exists:category,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $roleId = (int) $request->role;
+        $categoryId = (int) $request->category;
+
+        $plans = WebPlanModel::select([
+                'id',
+                'title',
+                'role_id',
+                'category_id',
+                'short_description',
+                'description',
+                'monthly_price',
+                'quarterly_price',
+                'yearly_price',
+                'monthly_discount_percentage',
+                'quarterly_discount_percentage',
+                'yearly_discount_percentage',
+                'monthly_final_amount',
+                'quarterly_final_amount',
+                'yearly_final_amount',
+            ])
+            ->where('status', 1)
+            ->where('role_id', $roleId)
+            ->where('category_id', $categoryId)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Web plan list fetched successfully',
+            'data' => [
+                'role' => $roleId,
+                'category' => $categoryId,
+                'plans' => $plans
+            ]
+        ], 200);
+    }
+
+    /**
      * GET /api/portal/years/closure-status
      * Returns last 5 years with is_closed true/false depending on whether
      * all active rice forms have a closing recorded for that cropYear.
