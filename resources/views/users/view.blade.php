@@ -13,7 +13,7 @@
 				<tr><th>Name</th><td>{{ $user['name'] ?? '-' }}</td></tr>
 				<tr><th>Email</th><td>{{ $user['email'] ?? '-' }}</td></tr>
 				<tr><th>Mobile</th><td>{{ $user['mobile'] ?? '-' }}</td></tr>
-				<tr><th>Role</th><td>{{ $user['role'] ?? '-' }}</td></tr>
+				<tr><th>Role</th><td>{{ $user['role_rel']['role_name'] ?? ($user['role'] ?? '-') }}</td></tr>
 				<tr>
 					<th>Status</th>
 					<td>
@@ -116,7 +116,7 @@
 			<h3>Business Details</h3>
 			<table class="table">
 				<tr><th>Company Name</th><td>{{ $user['get_web_business_details']['company_name'] ?? '-' }}</td></tr>
-				<tr><th>Selected Category</th><td>{{ $user['get_web_business_details']['selected_category'] ?? '-' }}</td></tr>
+				<tr><th>Selected Category</th><td>{{ $user['get_web_business_details']['get_category_details']['category'] ?? ($user['get_web_business_details']['selected_category'] ?? '-') }}</td></tr>
 				<tr><th>Address</th><td>{{ $user['get_web_business_details']['address'] ?? '-' }}</td></tr>
 				<tr><th>City</th><td>{{ $user['get_web_business_details']['city_rel']['city_name'] ?? '-' }}</td></tr>
 				<tr><th>State</th><td>{{ $user['get_web_business_details']['state_rel']['state_name'] ?? '-' }}</td></tr>

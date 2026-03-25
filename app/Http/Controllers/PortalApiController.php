@@ -617,7 +617,10 @@ class PortalApiController extends Controller
                 'yearly_discount_percentage',
                 'monthly_final_amount',
                 'quarterly_final_amount',
-                'yearly_final_amount'
+                'yearly_final_amount',
+                'monthly_gst',
+                'quarterly_gst',
+                'yearly_gst',
             ])
             ->where('status', 1)
             ->where('role_id', $roleId)
@@ -633,6 +636,11 @@ class PortalApiController extends Controller
                         'short_description' => $q->short_description,
                         'description' => $q->description,
                         'status' => $q->status,
+                        'gst' => [
+                            'monthly' => $q->monthly_gst,
+                            'quarterly' => $q->quarterly_gst,
+                            'yearly' => $q->yearly_gst,
+                        ],
                     ],
                     'pricing' => [
                         'monthly' => [

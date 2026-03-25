@@ -110,8 +110,8 @@ class UsersController extends Controller
     public function view($userId)
     {
         $user = User::with(['getWebPersonalDetails','getWebBusinessDetails' => function($q){
-            return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name']);
-        } , 'getWebUserAttachment' , 'getWebUserSubscription'])->find($userId)->toArray();
+            return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category']);
+        } , 'getWebUserAttachment' , 'getWebUserSubscription', 'role_rel:id,role_name'])->find($userId)->toArray();
 
         return view('users.view',['user' => $user]);
     }
