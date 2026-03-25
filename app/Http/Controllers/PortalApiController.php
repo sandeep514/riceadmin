@@ -636,27 +636,25 @@ class PortalApiController extends Controller
                         'short_description' => $q->short_description,
                         'description' => $q->description,
                         'status' => $q->status,
-                        'gst' => [
-                            'monthly' => $q->monthly_gst,
-                            'quarterly' => $q->quarterly_gst,
-                            'yearly' => $q->yearly_gst,
-                        ],
                     ],
                     'pricing' => [
                         'monthly' => [
                             'price' => $q->monthly_price,
                             'discount_percentage' => $q->monthly_discount_percentage,
                             'final_amount' => $q->monthly_final_amount,
+                            'gst' => $q->monthly_gst,
                         ],
                         'quarterly' => [
                             'price' => $q->quarterly_price,
                             'discount_percentage' => $q->quarterly_discount_percentage,
                             'final_amount' => $q->quarterly_final_amount,
+                            'gst' => $q->quarterly_gst,
                         ],
                         'yearly' => [
                             'price' => $q->yearly_price,
                             'discount_percentage' => $q->yearly_discount_percentage,
                             'final_amount' => $q->yearly_final_amount,
+                            'gst' => $q->yearly_gst,
                         ],
                     ],
                     'availableKeys' => $q->getPlanKeyMap->pluck('key_id'),
