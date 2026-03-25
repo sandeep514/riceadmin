@@ -981,7 +981,8 @@ class PortalApiController extends Controller
     {
         // Validate input
         $validator = \Validator::make($request->all(), [
-            'user_id' => 'required|integer|exists:users,id'
+            'user_id' => 'required|integer|exists:users,id',
+            'plan_id' => 'nullable|integer|exists:web_plan,id',
         ]);
 
         if ($validator->fails()) {
@@ -1028,13 +1029,15 @@ class PortalApiController extends Controller
         // Get user's category from business details
         $categoryId = null;
         if ($user->getWebBusinessDetails && $user->getWebBusinessDetails->selected_category) {
-            $categoryId = $user->getWebBusinessDetails->selected_category;
+            $categoryId = (int) $user->getWebBusinessDetails->selected_category;
         }
 
         // Check for active subscription (period_end >= today)
         $subscription = WebUserSubscriptionModel::where('user_id', $userId)
             ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
-            ->where('status', 1)
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            })
             ->orderBy('id', 'desc')
             ->first();
         
@@ -1045,13 +1048,38 @@ class PortalApiController extends Controller
             ], 200);
         }
 
-        // Get plan_id from active subscription
-        $planId = $subscription->plan_id;
+        // Get plan_id from active subscription (optional override from client)
+        $planId = $request->filled('plan_id')
+            ? (int) $request->plan_id
+            : (int) $subscription->plan_id;
 
-        // Build query for web_access
-        $webAccessQuery = WebAccess::where('role_id', $roleId)
-            ->where('plan_id', $planId)
+        // All web_plan rows for this role + category (subscription plan may not match web_access.plan_id)
+        $plansForRoleCategory = WebPlanModel::query()
+            ->where('role_id', $roleId)
             ->where('status', 1)
+            ->when($categoryId !== null, function ($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            }, function ($q) {
+                $q->whereNull('category_id');
+            })
+            ->pluck('id');
+
+        $candidatePlanIds = collect([$planId])
+            ->merge($plansForRoleCategory)
+            ->unique()
+            ->filter()
+            ->values()
+            ->all();
+
+        // Build query for web_access:
+        // - match subscription / same role+category plan ids
+        // - OR plan_id IS NULL (saved as "any plan" for that role/category in admin)
+        $webAccessQuery = WebAccess::where('role_id', $roleId)
+            ->where('status', 1)
+            ->where(function ($q) use ($candidatePlanIds) {
+                $q->whereIn('plan_id', $candidatePlanIds)
+                    ->orWhereNull('plan_id');
+            })
             ->with(['webSideMenu:id,title,sub_title,slug,create_url,read_url,update_url,delete_url,sort_order']);
 
         // Add category filter if category exists
@@ -1065,7 +1093,7 @@ class PortalApiController extends Controller
         }
 
         // Get web access permissions and order by menu sort_order
-        $webAccess = $webAccessQuery->get()->sortBy(function($access) {
+        $webAccess = $webAccessQuery->get()->unique('web_side_menu_id')->sortBy(function($access) {
             // Sort by menu's sort_order, then by menu id if sort_order is same
             if ($access->webSideMenu) {
                 return [$access->webSideMenu->sort_order ?? 999999, $access->webSideMenu->id ?? 999999];
