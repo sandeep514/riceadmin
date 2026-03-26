@@ -629,12 +629,13 @@ class PortalApiController extends Controller
             ->orderBy('id', 'desc')
             ->get()
             ->map(function ($q) {
+                // Avoid IEEE-754 noise in JSON (long float tails) by rounding to 2 decimals via string.
                 $roundMoney = function ($value) {
                     if ($value === null || $value === '') {
                         return null;
                     }
 
-                    return round((float) $value, 2);
+                    return json_decode(sprintf('%.2f', (float) $value));
                 };
 
                 $afterDiscount = function ($price, $discountPct) use ($roundMoney) {
