@@ -629,6 +629,16 @@ class PortalApiController extends Controller
             ->orderBy('id', 'desc')
             ->get()
             ->map(function ($q) {
+                $afterDiscount = function ($price, $discountPct) {
+                    if ($price === null || $price === '') {
+                        return null;
+                    }
+                    $p = (float) $price;
+                    $d = (float) ($discountPct ?? 0);
+
+                    return round($p * (1 - $d / 100), 2);
+                };
+
                 return [
                     'plan' => [
                         'id' => $q->id,
@@ -641,18 +651,21 @@ class PortalApiController extends Controller
                         'monthly' => [
                             'price' => $q->monthly_price,
                             'discount_percentage' => $q->monthly_discount_percentage,
+                            'afterDiscountValue' => $afterDiscount($q->monthly_price, $q->monthly_discount_percentage),
                             'final_amount' => $q->monthly_final_amount,
                             'gst' => $q->monthly_gst,
                         ],
                         'quarterly' => [
                             'price' => $q->quarterly_price,
                             'discount_percentage' => $q->quarterly_discount_percentage,
+                            'afterDiscountValue' => $afterDiscount($q->quarterly_price, $q->quarterly_discount_percentage),
                             'final_amount' => $q->quarterly_final_amount,
                             'gst' => $q->quarterly_gst,
                         ],
                         'yearly' => [
                             'price' => $q->yearly_price,
                             'discount_percentage' => $q->yearly_discount_percentage,
+                            'afterDiscountValue' => $afterDiscount($q->yearly_price, $q->yearly_discount_percentage),
                             'final_amount' => $q->yearly_final_amount,
                             'gst' => $q->yearly_gst,
                         ],
