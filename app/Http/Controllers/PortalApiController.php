@@ -348,6 +348,21 @@ class PortalApiController extends Controller
             $email = $personalDetails['email'];
             $userEmailForMail = $personalDetails['email'];
 
+            // Prevent duplicate web-user email during basic details save.
+            if (!empty($email)) {
+                $emailAlreadyUsed = User::where('email', $email)
+                    ->where('user_from', 'web')
+                    ->where('id', '!=', $user_id)
+                    ->exists();
+
+                if ($emailAlreadyUsed) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Email is already in use , please use different email or login if you already have account.'
+                    ], 422);
+                }
+            }
+
             User::where('id' , $user_id)->update(['name' => $name,'email' => $email]);
 
             if (array_key_exists('avatar', $personalDetails)) {
@@ -508,6 +523,7 @@ class PortalApiController extends Controller
             ->where(['status'  =>  1])
             ->get()
             ->pluck('key','id');
+        $activeWebKeyIds = $webKeys->keys()->map(fn($id) => (int) $id)->toArray();
 
         $plans = WebPlanModel::select([
                 "id","title","short_description","description","status",
@@ -545,7 +561,11 @@ class PortalApiController extends Controller
                             'final_amount' => $q->yearly_final_amount
                         ],
                     ],
-                    'availableKeys' => $q->getPlanKeyMap->pluck('key_id')
+                    'availableKeys' => $q->getPlanKeyMap
+                        ->pluck('key_id')
+                        ->map(fn($id) => (int) $id)
+                        ->filter(fn($id) => in_array($id, $activeWebKeyIds))
+                        ->values()
                 ];
             })->toArray();
         return response()->json(['status' => true, 'message' => 'Web Plans', 'data' => ['plans' => $plans , 'webKeys' => $webKeys]], 200);
@@ -602,6 +622,7 @@ class PortalApiController extends Controller
             ->where('status', 1)
             ->get()
             ->pluck('key', 'id');
+        $activeWebKeyIds = $webKeys->keys()->map(fn($id) => (int) $id)->toArray();
 
         $plans = WebPlanModel::select([
                 'id',
@@ -679,7 +700,11 @@ class PortalApiController extends Controller
                             'gst' => $q->yearly_gst,
                         ],
                     ],
-                    'availableKeys' => $q->getPlanKeyMap->pluck('key_id'),
+                    'availableKeys' => $q->getPlanKeyMap
+                        ->pluck('key_id')
+                        ->map(fn($id) => (int) $id)
+                        ->filter(fn($id) => in_array($id, $activeWebKeyIds))
+                        ->values(),
                 ];
             })
             ->toArray();

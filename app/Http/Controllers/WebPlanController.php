@@ -101,7 +101,7 @@ class WebPlanController extends Controller
     }
 
     public function createPlan(){
-        $WebPlanKeysModel = WebPlanKeysModel::get();
+        $WebPlanKeysModel = WebPlanKeysModel::where('status', 1)->get();
         $roles = Role::where('type', 'web')->pluck('role_name', 'id');
         return View('webplans.create', compact('WebPlanKeysModel', 'roles'));
     }
@@ -189,7 +189,7 @@ class WebPlanController extends Controller
             // return $q->with(['getPlanKey']);
         }])->first();
         $selectedMapKeys = $data->getPlanKeyMap->pluck( 'value' , 'key_id' );
-        $WebPlanKeysModel = WebPlanKeysModel::get();
+        $WebPlanKeysModel = WebPlanKeysModel::where('status', 1)->get();
         $roles = Role::where('type', 'web')->pluck('role_name', 'id');
         return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel','roles'));
     }

@@ -99,11 +99,11 @@ class WebBrandController extends Controller
             $cityId = $userDetails->city;
 
             $brandsId = BrandAvailability::where('city_id' , $cityId)->pluck('brand_id')->toArray();
-            $nearCityBrands = WebBrands::whereIn('id' , $brandsId)->get();
-            $otherBrands = WebBrands::whereNotIn('id' , $brandsId)->get();
+            $nearCityBrands = WebBrands::whereIn('id' , $brandsId)->where('status', 1)->get();
+            $otherBrands = WebBrands::whereNotIn('id' , $brandsId)->where('status', 1)->get();
         }else{
             $nearCityBrands = collect();
-            $otherBrands = WebBrands::get();    
+            $otherBrands = WebBrands::where('status', 1)->get();
         }
         
         return response()->json(['status' => 'success', 'message' => "Brand get successfully" ,'imagePre' => $imagePre ,'nearCityBrands' => $nearCityBrands , 'otherBrands' => $otherBrands]);
@@ -113,6 +113,8 @@ class WebBrandController extends Controller
     public function create(Request $request)
     {
         $data = $request->all();
+        // User should not be able to control activation from payload.
+        unset($data['status']);
         $validator = Validator::make($request->all(), [
             'name'         => 'required|string|max:255',
             'quality'      => 'integer',
@@ -241,7 +243,17 @@ class WebBrandController extends Controller
 
     }
 
-    public function indexVariant($brandId){
+    public function indexVariant($brandId, Request $request){
+        $isMyBrand = false;
+        $brand = WebBrands::select('id', 'user_id')->where('id', $brandId)->first();
+        if ($brand) {
+            if ($request->has('user_id')) {
+                $isMyBrand = ((int) $request->user_id === (int) $brand->user_id);
+            } elseif (auth()->check()) {
+                $isMyBrand = ((int) auth()->id() === (int) $brand->user_id);
+            }
+        }
+
         $WebBrandVariant = WebBrandVariant::select('id','variant','brand_id','quality_id','form_id','grade','packing','image','cut_image')->with(['qualityRel:id,name' , 'formRel:id,form_name'])->where('brand_id' , $brandId)->where('status' , 1)->get();
 
         $imagesPath = asset('brands/' . $brandId . '/variant/');
@@ -249,6 +261,7 @@ class WebBrandController extends Controller
             'status' => true,
             'message' => 'Variants get successfully.',
             'imagePath' => $imagesPath,
+            'is_my_brand' => $isMyBrand,
             'data' => $WebBrandVariant
         ], 200);
     }
