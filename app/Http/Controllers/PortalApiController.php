@@ -535,7 +535,7 @@ class PortalApiController extends Controller
             ->with(['getPlanKeyMap:key_id,plan_id'])
             ->where(['status' => 1])
             ->get()
-            ->map(function($q){
+            ->map(function ($q) use ($activeWebKeyIds) {
                 return [
                     'plan' => [
                         'id' => $q->id,
@@ -649,7 +649,7 @@ class PortalApiController extends Controller
             ->with(['getPlanKeyMap:key_id,plan_id'])
             ->orderBy('id', 'desc')
             ->get()
-            ->map(function ($q) {
+            ->map(function ($q) use ($activeWebKeyIds) {
                 // Avoid IEEE-754 noise in JSON (long float tails) by rounding to 2 decimals via string.
                 $roundMoney = function ($value) {
                     if ($value === null || $value === '') {
