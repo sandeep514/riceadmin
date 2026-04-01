@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'admin' => AdminRole::class,
         'field_runner' => FieldRunnerRole::class,
         'cors' => \App\Http\Middleware\CorsMiddleware::class,
+        'portal.api.token' => \App\Http\Middleware\PortalApiTokenAuth::class,
 
     ];
 }

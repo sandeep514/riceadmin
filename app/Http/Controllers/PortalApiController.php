@@ -79,6 +79,16 @@ use Illuminate\Support\Facades\File;
 
 class PortalApiController extends Controller
 {
+    private function generateAndStoreApiToken(int $userId): string
+    {
+        do {
+            $token = hash('sha256', Str::random(80) . microtime(true) . $userId);
+        } while (User::where('api_token', $token)->exists());
+
+        User::where('id', $userId)->update(['api_token' => $token]);
+
+        return $token;
+    }
 
     public function uploadAttachments($file, $destination, array $requiredExtentionValidation)
     {
@@ -125,9 +135,6 @@ class PortalApiController extends Controller
                 $user->update(['otp' => $Newotp]);
             }
 
-            $hasBasicDetails = false;
-
-
             $message = "SNTC rice sourcing OTP is $Newotp. Do not share this with anyone. - SNTC AGRO TECHNOLOGY";
 
             $url = "http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto="
@@ -136,7 +143,13 @@ class PortalApiController extends Controller
                   . "&PEID=1701172916686910712&templateid=1707176544745633588";
             if ($user) {
                 file_get_contents($url);
-                return response()->json(['status' => true, 'message' => 'OTP sent successfully','data' => $user], 200);
+                $userResponse = $user->toArray();
+                unset($userResponse['otp']);
+                return response()->json([
+                    'status' => true,
+                    'message' => 'OTP sent successfully',
+                    'data' => $userResponse
+                ], 200);
             } else {
                 return response()->json(['status' => false, 'message' => 'Wrong user credentials'], 401);
             }
@@ -165,6 +178,7 @@ class PortalApiController extends Controller
             $user = User::where(['mobile' => $mobile, 'otp' => $otp, 'userType' => 2])->first();
 
             if ($user) {
+                $token = $this->generateAndStoreApiToken((int) $user->id);
                 // ✅ Create Laravel session using 'web' guard (sets httpOnly cookie automatically)
                 auth('web')->login($user);
                 
@@ -204,6 +218,7 @@ class PortalApiController extends Controller
                 return response()->json([
                     'status' => true, 
                     'message' => 'Success', 
+                    'token' => $token,
                     'hasBasicDetails' => $hasBasicDetails,
                     'hasTrialDone' => $hasTrialDone,
                     'hasActivePlan' => $hasActivePlan,
@@ -227,17 +242,21 @@ class PortalApiController extends Controller
             $user = User::create(['mobile' => $mobile, 'otp' => $Newotp, 'userType' => 2,'user_from' => 'web']);
         } else {
             $user->update(['otp' => $Newotp]);
-            // return response()->json(['status' => false , 'message' => 'User already available', 'isVerified' => ($user->is_INR_active == 1)? true: false ] , 401);
         }
-        // file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+' . $Newotp . '.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
-        $message = "SNTC rice sourcing OTP is $Newotp. Do not share this with anyone. - SNTC AGRO TECHNOLOGY";
 
+        $message = "SNTC rice sourcing OTP is $Newotp. Do not share this with anyone. - SNTC AGRO TECHNOLOGY";
         $url = "http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto="
               . $mobile
               . "&message=" . urlencode($message)
               . "&PEID=1701172916686910712&templateid=1707176544745633588";
         file_get_contents($url);
-        return response()->json(['status' => true, 'message' => 'OTP sent successfully on ' . $mobile, 'data' => ['user_id' => $user->id], 'isVerified' => ($user->is_INR_active == 1) ? true : false], 200);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'OTP sent successfully on ' . $mobile,
+            'data' => ['user_id' => $user->id],
+            'isVerified' => ($user->is_INR_active == 1) ? true : false
+        ], 200);
     }
 
     public function verifyOTP(Request $request)
@@ -249,6 +268,7 @@ class PortalApiController extends Controller
 
             if ($user) {
                 $user->update(['is_INR_active' => 1]);
+                $token = $this->generateAndStoreApiToken((int) $user->id);
                 
                 // ✅ Create session after OTP verification using 'web' guard
                 auth('web')->login($user);
@@ -289,6 +309,7 @@ class PortalApiController extends Controller
                 return response()->json([
                     'status' => true, 
                     'message' => 'OTP verified successfully', 
+                    'token' => $token,
                     'hasBasicDetails' => $hasBasicDetails,
                     'hasActivePlan' => $hasActivePlan,
                     'hasTrialDone' => $hasTrialDone,

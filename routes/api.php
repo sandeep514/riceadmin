@@ -20,11 +20,12 @@ use Pusher\Pusher;
         Route::post('millstatus/save',          ['uses'=>'ApiController@saveMillStatus']);
     });
 
-    Route::post('web/brand-interest', [BrandInterestController::class, 'store']);
+    Route::post('web/brand-interest', [BrandInterestController::class, 'store'])->middleware('portal.api.token');
 
 
     Route::get('prices/{state}/{type}','ApiController@getPrices');
-    Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb');
+    Route::get('live/prices/today', ['as' => 'live.prices.today', 'uses' => 'ApiController@getLivePricesToday']);
+    Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb')->middleware('portal.api.token');
     Route::get('get/price/by/year/{state}/{type}','ApiController@getPricesByYear');
 
     
@@ -34,7 +35,7 @@ use Pusher\Pusher;
     Route::get('get/plans' ,                ['as' => 'get.plans'                , 'uses' => 'ApiController@getPlans']);
     Route::get('get/price/states' ,         ['as' => 'get.price.states'         , 'uses' => 'ApiController@getPriceStates']);
 
-    Route::get('get/web/other/services' ,         ['as' => 'get.web.other.service'         , 'uses' => 'ApiController@getWebOtherServices']);
+    Route::get('get/web/other/services' ,         ['as' => 'get.web.other.service'         , 'uses' => 'ApiController@getWebOtherServices', 'middleware' => 'portal.api.token']);
 
 
     Route::get('get/gallery/list' ,         ['as' => 'get.gallery.details'      , 'uses' => 'ApiController@getGalleryData']);
@@ -50,9 +51,9 @@ use Pusher\Pusher;
     Route::GET('verify/otp/{number}/{id}' , ['as' => 'verify.otp'               , 'uses' => 'ApiController@verifyOTP']);
 
     Route::get('get/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiState']);
-    Route::get('get/web/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiStateForWeb']);
+    Route::get('get/web/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiStateForWeb', 'middleware' => 'portal.api.token']);
     Route::get('get/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiState']);
-    Route::get('get/web/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiStateForWeb']);
+    Route::get('get/web/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiStateForWeb', 'middleware' => 'portal.api.token']);
     Route::get('get/images/for/dashboard' , ['as' => 'get.images.for.dashboard' , 'uses' => 'ApiController@getImagesForDashboard']);
 
     Route::post('send/message' ,            ['as' => 'send.message'             , 'uses' => 'MessageController@sendMessage']);
@@ -152,7 +153,7 @@ use Pusher\Pusher;
 
     Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
     Route::get('get/trades/{userId}' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade']);
-    Route::get('web/get/trades/{userId}' , ['as' => 'web.get.trade' , 'uses' => 'ApiController@getWebTrades']);
+    Route::get('web/get/trades/{userId}' , ['as' => 'web.get.trade' , 'uses' => 'ApiController@getWebTrades', 'middleware' => 'portal.api.token']);
     Route::get('get/personal/trades/{userId}' , ['as' => 'get.personal.trade' , 'uses' => 'ApiController@getPersonalTrade']);
     Route::match(['get', 'post'], 'get/all/trades/count', [
         'as' => 'get.personal.trades.count',
@@ -160,7 +161,7 @@ use Pusher\Pusher;
     ]);
     Route::get('get/personal/query/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQuery']);
     Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade']);
-    Route::post('web/get/trades/filter/{userId}' , ['as' => 'web.get.trade.filter' , 'uses' => 'ApiController@webFilterTrade']);
+    Route::post('web/get/trades/filter/{userId}' , ['as' => 'web.get.trade.filter' , 'uses' => 'ApiController@webFilterTrade', 'middleware' => 'portal.api.token']);
 
 
     Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount']);
@@ -171,9 +172,9 @@ use Pusher\Pusher;
 
 
     Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
-    Route::post('submit/sell/query/web' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQueryWeb']);
+    Route::post('submit/sell/query/web' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQueryWeb', 'middleware' => 'portal.api.token']);
     Route::PATCH('submit/buy/query' , ['as' => 'submit.buy.query' , 'uses' => 'ApiController@SubmitBuyQuery']);
-    Route::POST('submit/buy/query/web' , ['as' => 'submit.buy.query.web' , 'uses' => 'ApiController@SubmitBuyQuery']);
+    Route::POST('submit/buy/query/web' , ['as' => 'submit.buy.query.web' , 'uses' => 'ApiController@SubmitBuyQuery', 'middleware' => 'portal.api.token']);
 
     Route::post('future/submit/sell/query' , ['as' => 'future.submit.sell.query' , 'uses' => 'ApiController@FutureSubmitSellQuery']);
     Route::post('future/submit/buy/query' , ['as' => 'future.submit.buy.query' , 'uses' => 'ApiController@FutureSubmitBuyQuery']);
@@ -186,21 +187,21 @@ use Pusher\Pusher;
     Route::get('get/buyer/inr/packing' , ['as' => 'get.buyer.inr.packing' , 'uses' => 'ApiController@getBuyerPackingINR']);
     Route::POST('like/trade' , ['as' => 'post.like.trade' , 'uses' => 'ApiController@likeTrade']);
     Route::POST('intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@tradeintrested']);
-    Route::POST('web/intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@webTradeintrested']);
+    Route::POST('web/intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@webTradeintrested', 'middleware' => 'portal.api.token']);
     Route::POST('get/my/trades' , ['as' => 'get.personal.trades' , 'uses' => 'ApiController@getMyTrades']);
 
 
 
     Route::get('get/news/runner' , ['as' => 'get.news.runner' , 'uses' => 'ApiController@NewsRunner']);
-    Route::get('get/web/news/runner' , ['as' => 'get.web.news.runner' , 'uses' => 'ApiController@getWebNewsRunner']);
+    Route::get('get/web/news/runner' , ['as' => 'get.web.news.runner' , 'uses' => 'ApiController@getWebNewsRunner', 'middleware' => 'portal.api.token']);
     Route::get('get/testimonial' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonial']);
     Route::get('get/testimonial/videos' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonialVideos']);
     Route::get('get/grades' , ['as' => 'list.grade' , 'uses' => 'ApiController@listGrade']);
     Route::POST('contact/us' , ['as' => 'contact.us' , 'uses' => 'ApiController@contactUs']);
 
 
-    Route::get('list/web/paddy/state',      ['as' => 'list.web.paddy.state',    'uses' => 'PaddyApiController@listPaddy']);
-    Route::get('list/web/paddy/mandi/{stateId}',      ['as' => 'list.web.paddy.state.mandi',    'uses' => 'PaddyApiController@listPaddyMandi']);
+    Route::get('list/web/paddy/state',      ['as' => 'list.web.paddy.state',    'uses' => 'PaddyApiController@listPaddy', 'middleware' => 'portal.api.token']);
+    Route::get('list/web/paddy/mandi/{stateId}',      ['as' => 'list.web.paddy.state.mandi',    'uses' => 'PaddyApiController@listPaddyMandi', 'middleware' => 'portal.api.token']);
 
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
     Route::get('get/paddy/prices/by/paddy/{stateId}/{paddyId}',      ['as' => 'get.paddy.prices.by.paddy',    'uses' => 'PaddyApiController@getPaddyPricesByPaddy']);
@@ -209,31 +210,31 @@ use Pusher\Pusher;
 
     Route::get('get/category/role/{roleId}',      ['as' => 'get.category.role',    'uses' => 'ApiController@getCategoryByRole']);
 
-    Route::get('web/quality/list' , ['as' => 'web.quality.list' , 'uses' => 'WebBrandController@getQualities' ]); 
-    Route::get('web/brand/index/{userId}' , ['as' => 'web.brand.index' , 'uses' => 'WebBrandController@index' ]); 
-    Route::get('web/brand/availability/{userId}' , ['as' => 'web.brand.index' , 'uses' => 'WebBrandController@brandsForDistributers' ]); 
-    Route::post('web/brand/create' , ['as' => 'web.brand.create' , 'uses' => 'WebBrandController@create' ]); 
-    Route::post('web/brand/edit' , ['as' => 'web.brand.edit' , 'uses' => 'WebBrandController@edit' ]); 
+    Route::get('web/quality/list' , ['as' => 'web.quality.list' , 'uses' => 'WebBrandController@getQualities', 'middleware' => 'portal.api.token' ]); 
+    Route::get('web/brand/index/{userId}' , ['as' => 'web.brand.index' , 'uses' => 'WebBrandController@index', 'middleware' => 'portal.api.token' ]); 
+    Route::get('web/brand/availability/{userId}' , ['as' => 'web.brand.index' , 'uses' => 'WebBrandController@brandsForDistributers', 'middleware' => 'portal.api.token' ]); 
+    Route::post('web/brand/create' , ['as' => 'web.brand.create' , 'uses' => 'WebBrandController@create', 'middleware' => 'portal.api.token' ]); 
+    Route::post('web/brand/edit' , ['as' => 'web.brand.edit' , 'uses' => 'WebBrandController@edit', 'middleware' => 'portal.api.token' ]); 
 
 
-    Route::get('web/vendor/type' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorType' ]); 
-    Route::get('web/vendor/list/{vendorType}' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorList' ]); 
+    Route::get('web/vendor/type' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorType', 'middleware' => 'portal.api.token' ]); 
+    Route::get('web/vendor/list/{vendorType}' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorList', 'middleware' => 'portal.api.token' ]); 
 
     
 
 
 
-    Route::get('web/brand/variant/{brandId}' , ['as' => 'web.variant.index' , 'uses' => 'WebBrandController@indexVariant' ]); 
-    Route::get('web/brand/variant/delete/{variantId}' , ['as' => 'web.variant.delete' , 'uses' => 'WebBrandController@deleteVariant' ]); 
-    Route::POST('web/brand/variant/edit' , ['as' => 'web.variant.edit' , 'uses' => 'WebBrandController@editVariant' ]); 
-    Route::post('web/variant/create' , ['as' => 'web.variant.create' , 'uses' => 'WebBrandController@createVariant' ]); 
+    Route::get('web/brand/variant/{brandId}' , ['as' => 'web.variant.index' , 'uses' => 'WebBrandController@indexVariant', 'middleware' => 'portal.api.token' ]); 
+    Route::get('web/brand/variant/delete/{variantId}' , ['as' => 'web.variant.delete' , 'uses' => 'WebBrandController@deleteVariant', 'middleware' => 'portal.api.token' ]); 
+    Route::POST('web/brand/variant/edit' , ['as' => 'web.variant.edit' , 'uses' => 'WebBrandController@editVariant', 'middleware' => 'portal.api.token' ]); 
+    Route::post('web/variant/create' , ['as' => 'web.variant.create' , 'uses' => 'WebBrandController@createVariant', 'middleware' => 'portal.api.token' ]); 
 
 
-    Route::get('get/web/states' , ['as' => 'web.get.web.states' , 'uses' => 'WebStatesController@getStatesList']);
-    Route::get('get/web/cities/{stateId}' , ['as' => 'web.get.web.cities.stateId' , 'uses' => 'WebStatesController@getCityFromStateId']);
+    Route::get('get/web/states' , ['as' => 'web.get.web.states' , 'uses' => 'WebStatesController@getStatesList', 'middleware' => 'portal.api.token']);
+    Route::get('get/web/cities/{stateId}' , ['as' => 'web.get.web.cities.stateId' , 'uses' => 'WebStatesController@getCityFromStateId', 'middleware' => 'portal.api.token']);
     
 
-    Route::get('get/web/brand/form' , ['as' => 'web.get.brand.form' , 'uses' => 'WebStatesController@getWebBrandForm']);
+    Route::get('get/web/brand/form' , ['as' => 'web.get.brand.form' , 'uses' => 'WebStatesController@getWebBrandForm', 'middleware' => 'portal.api.token']);
 
 
 

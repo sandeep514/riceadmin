@@ -17,28 +17,30 @@
         Route::post('verify/otp', [PortalApiController::class, 'verifyOTP']);
         Route::post('resend/otp', [PortalApiController::class, 'resendOTP']);
 
-        // ✅ Session restore endpoint - POST works cross-origin with SameSite=Lax
-        // Works for both local (HTTP) and production (HTTPS) environments
-        Route::post('session', [PortalApiController::class, 'getSession']);
-        
-        // ✅ New logout endpoint
-        Route::post('logout', [PortalApiController::class, 'logout']);
+        Route::group(['middleware' => ['portal.api.token']], function () {
+            // ✅ Session restore endpoint - POST works cross-origin with SameSite=Lax
+            // Works for both local (HTTP) and production (HTTPS) environments
+            Route::post('session', [PortalApiController::class, 'getSession']);
+            
+            // ✅ New logout endpoint
+            Route::post('logout', [PortalApiController::class, 'logout']);
 
-        Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails']);
-        Route::get('get/user/details/{userId}', [PortalApiController::class, 'getUserDetails']);
-        Route::delete('delete/user/{userId}', [PortalApiController::class, 'deleteUser']);
+            Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails']);
+            Route::get('get/user/details/{userId}', [PortalApiController::class, 'getUserDetails']);
+            Route::delete('delete/user/{userId}', [PortalApiController::class, 'deleteUser']);
 
-        Route::get('plans', [PortalApiController::class, 'getPlans']);
-        Route::post('web/user/subscription', [PortalApiController::class, 'webUserSubscription']);
-        Route::post('web/create-order', [PortalApiController::class, 'webCreateOrder']);
-        Route::post('web/verify-payment', [PortalApiController::class, 'webVerifyPayment']);
+            Route::get('plans', [PortalApiController::class, 'getPlans']);
+            Route::post('web/user/subscription', [PortalApiController::class, 'webUserSubscription']);
+            Route::post('web/create-order', [PortalApiController::class, 'webCreateOrder']);
+            Route::post('web/verify-payment', [PortalApiController::class, 'webVerifyPayment']);
 
-        Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
-        Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
-        Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
-        
-        Route::get('get/latest/updated/count', [PortalApiController::class, 'getLatestUpdatedCount']);
-        
-        // ✅ Get web access permissions for user
-        Route::post('web-access', [PortalApiController::class, 'getWebAccess']);
+            Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
+            Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
+            Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
+            
+            Route::get('get/latest/updated/count', [PortalApiController::class, 'getLatestUpdatedCount']);
+            
+            // ✅ Get web access permissions for user
+            Route::post('web-access', [PortalApiController::class, 'getWebAccess']);
+        });
     });

@@ -6197,6 +6197,33 @@ if (!file_exists('uploads')) {
         return response()->json([ 'status' => true , 'message' => 'Brand Availability get successfully' , 'data' => $brandAvail ] , 200);
     }
 
+    /**
+     * Open API for guest users.
+     * Returns the same response format as getPrices(),
+     * using today records or latest fallback through existing getPrices logic.
+     *
+     * Query params:
+     * - year (optional)
+     */
+    public function getLivePricesToday(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'year' => 'nullable'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Locked for guests: always PUNJAB-HARYANA + basmati.
+        // Reuse existing endpoint logic so response structure stays exactly aligned.
+        return $this->getPrices('PUNJAB-HARYANA', 'basmati');
+    }
+
     public function adminIsViewedByAdmin()
     {
         $hasUnattendedUser = User::where(['user_from' => 'web', 'is_viewed_by_admin' => 0])->count();
