@@ -24,27 +24,43 @@ $fromEnv = array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS
 // Only "local" uses localhost-only defaults. Staging / production / testing need real domains.
 $isLocal = env('APP_ENV') === 'local';
 
+// Production SPA: https://sntc.netlify.app/ (Origin header has no trailing slash)
+$netlifyFrontendOrigins = [
+    'https://sntc.netlify.app',
+];
+
 $defaultOrigins = $isLocal
-    ? [
-        env('FRONTEND_URL', 'http://localhost:5173'),
-        'http://localhost:3000',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:3000',
-        'http://10.139.48.97:5173',
-    ]
-    : array_filter([
-        env('FRONTEND_URL'),
-        'https://snjtradelink.com',
-        'https://www.snjtradelink.com',
-        'http://snjtradelink.com',
-        'http://www.snjtradelink.com',
-    ]);
+    ? array_values(array_unique(array_filter(array_merge(
+        [
+            env('FRONTEND_URL', 'http://localhost:5173'),
+            'http://localhost:3000',
+            'http://127.0.0.1:5173',
+            'http://127.0.0.1:3000',
+            'http://10.139.48.97:5173',
+        ],
+        $netlifyFrontendOrigins
+    ))))
+    : array_values(array_unique(array_filter(array_merge(
+        [
+            env('FRONTEND_URL'),
+            'https://snjtradelink.com',
+            'https://www.snjtradelink.com',
+            'http://snjtradelink.com',
+            'http://www.snjtradelink.com',
+        ],
+        $netlifyFrontendOrigins
+    ))));
 
 $allowedOrigins = array_values(array_unique(array_filter(array_merge($fromEnv, $defaultOrigins))));
 
 $snjtradelinkPatterns = [
     '#^https://([a-zA-Z0-9-]+\.)*snjtradelink\.com(:\d+)?$#',
     '#^http://([a-zA-Z0-9-]+\.)*snjtradelink\.com(:\d+)?$#',
+];
+
+// Netlify branch / deploy preview URLs, e.g. https://deploy-preview-12--sntc.netlify.app
+$netlifyPatterns = [
+    '#^https://[a-z0-9][a-z0-9-]*--sntc\.netlify\.app$#i',
 ];
 
 $lanPatterns = [
@@ -58,6 +74,7 @@ $customPattern = $customRegex ? '#' . trim($customRegex, '#') . '#' : null;
 
 $allowedOriginsPatterns = array_values(array_filter(array_merge(
     $customPattern ? [$customPattern] : [],
+    $netlifyPatterns,
     $isLocal ? [] : $snjtradelinkPatterns,
     $lanPatterns,
     $isLocal ? [
