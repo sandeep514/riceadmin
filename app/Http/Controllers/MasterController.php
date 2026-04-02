@@ -818,18 +818,14 @@ class MasterController extends Controller
 	
 	public function listSellQueries()
 	{
-		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
-			return $query->with('getWandType')->get();
-		}])->orderBy('id', 'DESC')->get();		
+		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();		
 
 		return View('sellINR.index' , compact('sellerQueries'));
 	}
 
 	public function listFutureSellQueries()
 	{
-		$sellerQueries = FutureSellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
-			return $query->with('getWandType')->get();
-		}])->orderBy('id', 'DESC')->get();		
+		$sellerQueries = FutureSellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();		
 
 		return View('futuresellINR.index' , compact('sellerQueries'));
 	}
@@ -903,18 +899,14 @@ class MasterController extends Controller
 
 	public function listBuyQueries()
 	{
-		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
-			return $query->with('getWandType')->get();
-		}])->orderBy('id' ,'DESC')->get();
+		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();
 
 		return View('buyINR.index' , compact('buyQueries'));
 
 	}
 	public function listFutureBuyQueries()
 	{
-		$buyQueries = FutureBuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade' => function($query){
-			return $query->with('getWandType')->get();
-		}])->orderBy('id' ,'DESC')->get();
+		$buyQueries = FutureBuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();
 		return View('futurebuyINR.index' , compact('buyQueries'));
 
 	}

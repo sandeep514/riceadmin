@@ -50,7 +50,7 @@
                                                 <tr>
                                                     <td>{{ ($v->quality_type == 1)? 'Basmati' : 'Non-Basmati'  }}</td>
                                                     <td>{{ $v->RiceQualityRiceNames->name ?? '' }} {{ $v->RiceFormMilestone3->name ?? '' }}</td>
-                                                    <td>{{ $v->riceGrade->getWandType['type'] }} {{ $v->riceGrade->value }}</td>
+                                                    <td>{{ $v->riceGrade?->getWandType?->type ?? '--' }} {{ $v->riceGrade?->value ?? '--' }}</td>
                                                     <td>{{ App\BuyQueriesINR::$packingTypeStaus[$v->packing_type] }}</td>
 
                                                     <td>@if($v->packing_type == 1 && $v->RicePacking)

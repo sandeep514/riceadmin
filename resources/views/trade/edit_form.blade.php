@@ -72,7 +72,7 @@
                                 {!! Form::label('Grade','Grade') !!}
                                 <select class="form-control" required name="ricegrade">
                                     @foreach($wandModel as $k => $v)
-                                        <option {{ ($tradequeriesinr->grade == $v->id)?'selected' : '' }} value="{{ $v->id }}"> {{ $v->getWandType->type.' '.$v->value }} </option>
+                                        <option {{ ($tradequeriesinr->grade == $v->id)?'selected' : '' }} value="{{ $v->id }}"> {{ trim(($v->getWandType?->type ?? '').' '.($v->value ?? '')) }} </option>
                                     @endforeach
                                 </select>
                             </div>

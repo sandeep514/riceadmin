@@ -122,7 +122,7 @@
                                                     <td>{{ ($v->RiceFormMilestone3->name )?? '--'}}</td>
                                                     <td>{{ ($v->RiceFormData->form_name )?? '--'}}</td>
                                                     <td>{{ ($v->stateLinkWithLivePrice )?? '--'}}</td>
-                                                    <td>{{ ($v->riceGrade->getWandType['type']) ?? '--' }} {{ ($v->riceGrade->value )?? '--'}}</td>
+                                                    <td>{{ $v->riceGrade?->getWandType?->type ?? '--' }} {{ $v->riceGrade?->value ?? '--' }}</td>
                                                     <td>{{  ($v->tradeType == 2) ? $v->RicePackingBuyer->packing.' '.$v->RicePackingBuyer->description : $v->RicePackingSeller->description }}</td>
                                                     <td>{{ ($v->quantity )?? '--'}}</td>
                                                     <td>{{ ($v->offerPrice )?? '--'}}</td>

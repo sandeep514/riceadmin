@@ -58,7 +58,7 @@
                                                     <td>{{ ($v->RiceQualityRiceNames->type)??'---'  }}</td>
                                                     <td>{{ ($v->RiceQualityRiceNames->name)??'---' }}</td>
                                                     {{-- <td>{{ $v->RiceFormMilestone3->name }}</td> --}}
-                                                    <td>{{ ($v->riceGrade->getWandType['type'])??'--' }} {{ ($v->riceGrade->value)??'--' }}</td>
+                                                    <td>{{ $v->riceGrade?->getWandType?->type ?? '--' }} {{ $v->riceGrade?->value ?? '--' }}</td>
                                                     <td>{{ ($v->RicePacking->packing)?? '--' }}</td>
                                                     <td>{{ $v->quantity }}</td>
                                                     <td>{{ $v->offerPrice }}</td>
