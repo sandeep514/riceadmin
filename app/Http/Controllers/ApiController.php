@@ -2201,9 +2201,26 @@ class ApiController extends Controller
         $highDate = 0;
         $constantValue = 0;
 
-        $productType = RiceName::select('type')->where('name', $rice)->first();
+        // Resolve rice by numeric id or by name (avoids $productType null when id was passed encoded)
+        $riceName = ctype_digit(preg_replace('/\s+/', '', (string) $rice))
+            ? RiceName::where('id', (int) $rice)->first()
+            : RiceName::where('name', $rice)->first();
 
-        $riceName = RiceName::where('name', $rice)->first();
+        if (! $riceName) {
+            return response()->json([
+                'errors' => ['rice' => 'Rice not found'],
+                'message' => 'Invalid rice name or id for the given encoded value.',
+            ], 404);
+        }
+
+        $productType = RiceName::select('type')->where('id', $riceName->id)->first();
+
+        if (! $productType || $productType->type === null) {
+            return response()->json([
+                'errors' => ['rice' => 'Product type not found'],
+            ], 404);
+        }
+
         if( $request->has('year') ){
             // $explodeYear = explode('-' , $request->year);
             // $fromYear = $explodeYear[0];
@@ -2214,6 +2231,12 @@ class ApiController extends Controller
         $explodeRiceType = explode('_', $riceType);
         $implodeRiceType = implode(' ', $explodeRiceType);
         $type = RiceForm::select('id')->where('form_name', $implodeRiceType)->where('type', $productType->type)->first();
+
+        if (! $type) {
+            return response()->json([
+                'errors' => ['riceType' => 'Rice form not found for this product type'],
+            ], 404);
+        }
 
         $fromDate = $todayDate->format('y-m-d');
 
@@ -2410,9 +2433,14 @@ class ApiController extends Controller
         }
 
         $productType = RiceName::select('type')->where('id', $riceName->id)->first();
+
+        if (! $productType || $productType->type === null) {
+            return response()->json(['errors' => ['rice' => 'Product type not found']], 404);
+        }
+
         $type = RiceForm::select('id')
             ->where('form_name', $riceType)
-            ->where('type', $productType->type ?? null)
+            ->where('type', $productType->type)
             ->first();
 
         if (! $type) {

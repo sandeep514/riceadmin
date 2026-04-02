@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PortalApiController;
 use App\Http\Controllers\BrandInterestController;
 use Illuminate\Support\Facades\Broadcast;
 use Pusher\Pusher;
@@ -314,6 +315,17 @@ use Pusher\Pusher;
 
 
 
+
+    // Web SPA logout (session cookie) — same handler as portal/logout
+    Route::group([
+        'middleware' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+        ],
+    ], function () {
+        Route::post('web/logout', [PortalApiController::class, 'logout'])->name('api.web.logout');
+    });
 
     require __DIR__ . '/portal.php';
 // });

@@ -77,6 +77,8 @@ use Razorpay\Api\Api;
 use Exception;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
 class PortalApiController extends Controller
 {
@@ -1163,21 +1165,71 @@ class PortalApiController extends Controller
     }
 
     /**
-     * Logout user and clear session
-     * POST /api/portal/logout
+     * Log out web user: clear web guard, invalidate session, rotate CSRF token.
+     *
+     * Routes: POST /api/portal/logout, POST /api/web/logout
      */
     public function logout(Request $request)
     {
         auth('web')->logout();
-        
-        // Clear the session
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
-        return response()->json([
+
+        $response = response()->json([
             'status' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully',
         ], 200);
+
+        return $this->withExpiredWebAuthCookies($response);
+    }
+
+    /**
+     * Expire session + CSRF cookies so the browser removes them (path/domain/secure/samesite must match how they were set).
+     */
+    private function withExpiredWebAuthCookies(Response $response): Response
+    {
+        $path = config('session.path') ?: '/';
+        $domain = config('session.domain');
+        $secure = config('session.secure');
+        if (! is_bool($secure)) {
+            $secure = (bool) $secure;
+        }
+        $httpOnly = (bool) config('session.http_only', true);
+        $sameSite = config('session.same_site');
+        if ($sameSite === null || $sameSite === '') {
+            $sameSite = SymfonyCookie::SAMESITE_LAX;
+        } elseif (is_string($sameSite)) {
+            $sameSite = strtolower($sameSite);
+        }
+        $expire = time() - 3600;
+
+        $response->headers->setCookie(SymfonyCookie::create(
+            config('session.cookie'),
+            '',
+            $expire,
+            $path,
+            $domain,
+            $secure,
+            $httpOnly,
+            false,
+            $sameSite
+        ));
+
+        // CSRF cookie (readable by JS); clear so SPA does not keep stale token
+        $response->headers->setCookie(SymfonyCookie::create(
+            'XSRF-TOKEN',
+            '',
+            $expire,
+            $path,
+            $domain,
+            $secure,
+            false,
+            false,
+            $sameSite
+        ));
+
+        return $response;
     }
 
     /**
