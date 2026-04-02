@@ -90,22 +90,76 @@ class PortalApiController extends Controller
         return $token;
     }
 
+    /**
+     * Store an uploaded file under public/ (or an absolute path). Creates parent directories with group-writable perms for shared hosting.
+     *
+     * @return string|false Stored filename, or false if extension is not allowed
+     */
     public function uploadAttachments($file, $destination, array $requiredExtentionValidation)
     {
-        // $file = $request->file('file');
         $filename = $file->getClientOriginalName();
-        $fileextension = $file->getClientOriginalExtension();
+        $fileextension = strtolower($file->getClientOriginalExtension());
+        $allowed = array_map('strtolower', $requiredExtentionValidation);
 
-        if (in_array($fileextension, $requiredExtentionValidation)) {
-
-            // $destinationPath = 'uploads/gallery';
-            $file->move($destination, $filename);
-            return $filename;
-            // $gallery = Gallery::where('id', $request->id)->update(['attachment' => $galleryCounter . '_' . $filename]);
-            return;
-        } else {
-            return back()->withErrors(['error' => "File type not allowed ...! only jpg , jpeg, png is allowed."]);
+        if (! in_array($fileextension, $allowed, true)) {
+            return false;
         }
+
+        $destination = $this->resolvePortalUploadDirectory($destination);
+
+        try {
+            if (! File::isDirectory($destination)) {
+                File::makeDirectory($destination, 0775, true, true);
+            }
+        } catch (\Throwable $e) {
+            report($e);
+
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => 'Could not create upload directory. On the server, ensure public/webPortal exists and is writable by the web server user (e.g. mkdir -p public/webPortal && chown -R www-data:www-data public/webPortal && chmod -R 775 public/webPortal).',
+                ], 500)
+            );
+        }
+
+        try {
+            $file->move($destination, $filename);
+        } catch (\Throwable $e) {
+            report($e);
+
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => 'Could not save the uploaded file. Check disk space and permissions on the upload folder.',
+                ], 500)
+            );
+        }
+
+        return $filename;
+    }
+
+    private function resolvePortalUploadDirectory(string $destination): string
+    {
+        $normalized = rtrim(str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $destination), DIRECTORY_SEPARATOR);
+
+        if ($this->isAbsoluteFilesystemPath($normalized)) {
+            return $normalized;
+        }
+
+        return public_path(str_replace('\\', '/', $normalized));
+    }
+
+    private function isAbsoluteFilesystemPath(string $path): bool
+    {
+        if ($path !== '' && ($path[0] === '/' || $path[0] === '\\')) {
+            return true;
+        }
+
+        return PHP_OS_FAMILY === 'Windows'
+            && strlen($path) > 2
+            && ctype_alpha($path[0])
+            && $path[1] === ':'
+            && ($path[2] === '\\' || $path[2] === '/');
     }
 
     public function loginUser(Request $request)
@@ -387,19 +441,14 @@ class PortalApiController extends Controller
             User::where('id' , $user_id)->update(['name' => $name,'email' => $email]);
 
             if (array_key_exists('avatar', $personalDetails)) {
-
-                // Define real filesystem path
-                $basePath = public_path('webPortal/' . $user_id . '/attachments/avatar/');
-
-                // Recursively create directories if not exist
-                if (!File::isDirectory($basePath)) {
-                    File::makeDirectory($basePath, 0755, true, true);
-                }
-
-                // Upload file to this directory
+                $basePath = public_path('webPortal/' . $user_id . '/attachments/avatar');
                 $file = $this->uploadAttachments($personalDetails['avatar'], $basePath, ['jpeg', 'jpg', 'png']);
-
-                // Save only the file name or relative path
+                if ($file === false) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Avatar must be jpeg, jpg, or png.',
+                    ], 422);
+                }
                 $personalDetails['avatar'] = $file;
             }
 
@@ -441,38 +490,38 @@ class PortalApiController extends Controller
         }
 
         if ($request->has('documents.pan_file')) {
-            $dirname = 'webPortal/' . $user_id . '/attachments/pan/';
-            if (!$dirname) {
-                mkdir(asset($dirname, 0755));
+            $basePath = public_path('webPortal/' . $user_id . '/attachments/pan');
+            $file = $this->uploadAttachments($request->file('documents.pan_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+            if ($file === false) {
+                return response()->json(['status' => false, 'message' => 'PAN file must be jpeg, jpg, png, or pdf.'], 422);
             }
-            $file = $this->uploadAttachments($request->file('documents.pan_file'), $dirname, ['jpeg', 'jpg', 'png', 'pdf']);
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['panCard' => $file]);
         }
 
         if ($request->has('documents.farmer_file')) {
-            $dirname = 'webPortal/' . $user_id . '/attachments/farmer_file/';
-            if (!$dirname) {
-                mkdir(asset($dirname, 0755));
+            $basePath = public_path('webPortal/' . $user_id . '/attachments/farmer_file');
+            $file = $this->uploadAttachments($request->file('documents.farmer_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+            if ($file === false) {
+                return response()->json(['status' => false, 'message' => 'Farmer document must be jpeg, jpg, png, or pdf.'], 422);
             }
-            $file = $this->uploadAttachments($request->file('documents.farmer_file'), $dirname, ['jpeg', 'jpg', 'png', 'pdf']);
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['farmer_file' => $file]);
         }
 
         if ($request->has('documents.gst_file')) {
-            $dirname = 'webPortal/' . $user_id . '/attachments/gst/';
-            if (!$dirname) {
-                mkdir(asset($dirname, 0755));
+            $basePath = public_path('webPortal/' . $user_id . '/attachments/gst');
+            $file = $this->uploadAttachments($request->file('documents.gst_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+            if ($file === false) {
+                return response()->json(['status' => false, 'message' => 'GST file must be jpeg, jpg, png, or pdf.'], 422);
             }
-            $file = $this->uploadAttachments($request->file('documents.gst_file'), $dirname, ['jpeg', 'jpg', 'png', 'pdf']);
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['gstCard' => $file]);
         }
 
         if ($request->has('documents.fssai_file')) {
-            $dirname = 'webPortal/' . $user_id . '/attachments/fssai/';
-            if (!$dirname) {
-                mkdir(asset($dirname, 0755));
+            $basePath = public_path('webPortal/' . $user_id . '/attachments/fssai');
+            $file = $this->uploadAttachments($request->file('documents.fssai_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+            if ($file === false) {
+                return response()->json(['status' => false, 'message' => 'FSSAI file must be jpeg, jpg, png, or pdf.'], 422);
             }
-            $file = $this->uploadAttachments($request->file('documents.fssai_file'), $dirname, ['jpeg', 'jpg', 'png', 'pdf']);
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['fssaiCard' => $file]);
         }
         

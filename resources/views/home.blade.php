@@ -13,6 +13,11 @@
                 <li class="active">Dashboard </li>
             </ol>
             <div style="margin-top: 10px;">
+                @if(auth()->user()->role == 2)
+                    <a href="{{ route('database.backup.download') }}" class="btn btn-default btn-sm" style="margin-right: 8px;">
+                        <i class="fa fa-download"></i> Download database backup
+                    </a>
+                @endif
                 {!! Form::open(['route' => 'send.reverb.notification', 'method' => 'POST', 'style' => 'display:inline-block;']) !!}
                     <input type="text" name="message" class="form-control" style="display:inline-block; width: 280px; margin-right: 8px;" placeholder="Optional message for React app" value="">
                     <button type="submit" class="btn btn-primary btn-sm">

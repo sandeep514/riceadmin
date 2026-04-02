@@ -17,6 +17,8 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::post('send/reverb/notification', ['as' => 'send.reverb.notification', 'uses' => 'HomeController@sendReverbNotification']);
 
         Route::group(['middleware'=>'admin'], function(){
+            Route::get('database/backup/download', ['as' => 'database.backup.download', 'uses' => 'DatabaseBackupController@download']);
+
             Route::get('call/is/active' , ['as' => 'is.active.call' , 'uses' => 'PlanController@isActiveCall']);
             
             //plans
