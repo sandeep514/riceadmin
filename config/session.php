@@ -166,7 +166,9 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') === 'production'),
+    // For cross-site frontend (Netlify) -> backend (snjtradelink), cookies must be Secure.
+    // Default true for any non-local environment.
+    'secure' => env('SESSION_SECURE_COOKIE', env('APP_ENV') !== 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -194,9 +196,8 @@ return [
     |
     */
 
-    // ⚠️ For cross-origin AJAX requests, SameSite=Lax may not send cookies
-    // Using null for local dev (browser default, usually Lax but more lenient)
-    // For production with HTTPS, we'll use 'none' which requires Secure=true
-    'same_site' => env('APP_ENV') === 'production' ? 'none' : null,
+    // Cross-origin AJAX requires SameSite=None (+ Secure=true).
+    // Keep configurable from .env; default to none for non-local.
+    'same_site' => env('SESSION_SAME_SITE', env('APP_ENV') === 'local' ? null : 'none'),
 
 ];

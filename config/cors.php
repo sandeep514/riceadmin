@@ -30,6 +30,7 @@ $isLocal = env('APP_ENV') === 'local';
 // Production SPA: https://sntc.netlify.app/ (Origin header has no trailing slash)
 $netlifyFrontendOrigins = [
     'https://sntc.netlify.app',
+    'https://sntc.netlify.com',
 ];
 
 $defaultOrigins = $isLocal
@@ -64,6 +65,7 @@ $snjtradelinkPatterns = [
 // Netlify branch / deploy preview URLs, e.g. https://deploy-preview-12--sntc.netlify.app
 $netlifyPatterns = [
     '#^https://[a-z0-9][a-z0-9-]*--sntc\.netlify\.app$#i',
+    '#^https://[a-z0-9][a-z0-9-]*--sntc\.netlify\.com$#i',
 ];
 
 $lanPatterns = [
