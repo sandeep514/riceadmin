@@ -2375,6 +2375,131 @@ class ApiController extends Controller
         return response()->json($responseData);
     }
 
+    /**
+     * Chart records endpoint with fixed state/time period:
+     * - route: /api/get/price/chart/records/{encodedRiceType}/{encodedRice}
+     * - state: Punjab-Haryana (hardcoded)
+     * - period: 7 days (hardcoded)
+     */
+    public function getPriceChartRecords($encodedRiceType, $encodedRice)
+    {
+        $state = 'Punjab-Haryana';
+        $riceType = base64_decode($encodedRiceType, true);
+        $riceInput = base64_decode($encodedRice, true);
+        $riceType = $riceType !== false ? $riceType : $encodedRiceType;
+        $riceInput = $riceInput !== false ? $riceInput : $encodedRice;
+        $timePeriod = 7;
+
+        $todayDate = Carbon::now();
+        $created_at = [];
+        $max_price = [];
+        $lowValue = 0;
+        $highValue = 0;
+        $combinedData = [];
+        $lowDate = 0;
+        $highDate = 0;
+        $constantValue = 0;
+
+        // Keep backward compatibility: if rice input is numeric, try id first, else by name.
+        $riceName = ctype_digit((string) $riceInput)
+            ? RiceName::where('id', (int) $riceInput)->first()
+            : RiceName::where('name', $riceInput)->first();
+
+        if (! $riceName) {
+            return response()->json(['errors' => ['rice' => 'Rice not found']], 404);
+        }
+
+        $productType = RiceName::select('type')->where('id', $riceName->id)->first();
+        $type = RiceForm::select('id')
+            ->where('form_name', $riceType)
+            ->where('type', $productType->type ?? null)
+            ->first();
+
+        if (! $type) {
+            return response()->json(['errors' => ['riceType' => 'Rice form not found']], 404);
+        }
+
+        $fromDate = Carbon::now()->format('Y-m-d');
+        $prices = LivePrice::where('name', $riceName->id)
+            ->where('form', $type->id)
+            ->with([
+                'name_rel',
+                'form_rel' => function ($query) use ($riceType) {
+                    return $query->where('type', $riceType)->get();
+                }
+            ])
+            ->where(['state' => $state])
+            ->whereBetween(DB::raw('date(created_at)'), [$todayDate->subDays($timePeriod), $fromDate])
+            ->get();
+
+        foreach ($prices as $v) {
+            $created_at[] = strtotime($v->created_at->format('y-m-d'));
+            $max_price[] = $v->max_price;
+        }
+
+        $combine = array_combine($created_at, $max_price);
+        $arrayValuesPrices = '';
+        $maxCount = 0;
+        if ($combine) {
+            $lowValue = min($combine);
+            $highValue = max($combine);
+
+            $lowDate = Carbon::parse(array_search($lowValue, $combine), 'UTC')
+                ->setTimezone('Asia/Kolkata')
+                ->format('d-m-Y');
+
+            $highDate = Carbon::parse(array_search($highValue, $combine), 'UTC')
+                ->setTimezone('Asia/Kolkata')
+                ->format('d-m-Y');
+
+            $sortedCombine = $combine;
+            ksort($sortedCombine);
+            foreach ($sortedCombine as $kk => $vv) {
+                $combinedData[] = [$kk * 1000, (int) $vv];
+            }
+            $seq = array_values($sortedCombine);
+            $arrayValuesPrices = $seq;
+            $bestVal = null;
+            $bestLen = 0;
+            $currVal = null;
+            $currLen = 0;
+            foreach ($seq as $val) {
+                $num = is_numeric($val) ? (float) $val : null;
+                if ($num === null || $num <= 0) {
+                    $currVal = null;
+                    $currLen = 0;
+                    continue;
+                }
+                if ($currVal === null || $num != $currVal) {
+                    $currVal = $num;
+                    $currLen = 1;
+                } else {
+                    $currLen++;
+                }
+                if ($currLen > $bestLen) {
+                    $bestLen = $currLen;
+                    $bestVal = $num;
+                }
+            }
+            $constantValue = $bestVal !== null ? $bestVal : 0;
+            $maxCount = $bestLen;
+        }
+
+        return response()->json([
+            'errors' => null,
+            'date' => $created_at,
+            'prices' => $arrayValuesPrices,
+            'combinedData' => $combinedData,
+            'productType' => $productType,
+            'lowValue' => $lowValue,
+            'lowDate' => $lowDate,
+            'highDate' => $highDate,
+            'highValue' => $highValue,
+            'constantValue' => $constantValue,
+            'maxCountConstant' => $maxCount,
+        ]);
+    }
+
     public function getGalleryData()
     {
         $gallery = Gallery::get()->groupBy('type');

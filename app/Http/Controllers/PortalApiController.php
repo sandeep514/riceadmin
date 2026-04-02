@@ -1068,77 +1068,98 @@ class PortalApiController extends Controller
      */
     public function getSession(Request $request)
     {
-        // Debug: Check if cookie is being sent and session is being read
-        \Log::info('=== Session Debug ===');
-        \Log::info('Cookie Header: ' . ($request->header('Cookie') ?? 'NOT SENT'));
-        \Log::info('Session ID: ' . $request->session()->getId());
-        \Log::info('Session All: ' . json_encode($request->session()->all()));
-        \Log::info('Auth Check: ' . (auth('web')->check() ? 'TRUE' : 'FALSE'));
-        \Log::info('Origin: ' . $request->header('Origin'));
-        
-        // ✅ Use 'web' guard explicitly to ensure we're using session-based auth
-        // Check if user is authenticated via session
+        // 1) Preferred: session-cookie auth
         if (auth('web')->check()) {
-            $user = auth('web')->user();
-            
-            // Ensure it's a web user (userType = 2)
-            if ($user->userType != 2) {
-                return response()->json(['status' => false, 'message' => 'Invalid user type'], 401);
-            }
-            
-            // ✅ Reload user with relationships (can't use with() on existing model instance)
-            $data = User::where('id', $user->id)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
-                return $q->with(['getCategoryDetails:id,category']);
-            }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
-                return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
-            }, 'role_rel'])->first();
+            return $this->buildPortalSessionResponse((int) auth('web')->id());
+        }
 
-            // Check if user was found
-            if (!$data) {
-                return response()->json(['status' => false, 'message' => 'User not found'], 404);
-            }
+        // 2) Fallback: API token auth (helps when cross-site cookie is blocked)
+        $token = null;
+        $authHeader = $request->header('Authorization');
+        if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
+            $token = trim($matches[1]);
+        }
+        if (! $token) {
+            $token = $request->header('X-API-TOKEN');
+        }
 
-            $hasActivePlan = false;
-            if($data->getWebUserSubscription){
-                $hasActivePlan = true;
-            }
-            
-            $hasBasicDetails = false;
-            if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
-                $hasBasicDetails = true;
-            }
-
-            $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
-            
-            $hasTrialDone = false;
-            if($checkIfTrailDone){
-                $hasTrialDone = true;
-            }
-
-            // Return same format as getUserDetails for consistency
-            $userArray = $data->toArray();
-            if (isset($userArray['get_web_business_details']['get_bag_vendor_web'])) {
-                unset($userArray['get_web_business_details']['get_bag_vendor_web']);
-            }
-
-            return response()->json([
-                'status' => true, 
-                'message' => 'Session restored',
-                'hasBasicDetails' => $hasBasicDetails,
-                'hasTrialDone' => $hasTrialDone,
-                'hasActivePlan' => $hasActivePlan,
-                'planDetails' => $data->getWebUserSubscription,
-                'data' => $userArray,
-                'prefix' => [
-                    'avatar' => 'webPortal/' . $user->id . '/attachments/avatar',
-                    'gst' => 'webPortal/' . $user->id . '/attachments/gst',
-                    'pan' => 'webPortal/' . $user->id . '/attachments/pan',
-                    'fssai' => 'webPortal/' . $user->id . '/attachments/fssai'
-                ]
-            ], 200);
-        } else {
+        if (! $token) {
             return response()->json(['status' => false, 'message' => 'Not authenticated'], 401);
         }
+
+        $allowedFrom = config('portal.api_token_user_from', ['web']);
+        $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
+
+        $user = User::where('api_token', $token)
+            ->where('userType', 2)
+            ->where(function ($query) use ($allowedFrom, $allowNullFrom) {
+                $query->whereIn('user_from', $allowedFrom);
+                if ($allowNullFrom) {
+                    $query->orWhereNull('user_from')->orWhere('user_from', '');
+                }
+            })
+            ->first();
+
+        if (! $user) {
+            return response()->json(['status' => false, 'message' => 'Not authenticated'], 401);
+        }
+
+        // Re-create web session so future calls can work with cookies.
+        auth('web')->login($user);
+        $request->session()->save();
+
+        return $this->buildPortalSessionResponse((int) $user->id);
+    }
+
+    private function buildPortalSessionResponse(int $userId)
+    {
+        $data = User::where('id', $userId)
+            ->where('userType', 2)
+            ->with([
+                'getWebPersonalDetails',
+                'getWebBusinessDetails' => function ($q) {
+                    return $q->with(['getCategoryDetails:id,category']);
+                },
+                'getWebUserAttachment',
+                'getWebUserSubscription' => function ($q) {
+                    return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
+                },
+                'role_rel',
+            ])
+            ->first();
+
+        if (! $data) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        $hasActivePlan = (bool) $data->getWebUserSubscription;
+        $hasBasicDetails = $data->getWebPersonalDetails != null
+            || $data->getWebBusinessDetails != null
+            || $data->getWebUserAttachment != null;
+        $hasTrialDone = WebUserSubscriptionModel::where('user_id', $userId)
+            ->where('subscription_type', 'trial')
+            ->exists();
+
+        $userArray = $data->toArray();
+        if (isset($userArray['get_web_business_details']['get_bag_vendor_web'])) {
+            unset($userArray['get_web_business_details']['get_bag_vendor_web']);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Session restored',
+            'hasBasicDetails' => $hasBasicDetails,
+            'hasTrialDone' => $hasTrialDone,
+            'hasActivePlan' => $hasActivePlan,
+            'planDetails' => $data->getWebUserSubscription,
+            'data' => $userArray,
+            'prefix' => [
+                'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
+                'gst' => 'webPortal/' . $userId . '/attachments/gst',
+                'pan' => 'webPortal/' . $userId . '/attachments/pan',
+                'fssai' => 'webPortal/' . $userId . '/attachments/fssai',
+            ],
+        ], 200);
     }
 
     /**
