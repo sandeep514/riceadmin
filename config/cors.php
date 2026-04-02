@@ -21,6 +21,9 @@ if ($appUrlPath !== '') {
 
 $fromEnv = array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', ''))));
 
+// Capacitor / Ionic / Cordova WebView (optional; native RN/Flutter usually send no Origin — CORS N/A)
+$hybridAppOrigins = array_filter(array_map('trim', explode(',', env('CORS_HYBRID_APP_ORIGINS', 'capacitor://localhost,ionic://localhost,https://localhost'))));
+
 // Only "local" uses localhost-only defaults. Staging / production / testing need real domains.
 $isLocal = env('APP_ENV') === 'local';
 
@@ -51,7 +54,7 @@ $defaultOrigins = $isLocal
         $netlifyFrontendOrigins
     ))));
 
-$allowedOrigins = array_values(array_unique(array_filter(array_merge($fromEnv, $defaultOrigins))));
+$allowedOrigins = array_values(array_unique(array_filter(array_merge($fromEnv, $defaultOrigins, $hybridAppOrigins))));
 
 $snjtradelinkPatterns = [
     '#^https://([a-zA-Z0-9-]+\.)*snjtradelink\.com(:\d+)?$#',

@@ -56,7 +56,7 @@ use Pusher\Pusher;
     Route::get('get/web/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiStateForWeb', 'middleware' => 'portal.api.token']);
     Route::get('get/images/for/dashboard' , ['as' => 'get.images.for.dashboard' , 'uses' => 'ApiController@getImagesForDashboard']);
 
-    Route::post('send/message' ,            ['as' => 'send.message'             , 'uses' => 'MessageController@sendMessage']);
+    Route::post('send/message' ,            ['as' => 'send.message'             , 'uses' => 'ApiController@saveMessage']);
     Route::post('update/user/token' ,       ['as' => 'update.user.token'        , 'uses' => 'ApiController@updateUserToken']);
 
     //ChartIntervals

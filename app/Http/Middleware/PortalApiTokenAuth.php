@@ -28,8 +28,16 @@ class PortalApiTokenAuth
             ], 401);
         }
 
+        $allowedFrom = config('portal.api_token_user_from', ['web']);
+        $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
+
         $user = User::where('api_token', $token)
-            ->where('user_from', 'web')
+            ->where(function ($query) use ($allowedFrom, $allowNullFrom) {
+                $query->whereIn('user_from', $allowedFrom);
+                if ($allowNullFrom) {
+                    $query->orWhereNull('user_from')->orWhere('user_from', '');
+                }
+            })
             ->first();
 
         if (!$user) {
