@@ -2398,12 +2398,13 @@ class ApiController extends Controller
     /**
      * Chart records endpoint with fixed state/time period:
      * - route: /api/get/price/chart/records/{encodedRiceType}/{encodedRice}
-     * - state: Punjab-Haryana (hardcoded)
+     * - state: PUNJAB-HARYANA (hardcoded; matches getPrices / live_prices.state)
      * - period: 7 days (hardcoded)
      */
     public function getPriceChartRecords($encodedRiceType, $encodedRice)
     {
-        $state = 'Punjab-Haryana';
+        // Match live_prices.state values used by getPrices() / admin (typically PUNJAB-HARYANA).
+        $state = 'PUNJAB-HARYANA';
         $riceType = $this->decodeEncodedRouteSegment((string) $encodedRiceType);
         $riceInput = $this->decodeEncodedRouteSegment((string) $encodedRice);
         $timePeriod = 7;
@@ -2433,22 +2434,20 @@ class ApiController extends Controller
             return response()->json(['errors' => ['rice' => 'Product type not found']], 404);
         }
 
-        $type = RiceForm::select('id')
-            ->where('form_name', $riceType)
-            ->where('type', $productType->type)
-            ->first();
+        $riceForm = $this->resolveRiceFormForProductType($riceType, (string) $productType->type);
 
-        if (! $type) {
+        if (! $riceForm) {
             return response()->json(['errors' => ['riceType' => 'Rice form not found']], 404);
         }
 
+        $productTypeValue = (string) $productType->type;
         $fromDate = Carbon::now()->format('Y-m-d');
         $prices = LivePrice::where('name', $riceName->id)
-            ->where('form', $type->id)
+            ->where('form', $riceForm->id)
             ->with([
                 'name_rel',
-                'form_rel' => function ($query) use ($riceType) {
-                    return $query->where('type', $riceType)->get();
+                'form_rel' => function ($query) use ($productTypeValue) {
+                    return $query->where('type', $productTypeValue)->get();
                 }
             ])
             ->where(['state' => $state])
@@ -6442,6 +6441,46 @@ if (!file_exists('uploads')) {
 
         if ($compact !== '' && ctype_digit($compact)) {
             return RiceName::where('name', $compact)->first();
+        }
+
+        return null;
+    }
+
+    /**
+     * Match getpriceByTimePeriod: form_name in DB often matches "STEAM (GRADE A+)" while the URL
+     * segment may use underscores (STEAM_(GRADE_A+)). Try exact, underscore→space, and collapsed spaces.
+     */
+    private function resolveRiceFormForProductType(string $decodedRiceType, string $productType): ?RiceForm
+    {
+        $decodedRiceType = trim($decodedRiceType);
+        $fromUnderscores = implode(' ', explode('_', $decodedRiceType));
+        $collapsed = preg_replace('/\s+/', ' ', str_replace('_', ' ', $decodedRiceType));
+
+        $candidates = array_values(array_unique(array_filter([
+            $decodedRiceType,
+            $fromUnderscores,
+            $collapsed,
+        ])));
+
+        foreach ($candidates as $formName) {
+            $row = RiceForm::query()
+                ->where('form_name', $formName)
+                ->where('type', $productType)
+                ->where('status', 1)
+                ->first();
+            if ($row) {
+                return $row;
+            }
+        }
+
+        foreach ($candidates as $formName) {
+            $row = RiceForm::query()
+                ->where('form_name', $formName)
+                ->where('type', $productType)
+                ->first();
+            if ($row) {
+                return $row;
+            }
         }
 
         return null;
