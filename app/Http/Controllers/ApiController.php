@@ -2183,11 +2183,11 @@ class ApiController extends Controller
     public function getpriceByTimePeriod($state, $riceType, $rice, $timePeriod, Request $request)
     {
 
-        $state = base64_decode($state);
-        $riceType = base64_decode($riceType);
-        $rice = base64_decode($rice);
-        $timePeriod = base64_decode($timePeriod);
-        
+        $state = $this->decodeEncodedRouteSegment((string) $state);
+        $riceType = $this->decodeEncodedRouteSegment((string) $riceType);
+        $rice = $this->decodeEncodedRouteSegment((string) $rice);
+        $timePeriod = $this->decodeEncodedRouteSegment((string) $timePeriod);
+
         $rice = str_replace('_', ' ', $rice);
 
         $todayDate = Carbon::now();
@@ -2201,10 +2201,7 @@ class ApiController extends Controller
         $highDate = 0;
         $constantValue = 0;
 
-        // Resolve rice by numeric id or by name (avoids $productType null when id was passed encoded)
-        $riceName = ctype_digit(preg_replace('/\s+/', '', (string) $rice))
-            ? RiceName::where('id', (int) $rice)->first()
-            : RiceName::where('name', $rice)->first();
+        $riceName = $this->resolveRiceNameFromEncodedInput((string) $rice);
 
         if (! $riceName) {
             return response()->json([
@@ -2407,10 +2404,8 @@ class ApiController extends Controller
     public function getPriceChartRecords($encodedRiceType, $encodedRice)
     {
         $state = 'Punjab-Haryana';
-        $riceType = base64_decode($encodedRiceType, true);
-        $riceInput = base64_decode($encodedRice, true);
-        $riceType = $riceType !== false ? $riceType : $encodedRiceType;
-        $riceInput = $riceInput !== false ? $riceInput : $encodedRice;
+        $riceType = $this->decodeEncodedRouteSegment((string) $encodedRiceType);
+        $riceInput = $this->decodeEncodedRouteSegment((string) $encodedRice);
         $timePeriod = 7;
 
         $todayDate = Carbon::now();
@@ -2423,13 +2418,13 @@ class ApiController extends Controller
         $highDate = 0;
         $constantValue = 0;
 
-        // Keep backward compatibility: if rice input is numeric, try id first, else by name.
-        $riceName = ctype_digit((string) $riceInput)
-            ? RiceName::where('id', (int) $riceInput)->first()
-            : RiceName::where('name', $riceInput)->first();
+        $riceName = $this->resolveRiceNameFromEncodedInput($riceInput);
 
         if (! $riceName) {
-            return response()->json(['errors' => ['rice' => 'Rice not found']], 404);
+            return response()->json([
+                'errors' => ['rice' => 'Rice not found'],
+                'message' => 'Invalid rice name or id for the given encoded value.',
+            ], 404);
         }
 
         $productType = RiceName::select('type')->where('id', $riceName->id)->first();
@@ -6381,5 +6376,74 @@ if (!file_exists('uploads')) {
     {
         $hasUnattendedUser = User::where(['user_from' => 'web', 'is_viewed_by_admin' => 0])->count();
         return response()->json([ 'status' => true , 'message' => 'count get successfully' , 'count' => $hasUnattendedUser ] , 200);
+    }
+
+    /**
+     * Decode a base64 value from a URL path segment: spaces vs "+", URL-safe alphabet, missing padding.
+     */
+    private function decodeEncodedRouteSegment(string $encoded): string
+    {
+        $encoded = trim(rawurldecode($encoded));
+        $encoded = str_replace(' ', '+', $encoded);
+
+        $decoded = base64_decode($encoded, true);
+        if ($decoded !== false) {
+            return trim($decoded);
+        }
+
+        $padLen = strlen($encoded) % 4;
+        if ($padLen !== 0) {
+            $padded = $encoded . str_repeat('=', 4 - $padLen);
+            $decoded = base64_decode($padded, true);
+            if ($decoded !== false) {
+                return trim($decoded);
+            }
+        }
+
+        $urlSafe = strtr($encoded, '-_', '+/');
+        if ($urlSafe !== $encoded) {
+            $decoded = base64_decode($urlSafe, true);
+            if ($decoded !== false) {
+                return trim($decoded);
+            }
+            $padLen = strlen($urlSafe) % 4;
+            if ($padLen !== 0) {
+                $padded = $urlSafe . str_repeat('=', 4 - $padLen);
+                $decoded = base64_decode($padded, true);
+                if ($decoded !== false) {
+                    return trim($decoded);
+                }
+            }
+        }
+
+        return $encoded;
+    }
+
+    /**
+     * Resolve a rice row from decoded chart/price input: numeric id, then exact name, then name as digit string.
+     */
+    private function resolveRiceNameFromEncodedInput(string $riceInput): ?RiceName
+    {
+        $riceInput = trim($riceInput);
+        $riceInput = str_replace('_', ' ', $riceInput);
+        $compact = preg_replace('/\s+/', '', $riceInput);
+
+        if ($compact !== '' && ctype_digit($compact)) {
+            $byId = RiceName::where('id', (int) $compact)->first();
+            if ($byId) {
+                return $byId;
+            }
+        }
+
+        $byName = RiceName::where('name', $riceInput)->first();
+        if ($byName) {
+            return $byName;
+        }
+
+        if ($compact !== '' && ctype_digit($compact)) {
+            return RiceName::where('name', $compact)->first();
+        }
+
+        return null;
     }
 }
