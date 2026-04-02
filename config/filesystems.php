@@ -61,6 +61,13 @@ return [
             'visibility' => 'public',
         ],
 
+        /** Portal uploads (avatars, documents) — same URLs as public/webPortal/... */
+        'webportal' => [
+            'driver' => 'local',
+            'root' => public_path('webPortal'),
+            'visibility' => 'public',
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

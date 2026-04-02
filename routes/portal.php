@@ -17,13 +17,11 @@
         Route::post('verify/otp', [PortalApiController::class, 'verifyOTP']);
         Route::post('resend/otp', [PortalApiController::class, 'resendOTP']);
 
+        // Cookie/session based endpoints should not require bearer token.
+        Route::post('session', [PortalApiController::class, 'getSession']);
+        Route::post('logout', [PortalApiController::class, 'logout']);
+
         Route::group(['middleware' => ['portal.api.token']], function () {
-            // ✅ Session restore endpoint - POST works cross-origin with SameSite=Lax
-            // Works for both local (HTTP) and production (HTTPS) environments
-            Route::post('session', [PortalApiController::class, 'getSession']);
-            
-            // ✅ New logout endpoint
-            Route::post('logout', [PortalApiController::class, 'logout']);
 
             Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails']);
             Route::get('get/user/details/{userId}', [PortalApiController::class, 'getUserDetails']);

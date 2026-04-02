@@ -76,6 +76,7 @@ use App\ServiceProviderUserMap;
 use Razorpay\Api\Api;
 use Exception;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class PortalApiController extends Controller
 {
@@ -91,12 +92,22 @@ class PortalApiController extends Controller
     }
 
     /**
-     * Store an uploaded file under public/ (or an absolute path). Creates parent directories with group-writable perms for shared hosting.
+     * Store an uploaded file under public/webPortal/... (or legacy absolute paths).
+     * Uses the webportal disk when possible so writes stream reliably (avoids some move() failures across tmp vs public volumes).
      *
      * @return string|false Stored filename, or false if extension is not allowed
      */
     public function uploadAttachments($file, $destination, array $requiredExtentionValidation)
     {
+        if (! $file->isValid()) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => 'Invalid upload: ' . $file->getErrorMessage(),
+                ], 422)
+            );
+        }
+
         $filename = $file->getClientOriginalName();
         $fileextension = strtolower($file->getClientOriginalExtension());
         $allowed = array_map('strtolower', $requiredExtentionValidation);
@@ -105,37 +116,90 @@ class PortalApiController extends Controller
             return false;
         }
 
-        $destination = $this->resolvePortalUploadDirectory($destination);
+        $safeFilename = $this->sanitizePortalUploadFilename($filename, $fileextension);
 
+        $destination = $this->resolvePortalUploadDirectory($destination);
+        $webPortalRoot = rtrim(str_replace('\\', '/', public_path('webPortal')), '/');
+        $destNorm = rtrim(str_replace('\\', '/', $destination), '/');
+
+        if (str_starts_with($destNorm, $webPortalRoot)) {
+            $relativeDir = trim(substr($destNorm, strlen($webPortalRoot)), '/');
+            if ($relativeDir === '') {
+                $relativeDir = '.';
+            }
+
+            try {
+                if (! File::isDirectory($webPortalRoot)) {
+                    File::makeDirectory($webPortalRoot, 0775, true, true);
+                }
+
+                $stored = Storage::disk('webportal')->putFileAs($relativeDir, $file, $safeFilename);
+
+                if ($stored) {
+                    return basename($stored);
+                }
+            } catch (\Throwable $e) {
+                report($e);
+            }
+
+            // Fallback: stream copy from PHP temp (works when rename/move fails across filesystems)
+            try {
+                $targetPath = $destination . DIRECTORY_SEPARATOR . $safeFilename;
+                if (! File::isDirectory($destination)) {
+                    File::makeDirectory($destination, 0775, true, true);
+                }
+                $src = $file->getRealPath();
+                if ($src && is_readable($src) && @copy($src, $targetPath)) {
+                    @chmod($targetPath, 0664);
+
+                    return $safeFilename;
+                }
+            } catch (\Throwable $e) {
+                report($e);
+            }
+
+            $this->throwPortalUploadFailure('Could not save the uploaded file. Ensure public/webPortal is writable by the web server (e.g. chown -R www-data:www-data public/webPortal && chmod -R 775 public/webPortal). On SELinux: chcon -R -t httpd_sys_rw_content_t public/webPortal');
+        }
+
+        // Legacy: destination outside public/webPortal
         try {
             if (! File::isDirectory($destination)) {
                 File::makeDirectory($destination, 0775, true, true);
             }
+            $file->move($destination, $safeFilename);
+
+            return $safeFilename;
         } catch (\Throwable $e) {
             report($e);
+            $this->throwPortalUploadFailure('Could not save the uploaded file. Check disk space and permissions on the upload folder.');
+        }
+    }
 
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
-                response()->json([
-                    'status' => false,
-                    'message' => 'Could not create upload directory. On the server, ensure public/webPortal exists and is writable by the web server user (e.g. mkdir -p public/webPortal && chown -R www-data:www-data public/webPortal && chmod -R 775 public/webPortal).',
-                ], 500)
-            );
+    private function sanitizePortalUploadFilename(string $originalName, string $extension): string
+    {
+        $base = pathinfo($originalName, PATHINFO_FILENAME);
+        $base = preg_replace('/[^a-zA-Z0-9._\x{0900}-\x{097F}-]/u', '_', $base);
+        $base = trim((string) $base, '._- ');
+        if ($base === '') {
+            $base = 'upload_' . Str::random(10);
         }
 
-        try {
-            $file->move($destination, $filename);
-        } catch (\Throwable $e) {
-            report($e);
+        return $base . '.' . $extension;
+    }
 
-            throw new \Illuminate\Http\Exceptions\HttpResponseException(
-                response()->json([
-                    'status' => false,
-                    'message' => 'Could not save the uploaded file. Check disk space and permissions on the upload folder.',
-                ], 500)
-            );
+    private function throwPortalUploadFailure(string $userMessage): void
+    {
+        $payload = [
+            'status' => false,
+            'message' => $userMessage,
+        ];
+        if (config('app.debug')) {
+            $payload['debug'] = 'See laravel.log for the previous exception.';
         }
 
-        return $filename;
+        throw new \Illuminate\Http\Exceptions\HttpResponseException(
+            response()->json($payload, 500)
+        );
     }
 
     private function resolvePortalUploadDirectory(string $destination): string
