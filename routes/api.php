@@ -32,9 +32,9 @@ use Pusher\Pusher;
     
     Route::get('prices2/{state}/{type}','ApiController@getPrices2');
     Route::get('list/port',                 ['uses'=>'ApiController@getPorts']);
-    Route::get('get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
-    // Fixed-state/timeperiod chart endpoint (state=PUNJAB-HARYANA, period=7 days)
+    // Must be registered BEFORE get/price/{state}/... or "chart/records/..." is captured as state=chart, riceType=records.
     Route::get('get/price/chart/records/{encodedRiceType}/{encodedRice}', ['as' => 'get.price.chart.records', 'uses' => 'ApiController@getPriceChartRecords']);
+    Route::get('get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
     Route::get('get/plans' ,                ['as' => 'get.plans'                , 'uses' => 'ApiController@getPlans']);
     Route::get('get/price/states' ,         ['as' => 'get.price.states'         , 'uses' => 'ApiController@getPriceStates']);
 
