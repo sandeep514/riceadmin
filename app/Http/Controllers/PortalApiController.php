@@ -229,32 +229,29 @@ class PortalApiController extends Controller
     }
 
     /**
-     * Single GST-or-FSSAI document: prefer documents.gst_fssai_file; still accepts legacy gst_file / fssai_file.
-     * Stored path on row: gst_fssai/filename, gst/filename, or fssai/filename (prefix + basename).
+     * Single GST-or-FSSAI document: files are always stored under webPortal/{userId}/attachments/gst_fssai/.
+     * Accepts documents.gst_fssai_file or legacy documents.gst_file / documents.fssai_file (same folder).
+     * DB value: gst_fssai/{filename}.
      *
      * @return \Illuminate\Http\JsonResponse|null JSON error response, or null when nothing uploaded / success
      */
     private function applyGstFssaiDocumentUpload(Request $request, int $user_id): ?\Illuminate\Http\JsonResponse
     {
         $file = null;
-        $relativePrefix = null;
 
         if ($request->hasFile('documents.gst_fssai_file')) {
             $file = $request->file('documents.gst_fssai_file');
-            $relativePrefix = 'gst_fssai';
         } elseif ($request->hasFile('documents.gst_file')) {
             $file = $request->file('documents.gst_file');
-            $relativePrefix = 'gst';
         } elseif ($request->hasFile('documents.fssai_file')) {
             $file = $request->file('documents.fssai_file');
-            $relativePrefix = 'fssai';
         }
 
         if (! $file) {
             return null;
         }
 
-        $basePath = public_path('webPortal/' . $user_id . '/attachments/' . $relativePrefix);
+        $basePath = public_path('webPortal/' . $user_id . '/attachments/gst_fssai');
         $stored = $this->uploadAttachments($file, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
         if ($stored === false) {
             return response()->json(['status' => false, 'message' => 'GST/FSSAI file must be jpeg, jpg, png, or pdf.'], 422);
@@ -263,7 +260,7 @@ class PortalApiController extends Controller
         WebUserAttachment::updateOrCreate(
             ['user_id' => $user_id],
             [
-                'gst_fssai' => $relativePrefix . '/' . $stored,
+                'gst_fssai' => 'gst_fssai/' . $stored,
                 'gstCard' => null,
                 'fssaiCard' => null,
             ]
