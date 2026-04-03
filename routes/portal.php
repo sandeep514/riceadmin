@@ -23,9 +23,11 @@
 
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
 
+        Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails'])
+            ->middleware(['portal.session_or_token']);
+
         Route::group(['middleware' => ['portal.api.token']], function () {
 
-            Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails']);
             Route::get('get/user/details/{userId}', [PortalApiController::class, 'getUserDetails']);
             Route::delete('delete/user/{userId}', [PortalApiController::class, 'deleteUser']);
 

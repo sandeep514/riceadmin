@@ -228,6 +228,50 @@ class PortalApiController extends Controller
             && ($path[2] === '\\' || $path[2] === '/');
     }
 
+    /**
+     * Single GST-or-FSSAI document: prefer documents.gst_fssai_file; still accepts legacy gst_file / fssai_file.
+     * Stored path on row: gst_fssai/filename, gst/filename, or fssai/filename (prefix + basename).
+     *
+     * @return \Illuminate\Http\JsonResponse|null JSON error response, or null when nothing uploaded / success
+     */
+    private function applyGstFssaiDocumentUpload(Request $request, int $user_id): ?\Illuminate\Http\JsonResponse
+    {
+        $file = null;
+        $relativePrefix = null;
+
+        if ($request->hasFile('documents.gst_fssai_file')) {
+            $file = $request->file('documents.gst_fssai_file');
+            $relativePrefix = 'gst_fssai';
+        } elseif ($request->hasFile('documents.gst_file')) {
+            $file = $request->file('documents.gst_file');
+            $relativePrefix = 'gst';
+        } elseif ($request->hasFile('documents.fssai_file')) {
+            $file = $request->file('documents.fssai_file');
+            $relativePrefix = 'fssai';
+        }
+
+        if (! $file) {
+            return null;
+        }
+
+        $basePath = public_path('webPortal/' . $user_id . '/attachments/' . $relativePrefix);
+        $stored = $this->uploadAttachments($file, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+        if ($stored === false) {
+            return response()->json(['status' => false, 'message' => 'GST/FSSAI file must be jpeg, jpg, png, or pdf.'], 422);
+        }
+
+        WebUserAttachment::updateOrCreate(
+            ['user_id' => $user_id],
+            [
+                'gst_fssai' => $relativePrefix . '/' . $stored,
+                'gstCard' => null,
+                'fssaiCard' => null,
+            ]
+        );
+
+        return null;
+    }
+
     public function loginUser(Request $request)
     {
         $validator = \Validator::make($request->all(), [
@@ -573,24 +617,11 @@ class PortalApiController extends Controller
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['farmer_file' => $file]);
         }
 
-        if ($request->has('documents.gst_file')) {
-            $basePath = public_path('webPortal/' . $user_id . '/attachments/gst');
-            $file = $this->uploadAttachments($request->file('documents.gst_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
-            if ($file === false) {
-                return response()->json(['status' => false, 'message' => 'GST file must be jpeg, jpg, png, or pdf.'], 422);
-            }
-            WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['gstCard' => $file]);
+        $gstFssaiError = $this->applyGstFssaiDocumentUpload($request, $user_id);
+        if ($gstFssaiError !== null) {
+            return $gstFssaiError;
         }
 
-        if ($request->has('documents.fssai_file')) {
-            $basePath = public_path('webPortal/' . $user_id . '/attachments/fssai');
-            $file = $this->uploadAttachments($request->file('documents.fssai_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
-            if ($file === false) {
-                return response()->json(['status' => false, 'message' => 'FSSAI file must be jpeg, jpg, png, or pdf.'], 422);
-            }
-            WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['fssaiCard' => $file]);
-        }
-        
 
         $mailTo = 'info@sntcgroup.com';
         $mailMessage = '';
@@ -632,9 +663,8 @@ class PortalApiController extends Controller
 
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
-                'gst' => 'webPortal/' . $userId . '/attachments/gst',
                 'pan' => 'webPortal/' . $userId . '/attachments/pan',
-                'fssai' => 'webPortal/' . $userId . '/attachments/fssai'
+                'gst_fssai' => 'webPortal/' . $userId . '/attachments',
             ]], 200);
 
 
@@ -988,7 +1018,7 @@ class PortalApiController extends Controller
             if( $request->subscription_type =='trial' ){
                 $webUserAttachment = WebUserAttachment::where(['user_id' => $userId])->first();
 
-                if($webUserAttachment == null || $webUserAttachment->panCard == null || $webUserAttachment->gstCard == null || $webUserAttachment->fssaiCard == null || $webUserAttachment->farmer_file == null ){
+                if ($webUserAttachment === null || ! $webUserAttachment->trialDocumentsComplete()) {
                     User::where(['id' => $userId])->update(['has_validation' => "Please submit your documents to complete your profile."]);
                 }else{
                     User::where(['id' => $userId])->update(['has_validation' => "Your profile is under review. We will notify you once approved."]);
@@ -1157,9 +1187,8 @@ class PortalApiController extends Controller
             'data' => $userArray,
             'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
-                'gst' => 'webPortal/' . $userId . '/attachments/gst',
                 'pan' => 'webPortal/' . $userId . '/attachments/pan',
-                'fssai' => 'webPortal/' . $userId . '/attachments/fssai',
+                'gst_fssai' => 'webPortal/' . $userId . '/attachments',
             ],
         ], 200);
     }

@@ -73,31 +73,32 @@
 					</td>
 				</tr>
 
-				{{-- GST Card --}}
+				{{-- GST or FSSAI (single document) --}}
 				<tr>
-					<th>GST Card</th>
+					<th>GST / FSSAI</th>
 					<td>
-						@if (!empty($user['get_web_user_attachment']['gstCard']))
-
+						@php
+							$gstFssaiRel = $user['get_web_user_attachment']['gst_fssai'] ?? null;
+						@endphp
+						@if (!empty($gstFssaiRel))
 							@php
-								$filename = $user['get_web_user_attachment']['gstCard'];
+								$gstFssaiUrl = asset('webPortal/' . $user['id'] . '/attachments/' . $gstFssaiRel);
+								$basename = basename($gstFssaiRel);
 							@endphp
-
-							@if (preg_match('/\.(png|jpe?g)$/i', $filename)) {
-								<img 
-									src="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}" 
-									alt="GST Card" 
+							@if (preg_match('/\.(png|jpe?g)$/i', $basename))
+								<img
+									src="{{ $gstFssaiUrl }}"
+									alt="GST / FSSAI"
 									width="120"
 									class="img-thumbnail"
 									style="cursor:pointer"
-									data-bs-toggle="modal" 
-									data-bs-target="#imageModal" 
-									data-image="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}"
+									data-bs-toggle="modal"
+									data-bs-target="#imageModal"
+									data-image="{{ $gstFssaiUrl }}"
 								>
 							@else
-								<a href="{{ asset('webPortal/' . $user['id'] . '/attachments/gst/' . $user['get_web_user_attachment']['gstCard']) }}" target="_blank">View</a>
+								<a href="{{ $gstFssaiUrl }}" target="_blank">View</a>
 							@endif
-							
 						@else
 							--
 						@endif
