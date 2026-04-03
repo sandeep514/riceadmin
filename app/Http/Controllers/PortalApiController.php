@@ -235,22 +235,72 @@ class PortalApiController extends Controller
     }
 
     /**
-     * Multipart file under documents[gst_fssai_file] or documents.gst_fssai_file (Laravel dot key).
+     * Resolve multipart file for portal document fields.
+     * Supports: documents.{field}, documents[{field}], top-level {field}, and nested maps from various clients.
      */
     private function portalDocumentsUploadedFile(Request $request, string $fieldName): ?UploadedFile
     {
-        $dotKey = 'documents.' . $fieldName;
-        if ($request->hasFile($dotKey)) {
-            $f = $request->file($dotKey);
+        $all = $request->allFiles();
 
-            return $f instanceof UploadedFile ? $f : null;
+        foreach (['documents.' . $fieldName, $fieldName] as $path) {
+            $f = data_get($all, $path);
+            $one = $this->firstUploadedFile($f);
+            if ($one !== null) {
+                return $one;
+            }
         }
 
-        $documents = $request->file('documents');
-        if (is_array($documents) && isset($documents[$fieldName])) {
-            $f = $documents[$fieldName];
+        $documents = data_get($all, 'documents');
+        if (is_array($documents)) {
+            $one = $this->firstUploadedFile($documents[$fieldName] ?? null);
+            if ($one !== null) {
+                return $one;
+            }
+        }
 
-            return $f instanceof UploadedFile ? $f : null;
+        return $this->findNestedUploadedFileByKey($all, $fieldName, 0, 10);
+    }
+
+    /**
+     * @param  array<string, mixed>  $node
+     */
+    private function findNestedUploadedFileByKey(array $node, string $fieldName, int $depth, int $maxDepth): ?UploadedFile
+    {
+        if ($depth > $maxDepth) {
+            return null;
+        }
+        foreach ($node as $key => $value) {
+            if ($key === $fieldName) {
+                $one = $this->firstUploadedFile($value);
+                if ($one !== null) {
+                    return $one;
+                }
+            }
+            if (is_array($value)) {
+                $found = $this->findNestedUploadedFileByKey($value, $fieldName, $depth + 1, $maxDepth);
+                if ($found !== null) {
+                    return $found;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  mixed  $value
+     */
+    private function firstUploadedFile($value): ?UploadedFile
+    {
+        if ($value instanceof UploadedFile) {
+            return $value;
+        }
+        if (is_array($value)) {
+            foreach ($value as $item) {
+                if ($item instanceof UploadedFile) {
+                    return $item;
+                }
+            }
         }
 
         return null;
@@ -540,7 +590,10 @@ class PortalApiController extends Controller
 
     public function updateUserDetails(Request $request)
     {
-        $user_id = $request->user_id;
+        $user_id = (int) $request->input('user_id');
+        if ($user_id < 1) {
+            return response()->json(['status' => false, 'message' => 'Valid user_id is required.'], 422);
+        }
 
         $personalDetails = [];
         $businessDetails = [];
