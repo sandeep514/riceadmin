@@ -21,6 +21,8 @@
         Route::post('session', [PortalApiController::class, 'getSession']);
         Route::post('logout', [PortalApiController::class, 'logout']);
 
+        Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
+
         Route::group(['middleware' => ['portal.api.token']], function () {
 
             Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails']);
@@ -32,7 +34,6 @@
             Route::post('web/create-order', [PortalApiController::class, 'webCreateOrder']);
             Route::post('web/verify-payment', [PortalApiController::class, 'webVerifyPayment']);
 
-            Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
             

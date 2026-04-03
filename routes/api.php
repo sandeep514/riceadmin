@@ -233,8 +233,8 @@ use Pusher\Pusher;
     Route::post('web/variant/create' , ['as' => 'web.variant.create' , 'uses' => 'WebBrandController@createVariant', 'middleware' => 'portal.api.token' ]); 
 
 
-    Route::get('get/web/states' , ['as' => 'web.get.web.states' , 'uses' => 'WebStatesController@getStatesList', 'middleware' => 'portal.api.token']);
-    Route::get('get/web/cities/{stateId}' , ['as' => 'web.get.web.cities.stateId' , 'uses' => 'WebStatesController@getCityFromStateId', 'middleware' => 'portal.api.token']);
+    Route::get('get/web/states' , ['as' => 'web.get.web.states' , 'uses' => 'WebStatesController@getStatesList']);
+    Route::get('get/web/cities/{stateId}' , ['as' => 'web.get.web.cities.stateId' , 'uses' => 'WebStatesController@getCityFromStateId']);
     
 
     Route::get('get/web/brand/form' , ['as' => 'web.get.brand.form' , 'uses' => 'WebStatesController@getWebBrandForm', 'middleware' => 'portal.api.token']);
