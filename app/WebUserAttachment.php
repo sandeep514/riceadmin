@@ -16,6 +16,12 @@ class WebUserAttachment extends Model
      */
     protected $hidden = ['gstCard', 'fssaiCard'];
 
+    /**
+     * Split path so clients can build URLs without encodeURIComponent on the full string (avoids %2F breaking static files).
+     * Use: {prefix}/ + gst_fssai_folder + '/' + gst_fssai_file  (e.g. webPortal/1/attachments/gst_fssai/screenshot.png).
+     */
+    protected $appends = ['gst_fssai_folder', 'gst_fssai_file'];
+
     protected function gstFssai(): Attribute
     {
         return Attribute::make(
@@ -33,6 +39,36 @@ class WebUserAttachment extends Model
                 return null;
             }
         );
+    }
+
+    protected function gstFssaiFolder(): Attribute
+    {
+        return Attribute::get(function () {
+            $path = $this->gst_fssai;
+            if ($path === null || $path === '') {
+                return null;
+            }
+            if (str_contains($path, '/')) {
+                return dirname($path);
+            }
+
+            return 'gst_fssai';
+        });
+    }
+
+    protected function gstFssaiFile(): Attribute
+    {
+        return Attribute::get(function () {
+            $path = $this->gst_fssai;
+            if ($path === null || $path === '') {
+                return null;
+            }
+            if (str_contains($path, '/')) {
+                return basename($path);
+            }
+
+            return $path;
+        });
     }
 
     /**

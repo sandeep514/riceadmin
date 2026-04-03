@@ -34,6 +34,7 @@ use App\Helpers\StatusChat;
 use App\USD_prices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\FreeTrialMonths;
@@ -135,6 +136,11 @@ class PortalApiController extends Controller
                     File::makeDirectory($webPortalRoot, 0775, true, true);
                 }
 
+                // putFileAs does not always create nested dirs (e.g. {userId}/attachments/gst_fssai).
+                if (! File::isDirectory($destination)) {
+                    File::makeDirectory($destination, 0775, true, true);
+                }
+
                 $stored = Storage::disk('webportal')->putFileAs($relativeDir, $file, $safeFilename);
 
                 if ($stored) {
@@ -229,23 +235,39 @@ class PortalApiController extends Controller
     }
 
     /**
+     * Multipart file under documents[gst_fssai_file] or documents.gst_fssai_file (Laravel dot key).
+     */
+    private function portalDocumentsUploadedFile(Request $request, string $fieldName): ?UploadedFile
+    {
+        $dotKey = 'documents.' . $fieldName;
+        if ($request->hasFile($dotKey)) {
+            $f = $request->file($dotKey);
+
+            return $f instanceof UploadedFile ? $f : null;
+        }
+
+        $documents = $request->file('documents');
+        if (is_array($documents) && isset($documents[$fieldName])) {
+            $f = $documents[$fieldName];
+
+            return $f instanceof UploadedFile ? $f : null;
+        }
+
+        return null;
+    }
+
+    /**
      * Single GST-or-FSSAI document: files are always stored under webPortal/{userId}/attachments/gst_fssai/.
-     * Accepts documents.gst_fssai_file or legacy documents.gst_file / documents.fssai_file (same folder).
+     * Accepts documents[gst_fssai_file] / documents.gst_fssai_file, or legacy gst_file / fssai_file (same folder).
      * DB value: gst_fssai/{filename}.
      *
      * @return \Illuminate\Http\JsonResponse|null JSON error response, or null when nothing uploaded / success
      */
     private function applyGstFssaiDocumentUpload(Request $request, int $user_id): ?\Illuminate\Http\JsonResponse
     {
-        $file = null;
-
-        if ($request->hasFile('documents.gst_fssai_file')) {
-            $file = $request->file('documents.gst_fssai_file');
-        } elseif ($request->hasFile('documents.gst_file')) {
-            $file = $request->file('documents.gst_file');
-        } elseif ($request->hasFile('documents.fssai_file')) {
-            $file = $request->file('documents.fssai_file');
-        }
+        $file = $this->portalDocumentsUploadedFile($request, 'gst_fssai_file')
+            ?? $this->portalDocumentsUploadedFile($request, 'gst_file')
+            ?? $this->portalDocumentsUploadedFile($request, 'fssai_file');
 
         if (! $file) {
             return null;
@@ -596,18 +618,18 @@ class PortalApiController extends Controller
             }
         }
 
-        if ($request->has('documents.pan_file')) {
+        if (($panFile = $this->portalDocumentsUploadedFile($request, 'pan_file')) !== null) {
             $basePath = public_path('webPortal/' . $user_id . '/attachments/pan');
-            $file = $this->uploadAttachments($request->file('documents.pan_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+            $file = $this->uploadAttachments($panFile, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
             if ($file === false) {
                 return response()->json(['status' => false, 'message' => 'PAN file must be jpeg, jpg, png, or pdf.'], 422);
             }
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['panCard' => $file]);
         }
 
-        if ($request->has('documents.farmer_file')) {
+        if (($farmerFile = $this->portalDocumentsUploadedFile($request, 'farmer_file')) !== null) {
             $basePath = public_path('webPortal/' . $user_id . '/attachments/farmer_file');
-            $file = $this->uploadAttachments($request->file('documents.farmer_file'), $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+            $file = $this->uploadAttachments($farmerFile, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
             if ($file === false) {
                 return response()->json(['status' => false, 'message' => 'Farmer document must be jpeg, jpg, png, or pdf.'], 422);
             }
