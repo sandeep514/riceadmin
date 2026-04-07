@@ -2,172 +2,239 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\StatusChat;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Controllers\MailController;
-use Illuminate\Support\Str;
-use App\PaddyStateModel;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
-use Mail;
-use Auth;
+use App\PaddyStateModel;
 use App\RiceName;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class PaddyApiController extends Controller
 {
+    /**
+     * Calendar date (Y-m-d) of the most recently inserted/updated paddy row.
+     * Uses raw latest row — not filtered by price, so rows with "----" or 0 still anchor the snapshot.
+     */
+    private function latestPaddyPricesDate(): ?string
+    {
+        $row = PaddyPrice::query()
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->first();
+
+        return $row ? Carbon::parse($row->created_at)->format('Y-m-d') : null;
+    }
+
     public function listPaddy(Request $request)
     {
-        // $todayDate = Carbon::now()->format('Y-m-d');
-        $lastAddedRow = PaddyPrice::orderBy('created_at' , 'desc')->where(function($q){
-            return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-        })->first();
+        $lastAddedDate = $this->latestPaddyPricesDate();
 
         $selectedStatesIds = [];
-        if( $lastAddedRow ){
-            $lastAddedDate = Carbon::parse($lastAddedRow->created_at)->format('Y-m-d');
-            
-            $selectedStatesIds = array_unique(PaddyPrice::whereDate('created_at' , $lastAddedDate)->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })->pluck('state')->toArray());
+        if ($lastAddedDate !== null) {
+            $selectedStatesIds = array_unique(
+                PaddyPrice::query()
+                    ->whereDate('created_at', $lastAddedDate)
+                    ->pluck('state')
+                    ->filter()
+                    ->values()
+                    ->toArray()
+            );
         }
 
-        $paddyState = PaddyStateModel::select('id' , 'state')->where('status' , 1)->whereIn('id' , $selectedStatesIds)->get();
-        return response()->json(['status' => true , 'message' => 'Paddy state successfully' , 'data' => $paddyState]);
+        $paddyState = $selectedStatesIds === []
+            ? collect()
+            : PaddyStateModel::query()
+                ->select('id', 'state')
+                ->where('status', 1)
+                ->whereIn('id', $selectedStatesIds)
+                ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy state successfully',
+            'lastSnapshotDate' => $lastAddedDate,
+            'data' => $paddyState,
+        ]);
     }
 
     public function listPaddyMandi($stateId)
     {
-        $lastAddedRow = PaddyPrice::orderBy('created_at' , 'desc')->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })->first();
+        $lastAddedDate = $this->latestPaddyPricesDate();
+
         $selectedMandiIds = [];
-        if( $lastAddedRow ){
-            $lastAddedDate = Carbon::parse($lastAddedRow->created_at)->format('Y-m-d');
-            ;
-            $selectedMandiIds = array_unique(PaddyPrice::where('state' , $stateId)->whereDate('created_at' , $lastAddedDate)->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })->pluck('mandi')->toArray());
+        if ($lastAddedDate !== null) {
+            $selectedMandiIds = array_unique(
+                PaddyPrice::query()
+                    ->where('state', $stateId)
+                    ->whereDate('created_at', $lastAddedDate)
+                    ->pluck('mandi')
+                    ->filter()
+                    ->values()
+                    ->toArray()
+            );
         }
-        $paddyMandi = PaddyMandiModel::select('id' ,'mandi' ,'state_id')->where('state_id' , $stateId)->whereIn('id' , $selectedMandiIds)->where('status' , 1)->get();
-        return response()->json(['status' => true , 'message' => 'Paddy mandi successfully' , 'data' => $paddyMandi]);
+
+        $paddyMandi = $selectedMandiIds === []
+            ? collect()
+            : PaddyMandiModel::query()
+                ->select('id', 'mandi', 'state_id')
+                ->where('state_id', $stateId)
+                ->whereIn('id', $selectedMandiIds)
+                ->where('status', 1)
+                ->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy mandi successfully',
+            'lastSnapshotDate' => $lastAddedDate,
+            'data' => $paddyMandi,
+        ]);
     }
 
-    public function getPaddyPrices($mandi_id , $state_id)
-    {   
-        $lastEnterRow = PaddyPrice::orderBy('created_at' , 'desc')->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })->first();
-
-        $paddyPrices = collect();
-        $lastCreated_at = '';
-        if( $lastEnterRow ){
-            $lastCreated_at = $lastEnterRow->created_at->format('Y-m-d H:i');
-            $lastEnterDate = $lastEnterRow->created_at->format('Y-m-d');
-
-            $paddyPrices = PaddyPrice::where('mandi', $mandi_id)
-                ->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })
-                ->where('state', $state_id)
-                ->whereDate('created_at' , $lastEnterDate)
-                ->with(['getMandi_rel:id,mandi','getState_rel:id,state','quality_rel:id,name'])
-                ->orderBy('id', 'DESC')
-                ->get()
-                ->groupBy(function ($item) {
-                    return $item->created_at->format('Y-m-d');
-                })
-                ->map(function ($group) {
-                    return $group->groupBy('quality_id')->map(function ($qGroup) {
-                        return $qGroup->first();
-                    });
-                })
-            ->first();
-        }
-        
-        return response()->json(['status' => true , 'message' => 'Paddy get successfully' , 'data' => $paddyPrices,'lastUpdatedDate' => $lastCreated_at]);
-    }
-
-    public function getPaddyPricesByPaddy($stateId , $paddyId)
+    public function getPaddyPrices($mandi_id, $state_id)
     {
-        $lastEnterRow = PaddyPrice::orderBy('created_at' , 'desc')->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })->first();
+        $lastEnterDate = $this->latestPaddyPricesDate();
+        $lastCreated_at = '';
 
         $paddyPrices = collect();
-        $lastCreated_at = '';
-        if( $lastEnterRow ){
-            $lastCreated_at = $lastEnterRow->created_at->format('Y-m-d H:i');
-            $lastEnterDate = $lastEnterRow->created_at->format('Y-m-d');
-            // dd($lastEnterDate);
-            $paddyPrices = PaddyPrice::where('quality_id', $paddyId)
-                ->where(function($q){
-                    return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-                })
-                ->where('state', $stateId)
-                ->whereDate('created_at' , $lastEnterDate)
-                ->with(['getMandi_rel:id,mandi','getState_rel:id,state','quality_rel:id,name'])
-                ->orderBy('id', 'DESC')
+
+        if ($lastEnterDate !== null) {
+            $anchorRow = PaddyPrice::query()
+                ->whereDate('created_at', $lastEnterDate)
+                ->orderByDesc('created_at')
+                ->orderByDesc('id')
+                ->first();
+            if ($anchorRow) {
+                $lastCreated_at = $anchorRow->created_at->format('Y-m-d H:i');
+            }
+
+            $paddyPrices = PaddyPrice::query()
+                ->where('mandi', $mandi_id)
+                ->where('state', $state_id)
+                ->whereDate('created_at', $lastEnterDate)
+                ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,name'])
+                ->orderByDesc('id')
                 ->get()
-                ->groupBy(function ($item) {
-                    return $item->created_at->format('Y-m-d');
-                })
+                ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
                 ->map(function ($group) {
-                    return $group->groupBy('quality_id')->map(function ($qGroup) {
-                        return $qGroup;
-                    });
+                    return $group->groupBy('quality_id')->map(fn ($qGroup) => $qGroup->first());
                 })
-            ->first();
+                ->first() ?? collect();
         }
-        return response()->json(['status' => true , 'message' => 'Paddy get successfully' , 'data' => $paddyPrices,'lastUpdatedDate' => $lastCreated_at]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy get successfully',
+            'data' => $paddyPrices,
+            'lastUpdatedDate' => $lastCreated_at,
+            'lastSnapshotDate' => $lastEnterDate,
+        ]);
+    }
+
+    public function getPaddyPricesByPaddy($stateId, $paddyId)
+    {
+        $lastEnterDate = $this->latestPaddyPricesDate();
+        $lastCreated_at = '';
+
+        $paddyPrices = collect();
+
+        if ($lastEnterDate !== null) {
+            $anchorRow = PaddyPrice::query()
+                ->whereDate('created_at', $lastEnterDate)
+                ->orderByDesc('created_at')
+                ->orderByDesc('id')
+                ->first();
+            if ($anchorRow) {
+                $lastCreated_at = $anchorRow->created_at->format('Y-m-d H:i');
+            }
+
+            $paddyPrices = PaddyPrice::query()
+                ->where('quality_id', $paddyId)
+                ->where('state', $stateId)
+                ->whereDate('created_at', $lastEnterDate)
+                ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,name'])
+                ->orderByDesc('id')
+                ->get()
+                ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
+                ->map(function ($group) {
+                    return $group->groupBy('quality_id')->map(fn ($qGroup) => $qGroup);
+                })
+                ->first() ?? collect();
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy get successfully',
+            'data' => $paddyPrices,
+            'lastUpdatedDate' => $lastCreated_at,
+            'lastSnapshotDate' => $lastEnterDate,
+        ]);
     }
 
     public function getPaddyQualities($stateId)
     {
-        $lastEnterRow = PaddyPrice::orderBy('created_at' , 'desc')->where(function($q){
-            return $q->where('hand_cutting_price' ,'!=', 0 )->orWhere('machine_cutting_price' ,'!=', 0);
-        })->first();
-        $states = collect();
+        $lastEnterDate = $this->latestPaddyPricesDate();
+        $qualities = collect();
 
-        if( $lastEnterRow ){
+        if ($lastEnterDate !== null) {
+            $paddyQualityIds = PaddyPrice::query()
+                ->where('state', $stateId)
+                ->whereDate('created_at', $lastEnterDate)
+                ->orderByDesc('id')
+                ->pluck('quality_id')
+                ->toArray();
 
-            $lastEnterDate = $lastEnterRow->created_at->format('Y-m-d');
-            $paddyQualityIds = PaddyPrice::where('state', $stateId)
-                ->whereDate('created_at' , $lastEnterDate)
-                ->orderBy('id', 'DESC')
-                ->pluck('quality_id')->toArray();
+            $paddyQualityArrayIds = array_values(array_unique(array_filter($paddyQualityIds)));
 
-            $paddyQualityArrayIds = array_values(array_unique($paddyQualityIds));
-
-            $qualities = RiceName::select('id','name')->whereIn('id' , $paddyQualityArrayIds)->get();
+            if ($paddyQualityArrayIds !== []) {
+                $qualities = RiceName::query()
+                    ->select('id', 'name')
+                    ->whereIn('id', $paddyQualityArrayIds)
+                    ->get();
+            }
         }
-        return response()->json(['status' => true , 'message' => 'Paddy mandi get successfully' , 'data' => $qualities]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy mandi get successfully',
+            'lastSnapshotDate' => $lastEnterDate,
+            'data' => $qualities,
+        ]);
     }
 
-
-    public function GetPaddyMapData(Request $request)
+    public function GetPaddyMapData($mandi_id, $state_id, $quality_id)
     {
-        $mandi_id = ($request->mandi_id);
-        $state_id = ($request->state_id);
-        $quality_id = ($request->quality_id);
-        // $crop_id = base64_decode($request->crop_id);
+        $lastEnterDate = $this->latestPaddyPricesDate();
 
-        $paddyPricePre = PaddyPrice::where(['mandi'  => $mandi_id , 'state' => $state_id, 'quality_id' => $quality_id ]);
+        $paddyPricePre = PaddyPrice::query()
+            ->where('mandi', $mandi_id)
+            ->where('state', $state_id)
+            ->where('quality_id', $quality_id)
+            ->orderBy('created_at');
 
-        $hand_cutting_price = (clone $paddyPricePre)->where( 'hand_cutting_price','!=', '----')->pluck('hand_cutting_price' , 'created_at')->map(function($q){
-            return (int)(( str_contains($q , '-') ) ? explode('-' , $q)[1] : $q);
-        });
+        $hand_cutting_price = (clone $paddyPricePre)
+            ->where('hand_cutting_price', '!=', '----')
+            ->pluck('hand_cutting_price', 'created_at')
+            ->map(function ($q) {
+                return (int) ((str_contains((string) $q, '-')) ? explode('-', (string) $q)[1] : $q);
+            });
 
-        $machine_cutting_price = (clone $paddyPricePre)->where( 'machine_cutting_price','!=', '----')->pluck('machine_cutting_price' , 'created_at')->map(function($q){
-            return (int)(( str_contains($q , '-') ) ? explode('-' , $q)[1] : $q);
-        });
+        $machine_cutting_price = (clone $paddyPricePre)
+            ->where('machine_cutting_price', '!=', '----')
+            ->pluck('machine_cutting_price', 'created_at')
+            ->map(function ($q) {
+                return (int) ((str_contains((string) $q, '-')) ? explode('-', (string) $q)[1] : $q);
+            });
 
-        return response()->json(['status' => true , 'message' => 'Paddy get successfully' , 'data' => ['hand_cutting_price' => $hand_cutting_price , 'machine_cutting_price' => $machine_cutting_price]]);
-
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy get successfully',
+            'lastSnapshotDate' => $lastEnterDate,
+            'data' => [
+                'hand_cutting_price' => $hand_cutting_price,
+                'machine_cutting_price' => $machine_cutting_price,
+            ],
+        ]);
     }
-
-
-
 }
+

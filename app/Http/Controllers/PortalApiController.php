@@ -736,7 +736,8 @@ class PortalApiController extends Controller
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
                 'pan' => 'webPortal/' . $userId . '/attachments/pan',
-                'gst_fssai' => 'webPortal/' . $userId . '/attachments',
+                'attachments' => 'webPortal/' . $userId . '/attachments',
+                'gst_fssai' => 'webPortal/' . $userId . '/attachments/gst_fssai',
             ]], 200);
 
 
@@ -1260,7 +1261,8 @@ class PortalApiController extends Controller
             'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
                 'pan' => 'webPortal/' . $userId . '/attachments/pan',
-                'gst_fssai' => 'webPortal/' . $userId . '/attachments',
+                'attachments' => 'webPortal/' . $userId . '/attachments',
+                'gst_fssai' => 'webPortal/' . $userId . '/attachments/gst_fssai',
             ],
         ], 200);
     }

@@ -78,12 +78,13 @@
 					<th>GST / FSSAI</th>
 					<td>
 						@php
-							$gstFssaiRel = $user['get_web_user_attachment']['gst_fssai'] ?? null;
+							$gstFssaiFile = $user['get_web_user_attachment']['gst_fssai'] ?? null;
+							$gstFssaiFolder = $user['get_web_user_attachment']['gst_fssai_folder'] ?? 'gst_fssai';
 						@endphp
-						@if (!empty($gstFssaiRel))
+						@if (!empty($gstFssaiFile))
 							@php
-								$gstFssaiUrl = asset('webPortal/' . $user['id'] . '/attachments/' . $gstFssaiRel);
-								$basename = basename($gstFssaiRel);
+								$gstFssaiUrl = asset('webPortal/' . $user['id'] . '/attachments/' . $gstFssaiFolder . '/' . $gstFssaiFile);
+								$basename = $gstFssaiFile;
 							@endphp
 							@if (preg_match('/\.(png|jpe?g)$/i', $basename))
 								<img

@@ -1901,10 +1901,10 @@ class ApiController extends Controller
     public function getPricesWeb(Request $request ,$state, $ricetype)
     {
         $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
-        $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
-        $latestCropYear = $latestCropYearRecord->cropYear;
-
         $todayDate = Carbon::now();
+        $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
+        $latestCropYear = $latestCropYearRecord?->cropYear ?? (int) $todayDate->year;
+
         $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
 
         $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
@@ -1936,6 +1936,23 @@ class ApiController extends Controller
         }
 
         $lastEnteredRecord = $lastRecord->first();
+
+        if (!$lastEnteredRecord) {
+            $latestForMeta = LivePrice::orderBy('id', 'desc')->first();
+
+            return response()->json([
+                'errors' => null,
+                'livePriceStatusMessage' => $LivePriceStatusMessage,
+                'prices' => [],
+                'closing' => [$ricetype => []],
+                'latest' => $latestForMeta
+                    ? Carbon::parse($latestForMeta->created_at)->format('Y-m-d')
+                    : $todayDate->format('Y-m-d'),
+                'lastUpdatedDate' => ($latestForMeta && $latestForMeta->updated_at)
+                    ? $latestForMeta->updated_at->format('d-m-Y | H:i A')
+                    : '',
+            ]);
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -2237,16 +2254,35 @@ class ApiController extends Controller
 
         $fromDate = $todayDate->format('y-m-d');
 
-        $explodeTime = explode('_',  $timePeriod  );
-        if( $request->has('year') ){
+        $explodeTime = explode('_', $timePeriod);
+        $lookbackDays = 30;
+        if (preg_match('/^\d+$/', trim((string) $timePeriod))) {
+            $lookbackDays = max(1, min(2000, (int) trim((string) $timePeriod)));
+        } elseif (count($explodeTime) > 1 && is_numeric($explodeTime[0])) {
+            $n = (int) $explodeTime[0];
+            $unit = strtolower((string) ($explodeTime[1] ?? ''));
+            if (str_starts_with($unit, 'day')) {
+                $lookbackDays = max(1, $n);
+            } elseif (str_starts_with($unit, 'month')) {
+                $lookbackDays = max(1, min(2000, $n * 30));
+            }
+        }
+
+        if ($request->has('year')) {
+            $periodEnd = $todayDate->copy()->format('Y-m-d');
+            $periodStart = $todayDate->copy()->subDays($lookbackDays)->format('Y-m-d');
+
             $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                 'name_rel',
                 'form_rel' => function ($query) use ($riceType) {
                     return $query->where('type', $riceType)->get();
-                }
-            // ])->where(['state' => $state])->whereYear('created_at', $year)->get();
-            ])->where(['state' => $state])->where('cropYear', $year)->get();
-        }else{
+                },
+            ])->where(['state' => $state])
+                ->where('cropYear', $year)
+                ->whereDate('created_at', '>=', $periodStart)
+                ->whereDate('created_at', '<=', $periodEnd)
+                ->get();
+        } else {
              if( count($explodeTime) > 1 ){
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',

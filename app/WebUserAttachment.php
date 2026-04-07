@@ -12,31 +12,51 @@ class WebUserAttachment extends Model
     protected $fillable = ['user_id', 'panCard', 'farmer_file', 'gst_fssai', 'gstCard', 'fssaiCard', 'status'];
 
     /**
-     * Legacy columns; API/JSON uses a single gst_fssai path (e.g. gst/file.pdf, gst_fssai/file.pdf).
+     * Legacy columns; API/JSON uses a single gst/fssai document.
      */
     protected $hidden = ['gstCard', 'fssaiCard'];
 
     /**
-     * Split path so clients can build URLs without encodeURIComponent on the full string (avoids %2F breaking static files).
-     * Use: {prefix}/ + gst_fssai_folder + '/' + gst_fssai_file  (e.g. webPortal/1/attachments/gst_fssai/screenshot.png).
+     * Subfolder under attachments/ (gst_fssai, gst, or fssai). Combine with prefix.gst_fssai or prefix.attachments.
      */
-    protected $appends = ['gst_fssai_folder', 'gst_fssai_file'];
+    protected $appends = ['gst_fssai_folder'];
 
+    /**
+     * Full relative path under attachments/ (e.g. gst_fssai/file.png, gst/old.pdf). Not exposed in JSON.
+     */
+    public function resolveGstFssaiRelativePath(): ?string
+    {
+        return self::resolveGstFssaiRelativePathFrom($this->getAttributes());
+    }
+
+    private static function resolveGstFssaiRelativePathFrom(array $attributes): ?string
+    {
+        if (array_key_exists('gst_fssai', $attributes) && $attributes['gst_fssai'] !== null && $attributes['gst_fssai'] !== '') {
+            return $attributes['gst_fssai'];
+        }
+        if (! empty($attributes['gstCard'])) {
+            return 'gst/' . ltrim($attributes['gstCard'], '/');
+        }
+        if (! empty($attributes['fssaiCard'])) {
+            return 'fssai/' . ltrim($attributes['fssaiCard'], '/');
+        }
+
+        return null;
+    }
+
+    /**
+     * API/json: filename only (no folder prefix). URL: prefix.gst_fssai + '/' + gst_fssai when gst_fssai_folder is gst_fssai.
+     */
     protected function gstFssai(): Attribute
     {
         return Attribute::make(
             get: function (?string $value, array $attributes) {
-                if (array_key_exists('gst_fssai', $attributes) && $attributes['gst_fssai'] !== null && $attributes['gst_fssai'] !== '') {
-                    return $attributes['gst_fssai'];
-                }
-                if (! empty($attributes['gstCard'])) {
-                    return 'gst/' . ltrim($attributes['gstCard'], '/');
-                }
-                if (! empty($attributes['fssaiCard'])) {
-                    return 'fssai/' . ltrim($attributes['fssaiCard'], '/');
+                $full = self::resolveGstFssaiRelativePathFrom($attributes);
+                if ($full === null || $full === '') {
+                    return null;
                 }
 
-                return null;
+                return basename($full);
             }
         );
     }
@@ -44,30 +64,15 @@ class WebUserAttachment extends Model
     protected function gstFssaiFolder(): Attribute
     {
         return Attribute::get(function () {
-            $path = $this->gst_fssai;
-            if ($path === null || $path === '') {
+            $full = $this->resolveGstFssaiRelativePath();
+            if ($full === null || $full === '') {
                 return null;
             }
-            if (str_contains($path, '/')) {
-                return dirname($path);
+            if (str_contains($full, '/')) {
+                return dirname($full);
             }
 
             return 'gst_fssai';
-        });
-    }
-
-    protected function gstFssaiFile(): Attribute
-    {
-        return Attribute::get(function () {
-            $path = $this->gst_fssai;
-            if ($path === null || $path === '') {
-                return null;
-            }
-            if (str_contains($path, '/')) {
-                return basename($path);
-            }
-
-            return $path;
         });
     }
 
@@ -76,10 +81,10 @@ class WebUserAttachment extends Model
      */
     public function trialDocumentsComplete(): bool
     {
-        $gst = $this->gst_fssai;
+        $full = $this->resolveGstFssaiRelativePath();
 
         return ! empty($this->panCard)
-            && $gst !== null && $gst !== ''
+            && $full !== null && $full !== ''
             && ! empty($this->farmer_file);
     }
 }
