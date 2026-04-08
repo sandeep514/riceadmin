@@ -2301,11 +2301,63 @@ class ApiController extends Controller
             }
         }
 
-        foreach ($prices as $k => $v) {
-            $created_at[] = strtotime($v->created_at->format('y-m-d'));
+        // Multiple updates on the same day: keep only the first change of that day (earliest created_at), IST calendar day.
+        $sortedPrices = $prices->sortBy(function ($row) {
+            return $row->created_at?->timestamp ?? 0;
+        });
+        $seenDayKeys = [];
+        $pricesFirstEntryPerDay = collect();
+        foreach ($sortedPrices as $row) {
+            $dayKey = $row->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
+            if (! isset($seenDayKeys[$dayKey])) {
+                $seenDayKeys[$dayKey] = true;
+                $pricesFirstEntryPerDay->push($row);
+            }
         }
-        foreach ($prices as $key => $value) {
-            $max_price[] = $value->max_price;
+
+        // Latest calendar day (IST): prefer official opening from live_price_closing when set.
+        $latestIstDate = null;
+        if ($pricesFirstEntryPerDay->isNotEmpty()) {
+            $latestIstDate = $pricesFirstEntryPerDay
+                ->map(function ($r) {
+                    return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
+                })
+                ->max();
+        }
+
+        $cropYearForOpening = $request->has('year') ? (string) $request->year : null;
+        if ($cropYearForOpening === null && $latestIstDate) {
+            $rowForLatest = $pricesFirstEntryPerDay->first(function ($r) use ($latestIstDate) {
+                return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d') === $latestIstDate;
+            });
+            if ($rowForLatest && $rowForLatest->cropYear !== null && $rowForLatest->cropYear !== '') {
+                $cropYearForOpening = (string) $rowForLatest->cropYear;
+            }
+        }
+
+        $latestDateOpeningPrice = null;
+        if ($latestIstDate && $cropYearForOpening) {
+            $openingRecord = LivePricesOpeningClosing::where('name', $riceName->id)
+                ->where('form', $type->id)
+                ->where('state', $state)
+                ->where('cropYear', $cropYearForOpening)
+                ->whereNotNull('opening')
+                ->where('opening', '!=', '')
+                ->orderByDesc('id')
+                ->first();
+            if ($openingRecord !== null && is_numeric($openingRecord->opening)) {
+                $latestDateOpeningPrice = (float) $openingRecord->opening;
+            }
+        }
+
+        foreach ($pricesFirstEntryPerDay as $k => $v) {
+            $created_at[] = strtotime($v->created_at->copy()->timezone('Asia/Kolkata')->format('y-m-d'));
+            $dayIst = $v->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
+            $pointPrice = $v->max_price;
+            if ($latestDateOpeningPrice !== null && $dayIst === $latestIstDate) {
+                $pointPrice = $latestDateOpeningPrice;
+            }
+            $max_price[] = $pointPrice;
         }
 
         $combine = array_combine($created_at, $max_price);
@@ -2358,7 +2410,21 @@ class ApiController extends Controller
             $maxCount = $bestLen;
             
         }
-        $responseData = ['errors' => null, 'date' => $created_at, 'prices' => $arrayValuesPrices, 'combinedData' => $combinedData, 'productType' => $productType , 'lowValue' => $lowValue,'lowDate' => $lowDate  , 'highDate' => $highDate , 'highValue' => $highValue , 'constantValue' => $constantValue,'maxCountConstant' => $maxCount];
+        $responseData = [
+            'errors' => null,
+            'date' => $created_at,
+            'prices' => $arrayValuesPrices,
+            'combinedData' => $combinedData,
+            'productType' => $productType,
+            'lowValue' => $lowValue,
+            'lowDate' => $lowDate,
+            'highDate' => $highDate,
+            'highValue' => $highValue,
+            'constantValue' => $constantValue,
+            'maxCountConstant' => $maxCount,
+            'latestDate' => $latestIstDate,
+            'latestDateOpeningPrice' => $latestDateOpeningPrice,
+        ];
 
         return response()->json($responseData);
 
