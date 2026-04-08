@@ -61,7 +61,9 @@ use App\Buyerpackinginr;
 use App\BuyQueriesINR;
 use App\TradeLike;
 use App\TradeIntrested;
-use Mail;
+use App\Mail\NewUserRegistrationAdminMail;
+use App\Mail\WebTrialActivatedUserMail;
+use Illuminate\Support\Facades\Mail;
 use Auth;
 use App\NewsRunner;
 use App\TradeCurrentStatus;
@@ -1098,27 +1100,16 @@ class PortalApiController extends Controller
                 }
                 
 
-                // send trial mail
-                $mailTo = $userDetails->email;
-                $mailMessage = '';
-                $subject = 'Your SNTC 30-Day Free Trial is Now Active.';
-                $mailFrom = 'info@sntcgroup.com';
-                $mailFromName = 'SNTC Team - India';
+                $userName = (string) ($userDetails->name ?? '');
+                $userEmail = (string) ($userDetails->email ?? '');
 
+                Mail::to($userDetails->email)->queue(
+                    new WebTrialActivatedUserMail($userName, $userEmail)
+                );
 
-                $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
-
-                $respose = Mail::send('mail.sendTrailMailToUser', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                    $message->to($mailTo, $mailMessage)->subject($subject);
-                    $message->from($mailFrom, $mailFromName);
-                });
-
-                $subject = 'New User Registration-Webversion';
-                $mailTo = 'info@sntcgroup.com';
-                $respose = Mail::send('mail.newUserAdded', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                    $message->to($mailTo, $mailMessage)->subject($subject);
-                    $message->from($mailFrom, $mailFromName);
-                });
+                Mail::to('info@sntcgroup.com')->queue(
+                    new NewUserRegistrationAdminMail($userName, $userEmail)
+                );
                 
             }else{
                 

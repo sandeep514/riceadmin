@@ -196,7 +196,7 @@ use Pusher\Pusher;
 
 
     Route::get('get/news/runner' , ['as' => 'get.news.runner' , 'uses' => 'ApiController@NewsRunner']);
-    Route::get('get/web/news/runner' , ['as' => 'get.web.news.runner' , 'uses' => 'ApiController@getWebNewsRunner', 'middleware' => 'portal.api.token']);
+    Route::get('get/web/news/runner' , ['as' => 'get.web.news.runner' , 'uses' => 'ApiController@getWebNewsRunner']);
     Route::get('get/testimonial' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonial']);
     Route::get('get/testimonial/videos' , ['as' => 'get.testimonial' , 'uses' => 'ApiController@getTestimonialVideos']);
     Route::get('get/grades' , ['as' => 'list.grade' , 'uses' => 'ApiController@listGrade']);
