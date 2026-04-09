@@ -2373,6 +2373,7 @@ class ApiController extends Controller
             foreach ($sortedCombine as $kk => $vv) {
                 $combinedData[] = [$kk * 1000, (int)$vv];
             }
+            
             $seq = array_values($sortedCombine);
             $arrayValuesPrices = $seq;
             $bestVal = null;
@@ -6127,6 +6128,20 @@ if (!file_exists('uploads')) {
             ])
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
+
+        $allTrade = $allTrade->map(function ($trade) {
+            if (! empty($trade->validDays)) {
+                try {
+                    $formatted = Carbon::parse($trade->validDays)
+                        ->timezone('Asia/Kolkata')
+                        ->format('Y-m-d g:iA');
+                    $trade->setAttribute('validDays', $formatted);
+                } catch (\Throwable $e) {
+                    // leave original string if unparsable
+                }
+            }
+            return $trade;
+        });
 
         $trade = $allTrade;
         // $trade = $allTrade->groupBy('tradeType');
