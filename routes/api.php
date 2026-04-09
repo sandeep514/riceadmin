@@ -166,6 +166,11 @@ use Pusher\Pusher;
     Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade']);
     Route::post('web/get/trades/filter/{userId}' , ['as' => 'web.get.trade.filter' , 'uses' => 'ApiController@webFilterTrade', 'middleware' => 'portal.api.token']);
 
+    Route::match(['get', 'post'], 'get/guest/rice-sourcing/trades', [
+        'as' => 'get.guest.rice.sourcing.trades',
+        'uses' => 'ApiController@getGuestRiceSourcingTrades',
+    ]);
+
 
     Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount']);
 

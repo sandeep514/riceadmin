@@ -6145,6 +6145,87 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
+    /**
+     * Public rice sourcing list for guests (no token). Only trades that are still open for sourcing:
+     * not sold (3), not expired (2), not de-active/closed/hold (5, 11, 12), and validDays still in the future.
+     * Optional filters match web/get/trades/filter: trade_type, farming_type, quality_type, quality, quality_form, rice_size, state, packing.
+     */
+    public function getGuestRiceSourcingTrades(Request $request)
+    {
+        $now = Carbon::now();
+
+        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])
+            ->where('validDays', '<=', $now->format('Y-m-d H:i'))
+            ->update(['status' => 2]);
+
+        $allTrade = TradeQueriesINR::query()
+            ->whereIn('status', [1, 4, 6])
+            ->where('validDays', '>', $now->format('Y-m-d H:i'))
+            ->where(function ($query) use ($request) {
+                if ($request->has('trade_type')) {
+                    $query->where('tradeType', $request->trade_type);
+                } else {
+                    $query->whereIn('tradeType', [1, 2, 3, 4]);
+                }
+
+                if ($request->has('farming_type')) {
+                    $query->where('farmingType', $request->farming_type);
+                }
+
+                if ($request->has('quality_type')) {
+                    $query->where('quality_type', $request->quality_type);
+                }
+
+                if ($request->has('quality')) {
+                    $query->where('quality', $request->quality);
+                }
+
+                if ($request->has('quality_form')) {
+                    if ($request->has('state')) {
+                        $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
+                    } else {
+                        $query->where('qualityForm', $request->quality_form);
+                    }
+                }
+
+                if ($request->has('rice_size')) {
+                    $query->where('riceSize', $request->rice_size);
+                }
+
+                if ($request->has('state')) {
+                    $query->where('stateLinkWithLivePrice', $request->state);
+                }
+
+                if ($request->has('packing')) {
+                    $query->where('packingStreamType', $request->packing);
+                }
+            })
+            ->orderByRaw('FIELD(status,6,4,1)')
+            ->orderBy('id', 'DESC')
+            ->limit(150)
+            ->with([
+                'RiceNameData',
+                'RiceFormMilestone3',
+                'RiceFormData',
+                'riceGrade' => function ($query) {
+                    $query->with('getWandType');
+                },
+                'RicePackingBuyer',
+                'RicePackingSeller',
+            ])
+            ->withCount('TradeLikeAll')
+            ->get();
+
+        $tradeStatus = TradeCurrentStatus::first();
+
+        return response()->json([
+            'status' => true,
+            'data' => $allTrade,
+            'currentStatus' => $tradeStatus['currentStatus'] ?? null,
+            'statusMessage' => $tradeStatus['message'] ?? null,
+        ]);
+    }
+
     public function getTradeDetail($tradeId)
     {
         $trade = TradeQueriesINR::where('id', $tradeId)->with(['RiceFormMilestone3', 'RiceQualityMaster', 'riceGrade' => function ($query) {
