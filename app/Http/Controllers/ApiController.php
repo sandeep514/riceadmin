@@ -2309,7 +2309,7 @@ class ApiController extends Controller
             }
         }
 
-        // Latest calendar day (IST): prefer official opening from live_price_closing when set.
+        // Latest IST date in the series (for optional opening metadata only — chart uses LivePrice ticks).
         $latestIstDate = null;
         if ($pricesFirstEntryPerDay->isNotEmpty()) {
             $latestIstDate = $pricesFirstEntryPerDay
@@ -2348,12 +2348,7 @@ class ApiController extends Controller
 
         foreach ($pricesFirstEntryPerDay as $k => $v) {
             $created_at[] = strtotime($v->created_at->copy()->timezone('Asia/Kolkata')->format('y-m-d'));
-            $dayIst = $v->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
-            $pointPrice = $v->max_price;
-            if ($latestDateOpeningPrice !== null && $dayIst === $latestIstDate) {
-                $pointPrice = $latestDateOpeningPrice;
-            }
-            $max_price[] = $pointPrice;
+            $max_price[] = $v->max_price;
         }
 
         $combine = array_combine($created_at, $max_price);

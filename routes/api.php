@@ -38,7 +38,7 @@ use Pusher\Pusher;
     // Alias for web clients (same handler as get/price/...)
     Route::get('web/get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.web.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
     Route::get('get/plans' ,                ['as' => 'get.plans'                , 'uses' => 'ApiController@getPlans']);
-    Route::get('get/price/states' ,         ['as' => 'get.price.states'         , 'uses' => 'ApiController@getPriceStates']);
+    Route::get('/states' ,         ['as' => 'get.price.states'         , 'uses' => 'ApiController@getPriceStates']);
 
     Route::get('get/web/other/services' ,         ['as' => 'get.web.other.service'         , 'uses' => 'ApiController@getWebOtherServices', 'middleware' => 'portal.api.token']);
 
