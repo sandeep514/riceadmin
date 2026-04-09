@@ -2373,7 +2373,7 @@ class ApiController extends Controller
             foreach ($sortedCombine as $kk => $vv) {
                 $combinedData[] = [$kk * 1000, (int)$vv];
             }
-            
+
             $seq = array_values($sortedCombine);
             $arrayValuesPrices = $seq;
             $bestVal = null;
@@ -6134,7 +6134,7 @@ if (!file_exists('uploads')) {
                 try {
                     $formatted = Carbon::parse($trade->validDays)
                         ->timezone('Asia/Kolkata')
-                        ->format('Y-m-d g:iA');
+                        ->format('d-M-Y g:iA');
                     $trade->setAttribute('validDays', $formatted);
                 } catch (\Throwable $e) {
                     // leave original string if unparsable
