@@ -2236,15 +2236,10 @@ class ApiController extends Controller
         }
 
         if( $request->has('year') ){
-            // $explodeYear = explode('-' , $request->year);
-            // $fromYear = $explodeYear[0];
             $year = $request->year;
-
         }
 
-        $explodeRiceType = explode('_', $riceType);
-        $implodeRiceType = implode(' ', $explodeRiceType);
-        $type = RiceForm::select('id')->where('form_name', $implodeRiceType)->where('type', $productType->type)->first();
+        $type = $this->resolveRiceFormForProductType($riceType, (string) $productType->type);
 
         if (! $type) {
             return response()->json([
@@ -2268,35 +2263,34 @@ class ApiController extends Controller
             }
         }
 
+        $formRelConstraint = function ($query) use ($productType) {
+            $query->where('type', $productType->type);
+        };
+
         if ($request->has('year')) {
+            // Crop-year charts: use all rows for that crop year up to today (do not restrict to last N calendar days).
             $periodEnd = $todayDate->copy()->format('Y-m-d');
-            $periodStart = $todayDate->copy()->subDays($lookbackDays)->format('Y-m-d');
 
             $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                 'name_rel',
-                'form_rel' => function ($query) use ($riceType) {
-                    return $query->where('type', $riceType)->get();
-                },
+                'form_rel' => $formRelConstraint,
             ])->where(['state' => $state])
-                ->where('cropYear', $year)
-                ->whereDate('created_at', '>=', $periodStart)
+                ->where(function ($q) use ($year) {
+                    $this->applyLivePriceCropYearMatch($q, $year);
+                })
                 ->whereDate('created_at', '<=', $periodEnd)
                 ->get();
         } else {
              if( count($explodeTime) > 1 ){
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
+                    'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '<=', $fromDate)->get();
 
             }else{
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
-                    'form_rel' => function ($query) use ($riceType) {
-                        return $query->where('type', $riceType)->get();
-                    }
+                    'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])->whereBetween(DB::raw('date(created_at)'), [$todayDate->subDays($timePeriod) , $fromDate ])->get();
             }
         }
@@ -2340,7 +2334,9 @@ class ApiController extends Controller
             $openingRecord = LivePricesOpeningClosing::where('name', $riceName->id)
                 ->where('form', $type->id)
                 ->where('state', $state)
-                ->where('cropYear', $cropYearForOpening)
+                ->where(function ($q) use ($cropYearForOpening) {
+                    $this->applyLivePriceCropYearMatch($q, $cropYearForOpening);
+                })
                 ->whereNotNull('opening')
                 ->where('opening', '!=', '')
                 ->orderByDesc('id')
@@ -6627,6 +6623,25 @@ if (!file_exists('uploads')) {
         }
 
         return null;
+    }
+
+    /**
+     * Match cropYear column to requested year: exact value, or values like "2024-25" when request is "2024".
+     */
+    private function applyLivePriceCropYearMatch($query, $yearParam): void
+    {
+        $y = trim((string) $yearParam);
+        if ($y === '') {
+            return;
+        }
+
+        $query->where(function ($q) use ($y) {
+            $q->where('cropYear', $y);
+            if (preg_match('/^\d{4}$/', $y)) {
+                $q->orWhere('cropYear', 'like', $y.'-%')
+                    ->orWhere('cropYear', 'like', $y.'/%');
+            }
+        });
     }
 
     /**

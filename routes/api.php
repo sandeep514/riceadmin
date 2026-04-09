@@ -35,6 +35,8 @@ use Pusher\Pusher;
     // Must be registered BEFORE get/price/{state}/... or "chart/records/..." is captured as state=chart, riceType=records.
     Route::get('get/price/chart/records/{encodedRiceType}/{encodedRice}', ['as' => 'get.price.chart.records', 'uses' => 'ApiController@getPriceChartRecords']);
     Route::get('get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
+    // Alias for web clients (same handler as get/price/...)
+    Route::get('web/get/price/{state}/{riceType}/{rice}/{timePeriod}' , ['as' => 'get.web.price.by.period' ,'uses' => 'ApiController@getpriceByTimePeriod']);
     Route::get('get/plans' ,                ['as' => 'get.plans'                , 'uses' => 'ApiController@getPlans']);
     Route::get('get/price/states' ,         ['as' => 'get.price.states'         , 'uses' => 'ApiController@getPriceStates']);
 

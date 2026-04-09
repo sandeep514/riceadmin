@@ -24,7 +24,10 @@ use App\Buyerpackinginr;
 use App\WandTypeModel;
 use App\TradeLike;
 use App\LivePrice;
+use App\Role;
+use App\CategoryRoleMap;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class TradeController extends Controller
@@ -88,8 +91,10 @@ class TradeController extends Controller
         $qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
         $livePricesStates =  LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
+        $roles = Role::where('type', 'web')->orderBy('role_name')->pluck('role_name', 'id');
+        $webCategories = collect();
 
-        return View('trade.create' , compact('qualityMaster','packing','livePricesStates'));
+        return View('trade.create' , compact('qualityMaster','packing','livePricesStates','roles','webCategories'));
     }
 
 
@@ -186,7 +191,8 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
         $data['tradeFor'] = $request->tradeFor;
         $data['farmingType'] = $request->farmingType;
-
+        $data['role_id'] = $request->filled('role_id') ? (int) $request->role_id : null;
+        $data['category_id'] = $request->filled('category_id') ? (int) $request->category_id : null;
 
         $tradeQuery = TradeQueriesINR::create($data);
         Session::flash('success','Success|Trade saved successfully!');
@@ -227,9 +233,37 @@ class TradeController extends Controller
 
         $qualityMaster = RiceName::pluck('type_status' , 'type');
         // $packing = PublicPacking::get();
+        $roles = Role::where('type', 'web')->orderBy('role_name')->pluck('role_name', 'id');
+        $webCategories = $this->webCategoriesForRole(
+            $tradequeriesinr->role_id ? (int) $tradequeriesinr->role_id : null
+        );
 
-        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates'));
+        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates','roles','webCategories'));
 
+    }
+
+    /**
+     * Categories mapped to a web role via category_role_map (same source as Web Access UI).
+     */
+    protected function webCategoriesForRole($roleId): Collection
+    {
+        if ($roleId === null || $roleId === '' || (int) $roleId === 0) {
+            return collect();
+        }
+
+        $maps = CategoryRoleMap::where('role', (int) $roleId)
+            ->where('status', 1)
+            ->with('category_rel')
+            ->get();
+
+        $pairs = [];
+        foreach ($maps as $map) {
+            if ($map->category_rel) {
+                $pairs[$map->category_rel->id] = $map->category_rel->category;
+            }
+        }
+
+        return collect($pairs);
     }
     
     public function update(Request $request){
@@ -347,6 +381,8 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
 
         $data = array_filter($data);
+        $data['role_id'] = $request->filled('role_id') ? (int) $request->role_id : null;
+        $data['category_id'] = $request->filled('category_id') ? (int) $request->category_id : null;
         TradeQueriesINR::where('id' , $request['id'])->update(($data));
         Session::flash('success','Success|Trade saved successfully!');
 
