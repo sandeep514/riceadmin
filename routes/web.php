@@ -560,6 +560,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('trade/change/status/{tradeid}/{status}' , ['as' => 'master.trade.change.status' , 'uses' => 'TradeController@changeStatus']);
     Route::GET('update/trade/status/{tradeStatus}', ['as' => 'master.update.trade.create',    'uses' => 'TradeController@updateTradeStatus']);
     Route::POST('trade/purge-old', ['as' => 'master.trade.purge.old', 'uses' => 'TradeController@purgeOldByStatus']);
+    Route::get('trade/get-categories-by-role', ['as' => 'master.trade.categories.by.role', 'uses' => 'TradeController@getCategoriesByRoleJson']);
 
     //paid email
     Route::GET('get/latest/date/live/prices', ['as' => 'master.get.latest.price',    'uses' => 'Controller@getLatestPrices']);

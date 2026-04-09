@@ -258,7 +258,7 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        var tradeCategoriesByRoleUrl = {!! json_encode(route('web-access.get-categories')) !!};
+        var tradeCategoriesByRoleUrl = {!! json_encode(route('master.trade.categories.by.role')) !!};
         $('#trade_web_role_id').on('change', function () {
             var roleId = $(this).val();
             var $cat = $('#trade_web_category_id');

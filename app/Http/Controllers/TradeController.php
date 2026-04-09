@@ -408,4 +408,30 @@ class TradeController extends Controller
         Session::flash('success','Success|Trade status updated successfully!');
         return back();
     }
+
+    /**
+     * Same data as WebAccessController@getCategoriesByRole, but registered on trade routes (auth only).
+     * web-access/get-categories sits behind the admin middleware, so non-admin users get 302 on AJAX.
+     */
+    public function getCategoriesByRoleJson(Request $request)
+    {
+        $roleId = $request->input('role_id');
+        if ($roleId === null || $roleId === '') {
+            return response()->json([]);
+        }
+
+        $categoryMaps = CategoryRoleMap::where('role', $roleId)
+            ->where('status', 1)
+            ->with('category_rel')
+            ->get();
+
+        $categories = [];
+        foreach ($categoryMaps as $map) {
+            if ($map->category_rel) {
+                $categories[$map->category_rel->id] = $map->category_rel->category;
+            }
+        }
+
+        return response()->json($categories);
+    }
 }
