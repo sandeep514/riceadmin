@@ -5795,6 +5795,8 @@ if (!file_exists('uploads')) {
         // })
         ->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
 
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+
         $trade = $allTrade;
         // $trade = $allTrade->groupBy('tradeType');
         $tradeStatus = TradeCurrentStatus::first();
@@ -6129,19 +6131,7 @@ if (!file_exists('uploads')) {
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
 
-        $allTrade = $allTrade->map(function ($trade) {
-            if (! empty($trade->validDays)) {
-                try {
-                    $formatted = Carbon::parse($trade->validDays)
-                        ->timezone('Asia/Kolkata')
-                        ->format('d-M-Y g:iA');
-                    $trade->setAttribute('validDays', $formatted);
-                } catch (\Throwable $e) {
-                    // leave original string if unparsable
-                }
-            }
-            return $trade;
-        });
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $trade = $allTrade;
         // $trade = $allTrade->groupBy('tradeType');
@@ -6149,6 +6139,29 @@ if (!file_exists('uploads')) {
         $tradeStatus = TradeCurrentStatus::first();
 
         return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+    }
+
+    /**
+     * Format validDays for web trade APIs (IST, e.g. 09-Apr-2026 7:00PM).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
+     */
+    private function formatTradeCollectionValidDays($trades)
+    {
+        return $trades->map(function ($trade) {
+            if (! empty($trade->validDays)) {
+                try {
+                    $formatted = Carbon::parse($trade->validDays)
+                        ->timezone('Asia/Kolkata')
+                        ->format('d-M-Y g:iA');
+                    $trade->setAttribute('validDays', $formatted);
+                } catch (\Throwable $e) {
+                    // leave original if unparsable
+                }
+            }
+            return $trade;
+        });
     }
 
     /**
