@@ -33,6 +33,7 @@ use App\BagVendors;
 use App\Helpers\StatusChat;
 use App\USD_prices;
 use Carbon\Carbon;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -78,8 +79,10 @@ use App\VendorUserMap;
 use App\ServiceProviderUserMap;
 use Razorpay\Api\Api;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
@@ -354,6 +357,262 @@ class PortalApiController extends Controller
         );
 
         return null;
+    }
+
+    /**
+     * Chunked multipart upload for PAN or GST/FSSAI documents (same storage and DB rules as updateUserDetails).
+     *
+     * Expected multipart fields:
+     * - user_id (required): must match the authenticated user (session or Bearer / X-API-TOKEN)
+     * - document_type (required): "pan" | "gst_fssai"
+     * - upload_id (required): unique id per file (e.g. UUID), 8–64 chars [a-zA-Z0-9_-]
+     * - chunk_index (required): 0-based index of this chunk
+     * - total_chunks (required): total number of chunks for this file
+     * - original_filename (required): original file name (used for extension validation)
+     * - file (required): binary chunk (field name must be "file")
+     *
+     * When all chunks are received, they are merged, validated (jpeg/jpg/png/pdf, max 15 MB), stored under
+     * public/webPortal/{userId}/attachments/{pan|gst_fssai}/, and web_user_attachment is updated.
+     */
+    public function uploadPortalDocumentChunk(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|min:1',
+            'document_type' => 'required|in:pan,gst_fssai',
+            'upload_id' => ['required', 'string', 'min:8', 'max:64', 'regex:/^[a-zA-Z0-9_-]+$/'],
+            'chunk_index' => 'required|integer|min:0',
+            'total_chunks' => 'required|integer|min:1|max:5000',
+            'original_filename' => 'required|string|max:255',
+            'file' => 'required|file|max:10240',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation error.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $userId = (int) $request->input('user_id');
+        $uploadId = (string) $request->input('upload_id');
+        $chunkIndex = (int) $request->input('chunk_index');
+        $totalChunks = (int) $request->input('total_chunks');
+        $documentType = (string) $request->input('document_type');
+        $originalFilename = (string) $request->input('original_filename');
+
+        if ($chunkIndex >= $totalChunks) {
+            return response()->json([
+                'status' => false,
+                'message' => 'chunk_index must be less than total_chunks.',
+            ], 422);
+        }
+
+        $user = User::where('id', $userId)->where('userType', 2)->first();
+        if (! $user) {
+            return response()->json(['status' => false, 'message' => 'User not found.'], 404);
+        }
+
+        $chunkFile = $request->file('file');
+        if (! $chunkFile instanceof UploadedFile || ! $chunkFile->isValid()) {
+            return response()->json(['status' => false, 'message' => 'Invalid chunk upload.'], 422);
+        }
+
+        $baseRelative = $this->portalChunkUploadRelativePath($userId, $uploadId);
+        $disk = Storage::disk('local');
+
+        $lockKey = 'portal_doc_chunk:' . $userId . ':' . $uploadId;
+        $lock = Cache::lock($lockKey, 120);
+
+        try {
+            $lock->block(90);
+
+            $disk->makeDirectory($baseRelative);
+            $partName = 'part_' . sprintf('%08d', $chunkIndex);
+            $chunkFile->storeAs($baseRelative, $partName, 'local');
+
+            if (! $this->portalChunkUploadAllPartsPresent($disk, $baseRelative, $totalChunks)) {
+                $received = $this->portalChunkUploadCountParts($disk, $baseRelative);
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Chunk received.',
+                    'data' => [
+                        'upload_id' => $uploadId,
+                        'chunks_received' => $received,
+                        'total_chunks' => $totalChunks,
+                        'complete' => false,
+                    ],
+                ], 200);
+            }
+
+            $mergedPath = $this->portalChunkUploadMergeToTemp($disk, $baseRelative, $totalChunks);
+            if ($mergedPath === null) {
+                return response()->json(['status' => false, 'message' => 'Could not merge file chunks.'], 500);
+            }
+
+            $mergedSize = @filesize($mergedPath) ?: 0;
+            if ($mergedSize > self::PORTAL_UPLOAD_MAX_BYTES) {
+                $this->portalChunkUploadCleanup($disk, $baseRelative, $mergedPath);
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'File size must not exceed 15 MB.',
+                ], 422);
+            }
+
+            $mime = @mime_content_type($mergedPath) ?: 'application/octet-stream';
+            $uploaded = new UploadedFile(
+                $mergedPath,
+                $originalFilename,
+                is_string($mime) ? $mime : 'application/octet-stream',
+                null,
+                true
+            );
+
+            if ($documentType === 'pan') {
+                $basePath = public_path('webPortal/' . $userId . '/attachments/pan');
+                $stored = $this->uploadAttachments($uploaded, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+                if ($stored === false) {
+                    $this->portalChunkUploadCleanup($disk, $baseRelative, $mergedPath);
+
+                    return response()->json(['status' => false, 'message' => 'PAN file must be jpeg, jpg, png, or pdf.'], 422);
+                }
+                WebUserAttachment::updateOrCreate(['user_id' => $userId], ['panCard' => $stored]);
+                $urlKey = 'pan';
+            } else {
+                $basePath = public_path('webPortal/' . $userId . '/attachments/gst_fssai');
+                $stored = $this->uploadAttachments($uploaded, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
+                if ($stored === false) {
+                    $this->portalChunkUploadCleanup($disk, $baseRelative, $mergedPath);
+
+                    return response()->json(['status' => false, 'message' => 'GST/FSSAI file must be jpeg, jpg, png, or pdf.'], 422);
+                }
+                WebUserAttachment::updateOrCreate(
+                    ['user_id' => $userId],
+                    [
+                        'gst_fssai' => 'gst_fssai/' . $stored,
+                        'gstCard' => null,
+                        'fssaiCard' => null,
+                    ]
+                );
+                $urlKey = 'gst_fssai';
+            }
+
+            $this->portalChunkUploadCleanup($disk, $baseRelative, $mergedPath);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Upload complete.',
+                'data' => [
+                    'upload_id' => $uploadId,
+                    'document_type' => $documentType,
+                    'filename' => $stored,
+                    'complete' => true,
+                    'prefix' => [
+                        $urlKey => 'webPortal/' . $userId . '/attachments/' . ($documentType === 'pan' ? 'pan' : 'gst_fssai'),
+                    ],
+                ],
+            ], 200);
+        } catch (HttpResponseException $e) {
+            if (isset($baseRelative, $disk)) {
+                $mergedCandidate = storage_path('app/' . $baseRelative . '/_merged.bin');
+                $this->portalChunkUploadCleanup($disk, $baseRelative, is_file($mergedCandidate) ? $mergedCandidate : null);
+            }
+            throw $e;
+        } catch (\Throwable $e) {
+            report($e);
+            if (isset($baseRelative, $disk)) {
+                $mergedCandidate = storage_path('app/' . $baseRelative . '/_merged.bin');
+                $this->portalChunkUploadCleanup($disk, $baseRelative, is_file($mergedCandidate) ? $mergedCandidate : null);
+            }
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Upload failed. Please try again.',
+            ], 500);
+        } finally {
+            $lock->release();
+        }
+    }
+
+    private function portalChunkUploadRelativePath(int $userId, string $uploadId): string
+    {
+        return 'portal_chunk_uploads/' . $userId . '/' . $uploadId;
+    }
+
+    private function portalChunkUploadAllPartsPresent(\Illuminate\Contracts\Filesystem\Filesystem $disk, string $baseRelative, int $totalChunks): bool
+    {
+        for ($i = 0; $i < $totalChunks; $i++) {
+            if (! $disk->exists($baseRelative . '/part_' . sprintf('%08d', $i))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function portalChunkUploadCountParts(\Illuminate\Contracts\Filesystem\Filesystem $disk, string $baseRelative): int
+    {
+        $files = $disk->files($baseRelative);
+        $n = 0;
+        foreach ($files as $path) {
+            $name = basename($path);
+            if (preg_match('/^part_\d{8}$/', $name)) {
+                $n++;
+            }
+        }
+
+        return $n;
+    }
+
+    /**
+     * @return string|null Absolute path to merged temp file
+     */
+    private function portalChunkUploadMergeToTemp(\Illuminate\Contracts\Filesystem\Filesystem $disk, string $baseRelative, int $totalChunks): ?string
+    {
+        $mergedRelative = $baseRelative . '/_merged.bin';
+        $mergedPath = storage_path('app/' . $mergedRelative);
+        $out = @fopen($mergedPath, 'wb');
+        if (! $out) {
+            return null;
+        }
+
+        try {
+            for ($i = 0; $i < $totalChunks; $i++) {
+                $partRelative = $baseRelative . '/part_' . sprintf('%08d', $i);
+                if (! $disk->exists($partRelative)) {
+                    @unlink($mergedPath);
+
+                    return null;
+                }
+                $partPath = storage_path('app/' . $partRelative);
+                $in = @fopen($partPath, 'rb');
+                if (! $in) {
+                    @unlink($mergedPath);
+
+                    return null;
+                }
+                stream_copy_to_stream($in, $out);
+                fclose($in);
+            }
+        } finally {
+            fclose($out);
+        }
+
+        return is_file($mergedPath) ? $mergedPath : null;
+    }
+
+    private function portalChunkUploadCleanup(\Illuminate\Contracts\Filesystem\Filesystem $disk, string $baseRelative, ?string $mergedAbsolutePath): void
+    {
+        if ($mergedAbsolutePath && is_file($mergedAbsolutePath)) {
+            @unlink($mergedAbsolutePath);
+        }
+        try {
+            $disk->deleteDirectory($baseRelative);
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     public function loginUser(Request $request)
