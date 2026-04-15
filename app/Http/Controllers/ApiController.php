@@ -5385,23 +5385,24 @@ dd("kjnik");
 
     public function FutureSubmitSellQuery(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'selectedQualityTypeInt' => ['required'],
-            'crop_year' => ['nullable', 'string', 'max:32'],
-            'quality' => ['required'],
-            'qualityForm' => ['required'],
-            'selectedGrade' => ['required'],
-            'changePackingType' => ['required'],
-            'quantity' => ['required'],
-            'offerPrice' => ['required'],
-            'validDays' => ['required'],
-            'contactPerson' => ['nullable', 'string', 'max:255'],
-            'contactMobile' => ['nullable', 'string', 'max:64'],
-            'farming' => ['nullable', 'string'],
-            'type' => ['nullable', 'string', 'max:32'],
-            'extra_file' => ['nullable', 'file', 'max:15360'],
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            array_merge($this->rulesTradeQueryHierarchyIds(), [
+                'user_id' => ['required', 'integer', 'exists:users,id'],
+                'crop_year' => ['nullable', 'string', 'max:32'],
+                'changePackingType' => ['required'],
+                'quantity' => ['required'],
+                'offerPrice' => ['required'],
+                'validDays' => ['required'],
+                'contactPerson' => ['nullable', 'string', 'max:255'],
+                'contactMobile' => ['nullable', 'string', 'max:64'],
+                'farming' => ['nullable', 'string'],
+                'type' => ['nullable', 'string', 'max:32'],
+                'extra_file' => ['nullable', 'file', 'max:15360'],
+            ]),
+            [],
+            $this->tradeQueryHierarchyAttributeNames()
+        );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
         }
@@ -5476,22 +5477,23 @@ dd("kjnik");
 
     public function FutureSubmitBuyQuery(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'selectedQualityTypeInt' => ['required'],
-            'crop_year' => ['nullable', 'string', 'max:32'],
-            'quality' => ['required'],
-            'qualityForm' => ['required'],
-            'selectedGrade' => ['required'],
-            'changePackingType' => ['required'],
-            'packing' => ['required'],
-            'quantity' => ['required'],
-            'contactPerson' => ['nullable', 'string', 'max:255'],
-            'contactMobile' => ['nullable', 'string', 'max:64'],
-            'farming' => ['nullable', 'string'],
-            'type' => ['nullable', 'string', 'max:32'],
-            'additionalinfo' => ['nullable', 'string'],
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            array_merge($this->rulesTradeQueryHierarchyIds(), [
+                'user_id' => ['required', 'integer', 'exists:users,id'],
+                'crop_year' => ['nullable', 'string', 'max:32'],
+                'changePackingType' => ['required'],
+                'packing' => ['required'],
+                'quantity' => ['required'],
+                'contactPerson' => ['nullable', 'string', 'max:255'],
+                'contactMobile' => ['nullable', 'string', 'max:64'],
+                'farming' => ['nullable', 'string'],
+                'type' => ['nullable', 'string', 'max:32'],
+                'additionalinfo' => ['nullable', 'string'],
+            ]),
+            [],
+            $this->tradeQueryHierarchyAttributeNames()
+        );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
         }
@@ -5562,7 +5564,12 @@ dd("kjnik");
 
     public function SubmitSellQuery(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rulesInrSellQuerySubmit());
+        $validator = Validator::make(
+            $request->all(),
+            $this->rulesInrSellQuerySubmit(),
+            [],
+            $this->tradeQueryHierarchyAttributeNames()
+        );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
         }
@@ -5673,7 +5680,12 @@ if (!file_exists('uploads')) {
 
     public function SubmitSellQueryWeb(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->rulesInrSellQuerySubmit());
+        $validator = Validator::make(
+            $request->all(),
+            $this->rulesInrSellQuerySubmit(),
+            [],
+            $this->tradeQueryHierarchyAttributeNames()
+        );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
         }
@@ -6510,21 +6522,22 @@ if (!file_exists('uploads')) {
     
     public function SubmitBuyQuery(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'user_id' => ['required', 'integer', 'exists:users,id'],
-            'selectedQualityTypeInt' => ['required'],
-            'quality' => ['required'],
-            'qualityForm' => ['required'],
-            'selectedGrade' => ['required'],
-            'changePackingType' => ['required'],
-            'packing' => ['required'],
-            'quantity' => ['required'],
-            'additionalinfo' => ['nullable', 'string'],
-            'farming' => ['nullable', 'string'],
-            'contactPerson' => ['nullable', 'string', 'max:255'],
-            'contactMobile' => ['nullable', 'string', 'max:64'],
-            'type' => ['nullable', 'string', 'max:32'],
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            array_merge($this->rulesTradeQueryHierarchyIds(), [
+                'user_id' => ['required', 'integer', 'exists:users,id'],
+                'changePackingType' => ['required'],
+                'packing' => ['required'],
+                'quantity' => ['required'],
+                'additionalinfo' => ['nullable', 'string'],
+                'farming' => ['nullable', 'string'],
+                'contactPerson' => ['nullable', 'string', 'max:255'],
+                'contactMobile' => ['nullable', 'string', 'max:64'],
+                'type' => ['nullable', 'string', 'max:32'],
+            ]),
+            [],
+            $this->tradeQueryHierarchyAttributeNames()
+        );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
         }
@@ -6981,12 +6994,8 @@ if (!file_exists('uploads')) {
      */
     private function rulesInrSellQuerySubmit(): array
     {
-        return [
+        return array_merge($this->rulesTradeQueryHierarchyIds(), [
             'userId' => ['required', 'integer', 'exists:users,id'],
-            'selectedQualityTypeInt' => ['required'],
-            'quality' => ['required'],
-            'qualityForm' => ['required'],
-            'selectedGrade' => ['required'],
             'changePackingType' => ['required'],
             'quantity' => ['required'],
             'offerPrice' => ['required'],
@@ -7001,6 +7010,59 @@ if (!file_exists('uploads')) {
             'uncookedFile' => ['nullable', 'file', 'max:15360'],
             'cookedImageFile' => ['nullable', 'file', 'max:15360'],
             'extra_file' => ['nullable', 'file', 'max:15360'],
+        ]);
+    }
+
+    /**
+     * Category, quality, form, and grade must be real selections — not null, empty, 0, or literal "null"/"undefined".
+     */
+    private function rulesTradeQueryHierarchyIds(): array
+    {
+        $mustSelect = $this->ruleTradeQueryMustSelectValue();
+
+        return [
+            'selectedQualityTypeInt' => array_merge(['bail'], $mustSelect),
+            'quality' => array_merge(['bail'], $mustSelect),
+            'qualityForm' => array_merge(['bail'], $mustSelect),
+            'selectedGrade' => array_merge(['bail'], $mustSelect),
+        ];
+    }
+
+    private function ruleTradeQueryMustSelectValue(): array
+    {
+        $labels = $this->tradeQueryHierarchyAttributeNames();
+
+        return [
+            'required',
+            function (string $attribute, $value, \Closure $fail) use ($labels): void {
+                $label = $labels[$attribute] ?? str_replace('_', ' ', $attribute);
+                if ($value === null || $value === '') {
+                    $fail(__('validation.required', ['attribute' => $label]));
+
+                    return;
+                }
+                if (is_string($value)) {
+                    $t = strtolower(trim($value));
+                    if ($t === '' || $t === 'null' || $t === 'undefined') {
+                        $fail(__('validation.required', ['attribute' => $label]));
+
+                        return;
+                    }
+                }
+                if ($value === 0 || $value === '0' || $value === 0.0) {
+                    $fail(__('validation.required', ['attribute' => $label]));
+                }
+            },
+        ];
+    }
+
+    private function tradeQueryHierarchyAttributeNames(): array
+    {
+        return [
+            'selectedQualityTypeInt' => 'category',
+            'quality' => 'quality',
+            'qualityForm' => 'quality form',
+            'selectedGrade' => 'sub quality',
         ];
     }
 
