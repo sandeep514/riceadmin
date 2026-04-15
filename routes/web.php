@@ -278,6 +278,12 @@ Route::group(['prefix'=>'administrator'], function(){
 
             //Live Prices
             Route::group(['module'=>'live_prices','icon'=>'fa-inr'], function(){
+                Route::get('live/price/events', ['as' => 'live.price.events', 'uses' => 'LivePriceEventController@index', 'action' => 'view']);
+                Route::get('live/price/events/create', ['as' => 'create.live.price.event', 'uses' => 'LivePriceEventController@create', 'action' => 'create']);
+                Route::post('live/price/events/save', ['as' => 'save.live.price.event', 'uses' => 'LivePriceEventController@save', 'action' => 'create']);
+                Route::get('live/price/events/edit/{id}', ['as' => 'edit.live.price.event', 'uses' => 'LivePriceEventController@edit', 'action' => 'edit']);
+                Route::put('live/price/events/update/{id}', ['as' => 'update.live.price.event', 'uses' => 'LivePriceEventController@update', 'action' => 'edit']);
+                Route::delete('live/price/events/delete/{id}', ['as' => 'delete.live.price.event', 'uses' => 'LivePriceEventController@delete', 'action' => 'delete']);
                 Route::match(['get','post'],'live/price/{rice_name?}',['as'=>'live_prices','uses'=>'LivePricesController@index','action'=>'create']);
                 Route::post('live/prices/save/',['as'=>'save.price','uses'=>'LivePricesController@savePrice','action'=>'create']);
                 Route::post('live/prices/save/for/single',['as'=>'save.price.for.single','uses'=>'LivePricesController@savePriceSingle']);

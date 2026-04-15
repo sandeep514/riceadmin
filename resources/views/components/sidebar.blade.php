@@ -145,6 +145,11 @@
                             @if($hasCreatePermission)
                                 <li class="{{ ($currentRoute == $createPermission->first()->route_name)?'active':'' }}"><a href="{{ route($createPermission->first()->route_name) }}"><i class="fa fa-circle-o"></i> Create New</a></li>
                             @endif
+                            @if($module->slug == 'live_prices')
+                                <li class="{{ in_array($currentRoute, ['live.price.events','create.live.price.event','edit.live.price.event']) ? 'active' : '' }}">
+                                    <a href="{{ route('live.price.events') }}"><i class="fa fa-circle-o"></i> Live Prices Events</a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                 @else

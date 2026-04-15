@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Courier;
 use App\LivePrice;
+use App\LivePriceEvent;
 use App\MillStatus;
 use App\Packing;
 use App\PackingType;
@@ -1111,6 +1112,89 @@ class PortalApiController extends Controller
     {
         $role = Role::select(["id","role_name"])->where('type' , 'web')->get();
         return response()->json(['status' => true, 'message' => 'Role get successfully', 'data' => $role], 200);
+    }
+
+    /**
+     * Public endpoint for website: list live price events.
+     *
+     * Optional query params:
+     * - quality_type_id
+     * - quality_id
+     * - quality_form_id
+     * - from_date (Y-m-d)
+     * - to_date (Y-m-d)
+     * - limit (default 100, max 500)
+     */
+    public function getLivePriceEvents(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'quality_type_id' => 'nullable|integer|exists:rice_types,id',
+            'quality_id' => 'nullable|integer|exists:rice_names,id',
+            'quality_form_id' => 'nullable|integer|exists:rice_forms,id',
+            'from_date' => 'nullable|date',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'limit' => 'nullable|integer|min:1|max:500',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $limit = (int) ($request->input('limit', 100));
+
+        $query = LivePriceEvent::query()
+            ->with(['qualityType:id,name', 'quality:id,name,type', 'qualityForm:id,form_name,type'])
+            ->where('status', 1)
+            ->orderBy('event_date', 'desc')
+            ->orderBy('id', 'desc');
+
+        if ($request->filled('quality_type_id')) {
+            $query->where('quality_type_id', (int) $request->quality_type_id);
+        }
+        if ($request->filled('quality_id')) {
+            $query->where('quality_id', (int) $request->quality_id);
+        }
+        if ($request->filled('quality_form_id')) {
+            $query->where('quality_form_id', (int) $request->quality_form_id);
+        }
+        if ($request->filled('from_date')) {
+            $query->whereDate('event_date', '>=', $request->from_date);
+        }
+        if ($request->filled('to_date')) {
+            $query->whereDate('event_date', '<=', $request->to_date);
+        }
+
+        $events = $query->limit($limit)->get()->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'event_date' => $row->event_date,
+                'note' => $row->note,
+                'quality_type' => $row->qualityType ? [
+                    'id' => $row->qualityType->id,
+                    'name' => $row->qualityType->name,
+                ] : null,
+                'quality' => $row->quality ? [
+                    'id' => $row->quality->id,
+                    'name' => $row->quality->name,
+                    'type' => $row->quality->type,
+                ] : null,
+                'quality_form' => $row->qualityForm ? [
+                    'id' => $row->qualityForm->id,
+                    'name' => $row->qualityForm->form_name,
+                    'type' => $row->qualityForm->type,
+                ] : null,
+            ];
+        })->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Live price events list',
+            'data' => $events
+        ], 200);
     }
 
     /**

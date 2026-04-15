@@ -22,6 +22,7 @@
         Route::post('logout', [PortalApiController::class, 'logout']);
 
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
+        Route::get('live/price/events', [PortalApiController::class, 'getLivePriceEvents']);
 
         Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails'])
             ->middleware(['portal.session_or_token']);
