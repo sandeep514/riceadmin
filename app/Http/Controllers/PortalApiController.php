@@ -85,6 +85,9 @@ use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
 class PortalApiController extends Controller
 {
+    /** Maximum upload size for portal attachments (GST/PAN/farmer docs, avatar, etc.), in bytes. */
+    private const PORTAL_UPLOAD_MAX_BYTES = 15 * 1024 * 1024;
+
     private function generateAndStoreApiToken(int $userId): string
     {
         do {
@@ -109,6 +112,16 @@ class PortalApiController extends Controller
                 response()->json([
                     'status' => false,
                     'message' => 'Invalid upload: ' . $file->getErrorMessage(),
+                ], 422)
+            );
+        }
+
+        $size = $file->getSize();
+        if ($size !== false && $size > self::PORTAL_UPLOAD_MAX_BYTES) {
+            throw new \Illuminate\Http\Exceptions\HttpResponseException(
+                response()->json([
+                    'status' => false,
+                    'message' => 'File size must not exceed 15 MB.',
                 ], 422)
             );
         }

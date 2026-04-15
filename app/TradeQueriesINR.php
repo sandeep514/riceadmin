@@ -36,6 +36,7 @@ class TradeQueriesINR extends Model
         3 => 'Future Buying',
         4 => 'Future Selling'
     ];
+    
     public static $riceSize = [ 
         1 => 'Full Grain',
         2 => 'Broken',
@@ -96,5 +97,10 @@ class TradeQueriesINR extends Model
     public function TradeInterest()
     {
         return $this->belongsTo(TradeIntrested::class, 'id' , 'tradeId');
+    }
+
+    public function tradeCategoryMaps()
+    {
+        return $this->hasMany(TradeCategoryMap::class, 'trade_id', 'id');
     }
 }

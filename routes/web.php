@@ -160,6 +160,17 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('web-access/get-plan', ['as' => 'web-access.get-plan', 'uses' => 'WebAccessController@getPlanByRoleCategory']);
             });
 
+            // Post a job (master)
+            Route::group(['module' => 'post_a_job', 'icon' => 'fa-briefcase'], function () {
+                Route::get('post-a-job', ['as' => 'post-a-job', 'uses' => 'PostedJobController@index', 'action' => 'view']);
+                Route::get('post-a-job/create', ['as' => 'create.post-a-job', 'uses' => 'PostedJobController@create', 'action' => 'create']);
+                Route::post('post-a-job/save', ['as' => 'save.post-a-job', 'uses' => 'PostedJobController@save', 'action' => 'create']);
+                Route::get('post-a-job/edit/{id}', ['as' => 'edit.post-a-job', 'uses' => 'PostedJobController@edit', 'action' => 'edit']);
+                Route::put('post-a-job/update/{id}', ['as' => 'update.post-a-job', 'uses' => 'PostedJobController@update', 'action' => 'edit']);
+                Route::delete('post-a-job/delete/{id}', ['as' => 'delete.post-a-job', 'uses' => 'PostedJobController@delete', 'action' => 'delete']);
+                Route::get('post-a-job/change-status/{id}/{status}', ['as' => 'post-a-job.change-status', 'uses' => 'PostedJobController@changeStatus', 'action' => 'edit']);
+            });
+
             // Role Category Map
             Route::get('role-category-map', ['as' => 'role-category-map.index', 'uses' => 'RoleCategoryMapController@index']);
             Route::post('role-category-map/save', ['as' => 'role-category-map.save', 'uses' => 'RoleCategoryMapController@save']);

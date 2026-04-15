@@ -20,25 +20,7 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-6" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('role_id','Role (optional)') !!}
-                                <select class="form-control" name="role_id" id="trade_web_role_id">
-                                    <option value="">— None —</option>
-                                    @foreach(($roles ?? collect()) as $rid => $rname)
-                                        <option value="{{ $rid }}" {{ (string)($tradequeriesinr->role_id ?? '') === (string)$rid ? 'selected' : '' }}>{{ $rname }}</option>
-                                    @endforeach
-                                </select>
-                                <p class="help-block" style="font-size:12px;margin-top:4px;">Web roles only. Changing role reloads categories for that role.</p>
-                            </div>
-                            <div class="col-md-6" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('category_id','Category (optional)') !!}
-                                <select class="form-control" name="category_id" id="trade_web_category_id">
-                                    <option value="">— None —</option>
-                                    @foreach(($webCategories ?? collect()) as $cid => $cname)
-                                        <option value="{{ $cid }}" {{ (string)($tradequeriesinr->category_id ?? '') === (string)$cid ? 'selected' : '' }}>{{ $cname }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            @include('trade._web_categories_grid')
 
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}
@@ -258,21 +240,7 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
-        var tradeCategoriesByRoleUrl = {!! json_encode(route('master.trade.categories.by.role')) !!};
-        $('#trade_web_role_id').on('change', function () {
-            var roleId = $(this).val();
-            var $cat = $('#trade_web_category_id');
-            $cat.empty().append($('<option></option>').attr('value', '').text('— None —'));
-            if (!roleId) {
-                return;
-            }
-            $.get(tradeCategoriesByRoleUrl, { role_id: roleId }, function (data) {
-                $.each(data, function (id, name) {
-                    $cat.append($('<option></option>').attr('value', id).text(name));
-                });
-            });
-        });
-
+        @include('trade._web_categories_select_all_js')
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
             $.ajax({

@@ -426,6 +426,12 @@
                     <span>Web Access</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['post-a-job','create.post-a-job','edit.post-a-job']))?'active':'' }}">
+                <a href="{{ route('post-a-job') }}">
+                    <i class="fa fa-briefcase"></i>
+                    <span>Post a job</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['role-category-map.index']))?'active':'' }}">
                 <a href="{{ route('role-category-map.index') }}">
                     <i class="fa fa-sitemap"></i>

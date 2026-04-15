@@ -76,6 +76,10 @@ use Auth;
 use App\NewsRunner;
 use App\WebNewsRunner;
 use App\TradeCurrentStatus;
+use App\PostedJob;
+use App\JobApplication;
+use App\TradeCategoryMap;
+use App\WebBusinessDetails;
 
 
 class ApiController extends Controller
@@ -514,7 +518,7 @@ class ApiController extends Controller
     //                 'errors' => null,
     //                 'prices' => $myNewData,
     //                 'latest' => $lastRecord->created_at->format('Y-m-d'),
-    //                 'lastUpdatedDate' => $lastRecord->created_at->format('d-m-Y | H:i A'),
+    //                 'lastUpdatedDate' => $lastRecord->created_at->format('d-M-Y, g:i A'),
     //                 'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
     //             ]);
     //         }
@@ -533,7 +537,7 @@ class ApiController extends Controller
     //         return response()->json([
     //             'errors' => null,
     //             'prices' => json_encode($processedData),
-    //             'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
+    //             'latest' => $lastRecord->created_at->format('d-M-Y, g:i A'),
     //             'oldDate' => ''
     //         ]);
 
@@ -745,7 +749,7 @@ class ApiController extends Controller
                     'errors' => null,
                     'prices' => $myNewData,
                     'latest' => $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => $lastRecord->updated_at->format('d-m-Y | H:i A'),
+                    'lastUpdatedDate' => $lastRecord->updated_at->format('d-M-Y, g:i A'),
                     'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                 ]);
             }
@@ -763,7 +767,7 @@ class ApiController extends Controller
             return response()->json([
                 'errors' => null,
                 'prices' => json_encode($processedData),
-                'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
+                'latest' => $lastRecord->created_at->format('d-M-Y, g:i A'),
                 'oldDate' => ''
             ]);
         } else {
@@ -1009,7 +1013,7 @@ class ApiController extends Controller
                     'errors' => null,
                     'prices' => $myNewData,
                     'latest' => ($startYear != '' && $endYear != '')? $recordDate : $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
+                    'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-M-Y, g:i A') : '',
                     'oldDate' => $lastToLastDate->created_at->format('Y-m-d')
                 ]);
             }
@@ -1042,7 +1046,7 @@ class ApiController extends Controller
             return response()->json([
                 'errors' => null,
                 'prices' => json_encode($processedData),
-                'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
+                'latest' => $lastRecord->created_at->format('d-M-Y, g:i A'),
                 'oldDate' => ''
             ]);
         } else {
@@ -1259,7 +1263,7 @@ class ApiController extends Controller
                     'errors' => null,
                     'prices' => $myNewData,
                     'latest' => $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
+                    'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-M-Y, g:i A') : '',
                     'oldDate' => $lastToLastDate->created_at->format('Y-m-d')
                 ]);
             }
@@ -1297,7 +1301,7 @@ class ApiController extends Controller
             return response()->json([
                 'errors' => null,
                 'prices' => json_encode($processedData),
-                'latest' => $lastRecord->created_at->format('d-m-Y | H:i'),
+                'latest' => $lastRecord->created_at->format('d-M-Y, g:i A'),
                 'oldDate' => ''
             ]);
         }
@@ -1647,7 +1651,7 @@ class ApiController extends Controller
     //             'prices' => $myNewData,
     //             'closing' => [$ricetype => $livePricesClosingOpening],
     //             'latest' => $latstRecord,
-    //             'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
+    //             'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-M-Y, g:i A') : '',
     //             // 'oldDate' => $lastToLastDate
     //         ]);
     //     }else{
@@ -1892,7 +1896,7 @@ class ApiController extends Controller
     //             'prices' => $processedData,
     //             'closing' => [$ricetype => $livePricesClosingOpening],
     //             'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
-    //             'lastUpdatedDate' => ($latestEnteredRecord->updated_at)? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
+    //             'lastUpdatedDate' => ($latestEnteredRecord->updated_at)? $latestEnteredRecord->updated_at->format('d-M-Y, g:i A') : '',
     //             // 'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
     //         ]);
     // }
@@ -1949,7 +1953,7 @@ class ApiController extends Controller
                     ? Carbon::parse($latestForMeta->created_at)->format('Y-m-d')
                     : $todayDate->format('Y-m-d'),
                 'lastUpdatedDate' => ($latestForMeta && $latestForMeta->updated_at)
-                    ? $latestForMeta->updated_at->format('d-m-Y | H:i A')
+                    ? $latestForMeta->updated_at->format('d-M-Y, g:i A')
                     : '',
             ]);
         }
@@ -2170,7 +2174,7 @@ class ApiController extends Controller
             'closing' => [$ricetype => $livePricesClosingOpening],
             'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
             'lastUpdatedDate' => ($latestEnteredRecord->updated_at)
-                ? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A')
+                ? $latestEnteredRecord->updated_at->format('d-M-Y, g:i A')
                 : '',
         ]);
     }
@@ -3383,7 +3387,7 @@ class ApiController extends Controller
         //         'prices' => $processedData,
         //         'closing' => [$ricetype => $livePricesClosingOpening],
         //         'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
-        //         'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-m-Y | H:i A') : '',
+        //         'lastUpdatedDate' => ($latestEnteredRecord->updated_at) ? $latestEnteredRecord->updated_at->format('d-M-Y, g:i A') : '',
         //         // 'oldDate' => $lastToLastDate
         //     ]);
 
@@ -4528,7 +4532,7 @@ dd("kjnik");
 
         $getUSDPrices = USD_prices::select('created_at')->where('status', 1)->orderBy('id', 'desc')->first();
         $latestDateforQuery = $getUSDPrices->created_at->format('Y-m-d');
-        $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i A');
+        $latestDate = $getUSDPrices->created_at->format('d-M-Y, g:i A');
 
 
         // $usdData = USD_prices::with(['getRiceQuality','getUSDDefaultMaster' => function($query) {
@@ -4668,7 +4672,7 @@ dd("kjnik");
 
 
         $getUSDPrices = USD_prices::select('created_at')->where('status', 1)->latest('id')->first();
-        $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i A');
+        $latestDate = $getUSDPrices->created_at->format('d-M-Y, g:i A');
 
         $basmatiData = [];
         $nonbasmatiData = [];
@@ -4811,7 +4815,7 @@ dd("kjnik");
         // $getUSDPrices = USD_prices::where('rice' , $riceQualityId )->where('ricemin' , '!=' , 0)->where('ricemax' , '!=' , 0)->where('status' , 1)->orderBy('id' , 'desc')->first();
 
 
-        $latestDate = $getUSDPrices->created_at->format('d-m-Y | H:i A');
+        $latestDate = $getUSDPrices->created_at->format('d-M-Y, g:i A');
 
         $USD_fiftykg_master = USD_defaultmaster::select('id', 'bag_size', 'bag_type', 'PMT_USD')->where('applied_for', $newAppliedFor)->where('bag_size', 'like', '50Kg')->orderBy('created_at', 'desc')->first();
 
@@ -5795,6 +5799,8 @@ if (!file_exists('uploads')) {
         // })
         ->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
 
+        $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
+        $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $trade = $allTrade;
@@ -6131,6 +6137,8 @@ if (!file_exists('uploads')) {
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
 
+        $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
+        $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $trade = $allTrade;
@@ -6142,7 +6150,57 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Format validDays for web trade APIs (IST, e.g. 09-Apr-2026 7:00PM).
+     * Web user's primary category from business profile (e.g. Manufacturer); maps to category.id / trade_category_map.category_id.
+     */
+    private function resolveWebUserCategoryId(int $userId): ?int
+    {
+        $selected = WebBusinessDetails::where('user_id', $userId)->value('selected_category');
+        if ($selected === null || $selected === '') {
+            return null;
+        }
+        $id = (int) $selected;
+
+        return $id > 0 ? $id : null;
+    }
+
+    /**
+     * Put trades that include the user's category in trade_category_map first; keep existing order (status priority, then id) within each group.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
+     */
+    private function orderWebTradesWithUserCategoryFirst($trades, ?int $userCategoryId)
+    {
+        if ($userCategoryId === null || $trades->isEmpty()) {
+            return $trades;
+        }
+
+        $matchIds = TradeCategoryMap::query()
+            ->where('category_id', $userCategoryId)
+            ->where('status', 1)
+            ->pluck('trade_id')
+            ->flip()
+            ->all();
+
+        if (empty($matchIds)) {
+            return $trades;
+        }
+
+        $first = [];
+        $rest = [];
+        foreach ($trades as $trade) {
+            if (isset($matchIds[$trade->id])) {
+                $first[] = $trade;
+            } else {
+                $rest[] = $trade;
+            }
+        }
+
+        return collect(array_merge($first, $rest));
+    }
+
+    /**
+     * Format validDays for web trade APIs (IST, e.g. 12-04-2026, 7:00 PM).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
@@ -6154,7 +6212,7 @@ if (!file_exists('uploads')) {
                 try {
                     $formatted = Carbon::parse($trade->validDays)
                         ->timezone('Asia/Kolkata')
-                        ->format('d-M-Y g:iA');
+                        ->format('d-m-Y, g:i A');
                     $trade->setAttribute('validDays', $formatted);
                 } catch (\Throwable $e) {
                     // leave original if unparsable
@@ -6243,6 +6301,111 @@ if (!file_exists('uploads')) {
             'currentStatus' => $tradeStatus['currentStatus'] ?? null,
             'statusMessage' => $tradeStatus['message'] ?? null,
         ]);
+    }
+
+    /**
+     * Public list of posted jobs that are still open for applications (last_date_apply on or after today).
+     */
+    public function getPublicPostedJobs()
+    {
+        $today = Carbon::today();
+
+        $rows = PostedJob::query()
+            ->where('status', 1)
+            ->whereDate('last_date_apply', '>=', $today)
+            ->orderBy('last_date_apply', 'asc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $typeLabels = PostedJob::employmentTypeOptions();
+
+        $data = $rows->map(function (PostedJob $job) use ($typeLabels) {
+            return [
+                'id' => $job->id,
+                'title' => $job->title,
+                'description' => $job->description,
+                'job_role' => $job->job_role,
+                'location' => $job->location,
+                'type' => $job->employment_type,
+                'type_label' => $typeLabels[$job->employment_type] ?? null,
+                'last_date_apply' => $job->last_date_apply ? $job->last_date_apply->format('Y-m-d') : null,
+                'number_of_positions' => (int) $job->number_of_positions,
+            ];
+        })->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Posted jobs retrieved successfully.',
+            'data' => $data,
+        ]);
+    }
+
+    /**
+     * Public: submit a job application (multipart supported for optional CV).
+     * Expects application_id = posted_jobs.id for the job being applied to.
+     */
+    public function saveJobApplication(Request $request)
+    {
+        $validated = $request->validate([
+            'application_id' => 'required|integer|exists:posted_jobs,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'mobile' => 'required|string|max:64',
+            'experience' => 'nullable|string|max:10000',
+            'cv' => 'nullable|file|mimes:pdf,doc,docx|max:15360',
+        ]);
+
+        $job = PostedJob::query()
+            ->where('id', $validated['application_id'])
+            ->where('status', 1)
+            ->whereDate('last_date_apply', '>=', Carbon::today())
+            ->first();
+
+        if (! $job) {
+            return response()->json([
+                'status' => false,
+                'message' => 'This job is not open for applications or does not exist.',
+            ], 422);
+        }
+
+        $cvRelativePath = null;
+        if ($request->hasFile('cv')) {
+            $file = $request->file('cv');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $safe = 'cv_' . time() . '_' . Str::random(10) . '.' . $ext;
+            $relativeDir = 'uploads/job_applications';
+            $destDir = public_path($relativeDir);
+            if (! is_dir($destDir)) {
+                mkdir($destDir, 0755, true);
+            }
+            $file->move($destDir, $safe);
+            $cvRelativePath = $relativeDir . '/' . $safe;
+        }
+
+        $row = JobApplication::create([
+            'posted_job_id' => (int) $validated['application_id'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'mobile' => $validated['mobile'],
+            'experience' => $validated['experience'] ?? null,
+            'cv_file' => $cvRelativePath,
+            'status' => 1,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Application submitted successfully.',
+            'data' => [
+                'id' => $row->id,
+                'application_id' => $row->posted_job_id,
+                'name' => $row->name,
+                'email' => $row->email,
+                'mobile' => $row->mobile,
+                'experience' => $row->experience,
+                'cv_file' => $row->cv_file,
+                'status' => (int) $row->status,
+            ],
+        ], 201);
     }
 
     public function getTradeDetail($tradeId)

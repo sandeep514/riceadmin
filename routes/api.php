@@ -173,6 +173,16 @@ use Pusher\Pusher;
         'uses' => 'ApiController@getGuestRiceSourcingTrades',
     ]);
 
+    Route::get('get/posted-jobs', [
+        'as' => 'get.posted.jobs',
+        'uses' => 'ApiController@getPublicPostedJobs',
+    ]);
+
+    Route::post('save/job-application', [
+        'as' => 'save.job.application',
+        'uses' => 'ApiController@saveJobApplication',
+    ]);
+
 
     Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount']);
 

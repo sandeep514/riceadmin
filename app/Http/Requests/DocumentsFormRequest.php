@@ -29,6 +29,10 @@ class DocumentsFormRequest extends FormRequest
                 'contract_no' => 'required',
                 'truck_no' => 'required',
                 'driver_no' => 'required',
+                'contract_copy' => 'nullable|file|max:15360',
+                'bill_copy' => 'nullable|file|max:15360',
+                'bilty_copy' => 'nullable|file|max:15360',
+                'kanta_parchi' => 'nullable|file|max:15360',
                 'due_days' => 'required',
                 'due_date' => 'required'
             ];
@@ -38,10 +42,10 @@ class DocumentsFormRequest extends FormRequest
                 'contract_no' => 'required',
                 'truck_no' => 'required',
                 'driver_no' => 'required',
-                'contract_copy' => 'required',
-                'bill_copy' => 'required',
-                'bilty_copy' => 'required',
-                'kanta_parchi' => 'required',
+                'contract_copy' => 'required|file|max:15360',
+                'bill_copy' => 'required|file|max:15360',
+                'bilty_copy' => 'required|file|max:15360',
+                'kanta_parchi' => 'required|file|max:15360',
                 'due_days' => 'required',
                 'due_date' => 'required'
             ];

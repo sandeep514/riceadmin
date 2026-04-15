@@ -24,10 +24,10 @@ use App\Buyerpackinginr;
 use App\WandTypeModel;
 use App\TradeLike;
 use App\LivePrice;
-use App\Role;
+use App\Category;
 use App\CategoryRoleMap;
+use App\TradeCategoryMap;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class TradeController extends Controller
@@ -91,10 +91,12 @@ class TradeController extends Controller
         $qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
         $livePricesStates =  LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
-        $roles = Role::where('type', 'web')->orderBy('role_name')->pluck('role_name', 'id');
-        $webCategories = collect();
+        $categoryList = Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
+        $selectedTradeCategoryIds = $categoryList->pluck('id')->map(function ($id) {
+            return (int) $id;
+        })->all();
 
-        return View('trade.create' , compact('qualityMaster','packing','livePricesStates','roles','webCategories'));
+        return View('trade.create' , compact('qualityMaster','packing','livePricesStates','categoryList','selectedTradeCategoryIds'));
     }
 
 
@@ -191,10 +193,8 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
         $data['tradeFor'] = $request->tradeFor;
         $data['farmingType'] = $request->farmingType;
-        $data['role_id'] = $request->filled('role_id') ? (int) $request->role_id : null;
-        $data['category_id'] = $request->filled('category_id') ? (int) $request->category_id : null;
-
         $tradeQuery = TradeQueriesINR::create($data);
+        $this->syncTradeCategoryMaps($tradeQuery->id, $request->input('category_ids', []));
         Session::flash('success','Success|Trade saved successfully!');
         if( $request->has('heart') ){
             for( $i = 1 ; $i <= $request->heart ;$i++ ){
@@ -233,39 +233,13 @@ class TradeController extends Controller
 
         $qualityMaster = RiceName::pluck('type_status' , 'type');
         // $packing = PublicPacking::get();
-        $roles = Role::where('type', 'web')->orderBy('role_name')->pluck('role_name', 'id');
-        $webCategories = $this->webCategoriesForRole(
-            $tradequeriesinr->role_id ? (int) $tradequeriesinr->role_id : null
-        );
+        $categoryList = Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
+        $selectedTradeCategoryIds = TradeCategoryMap::where('trade_id', (int) $id)->where('status', 1)->pluck('category_id')->all();
 
-        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates','roles','webCategories'));
+        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates','categoryList','selectedTradeCategoryIds'));
 
     }
 
-    /**
-     * Categories mapped to a web role via category_role_map (same source as Web Access UI).
-     */
-    protected function webCategoriesForRole($roleId): Collection
-    {
-        if ($roleId === null || $roleId === '' || (int) $roleId === 0) {
-            return collect();
-        }
-
-        $maps = CategoryRoleMap::where('role', (int) $roleId)
-            ->where('status', 1)
-            ->with('category_rel')
-            ->get();
-
-        $pairs = [];
-        foreach ($maps as $map) {
-            if ($map->category_rel) {
-                $pairs[$map->category_rel->id] = $map->category_rel->category;
-            }
-        }
-
-        return collect($pairs);
-    }
-    
     public function update(Request $request){
         $data = [];
         $selectedQualityTypeInt = $request->category;
@@ -381,9 +355,8 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
 
         $data = array_filter($data);
-        $data['role_id'] = $request->filled('role_id') ? (int) $request->role_id : null;
-        $data['category_id'] = $request->filled('category_id') ? (int) $request->category_id : null;
         TradeQueriesINR::where('id' , $request['id'])->update(($data));
+        $this->syncTradeCategoryMaps((int) $request['id'], $request->input('category_ids', []));
         Session::flash('success','Success|Trade saved successfully!');
 
         return back();
@@ -433,5 +406,26 @@ class TradeController extends Controller
         }
 
         return response()->json($categories);
+    }
+
+    /**
+     * Replace trade_category_map rows for a trade from submitted category_ids[].
+     */
+    protected function syncTradeCategoryMaps(int $tradeId, $categoryIds): void
+    {
+        TradeCategoryMap::where('trade_id', $tradeId)->delete();
+        $raw = is_array($categoryIds) ? $categoryIds : [];
+        $ids = array_values(array_unique(array_filter(array_map('intval', $raw))));
+        if (empty($ids)) {
+            return;
+        }
+        $validIds = Category::where('status', 1)->whereIn('id', $ids)->pluck('id');
+        foreach ($validIds as $cid) {
+            TradeCategoryMap::create([
+                'trade_id' => $tradeId,
+                'category_id' => (int) $cid,
+                'status' => 1,
+            ]);
+        }
     }
 }

@@ -131,7 +131,7 @@
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></div></td>
                                                     <td>{{ App\TradeQueriesINR::$tradeStatus[$v->status] ?? 'Archived' }}</td>
-                                                    <td>{{ $v->created_at }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($v->created_at)->format('d-M-Y, g:i A') }}</td>
 
 
                                                     <td style="text-align: center;">
