@@ -710,19 +710,23 @@ class PortalApiController extends Controller
         }
 
 
-        $mailTo = 'info@sntcgroup.com';
-        $mailMessage = '';
-        $subject = 'User update the profile';
-        $mailFrom = 'info@sntcgroup.com';
-        $mailFromName = 'SNTC Team - India';
+        if( $request->has('account_type') ){
+            if( $request->account_type == 'new' ) {
+                $mailTo = 'info@sntcgroup.com';
+                $mailMessage = '';
+                $subject = 'User update the profile';
+                $mailFrom = 'info@sntcgroup.com';
+                $mailFromName = 'SNTC Team - India';
 
 
-        $data = ['userEmail' => $userEmailForMail];
+                $data = ['userEmail' => $userEmailForMail];
 
-        $respose = Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+                $respose = Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                    $message->to($mailTo, $mailMessage)->subject($subject);
+                    $message->from($mailFrom, $mailFromName);
+                });
+            }
+        }
 
 
         return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => ['personalDetails' => $personalDetails, 'businessDetails' => $businessDetails]], 200);
