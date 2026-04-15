@@ -1198,6 +1198,110 @@ class PortalApiController extends Controller
     }
 
     /**
+     * Delete uploaded PAN or GST/FSSAI document for a user.
+     *
+     * Payload:
+     * - user_id (required)
+     * - file_type (required): pan | gst_fssai
+     *
+     * Note: route is protected with portal.session_or_token middleware,
+     * so user can only delete own files.
+     */
+    public function deleteUserUploadedDocument(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+            'file_type' => 'required|in:pan,gst_fssai',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $userId = (int) $request->user_id;
+        $fileType = (string) $request->file_type;
+
+        $attachment = WebUserAttachment::where('user_id', $userId)->first();
+        if (! $attachment) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No uploaded document found for this user.',
+            ], 404);
+        }
+
+        if ($fileType === 'pan') {
+            $fileName = trim((string) $attachment->panCard);
+            if ($fileName === '') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'PAN document is already empty.',
+                ], 404);
+            }
+
+            $pathsToDelete = [
+                public_path('webPortal/' . $userId . '/attachments/pan/' . $fileName),
+            ];
+            foreach ($pathsToDelete as $path) {
+                if ($path && File::exists($path)) {
+                    @File::delete($path);
+                }
+            }
+
+            $attachment->update(['panCard' => null]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'PAN document deleted successfully.',
+            ], 200);
+        }
+
+        // gst_fssai delete (supports new combined path + legacy gstCard/fssaiCard)
+        $gstFssaiPath = trim((string) $attachment->getRawOriginal('gst_fssai'));
+        $gstLegacy = trim((string) $attachment->gstCard);
+        $fssaiLegacy = trim((string) $attachment->fssaiCard);
+
+        if ($gstFssaiPath === '' && $gstLegacy === '' && $fssaiLegacy === '') {
+            return response()->json([
+                'status' => false,
+                'message' => 'GST/FSSAI document is already empty.',
+            ], 404);
+        }
+
+        $relativeCandidates = [];
+        if ($gstFssaiPath !== '') {
+            $relativeCandidates[] = ltrim($gstFssaiPath, '/');
+        }
+        if ($gstLegacy !== '') {
+            $relativeCandidates[] = 'gst/' . ltrim($gstLegacy, '/');
+        }
+        if ($fssaiLegacy !== '') {
+            $relativeCandidates[] = 'fssai/' . ltrim($fssaiLegacy, '/');
+        }
+
+        foreach (array_unique($relativeCandidates) as $rel) {
+            $full = public_path('webPortal/' . $userId . '/attachments/' . $rel);
+            if (File::exists($full)) {
+                @File::delete($full);
+            }
+        }
+
+        $attachment->update([
+            'gst_fssai' => null,
+            'gstCard' => null,
+            'fssaiCard' => null,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'GST/FSSAI document deleted successfully.',
+        ], 200);
+    }
+
+    /**
      * POST /api/portal/web/plans/by-role-category
      * Payload: { "role": 4, "category": 2 }
      */

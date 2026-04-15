@@ -26,6 +26,8 @@
 
         Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails'])
             ->middleware(['portal.session_or_token']);
+        Route::post('delete/uploaded-document', [PortalApiController::class, 'deleteUserUploadedDocument'])
+            ->middleware(['portal.session_or_token']);
 
         /** Multipart chunked upload for PAN or GST/FSSAI (see PortalApiController::uploadPortalDocumentChunk). */
         Route::post('upload/document-chunk', [PortalApiController::class, 'uploadPortalDocumentChunk'])
