@@ -710,10 +710,8 @@ class PortalApiController extends Controller
                     $hasActivePlan = true;
                 }
                 
-                $hasBasicDetails = false;
-                if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
-                    $hasBasicDetails = true;
-                }
+                $hasBasicDetails = $this->portalUserHasBasicProfileDetails($data);
+                $hasUploadedDocuments = $this->portalUserHasUploadedDocuments($data);
 
                 $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
                 
@@ -728,6 +726,7 @@ class PortalApiController extends Controller
                     'message' => 'Success', 
                     'token' => $token,
                     'hasBasicDetails' => $hasBasicDetails,
+                    'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasTrialDone' => $hasTrialDone,
                     'hasActivePlan' => $hasActivePlan,
                     'planDetails' => $data->getWebUserSubscription, 
@@ -801,10 +800,8 @@ class PortalApiController extends Controller
                     $hasActivePlan = true;
                 }
                 
-                $hasBasicDetails = false;
-                if ($data->getWebPersonalDetails != null || $data->getWebBusinessDetails != null || $data->getWebUserAttachment != null) {
-                    $hasBasicDetails = true;
-                }
+                $hasBasicDetails = $this->portalUserHasBasicProfileDetails($data);
+                $hasUploadedDocuments = $this->portalUserHasUploadedDocuments($data);
 
                 $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
                 
@@ -819,6 +816,7 @@ class PortalApiController extends Controller
                     'message' => 'OTP verified successfully', 
                     'token' => $token,
                     'hasBasicDetails' => $hasBasicDetails,
+                    'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasActivePlan' => $hasActivePlan,
                     'hasTrialDone' => $hasTrialDone,
                     'planDetails' => $data->getWebUserSubscription, 
@@ -1671,6 +1669,38 @@ class PortalApiController extends Controller
         return $this->buildPortalSessionResponse((int) $user->id);
     }
 
+    /**
+     * True when personal and/or business profile rows exist.
+     * Document-only uploads (PAN / GST-FSSAI / farmer file) do not count as "basic details".
+     */
+    private function portalUserHasBasicProfileDetails(User $user): bool
+    {
+        return $user->getWebPersonalDetails != null || $user->getWebBusinessDetails != null;
+    }
+
+    /**
+     * True when at least one onboarding document exists (PAN, GST/FSSAI, or farmer file).
+     */
+    private function portalUserHasUploadedDocuments(User $user): bool
+    {
+        $attachment = $user->getWebUserAttachment;
+        if ($attachment === null) {
+            return false;
+        }
+
+        if (! empty(trim((string) $attachment->panCard))) {
+            return true;
+        }
+
+        if (! empty(trim((string) $attachment->farmer_file))) {
+            return true;
+        }
+
+        $gstFssaiPath = $attachment->resolveGstFssaiRelativePath();
+
+        return $gstFssaiPath !== null && $gstFssaiPath !== '';
+    }
+
     private function buildPortalSessionResponse(int $userId)
     {
         $data = User::where('id', $userId)
@@ -1693,9 +1723,8 @@ class PortalApiController extends Controller
         }
 
         $hasActivePlan = (bool) $data->getWebUserSubscription;
-        $hasBasicDetails = $data->getWebPersonalDetails != null
-            || $data->getWebBusinessDetails != null
-            || $data->getWebUserAttachment != null;
+        $hasBasicDetails = $this->portalUserHasBasicProfileDetails($data);
+        $hasUploadedDocuments = $this->portalUserHasUploadedDocuments($data);
         $hasTrialDone = WebUserSubscriptionModel::where('user_id', $userId)
             ->where('subscription_type', 'trial')
             ->exists();
@@ -1709,6 +1738,7 @@ class PortalApiController extends Controller
             'status' => true,
             'message' => 'Session restored',
             'hasBasicDetails' => $hasBasicDetails,
+            'hasUploadedDocuments' => $hasUploadedDocuments,
             'hasTrialDone' => $hasTrialDone,
             'hasActivePlan' => $hasActivePlan,
             'planDetails' => $data->getWebUserSubscription,
