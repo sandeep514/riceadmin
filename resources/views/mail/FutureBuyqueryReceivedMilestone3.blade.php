@@ -11,6 +11,11 @@
     <p><strong>Contact Person:</strong> {{ $contactPerson }}</p>
     <p><strong>Contact Mobile:</strong> {{ $contactMobile }}</p>
 
+    <p style="margin-top:1em;"><strong>Submitted by (account)</strong></p>
+    <p><strong>Name:</strong> {{ $creator_name }}</p>
+    <p><strong>Email:</strong> {{ $creator_email }}</p>
+    <p><strong>Phone:</strong> {{ $creator_phone }}</p>
+
     <br>
     <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
     <hr style="border:none;border-top:1px solid #eee" />

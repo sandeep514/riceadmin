@@ -44,7 +44,9 @@ use App\USD_prices;
 // use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\FreeTrialMonths;
 use App\QualityMaster;
@@ -5383,6 +5385,27 @@ dd("kjnik");
 
     public function FutureSubmitSellQuery(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'selectedQualityTypeInt' => ['required'],
+            'crop_year' => ['nullable', 'string', 'max:32'],
+            'quality' => ['required'],
+            'qualityForm' => ['required'],
+            'selectedGrade' => ['required'],
+            'changePackingType' => ['required'],
+            'quantity' => ['required'],
+            'offerPrice' => ['required'],
+            'validDays' => ['required'],
+            'contactPerson' => ['nullable', 'string', 'max:255'],
+            'contactMobile' => ['nullable', 'string', 'max:64'],
+            'farming' => ['nullable', 'string'],
+            'type' => ['nullable', 'string', 'max:32'],
+            'extra_file' => ['nullable', 'file', 'max:15360'],
+        ]);
+        if ($validator->fails()) {
+            return $this->tradeQueryValidationFailedResponse($validator);
+        }
+
         $data = [];
 
         $selectedQualityTypeInt = $request->selectedQualityTypeInt;
@@ -5430,7 +5453,7 @@ dd("kjnik");
 
         $sellCreate = FutureSellQueriesINR::create($data);
 
-        $data = array();
+        $mailPayload = $this->creatorDetailsForMail($userId);
 
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
@@ -5438,7 +5461,7 @@ dd("kjnik");
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.FutureSellQueryReceivedMilestone3', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+        $respose = Mail::send('mail.FutureSellQueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
             $message->to($mailTo, $mailMessage)->subject($subject);
             $message->from($mailFrom, $mailFromName);
         });
@@ -5453,6 +5476,26 @@ dd("kjnik");
 
     public function FutureSubmitBuyQuery(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'selectedQualityTypeInt' => ['required'],
+            'crop_year' => ['nullable', 'string', 'max:32'],
+            'quality' => ['required'],
+            'qualityForm' => ['required'],
+            'selectedGrade' => ['required'],
+            'changePackingType' => ['required'],
+            'packing' => ['required'],
+            'quantity' => ['required'],
+            'contactPerson' => ['nullable', 'string', 'max:255'],
+            'contactMobile' => ['nullable', 'string', 'max:64'],
+            'farming' => ['nullable', 'string'],
+            'type' => ['nullable', 'string', 'max:32'],
+            'additionalinfo' => ['nullable', 'string'],
+        ]);
+        if ($validator->fails()) {
+            return $this->tradeQueryValidationFailedResponse($validator);
+        }
+
         $data = [];
         
         $farming = $request->farming ?? '';
@@ -5497,7 +5540,11 @@ dd("kjnik");
 
 
         $buyerQuery = FutureBuyQueriesINR::create($data);
-        $data = array();
+
+        $mailPayload = array_merge($this->creatorDetailsForMail($userId), [
+            'contactPerson' => $contactPerson,
+            'contactMobile' => $contactMobile,
+        ]);
 
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
@@ -5505,7 +5552,7 @@ dd("kjnik");
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.FutureBuyqueryReceivedMilestone3', ['contactPerson' => $contactPerson, 'contactMobile' => $contactMobile], function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+        $respose = Mail::send('mail.FutureBuyqueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
             $message->to($mailTo, $mailMessage)->subject($subject);
             $message->from($mailFrom, $mailFromName);
         });
@@ -5515,6 +5562,11 @@ dd("kjnik");
 
     public function SubmitSellQuery(Request $request)
     {
+        $validator = Validator::make($request->all(), $this->rulesInrSellQuerySubmit());
+        if ($validator->fails()) {
+            return $this->tradeQueryValidationFailedResponse($validator);
+        }
+
         $data = [];
 
         $selectedQualityTypeInt = $request->selectedQualityTypeInt;
@@ -5602,7 +5654,7 @@ if (!file_exists('uploads')) {
 
         $sellCreate = SellQueriesINR::create($data);
 
-        $data = array();
+        $mailPayload = $this->creatorDetailsForMail($userId);
 
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
@@ -5610,7 +5662,7 @@ if (!file_exists('uploads')) {
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
             $message->to($mailTo, $mailMessage)->subject($subject);
             $message->from($mailFrom, $mailFromName);
         });
@@ -5621,6 +5673,11 @@ if (!file_exists('uploads')) {
 
     public function SubmitSellQueryWeb(Request $request)
     {
+        $validator = Validator::make($request->all(), $this->rulesInrSellQuerySubmit());
+        if ($validator->fails()) {
+            return $this->tradeQueryValidationFailedResponse($validator);
+        }
+
         $data = [];
 
         $selectedQualityTypeInt = $request->selectedQualityTypeInt;
@@ -5708,7 +5765,7 @@ if (!file_exists('uploads')) {
 
         $sellCreate = SellQueriesINR::create($data);
 
-        $data = array();
+        $mailPayload = $this->creatorDetailsForMail($userId);
 
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
@@ -5716,7 +5773,7 @@ if (!file_exists('uploads')) {
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
             $message->to($mailTo, $mailMessage)->subject($subject);
             $message->from($mailFrom, $mailFromName);
         });
@@ -6223,6 +6280,34 @@ if (!file_exists('uploads')) {
     }
 
     /**
+     * Account holder (created_by user) for enquiry emails: name, email, phone.
+     *
+     * @return array{creator_name: string, creator_email: string, creator_phone: string}
+     */
+    private function creatorDetailsForMail($userId): array
+    {
+        $empty = [
+            'creator_name' => '—',
+            'creator_email' => '—',
+            'creator_phone' => '—',
+        ];
+        if ($userId === null || $userId === '' || (int) $userId <= 0) {
+            return $empty;
+        }
+        $u = User::query()->where('id', (int) $userId)->first(['name', 'email', 'phone', 'mobile']);
+        if (! $u) {
+            return $empty;
+        }
+        $phone = $u->phone ?: $u->mobile;
+
+        return [
+            'creator_name' => $u->name ?: '—',
+            'creator_email' => $u->email ?: '—',
+            'creator_phone' => $phone ?: '—',
+        ];
+    }
+
+    /**
      * Public rice sourcing list for guests (no token). Only trades that are still open for sourcing:
      * not sold (3), not expired (2), not de-active/closed/hold (5, 11, 12), and validDays still in the future.
      * Optional filters match web/get/trades/filter: trade_type, farming_type, quality_type, quality, quality_form, rice_size, state, packing.
@@ -6425,6 +6510,25 @@ if (!file_exists('uploads')) {
     
     public function SubmitBuyQuery(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'selectedQualityTypeInt' => ['required'],
+            'quality' => ['required'],
+            'qualityForm' => ['required'],
+            'selectedGrade' => ['required'],
+            'changePackingType' => ['required'],
+            'packing' => ['required'],
+            'quantity' => ['required'],
+            'additionalinfo' => ['nullable', 'string'],
+            'farming' => ['nullable', 'string'],
+            'contactPerson' => ['nullable', 'string', 'max:255'],
+            'contactMobile' => ['nullable', 'string', 'max:64'],
+            'type' => ['nullable', 'string', 'max:32'],
+        ]);
+        if ($validator->fails()) {
+            return $this->tradeQueryValidationFailedResponse($validator);
+        }
+
         $data = [];
 
         $selectedQualityTypeInt = $request->selectedQualityTypeInt;
@@ -6460,17 +6564,19 @@ if (!file_exists('uploads')) {
 
 
         $buyerQuery = BuyQueriesINR::create($data);
-        $viewData = [
-            'contactPerson'  => $contactPerson,
-            'contactMobile'  => $contactMobile
-            // add everything you need
-        ];
-        // $data = array();
+        $viewData = array_merge($this->creatorDetailsForMail($userId), [
+            'contactPerson' => $contactPerson,
+            'contactMobile' => $contactMobile,
+        ]);
 
         $mailTo = "enquiry@sntcgroup.com";
         // $mailTo = "sandy.singh51480@gmail.com";
         $mailMessage = '';
-        $subject = 'Buy with SNTC - Web Version' ;
+        if( $type == 'web' ){
+            $subject = 'Buy with SNTC - Web Version' ;
+        }else{
+            $subject = 'Buy with SNTC' ;
+        }
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
@@ -6868,5 +6974,42 @@ if (!file_exists('uploads')) {
         }
 
         return null;
+    }
+
+    /**
+     * Shared validation rules for SubmitSellQuery / SubmitSellQueryWeb (multipart, optional images).
+     */
+    private function rulesInrSellQuerySubmit(): array
+    {
+        return [
+            'userId' => ['required', 'integer', 'exists:users,id'],
+            'selectedQualityTypeInt' => ['required'],
+            'quality' => ['required'],
+            'qualityForm' => ['required'],
+            'selectedGrade' => ['required'],
+            'changePackingType' => ['required'],
+            'quantity' => ['required'],
+            'offerPrice' => ['required'],
+            'validDays' => ['required'],
+            'contactperson' => ['nullable', 'string', 'max:255'],
+            'contactMobile' => ['nullable', 'string', 'max:64'],
+            'warehouselocation' => ['nullable', 'string', 'max:500'],
+            'farming' => ['nullable', 'string'],
+            'riceSize' => ['nullable', 'string', 'max:255'],
+            'type' => ['nullable', 'string', 'max:32'],
+            'packageImageFile' => ['nullable', 'file', 'max:15360'],
+            'uncookedFile' => ['nullable', 'file', 'max:15360'],
+            'cookedImageFile' => ['nullable', 'file', 'max:15360'],
+            'extra_file' => ['nullable', 'file', 'max:15360'],
+        ];
+    }
+
+    private function tradeQueryValidationFailedResponse(ValidatorContract $validator): \Illuminate\Http\JsonResponse
+    {
+        return response()->json([
+            'status' => false,
+            'message' => 'Validation error.',
+            'errors' => $validator->errors(),
+        ], 422);
     }
 }

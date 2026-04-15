@@ -6,6 +6,12 @@
     <p style="font-size:1.1em">Hi,</p>
     <p>You got a new Sell Query.</p>
     <p>Thank you for your patience.</p>
+
+    <p style="margin-top:1em;"><strong>Submitted by (account)</strong></p>
+    <p><strong>Name:</strong> {{ $creator_name }}</p>
+    <p><strong>Email:</strong> {{ $creator_email }}</p>
+    <p><strong>Phone:</strong> {{ $creator_phone }}</p>
+
     <br>
     <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>
     <hr style="border:none;border-top:1px solid #eee" />
