@@ -51,5 +51,6 @@
             
             // ✅ Get web access permissions for user
             Route::post('web-access', [PortalApiController::class, 'getWebAccess']);
+            Route::post('web/subscription-history', [PortalApiController::class, 'getWebSubscriptionHistory']);
         });
     });

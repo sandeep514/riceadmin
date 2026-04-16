@@ -2166,4 +2166,46 @@ class PortalApiController extends Controller
         ], 200);
     }
 
+    /**
+     * Subscription history for a web user (latest first).
+     * Payload: { "user_id": 123 }
+     */
+    public function getWebSubscriptionHistory(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $userId = (int) $request->input('user_id');
+
+        $history = WebUserSubscriptionModel::where('user_id', $userId)
+            ->with(['planRel'])
+            ->orderBy('id', 'desc')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'date_of_payment' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d H:i:s') : null,
+                    'plan' => $row->planRel ? $row->planRel->title : null,
+                    'purchased_on' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d') : null,
+                    'start_date' => $row->period_start,
+                    'end_date' => $row->period_end,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Subscription history fetched successfully.',
+            'data' => $history,
+        ], 200);
+    }
+
 }
