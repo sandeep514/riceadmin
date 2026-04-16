@@ -2194,6 +2194,7 @@ class PortalApiController extends Controller
                 return [
                     'date_of_payment' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d H:i:s') : null,
                     'plan' => $row->planRel ? $row->planRel->title : null,
+                    'plan_type' => $row->subscription_type,
                     'purchased_on' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d') : null,
                     'start_date' => $row->period_start,
                     'end_date' => $row->period_end,
