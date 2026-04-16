@@ -1106,6 +1106,95 @@ class PortalApiController extends Controller
 
     }
 
+    /**
+     * Create a renewal entry in web_user_subscription.
+     * If a user still has an active plan, renewed plan starts from next day of period_end.
+     * Otherwise it starts from today.
+     */
+    public function webRenewSubscription(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+            'plan_id' => 'required|integer|exists:web_plan,id',
+            'subscription_type' => 'required|string|in:trial,monthly,half_yearly,yearly',
+            'payment_id' => 'required|string|max:255',
+            'order_id' => 'required|string|max:255',
+            'status' => 'nullable|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $userId = (int) $request->input('user_id');
+        $planId = (int) $request->input('plan_id');
+        $subscriptionType = (string) $request->input('subscription_type');
+        $paymentId = (string) $request->input('payment_id');
+        $orderId = (string) $request->input('order_id');
+        $rowStatus = $request->filled('status') ? (int) $request->input('status') : 1;
+
+        $alreadyExists = WebUserSubscriptionModel::where(function ($q) use ($paymentId, $orderId) {
+            $q->where('payment_id', $paymentId)->orWhere('order_id', $orderId);
+        })->exists();
+        if ($alreadyExists) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Subscription with same payment_id or order_id already exists.',
+            ], 422);
+        }
+
+        $existingActivePlan = WebUserSubscriptionModel::where('user_id', $userId)
+            ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+            ->orderBy('period_end', 'desc')
+            ->first();
+
+        $renewalStart = $existingActivePlan
+            ? Carbon::parse($existingActivePlan->period_end)->addDay()->startOfDay()
+            : Carbon::now()->startOfDay();
+
+        $addedDays = $this->getSubscriptionAddedDays($subscriptionType);
+        $renewalEnd = (clone $renewalStart)->addDays($addedDays);
+
+        $subscription = WebUserSubscriptionModel::create([
+            'user_id' => $userId,
+            'plan_id' => $planId,
+            'payment_id' => $paymentId,
+            'order_id' => $orderId,
+            'subscription_type' => $subscriptionType,
+            'period_start' => $renewalStart->format('Y-m-d'),
+            'period_end' => $renewalEnd->format('Y-m-d'),
+            'status' => $rowStatus,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Plan renewed successfully.',
+            'data' => $subscription,
+        ], 200);
+    }
+
+    private function getSubscriptionAddedDays(string $subscriptionType): int
+    {
+        if ($subscriptionType === 'trial') {
+            return 30;
+        }
+        if ($subscriptionType === 'monthly') {
+            return 30;
+        }
+        if ($subscriptionType === 'half_yearly') {
+            return 183;
+        }
+        if ($subscriptionType === 'yearly') {
+            return 365;
+        }
+
+        return 7;
+    }
+
     public function getWebPlans()
     {
         $role = Role::select(["id","role_name"])->where('type' , 'web')->get();
@@ -1526,16 +1615,18 @@ class PortalApiController extends Controller
         try {
             // Verify payment signature
             $api->utility->verifyPaymentSignature($attributes);
-            $addedDays  = 7;
-            if( $request->subscription_type =='trial' ){
-                $addedDays = 30;
-            }elseif( $request->subscription_type =='monthly' ){
-                $addedDays = 30;
-            }elseif( $request->subscription_type =='half_yearly' ){
-                $addedDays = 183;
-            }elseif( $request->subscription_type =='yearly' ){
-                $addedDays = 365;
-            }
+            $addedDays = $this->getSubscriptionAddedDays((string) $request->subscription_type);
+
+            $existingActivePlan = WebUserSubscriptionModel::where('user_id', $userId)
+                ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+                ->orderBy('period_end', 'desc')
+                ->first();
+
+            // If plan is renewed before expiry, start from next day of active end date.
+            $subscriptionStart = $existingActivePlan
+                ? Carbon::parse($existingActivePlan->period_end)->addDay()->startOfDay()
+                : Carbon::now()->startOfDay();
+            $subscriptionEnd = (clone $subscriptionStart)->addDays($addedDays);
 
             // ✅ Signature matched successfully — store the subscription/payment
             $subscription = WebUserSubscriptionModel::create([
@@ -1544,11 +1635,38 @@ class PortalApiController extends Controller
                 'payment_id'   => $razorpayPaymentId,
                 'order_id'     => $razorpayOrderId,
                 'status'       => 'active',
-                'period_start' => now(),
-                'period_end'   => now()->addDays($addedDays) ,
+                'period_start' => $subscriptionStart->format('Y-m-d'),
+                'period_end'   => $subscriptionEnd->format('Y-m-d'),
                 'subscription_type' => $request->subscription_type,
                 'status' => 1
             ]);
+
+            $subscriptions = WebUserSubscriptionModel::where('user_id', $userId)
+                ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+                ->where(function ($q) {
+                    $q->where('status', 1)->orWhereNull('status');
+                })
+                ->get(['period_start', 'period_end']);
+
+            $today = Carbon::now()->startOfDay();
+            $totalAvailableDays = 0;
+            foreach ($subscriptions as $row) {
+                if (! $row->period_end) {
+                    continue;
+                }
+
+                $effectiveStart = $row->period_start
+                    ? Carbon::parse($row->period_start)->startOfDay()
+                    : $today->copy();
+                if ($effectiveStart->lt($today)) {
+                    $effectiveStart = $today->copy();
+                }
+
+                $effectiveEnd = Carbon::parse($row->period_end)->startOfDay();
+                if ($effectiveEnd->gte($effectiveStart)) {
+                    $totalAvailableDays += $effectiveStart->diffInDays($effectiveEnd) + 1;
+                }
+            }
 
             $userDetails = User::where(['id' => $userId])->first();
 
@@ -1593,6 +1711,7 @@ class PortalApiController extends Controller
             return response()->json([
                 'status'  => true,
                 'message' => '✅ Payment verified and subscription activated.',
+                'total_available_days' => $totalAvailableDays,
                 'data'    => $subscription
             ]);
 

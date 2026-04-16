@@ -40,6 +40,7 @@
 
             Route::get('plans', [PortalApiController::class, 'getPlans']);
             Route::post('web/user/subscription', [PortalApiController::class, 'webUserSubscription']);
+            Route::post('web/renew-subscription', [PortalApiController::class, 'webRenewSubscription']);
             Route::post('web/create-order', [PortalApiController::class, 'webCreateOrder']);
             Route::post('web/verify-payment', [PortalApiController::class, 'webVerifyPayment']);
 
