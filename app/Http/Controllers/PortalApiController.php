@@ -1149,14 +1149,7 @@ class PortalApiController extends Controller
             ], 422);
         }
 
-        $existingActivePlan = WebUserSubscriptionModel::where('user_id', $userId)
-            ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
-            ->orderBy('period_end', 'desc')
-            ->first();
-
-        $renewalStart = $existingActivePlan
-            ? Carbon::parse($existingActivePlan->period_end)->addDay()->startOfDay()
-            : Carbon::now()->startOfDay();
+        $renewalStart = $this->getNextSubscriptionStartDate($userId);
 
         $addedDays = $this->getSubscriptionAddedDays($subscriptionType);
         $renewalEnd = (clone $renewalStart)->addDays($addedDays);
@@ -1619,15 +1612,8 @@ class PortalApiController extends Controller
             $api->utility->verifyPaymentSignature($attributes);
             $addedDays = $this->getSubscriptionAddedDays((string) $request->subscription_type);
 
-            $existingActivePlan = WebUserSubscriptionModel::where('user_id', $userId)
-                ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
-                ->orderBy('period_end', 'desc')
-                ->first();
-
-            // If plan is renewed before expiry, start from next day of active end date.
-            $subscriptionStart = $existingActivePlan
-                ? Carbon::parse($existingActivePlan->period_end)->addDay()->startOfDay()
-                : Carbon::now()->startOfDay();
+            // Always chain renewal from the latest available plan end date (current or queued future plans).
+            $subscriptionStart = $this->getNextSubscriptionStartDate((int) $userId);
             $subscriptionEnd = (clone $subscriptionStart)->addDays($addedDays);
 
             // ✅ Signature matched successfully — store the subscription/payment
@@ -1827,6 +1813,23 @@ class PortalApiController extends Controller
         }
 
         return $totalDays;
+    }
+
+    private function getNextSubscriptionStartDate(int $userId): Carbon
+    {
+        $lastAvailablePlan = WebUserSubscriptionModel::where('user_id', $userId)
+            ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            })
+            ->orderBy('period_end', 'desc')
+            ->first(['period_end']);
+
+        if (! $lastAvailablePlan || ! $lastAvailablePlan->period_end) {
+            return Carbon::now()->startOfDay();
+        }
+
+        return Carbon::parse($lastAvailablePlan->period_end)->addDay()->startOfDay();
     }
 
     private function buildPortalSessionResponse(int $userId)
