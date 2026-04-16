@@ -729,6 +729,7 @@ class PortalApiController extends Controller
                     'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasTrialDone' => $hasTrialDone,
                     'hasActivePlan' => $hasActivePlan,
+                    'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $user->id),
                     'planDetails' => $data->getWebUserSubscription, 
                     'data' => $data
                 ], 200);
@@ -819,6 +820,7 @@ class PortalApiController extends Controller
                     'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasActivePlan' => $hasActivePlan,
                     'hasTrialDone' => $hasTrialDone,
+                    'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $user->id),
                     'planDetails' => $data->getWebUserSubscription, 
                     'data' => $data
                 ], 200);
@@ -1015,7 +1017,7 @@ class PortalApiController extends Controller
                 'pan' => 'webPortal/' . $userId . '/attachments/pan',
                 'attachments' => 'webPortal/' . $userId . '/attachments',
                 'gst_fssai' => 'webPortal/' . $userId . '/attachments/gst_fssai',
-            ]], 200);
+            ], 'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $userId)], 200);
 
 
         } else {
@@ -1641,32 +1643,7 @@ class PortalApiController extends Controller
                 'status' => 1
             ]);
 
-            $subscriptions = WebUserSubscriptionModel::where('user_id', $userId)
-                ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
-                ->where(function ($q) {
-                    $q->where('status', 1)->orWhereNull('status');
-                })
-                ->get(['period_start', 'period_end']);
-
-            $today = Carbon::now()->startOfDay();
-            $totalAvailableDays = 0;
-            foreach ($subscriptions as $row) {
-                if (! $row->period_end) {
-                    continue;
-                }
-
-                $effectiveStart = $row->period_start
-                    ? Carbon::parse($row->period_start)->startOfDay()
-                    : $today->copy();
-                if ($effectiveStart->lt($today)) {
-                    $effectiveStart = $today->copy();
-                }
-
-                $effectiveEnd = Carbon::parse($row->period_end)->startOfDay();
-                if ($effectiveEnd->gte($effectiveStart)) {
-                    $totalAvailableDays += $effectiveStart->diffInDays($effectiveEnd) + 1;
-                }
-            }
+            $totalAvailableDays = $this->getTotalAvailableSubscriptionDays((int) $userId);
 
             $userDetails = User::where(['id' => $userId])->first();
 
@@ -1820,6 +1797,38 @@ class PortalApiController extends Controller
         return $gstFssaiPath !== null && $gstFssaiPath !== '';
     }
 
+    private function getTotalAvailableSubscriptionDays(int $userId): int
+    {
+        $subscriptions = WebUserSubscriptionModel::where('user_id', $userId)
+            ->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'))
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            })
+            ->get(['period_start', 'period_end']);
+
+        $today = Carbon::now()->startOfDay();
+        $totalDays = 0;
+        foreach ($subscriptions as $row) {
+            if (! $row->period_end) {
+                continue;
+            }
+
+            $effectiveStart = $row->period_start
+                ? Carbon::parse($row->period_start)->startOfDay()
+                : $today->copy();
+            if ($effectiveStart->lt($today)) {
+                $effectiveStart = $today->copy();
+            }
+
+            $effectiveEnd = Carbon::parse($row->period_end)->startOfDay();
+            if ($effectiveEnd->gte($effectiveStart)) {
+                $totalDays += $effectiveStart->diffInDays($effectiveEnd) + 1;
+            }
+        }
+
+        return $totalDays;
+    }
+
     private function buildPortalSessionResponse(int $userId)
     {
         $data = User::where('id', $userId)
@@ -1860,6 +1869,7 @@ class PortalApiController extends Controller
             'hasUploadedDocuments' => $hasUploadedDocuments,
             'hasTrialDone' => $hasTrialDone,
             'hasActivePlan' => $hasActivePlan,
+            'total_available_days' => $this->getTotalAvailableSubscriptionDays($userId),
             'planDetails' => $data->getWebUserSubscription,
             'data' => $userArray,
             'prefix' => [
