@@ -2212,12 +2212,21 @@ class PortalApiController extends Controller
 
     /**
      * In-app notifications for web portal (from admin "Notify Web User").
-     * Payload: { "user_id": 123 }
+     * Authenticated by Bearer / X-API-TOKEN (portal.api.token); list is for the token owner only.
+     * Optional: limit (default 100, max 200). Legacy POST body user_id is still accepted if it matches the token.
      */
     public function getWebPortalNotifications(Request $request)
     {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized.',
+            ], 401);
+        }
+
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required|integer|exists:users,id',
+            'limit' => 'nullable|integer|min:1|max:200',
         ]);
 
         if ($validator->fails()) {
@@ -2228,11 +2237,12 @@ class PortalApiController extends Controller
             ], 422);
         }
 
-        $userId = (int) $request->input('user_id');
+        $limit = (int) $request->input('limit', 100);
+        $userId = (int) $user->id;
 
         $rows = WebUserNotification::where('user_id', $userId)
             ->orderBy('id', 'desc')
-            ->limit(100)
+            ->limit($limit)
             ->get()
             ->map(function ($row) {
                 return [
