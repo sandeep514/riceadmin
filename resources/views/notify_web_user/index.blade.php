@@ -153,7 +153,7 @@
     }
 
     function toggleAudience() {
-        var mode = $('.audience-mode:checked').val();
+        var mode = $('input[name="audience_mode"]:checked').val();
         if (mode === 'selected_users') {
             $('#user-multiselect-wrap').show();
             $('#notify_user_ids').prop('required', true);
@@ -169,12 +169,15 @@
     });
 
     $('#notify_category_id').on('change', function () {
-        if ($('.audience-mode:checked').val() === 'selected_users') {
+        if ($('input[name="audience_mode"]:checked').val() === 'selected_users') {
             loadUsers();
         }
     });
 
-    $('.audience-mode').on('change', toggleAudience);
+    // Support both native radio events and iCheck custom events.
+    $('.audience-mode').on('change ifChecked ifToggled click', function () {
+        setTimeout(toggleAudience, 0);
+    });
 
     @if(old('role_id'))
         loadCategories('{{ old('role_id') }}');
@@ -185,6 +188,7 @@
     @endif
 
     toggleAudience();
+    setTimeout(toggleAudience, 100);
 })();
 </script>
 @endsection
