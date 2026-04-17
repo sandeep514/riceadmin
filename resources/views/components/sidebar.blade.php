@@ -159,6 +159,13 @@
                         </a>
                     </li>
                 @endif
+                @if($module->slug == 'live_prices')
+                    <li class="{{ ($currentRoute == 'notify.web.user') ? 'active' : '' }}">
+                        <a href="{{ route('notify.web.user') }}">
+                            <i class="fa fa-bullhorn"></i> <span>Notify Web User</span>
+                        </a>
+                    </li>
+                @endif
             @endforeach
 
             <li class="{{ (in_array($currentRoute,['gallery','gallery.create','gallery.delete']))?'active':'' }}">

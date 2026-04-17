@@ -31,3 +31,15 @@ Broadcast::channel('presence-admin-events', function ($user = null) {
         'name' => $user->name ?? 'Guest',
     ];
 });
+
+/*
+| Web portal users: Echo.private('web-user.' + userId)
+*/
+Broadcast::channel('web-user.{id}', function ($user, $id) {
+    if (! $user) {
+        return false;
+    }
+
+    return (int) $user->id === (int) $id
+        && (int) ($user->userType ?? 0) === 2;
+});

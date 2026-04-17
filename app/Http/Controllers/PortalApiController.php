@@ -75,6 +75,7 @@ use App\WebUserAttachment;
 use App\WebPlanModel;
 use App\WebPlanKeysModel;
 use App\WebUserSubscriptionModel;
+use App\WebUserNotification;
 use App\WebAccess;
 use App\VendorUserMap;
 use App\ServiceProviderUserMap;
@@ -2206,6 +2207,49 @@ class PortalApiController extends Controller
             'status' => true,
             'message' => 'Subscription history fetched successfully.',
             'data' => $history,
+        ], 200);
+    }
+
+    /**
+     * In-app notifications for web portal (from admin "Notify Web User").
+     * Payload: { "user_id": 123 }
+     */
+    public function getWebPortalNotifications(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $userId = (int) $request->input('user_id');
+
+        $rows = WebUserNotification::where('user_id', $userId)
+            ->orderBy('id', 'desc')
+            ->limit(100)
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'title' => $row->title,
+                    'message' => $row->message,
+                    'notify_date' => $row->notify_date ? $row->notify_date->format('Y-m-d') : null,
+                    'read_at' => $row->read_at ? Carbon::parse($row->read_at)->format('Y-m-d H:i:s') : null,
+                    'created_at' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d H:i:s') : null,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Notifications fetched successfully.',
+            'data' => $rows,
         ], 200);
     }
 

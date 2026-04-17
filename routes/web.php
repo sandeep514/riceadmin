@@ -290,6 +290,12 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('price/delete/{id}',['as'=>'delete.price','uses'=>'LivePricesController@delete','action'=>'delete']);
             });
 
+            // Notify web users (Live Prices submenu)
+            Route::get('notify/web-user', ['as' => 'notify.web.user', 'uses' => 'NotifyWebUserController@index']);
+            Route::post('notify/web-user', ['as' => 'notify.web.user.store', 'uses' => 'NotifyWebUserController@store']);
+            Route::get('notify/web-user/categories/{roleId}', ['as' => 'notify.web.user.categories', 'uses' => 'NotifyWebUserController@categoriesByRole']);
+            Route::get('notify/web-user/users', ['as' => 'notify.web.user.users', 'uses' => 'NotifyWebUserController@usersByRoleCategory']);
+
             //Ports
             Route::group(['module'=>'ports','icon'=>'fa-bus'], function(){
                 Route::get('ports',['as'=>'ports','uses'=>'PortsController@index','action'=>'create']);
