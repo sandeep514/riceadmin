@@ -27,6 +27,7 @@ use App\LivePrice;
 use App\Category;
 use App\CategoryRoleMap;
 use App\TradeCategoryMap;
+use App\Services\TradeWebNotificationService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -195,7 +196,8 @@ class TradeController extends Controller
         $data['farmingType'] = $request->farmingType;
         $tradeQuery = TradeQueriesINR::create($data);
         $this->syncTradeCategoryMaps($tradeQuery->id, $request->input('category_ids', []));
-        Session::flash('success','Success|Trade saved successfully!');
+        $notifyNote = $this->dispatchTradeWebNotification($tradeQuery, $request);
+        Session::flash('success', 'Success|Trade saved successfully!' . ($notifyNote ? ' ' . $notifyNote : ''));
         if( $request->has('heart') ){
             for( $i = 1 ; $i <= $request->heart ;$i++ ){
                 TradeLike::create([
@@ -357,7 +359,12 @@ class TradeController extends Controller
         $data = array_filter($data);
         TradeQueriesINR::where('id' , $request['id'])->update(($data));
         $this->syncTradeCategoryMaps((int) $request['id'], $request->input('category_ids', []));
-        Session::flash('success','Success|Trade saved successfully!');
+        $tradeRow = TradeQueriesINR::where('id', (int) $request['id'])->first();
+        $notifyNote = '';
+        if ($tradeRow) {
+            $notifyNote = $this->dispatchTradeWebNotification($tradeRow, $request);
+        }
+        Session::flash('success', 'Success|Trade saved successfully!' . ($notifyNote ? ' ' . $notifyNote : ''));
 
         return back();
         return View('trade.index');
@@ -427,5 +434,93 @@ class TradeController extends Controller
                 'status' => 1,
             ]);
         }
+    }
+
+    /**
+     * Web portal notifications for trade (web_notifications + Reverb/private channel).
+     */
+    /**
+     * @return string Optional note appended to success toast (notification skipped reason).
+     */
+    protected function dispatchTradeWebNotification(TradeQueriesINR $trade, Request $request): string
+    {
+        $send = (string) $request->input('trade_notify_send', '0') === '1';
+        if (! $send) {
+            return '';
+        }
+
+        $raw = $request->input('category_ids', []);
+        $categoryIds = is_array($raw) ? $raw : [];
+        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
+        if ($categoryIds === []) {
+            return '(Notification not sent: select at least one web category.)';
+        }
+
+        $audience = (string) $request->input('trade_notify_audience', 'all_category');
+        if (! in_array($audience, ['all_category', 'selected_users'], true)) {
+            $audience = 'all_category';
+        }
+
+        $title = (string) $request->input('trade_notify_title', 'New Trade alert');
+        $message = (string) $request->input('trade_notify_message', TradeWebNotificationService::DEFAULT_TRADE_NOTIFY_MESSAGE);
+        if (trim($message) === '') {
+            $message = TradeWebNotificationService::DEFAULT_TRADE_NOTIFY_MESSAGE;
+        }
+
+        $selected = $request->input('trade_notify_user_ids', []);
+        $selected = is_array($selected) ? array_values(array_filter(array_map('intval', $selected))) : [];
+
+        if ($audience === 'selected_users' && $selected === []) {
+            return '(Notification not sent: no users selected.)';
+        }
+
+        /** @var TradeWebNotificationService $svc */
+        $svc = app(TradeWebNotificationService::class);
+
+        $eligible = $svc->eligibleWebUserIds($categoryIds);
+        if ($eligible === []) {
+            return '(Notification not sent: no web users found for selected categories.)';
+        }
+
+        if ($audience === 'selected_users') {
+            $ok = array_values(array_intersect($selected, $eligible));
+            if ($ok === []) {
+                return '(Notification not sent: selected users do not belong to the chosen categories.)';
+            }
+        }
+
+        $svc->send(
+            $trade,
+            $categoryIds,
+            true,
+            $audience,
+            $audience === 'selected_users' ? $selected : null,
+            $title,
+            $message
+        );
+
+        return '';
+    }
+
+    /**
+     * JSON: web users (portal) for selected web category ids — for trade notification recipient picker.
+     */
+    public function getWebUsersForCategoriesJson(Request $request)
+    {
+        $raw = $request->input('category_ids', []);
+        $categoryIds = is_array($raw) ? $raw : [];
+        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
+        if ($categoryIds === []) {
+            return response()->json(['status' => true, 'data' => []]);
+        }
+
+        $svc = app(TradeWebNotificationService::class);
+        $ids = $svc->eligibleWebUserIds($categoryIds);
+        $users = User::query()
+            ->whereIn('id', $ids)
+            ->orderBy('id', 'desc')
+            ->get(['id', 'name', 'mobile', 'email']);
+
+        return response()->json(['status' => true, 'data' => $users]);
     }
 }

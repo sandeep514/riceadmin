@@ -22,6 +22,8 @@
 
                             @include('trade._web_categories_grid')
 
+                            @include('trade._web_trade_notification', ['isEdit' => true])
+
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}
                                 <select class="form-control" required name="category">
@@ -241,6 +243,7 @@
 
     $(document).ready(function() {
         @include('trade._web_categories_select_all_js')
+        @include('trade._web_trade_notification_js')
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
             $.ajax({
