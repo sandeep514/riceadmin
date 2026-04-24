@@ -6,6 +6,10 @@ Route::get('/',function(){
     return redirect()->route('home');
 });
 
+Route::get('/debug-path', function () {
+    return request()->path();
+});
+
 
 Route::get('sendhtmlemail', 'MailController@html_email');
 

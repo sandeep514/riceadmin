@@ -5,6 +5,12 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 error_reporting(E_ALL);
 
 ini_set('display_errors', 1);
+
+// Fix subfolder routing
+if (isset($_SERVER['REQUEST_URI'])) {
+    $_SERVER['REQUEST_URI'] = str_replace('/staging/public', '', $_SERVER['REQUEST_URI']);
+}
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

@@ -57,6 +57,11 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' /* optional */
         });
+const ws = new WebSocket("wss://snjtradelink.com/app/ru9fetnneiub1ezhirqo");
+
+ws.onopen = () => console.log("✅ Connected");
+ws.onerror = (e) => console.log("❌ Error", e);
+ws.onclose = () => console.log("Closed");
     });
 </script>
 </body>
