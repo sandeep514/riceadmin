@@ -450,6 +450,12 @@
                     <span>Role Category Map</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['rice-form-map','create.rice-form-map','edit.rice-form-map']))?'active':'' }}">
+                <a href="{{ route('rice-form-map') }}">
+                    <i class="fa fa-sitemap"></i>
+                    <span>Rice Form Map</span>
+                </a>
+            </li>
             <li class="treeview {{ (in_array($currentRoute,['reports.live-prices']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-file-text-o"></i>

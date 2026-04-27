@@ -179,6 +179,16 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('role-category-map', ['as' => 'role-category-map.index', 'uses' => 'RoleCategoryMapController@index']);
             Route::post('role-category-map/save', ['as' => 'role-category-map.save', 'uses' => 'RoleCategoryMapController@save']);
 
+            // Rice Form Map
+            Route::group(['module'=>'rice_form_map','icon'=>'fa-sitemap'], function() {
+                Route::get('rice-form-map', ['as' => 'rice-form-map', 'uses' => 'WebRiceFormMapController@index','action'=>'view']);
+                Route::get('rice-form-map/create', ['as' => 'create.rice-form-map', 'uses' => 'WebRiceFormMapController@create','action'=>'create']);
+                Route::post('rice-form-map/save', ['as' => 'save.rice-form-map', 'uses' => 'WebRiceFormMapController@save','action'=>'create']);
+                Route::get('rice-form-map/edit/{id}', ['as' => 'edit.rice-form-map', 'uses' => 'WebRiceFormMapController@edit','action'=>'edit']);
+                Route::put('rice-form-map/update/{id}', ['as' => 'update.rice-form-map', 'uses' => 'WebRiceFormMapController@update','action'=>'edit']);
+                Route::delete('rice-form-map/delete/{id}', ['as' => 'delete.rice-form-map', 'uses' => 'WebRiceFormMapController@delete','action'=>'delete']);
+            });
+
             //Sample Registers
             Route::group(['module'=>'sample_register','icon'=>'fa-database'], function() {
                 Route::get('sample-registers', ['as' => 'sample-registers', 'uses' => 'SampleRegistersController@index','action'=>'view']);

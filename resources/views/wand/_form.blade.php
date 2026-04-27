@@ -8,7 +8,7 @@
                 @endforeach
             </select> -->
             @php
-                $url = $_SERVER['REDIRECT_URL'];
+                $url = $_SERVER['REDIRECT_URL'] ?? request()->getRequestUri();
                 $explodedURL = explode('/' , $url);
                 $countURL = count($explodedURL);
                 $lastIndex = ($countURL-1);
