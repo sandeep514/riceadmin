@@ -8,6 +8,8 @@ use App\WandModel;
 use App\RiceName;
 use App\QualityMaster;
 use Session;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Export\WandExport;
 
 class WandController extends Controller
 {
@@ -58,6 +60,11 @@ class WandController extends Controller
 
     public function changeStatus(){
         dd('changeStatus');
+    }
+
+    public function export()
+    {
+        return Excel::download(new WandExport(), 'wand-data-' . date('Y-m-d') . '.xlsx');
     }
 
 }

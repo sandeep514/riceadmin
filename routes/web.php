@@ -576,6 +576,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::GET('wand/edit/{WandId}' , ['as' => 'master.wand.edit' , 'uses' => 'WandController@edit']);
     Route::POST('wand/update' , ['as' => 'master.wand.update' , 'uses' => 'WandController@update']);
     Route::get('wand/change/status/{Wandid}' , ['as' => 'master.wand.change.status' , 'uses' => 'WandController@changeStatus']);
+    Route::get('wand/export' , ['as' => 'master.wand.export' , 'uses' => 'WandController@export']);
 
 
 
