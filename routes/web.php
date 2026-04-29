@@ -518,6 +518,13 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('create/other/rice/forms' , [ 'as' => 'master.create.rice.form.milestone3' , 'uses' => 'MasterController@createRiceFormMilestone']);
         Route::POST('save/other/rice/forms' , [ 'as' => 'master.save.rice.form.milestone3' , 'uses' => 'MasterController@SaveRiceFormMilestone']);
 
+        // Master Export Routes
+        Route::get('export/rice/form',        ['as' => 'master.export.rice.form',       'uses' => 'MasterController@exportRiceForm']);
+        Route::get('export/rice/quality',     ['as' => 'master.export.rice.quality',    'uses' => 'MasterController@exportRiceQuality']);
+        Route::get('export/city',             ['as' => 'master.export.city',            'uses' => 'MasterController@exportCity']);
+        Route::get('export/state',            ['as' => 'master.export.state',           'uses' => 'MasterController@exportState']);
+        Route::get('export/rice/brand/form',  ['as' => 'master.export.rice.brand.form', 'uses' => 'MasterController@exportRiceBrandForm']);
+
         Route::get('news/runner' , [ 'as' => 'master.news.runner' , 'uses' => 'NewsRunnerController@index']);
         Route::post('create/news/runner' , [ 'as' => 'master.post.news.runner' , 'uses' => 'NewsRunnerController@create']);
         Route::get('update/news/status/{newsId}/{status}' , [ 'as' => 'master.news.change.status' , 'uses' => 'NewsRunnerController@updateStatus']);

@@ -25,6 +25,12 @@ use App\BuyQueriesINR;
 use App\FutureBuyQueriesINR;
 use App\RiceFormMilestone3;
 use Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Export\MasterRiceFormExport;
+use App\Export\MasterRiceNameExport;
+use App\Export\MasterCityExport;
+use App\Export\MasterStateExport;
+use App\Export\MasterRiceBrandFormExport;
 
 class MasterController extends Controller
 {
@@ -968,5 +974,30 @@ class MasterController extends Controller
 		]);
 		Session::flash('message' , 'Form generated successfully.');
 		return view('riceFormMilestone3.create');
+	}
+
+	public function exportRiceForm()
+	{
+		return Excel::download(new MasterRiceFormExport(), 'rice-forms-' . date('Y-m-d') . '.xlsx');
+	}
+
+	public function exportRiceQuality()
+	{
+		return Excel::download(new MasterRiceNameExport(), 'rice-quality-' . date('Y-m-d') . '.xlsx');
+	}
+
+	public function exportCity()
+	{
+		return Excel::download(new MasterCityExport(), 'cities-' . date('Y-m-d') . '.xlsx');
+	}
+
+	public function exportState()
+	{
+		return Excel::download(new MasterStateExport(), 'states-' . date('Y-m-d') . '.xlsx');
+	}
+
+	public function exportRiceBrandForm()
+	{
+		return Excel::download(new MasterRiceBrandFormExport(), 'rice-brand-forms-' . date('Y-m-d') . '.xlsx');
 	}
 }

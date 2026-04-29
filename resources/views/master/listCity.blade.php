@@ -1,88 +1,65 @@
 @extends('layouts.main')
 
 @section('content')
-<style>
-    .nonbasmatitabs .nav>li>a {
-        padding: 10px 11px;
-    }    
-    .basmatitabs .nav>li>a {
-        padding: 10px 11px;
-    }
-</style>
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>
-                List Cities
-                <small>List</small>
-            </h1>
+            <h1>List Cities <small>List</small></h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Cities</a></li>
+                <li class="active">Cities</li>
             </ol>
         </section>
-
         <section class="content">
-            <div class="box-body">
-
-                <div class="responsiveTabs basmatitabs">
-                    <div id="myTabContent" class="tab-content" >
-                        <div class="">
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <div class="row text-left" style="margin-top: 20px;">
-                                        <div class="col-md-12 inputs">
-                                            <form method="post" action="{{ route('master.update.city.order') }}">
-                                                @csrf
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Order</th>
-                                                            <th>Name</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($cities as $key => $value)
-                                                            <tr>
-                                                                <td style="text-transform: capitalize;">
-                                                                    <input type="hidden" name="state[]" value="{{ ($value['state']) }}" >
-                                                                    <input type="text" name="order[]" value="{{ $value['state_order'] }}">
-                                                                </td>
-                                                                <td style="text-transform: capitalize;">{{ str_replace('_', ' ', ($value['state'])) }}</td>
-                                                                <td>
-                                                                    <ul style="list-style: none;display: inline-flex;padding: 0">
-                                                                        {{-- <li>
-                                                                            <a class="btn btn-sm btn-{{ ( $value == 1 ) ? 'primary' : 'info' }}" href="{{ route('master.city.changeStatus' , base64_encode($value['id'])) }}"> {{ ($value == 1) ? 'Disable' : 'Enable' }} </a>
-                                                                        </li> --}}
-
-                                                                        <li style="margin-left: 20px">
-                                                                            <a class="btn btn-sm btn-info" href="{{ route('master.get.city' , base64_encode($value['state'])) }}"> Edit </a>
-                                                                        </li>
-                                                                        <li style="margin-left: 20px">
-                                                                            <a class="btn btn-sm btn-danger" href="{{ route('master.delete.city' , base64_encode($value['state'])) }}"> Delete </a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>    
-                                                <input type="submit" name="button" value="Change Order" class="btn btn-primary btn-sm">
-                                            </form>
-                                            
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Cities</h3>
+                    <div class="pull-right">
+                        <a href="{{ route('master.export.city') }}" class="btn btn-success btn-sm">
+                            <i class="fa fa-file-excel-o"></i> Export Excel
+                        </a>
                     </div>
                 </div>
-
+                <div class="box-body">
+                    <form method="post" action="{{ route('master.update.city.order') }}">
+                        @csrf
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped master-datatable" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Order</th>
+                                        <th>Name</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($cities as $key => $value)
+                                        <tr>
+                                            <td>{{ $key + 1 }}</td>
+                                            <td>
+                                                <input type="hidden" name="state[]" value="{{ $value['state'] }}">
+                                                <input type="text" name="order[]" value="{{ $value['state_order'] }}" class="form-control input-sm" style="width:60px">
+                                            </td>
+                                            <td style="text-transform: capitalize;">{{ str_replace('_', ' ', $value['state']) }}</td>
+                                            <td>
+                                                <a class="btn btn-info btn-xs" href="{{ route('master.get.city', base64_encode($value['state'])) }}">Edit</a>
+                                                <a class="btn btn-danger btn-xs" href="{{ route('master.delete.city', base64_encode($value['state'])) }}" onclick="return confirm('Delete this record?')">Delete</a>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-sm">Update Order</button>
+                    </form>
+                </div>
             </div>
         </section>
     </div>
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('js/live-price.js?ref='.rand(1111,9999)) }}"></script>
+@section('javascript')
+<script>
+    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[0,'asc']], columnDefs: [{orderable: false, targets: [1,3]}] }); });
+</script>
 @endsection
