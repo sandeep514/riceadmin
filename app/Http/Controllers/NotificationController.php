@@ -15,6 +15,7 @@ use App\QualityMaster;
 use App\USD_defaultmaster;
 use App\HotDealAccept;
 use App\Notifications\SNTCNotification;
+use App\Jobs\SendPushNotificationJob;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Kreait\Laravel\Firebase\Facades\Firebase;
@@ -31,111 +32,52 @@ class NotificationController extends Controller
     public function sendNotification(Request $request)
     {
         $request->validate([
-            'userType' => 'required',
-            'title' => 'required',
-            'message' => 'required',
+            'userType'    => 'required',
+            'title'       => 'required',
+            'message'     => 'required',
             'userAppType' => 'required',
         ]);
-
-
+    
         if ($request->userAppType == 'usd') {
             $users = User::query()
                 ->whereIn('usd_role', $request->userType)
                 ->where('id', '!=', 301)
-                ->where('user_token', '!=', null)
+                ->whereNotNull('user_token')
                 ->select('user_token', 'id')
                 ->get();
         } else {
-
             $users = User::query()
                 ->whereIn('role', $request->userType)
                 ->where('id', '!=', 301)
-                ->where('user_token', '!=', null)
+                ->whereNotNull('user_token')
                 ->select('user_token', 'id')
                 ->get();
         }
-        // return true;
-
-        // $users = User::query()
-        //     ->whereIn('id', [224])
-        //     ->whereNotNull('user_token')
-        //     ->select('user_token', 'id')
-        //     ->get();
-        // $users = User::whereIn('id', [220,1297,1664,2173])->where('user_token' , '!=' , null)->get();
-
-        // $arrayUsers = $users->toArray();
-
-        // $registeredTokens =  array_chunk($arrayUsers, 400);
-
-
-        $postedData = [];
-        // $arrayFilters = [];
-
-        // if ($users->count() > 0) {
-        //     $arrayFilters = array_filter($users->toArray());
-        // }
-
-
-        foreach ($users as $user) {
-            // $this->sendNotif($request->title, $request->message, $v,$request->userAppType);
-            // Notification::create([
-            //         'user_id' => $k,
-            //         'title' => $request->title,
-            //         'message' => $request->message,
-            //         'userAppType' => $request->userAppType,
-            //         'status' => 1
-            // ]);
-            $postedData[] = [
-                'user_id' => $user->id,
-                'title' => $request->title,
-                'message' => $request->message,
-                'userAppType' => $request->userAppType,
-                'status' => 1,
-                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
-                'updated_at' => Carbon::now()->format('Y-m-d H:i:s')
-            ];
+    
+        $totalUsers = $users->count();
+    
+        if ($totalUsers === 0) {
+            return back()->with('message', 'No users found with tokens.');
         }
-        Notification::insert($postedData);
-        // foreach ($registeredTokens as $k => $v) {
-        //     echo $this->sendNotifMultiple($request->title, $request->message, $v, $request->userAppType);
-        // }
-
-        $results = $this->sendNotifMultiple($request->title, $request->message, $users, $request->userAppType);
-
-        $message = "Notification sent successfully to {$results['success']} users";
-
+    
+        // Split into chunks of 500 and dispatch a background job per chunk
+        $chunkSize = 500;
+        $chunks = $users->toArray();
+        $chunked = array_chunk($chunks, $chunkSize);
+    
+        foreach ($chunked as $chunk) {
+            SendPushNotificationJob::dispatch(
+                $request->title,
+                $request->message,
+                $chunk,
+                $request->userAppType
+            );
+        }
+    
+        $chunkCount = count($chunked);
+        $message = "Notification queued for {$totalUsers} users in {$chunkCount} batch(es).";
+    
         return back()->with('message', $message);
-
-        // $request->validate([
-        //         'userType' => 'required|array',
-        //         'message' => 'required'
-        //     ]);
-
-        // $checkIfUserHasSameNotif = Notification::where(['title' => $request->title,'message' => $request->message])->where('created_at', 'like', date("Y-m-d")."%")->get()->map(function ($query) {
-        //     return $query->user_id;
-        // });
-        // $arrayFilter = [];
-        // if( $checkIfUserHasSameNotif != null ){
-        //     $arrayFilter = array_filter($checkIfUserHasSameNotif->toArray());
-        // }
-
-        // foreach ($users as $key => $user) {
-        //     if ($user != null) {
-        //         if ($user->user_token != null) {
-        //             if( !in_array($user->id, $arrayFilter) ){
-        //                 if( $checkIfUserHasSameNotif->count() == 0 ){
-        //                     echo($this->sendNotif($request->title, $request->message, $user->user_token));
-        //                     Notification::create([
-        //                             'user_id' => $user->id,
-        //                             'title' => $request->title,
-        //                             'message' => $request->message
-        //                     ]);
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-        return back();
     }
 
     // public function sendNotif($title, $message, $token, $payload = null)

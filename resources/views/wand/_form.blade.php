@@ -7,6 +7,7 @@
                     <option value="{{ $v->id }}" >{{ $v->name }}</option>
                 @endforeach
             </select> -->
+            
             @php
                 $url = $_SERVER['REDIRECT_URL'] ?? request()->getRequestUri();
                 $explodedURL = explode('/' , $url);
