@@ -187,6 +187,9 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('rice-form-map/edit/{id}', ['as' => 'edit.rice-form-map', 'uses' => 'WebRiceFormMapController@edit','action'=>'edit']);
                 Route::put('rice-form-map/update/{id}', ['as' => 'update.rice-form-map', 'uses' => 'WebRiceFormMapController@update','action'=>'edit']);
                 Route::delete('rice-form-map/delete/{id}', ['as' => 'delete.rice-form-map', 'uses' => 'WebRiceFormMapController@delete','action'=>'delete']);
+                Route::get('rice-form-map/ajax/rice-names/{type}', ['as' => 'ajax.rice-form-map.rice-names', 'uses' => 'WebRiceFormMapController@getRiceNamesByType']);
+                Route::get('rice-form-map/ajax/forms/{type}', ['as' => 'ajax.rice-form-map.forms', 'uses' => 'WebRiceFormMapController@getFormsByType']);
+                Route::get('rice-form-map/ajax/wands/{riceNameId}', ['as' => 'ajax.rice-form-map.wands', 'uses' => 'WebRiceFormMapController@getWandsByRiceName']);
             });
 
             //Sample Registers

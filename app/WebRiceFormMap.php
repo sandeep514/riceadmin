@@ -3,15 +3,16 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\WandModel;
 
 class WebRiceFormMap extends Model
 {
     protected $table = 'web_rice_form_map';
 
-    protected $fillable = ['rice_name_id', 'group_name', 'form_ids'];
+    protected $fillable = ['rice_type', 'rice_name_id', 'group_name', 'form_ids', 'wand_ids'];
 
     protected $casts = [
-        'form_ids' => 'array',
+        'wand_ids' => 'array',
     ];
 
     public function riceName()
@@ -24,7 +25,23 @@ class WebRiceFormMap extends Model
         if (!$this->form_ids) {
             return '';
         }
-        $forms = RiceForm::whereIn('id', $this->form_ids)->pluck('form_name')->toArray();
-        return implode(', ', $forms);
+        $form = RiceForm::find($this->form_ids);
+        return $form ? $form->form_name : '';
+    }
+
+    public function getWandNamesAttribute()
+    {
+        if (!$this->wand_ids) {
+            return '';
+        }
+        $wands = WandModel::with('getWandType')
+            ->whereIn('id', $this->wand_ids)
+            ->orderBy('order')
+            ->get()
+            ->map(function ($wand) {
+                return $wand->getWandType ? $wand->getWandType->type . ' - ' . $wand->value : $wand->value;
+            })
+            ->toArray();
+        return implode(', ', $wands);
     }
 }

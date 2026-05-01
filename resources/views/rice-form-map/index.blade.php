@@ -29,9 +29,10 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>Rice Type</th>
                                             <th>Rice Name</th>
-                                            <th>Group Name</th>
                                             <th>Forms</th>
+                                            <th>Wand Types</th>
                                             <th>Created At</th>
                                             <th width="150">Action</th>
                                         </tr>
@@ -40,9 +41,10 @@
                                         @foreach($records as $record)
                                             <tr>
                                                 <td>{{ $record->id }}</td>
+                                                <td><span class="label label-{{ $record->rice_type == 'basmati' ? 'info' : 'warning' }}">{{ ucfirst($record->rice_type ?? '-') }}</span></td>
                                                 <td>{{ $record->riceName ? $record->riceName->name : '-' }}</td>
-                                                <td>{{ $record->group_name }}</td>
                                                 <td>{{ $record->form_names }}</td>
+                                                <td>{{ $record->wand_names ?: '-' }}</td>
                                                 <td>{{ $record->created_at->format('d M Y H:i') }}</td>
                                                 <td>
                                                     @include('rice-form-map._actions', ['model' => $record])
