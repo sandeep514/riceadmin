@@ -31,6 +31,7 @@ use App\Export\MasterRiceNameExport;
 use App\Export\MasterCityExport;
 use App\Export\MasterStateExport;
 use App\Export\MasterRiceBrandFormExport;
+use App\Export\MasterRiceFormMilestone3Export;
 
 class MasterController extends Controller
 {
@@ -958,7 +959,7 @@ class MasterController extends Controller
 	}
 	public function riceFormMilestone()
 	{
-		$forms = RiceFormMilestone3::get();
+		$forms = RiceFormMilestone3::orderBy('order', 'ASC')->get();
 		return view('riceFormMilestone3.listRiceForm' , compact('forms') );
 	}
 	public function createRiceFormMilestone()
@@ -967,13 +968,61 @@ class MasterController extends Controller
 	}
 	public function SaveRiceFormMilestone(Request $request)
 	{
+		$request->validate([
+			'name' => 'required|string|max:255',
+		]);
 		$lastOrder = RiceFormMilestone3::orderBy('order','desc')->first();
 		RiceFormMilestone3::create([
 			'name' => $request->name,
-			'order' => ($lastOrder->order+1)
+			'order' => $lastOrder ? ($lastOrder->order + 1) : 1,
+			'status' => 1,
 		]);
-		Session::flash('message' , 'Form generated successfully.');
-		return view('riceFormMilestone3.create');
+		Session::flash('success', 'Success|Rice Form created successfully!');
+		return redirect()->route('master.rice.form.milestone3');
+	}
+	public function editRiceFormMilestone($id)
+	{
+		$form = RiceFormMilestone3::find($id);
+		if (!$form) {
+			Session::flash('error', 'Error|No record found!');
+			return back();
+		}
+		return view('riceFormMilestone3.editRiceForm', compact('form'));
+	}
+	public function updateRiceFormMilestone(Request $request, $id)
+	{
+		$request->validate([
+			'name' => 'required|string|max:255',
+			'order' => 'required|integer',
+			'status' => 'required|in:0,1',
+		]);
+		$form = RiceFormMilestone3::find($id);
+		if (!$form) {
+			Session::flash('error', 'Error|No record found!');
+			return back();
+		}
+		$form->update([
+			'name' => $request->name,
+			'order' => $request->order,
+			'status' => $request->status,
+		]);
+		Session::flash('success', 'Success|Rice Form updated successfully!');
+		return redirect()->route('master.rice.form.milestone3');
+	}
+	public function deleteRiceFormMilestone($id)
+	{
+		$form = RiceFormMilestone3::find($id);
+		if (!$form) {
+			Session::flash('error', 'Error|No record found!');
+		} else {
+			$form->delete();
+			Session::flash('success', 'Success|Rice Form deleted successfully!');
+		}
+		return back();
+	}
+	public function exportRiceFormMilestone()
+	{
+		return Excel::download(new MasterRiceFormMilestone3Export(), 'rice-forms-milestone3-' . date('Y-m-d') . '.xlsx');
 	}
 
 	public function exportRiceForm()

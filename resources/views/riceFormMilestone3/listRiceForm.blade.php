@@ -1,75 +1,78 @@
 @extends('layouts.main')
 
 @section('content')
-<style>
-    .nonbasmatitabs .nav>li>a {
-        padding: 10px 11px;
-    }    
-    .basmatitabs .nav>li>a {
-        padding: 10px 11px;
-    }
-</style>
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>
-                List Rice Forms
-                <small>List</small>
-            </h1>
+            <h1>Rice Forms (Milestone 3) <small>List</small></h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Rice Forms</a></li>
+                <li class="active">Rice Forms Milestone 3</li>
             </ol>
         </section>
         <section class="content">
-            <div class="box-body">
-                <a href="{{ route('master.create.rice.form.milestone3') }}" class="btn btn-info" >Create</a>
-                <div class="responsiveTabs basmatitabs">
-                    <div id="myTabContent" class="tab-content" >
-                        <div class="">
-                            <div class="row">
-                                <div class="col-md-12 text-center">
-                                    <div class="row text-left" style="margin-top: 20px;">
-                                        <div class="col-md-12 inputs">
-                                            <table class="table table-striped datatable">
-                                                <thead>
-                                                <tr>
-                                                    <th>Rice Name</th>
-                                                    <!-- <th>Type</th> -->
-                                                    <!-- <th>Actions</th> -->
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($forms as $key => $form)
-                                                        <tr>
-                                                            <td>{{ $form->name }}</td>
-                                                            {{-- <td>{{ $form->type }}</td> --}}
-                                                            {{-- <td>
-                                                                <ul>
-                                                                    <li>
-                                                                        <a href="{{ route('master.get.rice.type' , $form->id) }}"> Edit </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="{{ route('master.delete.rice.type' , $form->id) }}"> Delete </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </td> --}}
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">All Rice Forms</h3>
+                    <div class="pull-right">
+                        <a href="{{ route('master.export.rice.form.milestone3') }}" class="btn btn-success btn-sm">
+                            <i class="fa fa-file-excel-o"></i> Export Excel
+                        </a>
+                        <a href="{{ route('master.create.rice.form.milestone3') }}" class="btn btn-primary btn-sm">
+                            <i class="fa fa-plus"></i> Create New
+                        </a>
                     </div>
                 </div>
-
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped milestone3-datatable" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Order</th>
+                                    <th>Status</th>
+                                    <th width="150">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($forms as $form)
+                                    <tr>
+                                        <td>{{ $form->id }}</td>
+                                        <td>{{ $form->name }}</td>
+                                        <td>{{ $form->order }}</td>
+                                        <td>
+                                            @if($form->status == 1)
+                                                <span class="label label-success">Active</span>
+                                            @else
+                                                <span class="label label-danger">Inactive</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('master.edit.rice.form.milestone3', $form->id) }}" class="btn btn-info btn-xs">
+                                                <i class="fa fa-edit"></i> Edit
+                                            </a>
+                                            {!! Form::open(['method'=>'DELETE','route'=>['master.delete.rice.form.milestone3',$form->id],'style'=>'display: inline-block;']) !!}
+                                                <button type="submit" class="btn btn-danger btn-xs delete-row" onclick="return confirm('Are you sure you want to delete this?')">Delete</button>
+                                            {!! Form::close() !!}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('js/live-price.js?ref='.rand(1111,9999)) }}"></script>
+@section('javascript')
+<script>
+    $(function(){
+        $('.milestone3-datatable').DataTable({
+            pageLength: 25,
+            order: [[2, 'asc']],
+        });
+    });
+</script>
 @endsection

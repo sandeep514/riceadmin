@@ -520,6 +520,10 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('other/rice/forms' , [ 'as' => 'master.rice.form.milestone3' , 'uses' => 'MasterController@riceFormMilestone']);
         Route::get('create/other/rice/forms' , [ 'as' => 'master.create.rice.form.milestone3' , 'uses' => 'MasterController@createRiceFormMilestone']);
         Route::POST('save/other/rice/forms' , [ 'as' => 'master.save.rice.form.milestone3' , 'uses' => 'MasterController@SaveRiceFormMilestone']);
+        Route::get('edit/other/rice/forms/{id}' , [ 'as' => 'master.edit.rice.form.milestone3' , 'uses' => 'MasterController@editRiceFormMilestone']);
+        Route::put('update/other/rice/forms/{id}' , [ 'as' => 'master.update.rice.form.milestone3' , 'uses' => 'MasterController@updateRiceFormMilestone']);
+        Route::delete('delete/other/rice/forms/{id}' , [ 'as' => 'master.delete.rice.form.milestone3' , 'uses' => 'MasterController@deleteRiceFormMilestone']);
+        Route::get('export/other/rice/forms' , [ 'as' => 'master.export.rice.form.milestone3' , 'uses' => 'MasterController@exportRiceFormMilestone']);
 
         // Master Export Routes
         Route::get('export/rice/form',        ['as' => 'master.export.rice.form',       'uses' => 'MasterController@exportRiceForm']);
