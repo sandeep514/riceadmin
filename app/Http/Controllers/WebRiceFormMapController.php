@@ -31,7 +31,7 @@ class WebRiceFormMapController extends Controller
             'rice_name_id' => 'required|exists:rice_names,id',
             'form_ids'     => 'required|exists:rice_forms,id',
             'wand_ids'     => 'nullable|array',
-            'wand_ids.*'   => 'exists:wandType,id',
+            'wand_ids.*'   => 'exists:wand,id',
         ]);
 
         WebRiceFormMap::create([
@@ -71,7 +71,7 @@ class WebRiceFormMapController extends Controller
             'rice_name_id' => 'required|exists:rice_names,id',
             'form_ids'     => 'required|exists:rice_forms,id',
             'wand_ids'     => 'nullable|array',
-            'wand_ids.*'   => 'exists:wandType,id',
+            'wand_ids.*'   => 'exists:wand,id',
         ]);
 
         $model = WebRiceFormMap::find($id);

@@ -50,9 +50,9 @@ $(function(){
         var type = $(this).val();
 
         // Reset dependent fields
-        $('#rice_name_id').val(null).trigger('change').prop('disabled', true);
-        $('#form_ids').val(null).prop('disabled', true);
-        $('#wand_ids').val(null).trigger('change').prop('disabled', true).empty();
+        $('#rice_name_id').val(null).trigger('change');
+        $('#form_ids').val('');
+        $('#wand_ids').val(null).trigger('change').empty();
 
         if (!type) return;
 
@@ -63,7 +63,7 @@ $(function(){
             $.each(data, function(id, name){
                 $('#rice_name_id').append('<option value="'+id+'">'+name+'</option>');
             });
-            $('#rice_name_id').prop('disabled', false).trigger('change.select2');
+            $('#rice_name_id').trigger('change.select2');
         });
 
         // Load Rice Forms by type
@@ -73,14 +73,13 @@ $(function(){
             $.each(data, function(id, name){
                 $('#form_ids').append('<option value="'+id+'">'+name+'</option>');
             });
-            $('#form_ids').prop('disabled', false);
         });
     });
 
     // When rice name changes → load wand types with values
     $('#rice_name_id').on('change', function(){
         var riceNameId = $(this).val();
-        $('#wand_ids').val(null).trigger('change').prop('disabled', true).empty();
+        $('#wand_ids').val(null).trigger('change').empty();
         if (!riceNameId) return;
 
         var url = wandsUrl.replace(':riceNameId', riceNameId);
@@ -89,7 +88,7 @@ $(function(){
             $.each(data, function(id, label){
                 $('#wand_ids').append('<option value="'+id+'">'+label+'</option>');
             });
-            $('#wand_ids').prop('disabled', false).trigger('change.select2');
+            $('#wand_ids').trigger('change.select2');
         });
     });
 });

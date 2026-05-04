@@ -19,8 +19,8 @@
     <div class="row">
         <div class="form-group col-md-6 @error('rice_name_id') has-error @enderror">
             <label for="rice_name_id">Rice Name <span class="text-danger">*</span></label>
-            <select name="rice_name_id" id="rice_name_id" class="form-control select2-basic" disabled>
-                <option value="">-- Select Rice Name --</option>
+            <select name="rice_name_id" id="rice_name_id" class="form-control select2-basic">
+                <option value="">-- Select Rice Type First --</option>
                 @if(isset($riceNames))
                     @foreach($riceNames as $id => $name)
                         <option value="{{ $id }}" {{ (isset($model) && $model->rice_name_id == $id) ? 'selected' : (old('rice_name_id') == $id ? 'selected' : '') }}>{{ $name }}</option>
@@ -37,8 +37,8 @@
     <div class="row">
         <div class="form-group col-md-8 @error('form_ids') has-error @enderror">
             <label for="form_ids">Rice Form <span class="text-danger">*</span></label>
-            <select name="form_ids" id="form_ids" class="form-control select2-basic" disabled>
-                <option value="">-- Select Rice Form --</option>
+            <select name="form_ids" id="form_ids" class="form-control select2-basic">
+                <option value="">-- Select Rice Type First --</option>
                 @if(isset($riceForms))
                     @foreach($riceForms as $id => $formName)
                         <option value="{{ $id }}" {{ (isset($model) && $model->form_ids == $id) ? 'selected' : (old('form_ids') == $id ? 'selected' : '') }}>{{ $formName }}</option>
@@ -55,10 +55,8 @@
     <div class="row">
         <div class="form-group col-md-8 @error('wand_ids') has-error @enderror">
             <label for="wand_ids">Wand Types</label>
-            <select name="wand_ids[]" id="wand_ids" class="form-control select2" multiple="multiple" disabled>
-                @foreach($wandTypes as $wand)
-                    <option value="{{ $wand->id }}" {{ (isset($model) && $model->wand_ids && in_array($wand->id, $model->wand_ids)) ? 'selected' : '' }}>{{ $wand->type }}</option>
-                @endforeach
+            <select name="wand_ids[]" id="wand_ids" class="form-control select2" multiple="multiple">
+                <option value="">-- Select Rice Name First --</option>
             </select>
             @error('wand_ids')
                 <span class="help-block text-danger">{{ $message }}</span>

@@ -41,7 +41,7 @@ $(function(){
     // Existing saved values for pre-selection
     var savedRiceNameId = "{{ $model->rice_name_id }}";
     var savedFormId     = "{{ $model->form_ids }}";
-    var savedWandIds    = {!! json_encode($model->wand_ids ?? []) !!};
+    var savedWandIds    = {!! json_encode($model->wand_ids ?? []) !!}.map(String);
 
     // Init select2
     function initSelect2(el, placeholder){
@@ -52,20 +52,19 @@ $(function(){
 
     // On edit page load — if rice_type already set, enable rice name & forms dropdowns
     var currentType = $('#rice_type').val();
-    if (currentType) {
-        $('#rice_name_id').prop('disabled', false);
-        $('#form_ids').prop('disabled', false);
-    }
-    // Also pre-load wands if rice_name_id is already set
+    // Pre-load wands if rice_name_id is already set
     if (savedRiceNameId) {
         var wUrl = wandsUrl.replace(':riceNameId', savedRiceNameId);
         $.get(wUrl, function(data){
             $('#wand_ids').empty();
+            var preselected = [];
             $.each(data, function(id, label){
-                var selected = (savedWandIds.indexOf(parseInt(id)) !== -1) ? ' selected' : '';
-                $('#wand_ids').append('<option value="'+id+'"'+selected+'>'+label+'</option>');
+                var isSelected = (savedWandIds.indexOf(String(id)) !== -1);
+                if (isSelected) preselected.push(id);
+                var selectedAttr = isSelected ? ' selected' : '';
+                $('#wand_ids').append('<option value="'+id+'"'+selectedAttr+'>'+label+'</option>');
             });
-            $('#wand_ids').prop('disabled', false).trigger('change.select2');
+            $('#wand_ids').val(preselected).trigger('change');
             savedWandIds = [];
         });
     }
@@ -75,9 +74,9 @@ $(function(){
         var type = $(this).val();
 
         // Reset dependent fields
-        $('#rice_name_id').val(null).trigger('change').prop('disabled', true);
-        $('#form_ids').val(null).prop('disabled', true);
-        $('#wand_ids').val(null).trigger('change').prop('disabled', true).empty();
+        $('#rice_name_id').val(null).trigger('change');
+        $('#form_ids').val('');
+        $('#wand_ids').val(null).trigger('change').empty();
 
         if (!type) return;
 
@@ -89,7 +88,7 @@ $(function(){
                 var selected = (id == savedRiceNameId) ? ' selected' : '';
                 $('#rice_name_id').append('<option value="'+id+'"'+selected+'>'+name+'</option>');
             });
-            $('#rice_name_id').prop('disabled', false).trigger('change.select2');
+            $('#rice_name_id').trigger('change.select2');
             savedRiceNameId = ''; // clear after first use
         });
 
@@ -101,7 +100,6 @@ $(function(){
                 var selected = (id == savedFormId) ? ' selected' : '';
                 $('#form_ids').append('<option value="'+id+'"'+selected+'>'+name+'</option>');
             });
-            $('#form_ids').prop('disabled', false);
             savedFormId = ''; // clear after first use
         });
     });
@@ -109,17 +107,20 @@ $(function(){
     // When rice name changes → load wand types with values
     $('#rice_name_id').on('change', function(){
         var riceNameId = $(this).val();
-        $('#wand_ids').val(null).trigger('change').prop('disabled', true).empty();
+        $('#wand_ids').val(null).trigger('change').empty();
         if (!riceNameId) return;
 
         var url = wandsUrl.replace(':riceNameId', riceNameId);
         $.get(url, function(data){
             $('#wand_ids').empty();
+            var preselected = [];
             $.each(data, function(id, label){
-                var selected = (savedWandIds.indexOf(parseInt(id)) !== -1) ? ' selected' : '';
-                $('#wand_ids').append('<option value="'+id+'"'+selected+'>'+label+'</option>');
+                var isSelected = (savedWandIds.indexOf(String(id)) !== -1);
+                if (isSelected) preselected.push(id);
+                var selectedAttr = isSelected ? ' selected' : '';
+                $('#wand_ids').append('<option value="'+id+'"'+selectedAttr+'>'+label+'</option>');
             });
-            $('#wand_ids').prop('disabled', false).trigger('change.select2');
+            $('#wand_ids').val(preselected).trigger('change');
             savedWandIds = [];
         });
     });
