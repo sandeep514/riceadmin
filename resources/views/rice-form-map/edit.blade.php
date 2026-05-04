@@ -50,8 +50,16 @@ $(function(){
     initSelect2('#rice_name_id', 'Select Rice Name');
     initSelect2('#wand_ids',     'Select Wand Types');
 
-    // On edit page load — if rice_type already set, enable rice name & forms dropdowns
-    var currentType = $('#rice_type').val();
+    // Load rice forms on page ready (milestone3 forms are not type-filtered)
+    $.get(formsUrl.replace(':type', 'all'), function(data){
+        $('#form_ids').empty().append('<option value="">-- Select Rice Form --</option>');
+        $.each(data, function(id, name){
+            var selected = (id == savedFormId) ? ' selected' : '';
+            $('#form_ids').append('<option value="'+id+'"'+selected+'>'+name+'</option>');
+        });
+        savedFormId = '';
+    });
+
     // Pre-load wands if rice_name_id is already set
     if (savedRiceNameId) {
         var wUrl = wandsUrl.replace(':riceNameId', savedRiceNameId);
@@ -69,13 +77,12 @@ $(function(){
         });
     }
 
-    // When rice type changes → reload rice names + forms (cascade)
+    // When rice type changes → reload rice names
     $('#rice_type').on('change', function(){
         var type = $(this).val();
 
         // Reset dependent fields
         $('#rice_name_id').val(null).trigger('change');
-        $('#form_ids').val('');
         $('#wand_ids').val(null).trigger('change').empty();
 
         if (!type) return;
@@ -90,17 +97,6 @@ $(function(){
             });
             $('#rice_name_id').trigger('change.select2');
             savedRiceNameId = ''; // clear after first use
-        });
-
-        // Load Rice Forms by type
-        var formUrl = formsUrl.replace(':type', type);
-        $.get(formUrl, function(data){
-            $('#form_ids').empty().append('<option value="">-- Select Rice Form --</option>');
-            $.each(data, function(id, name){
-                var selected = (id == savedFormId) ? ' selected' : '';
-                $('#form_ids').append('<option value="'+id+'"'+selected+'>'+name+'</option>');
-            });
-            savedFormId = ''; // clear after first use
         });
     });
 

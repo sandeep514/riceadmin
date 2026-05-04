@@ -33,12 +33,12 @@
         </div>
     </div>
 
-    {{-- Step 3: Rice Form (loaded via AJAX on rice_type change, single select) --}}
+    {{-- Step 3: Rice Form (from rice_form_milestone3, single select) --}}
     <div class="row">
         <div class="form-group col-md-8 @error('form_ids') has-error @enderror">
             <label for="form_ids">Rice Form <span class="text-danger">*</span></label>
             <select name="form_ids" id="form_ids" class="form-control select2-basic">
-                <option value="">-- Select Rice Type First --</option>
+                <option value="">-- Select Rice Form --</option>
                 @if(isset($riceForms))
                     @foreach($riceForms as $id => $formName)
                         <option value="{{ $id }}" {{ (isset($model) && $model->form_ids == $id) ? 'selected' : (old('form_ids') == $id ? 'selected' : '') }}>{{ $formName }}</option>

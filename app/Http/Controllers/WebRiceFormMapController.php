@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\RiceName;
-use App\RiceForm;
+use App\RiceFormMilestone3;
 use App\WandTypeModel;
 use App\WandModel;
 use App\WebRiceFormMap;
@@ -29,7 +29,7 @@ class WebRiceFormMapController extends Controller
         $request->validate([
             'rice_type'    => 'required|in:basmati,non-basmati',
             'rice_name_id' => 'required|exists:rice_names,id',
-            'form_ids'     => 'required|exists:rice_forms,id',
+            'form_ids'     => 'required|exists:rice_form_milestone3,id',
             'wand_ids'     => 'nullable|array',
             'wand_ids.*'   => 'exists:wand,id',
         ]);
@@ -59,7 +59,7 @@ class WebRiceFormMapController extends Controller
             ? RiceName::where('type', $model->rice_type)->pluck('name', 'id')
             : collect();
         $riceForms = $model->rice_name_id
-            ? RiceForm::where('type', $model->rice_type)->pluck('form_name', 'id')
+            ? RiceFormMilestone3::where('status', 1)->orderBy('order')->pluck('name', 'id')
             : collect();
         return view('rice-form-map.edit', compact('model', 'wandTypes', 'riceNames', 'riceForms'));
     }
@@ -69,7 +69,7 @@ class WebRiceFormMapController extends Controller
         $request->validate([
             'rice_type'    => 'required|in:basmati,non-basmati',
             'rice_name_id' => 'required|exists:rice_names,id',
-            'form_ids'     => 'required|exists:rice_forms,id',
+            'form_ids'     => 'required|exists:rice_form_milestone3,id',
             'wand_ids'     => 'nullable|array',
             'wand_ids.*'   => 'exists:wand,id',
         ]);
@@ -111,10 +111,10 @@ class WebRiceFormMapController extends Controller
         return response()->json($names);
     }
 
-    // AJAX: get rice forms filtered by rice type
+    // AJAX: get rice forms from milestone3 table (all active, ordered)
     public function getFormsByType($type)
     {
-        $forms = RiceForm::where('type', $type)->pluck('form_name', 'id');
+        $forms = RiceFormMilestone3::where('status', 1)->orderBy('order')->pluck('name', 'id');
         return response()->json($forms);
     }
 

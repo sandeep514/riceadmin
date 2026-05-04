@@ -25,8 +25,8 @@ class WebRiceFormMap extends Model
         if (!$this->form_ids) {
             return '';
         }
-        $form = RiceForm::find($this->form_ids);
-        return $form ? $form->form_name : '';
+        $form = RiceFormMilestone3::find($this->form_ids);
+        return $form ? $form->name : '';
     }
 
     public function getWandNamesAttribute()

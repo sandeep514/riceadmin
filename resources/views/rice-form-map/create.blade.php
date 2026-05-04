@@ -45,13 +45,20 @@ $(function(){
     initSelect2('#rice_name_id', 'Select Rice Name');
     initSelect2('#wand_ids',     'Select Wand Types');
 
-    // When rice type changes → load rice names + load forms
+    // Load rice forms on page ready (milestone3 forms are not type-filtered)
+    $.get(formsUrl.replace(':type', 'all'), function(data){
+        $('#form_ids').empty().append('<option value="">-- Select Rice Form --</option>');
+        $.each(data, function(id, name){
+            $('#form_ids').append('<option value="'+id+'">'+name+'</option>');
+        });
+    });
+
+    // When rice type changes → load rice names
     $('#rice_type').on('change', function(){
         var type = $(this).val();
 
         // Reset dependent fields
         $('#rice_name_id').val(null).trigger('change');
-        $('#form_ids').val('');
         $('#wand_ids').val(null).trigger('change').empty();
 
         if (!type) return;
@@ -64,15 +71,6 @@ $(function(){
                 $('#rice_name_id').append('<option value="'+id+'">'+name+'</option>');
             });
             $('#rice_name_id').trigger('change.select2');
-        });
-
-        // Load Rice Forms by type
-        var formUrl = formsUrl.replace(':type', type);
-        $.get(formUrl, function(data){
-            $('#form_ids').empty().append('<option value="">-- Select Rice Form --</option>');
-            $.each(data, function(id, name){
-                $('#form_ids').append('<option value="'+id+'">'+name+'</option>');
-            });
         });
     });
 
