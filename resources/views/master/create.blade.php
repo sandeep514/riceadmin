@@ -92,7 +92,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Rice Brand Form</h3>
+                            <h3 class="box-title">Rice Trade Form</h3>
                         </div>
                         {!! Form::open(['route'=>'master.create.rice.brand.quality']) !!}
                             <div class="box-body">

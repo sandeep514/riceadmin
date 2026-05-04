@@ -27,6 +27,7 @@
                                     <th>#</th>
                                     <th>Rice Brand Form Name</th>
                                     <th>Type</th>
+                                    <th>Order</th>
                                     <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
@@ -36,13 +37,15 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $form->form_name }}</td>
-                                        <td>{{ $form->type }}</td>
+                                        <td>{{ ucfirst($form->type) }}</td>
+                                        <td>{{ $form->order ?? '-' }}</td>
                                         <td>
                                             <span class="badge badge-{{ $form->status == 1 ? 'success' : 'danger' }}">
                                                 {{ $form->status == 1 ? 'Active' : 'Inactive' }}
                                             </span>
                                         </td>
                                         <td>
+                                            <a href="{{ route('master.edit.rice.brand.quality', $form->id) }}" class="btn btn-primary btn-xs"><i class="fa fa-edit"></i> Edit</a>
                                             @if($form->status == 0)
                                                 <a href="{{ route('master.delete.rice.brand.quality', $form->id) }}" class="btn btn-info btn-xs">Activate</a>
                                             @else
@@ -62,6 +65,6 @@
 
 @section('javascript')
 <script>
-    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[0,'asc']] }); });
+    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[3,'asc']] }); });
 </script>
 @endsection

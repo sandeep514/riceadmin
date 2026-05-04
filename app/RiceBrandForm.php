@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class RiceBrandForm extends Model
 {
     protected $table = 'rice_brand_form';
-    protected $fillable = ['form_name','type'];
+    protected $fillable = ['form_name','type','order','status'];
     
 
 

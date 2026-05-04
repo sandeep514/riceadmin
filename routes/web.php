@@ -446,6 +446,8 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('brand/list/rice/quality' ,            ['as' => 'master.list.rice.brand.quality'     ,'uses' => 'MasterController@listRiceBrandQuality' ] );
         Route::post('brand/create/rice/quality' ,         ['as' => 'master.create.rice.brand.quality'   ,'uses' => 'MasterController@createRiceBrandQuality' ] );
         Route::get('brand/delete/rice/qualitie/{id}',      ['as' => 'master.delete.rice.brand.quality'   ,'uses' => 'MasterController@deleteRiceBrandQuality' ] );
+        Route::get('brand/edit/rice/quality/{id}',         ['as' => 'master.edit.rice.brand.quality'     ,'uses' => 'MasterController@editRiceBrandQuality' ] );
+        Route::post('brand/update/rice/quality/{id}',      ['as' => 'master.update.rice.brand.quality'   ,'uses' => 'MasterController@updateRiceBrandQuality' ] );
 
 
         Route::get('edit/rice/quality/{id}',      ['as' => 'master.edit.rice.quality'   ,'uses' => 'MasterController@editRiceQuality' ] );

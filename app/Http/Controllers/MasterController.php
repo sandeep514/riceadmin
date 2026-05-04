@@ -180,7 +180,7 @@ class MasterController extends Controller
 
 
 	public function listRiceBrandQuality(){
-		$riceForm = RiceBrandForm::select('id','form_name','type','status')->get();
+		$riceForm = RiceBrandForm::select('id','form_name','type','order','status')->orderBy('order')->get();
 
 		return view('master.listRiceBrandForm' , compact('riceForm'));
 	}
@@ -197,7 +197,7 @@ class MasterController extends Controller
 			return back();
 		}
 
-		$save = ['form_name' => $request->name,'type' => $request->riceType];
+		$save = ['form_name' => $request->name,'type' => $request->riceType,'order' => $request->order ?? null];
 		RiceBrandForm::create($save);
 
 		Session::flash('message' , 'Rice brand form added successfully');
@@ -215,6 +215,37 @@ class MasterController extends Controller
 		$form->update(['status' => $formStatus]);
 		Session::flash('message' , 'Rice brand form status updated successfully');
 		return back();
+	}
+
+	public function editRiceBrandQuality($id){
+		$riceForm = RiceBrandForm::find($id);
+		if (!$riceForm) {
+			Session::flash('message', 'Record not found.');
+			return redirect()->route('master.list.rice.brand.quality');
+		}
+		return view('master.editRiceBrandForm', compact('riceForm'));
+	}
+
+	public function updateRiceBrandQuality(Request $request, $id){
+		$request->validate([
+			'name'     => 'required|string|max:255',
+			'riceType' => 'required|in:basmati,non-basmati',
+			'order'    => 'nullable|integer',
+			'status'   => 'required|in:0,1',
+		]);
+		$riceForm = RiceBrandForm::find($id);
+		if (!$riceForm) {
+			Session::flash('message', 'Record not found.');
+			return redirect()->route('master.list.rice.brand.quality');
+		}
+		$riceForm->update([
+			'form_name' => $request->name,
+			'type'      => $request->riceType,
+			'order'     => $request->order,
+			'status'    => $request->status,
+		]);
+		Session::flash('message', 'Rice brand form updated successfully.');
+		return redirect()->route('master.list.rice.brand.quality');
 	}
 
 
