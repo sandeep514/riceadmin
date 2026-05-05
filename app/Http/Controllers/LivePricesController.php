@@ -469,6 +469,30 @@ class LivePricesController extends Controller
 
         LivePrice::whereDate('created_at' , $todayDate)->update(['updated_at'  => $updatedTime]);
 
+        // Insert or update live_price_closing based on name, form, cropYear, state
+        if( $opening !== '' || $closing !== '' ){
+            LivePricesOpeningClosing::upsert(
+                [
+                    'name'     => $name,
+                    'form'     => $form,
+                    'cropYear' => $cropYear,
+                    'state'    => $state,
+                    'opening'  => $opening,
+                    'closing'  => $closing,
+                ],
+                ['name', 'form', 'cropYear', 'state'],
+                [
+                    'opening',
+                    'closing' => DB::raw("
+                        COALESCE(
+                            NULLIF(VALUES(closing), ''),
+                            closing
+                        )
+                    ")
+                ]
+            );
+        }
+
         return response()->json(['status' => true , 'message' => 'data uploaded successfully']);
     }
 
