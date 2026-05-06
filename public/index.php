@@ -6,9 +6,10 @@ error_reporting(E_ALL);
 
 ini_set('display_errors', 1);
 
-// Fix subfolder routing — set APP_URL in .env instead of hacking REQUEST_URI
-// e.g. APP_URL=https://snjtradelink.com/staging/public
-// This makes url(), route(), and asset() all generate correct URLs.
+// Fix subfolder routing
+if (isset($_SERVER['REQUEST_URI'])) {
+    $_SERVER['REQUEST_URI'] = str_replace('/staging/public', '', $_SERVER['REQUEST_URI']);
+}
 
 /**
  * Laravel - A PHP Framework For Web Artisans

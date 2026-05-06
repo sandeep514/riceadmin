@@ -100,7 +100,12 @@
 
 <!-- ./wrapper -->
 <script type="text/javascript">
-    window.route = "{{ url('administrator') }}";
+    // Derive base URL from current page path (works with subdirectory deployments)
+    (function(){
+        var idx = window.location.pathname.indexOf('/administrator');
+        var basePath = idx >= 0 ? window.location.pathname.substring(0, idx) : '';
+        window.route = window.location.origin + basePath + '/administrator';
+    })();
     // $.ajaxSetup({
     //     headers: {
     //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

@@ -45,7 +45,7 @@
             function loadPlan(roleId, categoryId) {
                 if (roleId && categoryId) {
                     $.ajax({
-                        url: "{{ url('administrator/web-access/get-plan') }}",
+                        url: window.route+"/web-access/get-plan",
                         type: "GET",
                         data: { role_id: roleId, category_id: categoryId },
                         success: function(data) {
@@ -82,7 +82,7 @@
                     categorySelect.html('<option value="">Loading categories...</option>');
                     
                     $.ajax({
-                        url: "{{ url('administrator/web-access/get-categories') }}",
+                        url: window.route+"/web-access/get-categories",
                         type: "GET",
                         data: {role_id: roleId},
                         success: function(data) {
