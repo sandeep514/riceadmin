@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // Fix subfolder routing
+$originalRequestUri = $_SERVER['REQUEST_URI'] ?? '';
 if (isset($_SERVER['REQUEST_URI'])) {
     $_SERVER['REQUEST_URI'] = str_replace('/staging/public', '', $_SERVER['REQUEST_URI']);
 }
@@ -47,6 +48,11 @@ require __DIR__.'/../vendor/autoload.php';
 */
 
 $app = require_once __DIR__.'/../bootstrap/app.php';
+
+// Force root URL for subdirectory deployments so route(), url(), asset() work correctly
+if (strpos($originalRequestUri, '/staging/public') === 0) {
+    $app->make('url')->forceRootUrl('https://snjtradelink.com/staging/public');
+}
 
 /*
 |--------------------------------------------------------------------------
