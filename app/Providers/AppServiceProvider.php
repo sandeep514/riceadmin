@@ -26,7 +26,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-	// URL::forceRootUrl(config('app.url'));
+        // For subfolder deployments (e.g. /staging/public), set APP_URL to the full base
+        // so redirects like login -> dashboard generate the correct path.
+        $appUrl = config('app.url');
+        if (is_string($appUrl) && $appUrl !== '') {
+            URL::forceRootUrl($appUrl);
+        }
         Schema::defaultStringLength(191);
     }
 }
