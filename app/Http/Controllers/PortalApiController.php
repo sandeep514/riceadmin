@@ -2276,7 +2276,10 @@ class PortalApiController extends Controller
             $query->where('type', $request->type);
         }
 
-        $riceNames = $query->orderBy('order')->get(['id', 'name', 'type']);
+        $riceNames = $query
+            ->orderBy('order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get(['id', 'name', 'type']);
 
         return response()->json([
             'status'  => true,
@@ -2292,7 +2295,10 @@ class PortalApiController extends Controller
     {
         $query = RiceFormMilestone3::where('status', 1);
 
-        $forms = $query->orderBy('order')->get(['id', 'name', 'order', 'status']);
+        $forms = $query
+            ->orderBy('order', 'asc')
+            ->orderBy('id', 'asc')
+            ->get(['id', 'name', 'order', 'status']);
 
         return response()->json([
             'status'  => true,
