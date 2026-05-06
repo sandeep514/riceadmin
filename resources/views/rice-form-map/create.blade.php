@@ -34,9 +34,9 @@
 @section('javascript')
 <script>
 $(function(){
-    var riceNamesUrl = "rice-form-map/ajax/rice-names/:type";
-    var formsUrl     = "rice-form-map/ajax/forms/:type";
-    var wandsUrl     = "rice-form-map/ajax/wands/:riceNameId";
+    var riceNamesUrl = window.route+"/rice-form-map/ajax/rice-names/:type";
+    var formsUrl     = window.route+"/rice-form-map/ajax/forms/:type";
+    var wandsUrl     = window.route+"/rice-form-map/ajax/wands/:riceNameId";
 
     // Init select2
     function initSelect2(el, placeholder){

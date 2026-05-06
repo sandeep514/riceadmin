@@ -163,7 +163,7 @@
         $(document).ready(function(){
 
             $.ajax({
-                url : 'api/admin/is/viewed/by/admin',
+                url : window.route.replace('/administrator','') + '/api/admin/is/viewed/by/admin',
                 method: 'GET',
                 success : function(res){
                     if( res.count > 0 ){

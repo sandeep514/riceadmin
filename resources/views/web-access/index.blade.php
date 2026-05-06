@@ -62,7 +62,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "web-access/data",
+                    url: window.route+"/web-access/data",
                     type: "GET"
                 },
                 columns: [

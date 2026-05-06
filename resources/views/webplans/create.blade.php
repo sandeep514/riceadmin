@@ -65,7 +65,7 @@ $(document).ready(function() {
 
         if (roleId) {
             $.ajax({
-                url: "web-access/get-categories",
+                url: window.route+"/web-access/get-categories",
                 type: 'GET',
                 data: { role_id: roleId },
                 success: function(data) {

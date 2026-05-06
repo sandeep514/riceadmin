@@ -149,7 +149,7 @@
 
                 console.log(formData2);
                 const request = new XMLHttpRequest();
-                request.open("POST", "live/prices/save/");
+                request.open("POST", window.route+"/live/prices/save/");
                 request.send((formData2));
                 // console.log(formData);
 
