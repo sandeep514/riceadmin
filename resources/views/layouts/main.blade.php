@@ -100,7 +100,7 @@
 
 <!-- ./wrapper -->
 <script type="text/javascript">
-    window.route = "{{ url('/') }}/administrator";
+    window.route = "{{ url('administrator') }}";
     // $.ajaxSetup({
     //     headers: {
     //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

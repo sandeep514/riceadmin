@@ -120,7 +120,7 @@ $(document).ready(function() {
 
         if (roleId) {
             $.ajax({
-                url: window.route+"/web-access/get-categories",
+                url: "{{ url('administrator/web-access/get-categories') }}",
                 type: "GET",
                 data: { role_id: roleId },
                 success: function(data) {

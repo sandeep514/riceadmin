@@ -62,7 +62,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: window.route+"/web-access/data",
+                    url: "{{ url('administrator/web-access/data') }}",
                     type: "GET"
                 },
                 columns: [

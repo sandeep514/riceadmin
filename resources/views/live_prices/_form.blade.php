@@ -321,7 +321,7 @@
                 
 
                 $.ajax({
-                    url: window.route+'/live/prices/save/for/single',
+                    url: '{{ url("administrator/live/prices/save/for/single") }}',
                     type: 'POST',
                     data: formData,
                     processData: false,
