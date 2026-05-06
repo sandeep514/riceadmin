@@ -2278,7 +2278,7 @@ class PortalApiController extends Controller
 
         $riceNames = $query
             ->orderBy('order', 'asc')
-            ->orderBy('id', 'asc')
+            // ->orderBy('id', 'asc')
             ->get(['id', 'name', 'type']);
 
         return response()->json([
