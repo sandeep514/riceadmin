@@ -1,4 +1,11 @@
 <?php
+
+// Subfolder deploy fix: strip "/staging/public" from REQUEST_URI before Laravel handles routes.
+// Keep this minimal and do not resolve framework services here.
+if (isset($_SERVER['REQUEST_URI'])) {
+    $_SERVER['REQUEST_URI'] = preg_replace('#^/staging/public#', '', $_SERVER['REQUEST_URI']);
+}
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
