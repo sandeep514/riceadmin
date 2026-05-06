@@ -24,6 +24,11 @@
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
         Route::get('live/price/events', [PortalApiController::class, 'getLivePriceEvents']);
 
+        // Interested functionality APIs
+        Route::get('interested/rice-qualities', [PortalApiController::class, 'getRiceQualitiesList']);
+        Route::get('interested/rice-forms', [PortalApiController::class, 'getRiceFormsList']);
+        Route::post('interested/wands', [PortalApiController::class, 'getWandsByRiceFormMap']);
+
         Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails'])
             ->middleware(['portal.session_or_token']);
         Route::post('delete/uploaded-document', [PortalApiController::class, 'deleteUserUploadedDocument'])

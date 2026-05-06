@@ -78,6 +78,7 @@ use App\WebUserSubscriptionModel;
 use App\WebUserNotification;
 use App\WebAccess;
 use App\VendorUserMap;
+use App\WebRiceFormMap;
 use App\ServiceProviderUserMap;
 use Razorpay\Api\Api;
 use Exception;
@@ -2261,6 +2262,95 @@ class PortalApiController extends Controller
             'message' => 'Notifications fetched successfully.',
             'data' => $rows,
         ], 200);
+    }
+
+    /**
+     * API 1: Get list of all rice qualities (rice names like 1121, 1509, etc.)
+     * Optionally filter by type: basmati / non-basmati
+     */
+    public function getRiceQualitiesList(Request $request)
+    {
+        $query = RiceName::query();
+
+        if ($request->has('type') && in_array($request->type, ['basmati', 'non-basmati'])) {
+            $query->where('type', $request->type);
+        }
+
+        $riceNames = $query->orderBy('order')->get(['id', 'name', 'type']);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Rice qualities fetched successfully.',
+            'data'    => $riceNames,
+        ]);
+    }
+
+    /**
+     * API 2: Get list of rice forms from rice_form_milestone3 table
+     */
+    public function getRiceFormsList(Request $request)
+    {
+        $query = RiceFormMilestone3::where('status', 1);
+
+        $forms = $query->orderBy('order')->get(['id', 'name', 'order', 'status']);
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Rice forms fetched successfully.',
+            'data'    => $forms,
+        ]);
+    }
+
+    /**
+     * API 3: Get wands based on rice_name_id and form_ids from web_rice_form_map table
+     * Returns wand details with type + value (e.g. "Wand - 8.50+mm")
+     *
+     * Required params: rice_name_id, form_id
+     */
+    public function getWandsByRiceFormMap(Request $request)
+    {
+        $request->validate([
+            'rice_name_id' => 'required|exists:rice_names,id',
+            'form_id'      => 'required|exists:rice_form_milestone3,id',
+        ]);
+
+        $riceNameId = $request->rice_name_id;
+        $formId     = $request->form_id;
+
+        // Find the web_rice_form_map record matching rice_name_id and form_id
+        $formMap = WebRiceFormMap::where('rice_name_id', $riceNameId)
+            ->where('form_ids', $formId)
+            ->first();
+
+        if (!$formMap || !$formMap->wand_ids) {
+            return response()->json([
+                'status'  => true,
+                'message' => 'No wands found for the given rice name and form.',
+                'data'    => [],
+            ]);
+        }
+
+        // Get wand details with type + value format
+        $wands = WandModel::with('getWandType')
+            ->whereIn('id', $formMap->wand_ids)
+            ->where('status', 1)
+            ->orderBy('order')
+            ->get()
+            ->map(function ($wand) {
+                return [
+                    'id'    => $wand->id,
+                    'label' => $wand->getWandType ? $wand->getWandType->type . ' - ' . $wand->value : $wand->value,
+                    'type'  => $wand->getWandType ? $wand->getWandType->type : '',
+                    'value' => $wand->value,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status'  => true,
+            'message' => 'Wands fetched successfully.',
+            'data'    => $wands,
+        ]);
     }
 
 }
