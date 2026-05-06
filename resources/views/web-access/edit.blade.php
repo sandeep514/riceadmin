@@ -46,7 +46,7 @@
             function loadPlan(roleId, categoryId) {
                 if (roleId && categoryId) {
                     $.ajax({
-                        url: "{{ route('web-access.get-plan') }}",
+                        url: "web-access/get-plan",
                         type: "GET",
                         data: { role_id: roleId, category_id: categoryId },
                         success: function(data) {
@@ -77,7 +77,7 @@
 
                 if(roleId) {
                     $.ajax({
-                        url: "{{ route('web-access.get-categories') }}",
+                        url: "web-access/get-categories",
                         type: "GET",
                         data: {role_id: roleId},
                         success: function(data) {

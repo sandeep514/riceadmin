@@ -84,7 +84,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: "{{ route('web-side-menu.data') }}",
+                    url: "web-side-menu/data",
                     type: "GET"
                 },
                 columns: [

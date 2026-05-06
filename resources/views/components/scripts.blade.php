@@ -163,7 +163,7 @@
         $(document).ready(function(){
 
             $.ajax({
-                url : '{{ route("admin.is.viewed.by.admin") }}',
+                url : 'api/admin/is/viewed/by/admin',
                 method: 'GET',
                 success : function(res){
                     if( res.count > 0 ){

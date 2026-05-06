@@ -34,9 +34,9 @@
 @section('javascript')
 <script>
 $(function(){
-    var riceNamesUrl = "{{ route('ajax.rice-form-map.rice-names', ':type') }}";
-    var formsUrl     = "{{ route('ajax.rice-form-map.forms', ':type') }}";
-    var wandsUrl     = "{{ route('ajax.rice-form-map.wands', ':riceNameId') }}";
+    var riceNamesUrl = "rice-form-map/ajax/rice-names/:type";
+    var formsUrl     = "rice-form-map/ajax/forms/:type";
+    var wandsUrl     = "rice-form-map/ajax/wands/:riceNameId";
 
     // Existing saved values for pre-selection
     var savedRiceNameId = "{{ $model->rice_name_id }}";

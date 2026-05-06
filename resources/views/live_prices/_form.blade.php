@@ -321,7 +321,7 @@
                 
 
                 $.ajax({
-                    url: '{{ route("save.price.for.single") }}',
+                    url: 'live/prices/save/for/single',
                     type: 'POST',
                     data: formData,
                     processData: false,
