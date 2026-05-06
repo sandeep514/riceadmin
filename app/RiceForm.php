@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class RiceForm extends Model
 {
-    protected $fillable = ['form_name','type'];
+    protected $fillable = ['form_name','type','order'];
     public static $grade = [1=>'' ,2=>'A' , 3=>'A+'];
 
 

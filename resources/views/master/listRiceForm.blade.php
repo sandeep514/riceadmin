@@ -27,6 +27,7 @@
                                     <th>#</th>
                                     <th>Rice Form Name</th>
                                     <th>Type</th>
+                                    <th>Order</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -36,6 +37,7 @@
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $form->form_name }}</td>
                                         <td>{{ $form->type }}</td>
+                                        <td>{{ $form->order ?? '-' }}</td>
                                         <td>
                                             <a href="{{ route('master.get.rice.type', $form->id) }}" class="btn btn-info btn-xs">Edit</a>
                                             <a href="{{ route('master.delete.rice.type', $form->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('Delete this record?')">Delete</a>
@@ -53,6 +55,6 @@
 
 @section('javascript')
 <script>
-    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[0,'asc']] }); });
+    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[3,'asc']] }); });
 </script>
 @endsection

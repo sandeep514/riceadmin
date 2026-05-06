@@ -42,6 +42,10 @@
                                         {!! Form::label('end_month','End Month') !!}
                                         {!! Form::text('end_month' , $riceName->end_month , ['placeholder' => 'End month', 'class' => 'form-control']) !!}
                                     </div>
+                                    <div class="form-group col-md-4 ">
+                                        {!! Form::label('order','Order') !!}
+                                        {!! Form::number('order' , $riceName->order , ['class' => 'form-control', 'min' => 1, 'placeholder' => 'Enter sort order']) !!}
+                                    </div>
                                     <input type="hidden" name="id" value="{{ $riceName->id }}">
                                 </div>
 

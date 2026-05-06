@@ -67,6 +67,10 @@
                                         {!! Form::label('name','Rice Name*') !!} <small>(eg: 1121 , Sugandha )</small>
                                         {!! Form::text('name' , '' , ['class' => 'form-control']) !!}
                                     </div>
+                                    <div class="form-group col-md-4">
+                                        {!! Form::label('order','Order') !!}
+                                        {!! Form::number('order' , '' , ['class' => 'form-control', 'min' => 1, 'placeholder' => 'Enter sort order']) !!}
+                                    </div>
                                 </div>
 
                             </div>
@@ -108,6 +112,10 @@
                                         {!! Form::label('name','Rice Brand Form*') !!} <small>(eg: Raw, Steam )</small>
                                         {!! Form::text('name' , '' , ['class' => 'form-control']) !!}
                                     </div>
+                                    <div class="form-group col-md-4">
+                                        {!! Form::label('order','Order') !!}
+                                        {!! Form::number('order' , '' , ['class' => 'form-control', 'min' => 1, 'placeholder' => 'Enter sort order']) !!}
+                                    </div>
                                 </div>
 
                             </div>
@@ -146,6 +154,10 @@
                                     <div class="form-group col-md-4 ">
                                         {!! Form::label('name','Rice name*') !!}<small>(eg: Creamy sella , Brown)</small>
                                         {!! Form::text('name' , '' , ['class' => 'form-control']) !!}
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        {!! Form::label('order','Order') !!}
+                                        {!! Form::number('order' , '' , ['class' => 'form-control', 'min' => 1, 'placeholder' => 'Enter sort order']) !!}
                                     </div>
                                 </div>
 

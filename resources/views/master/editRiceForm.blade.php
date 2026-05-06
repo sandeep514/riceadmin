@@ -34,6 +34,10 @@
                                         {!! Form::label('name','Rice name*') !!}
                                         {!! Form::text('name' , $riceForm->form_name , ['class' => 'form-control']) !!}
                                     </div>
+                                    <div class="form-group col-md-4 ">
+                                        {!! Form::label('order','Order') !!}
+                                        {!! Form::number('order' , $riceForm->order , ['class' => 'form-control', 'min' => 1, 'placeholder' => 'Enter sort order']) !!}
+                                    </div>
                                     <input type="hidden" name="id" value="{{ $riceForm->id }}">
                                 </div>
 

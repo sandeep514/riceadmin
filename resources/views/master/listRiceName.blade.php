@@ -26,6 +26,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Rice Quality</th>
+                                    <th>Order</th>
                                     <th>From Month</th>
                                     <th>End Month</th>
                                     <th>Type</th>
@@ -37,6 +38,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $form->name }}</td>
+                                        <td>{{ $form->order ?? '-' }}</td>
                                         <td>{{ $form->from_month }}</td>
                                         <td>{{ $form->end_month }}</td>
                                         <td>{{ $form->type }}</td>
@@ -57,6 +59,6 @@
 
 @section('javascript')
 <script>
-    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[0,'asc']] }); });
+    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[2,'asc']] }); });
 </script>
 @endsection

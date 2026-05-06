@@ -40,7 +40,7 @@ class MasterController extends Controller
 	}
 
 	public function listRiceType(){
-		$riceForm = RiceForm::where('status' , 1)->get();
+		$riceForm = RiceForm::where('status' , 1)->orderBy('order', 'ASC')->get();
 		return view('master.listRiceForm' , compact('riceForm'));
 	}
 
@@ -60,7 +60,11 @@ class MasterController extends Controller
 			Session::flash('message' , 'Type field is required.');
 			return back();
 		}
-		RiceForm::where('id' , $request->id)->update([ 'form_name' => $request->name , 'type' => $request->riceType ]);
+		RiceForm::where('id' , $request->id)->update([
+			'form_name' => $request->name,
+			'type' => $request->riceType,
+			'order' => $request->order ?? null,
+		]);
 		return back();
 	}
 
@@ -75,7 +79,11 @@ class MasterController extends Controller
 			return back();
 		}
 
-		RiceForm::create(['form_name' => $request->name , 'type' => $request->riceType ]);
+		RiceForm::create([
+			'form_name' => $request->name,
+			'type' => $request->riceType,
+			'order' => $request->order ?? null,
+		]);
 		return back();
 	}
 
@@ -90,7 +98,7 @@ class MasterController extends Controller
 		return back();
 	}
 	public function listRiceQuality(){
-		$riceName = RiceName::get();
+		$riceName = RiceName::orderBy('order', 'ASC')->get();
 		return view('master.listRiceName', compact('riceName'));
 	}
 
@@ -104,7 +112,12 @@ class MasterController extends Controller
 			return back();
 		}
 
-		RiceName::create(['name' => $request->name , 'type' => $request->riceType , 'type_status' => ($request->riceType == 'basmati')? 1: 2 ]);
+		RiceName::create([
+			'name' => $request->name,
+			'type' => $request->riceType,
+			'type_status' => ($request->riceType == 'basmati')? 1: 2,
+			'order' => $request->order ?? null,
+		]);
 		return back();
 	}
 
@@ -141,7 +154,13 @@ class MasterController extends Controller
 			Session::flash('message' , 'Type field is required.');
 			return back();
 		}
-		RiceName::where('id' , $request->id)->update([ 'name' => $request->name ,'from_month' => $request->from_month??'','end_month' => $request->end_month??'', 'type' => $request->riceType ]);
+		RiceName::where('id' , $request->id)->update([
+			'name' => $request->name,
+			'from_month' => $request->from_month??'',
+			'end_month' => $request->end_month??'',
+			'type' => $request->riceType,
+			'order' => $request->order ?? null,
+		]);
 		return back();
 	}
 	
