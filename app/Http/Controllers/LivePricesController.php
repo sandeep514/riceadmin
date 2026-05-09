@@ -468,7 +468,8 @@ class LivePricesController extends Controller
 
         
 
-        LivePrice::whereDate('created_at' , $todayDate)->update(['updated_at'  => $updatedTime]);
+        // Keep updated_at tied to the saved row only; touching all today's rows
+        // can cause stale duplicates to be preferred on reload.
 
         // Insert or update live_price_closing based on name, form, cropYear, state
         if( $opening !== '' || $closing !== '' ){
