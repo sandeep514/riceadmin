@@ -438,6 +438,7 @@ class LivePricesController extends Controller
                 'min_price'   => $min_price,
                 'max_price'   => $max_price,
                 'is_updated_by_admin'   => 1,
+                'cropYear'    => $cropYear,
                 'cropGrade'   => $cropGrade,
                 'opening'     => $opening,
                 'closing'     => $closing,
