@@ -119,6 +119,8 @@ class LivePricesController extends Controller
                 $lastPrices = LivePrice::where('name', $riceName)
                     ->with(['form_rel','name_rel'])
                     ->whereDate('created_at', $lastAvailableDate)
+                    ->orderBy('updated_at', 'DESC')
+                    ->orderBy('id', 'DESC')
                     ->get();
             }
         }
@@ -428,7 +430,6 @@ class LivePricesController extends Controller
         $livePrices = LivePrice::where([
                 'name'      => $name,
                 'form'      => $form,
-                'cropYear'  => $cropYear,
                 'state'     => $state
             ])->whereDate('created_at' , $todayDate);
 
@@ -460,7 +461,7 @@ class LivePricesController extends Controller
                 'form'      => $form,
                 'cropYear'  => $cropYear,
                 'state'     => $state,
-                'created_at' , $todayDate,
+                'created_at'  => $todayDate,
                 'updated_at'  => $updatedTime,
             ]);
         }

@@ -2358,5 +2358,4 @@ class PortalApiController extends Controller
             'data'    => $wands,
         ]);
     }
-
 }
