@@ -2320,12 +2320,18 @@ class PortalApiController extends Controller
             'form_id'      => 'required|exists:rice_form_milestone3,id',
         ]);
 
-        $riceNameId = $request->rice_name_id;
-        $formId     = $request->form_id;
+        $riceNameId = (int) $request->rice_name_id;
+        $formId     = (int) $request->form_id;
 
-        // Find the web_rice_form_map record matching rice_name_id and form_id
+        // `form_ids` is a JSON column; values may be stored either as a scalar
+        // (e.g. 16 / "16") via the single-select form, or as an array. Match all
+        // valid shapes for the given form_id.
         $formMap = WebRiceFormMap::where('rice_name_id', $riceNameId)
-            ->where('form_ids', $formId)
+            ->where(function ($q) use ($formId) {
+                $q->whereJsonContains('form_ids', $formId)
+                    ->orWhereJsonContains('form_ids', (string) $formId)
+                    ->orWhereRaw('CAST(form_ids AS UNSIGNED) = ?', [$formId]);
+            })
             ->first();
 
         if (!$formMap || !$formMap->wand_ids) {
