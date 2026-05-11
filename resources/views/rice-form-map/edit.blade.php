@@ -77,6 +77,17 @@ $(function(){
         });
     }
 
+    // Check / Uncheck all wand types
+    $(document).on('click', '#wand_check_all', function(){
+        var allIds = $('#wand_ids option').map(function(){
+            return this.value ? String(this.value) : null;
+        }).get();
+        $('#wand_ids').val(allIds).trigger('change');
+    });
+    $(document).on('click', '#wand_uncheck_all', function(){
+        $('#wand_ids').val(null).trigger('change');
+    });
+
     // When rice type changes → reload rice names
     $('#rice_type').on('change', function(){
         var type = $(this).val();

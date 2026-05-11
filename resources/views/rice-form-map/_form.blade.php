@@ -54,7 +54,13 @@
     {{-- Step 4: Wand Types (loaded via AJAX on rice name change) --}}
     <div class="row">
         <div class="form-group col-md-8 @error('wand_ids') has-error @enderror">
-            <label for="wand_ids">Wand Types</label>
+            <label for="wand_ids" style="display:block;">
+                Wand Types
+                <span class="pull-right">
+                    <button type="button" id="wand_check_all" class="btn btn-xs btn-default">Check All</button>
+                    <button type="button" id="wand_uncheck_all" class="btn btn-xs btn-default">Uncheck All</button>
+                </span>
+            </label>
             <select name="wand_ids[]" id="wand_ids" class="form-control select2" multiple="multiple">
                 <option value="">-- Select Rice Name First --</option>
             </select>

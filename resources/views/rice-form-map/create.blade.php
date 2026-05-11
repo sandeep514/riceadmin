@@ -74,6 +74,17 @@ $(function(){
         });
     });
 
+    // Check / Uncheck all wand types
+    $(document).on('click', '#wand_check_all', function(){
+        var allIds = $('#wand_ids option').map(function(){
+            return this.value ? String(this.value) : null;
+        }).get();
+        $('#wand_ids').val(allIds).trigger('change');
+    });
+    $(document).on('click', '#wand_uncheck_all', function(){
+        $('#wand_ids').val(null).trigger('change');
+    });
+
     // When rice name changes → load wand types with values
     $('#rice_name_id').on('change', function(){
         var riceNameId = $(this).val();
@@ -83,10 +94,13 @@ $(function(){
         var url = wandsUrl.replace(':riceNameId', riceNameId);
         $.get(url, function(data){
             $('#wand_ids').empty();
+            var allWandIds = [];
             $.each(data, function(id, label){
                 $('#wand_ids').append('<option value="'+id+'">'+label+'</option>');
+                allWandIds.push(String(id));
             });
-            $('#wand_ids').trigger('change.select2');
+            // Pre-select all wand types by default on create
+            $('#wand_ids').val(allWandIds).trigger('change');
         });
     });
 });
