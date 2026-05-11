@@ -28,6 +28,7 @@
         Route::get('interested/rice-qualities', [PortalApiController::class, 'getRiceQualitiesList']);
         Route::get('interested/rice-forms', [PortalApiController::class, 'getRiceFormsList']);
         Route::post('interested/wands', [PortalApiController::class, 'getWandsByRiceFormMap']);
+        Route::post('interested/save', [PortalApiController::class, 'saveUserInterestedMap']);
 
         Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails'])
             ->middleware(['portal.session_or_token']);

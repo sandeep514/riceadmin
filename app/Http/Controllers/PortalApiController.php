@@ -79,6 +79,7 @@ use App\WebUserNotification;
 use App\WebAccess;
 use App\VendorUserMap;
 use App\WebRiceFormMap;
+use App\UserInterestedMap;
 use App\ServiceProviderUserMap;
 use Razorpay\Api\Api;
 use Exception;
@@ -2363,5 +2364,104 @@ class PortalApiController extends Controller
             'message' => 'Wands fetched successfully.',
             'data'    => $wands,
         ]);
+    }
+
+    public function saveUserInterestedMap(Request $request)
+    {
+        $interestedItems = $request->input('interested', $request->input('intrested'));
+
+        $validator = Validator::make(
+            array_merge($request->all(), ['interested' => $interestedItems]),
+            [
+                'user_id' => 'required|exists:users,id',
+                'interested' => 'required|array|min:1',
+                'interested.*.name_id' => 'required|exists:rice_names,id',
+                'interested.*.form_id' => 'required|exists:rice_form_milestone3,id',
+                'interested.*.grades' => 'nullable|array',
+                'interested.*.grades.*' => 'integer|exists:grade,id',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $userId = (int) $request->user_id;
+        $rows = [];
+        $now = Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
+
+        foreach ($interestedItems as $item) {
+            foreach ($this->normalizeInterestedGradeIds($item['grades'] ?? null) as $gradeId) {
+                $rows[] = [
+                    'user_id' => $userId,
+                    'rice_name_id' => (int) $item['name_id'],
+                    'form_id' => (int) $item['form_id'],
+                    'grade' => $gradeId,
+                    'status' => 1,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+
+        DB::beginTransaction();
+        try {
+            UserInterestedMap::where('user_id', $userId)->delete();
+
+            if (!empty($rows)) {
+                UserInterestedMap::insert($rows);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Interested data saved successfully.',
+                'data' => [
+                    'user_id' => $userId,
+                    'saved_count' => count($rows),
+                ],
+            ]);
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    private function normalizeInterestedGradeIds($grades): array
+    {
+        if ($grades === null || $grades === '' || $grades === []) {
+            return [null];
+        }
+
+        if (!is_array($grades)) {
+            $grades = [$grades];
+        }
+
+        $normalized = [];
+        foreach ($grades as $value) {
+            if (is_array($value) || $value === null || $value === '') {
+                continue;
+            }
+            if (!is_numeric($value)) {
+                continue;
+            }
+            $normalized[] = (int) $value;
+        }
+
+        $normalized = array_values(array_unique(array_filter($normalized, function ($id) {
+            return $id > 0;
+        })));
+
+        return !empty($normalized) ? $normalized : [null];
     }
 }
