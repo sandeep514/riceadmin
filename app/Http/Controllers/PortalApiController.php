@@ -2284,16 +2284,28 @@ class PortalApiController extends Controller
 
         $selected = (object) [];
         if ($request->filled('user_id')) {
-            $selected = UserInterestedMap::where('user_id', (int) $request->user_id)
+            $rows = UserInterestedMap::where('user_id', (int) $request->user_id)
                 ->where('status', 1)
-                ->get(['rice_name_id', 'form_id'])
+                ->get(['rice_name_id', 'form_id', 'grade']);
+
+            $selected = $rows
                 ->groupBy('rice_name_id')
                 ->map(function ($items) {
-                    return $items->pluck('form_id')
-                        ->map(fn ($id) => (int) $id)
-                        ->unique()
-                        ->values();
+                    return $items
+                        ->groupBy('form_id')
+                        ->map(function ($formItems) {
+                            return $formItems
+                                ->pluck('grade')
+                                ->filter(fn ($g) => $g !== null && $g !== '')
+                                ->map(fn ($g) => (int) $g)
+                                ->unique()
+                                ->values();
+                        });
                 });
+
+            if ($selected->isEmpty()) {
+                $selected = (object) [];
+            }
         }
 
         return response()->json([
