@@ -2282,10 +2282,25 @@ class PortalApiController extends Controller
             // ->orderBy('id', 'asc')
             ->get(['id', 'name', 'type','order']);
 
+        $selected = (object) [];
+        if ($request->filled('user_id')) {
+            $selected = UserInterestedMap::where('user_id', (int) $request->user_id)
+                ->where('status', 1)
+                ->get(['rice_name_id', 'form_id'])
+                ->groupBy('rice_name_id')
+                ->map(function ($items) {
+                    return $items->pluck('form_id')
+                        ->map(fn ($id) => (int) $id)
+                        ->unique()
+                        ->values();
+                });
+        }
+
         return response()->json([
-            'status'  => true,
-            'message' => 'Rice qualities fetched successfully.',
-            'data'    => $riceNames,
+            'status'   => true,
+            'message'  => 'Rice qualities fetched successfully.',
+            'data'     => $riceNames,
+            'selected' => $selected,
         ]);
     }
 
