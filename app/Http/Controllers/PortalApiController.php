@@ -2378,7 +2378,7 @@ class PortalApiController extends Controller
                 'interested.*.name_id' => 'required|exists:rice_names,id',
                 'interested.*.form_id' => 'required|exists:rice_form_milestone3,id',
                 'interested.*.grades' => 'nullable|array',
-                'interested.*.grades.*' => 'integer|exists:grade,id',
+                'interested.*.grades.*' => 'integer|exists:wand,id',
             ]
         );
 
