@@ -8,7 +8,12 @@ use Carbon\Carbon;
 class LivePrice extends Model
 {
     protected $table = 'live_prices';
-    protected $fillable = ['name', 'form', 'cropGrade', 'cropYear', 'min_price', 'max_price', 'state', 'up_down', 'state_order','opening','closing','monthStart','monthEnd','is_updated_by_admin', 'status'];
+    protected $fillable = ['name', 'form', 'cropGrade', 'cropYear', 'min_price', 'max_price', 'state', 'up_down', 'state_order','opening','closing','monthStart','monthEnd','is_updated_by_admin', 'status', 'created_at', 'updated_at'];
+
+    public function freshTimestamp()
+    {
+        return Carbon::now(config('app.timezone', 'Asia/Kolkata'));
+    }
 
     public function name_rel()
     {

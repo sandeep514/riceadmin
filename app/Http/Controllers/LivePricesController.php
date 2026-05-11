@@ -161,7 +161,9 @@ class LivePricesController extends Controller
 
     // 11 nov 2025
     public function savePrice(Request $request){
-        $todayDate = Carbon::now()->format('Y-m-d');
+        $now = Carbon::now(config('app.timezone', 'Asia/Kolkata'));
+        $todayDate = $now->format('Y-m-d');
+        $currentTimestamp = $now->format('Y-m-d H:i:s');
         $lastAvailableDate ='';
         $lastAvaibleRecord = LivePrice::where('min_price' ,'!=' ,0  )->orderBy('created_at' , "DESC")->first();
         $sortedStateData = [];
@@ -206,7 +208,8 @@ class LivePricesController extends Controller
                             'monthStart' => $request->monthStart[$state][$form]??'',
                             'monthEnd' => $request->monthEnd[$state][$form]??'',
                             'opening' => $request->opening[$state][$form]??'',
-                            'closing' => $request->closing[$state][$form]??'' 
+                            'closing' => $request->closing[$state][$form]??'',
+                            'updated_at' => $currentTimestamp
                         ]); 
 
                             if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
@@ -235,6 +238,8 @@ class LivePricesController extends Controller
                             'monthStart'   => $request->monthStart[$state][$form]??'',
                             'monthEnd'   => $request->monthEnd[$state][$form]??'',
                             'up_down'   => (array_key_exists($form, $request->up_down[$state])? $request->up_down[$state][$form] : 'up' ),
+                            'created_at' => $currentTimestamp,
+                            'updated_at' => $currentTimestamp,
                         ]);
                         if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
                             $openingOrClosing[] = [
@@ -269,7 +274,9 @@ class LivePricesController extends Controller
                         'closing'   => $v->closing??'',
                         'monthStart'   => $v->monthStart??'',
                         'monthEnd'   => $v->monthEnd??'',
-                        'up_down'   => $v->up_down
+                        'up_down'   => $v->up_down,
+                        'created_at' => $currentTimestamp,
+                        'updated_at' => $currentTimestamp
                     ]);
 
                     if( isset($v->opening) || isset($v->closing) ){
@@ -305,6 +312,7 @@ class LivePricesController extends Controller
                             'closing'   => $request->closing[$state][$form]??'',
                             'monthStart'   => $request->monthStart[$state][$form]??'',
                             'monthEnd'   => $request->monthEnd[$state][$form]??'',
+                            'updated_at' => $currentTimestamp
                         ]);
 
                         if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
@@ -336,6 +344,8 @@ class LivePricesController extends Controller
                         $priceModel->closing    = $request->closing[$state][$form]??'';
                         $priceModel->monthStart    = $request->monthStart[$state][$form]??'';
                         $priceModel->monthEnd    = $request->monthEnd[$state][$form]??'';
+                        $priceModel->created_at = $currentTimestamp;
+                        $priceModel->updated_at = $currentTimestamp;
                         $priceModel->save();
 
                         if (!empty($request->opening[$state][$form]) && !empty($request->closing[$state][$form])) {
@@ -378,7 +388,7 @@ class LivePricesController extends Controller
             LivePrice::where('state' , $v)->whereDate('created_at' , $todayDate)->update(['state_order' => $k]);
         }
         foreach($sortedNameData as $k => $v){
-            LivePrice::where('name' , $v)->where('created_at' , $todayDate)->update(['name_order' => $k]);    
+            LivePrice::where('name' , $v)->whereDate('created_at' , $todayDate)->update(['name_order' => $k]);    
         }
 
         
@@ -424,8 +434,9 @@ class LivePricesController extends Controller
         $up_down        =   (array_key_exists($form, $request->up_down[$state])? $request->up_down[$state][$form] : 'up' );
 
 
-        $todayDate = Carbon::now()->format('Y-m-d');
-        $updatedTime = Carbon::now()->format('Y-m-d H:i:s');
+        $now = Carbon::now(config('app.timezone', 'Asia/Kolkata'));
+        $todayDate = $now->format('Y-m-d');
+        $updatedTime = $now->format('Y-m-d H:i:s');
 
         $livePrices = LivePrice::where([
                 'name'      => $name,
@@ -462,7 +473,7 @@ class LivePricesController extends Controller
                 'form'      => $form,
                 'cropYear'  => $cropYear,
                 'state'     => $state,
-                'created_at'  => $todayDate,
+                'created_at'  => $updatedTime,
                 'updated_at'  => $updatedTime,
             ]);
         }
