@@ -1563,6 +1563,23 @@ class PortalApiController extends Controller
         $amount = $request->amount;
         $currency = $request->currency ?? 'INR';
         $billingPeriod = $request->billing_period;
+        $subscriptionType = (string) $request->subscription_type;
+
+        // Trial activation: no Razorpay order is created (Razorpay rejects 0-amount orders).
+        // Create the subscription row, mirror the trial side-effects of webVerifyPayment, and return.
+        if ($subscriptionType === 'trial') {
+            $subscription = $this->activateTrialSubscription((int) $userId, (int) $planId);
+
+            return response()->json([
+                'status' => true,
+                'trial_activated' => true,
+                'order_id' => null,
+                'amount' => 0,
+                'currency' => $currency,
+                'message' => '✅ Free trial activated.',
+                'data' => $subscription,
+            ]);
+        }
 
         $api = new Api(
             config('services.razorpay.key'),
@@ -1582,10 +1599,56 @@ class PortalApiController extends Controller
 
         return response()->json([
             'status' => true,
+            'trial_activated' => false,
             'order_id' => $order['id'],
             'amount' => $amount,
             'currency' => $currency,
         ]);
+    }
+
+    /**
+     * Create a 30-day trial subscription row, refresh the user's profile validation status,
+     * and dispatch the trial activation + admin notification emails. Used by both
+     * `webCreateOrder` (no payment) and `webVerifyPayment` (legacy paid path that still receives trial).
+     */
+    private function activateTrialSubscription(int $userId, int $planId): WebUserSubscriptionModel
+    {
+        $addedDays = $this->getSubscriptionAddedDays('trial');
+        $subscriptionStart = $this->getNextSubscriptionStartDate($userId);
+        $subscriptionEnd = (clone $subscriptionStart)->addDays($addedDays);
+
+        $subscription = WebUserSubscriptionModel::create([
+            'user_id'           => $userId,
+            'plan_id'           => $planId,
+            'payment_id'        => null,
+            'order_id'          => null,
+            'period_start'      => $subscriptionStart->format('Y-m-d'),
+            'period_end'        => $subscriptionEnd->format('Y-m-d'),
+            'subscription_type' => 'trial',
+            'status'            => 1,
+        ]);
+
+        $userDetails = User::where('id', $userId)->first();
+
+        $webUserAttachment = WebUserAttachment::where('user_id', $userId)->first();
+        if ($webUserAttachment === null || ! $webUserAttachment->trialDocumentsComplete()) {
+            User::where('id', $userId)->update(['has_validation' => 'Please submit your documents to complete your profile.']);
+        } else {
+            User::where('id', $userId)->update(['has_validation' => 'Your profile is under review. We will notify you once approved.']);
+        }
+
+        if ($userDetails) {
+            $userName  = (string) ($userDetails->name ?? '');
+            $userEmail = (string) ($userDetails->email ?? '');
+
+            if ($userEmail !== '') {
+                Mail::to($userEmail)->queue(new WebTrialActivatedUserMail($userName, $userEmail));
+            }
+
+            Mail::to('info@sntcgroup.com')->queue(new NewUserRegistrationAdminMail($userName, $userEmail));
+        }
+
+        return $subscription;
     }
 
 
@@ -1596,6 +1659,21 @@ class PortalApiController extends Controller
         $razorpaySignature = $request->razorpay_signature;
         $userId            = $request->user_id;
         $planId            = $request->plan_id;
+        $subscriptionType  = (string) $request->subscription_type;
+
+        // Defensive: trial flow should not hit verify-payment (no Razorpay order is created),
+        // but if a legacy client still calls it, activate the trial without signature checks.
+        if ($subscriptionType === 'trial') {
+            $subscription = $this->activateTrialSubscription((int) $userId, (int) $planId);
+            $totalAvailableDays = $this->getTotalAvailableSubscriptionDays((int) $userId);
+
+            return response()->json([
+                'status'  => true,
+                'message' => '✅ Free trial activated.',
+                'total_available_days' => $totalAvailableDays,
+                'data'    => $subscription,
+            ]);
+        }
 
         // Initialize Razorpay API with correct credentials
         $api = new Api(
@@ -1613,7 +1691,7 @@ class PortalApiController extends Controller
         try {
             // Verify payment signature
             $api->utility->verifyPaymentSignature($attributes);
-            $addedDays = $this->getSubscriptionAddedDays((string) $request->subscription_type);
+            $addedDays = $this->getSubscriptionAddedDays($subscriptionType);
 
             // Always chain renewal from the latest available plan end date (current or queued future plans).
             $subscriptionStart = $this->getNextSubscriptionStartDate((int) $userId);
@@ -1628,7 +1706,7 @@ class PortalApiController extends Controller
                 'status'       => 'active',
                 'period_start' => $subscriptionStart->format('Y-m-d'),
                 'period_end'   => $subscriptionEnd->format('Y-m-d'),
-                'subscription_type' => $request->subscription_type,
+                'subscription_type' => $subscriptionType,
                 'status' => 1
             ]);
 
@@ -1636,43 +1714,17 @@ class PortalApiController extends Controller
 
             $userDetails = User::where(['id' => $userId])->first();
 
-            if( $request->subscription_type =='trial' ){
-                $webUserAttachment = WebUserAttachment::where(['user_id' => $userId])->first();
+            $mailTo = $userDetails->email;
+            $mailMessage = '';
+            $subject = 'Subscription Activated – Welcome to SNTC';
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
 
-                if ($webUserAttachment === null || ! $webUserAttachment->trialDocumentsComplete()) {
-                    User::where(['id' => $userId])->update(['has_validation' => "Please submit your documents to complete your profile."]);
-                }else{
-                    User::where(['id' => $userId])->update(['has_validation' => "Your profile is under review. We will notify you once approved."]);
-                }
-                
-
-                $userName = (string) ($userDetails->name ?? '');
-                $userEmail = (string) ($userDetails->email ?? '');
-
-                Mail::to($userDetails->email)->queue(
-                    new WebTrialActivatedUserMail($userName, $userEmail)
-                );
-
-                Mail::to('info@sntcgroup.com')->queue(
-                    new NewUserRegistrationAdminMail($userName, $userEmail)
-                );
-                
-            }else{
-                
-                $mailTo = $userDetails->email;
-                $mailMessage = '';
-                $subject = 'Subscription Activated – Welcome to SNTC';
-                $mailFrom = 'info@sntcgroup.com';
-                $mailFromName = 'SNTC Team - India';
-                
-                $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
-                $respose = Mail::send('mail.AccrountActiveWebMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                    $message->to($mailTo, $mailMessage)->subject($subject);
-                    $message->from($mailFrom, $mailFromName);
-                });
-            }
-
-            
+            $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
+            $respose = Mail::send('mail.AccrountActiveWebMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
 
             return response()->json([
                 'status'  => true,
