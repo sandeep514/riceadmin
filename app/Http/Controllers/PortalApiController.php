@@ -1617,11 +1617,12 @@ class PortalApiController extends Controller
         $subscriptionStart = $this->getNextSubscriptionStartDate($userId);
         $subscriptionEnd = (clone $subscriptionStart)->addDays($addedDays);
 
+        $trialReference = 'trial_' . $userId . '_' . time();
         $subscription = WebUserSubscriptionModel::create([
             'user_id'           => $userId,
             'plan_id'           => $planId,
-            'payment_id'        => null,
-            'order_id'          => null,
+            'payment_id'        => $trialReference,
+            'order_id'          => $trialReference,
             'period_start'      => $subscriptionStart->format('Y-m-d'),
             'period_end'        => $subscriptionEnd->format('Y-m-d'),
             'subscription_type' => 'trial',
