@@ -503,6 +503,12 @@
                     <span style="display: inline-flex;">Web Users &nbsp; <div style="background: white; height: 10px;width: 10px;border-radius: 100px;display: none;" id="hasNewUser"></div></span>
                 </a>
             </li>
+            <li class="{{ ($currentRoute == 'user-interests')?'active':'' }}">
+                <a href="{{ route('user-interests') }}">
+                    <i class="fa fa-heart-o"></i>
+                    <span>User interests</span>
+                </a>
+            </li>
             
         </ul>
         <!-- for Dollar $ -->

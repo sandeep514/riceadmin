@@ -131,4 +131,9 @@ class User extends Authenticatable
         return $this->hasOne(WebUserSubscriptionModel::class  , 'user_id' , 'id')->orderBy('id' , 'desc');
         // return $this->hasOne(WebUserSubscriptionModel::class  , 'user_id' , 'id')->orderBy('id' , 'desc')->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
     }
+
+    public function interestedMaps()
+    {
+        return $this->hasMany(UserInterestedMap::class, 'user_id');
+    }
 }

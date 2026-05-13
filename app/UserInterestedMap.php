@@ -15,4 +15,27 @@ class UserInterestedMap extends Model
         'grade',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function riceName()
+    {
+        return $this->belongsTo(RiceName::class, 'rice_name_id');
+    }
+
+    public function riceForm()
+    {
+        return $this->belongsTo(RiceFormMilestone3::class, 'form_id');
+    }
+
+    /**
+     * Wand (grade) selected for this interest row.
+     */
+    public function wandGrade()
+    {
+        return $this->belongsTo(WandModel::class, 'grade');
+    }
 }

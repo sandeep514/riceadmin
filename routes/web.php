@@ -192,6 +192,11 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('rice-form-map/ajax/wands/{riceNameId}', ['as' => 'ajax.rice-form-map.wands', 'uses' => 'WebRiceFormMapController@getWandsByRiceName']);
             });
 
+            // User interests (web portal users + user_interested_map_table)
+            Route::get('user-interests', ['as' => 'user-interests', 'uses' => 'UserInterestsController@index']);
+            Route::get('user-interests/ajax/forms', ['as' => 'user-interests.ajax.forms', 'uses' => 'UserInterestsController@ajaxFormsByRiceName']);
+            Route::get('user-interests/ajax/wands', ['as' => 'user-interests.ajax.wands', 'uses' => 'UserInterestsController@ajaxWandsByRiceForm']);
+
             //Sample Registers
             Route::group(['module'=>'sample_register','icon'=>'fa-database'], function() {
                 Route::get('sample-registers', ['as' => 'sample-registers', 'uses' => 'SampleRegistersController@index','action'=>'view']);
