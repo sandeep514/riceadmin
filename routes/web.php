@@ -50,6 +50,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::post('users/save/{role}',['as'=>'save.user','uses'=>'UsersController@save','action'=>'create']);
                 Route::post('users/reject',['as'=>'reject.user','uses'=>'UsersController@rejectUser']);
                 Route::get('users/view/{id}',['as'=>'view.user','uses'=>'UsersController@view','action'=>'view']);
+                Route::post('users/view/{userId}/interests', ['as' => 'save.user.interests', 'uses' => 'UsersController@saveUserInterests']);
                 Route::get('users/edit/{id}/{role}',['as'=>'edit.user','uses'=>'UsersController@edit','action'=>'edit']);
                 Route::put('users/update/{id}/{role}',['as'=>'update.user','uses'=>'UsersController@update','action'=>'edit']);
                 Route::delete('users/delete/{id}/{role}',['as'=>'delete.user','uses'=>'UsersController@delete','action'=>'delete']);

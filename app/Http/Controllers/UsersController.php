@@ -7,8 +7,11 @@ use App\DataTables\AllUsersDatatable;
 use App\Http\Requests\UserRequest;
 use App\Services\UserService;
 use App\User;
+use App\UserInterestedMap;
 use App\ChatStatus;
+use App\Services\UserInterestService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Session;
 use Mail;
 
@@ -109,11 +112,112 @@ class UsersController extends Controller
 
     public function view($userId)
     {
-        $user = User::with(['getWebPersonalDetails','getWebBusinessDetails' => function($q){
-            return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category']);
-        } , 'getWebUserAttachment' , 'getWebUserSubscription', 'role_rel:id,role_name'])->find($userId)->toArray();
+        $userModel = User::with(['getWebPersonalDetails', 'getWebBusinessDetails' => function ($q) {
+            return $q->with(['cityRel:id,city_name', 'stateRel:id,state_name', 'getCategoryDetails:id,category']);
+        }, 'getWebUserAttachment', 'getWebUserSubscription', 'role_rel:id,role_name'])->find($userId);
 
-        return view('users.view',['user' => $user]);
+        if (! $userModel) {
+            abort(404);
+        }
+
+        $interestedMaps = UserInterestedMap::query()
+            ->where('user_id', $userId)
+            ->where('status', 1)
+            ->with(['riceName', 'riceForm', 'wandGrade.getWandType'])
+            ->orderBy('rice_name_id')
+            ->orderBy('form_id')
+            ->orderByRaw('grade IS NULL, grade')
+            ->get();
+
+        $interestEditRows = $interestedMaps
+            ->groupBy(fn ($m) => $m->rice_name_id.'_'.$m->form_id)
+            ->map(function ($group) {
+                $r = $group->first();
+
+                return [
+                    'rice_type' => optional($r->riceName)->type ?? '',
+                    'name_id' => (int) $r->rice_name_id,
+                    'form_id' => (int) $r->form_id,
+                    'grades' => $group->pluck('grade')->filter(fn ($g) => $g !== null && $g !== '')->map(fn ($g) => (int) $g)->unique()->values()->all(),
+                ];
+            })
+            ->values()
+            ->all();
+
+        if ($interestEditRows === []) {
+            $interestEditRows = [
+                ['rice_type' => '', 'name_id' => '', 'form_id' => '', 'grades' => []],
+            ];
+        }
+
+        return view('users.view', [
+            'user' => $userModel->toArray(),
+            'interestedMaps' => $interestedMaps,
+            'interestEditRows' => $interestEditRows,
+        ]);
+    }
+
+    /**
+     * Admin: replace web user's rice interests (same storage as portal).
+     */
+    public function saveUserInterests(Request $request, $userId)
+    {
+        $user = User::find($userId);
+        if (! $user) {
+            Session::flash('error', 'Error|User not found.');
+
+            return redirect()->back();
+        }
+
+        $interested = $request->input('interested', []);
+        if (! is_array($interested)) {
+            $interested = [];
+        }
+
+        $cleaned = [];
+        foreach ($interested as $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            $nid = isset($row['name_id']) ? (int) $row['name_id'] : 0;
+            $fid = isset($row['form_id']) ? (int) $row['form_id'] : 0;
+            if ($nid <= 0 || $fid <= 0) {
+                continue;
+            }
+            $cleaned[] = [
+                'name_id' => $nid,
+                'form_id' => $fid,
+                'grades' => $row['grades'] ?? null,
+            ];
+        }
+
+        if (count($cleaned) > 0) {
+            $validator = Validator::make(
+                ['interested' => $cleaned],
+                [
+                    'interested' => 'required|array|min:1',
+                    'interested.*.name_id' => 'required|exists:rice_names,id',
+                    'interested.*.form_id' => 'required|exists:rice_form_milestone3,id',
+                    'interested.*.grades' => 'nullable|array',
+                    'interested.*.grades.*' => 'integer|exists:wand,id',
+                ]
+            );
+
+            if ($validator->fails()) {
+                return redirect()->route('view.user', $userId)
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
+
+        try {
+            $count = UserInterestService::syncForUser((int) $userId, $cleaned);
+            Session::flash('success', 'Success|User interests saved ('.$count.' row(s)).');
+        } catch (\Throwable $e) {
+            Session::flash('error', 'Error|Could not save interests: '.$e->getMessage());
+        }
+
+        return redirect()->route('view.user', $userId);
     }
 
     public function rejectUser(Request $request)

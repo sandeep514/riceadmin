@@ -6,6 +6,24 @@
 	<div class="container">
 		<h2>User Details - ID #{{ $user['id'] }}</h2>
 
+		@if ($errors->any())
+			<div class="alert alert-danger">
+				<ul class="mb-0" style="padding-left:18px;">
+					@foreach ($errors->all() as $err)
+						<li>{{ $err }}</li>
+					@endforeach
+				</ul>
+			</div>
+		@endif
+		@if (session('error'))
+			@php $parts = explode('|', session('error'), 2); @endphp
+			<div class="alert alert-danger">{{ $parts[1] ?? $parts[0] }}</div>
+		@endif
+		@if (session('success'))
+			@php $parts = explode('|', session('success'), 2); @endphp
+			<div class="alert alert-success">{{ $parts[1] ?? $parts[0] }}</div>
+		@endif
+
 		<!-- Basic Info -->
 		<div class="section">
 			<h3>Basic Information</h3>
@@ -29,6 +47,67 @@
 				<tr><th>Created At</th><td>{{ $user['created_at'] ?? '-' }}</td></tr>
 				<tr><th>Updated At</th><td>{{ $user['updated_at'] ?? '-' }}</td></tr>
 			</table>
+		</div>
+
+		{{-- Rice / portal interests (user_interested_map_table) --}}
+		<div class="section">
+			<h3>Rice interests</h3>
+			<p class="text-muted">Saved preferences used by the web portal. Incomplete lines are ignored when saving. To clear everything, remove all lines with the Remove button and click <strong>Save interests</strong>.</p>
+
+			@if (isset($interestedMaps) && $interestedMaps->isNotEmpty())
+				<div class="table-responsive" style="margin-bottom:16px;">
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Rice name</th>
+								<th>Form</th>
+								<th>Wand / grade</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach ($interestedMaps as $im)
+								<tr>
+									<td>{{ optional($im->riceName)->name ?? '—' }}</td>
+									<td>{{ optional($im->riceForm)->name ?? '—' }}</td>
+									<td>
+										@if ($im->grade && $im->wandGrade)
+											@if ($im->wandGrade->getWandType)
+												{{ $im->wandGrade->getWandType->type }} — {{ $im->wandGrade->value }}
+											@else
+												{{ $im->wandGrade->value }}
+											@endif
+										@elseif ($im->grade)
+											#{{ $im->grade }}
+										@else
+											<span class="text-muted">All / not set</span>
+										@endif
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			@else
+				<p class="text-muted">No interests saved yet.</p>
+			@endif
+
+			<form method="POST" action="{{ route('save.user.interests', $user['id']) }}">
+				@csrf
+				<h4 style="margin-top:20px;">Edit interests</h4>
+				<div id="interest-rows">
+					@foreach ($interestEditRows ?? [] as $idx => $row)
+						@include('users.interest_row', ['idx' => $idx, 'row' => $row])
+					@endforeach
+				</div>
+				<p style="margin-top:10px;">
+					<button type="button" class="btn btn-default btn-sm" id="add-interest-row">Add line</button>
+					<button type="submit" class="btn btn-primary btn-sm">Save interests</button>
+				</p>
+			</form>
+
+			<div id="interest-row-skeleton" style="display:none;">
+				@include('users.interest_row', ['idx' => '__IDX__', 'row' => ['rice_type' => '', 'name_id' => '', 'form_id' => '', 'grades' => []]])
+			</div>
 		</div>
 
 		<!-- Personal Info -->
@@ -210,7 +289,108 @@ $(document).ready(function() {
 		// $('#imageModal').removeClass('fade')
 
 	});
-	
+
+	// --- Admin: rice interests (cascading selects) ---
+	var interestRowCounter = $('#interest-rows .interest-row').length;
+
+	function hydrateInterestRow($row) {
+		var type = $row.attr('data-initial-type');
+		if (!type) return;
+		var nid = String($row.attr('data-initial-name-id') || '');
+		var fid = String($row.attr('data-initial-form-id') || '');
+		var grades = $row.data('initial-grades');
+		if (!$.isArray(grades)) grades = [];
+
+		$row.find('.js-interest-rice-type').val(type);
+		var $name = $row.find('.js-interest-rice-name');
+		$.get(window.route + '/rice-form-map/ajax/rice-names/' + encodeURIComponent(type), function (data) {
+			$name.empty().append('<option value="">— Select —</option>');
+			$.each(data, function (id, label) {
+				$name.append($('<option>').val(id).text(label));
+			});
+			if (nid) $name.val(nid);
+			if (!nid) return;
+			$.get(window.route + '/user-interests/ajax/forms', { rice_name_id: nid, rice_type: type }, function (forms) {
+				var $form = $row.find('.js-interest-form');
+				$form.empty().append('<option value="">— Select —</option>');
+				$.each(forms, function (id, label) {
+					$form.append($('<option>').val(id).text(label));
+				});
+				if (fid) $form.val(fid);
+				if (!fid) return;
+				$.get(window.route + '/user-interests/ajax/wands', { rice_name_id: nid, form_id: fid }, function (wands) {
+					var $w = $row.find('.js-interest-wands');
+					$w.empty();
+					$.each(wands, function (id, label) {
+						$w.append($('<option>').val(id).text(label));
+					});
+					if (grades.length) {
+						$w.val($.map(grades, String));
+					}
+				});
+			});
+		});
+	}
+
+	$('#interest-rows .interest-row').each(function () {
+		hydrateInterestRow($(this));
+	});
+
+	$(document).on('change', '#interest-rows .js-interest-rice-type', function () {
+		var $row = $(this).closest('.interest-row');
+		var type = $(this).val();
+		var $name = $row.find('.js-interest-rice-name');
+		$name.empty().append('<option value="">— Select —</option>');
+		$row.find('.js-interest-form').empty().append('<option value="">— Select —</option>');
+		$row.find('.js-interest-wands').empty();
+		if (!type) return;
+		$.get(window.route + '/rice-form-map/ajax/rice-names/' + encodeURIComponent(type), function (data) {
+			$.each(data, function (id, label) {
+				$name.append($('<option>').val(id).text(label));
+			});
+		});
+	});
+
+	$(document).on('change', '#interest-rows .js-interest-rice-name', function () {
+		var $row = $(this).closest('.interest-row');
+		var rid = $(this).val();
+		var type = $row.find('.js-interest-rice-type').val();
+		var $form = $row.find('.js-interest-form');
+		$form.empty().append('<option value="">— Select —</option>');
+		$row.find('.js-interest-wands').empty();
+		if (!rid) return;
+		$.get(window.route + '/user-interests/ajax/forms', { rice_name_id: rid, rice_type: type || '' }, function (forms) {
+			$.each(forms, function (id, label) {
+				$form.append($('<option>').val(id).text(label));
+			});
+		});
+	});
+
+	$(document).on('change', '#interest-rows .js-interest-form', function () {
+		var $row = $(this).closest('.interest-row');
+		var rid = $row.find('.js-interest-rice-name').val();
+		var fid = $(this).val();
+		var $w = $row.find('.js-interest-wands');
+		$w.empty();
+		if (!rid || !fid) return;
+		$.get(window.route + '/user-interests/ajax/wands', { rice_name_id: rid, form_id: fid }, function (wands) {
+			$.each(wands, function (id, label) {
+				$w.append($('<option>').val(id).text(label));
+			});
+		});
+	});
+
+	$('#add-interest-row').on('click', function () {
+		var idx = 'n' + (++interestRowCounter) + '_' + Date.now();
+		var html = $('#interest-row-skeleton').html().replace(/__IDX__/g, idx);
+		var $new = $(html);
+		$new.attr('data-initial-type', '').attr('data-initial-name-id', '').attr('data-initial-form-id', '').attr('data-initial-grades', '[]');
+		$('#interest-rows').append($new);
+	});
+
+	$(document).on('click', '#interest-rows .js-remove-interest-row', function () {
+		$(this).closest('.interest-row').remove();
+	});
 });
 </script>
 @endsection
