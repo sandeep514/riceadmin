@@ -84,4 +84,68 @@ class UserInterestService
 
         return count($rows);
     }
+
+    /**
+     * Admin: add only new (rice_name_id, form_id, grade) rows; keep everything already saved.
+     * Use table "Delete" to remove rows; portal API still uses {@see syncForUser} full replace.
+     *
+     * @param  array<int, array{name_id?:int, form_id?:int, grades?:mixed}>  $interestedItems
+     */
+    public static function appendUniqueInterestsForUser(int $userId, array $interestedItems): int
+    {
+        $now = Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
+
+        $tupleKey = static function (int $nameId, int $formId, $grade): string {
+            $g = $grade === null || $grade === '' ? "\0null" : (string) (int) $grade;
+
+            return $nameId.'|'.$formId.'|'.$g;
+        };
+
+        $desired = [];
+        foreach ($interestedItems as $item) {
+            if (! isset($item['name_id'], $item['form_id'])) {
+                continue;
+            }
+            $nameId = (int) $item['name_id'];
+            $formId = (int) $item['form_id'];
+            if ($nameId <= 0 || $formId <= 0) {
+                continue;
+            }
+            foreach (self::normalizeGradeIds($item['grades'] ?? null) as $gradeId) {
+                $key = $tupleKey($nameId, $formId, $gradeId);
+                $desired[$key] = [
+                    'user_id' => $userId,
+                    'rice_name_id' => $nameId,
+                    'form_id' => $formId,
+                    'grade' => $gradeId,
+                    'status' => 1,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+        }
+
+        if ($desired === []) {
+            return 0;
+        }
+
+        $existingKeys = [];
+        foreach (UserInterestedMap::query()->where('user_id', $userId)->get(['rice_name_id', 'form_id', 'grade']) as $row) {
+            $existingKeys[$tupleKey((int) $row->rice_name_id, (int) $row->form_id, $row->grade)] = true;
+        }
+
+        $toInsert = [];
+        foreach ($desired as $key => $payload) {
+            if (! isset($existingKeys[$key])) {
+                $toInsert[] = $payload;
+                $existingKeys[$key] = true;
+            }
+        }
+
+        if ($toInsert !== []) {
+            UserInterestedMap::insert($toInsert);
+        }
+
+        return count($toInsert);
+    }
 }

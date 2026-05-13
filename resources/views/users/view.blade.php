@@ -52,7 +52,7 @@
 		{{-- Rice / portal interests (user_interested_map_table) --}}
 		<div class="section">
 			<h3>Rice interests</h3>
-			<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> on a row below to remove that line immediately. In the editor, incomplete lines are ignored when saving; you can remove all lines and save to clear everything.</p>
+			<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> in the table to remove a saved row. The form below <strong>adds</strong> new rice + form + wand combinations; anything already saved is kept (duplicates are skipped). To change wands for an existing rice + form, delete those rows in the table first, then add the new combination here.</p>
 
 			@if (isset($interestedMaps) && $interestedMaps->isNotEmpty())
 				<div class="table-responsive" style="margin-bottom:16px;">
@@ -101,7 +101,8 @@
 
 			<form method="POST" action="{{ route('save.user.interests', $user['id']) }}">
 				@csrf
-				<h4 style="margin-top:20px;">Edit interests</h4>
+				<h4 style="margin-top:20px;">Add more interests</h4>
+				<p class="text-muted small">Use <strong>Add line</strong> for another rice (e.g. 1401) without losing what is already saved (e.g. 1121). <strong>Save</strong> only inserts new rows.</p>
 				<div id="interest-rows">
 					@foreach ($interestEditRows ?? [] as $idx => $row)
 						@include('users.interest_row', ['idx' => $idx, 'row' => $row])
@@ -109,7 +110,7 @@
 				</div>
 				<p style="margin-top:10px;">
 					<button type="button" class="btn btn-default btn-sm" id="add-interest-row">Add line</button>
-					<button type="submit" class="btn btn-primary btn-sm">Save interests</button>
+					<button type="submit" class="btn btn-primary btn-sm">Save new interests</button>
 				</p>
 			</form>
 

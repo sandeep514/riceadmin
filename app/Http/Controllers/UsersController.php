@@ -158,7 +158,7 @@ class UsersController extends Controller
     }
 
     /**
-     * Admin: replace web user's rice interests (same storage as portal).
+     * Admin: add new rice interest rows only (does not remove existing; duplicates skipped).
      */
     public function saveUserInterests(Request $request, $userId)
     {
@@ -210,9 +210,19 @@ class UsersController extends Controller
             }
         }
 
+        if (count($cleaned) === 0) {
+            Session::flash('error', 'Error|Nothing to add — select rice name and form on at least one line. Existing interests are kept. Use Delete in the table above to remove saved rows.');
+
+            return redirect()->route('view.user', $userId);
+        }
+
         try {
-            $count = UserInterestService::syncForUser((int) $userId, $cleaned);
-            Session::flash('success', 'Success|User interests saved ('.$count.' row(s)).');
+            $added = UserInterestService::appendUniqueInterestsForUser((int) $userId, $cleaned);
+            if ($added === 0) {
+                Session::flash('success', 'Success|No new combinations to add (already on file). Existing rows were unchanged.');
+            } else {
+                Session::flash('success', 'Success|Added '.$added.' new interest row(s). Previous entries were kept.');
+            }
         } catch (\Throwable $e) {
             Session::flash('error', 'Error|Could not save interests: '.$e->getMessage());
         }
