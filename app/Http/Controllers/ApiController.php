@@ -86,6 +86,30 @@ use App\WebBusinessDetails;
 
 class ApiController extends Controller
 {
+    /**
+     * Latest live-price edit time across all states (not per viewed state).
+     * Optionally limited to a crop year when the API is year-scoped.
+     */
+    protected function livePricesGlobalLastUpdatedAtFormatted($cropYear = null): string
+    {
+        $appTz = config('app.timezone', 'Asia/Kolkata');
+        $q = LivePrice::query()
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price');
+
+        if ($cropYear !== null && $cropYear !== '' && is_numeric($cropYear)) {
+            $q->where('cropYear', (int) $cropYear);
+        }
+
+        $row = $q->orderByDesc('updated_at')->orderByDesc('id')->first();
+
+        return ($row && $row->updated_at)
+            ? $row->updated_at->copy()->setTimezone($appTz)->format('d-M-Y, g:i A')
+            : '';
+    }
+
     public function getWebOtherServices()
     {
         $bagVendor = BagVendors::vendorType();
@@ -751,7 +775,7 @@ class ApiController extends Controller
                     'errors' => null,
                     'prices' => $myNewData,
                     'latest' => $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => $lastRecord->updated_at->format('d-M-Y, g:i A'),
+                    'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted(null),
                     'oldDate' => $lastToLastDate[0]->created_at->format('Y-m-d')
                 ]);
             }
@@ -1010,19 +1034,11 @@ class ApiController extends Controller
                         }
                     }
                 }
-                $appTz = config('app.timezone', 'Asia/Kolkata');
-                $latestEnteredRecord = LivePrice::query()
-                    ->where('state', $state)
-                    ->whereDate('updated_at', $latstRecord)
-                    ->orderBy('updated_at', 'desc')
-                    ->first();
                 return response()->json([
                     'errors' => null,
                     'prices' => $myNewData,
                     'latest' => ($startYear != '' && $endYear != '')? $recordDate : $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => ($latestEnteredRecord && $latestEnteredRecord->updated_at)
-                        ? $latestEnteredRecord->updated_at->copy()->setTimezone($appTz)->format('d-M-Y, g:i A')
-                        : '',
+                    'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted(null),
                     'oldDate' => $lastToLastDate->created_at->format('Y-m-d')
                 ]);
             }
@@ -1266,21 +1282,11 @@ class ApiController extends Controller
                     }
                 }
 
-                $appTz = config('app.timezone', 'Asia/Kolkata');
-                $latestEnteredRecord = LivePrice::query()
-                    ->where('state', $state)
-                    ->when($cropYear, fn($q) => $q->where('cropYear', $cropYear))
-                    ->whereDate('updated_at', $lastRecord->created_at->copy()->setTimezone($appTz)->format('Y-m-d'))
-                    ->orderBy('updated_at', 'desc')
-                    ->first();
-
                 return response()->json([
                     'errors' => null,
                     'prices' => $myNewData,
                     'latest' => $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => ($latestEnteredRecord && $latestEnteredRecord->updated_at)
-                        ? $latestEnteredRecord->updated_at->copy()->setTimezone($appTz)->format('d-M-Y, g:i A')
-                        : '',
+                    'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
                     'oldDate' => $lastToLastDate->created_at->format('Y-m-d')
                 ]);
             }
@@ -1959,7 +1965,6 @@ class ApiController extends Controller
         $lastEnteredRecord = $lastRecord->first();
 
         if (!$lastEnteredRecord) {
-            $appTz = config('app.timezone', 'Asia/Kolkata');
             $latestForMeta = LivePrice::query()
                 ->where('state', $state)
                 ->where('cropYear', $cropYear)
@@ -1975,9 +1980,7 @@ class ApiController extends Controller
                 'latest' => $latestForMeta
                     ? Carbon::parse($latestForMeta->created_at)->format('Y-m-d')
                     : $todayDate->format('Y-m-d'),
-                'lastUpdatedDate' => ($latestForMeta && $latestForMeta->updated_at)
-                    ? $latestForMeta->updated_at->copy()->setTimezone($appTz)->format('d-M-Y, g:i A')
-                    : '',
+                'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
             ]);
         }
 
@@ -2188,23 +2191,13 @@ class ApiController extends Controller
             }
         }
 
-        $appTz = config('app.timezone', 'Asia/Kolkata');
-        $latestEnteredRecord = LivePrice::query()
-            ->where('state', $state)
-            ->where('cropYear', $cropYear)
-            ->whereDate('updated_at', Carbon::parse($lastEnteredRecord->created_at)->setTimezone($appTz)->format('Y-m-d'))
-            ->orderBy('updated_at', 'desc')
-            ->first();
-
         return response()->json([
             'errors' => null,
             'livePriceStatusMessage' => $LivePriceStatusMessage,
             'prices' => $processedData,
             'closing' => [$ricetype => $livePricesClosingOpening],
             'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
-            'lastUpdatedDate' => ($latestEnteredRecord && $latestEnteredRecord->updated_at)
-                ? $latestEnteredRecord->updated_at->copy()->setTimezone($appTz)->format('d-M-Y, g:i A')
-                : '',
+            'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
         ]);
     }
 
