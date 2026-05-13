@@ -52,7 +52,7 @@
 		{{-- Rice / portal interests (user_interested_map_table) --}}
 		<div class="section">
 			<h3>Rice interests</h3>
-			<p class="text-muted">Saved preferences used by the web portal. Incomplete lines are ignored when saving. To clear everything, remove all lines with the Remove button and click <strong>Save interests</strong>.</p>
+			<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> on a row below to remove that line immediately. In the editor, incomplete lines are ignored when saving; you can remove all lines and save to clear everything.</p>
 
 			@if (isset($interestedMaps) && $interestedMaps->isNotEmpty())
 				<div class="table-responsive" style="margin-bottom:16px;">
@@ -62,6 +62,7 @@
 								<th>Rice name</th>
 								<th>Form</th>
 								<th>Wand / grade</th>
+								<th style="width:100px;">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -81,6 +82,13 @@
 										@else
 											<span class="text-muted">All / not set</span>
 										@endif
+									</td>
+									<td>
+										<form method="POST" action="{{ route('delete.user.interest.row', $user['id']) }}" style="display:inline;" onsubmit="return confirm('Delete this interest row?');">
+											@csrf
+											<input type="hidden" name="map_id" value="{{ $im->id }}">
+											<button type="submit" class="btn btn-danger btn-xs">Delete</button>
+										</form>
 									</td>
 								</tr>
 							@endforeach

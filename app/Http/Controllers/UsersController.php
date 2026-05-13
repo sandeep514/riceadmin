@@ -220,6 +220,39 @@ class UsersController extends Controller
         return redirect()->route('view.user', $userId);
     }
 
+    /**
+     * Admin: delete one user_interested_map_table row by id (summary table action).
+     */
+    public function deleteUserInterestRow(Request $request, $userId)
+    {
+        $request->validate([
+            'map_id' => 'required|integer',
+        ]);
+
+        $user = User::find($userId);
+        if (! $user) {
+            Session::flash('error', 'Error|User not found.');
+
+            return redirect()->back();
+        }
+
+        $map = UserInterestedMap::query()
+            ->where('id', (int) $request->input('map_id'))
+            ->where('user_id', (int) $userId)
+            ->first();
+
+        if (! $map) {
+            Session::flash('error', 'Error|That interest row was not found for this user.');
+
+            return redirect()->route('view.user', $userId);
+        }
+
+        $map->delete();
+        Session::flash('success', 'Success|Interest row deleted.');
+
+        return redirect()->route('view.user', $userId);
+    }
+
     public function rejectUser(Request $request)
     {
         $userId = $request->userId;
