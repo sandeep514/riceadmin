@@ -82,6 +82,7 @@ use App\PostedJob;
 use App\JobApplication;
 use App\TradeCategoryMap;
 use App\WebBusinessDetails;
+use App\Services\UserInterestService;
 
 
 class ApiController extends Controller
@@ -6228,6 +6229,7 @@ if (!file_exists('uploads')) {
 
         $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
         $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
+        $allTrade = UserInterestService::orderTradesWithUserInterestsFirst($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $trade = $allTrade;
@@ -6235,7 +6237,14 @@ if (!file_exists('uploads')) {
 
         $tradeStatus = TradeCurrentStatus::first();
 
-        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+        return response()->json([
+            'status' => true,
+            'data' => $trade,
+            'allTrade' => $allTrade,
+            'currentStatus' => $tradeStatus['currentStatus'],
+            'statusMessage' => $tradeStatus['message'],
+            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
+        ]);
     }
 
     /**

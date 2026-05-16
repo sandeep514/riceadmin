@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\UserInterestedMap;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class UserInterestService
@@ -147,5 +148,141 @@ class UserInterestService
         }
 
         return count($toInsert);
+    }
+
+    /**
+     * Active portal interest rows for a user (rice name, form, optional wand grade).
+     *
+     * @return array<int, array{rice_name_id: int, form_id: int, grade: int|null}>
+     */
+    public static function getActiveInterestTuplesForUser(int $userId): array
+    {
+        return UserInterestedMap::query()
+            ->where('user_id', $userId)
+            ->where('status', 1)
+            ->get(['rice_name_id', 'form_id', 'grade'])
+            ->map(function ($row) {
+                $grade = $row->grade;
+                if ($grade === null || $grade === '') {
+                    return [
+                        'rice_name_id' => (int) $row->rice_name_id,
+                        'form_id' => (int) $row->form_id,
+                        'grade' => null,
+                    ];
+                }
+
+                return [
+                    'rice_name_id' => (int) $row->rice_name_id,
+                    'form_id' => (int) $row->form_id,
+                    'grade' => (int) $grade,
+                ];
+            })
+            ->values()
+            ->all();
+    }
+
+    /**
+     * Match trade against user interests (trade.quality = rice name, form fields = form, grade = wand).
+     * 3 = name + form + grade, 2 = name + form (interest has no specific grade), 0 = no match.
+     */
+    public static function scoreTradeAgainstInterests(object $trade, array $tuples): int
+    {
+        if ($tuples === []) {
+            return 0;
+        }
+
+        $quality = (int) ($trade->quality ?? 0);
+        if ($quality <= 0) {
+            return 0;
+        }
+
+        $tradeFormIds = array_values(array_unique(array_filter([
+            (int) ($trade->qualityForm ?? 0),
+            (int) ($trade->qualityFormLinkWithLivePrice ?? 0),
+        ])));
+
+        $tradeGrade = (int) ($trade->grade ?? 0);
+        $best = 0;
+
+        foreach ($tuples as $tuple) {
+            if ($quality !== $tuple['rice_name_id']) {
+                continue;
+            }
+            if (! in_array($tuple['form_id'], $tradeFormIds, true)) {
+                continue;
+            }
+            if ($tuple['grade'] !== null) {
+                if ($tradeGrade === $tuple['grade']) {
+                    $best = max($best, 3);
+                }
+            } else {
+                $best = max($best, 2);
+            }
+        }
+
+        return $best;
+    }
+
+    /**
+     * Active trade statuses for web listing (Pending, In-Process, Active).
+     */
+    public static function webActiveTradeStatusIds(): array
+    {
+        return [1, 4, 6];
+    }
+
+    /**
+     * Put active trades matching user interests first; preserve SQL order within each group.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return Collection
+     */
+    public static function orderTradesWithUserInterestsFirst($trades, int $userId): Collection
+    {
+        $collection = $trades instanceof Collection ? $trades : collect($trades);
+        $tuples = self::getActiveInterestTuplesForUser($userId);
+
+        if ($tuples === [] || $collection->isEmpty()) {
+            return $collection->values();
+        }
+
+        $activeStatuses = self::webActiveTradeStatusIds();
+        $scored = [];
+
+        foreach ($collection->values() as $index => $trade) {
+            $matchScore = self::scoreTradeAgainstInterests($trade, $tuples);
+            $isActive = in_array((int) $trade->status, $activeStatuses, true);
+
+            if ($isActive && $matchScore > 0) {
+                $tier = 1;
+            } elseif ($isActive) {
+                $tier = 2;
+            } else {
+                $tier = 3;
+            }
+
+            $trade->setAttribute('interest_match_score', $matchScore);
+            $trade->setAttribute('matches_user_interest', $matchScore > 0);
+
+            $scored[] = [
+                'trade' => $trade,
+                'tier' => $tier,
+                'score' => $matchScore,
+                'index' => $index,
+            ];
+        }
+
+        usort($scored, function ($a, $b) {
+            if ($a['tier'] !== $b['tier']) {
+                return $a['tier'] <=> $b['tier'];
+            }
+            if ($a['score'] !== $b['score']) {
+                return $b['score'] <=> $a['score'];
+            }
+
+            return $a['index'] <=> $b['index'];
+        });
+
+        return collect(array_map(static fn (array $row) => $row['trade'], $scored));
     }
 }
