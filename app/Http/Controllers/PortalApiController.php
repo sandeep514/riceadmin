@@ -2378,21 +2378,89 @@ class PortalApiController extends Controller
     }
 
     /**
-     * API 2: Get list of rice forms from rice_form_milestone3 table
+     * API 2: Rice forms for a rice name from user_interested_map_table.
+     * GET portal/interested/rice-form?riceId={id}&user_id={optional}
      */
     public function getRiceFormsList(Request $request)
     {
-        $query = RiceFormMilestone3::where('status', 1);
+        $riceId = $request->input('riceId', $request->input('rice_id'));
 
-        $forms = $query
+        $validator = Validator::make(
+            array_merge($request->all(), ['riceId' => $riceId]),
+            [
+                'riceId' => 'required|integer|exists:rice_names,id',
+                'user_id' => 'nullable|integer|exists:users,id',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $riceId = (int) $riceId;
+
+        $mapQuery = UserInterestedMap::query()
+            ->where('rice_name_id', $riceId)
+            ->where('status', 1);
+
+        if ($request->filled('user_id')) {
+            $mapQuery->where('user_id', (int) $request->user_id);
+        }
+
+        $interestRows = $mapQuery->get(['form_id', 'grade']);
+
+        $formIds = $interestRows
+            ->pluck('form_id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->unique()
+            ->values();
+
+        if ($formIds->isEmpty()) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Rice forms fetched successfully.',
+                'data' => [],
+                'selected' => (object) [],
+                'rice_id' => $riceId,
+            ]);
+        }
+
+        $forms = RiceFormMilestone3::query()
+            ->where('status', 1)
+            ->whereIn('id', $formIds->all())
             ->orderBy('order', 'asc')
             ->orderBy('id', 'asc')
             ->get(['id', 'name', 'order', 'status']);
 
+        $selected = (object) [];
+        if ($request->filled('user_id')) {
+            $selected = $interestRows
+                ->groupBy('form_id')
+                ->map(function ($items) {
+                    return $items
+                        ->pluck('grade')
+                        ->filter(fn ($g) => $g !== null && $g !== '')
+                        ->map(fn ($g) => (int) $g)
+                        ->unique()
+                        ->values();
+                });
+
+            if ($selected->isEmpty()) {
+                $selected = (object) [];
+            }
+        }
+
         return response()->json([
-            'status'  => true,
+            'status' => true,
             'message' => 'Rice forms fetched successfully.',
-            'data'    => $forms,
+            'data' => $forms,
+            'selected' => $selected,
+            'rice_id' => $riceId,
         ]);
     }
 

@@ -26,6 +26,7 @@
 
         // Interested functionality APIs
         Route::get('interested/rice-qualities', [PortalApiController::class, 'getRiceQualitiesList']);
+        Route::get('interested/rice-form', [PortalApiController::class, 'getRiceFormsList']);
         Route::get('interested/rice-forms', [PortalApiController::class, 'getRiceFormsList']);
         Route::post('interested/wands', [PortalApiController::class, 'getWandsByRiceFormMap']);
         Route::post('interested/save', [PortalApiController::class, 'saveUserInterestedMap']);
