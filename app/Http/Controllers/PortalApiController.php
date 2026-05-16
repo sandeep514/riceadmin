@@ -2336,8 +2336,10 @@ class PortalApiController extends Controller
             ->get(['id', 'name', 'type','order']);
 
         $selected = (object) [];
+        $canEditByAdmin = null;
         if ($request->filled('user_id')) {
-            $rows = UserInterestedMap::where('user_id', (int) $request->user_id)
+            $userId = (int) $request->user_id;
+            $rows = UserInterestedMap::where('user_id', $userId)
                 ->where('status', 1)
                 ->get(['rice_name_id', 'form_id', 'grade']);
 
@@ -2359,6 +2361,11 @@ class PortalApiController extends Controller
             if ($selected->isEmpty()) {
                 $selected = (object) [];
             }
+
+            $user = User::find($userId);
+            if ($user) {
+                $canEditByAdmin = (int) ($user->can_edit_by_admin ?? 0);
+            }
         }
 
         return response()->json([
@@ -2366,6 +2373,7 @@ class PortalApiController extends Controller
             'message'  => 'Rice qualities fetched successfully.',
             'data'     => $riceNames,
             'selected' => $selected,
+            'can_edit_by_admin' => $canEditByAdmin,
         ]);
     }
 
@@ -2454,6 +2462,8 @@ class PortalApiController extends Controller
             array_merge($request->all(), ['interested' => $interestedItems]),
             [
                 'user_id' => 'required|exists:users,id',
+                // 1 = let SNTC approve search experience; 0 = user manages interests themselves
+                'can_edit_by_admin' => 'required|in:0,1',
                 'interested' => 'required|array|min:1',
                 'interested.*.name_id' => 'required|exists:rice_names,id',
                 'interested.*.form_id' => 'required|exists:rice_form_milestone3,id',
@@ -2471,8 +2481,11 @@ class PortalApiController extends Controller
         }
 
         $userId = (int) $request->user_id;
+        $canEditByAdmin = (int) $request->input('can_edit_by_admin');
 
         try {
+            User::where('id', $userId)->update(['can_edit_by_admin' => $canEditByAdmin]);
+
             $savedCount = \App\Services\UserInterestService::syncForUser($userId, $interestedItems);
 
             return response()->json([
@@ -2481,6 +2494,7 @@ class PortalApiController extends Controller
                 'data' => [
                     'user_id' => $userId,
                     'saved_count' => $savedCount,
+                    'can_edit_by_admin' => $canEditByAdmin,
                 ],
             ]);
         } catch (Exception $e) {

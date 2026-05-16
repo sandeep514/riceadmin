@@ -48,6 +48,7 @@ class User extends Authenticatable
         'planId',
         'user_from',
         'userType',
+        'can_edit_by_admin',
         'stripe_customer_id',
         'stripe_payment_method'
     ];
@@ -74,6 +75,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'can_edit_by_admin' => 'integer',
     ];
 
     public function role_rel()

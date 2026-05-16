@@ -52,6 +52,17 @@
 		{{-- Rice / portal interests (user_interested_map_table) --}}
 		<div class="section">
 			<h3>Rice interests</h3>
+			@php
+				$canEditByAdmin = (int) ($user['can_edit_by_admin'] ?? 0);
+			@endphp
+			<p class="text-muted" style="margin-bottom:12px;">
+				<strong>Search experience preference:</strong>
+				@if ($canEditByAdmin === 1)
+					Let SNTC approve my search experience (admin may manage interests).
+				@else
+					I will do it myself (user manages interests on the portal).
+				@endif
+			</p>
 			<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> in the table to remove a saved row. The form below <strong>adds</strong> new rice + form + wand combinations; anything already saved is kept (duplicates are skipped). To change wands for an existing rice + form, delete those rows in the table first, then add the new combination here.</p>
 
 			@if (isset($interestedMaps) && $interestedMaps->isNotEmpty())
