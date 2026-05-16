@@ -54,6 +54,7 @@
 			<h3>Rice interests</h3>
 			@php
 				$canEditByAdmin = (int) ($user['can_edit_by_admin'] ?? 0);
+				$canAdminManageInterests = $canAdminManageInterests ?? ($canEditByAdmin === 1);
 			@endphp
 			<p class="text-muted" style="margin-bottom:12px;">
 				<strong>Search experience preference:</strong>
@@ -63,7 +64,11 @@
 					I will do it myself (user manages interests on the portal).
 				@endif
 			</p>
-			<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> in the table to remove a saved row. The form below <strong>adds</strong> new rice + form + wand combinations; anything already saved is kept (duplicates are skipped). To change wands for an existing rice + form, delete those rows in the table first, then add the new combination here.</p>
+			@if ($canAdminManageInterests)
+				<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> in the table to remove a saved row. The form below <strong>adds</strong> new rice + form + wand combinations; anything already saved is kept (duplicates are skipped). To change wands for an existing rice + form, delete those rows in the table first, then add the new combination here.</p>
+			@else
+				<p class="text-muted">Read-only: this user chose to manage their own search experience. Interests are shown below for reference only.</p>
+			@endif
 
 			@if (isset($interestedMaps) && $interestedMaps->isNotEmpty())
 				<div class="table-responsive" style="margin-bottom:16px;">
@@ -73,7 +78,9 @@
 								<th>Rice name</th>
 								<th>Form</th>
 								<th>Wand / grade</th>
-								<th style="width:100px;">Actions</th>
+								@if ($canAdminManageInterests)
+									<th style="width:100px;">Actions</th>
+								@endif
 							</tr>
 						</thead>
 						<tbody>
@@ -94,13 +101,15 @@
 											<span class="text-muted">All / not set</span>
 										@endif
 									</td>
-									<td>
-										<form method="POST" action="{{ route('delete.user.interest.row', $user['id']) }}" style="display:inline;" onsubmit="return confirm('Delete this interest row?');">
-											@csrf
-											<input type="hidden" name="map_id" value="{{ $im->id }}">
-											<button type="submit" class="btn btn-danger btn-xs">Delete</button>
-										</form>
-									</td>
+									@if ($canAdminManageInterests)
+										<td>
+											<form method="POST" action="{{ route('delete.user.interest.row', $user['id']) }}" style="display:inline;" onsubmit="return confirm('Delete this interest row?');">
+												@csrf
+												<input type="hidden" name="map_id" value="{{ $im->id }}">
+												<button type="submit" class="btn btn-danger btn-xs">Delete</button>
+											</form>
+										</td>
+									@endif
 								</tr>
 							@endforeach
 						</tbody>
@@ -110,6 +119,7 @@
 				<p class="text-muted">No interests saved yet.</p>
 			@endif
 
+			@if ($canAdminManageInterests)
 			<form method="POST" action="{{ route('save.user.interests', $user['id']) }}">
 				@csrf
 				<h4 style="margin-top:20px;">Add more interests</h4>
@@ -128,6 +138,7 @@
 			<div id="interest-row-skeleton" style="display:none;">
 				@include('users.interest_row', ['idx' => '__IDX__', 'row' => ['rice_type' => '', 'name_id' => '', 'form_id' => '', 'grades' => []]])
 			</div>
+			@endif
 		</div>
 
 		<!-- Personal Info -->
@@ -310,6 +321,7 @@ $(document).ready(function() {
 
 	});
 
+	@if (!empty($canAdminManageInterests))
 	// --- Admin: rice interests (cascading selects) ---
 	var interestRowCounter = $('#interest-rows .interest-row').length;
 
@@ -411,6 +423,7 @@ $(document).ready(function() {
 	$(document).on('click', '#interest-rows .js-remove-interest-row', function () {
 		$(this).closest('.interest-row').remove();
 	});
+	@endif
 });
 </script>
 @endsection

@@ -144,7 +144,9 @@ class UsersController extends Controller
             ->values()
             ->all();
 
-        if ($interestEditRows === []) {
+        $canAdminManageInterests = (int) ($userModel->can_edit_by_admin ?? 0) === 1;
+
+        if ($canAdminManageInterests && $interestEditRows === []) {
             $interestEditRows = [
                 ['rice_type' => '', 'name_id' => '', 'form_id' => '', 'grades' => []],
             ];
@@ -154,7 +156,16 @@ class UsersController extends Controller
             'user' => $userModel->toArray(),
             'interestedMaps' => $interestedMaps,
             'interestEditRows' => $interestEditRows,
+            'canAdminManageInterests' => $canAdminManageInterests,
         ]);
+    }
+
+    /**
+     * User chose "let SNTC approve" (can_edit_by_admin = 1); otherwise admin may only view interests.
+     */
+    private function userAllowsAdminInterestManagement(User $user): bool
+    {
+        return (int) ($user->can_edit_by_admin ?? 0) === 1;
     }
 
     /**
@@ -167,6 +178,12 @@ class UsersController extends Controller
             Session::flash('error', 'Error|User not found.');
 
             return redirect()->back();
+        }
+
+        if (! $this->userAllowsAdminInterestManagement($user)) {
+            Session::flash('error', 'Error|This user manages their own interests. Admin cannot add or change them.');
+
+            return redirect()->route('view.user', $userId);
         }
 
         $interested = $request->input('interested', []);
@@ -244,6 +261,12 @@ class UsersController extends Controller
             Session::flash('error', 'Error|User not found.');
 
             return redirect()->back();
+        }
+
+        if (! $this->userAllowsAdminInterestManagement($user)) {
+            Session::flash('error', 'Error|This user manages their own interests. Admin cannot delete them.');
+
+            return redirect()->route('view.user', $userId);
         }
 
         $map = UserInterestedMap::query()
