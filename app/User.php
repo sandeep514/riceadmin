@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
 use Carbon\Carbon;
 
 class User extends Authenticatable
@@ -137,5 +138,27 @@ class User extends Authenticatable
     public function interestedMaps()
     {
         return $this->hasMany(UserInterestedMap::class, 'user_id');
+    }
+
+    /**
+     * 1 = user asked SNTC to approve / manage search experience (admin may edit interests).
+     * 0 = user manages interests themselves (admin read-only).
+     */
+    public function allowsAdminInterestManagement(): bool
+    {
+        if (! Schema::hasColumn($this->getTable(), 'can_edit_by_admin')) {
+            return false;
+        }
+
+        return (int) $this->getAttribute('can_edit_by_admin') === 1;
+    }
+
+    public function canEditByAdminFlag(): int
+    {
+        if (! Schema::hasColumn($this->getTable(), 'can_edit_by_admin')) {
+            return 0;
+        }
+
+        return (int) $this->getAttribute('can_edit_by_admin');
     }
 }

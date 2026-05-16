@@ -46,25 +46,22 @@
 				<tr><th>USD Active</th><td>{{ ($user['is_usd_active'] ?? 0) ? 'Yes' : 'No' }}</td></tr>
 				<tr><th>Created At</th><td>{{ $user['created_at'] ?? '-' }}</td></tr>
 				<tr><th>Updated At</th><td>{{ $user['updated_at'] ?? '-' }}</td></tr>
+				<tr><th>Can edit by admin</th><td>{{ ($canEditByAdmin ?? 0) === 1 ? 'Yes (1)' : 'No (0)' }}</td></tr>
 			</table>
 		</div>
 
 		{{-- Rice / portal interests (user_interested_map_table) --}}
 		<div class="section">
 			<h3>Rice interests</h3>
-			@php
-				$canEditByAdmin = (int) ($user['can_edit_by_admin'] ?? 0);
-				$canAdminManageInterests = $canAdminManageInterests ?? ($canEditByAdmin === 1);
-			@endphp
 			<p class="text-muted" style="margin-bottom:12px;">
 				<strong>Search experience preference:</strong>
-				@if ($canEditByAdmin === 1)
+				@if (($canEditByAdmin ?? 0) === 1)
 					Let SNTC approve my search experience (admin may manage interests).
 				@else
 					I will do it myself (user manages interests on the portal).
 				@endif
 			</p>
-			@if ($canAdminManageInterests)
+			@if ($canAdminManageInterests === true)
 				<p class="text-muted">Saved preferences used by the web portal. Use <strong>Delete</strong> in the table to remove a saved row. The form below <strong>adds</strong> new rice + form + wand combinations; anything already saved is kept (duplicates are skipped). To change wands for an existing rice + form, delete those rows in the table first, then add the new combination here.</p>
 			@else
 				<p class="text-muted">Read-only: this user chose to manage their own search experience. Interests are shown below for reference only.</p>
@@ -78,7 +75,7 @@
 								<th>Rice name</th>
 								<th>Form</th>
 								<th>Wand / grade</th>
-								@if ($canAdminManageInterests)
+								@if ($canAdminManageInterests === true)
 									<th style="width:100px;">Actions</th>
 								@endif
 							</tr>
@@ -101,7 +98,7 @@
 											<span class="text-muted">All / not set</span>
 										@endif
 									</td>
-									@if ($canAdminManageInterests)
+									@if ($canAdminManageInterests === true)
 										<td>
 											<form method="POST" action="{{ route('delete.user.interest.row', $user['id']) }}" style="display:inline;" onsubmit="return confirm('Delete this interest row?');">
 												@csrf
@@ -119,7 +116,7 @@
 				<p class="text-muted">No interests saved yet.</p>
 			@endif
 
-			@if ($canAdminManageInterests)
+			@if ($canAdminManageInterests === true)
 			<form method="POST" action="{{ route('save.user.interests', $user['id']) }}">
 				@csrf
 				<h4 style="margin-top:20px;">Add more interests</h4>
@@ -321,7 +318,7 @@ $(document).ready(function() {
 
 	});
 
-	@if (!empty($canAdminManageInterests))
+	@if ($canAdminManageInterests === true)
 	// --- Admin: rice interests (cascading selects) ---
 	var interestRowCounter = $('#interest-rows .interest-row').length;
 

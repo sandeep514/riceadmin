@@ -144,7 +144,8 @@ class UsersController extends Controller
             ->values()
             ->all();
 
-        $canAdminManageInterests = (int) ($userModel->can_edit_by_admin ?? 0) === 1;
+        $canAdminManageInterests = $userModel->allowsAdminInterestManagement();
+        $canEditByAdmin = $userModel->canEditByAdminFlag();
 
         if ($canAdminManageInterests && $interestEditRows === []) {
             $interestEditRows = [
@@ -152,20 +153,23 @@ class UsersController extends Controller
             ];
         }
 
+        $userArray = $userModel->toArray();
+        $userArray['can_edit_by_admin'] = $canEditByAdmin;
+
         return view('users.view', [
-            'user' => $userModel->toArray(),
+            'user' => $userArray,
             'interestedMaps' => $interestedMaps,
             'interestEditRows' => $interestEditRows,
             'canAdminManageInterests' => $canAdminManageInterests,
+            'canEditByAdmin' => $canEditByAdmin,
         ]);
     }
 
-    /**
-     * User chose "let SNTC approve" (can_edit_by_admin = 1); otherwise admin may only view interests.
-     */
     private function userAllowsAdminInterestManagement(User $user): bool
     {
-        return (int) ($user->can_edit_by_admin ?? 0) === 1;
+        $fresh = $user->fresh();
+
+        return $fresh ? $fresh->allowsAdminInterestManagement() : false;
     }
 
     /**
