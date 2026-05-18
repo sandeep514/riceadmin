@@ -28,6 +28,7 @@ use App\Category;
 use App\CategoryRoleMap;
 use App\TradeCategoryMap;
 use App\Services\TradeWebNotificationService;
+use App\Services\UserInterestService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -197,7 +198,9 @@ class TradeController extends Controller
         $tradeQuery = TradeQueriesINR::create($data);
         $this->syncTradeCategoryMaps($tradeQuery->id, $request->input('category_ids', []));
         $notifyNote = $this->dispatchTradeWebNotification($tradeQuery, $request);
-        Session::flash('success', 'Success|Trade saved successfully!' . ($notifyNote ? ' ' . $notifyNote : ''));
+        $interestNotifyNote = $this->dispatchTradeInterestNotification($tradeQuery, $request);
+        $flashNotes = trim($notifyNote . ' ' . $interestNotifyNote);
+        Session::flash('success', 'Success|Trade saved successfully!' . ($flashNotes !== '' ? ' ' . $flashNotes : ''));
         if( $request->has('heart') ){
             for( $i = 1 ; $i <= $request->heart ;$i++ ){
                 TradeLike::create([
@@ -522,5 +525,75 @@ class TradeController extends Controller
             ->get(['id', 'name', 'mobile', 'email']);
 
         return response()->json(['status' => true, 'data' => $users]);
+    }
+
+    /**
+     * JSON: web users whose saved interests match trade quality + form + grade.
+     */
+    public function getInterestedUsersForTradeJson(Request $request)
+    {
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'quality' => 'required|integer|exists:rice_names,id',
+            'riceform' => 'required|integer|exists:rice_form_milestone3,id',
+            'ricegrade' => 'required|integer|exists:wand,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $users = UserInterestService::webUsersWithExactInterest(
+            (int) $request->input('quality'),
+            (int) $request->input('riceform'),
+            (int) $request->input('ricegrade')
+        );
+
+        return response()->json([
+            'status' => true,
+            'data' => $users->map(function ($u) {
+                return [
+                    'id' => $u->id,
+                    'name' => $u->name,
+                    'mobile' => $u->mobile,
+                    'email' => $u->email,
+                ];
+            })->values(),
+            'count' => $users->count(),
+        ]);
+    }
+
+    /**
+     * @return string Optional note appended to success toast.
+     */
+    protected function dispatchTradeInterestNotification(TradeQueriesINR $trade, Request $request): string
+    {
+        if ((string) $request->input('trade_interest_notify_send', '0') !== '1') {
+            return '';
+        }
+
+        $raw = $request->input('trade_interest_notify_user_ids', []);
+        $userIds = is_array($raw) ? array_values(array_filter(array_map('intval', $raw))) : [];
+        if ($userIds === []) {
+            return '(Interest notification not sent: no users selected.)';
+        }
+
+        $title = (string) $request->input('trade_interest_notify_title', 'Special trade alert');
+        $message = (string) $request->input(
+            'trade_interest_notify_message',
+            TradeWebNotificationService::DEFAULT_TRADE_INTEREST_NOTIFY_MESSAGE
+        );
+        if (trim($message) === '') {
+            $message = TradeWebNotificationService::DEFAULT_TRADE_INTEREST_NOTIFY_MESSAGE;
+        }
+
+        /** @var TradeWebNotificationService $svc */
+        $svc = app(TradeWebNotificationService::class);
+        $svc->sendInterestMatch($trade, $userIds, $title, $message);
+
+        return '';
     }
 }

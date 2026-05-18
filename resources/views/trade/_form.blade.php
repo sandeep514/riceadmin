@@ -91,6 +91,9 @@
 
                                 </select>
                             </div>
+
+                            @include('trade._trade_interest_users')
+
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing Type','Packing Type') !!}
                                 <select class="form-control" required name="packingStreamType">
@@ -243,6 +246,7 @@
     $(document).ready(function() {
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
+        @include('trade._trade_interest_users_js')
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
             $.ajax({

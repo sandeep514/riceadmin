@@ -285,4 +285,39 @@ class UserInterestService
 
         return collect(array_map(static fn (array $row) => $row['trade'], $scored));
     }
+
+    /**
+     * Web users with an active interest row matching rice name, form, and wand grade.
+     *
+     * @return \Illuminate\Support\Collection<int, \App\User>
+     */
+    public static function webUsersWithExactInterest(int $riceNameId, int $formId, int $gradeId)
+    {
+        if ($riceNameId <= 0 || $formId <= 0 || $gradeId <= 0) {
+            return collect();
+        }
+
+        $userIds = UserInterestedMap::query()
+            ->where('status', 1)
+            ->where('rice_name_id', $riceNameId)
+            ->where('form_id', $formId)
+            ->where('grade', $gradeId)
+            ->distinct()
+            ->pluck('user_id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->values()
+            ->all();
+
+        if ($userIds === []) {
+            return collect();
+        }
+
+        return \App\User::query()
+            ->where('user_from', 'web')
+            ->whereIn('id', $userIds)
+            ->orderBy('name')
+            ->orderBy('id')
+            ->get(['id', 'name', 'mobile', 'email']);
+    }
 }
