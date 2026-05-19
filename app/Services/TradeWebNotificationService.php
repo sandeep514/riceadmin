@@ -219,7 +219,9 @@ Quantity: {quantity}';
         $tradeTypeLabel = TradeQueriesINR::$tradeType[$tradeTypeKey] ?? (string) ($trade->tradeType ?? '');
 
         $farmingKey = (int) ($trade->farmingType ?? 0);
-        $farmingLabel = TradeQueriesINR::$farmingType[$farmingKey] ?? (string) ($trade->farmingType ?? '');
+        $farmingLabel = TradeQueriesINR::$farmingTypeWeb[$farmingKey]
+            ?? TradeQueriesINR::$farmingType[$farmingKey]
+            ?? (string) ($trade->farmingType ?? '');
 
         $qualityLabel = optional($trade->RiceNameData)->name ?? '';
 

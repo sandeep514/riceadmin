@@ -34,14 +34,19 @@
                                 <input type="hidden" name="queryId" value="{{ $explodeURL[count($explodeURL) - 1] }}" /> 
                             @endif
 
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Farming Type','Farming Type') !!}
-                                <select class="form-control" required name="farmingType">
-                                    <option value=""> Select </option>
-                                        <option value="1" {{ ($query->farming == 'Conventional') ? 'selected' : '' }}> Conventional </option>
-                                        <option value="2" {{ ($query->farming != 'Conventional') ? 'selected' : '' }}> Compliance / Organic </option>
-                                </select>
-                            </div>
+                            @php
+                                $selectedFarming = '';
+                                if (isset($query) && $query->farming !== null && $query->farming !== '') {
+                                    if (is_numeric($query->farming)) {
+                                        $selectedFarming = (int) $query->farming;
+                                    } elseif (strtolower((string) $query->farming) === 'conventional') {
+                                        $selectedFarming = 1;
+                                    } else {
+                                        $selectedFarming = 2;
+                                    }
+                                }
+                            @endphp
+                            @include('trade._farming_type_select', ['selectedFarming' => $selectedFarming])
 
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Rice Category','Rice Category') !!}

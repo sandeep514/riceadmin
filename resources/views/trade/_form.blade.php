@@ -34,14 +34,7 @@
                                 <input type="hidden" name="queryId" value="{{ $explodeURL[count($explodeURL) - 1] }}" /> 
                             @endif
                             
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
-                                {!! Form::label('Farming Type','Farming Type') !!}
-                                <select class="form-control" required name="farmingType">
-                                    <option value=""> Select </option>
-                                        <option value="1"> Conventional </option>
-                                        <option value="2"> Compliance / Organic </option>
-                                </select>
-                            </div>
+                            @include('trade._farming_type_select')
 
                             @include('trade._web_categories_grid')
 
