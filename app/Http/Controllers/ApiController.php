@@ -44,6 +44,7 @@ use App\USD_prices;
 // use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -5420,6 +5421,8 @@ dd("kjnik");
 
     public function FutureSubmitSellQuery(Request $request)
     {
+        $this->mergeValidTillInputAliases($request);
+
         $validator = Validator::make(
             $request->all(),
             array_merge($this->rulesTradeQueryHierarchyIds(), [
@@ -5428,14 +5431,13 @@ dd("kjnik");
                 'changePackingType' => ['required'],
                 'quantity' => ['required'],
                 'offerPrice' => ['required'],
-                'validDays' => ['required'],
                 'contactPerson' => ['nullable', 'string', 'max:255'],
                 'contactMobile' => ['nullable', 'string', 'max:64'],
                 'type' => ['nullable', 'string', 'max:32'],
                 'extra_file' => ['nullable', 'file', 'max:15360'],
-            ], $this->rulesFarmingWebId()),
+            ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidTillForSellQuery()),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validTillAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5451,7 +5453,7 @@ dd("kjnik");
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
         $offerPrice = $request->offerPrice;
-        $validDays = $request->validDays;
+        $validTill = $this->resolveValidTillForQuerySave($request);
         $contactperson = $request->contactPerson;
         $contactMobile = $request->contactMobile;
         $userId = $request->user_id;
@@ -5470,6 +5472,10 @@ dd("kjnik");
             $data['extra_file'] = $file_name;
         }
 
+        if ($reportFile = $this->storeOptionalReportUpload($request)) {
+            $data['report_file'] = $reportFile;
+        }
+
         $data['farming'] = $farming ?? '';
         $data['year'] = $year;
         $data['quality_type'] = $selectedQualityTypeInt;
@@ -5479,7 +5485,8 @@ dd("kjnik");
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
-        $data['validDays'] = $validDays;
+        $data['valid_till'] = $validTill;
+        $data['validDays'] = $validTill;
         $data['contactPerson'] = $contactperson;
         $data['contactMobile'] = $contactMobile;
         $data['created_by'] = $userId;
@@ -5597,11 +5604,13 @@ dd("kjnik");
 
     public function SubmitSellQuery(Request $request)
     {
+        $this->mergeValidTillInputAliases($request);
+
         $validator = Validator::make(
             $request->all(),
             $this->rulesInrSellQuerySubmit(),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validTillAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5616,7 +5625,7 @@ dd("kjnik");
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
         $offerPrice = $request->offerPrice;
-        $validDays = $request->validDays;
+        $validTill = $this->resolveValidTillForQuerySave($request);
         $contactperson = $request->contactperson;
         $contactMobile = $request->contactMobile;
         $warehouselocation = $request->warehouselocation;
@@ -5674,6 +5683,9 @@ if (!file_exists('uploads')) {
             $data['extra_file'] = $file_name;
         }
 
+        if ($reportFile = $this->storeOptionalReportUpload($request)) {
+            $data['report_file'] = $reportFile;
+        }
 
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
@@ -5682,7 +5694,8 @@ if (!file_exists('uploads')) {
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
-        $data['validDays'] = $validDays;
+        $data['valid_till'] = $validTill;
+        $data['validDays'] = $validTill;
         $data['contactperson'] = $contactperson;
         $data['contactMobile'] = $contactMobile;
         $data['warehouselocation'] = $warehouselocation;
@@ -5713,11 +5726,13 @@ if (!file_exists('uploads')) {
 
     public function SubmitSellQueryWeb(Request $request)
     {
+        $this->mergeValidTillInputAliases($request);
+
         $validator = Validator::make(
             $request->all(),
             $this->rulesInrSellQuerySubmit(),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validTillAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5732,7 +5747,7 @@ if (!file_exists('uploads')) {
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
         $offerPrice = $request->offerPrice;
-        $validDays = $request->validDays;
+        $validTill = $this->resolveValidTillForQuerySave($request);
         $contactperson = $request->contactperson;
         $contactMobile = $request->contactMobile;
         $warehouselocation = $request->warehouselocation;
@@ -5790,6 +5805,9 @@ if (!file_exists('uploads')) {
             $data['extra_file'] = $file_name;
         }
 
+        if ($reportFile = $this->storeOptionalReportUpload($request)) {
+            $data['report_file'] = $reportFile;
+        }
 
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
@@ -5798,7 +5816,8 @@ if (!file_exists('uploads')) {
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
-        $data['validDays'] = $validDays;
+        $data['valid_till'] = $validTill;
+        $data['validDays'] = $validTill;
         $data['contactperson'] = $contactperson;
         $data['contactMobile'] = $contactMobile;
         $data['warehouselocation'] = $warehouselocation;
@@ -5962,30 +5981,23 @@ if (!file_exists('uploads')) {
                 ->get()
         );
 
-        $FutureSellQueriesINR = $this->applyPackingLogic(
-            FutureSellQueriesINR::where('created_by', $userId)
-             ->selectRaw("
-                    future_sell_query_milestone3.*,
-                    contactperson AS contactPerson
-                ")
-              // ->selectRaw("
-              //       future_sell_query_milestone3.*,
-              //       contactperson AS contactPerson,
-              //       // CASE 
-              //       //     WHEN quality_type = 1 THEN 2
-              //       //     WHEN quality_type = 0 THEN 1
-              //       //     ELSE quality_type
-              //       // END AS quality_type
-              //   ")
-                ->with([
-                    'RiceQualityRiceNames:id,name',
-                    'riceGrade:id,value',
-                    'RicePacking:id,packing,description',
-                    'UserDetail:id,name',
-                    'RiceFormMilestone3:id,name'
-                ])
-                ->get()
+        $FutureSellQueriesINR = $this->formatSellQueryCollectionValidTill(
+            $this->applyPackingLogic(
+                FutureSellQueriesINR::where('created_by', $userId)
+                    ->selectRaw('future_sell_query_milestone3.*, contactPerson AS contactPerson')
+                    ->with([
+                        'RiceQualityRiceNames:id,name',
+                        'riceGrade:id,value',
+                        'RicePacking:id,packing,description',
+                        'UserDetail:id,name',
+                        'RiceFormMilestone3:id,name',
+                    ])
+                    ->get()
+            )
         );
+
+        $SellQueriesINR = $this->formatSellQueryCollectionValidTill($SellQueriesINR);
+
         return response()->json([
             'status' => true, 
             'data' => [ 'buy' =>  $BuyQueriesINR, 'sell' => $SellQueriesINR , 'futureBuy' => $FutureBuyQueriesINR , 'futureSell' => $FutureSellQueriesINR ]
@@ -7045,7 +7057,6 @@ if (!file_exists('uploads')) {
             'changePackingType' => ['required'],
             'quantity' => ['required'],
             'offerPrice' => ['required'],
-            'validDays' => ['required'],
             'contactperson' => ['nullable', 'string', 'max:255'],
             'contactMobile' => ['nullable', 'string', 'max:64'],
             'warehouselocation' => ['nullable', 'string', 'max:500'],
@@ -7055,7 +7066,185 @@ if (!file_exists('uploads')) {
             'uncookedFile' => ['nullable', 'file', 'max:15360'],
             'cookedImageFile' => ['nullable', 'file', 'max:15360'],
             'extra_file' => ['nullable', 'file', 'max:15360'],
-        ], $this->rulesFarmingWebId());
+        ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidTillForSellQuery());
+    }
+
+    /**
+     * Valid till datetime for sell / future sell query APIs.
+     */
+    private function rulesValidTillForSellQuery(): array
+    {
+        return [
+            'valid_till' => ['required', 'date'],
+        ];
+    }
+
+    private function validTillAttributeNames(): array
+    {
+        return [
+            'valid_till' => 'valid till',
+        ];
+    }
+
+    /**
+     * Map legacy field names (validDays, validTill, validity) into valid_till before validation.
+     */
+    private function mergeValidTillInputAliases(Request $request): void
+    {
+        if ($request->filled('valid_till')) {
+            return;
+        }
+
+        foreach (['validTill', 'validDays', 'validity'] as $field) {
+            if ($request->filled($field)) {
+                $request->merge([
+                    'valid_till' => $request->input($field),
+                ]);
+
+                return;
+            }
+        }
+    }
+
+    private function resolveValidTillForQuerySave(Request $request): string
+    {
+        return Carbon::parse($request->input('valid_till'))
+            ->timezone(config('app.timezone', 'Asia/Kolkata'))
+            ->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Add formatted validTill for list APIs; keeps valid_till as ISO datetime in JSON.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $queries
+     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
+     */
+    private function formatSellQueryCollectionValidTill($queries)
+    {
+        return $queries->map(function ($query) {
+            $raw = $query->valid_till ?? $query->validDays ?? null;
+            if ($raw !== null && $raw !== '') {
+                try {
+                    $dt = Carbon::parse($raw)->timezone('Asia/Kolkata');
+                    $query->setAttribute('validTill', $dt->format('d-m-Y, g:i A'));
+                    if (empty($query->valid_till)) {
+                        $query->setAttribute('valid_till', $dt->format('Y-m-d H:i:s'));
+                    }
+                } catch (\Throwable $e) {
+                    $query->setAttribute('validTill', (string) $raw);
+                }
+            } else {
+                $query->setAttribute('validTill', '');
+            }
+
+            return $query;
+        });
+    }
+
+    /**
+     * Optional report upload for sell & future sell (binary PDF / JPEG / JPG / PNG only).
+     */
+    private function rulesOptionalReportUpload(): array
+    {
+        $fileRule = ['nullable', 'file', 'max:15360', 'mimes:pdf,jpg,jpeg,png'];
+
+        return [
+            'report_file' => $fileRule,
+            'upload_report' => $fileRule,
+            'report' => $fileRule,
+        ];
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    private function allowedReportFileExtensions(): array
+    {
+        return ['pdf', 'jpg', 'jpeg', 'png'];
+    }
+
+    private function isAllowedReportFile(string $originalName, ?string $tmpPath = null): bool
+    {
+        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        if (! in_array($ext, $this->allowedReportFileExtensions(), true)) {
+            return false;
+        }
+
+        if ($tmpPath === null || ! is_readable($tmpPath)) {
+            return true;
+        }
+
+        $mime = @mime_content_type($tmpPath);
+        if ($mime === false) {
+            return true;
+        }
+
+        return in_array($mime, ['application/pdf', 'image/jpeg', 'image/png'], true);
+    }
+
+    /**
+     * Store optional report file; field name: report_file (aliases: upload_report, report).
+     */
+    private function storeOptionalReportUpload(Request $request): ?string
+    {
+        foreach (['report_file', 'upload_report', 'report'] as $field) {
+            if ($request->hasFile($field)) {
+                $uploaded = $request->file($field);
+                if ($uploaded instanceof UploadedFile && $uploaded->isValid()) {
+                    if (! $this->isAllowedReportFile($uploaded->getClientOriginalName(), $uploaded->getPathname())) {
+                        continue;
+                    }
+
+                    return $this->persistInrQueryUploadedFile($uploaded);
+                }
+            }
+
+            if (! empty($_FILES[$field]['tmp_name']) && (int) ($_FILES[$field]['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_OK) {
+                $name = (string) $_FILES[$field]['name'];
+                $tmp = (string) $_FILES[$field]['tmp_name'];
+                if (! $this->isAllowedReportFile($name, $tmp)) {
+                    continue;
+                }
+
+                return $this->persistInrQueryUploadFromTmp($name, $tmp);
+            }
+        }
+
+        return null;
+    }
+
+    private function persistInrQueryUploadedFile(UploadedFile $file): string
+    {
+        if (! file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+
+        $ext = strtolower($file->getClientOriginalExtension() ?: pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION));
+        if (! in_array($ext, $this->allowedReportFileExtensions(), true)) {
+            $ext = 'pdf';
+        }
+
+        $fileName = 'report_' . uniqid('', true) . '.' . $ext;
+        $file->move('uploads', $fileName);
+
+        return $fileName;
+    }
+
+    private function persistInrQueryUploadFromTmp(string $originalName, string $tmpPath): string
+    {
+        if (! file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+
+        $ext = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        if (! in_array($ext, $this->allowedReportFileExtensions(), true)) {
+            $ext = 'pdf';
+        }
+
+        $fileName = 'report_' . uniqid('', true) . '.' . $ext;
+        move_uploaded_file($tmpPath, 'uploads/' . $fileName);
+
+        return $fileName;
     }
 
     /**
