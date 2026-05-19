@@ -6580,7 +6580,7 @@ if (!file_exists('uploads')) {
     {
         $validator = Validator::make(
             $request->all(),
-            array_merge($this->rulesTradeQueryHierarchyIds(), [
+            array_merge($this->rulesTradeQueryHierarchyIds(requireGrade: false), [
                 'user_id' => ['required', 'integer', 'exists:users,id'],
                 'changePackingType' => ['required'],
                 'packing' => ['required'],
@@ -6602,7 +6602,6 @@ if (!file_exists('uploads')) {
         $selectedQualityTypeInt = $request->selectedQualityTypeInt;
         $quality = $request->quality;
         $qualityForm = $request->qualityForm;
-        $selectedGrade = $request->selectedGrade;
         $changePackingType = $request->changePackingType;
         $packing = $request->packing;
         $quantity = $request->quantity;
@@ -6621,7 +6620,7 @@ if (!file_exists('uploads')) {
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
         $data['quality_form'] = $qualityForm;
-        $data['grade'] = $selectedGrade;
+        $data['grade'] = $this->coalesceEmptyTradeQuerySelection($request->input('selectedGrade')) ?? '';
         $data['packing_type'] = $changePackingType;
         $data['packing'] = $packing;
         $data['quantity'] = $quantity;
@@ -7288,16 +7287,42 @@ if (!file_exists('uploads')) {
     /**
      * Category, quality, form, and grade must be real selections — not null, empty, 0, or literal "null"/"undefined".
      */
-    private function rulesTradeQueryHierarchyIds(): array
+    private function rulesTradeQueryHierarchyIds(bool $requireGrade = true): array
     {
         $mustSelect = $this->ruleTradeQueryMustSelectValue();
 
-        return [
+        $rules = [
             'selectedQualityTypeInt' => array_merge(['bail'], $mustSelect),
             'quality' => array_merge(['bail'], $mustSelect),
             'qualityForm' => array_merge(['bail'], $mustSelect),
-            'selectedGrade' => array_merge(['bail'], $mustSelect),
         ];
+
+        $rules['selectedGrade'] = $requireGrade
+            ? array_merge(['bail'], $mustSelect)
+            : ['bail', 'nullable'];
+
+        return $rules;
+    }
+
+    /**
+     * Treat unset / placeholder hierarchy values as empty (used when grade is optional).
+     */
+    private function coalesceEmptyTradeQuerySelection($value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        if (is_string($value)) {
+            $t = strtolower(trim($value));
+            if ($t === '' || $t === 'null' || $t === 'undefined') {
+                return null;
+            }
+        }
+        if ($value === 0 || $value === '0' || $value === 0.0) {
+            return null;
+        }
+
+        return (string) $value;
     }
 
     private function ruleTradeQueryMustSelectValue(): array
