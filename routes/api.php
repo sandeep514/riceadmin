@@ -147,6 +147,7 @@ use Pusher\Pusher;
     Route::get('get/brand/list' , ['as' => 'get.brand.list' , 'uses' => 'ApiController@getBrandList']);
     Route::get('get/packing/by/{tradeType}' , ['as' => 'get.packing.tradeType' , 'uses' => 'ApiController@getPackingByTradeType']);
     Route::get('get/packing/type' , ['as' => 'get.packing.type' , 'uses' => 'ApiController@getBagPacking']);
+    Route::get('web/get/farming-types', ['as' => 'web.get.farming.types', 'uses' => 'ApiController@getFarmingTypesWeb']);
     Route::get('get/rice/qualities/{riceType}' , ['as' => 'get.rice.qualities' , 'uses' => 'ApiController@getRiceQualities']);
     Route::get('get/rice/qualities/name/{riceId}' , ['as' => 'get.rice.qualities.name' , 'uses' => 'ApiController@getRiceQualitiesName']);
     Route::get('get/rice/wand/{riceNameId}' , ['as' => 'get.rice.wand' , 'uses' => 'ApiController@getRiceWand']);

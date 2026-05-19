@@ -43,10 +43,20 @@ class TradeQueriesINR extends Model
         3 => 'Sizer',
         4 => 'Resort',
     ];
-    public static $farmingType = [ 
+
+    public static $farmingType = [
         1 => 'Conventional',
-        2 => 'compliance/organic'
+        2 => 'compliance/organic',
     ];
+
+    /** Web portal / trade filter farming types. */
+    public static $farmingTypeWeb = [
+        1 => 'Conventional',
+        2 => 'Organic',
+        3 => 'EU Standards',
+        4 => 'US Standards',
+    ];
+
 
     public function RiceFormMilestone3()
     {

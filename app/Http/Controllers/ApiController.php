@@ -47,6 +47,7 @@ use Illuminate\Http\Request;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
 use App\FreeTrialMonths;
 use App\QualityMaster;
@@ -5366,6 +5367,19 @@ dd("kjnik");
         $brands = Brand::orderBy('name')->with(['getAttachments'])->where('status' , 1)->get();
         return response()->json(['sttaus' => true, 'data' => $brands], 200);
     }
+    /**
+     * Web farming type options (TradeQueriesINR::$farmingTypeWeb).
+     * GET api/web/get/farming-types
+     */
+    public function getFarmingTypesWeb()
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'Farming types fetched successfully.',
+            'data' => TradeQueriesINR::$farmingTypeWeb,
+        ]);
+    }
+
     public function getRiceQualities($qualityTypeStatus)
     {
         $type = "non-basmati";
@@ -5417,12 +5431,11 @@ dd("kjnik");
                 'validDays' => ['required'],
                 'contactPerson' => ['nullable', 'string', 'max:255'],
                 'contactMobile' => ['nullable', 'string', 'max:64'],
-                'farming' => ['nullable', 'string'],
                 'type' => ['nullable', 'string', 'max:32'],
                 'extra_file' => ['nullable', 'file', 'max:15360'],
-            ]),
+            ], $this->rulesFarmingWebId()),
             [],
-            $this->tradeQueryHierarchyAttributeNames()
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5442,7 +5455,7 @@ dd("kjnik");
         $contactperson = $request->contactPerson;
         $contactMobile = $request->contactMobile;
         $userId = $request->user_id;
-        $farming = $request->farming;
+        $farming = $this->resolveFarmingForQuerySave($request);
         $type = $request->type ?? 'app'; 
 
         if (isset($_FILES['extra_file'])) {
@@ -5457,7 +5470,7 @@ dd("kjnik");
             $data['extra_file'] = $file_name;
         }
 
-        $data['farming'] = $farming;
+        $data['farming'] = $farming ?? '';
         $data['year'] = $year;
         $data['quality_type'] = $selectedQualityTypeInt;
         $data['quality'] = $quality;
@@ -5508,12 +5521,11 @@ dd("kjnik");
                 'quantity' => ['required'],
                 'contactPerson' => ['nullable', 'string', 'max:255'],
                 'contactMobile' => ['nullable', 'string', 'max:64'],
-                'farming' => ['nullable', 'string'],
                 'type' => ['nullable', 'string', 'max:32'],
                 'additionalinfo' => ['nullable', 'string'],
-            ]),
+            ], $this->rulesFarmingWebId()),
             [],
-            $this->tradeQueryHierarchyAttributeNames()
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5521,7 +5533,7 @@ dd("kjnik");
 
         $data = [];
         
-        $farming = $request->farming ?? '';
+        $farming = $this->resolveFarmingForQuerySave($request);
         $selectedQualityTypeInt = $request->selectedQualityTypeInt;
         $year = $request->crop_year?? '';
         $quality = $request->quality;
@@ -5541,7 +5553,7 @@ dd("kjnik");
         $userId = $request->user_id;
        
 
-        $data['farming'] = $farming;
+        $data['farming'] = $farming ?? '';
         $data['quality_type'] = $selectedQualityTypeInt;
 
 
@@ -5589,7 +5601,7 @@ dd("kjnik");
             $request->all(),
             $this->rulesInrSellQuerySubmit(),
             [],
-            $this->tradeQueryHierarchyAttributeNames()
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5609,7 +5621,7 @@ dd("kjnik");
         $contactMobile = $request->contactMobile;
         $warehouselocation = $request->warehouselocation;
         $userId = $request->userId;
-        $farming = $request->farming;
+        $farming = $this->resolveFarmingForQuerySave($request);
         $riceSize = $request->riceSize;
 
         $type = $request->type ?? 'app';
@@ -5675,7 +5687,7 @@ if (!file_exists('uploads')) {
         $data['contactMobile'] = $contactMobile;
         $data['warehouselocation'] = $warehouselocation;
         $data['created_by'] = $userId;
-        $data['farming'] = $farming;
+        $data['farming'] = $farming ?? '';
         $data['type'] = $type;
         $data['riceSize'] = $riceSize;
 
@@ -5705,7 +5717,7 @@ if (!file_exists('uploads')) {
             $request->all(),
             $this->rulesInrSellQuerySubmit(),
             [],
-            $this->tradeQueryHierarchyAttributeNames()
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5725,7 +5737,7 @@ if (!file_exists('uploads')) {
         $contactMobile = $request->contactMobile;
         $warehouselocation = $request->warehouselocation;
         $userId = $request->userId;
-        $farming = $request->farming;
+        $farming = $this->resolveFarmingForQuerySave($request);
         $riceSize = $request->riceSize;
 
         $type = $request->type ?? 'app';
@@ -5791,7 +5803,7 @@ if (!file_exists('uploads')) {
         $data['contactMobile'] = $contactMobile;
         $data['warehouselocation'] = $warehouselocation;
         $data['created_by'] = $userId;
-        $data['farming'] = $farming;
+        $data['farming'] = $farming ?? '';
         $data['type'] = $type;
         $data['riceSize'] = $riceSize;
 
@@ -6559,13 +6571,12 @@ if (!file_exists('uploads')) {
                 'packing' => ['required'],
                 'quantity' => ['required'],
                 'additionalinfo' => ['nullable', 'string'],
-                'farming' => ['nullable', 'string'],
                 'contactPerson' => ['nullable', 'string', 'max:255'],
                 'contactMobile' => ['nullable', 'string', 'max:64'],
                 'type' => ['nullable', 'string', 'max:32'],
-            ]),
+            ], $this->rulesFarmingWebId()),
             [],
-            $this->tradeQueryHierarchyAttributeNames()
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -6582,12 +6593,12 @@ if (!file_exists('uploads')) {
         $quantity = $request->quantity;
         $additionalinfo = $request->additionalinfo;
         $userId = $request->user_id;
-        $farming = $request->farming ?? '';
+        $farming = $this->resolveFarmingForQuerySave($request);
         $contactPerson = $request->contactPerson ?? '';
         $contactMobile = $request->contactMobile ?? '';
         $type = $request->type ?? 'app';
 
-        $data['farming'] = $farming;
+        $data['farming'] = $farming ?? '';
         $data['contactPerson'] = $contactPerson;
         $data['contactMobile'] = $contactMobile;
         $data['type'] = $type;
@@ -7032,14 +7043,56 @@ if (!file_exists('uploads')) {
             'contactperson' => ['nullable', 'string', 'max:255'],
             'contactMobile' => ['nullable', 'string', 'max:64'],
             'warehouselocation' => ['nullable', 'string', 'max:500'],
-            'farming' => ['nullable', 'string'],
             'riceSize' => ['nullable', 'string', 'max:255'],
             'type' => ['nullable', 'string', 'max:32'],
             'packageImageFile' => ['nullable', 'file', 'max:15360'],
             'uncookedFile' => ['nullable', 'file', 'max:15360'],
             'cookedImageFile' => ['nullable', 'file', 'max:15360'],
             'extra_file' => ['nullable', 'file', 'max:15360'],
-        ]);
+        ], $this->rulesFarmingWebId());
+    }
+
+    /**
+     * Farming type ids for web buy/sell/future query APIs (TradeQueriesINR::$farmingTypeWeb).
+     */
+    private function rulesFarmingWebId(): array
+    {
+        $allowed = array_keys(TradeQueriesINR::$farmingTypeWeb);
+
+        return [
+            'farming' => ['nullable', 'integer', Rule::in($allowed)],
+            'farmingType' => ['nullable', 'integer', Rule::in($allowed)],
+            'farming_type' => ['nullable', 'integer', Rule::in($allowed)],
+        ];
+    }
+
+    private function farmingWebAttributeNames(): array
+    {
+        return [
+            'farming' => 'farming type',
+            'farmingType' => 'farming type',
+            'farming_type' => 'farming type',
+        ];
+    }
+
+    /**
+     * Resolve farming id (1–4) from request; stored in query `farming` column.
+     */
+    private function resolveFarmingForQuerySave(Request $request): ?string
+    {
+        foreach (['farming', 'farmingType', 'farming_type'] as $key) {
+            if (! $request->has($key)) {
+                continue;
+            }
+            $value = $request->input($key);
+            if ($value === null || $value === '') {
+                continue;
+            }
+
+            return (string) (int) $value;
+        }
+
+        return null;
     }
 
     /**
