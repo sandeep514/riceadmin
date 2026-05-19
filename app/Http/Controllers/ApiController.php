@@ -6031,13 +6031,11 @@ if (!file_exists('uploads')) {
         $FutureBuyQueriesINR = FutureBuyQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
         $FutureSellQueriesINR = FutureSellQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
         
-        $tradePre = TradeQueriesINR::whereNotNull('queryId');
-
-        // 1= buy , 2 = sell , 3 = futureBuy , 4 = futureSell
-        $BuyQuery = (clone $tradePre)->where('tradeFor' , 1)->whereIn('queryId' , $BuyQueriesINR)->get();
-        $SellQuery = (clone $tradePre)->where('tradeFor' , 2)->whereIn('queryId' , $SellQueriesINR)->get();
-        $FutureBuyQuery = (clone $tradePre)->where('tradeFor' , 3)->whereIn('queryId' , $FutureBuyQueriesINR)->get();
-        $FutureSellQuery = (clone $tradePre)->where('tradeFor' , 4)->whereIn('queryId' , $FutureSellQueriesINR)->get();
+        // tradeType: 1 = buy, 2 = sell, 3 = future buy, 4 = future sell (tradeFor is App/Web)
+        $BuyQuery = $this->personalLinkedTradesQuery($BuyQueriesINR, 1)->get();
+        $SellQuery = $this->personalLinkedTradesQuery($SellQueriesINR, 2)->get();
+        $FutureBuyQuery = $this->personalLinkedTradesQuery($FutureBuyQueriesINR, 3)->get();
+        $FutureSellQuery = $this->personalLinkedTradesQuery($FutureSellQueriesINR, 4)->get();
 
         return response()->json(['status' => true, 'data' => ['BuyQuery' => $BuyQuery , 'SellQuery' => $SellQuery , 'FutureBuyQuery' => $FutureBuyQuery , 'FutureSellQuery' => $FutureSellQuery]]);
     }
@@ -6098,18 +6096,20 @@ if (!file_exists('uploads')) {
 
     public function getPersonalQueryCount($userId)
     {
-        $BuyQueriesINR = BuyQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
-        $SellQueriesINR = SellQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
-        $FutureBuyQueriesINR = FutureBuyQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
-        $FutureSellQueriesINR = FutureSellQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
-        
-        $availableQueries = array_merge($BuyQueriesINR,$SellQueriesINR,$FutureBuyQueriesINR,$FutureSellQueriesINR);
-        $tradePre = TradeQueriesINR::whereNotNull('queryId')->whereIn('queryId' , $availableQueries);
+        $availableQueries =
+            BuyQueriesINR::where('created_by', $userId)->count()
+            + SellQueriesINR::where('created_by', $userId)->count()
+            + FutureBuyQueriesINR::where('created_by', $userId)->count()
+            + FutureSellQueriesINR::where('created_by', $userId)->count();
 
-        $tradePreCount = (clone $tradePre)->count();
-        $tradePreSoldCount = (clone $tradePre)->where('status' ,3)->count();
-
-        return response()->json(['status' => true, 'data' => ['availableQueries' => count($availableQueries) , 'trades' => $tradePreCount , 'soldCount' => $tradePreSoldCount    ]]);
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'availableQueries' => $availableQueries,
+                'trades' => $this->countPersonalMovedToTradeQueries($userId),
+                'soldCount' => $this->countPersonalLinkedTrades($userId, 3),
+            ],
+        ]);
     }
 
     public function filterTrade(Request $request , $userId)
@@ -7282,6 +7282,75 @@ if (!file_exists('uploads')) {
         }
 
         return null;
+    }
+
+    /**
+     * Trades created from a user's buy/sell/future query (matched by tradeType + queryId).
+     */
+    private function personalLinkedTradesQuery(array $queryIds, int $tradeType)
+    {
+        return TradeQueriesINR::query()
+            ->where('tradeType', $tradeType)
+            ->where('queryId', '>', 0)
+            ->whereIn('queryId', $queryIds);
+    }
+
+    private function countPersonalLinkedTrades($userId, ?int $status = null): int
+    {
+        $pairs = [
+            [1, BuyQueriesINR::class],
+            [2, SellQueriesINR::class],
+            [3, FutureBuyQueriesINR::class],
+            [4, FutureSellQueriesINR::class],
+        ];
+
+        $count = 0;
+        foreach ($pairs as [$tradeType, $modelClass]) {
+            $queryIds = $modelClass::where('created_by', $userId)->pluck('id')->all();
+            if ($queryIds === []) {
+                continue;
+            }
+
+            $q = $this->personalLinkedTradesQuery($queryIds, $tradeType);
+            if ($status !== null) {
+                $q->where('status', $status);
+            }
+            $count += $q->count();
+        }
+
+        return $count;
+    }
+
+    /**
+     * Queries moved to trade (status 2) or converted to a trade record.
+     */
+    private function countPersonalMovedToTradeQueries($userId): int
+    {
+        $pairs = [
+            [1, BuyQueriesINR::class],
+            [2, SellQueriesINR::class],
+            [3, FutureBuyQueriesINR::class],
+            [4, FutureSellQueriesINR::class],
+        ];
+
+        $count = 0;
+        foreach ($pairs as [$tradeType, $modelClass]) {
+            $linkedQueryIds = TradeQueriesINR::query()
+                ->where('tradeType', $tradeType)
+                ->where('queryId', '>', 0)
+                ->pluck('queryId');
+
+            $q = $modelClass::where('created_by', $userId)->where(function ($query) use ($linkedQueryIds) {
+                $query->where('status', 2);
+                if ($linkedQueryIds->isNotEmpty()) {
+                    $query->orWhereIn('id', $linkedQueryIds);
+                }
+            });
+
+            $count += $q->count();
+        }
+
+        return $count;
     }
 
     /**
