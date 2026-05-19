@@ -5421,7 +5421,7 @@ dd("kjnik");
 
     public function FutureSubmitSellQuery(Request $request)
     {
-        $this->mergeValidTillInputAliases($request);
+        $this->mergeValidDaysInputAliases($request);
 
         $validator = Validator::make(
             $request->all(),
@@ -5435,9 +5435,9 @@ dd("kjnik");
                 'contactMobile' => ['nullable', 'string', 'max:64'],
                 'type' => ['nullable', 'string', 'max:32'],
                 'extra_file' => ['nullable', 'file', 'max:15360'],
-            ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidTillForSellQuery()),
+            ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidDaysForSellQuery()),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validTillAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validDaysAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5453,7 +5453,7 @@ dd("kjnik");
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
         $offerPrice = $request->offerPrice;
-        $validTill = $this->resolveValidTillForQuerySave($request);
+        $validDays = $this->resolveValidDaysForQuerySave($request);
         $contactperson = $request->contactPerson;
         $contactMobile = $request->contactMobile;
         $userId = $request->user_id;
@@ -5485,8 +5485,7 @@ dd("kjnik");
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
-        $data['valid_till'] = $validTill;
-        $data['validDays'] = $validTill;
+        $data['validDays'] = $validDays;
         $data['contactPerson'] = $contactperson;
         $data['contactMobile'] = $contactMobile;
         $data['created_by'] = $userId;
@@ -5604,13 +5603,13 @@ dd("kjnik");
 
     public function SubmitSellQuery(Request $request)
     {
-        $this->mergeValidTillInputAliases($request);
+        $this->mergeValidDaysInputAliases($request);
 
         $validator = Validator::make(
             $request->all(),
             $this->rulesInrSellQuerySubmit(),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validTillAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validDaysAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5625,7 +5624,7 @@ dd("kjnik");
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
         $offerPrice = $request->offerPrice;
-        $validTill = $this->resolveValidTillForQuerySave($request);
+        $validDays = $this->resolveValidDaysForQuerySave($request);
         $contactperson = $request->contactperson;
         $contactMobile = $request->contactMobile;
         $warehouselocation = $request->warehouselocation;
@@ -5694,8 +5693,7 @@ if (!file_exists('uploads')) {
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
-        $data['valid_till'] = $validTill;
-        $data['validDays'] = $validTill;
+        $data['validDays'] = $validDays;
         $data['contactperson'] = $contactperson;
         $data['contactMobile'] = $contactMobile;
         $data['warehouselocation'] = $warehouselocation;
@@ -5726,13 +5724,13 @@ if (!file_exists('uploads')) {
 
     public function SubmitSellQueryWeb(Request $request)
     {
-        $this->mergeValidTillInputAliases($request);
+        $this->mergeValidDaysInputAliases($request);
 
         $validator = Validator::make(
             $request->all(),
             $this->rulesInrSellQuerySubmit(),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validTillAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validDaysAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5747,7 +5745,7 @@ if (!file_exists('uploads')) {
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
         $offerPrice = $request->offerPrice;
-        $validTill = $this->resolveValidTillForQuerySave($request);
+        $validDays = $this->resolveValidDaysForQuerySave($request);
         $contactperson = $request->contactperson;
         $contactMobile = $request->contactMobile;
         $warehouselocation = $request->warehouselocation;
@@ -5816,8 +5814,7 @@ if (!file_exists('uploads')) {
         $data['packing'] = $changePackingType;
         $data['quantity'] = $quantity;
         $data['offerPrice'] = $offerPrice;
-        $data['valid_till'] = $validTill;
-        $data['validDays'] = $validTill;
+        $data['validDays'] = $validDays;
         $data['contactperson'] = $contactperson;
         $data['contactMobile'] = $contactMobile;
         $data['warehouselocation'] = $warehouselocation;
@@ -5981,7 +5978,7 @@ if (!file_exists('uploads')) {
                 ->get()
         );
 
-        $FutureSellQueriesINR = $this->formatSellQueryCollectionValidTill(
+        $FutureSellQueriesINR = $this->formatSellQueryCollectionValidDays(
             $this->applyPackingLogic(
                 FutureSellQueriesINR::where('created_by', $userId)
                     ->selectRaw('future_sell_query_milestone3.*, contactPerson AS contactPerson')
@@ -5996,7 +5993,7 @@ if (!file_exists('uploads')) {
             )
         );
 
-        $SellQueriesINR = $this->formatSellQueryCollectionValidTill($SellQueriesINR);
+        $SellQueriesINR = $this->formatSellQueryCollectionValidDays($SellQueriesINR);
 
         return response()->json([
             'status' => true, 
@@ -7066,39 +7063,39 @@ if (!file_exists('uploads')) {
             'uncookedFile' => ['nullable', 'file', 'max:15360'],
             'cookedImageFile' => ['nullable', 'file', 'max:15360'],
             'extra_file' => ['nullable', 'file', 'max:15360'],
-        ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidTillForSellQuery());
+        ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidDaysForSellQuery());
     }
 
     /**
-     * Valid till datetime for sell / future sell query APIs.
+     * Valid till datetime for sell / future sell query APIs (stored in validDays column).
      */
-    private function rulesValidTillForSellQuery(): array
+    private function rulesValidDaysForSellQuery(): array
     {
         return [
-            'valid_till' => ['required', 'date'],
+            'validDays' => ['required', 'date'],
         ];
     }
 
-    private function validTillAttributeNames(): array
+    private function validDaysAttributeNames(): array
     {
         return [
-            'valid_till' => 'valid till',
+            'validDays' => 'valid till',
         ];
     }
 
     /**
-     * Map legacy field names (validDays, validTill, validity) into valid_till before validation.
+     * Map legacy field names (validTill, validity, valid_till) into validDays before validation.
      */
-    private function mergeValidTillInputAliases(Request $request): void
+    private function mergeValidDaysInputAliases(Request $request): void
     {
-        if ($request->filled('valid_till')) {
+        if ($request->filled('validDays')) {
             return;
         }
 
-        foreach (['validTill', 'validDays', 'validity'] as $field) {
+        foreach (['validTill', 'validity', 'valid_till'] as $field) {
             if ($request->filled($field)) {
                 $request->merge([
-                    'valid_till' => $request->input($field),
+                    'validDays' => $request->input($field),
                 ]);
 
                 return;
@@ -7106,30 +7103,28 @@ if (!file_exists('uploads')) {
         }
     }
 
-    private function resolveValidTillForQuerySave(Request $request): string
+    private function resolveValidDaysForQuerySave(Request $request): string
     {
-        return Carbon::parse($request->input('valid_till'))
+        return Carbon::parse($request->input('validDays'))
             ->timezone(config('app.timezone', 'Asia/Kolkata'))
             ->format('Y-m-d H:i:s');
     }
 
     /**
-     * Add formatted validTill for list APIs; keeps valid_till as ISO datetime in JSON.
+     * Add formatted validTill display string; validDays holds datetime (Y-m-d H:i:s).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $queries
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
      */
-    private function formatSellQueryCollectionValidTill($queries)
+    private function formatSellQueryCollectionValidDays($queries)
     {
         return $queries->map(function ($query) {
-            $raw = $query->valid_till ?? $query->validDays ?? null;
+            $raw = $query->validDays ?? null;
             if ($raw !== null && $raw !== '') {
                 try {
                     $dt = Carbon::parse($raw)->timezone('Asia/Kolkata');
+                    $query->setAttribute('validDays', $dt->format('Y-m-d H:i:s'));
                     $query->setAttribute('validTill', $dt->format('d-m-Y, g:i A'));
-                    if (empty($query->valid_till)) {
-                        $query->setAttribute('valid_till', $dt->format('Y-m-d H:i:s'));
-                    }
                 } catch (\Throwable $e) {
                     $query->setAttribute('validTill', (string) $raw);
                 }

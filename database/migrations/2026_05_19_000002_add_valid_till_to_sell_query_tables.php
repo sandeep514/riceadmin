@@ -8,12 +8,6 @@ class AddValidTillToSellQueryTables extends Migration
 {
     public function up()
     {
-        Schema::table('sell_query_milestone3', function (Blueprint $table) {
-            if (! Schema::hasColumn('sell_query_milestone3', 'valid_till')) {
-                $table->dateTime('valid_till')->nullable()->after('validDays');
-            }
-        });
-
         Schema::table('future_sell_query_milestone3', function (Blueprint $table) {
             if (! Schema::hasColumn('future_sell_query_milestone3', 'offerPrice')) {
                 $table->string('offerPrice', 256)->nullable()->after('quantity');
@@ -21,23 +15,17 @@ class AddValidTillToSellQueryTables extends Migration
             if (! Schema::hasColumn('future_sell_query_milestone3', 'validDays')) {
                 $table->string('validDays', 256)->nullable()->after('offerPrice');
             }
-            if (! Schema::hasColumn('future_sell_query_milestone3', 'valid_till')) {
-                $table->dateTime('valid_till')->nullable()->after('validDays');
-            }
         });
     }
 
     public function down()
     {
-        Schema::table('sell_query_milestone3', function (Blueprint $table) {
-            if (Schema::hasColumn('sell_query_milestone3', 'valid_till')) {
-                $table->dropColumn('valid_till');
-            }
-        });
-
         Schema::table('future_sell_query_milestone3', function (Blueprint $table) {
-            if (Schema::hasColumn('future_sell_query_milestone3', 'valid_till')) {
-                $table->dropColumn('valid_till');
+            if (Schema::hasColumn('future_sell_query_milestone3', 'validDays')) {
+                $table->dropColumn('validDays');
+            }
+            if (Schema::hasColumn('future_sell_query_milestone3', 'offerPrice')) {
+                $table->dropColumn('offerPrice');
             }
         });
     }
