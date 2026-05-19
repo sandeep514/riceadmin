@@ -2338,9 +2338,15 @@ class ApiController extends Controller
             }
         }
 
-        // Latest IST date in the series (for optional opening metadata only — chart uses LivePrice ticks).
+        // Earliest / latest IST dates in the series (season open = first chart point for these params).
+        $seasonOpeningDate = null;
         $latestIstDate = null;
         if ($pricesFirstEntryPerDay->isNotEmpty()) {
+            $seasonOpeningDate = $pricesFirstEntryPerDay
+                ->map(function ($r) {
+                    return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
+                })
+                ->min();
             $latestIstDate = $pricesFirstEntryPerDay
                 ->map(function ($r) {
                     return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
@@ -2443,6 +2449,7 @@ class ApiController extends Controller
             'highValue' => $highValue,
             'constantValue' => $constantValue,
             'maxCountConstant' => $maxCount,
+            'seasonOpeningDate' => $seasonOpeningDate,
             'latestDate' => $latestIstDate,
             'latestDateOpeningPrice' => $latestDateOpeningPrice,
         ];
