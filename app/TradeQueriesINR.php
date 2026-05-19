@@ -57,6 +57,18 @@ class TradeQueriesINR extends Model
         4 => 'US Standards',
     ];
 
+    /**
+     * Human-readable farming type for API responses (web labels, then legacy admin labels).
+     */
+    public static function resolveFarmingName($farmingType): ?string
+    {
+        $key = (int) ($farmingType ?? 0);
+        if ($key <= 0) {
+            return null;
+        }
+
+        return static::$farmingTypeWeb[$key] ?? static::$farmingType[$key] ?? null;
+    }
 
     public function RiceFormMilestone3()
     {

@@ -6328,6 +6328,12 @@ if (!file_exists('uploads')) {
                     // leave original if unparsable
                 }
             }
+
+            $trade->setAttribute(
+                'farmingName',
+                TradeQueriesINR::resolveFarmingName($trade->farmingType) ?? ''
+            );
+
             return $trade;
         });
     }
