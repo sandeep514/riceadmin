@@ -181,6 +181,16 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('role-category-map', ['as' => 'role-category-map.index', 'uses' => 'RoleCategoryMapController@index']);
             Route::post('role-category-map/save', ['as' => 'role-category-map.save', 'uses' => 'RoleCategoryMapController@save']);
 
+            // Avg Length Map
+            Route::group(['module'=>'avg_length_map','icon'=>'fa-arrows-h'], function() {
+                Route::get('avg-length-map', ['as' => 'avg-length-map', 'uses' => 'AvgLengthMapController@index', 'action' => 'view']);
+                Route::get('avg-length-map/create', ['as' => 'create.avg-length-map', 'uses' => 'AvgLengthMapController@create', 'action' => 'create']);
+                Route::post('avg-length-map/save', ['as' => 'save.avg-length-map', 'uses' => 'AvgLengthMapController@save', 'action' => 'create']);
+                Route::get('avg-length-map/edit/{id}', ['as' => 'edit.avg-length-map', 'uses' => 'AvgLengthMapController@edit', 'action' => 'edit']);
+                Route::put('avg-length-map/update/{id}', ['as' => 'update.avg-length-map', 'uses' => 'AvgLengthMapController@update', 'action' => 'edit']);
+                Route::delete('avg-length-map/delete/{id}', ['as' => 'delete.avg-length-map', 'uses' => 'AvgLengthMapController@delete', 'action' => 'delete']);
+            });
+
             // Rice Form Map
             Route::group(['module'=>'rice_form_map','icon'=>'fa-sitemap'], function() {
                 Route::get('rice-form-map', ['as' => 'rice-form-map', 'uses' => 'WebRiceFormMapController@index','action'=>'view']);
