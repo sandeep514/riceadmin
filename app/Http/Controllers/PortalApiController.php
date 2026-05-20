@@ -2378,8 +2378,8 @@ class PortalApiController extends Controller
     }
 
     /**
-     * API 2: Rice forms for a rice name from user_interested_map_table.
-     * GET portal/interested/rice-form?riceId={id}&user_id={optional}
+     * Rice forms for a rice name from web_rice_form_map (portal interest picker).
+     * GET portal/interested/rice-forms?riceId={id}&user_id={optional}
      */
     public function getRiceFormsList(Request $request)
     {
@@ -2402,25 +2402,26 @@ class PortalApiController extends Controller
         }
 
         $riceId = (int) $riceId;
+        $riceName = RiceName::find($riceId);
 
-        $mapQuery = UserInterestedMap::query()
+        $maps = WebRiceFormMap::query()
             ->where('rice_name_id', $riceId)
-            ->where('status', 1);
+            ->when($riceName?->type, function ($q) use ($riceName) {
+                $q->where(function ($q2) use ($riceName) {
+                    $q2->where('rice_type', $riceName->type)->orWhereNull('rice_type');
+                });
+            })
+            ->get(['form_ids']);
 
-        if ($request->filled('user_id')) {
-            $mapQuery->where('user_id', (int) $request->user_id);
+        $formIdSet = [];
+        foreach ($maps as $map) {
+            foreach ($this->normalizeFormIdsFromMap($map->form_ids) as $formId) {
+                $formIdSet[$formId] = true;
+            }
         }
+        $formIds = array_keys($formIdSet);
 
-        $interestRows = $mapQuery->get(['form_id', 'grade']);
-
-        $formIds = $interestRows
-            ->pluck('form_id')
-            ->map(fn ($id) => (int) $id)
-            ->filter(fn ($id) => $id > 0)
-            ->unique()
-            ->values();
-
-        if ($formIds->isEmpty()) {
+        if ($formIds === []) {
             return response()->json([
                 'status' => true,
                 'message' => 'Rice forms fetched successfully.',
@@ -2432,13 +2433,19 @@ class PortalApiController extends Controller
 
         $forms = RiceFormMilestone3::query()
             ->where('status', 1)
-            ->whereIn('id', $formIds->all())
+            ->whereIn('id', $formIds)
             ->orderBy('order', 'asc')
             ->orderBy('id', 'asc')
             ->get(['id', 'name', 'order', 'status']);
 
         $selected = (object) [];
         if ($request->filled('user_id')) {
+            $interestRows = UserInterestedMap::query()
+                ->where('user_id', (int) $request->user_id)
+                ->where('rice_name_id', $riceId)
+                ->where('status', 1)
+                ->get(['form_id', 'grade']);
+
             $selected = $interestRows
                 ->groupBy('form_id')
                 ->map(function ($items) {
@@ -2572,5 +2579,40 @@ class PortalApiController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * @param  mixed  $formIds
+     * @return int[]
+     */
+    private function normalizeFormIdsFromMap($formIds): array
+    {
+        if ($formIds === null || $formIds === '') {
+            return [];
+        }
+        if (is_array($formIds)) {
+            $out = [];
+            foreach ($formIds as $v) {
+                if (is_numeric($v)) {
+                    $out[] = (int) $v;
+                }
+            }
+
+            return array_values(array_unique($out));
+        }
+        if (is_numeric($formIds)) {
+            return [(int) $formIds];
+        }
+        if (is_string($formIds)) {
+            $decoded = json_decode($formIds, true);
+            if (is_array($decoded)) {
+                return $this->normalizeFormIdsFromMap($decoded);
+            }
+            if (is_numeric($formIds)) {
+                return [(int) $formIds];
+            }
+        }
+
+        return [];
     }
 }
