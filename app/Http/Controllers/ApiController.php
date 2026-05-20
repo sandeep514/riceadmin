@@ -2015,6 +2015,7 @@ class ApiController extends Controller
             ->where('live_prices.cropYear' , $cropYear)
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
             ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
+            ->orderBy('live_prices.id', 'DESC')
             ->whereDate('live_prices.created_at',$lastEnteredRecord->created_at)
             ->get();
 
