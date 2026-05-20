@@ -12,12 +12,11 @@ class AvgLengthMap extends Model
         'quality_type',
         'rice_name_id',
         'form_id',
-        'wand_id',
-        'avg_length',
+        'wand_ids',
     ];
 
     protected $casts = [
-        'avg_length' => 'decimal:2',
+        'wand_ids' => 'array',
     ];
 
     public function riceName()
@@ -30,21 +29,21 @@ class AvgLengthMap extends Model
         return $this->belongsTo(RiceFormMilestone3::class, 'form_id');
     }
 
-    public function wand()
+    public function getGradeNamesAttribute(): string
     {
-        return $this->belongsTo(WandModel::class, 'wand_id');
-    }
-
-    public function getGradeLabelAttribute(): string
-    {
-        $wand = $this->wand;
-        if (! $wand) {
+        if (! $this->wand_ids || $this->wand_ids === []) {
             return '-';
         }
-        $wand->loadMissing('getWandType');
 
-        return $wand->getWandType
-            ? $wand->getWandType->type.' - '.$wand->value
-            : (string) $wand->value;
+        return WandModel::with('getWandType')
+            ->whereIn('id', $this->wand_ids)
+            ->orderBy('order')
+            ->get()
+            ->map(function ($wand) {
+                return $wand->getWandType
+                    ? $wand->getWandType->type.' - '.$wand->value
+                    : $wand->value;
+            })
+            ->implode(', ');
     }
 }

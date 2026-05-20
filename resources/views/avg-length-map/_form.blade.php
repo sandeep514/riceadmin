@@ -49,23 +49,21 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-6 @error('wand_id') has-error @enderror">
-            <label for="wand_id">Grade <span class="text-danger">*</span></label>
-            <select name="wand_id" id="wand_id" class="form-control select2-basic">
+        <div class="form-group col-md-8 @error('wand_ids') has-error @enderror">
+            <label for="wand_ids" style="display:block;">
+                Grade
+                <span class="pull-right">
+                    <button type="button" id="wand_check_all" class="btn btn-xs btn-default">Check All</button>
+                    <button type="button" id="wand_uncheck_all" class="btn btn-xs btn-default">Uncheck All</button>
+                </span>
+            </label>
+            <select name="wand_ids[]" id="wand_ids" class="form-control select2" multiple="multiple">
                 <option value="">-- Select quality first --</option>
             </select>
-            @error('wand_id')
+            @error('wand_ids')
                 <span class="help-block text-danger">{{ $message }}</span>
             @enderror
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="form-group col-md-4 @error('avg_length') has-error @enderror">
-            <label for="avg_length">Avg Length <span class="text-danger">*</span></label>
-            <input type="number" step="0.01" min="0" name="avg_length" id="avg_length" class="form-control"
-                value="{{ old('avg_length', isset($model) ? $model->avg_length : '') }}" placeholder="e.g. 8.50">
-            @error('avg_length')
+            @error('wand_ids.*')
                 <span class="help-block text-danger">{{ $message }}</span>
             @enderror
         </div>

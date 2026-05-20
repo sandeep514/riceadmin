@@ -12,7 +12,7 @@ class AvgLengthMapController extends Controller
 {
     public function index()
     {
-        $records = AvgLengthMap::with(['riceName', 'form', 'wand.getWandType'])
+        $records = AvgLengthMap::with(['riceName', 'form'])
             ->orderByDesc('id')
             ->get();
 
@@ -29,14 +29,14 @@ class AvgLengthMapController extends Controller
         $data = $this->validated($request);
 
         if ($this->duplicateExists($data)) {
-            Session::flash('error', 'Error|A map already exists for this category, quality, form, and grade.');
+            Session::flash('error', 'Error|A map already exists for this category, quality, and form.');
 
             return back()->withInput();
         }
 
         AvgLengthMap::create($data);
 
-        Session::flash('success', 'Success|Avg length map saved successfully!');
+        Session::flash('success', 'Success|Map saved successfully!');
 
         return redirect()->route('avg-length-map');
     }
@@ -70,14 +70,14 @@ class AvgLengthMapController extends Controller
         $data = $this->validated($request);
 
         if ($this->duplicateExists($data, (int) $id)) {
-            Session::flash('error', 'Error|A map already exists for this category, quality, form, and grade.');
+            Session::flash('error', 'Error|A map already exists for this category, quality, and form.');
 
             return back()->withInput();
         }
 
         $model->update($data);
 
-        Session::flash('success', 'Success|Avg length map updated successfully!');
+        Session::flash('success', 'Success|Map updated successfully!');
 
         return redirect()->route('avg-length-map');
     }
@@ -101,16 +101,17 @@ class AvgLengthMapController extends Controller
             'quality_type' => 'required|in:basmati,non-basmati',
             'rice_name_id' => 'required|exists:rice_names,id',
             'form_id' => 'required|exists:rice_form_milestone3,id',
-            'wand_id' => 'required|exists:wand,id',
-            'avg_length' => 'required|numeric|min:0',
+            'wand_ids' => 'required|array|min:1',
+            'wand_ids.*' => 'exists:wand,id',
         ]);
+
+        $wandIds = array_values(array_unique(array_map('intval', $request->wand_ids ?? [])));
 
         return [
             'quality_type' => $request->quality_type,
             'rice_name_id' => (int) $request->rice_name_id,
             'form_id' => (int) $request->form_id,
-            'wand_id' => (int) $request->wand_id,
-            'avg_length' => round((float) $request->avg_length, 2),
+            'wand_ids' => $wandIds,
         ];
     }
 
@@ -119,8 +120,7 @@ class AvgLengthMapController extends Controller
         $q = AvgLengthMap::query()
             ->where('quality_type', $data['quality_type'])
             ->where('rice_name_id', $data['rice_name_id'])
-            ->where('form_id', $data['form_id'])
-            ->where('wand_id', $data['wand_id']);
+            ->where('form_id', $data['form_id']);
 
         if ($exceptId !== null) {
             $q->where('id', '!=', $exceptId);

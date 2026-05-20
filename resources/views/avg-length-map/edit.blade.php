@@ -32,5 +32,5 @@
 @endsection
 
 @section('javascript')
-@include('avg-length-map._scripts', ['selectedWandId' => $model->wand_id])
+@include('avg-length-map._scripts', ['selectedWandIds' => $model->wand_ids ?? []])
 @endsection

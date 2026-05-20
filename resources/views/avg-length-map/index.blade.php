@@ -17,7 +17,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Avg length by category, quality, form & grade</h3>
+                            <h3 class="box-title">Category, quality, form & grades</h3>
                             <div class="pull-right">
                                 <a href="{{ route('create.avg-length-map') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Create New</a>
                             </div>
@@ -31,8 +31,7 @@
                                             <th>Category</th>
                                             <th>Quality</th>
                                             <th>Type (Form)</th>
-                                            <th>Grade</th>
-                                            <th>Avg Length</th>
+                                            <th>Grades</th>
                                             <th>Updated</th>
                                             <th width="150">Action</th>
                                         </tr>
@@ -44,8 +43,7 @@
                                                 <td><span class="label label-{{ $record->quality_type == 'basmati' ? 'info' : 'warning' }}">{{ ucfirst($record->quality_type) }}</span></td>
                                                 <td>{{ $record->riceName ? $record->riceName->name : '-' }}</td>
                                                 <td>{{ $record->form ? $record->form->name : '-' }}</td>
-                                                <td>{{ $record->grade_label }}</td>
-                                                <td>{{ number_format((float) $record->avg_length, 2) }}</td>
+                                                <td>{{ $record->grade_names }}</td>
                                                 <td>{{ $record->updated_at->format('d M Y H:i') }}</td>
                                                 <td>
                                                     @include('avg-length-map._actions', ['model' => $record])

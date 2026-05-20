@@ -3,14 +3,14 @@ $(function(){
     var riceNamesUrl = window.route + '/rice-form-map/ajax/rice-names/:type';
     var formsUrl     = window.route + '/rice-form-map/ajax/forms/:type';
     var wandsUrl     = window.route + '/rice-form-map/ajax/wands/:riceNameId';
-    var selectedWandId = @json($selectedWandId ?? old('wand_id'));
+    var selectedWandIds = @json($selectedWandIds ?? old('wand_ids', []));
 
     function initSelect2(el, placeholder) {
         $(el).select2({ placeholder: placeholder, allowClear: true });
     }
     initSelect2('#rice_name_id', 'Select quality');
     initSelect2('#form_id', 'Select form');
-    initSelect2('#wand_id', 'Select grade');
+    initSelect2('#wand_ids', 'Select grades');
 
     $.get(formsUrl.replace(':type', 'all'), function(data) {
         var currentForm = $('#form_id').val();
@@ -23,17 +23,17 @@ $(function(){
         }
     });
 
-    function loadWands(riceNameId, selectId) {
-        $('#wand_id').empty().append('<option value="">-- Select grade --</option>');
+    function loadWands(riceNameId, preselect) {
+        $('#wand_ids').val(null).trigger('change').empty();
         if (!riceNameId) {
             return;
         }
         $.get(wandsUrl.replace(':riceNameId', riceNameId), function(data) {
             $.each(data, function(id, label) {
-                $('#wand_id').append('<option value="' + id + '">' + label + '</option>');
+                $('#wand_ids').append('<option value="' + id + '">' + label + '</option>');
             });
-            if (selectId) {
-                $('#wand_id').val(String(selectId)).trigger('change.select2');
+            if (preselect && preselect.length) {
+                $('#wand_ids').val(preselect.map(String)).trigger('change');
             }
         });
     }
@@ -41,7 +41,7 @@ $(function(){
     $('#quality_type').on('change', function() {
         var type = $(this).val();
         $('#rice_name_id').val(null).trigger('change');
-        $('#wand_id').val(null).trigger('change');
+        $('#wand_ids').val(null).trigger('change').empty();
         $('#rice_name_id').empty().append('<option value="">-- Select quality --</option>');
         if (!type) {
             return;
@@ -55,14 +55,24 @@ $(function(){
     });
 
     $('#rice_name_id').on('change', function() {
-        loadWands($(this).val(), null);
+        loadWands($(this).val(), []);
+    });
+
+    $(document).on('click', '#wand_check_all', function() {
+        var allIds = $('#wand_ids option').map(function() {
+            return this.value ? String(this.value) : null;
+        }).get();
+        $('#wand_ids').val(allIds).trigger('change');
+    });
+    $(document).on('click', '#wand_uncheck_all', function() {
+        $('#wand_ids').val(null).trigger('change');
     });
 
     if ($('#quality_type').val() && !$('#rice_name_id option:selected').val()) {
         $('#quality_type').trigger('change');
     }
     if ($('#rice_name_id').val()) {
-        loadWands($('#rice_name_id').val(), selectedWandId);
+        loadWands($('#rice_name_id').val(), selectedWandIds);
     }
 });
 </script>
