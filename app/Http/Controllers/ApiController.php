@@ -1932,45 +1932,28 @@ class ApiController extends Controller
     {
         $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
         $todayDate = Carbon::now();
-        $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
-        $latestCropYear = $latestCropYearRecord?->cropYear ?? (int) $todayDate->year;
 
-        $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
+        $cropYear = $request->get('year');
+        if ($cropYear === null || $cropYear === '') {
+            $latestCropYearRecord = LivePrice::orderBy('cropYear', 'desc')->first();
+            $cropYear = $latestCropYearRecord?->cropYear ?? (int) $todayDate->year;
+        }
 
-        $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
-        $date = $todayDate->day;
-        $month = $todayDate->month;
-
-        $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
-
-        $lastRecord = LivePrice::query()
+        // Match api/prices/{state}/{type}: latest row for state + crop year (not today's calendar date).
+        $lastEnteredRecord = LivePrice::query()
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
             ->where('state', $state)
-            ->whereDate('created_at' , $lastEnteredRecord)
-            ->where('cropYear' , $cropYear)
-            ->latest('id');
+            ->when($cropYear, fn ($q) => $this->applyLivePriceCropYearMatch($q, $cropYear))
+            ->latest('id')
+            ->first();
 
-        if(!$lastRecord->exists()){
-            $lastRecord = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->whereNotNull('min_price')
-                ->whereNotNull('max_price')
-                ->where('state', $state)
-                ->where('cropYear' , $cropYear)
-                ->whereDate('created_at' ,'<', $lastEnteredRecord)
-                ->latest('id');
-        }
-
-        $lastEnteredRecord = $lastRecord->first();
-
-        if (!$lastEnteredRecord) {
+        if (! $lastEnteredRecord) {
             $latestForMeta = LivePrice::query()
                 ->where('state', $state)
-                ->where('cropYear', $cropYear)
+                ->when($cropYear, fn ($q) => $this->applyLivePriceCropYearMatch($q, $cropYear))
                 ->orderBy('updated_at', 'desc')
                 ->first()
                 ?: LivePrice::orderBy('updated_at', 'desc')->first();
@@ -2012,10 +1995,10 @@ class ApiController extends Controller
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
             ->where('live_prices.state', $state)
-            ->where('live_prices.cropYear' , $cropYear)
+            ->when($cropYear, fn ($q) => $this->applyLivePriceCropYearMatch($q, $cropYear))
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
             ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
-            ->whereDate('live_prices.created_at',$lastEnteredRecord->created_at)
+            ->whereDate('live_prices.created_at', $lastEnteredRecord->created_at->format('Y-m-d'))
             ->get();
 
         /*
@@ -2036,7 +2019,7 @@ class ApiController extends Controller
         */
 
         $latestIds = LivePricesOpeningClosing::selectRaw('MAX(id) as id')
-            ->where('cropYear', $cropYear)
+            ->when($cropYear, fn ($q) => $this->applyLivePriceCropYearMatch($q, $cropYear))
             ->where('state', $state)
             ->whereNotNull('closing')
             ->where('closing', '!=', '')
