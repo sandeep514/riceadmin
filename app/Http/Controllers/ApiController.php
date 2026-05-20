@@ -2015,9 +2015,14 @@ class ApiController extends Controller
             ->where('live_prices.cropYear' , $cropYear)
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
             ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
-            ->orderBy('live_prices.id', 'DESC')
             ->whereDate('live_prices.created_at',$lastEnteredRecord->created_at)
             ->get();
+
+        // Multiple admin updates same day: keep latest row per name+form (highest id), not the first.
+        $data = $data
+            ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
+            ->map(fn ($rows) => $rows->sortByDesc('id')->first())
+            ->values();
 
         /*
         |--------------------------------------------------------------------------
