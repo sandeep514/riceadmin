@@ -2021,8 +2021,13 @@ class ApiController extends Controller
         $latestIds = LivePricesOpeningClosing::selectRaw('MAX(id) as id')
             ->when($cropYear, fn ($q) => $this->applyLivePriceCropYearMatch($q, $cropYear))
             ->where('state', $state)
-            ->whereNotNull('closing')
-            ->where('closing', '!=', '')
+            ->where(function ($q) {
+                $q->where(function ($q2) {
+                    $q2->whereNotNull('opening')->where('opening', '!=', '');
+                })->orWhere(function ($q2) {
+                    $q2->whereNotNull('closing')->where('closing', '!=', '');
+                });
+            })
             ->groupBy('name', 'form', 'cropYear', 'state');
 
             $stateOrder = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
@@ -2079,16 +2084,28 @@ class ApiController extends Controller
             ->sortBy(fn ($row) => $row->form_order ?? 999)
             ->values();
 
-            
-
-        $hasClosingName = $livePricesClosingOpening->pluck('name');
-        $hasClosingForm = $livePricesClosingOpening->pluck('form');
-
-        $hasOpenigClosingConcade = [];
-
-        foreach ($hasClosingName as $index => $key) {
-            $hasOpenigClosingConcade[] = strtolower($key . '_' . $hasClosingForm[$index]);
+        // Always use today's live_prices min/max on closing rows (stale closing column is season-end only).
+        $livePriceByNameForm = [];
+        foreach ($data as $row) {
+            $livePriceByNameForm[strtolower((string) $row->name.'_'.(string) $row->form)] = $row;
         }
+        $livePricesClosingOpening = $livePricesClosingOpening->map(function ($row) use ($livePriceByNameForm) {
+            $key = strtolower((string) $row->name.'_'.(string) $row->form);
+            if (isset($livePriceByNameForm[$key])) {
+                $live = $livePriceByNameForm[$key];
+                $row->min_price = $live->min_price;
+                $row->max_price = $live->max_price;
+                $row->up_down = $live->up_down;
+                $row->tradeCount = $live->tradeCount ?? 0;
+                $row->is_updated_by_admin = $live->is_updated_by_admin ?? 0;
+                // Ex-mill display must follow live_prices; closing column may hold an old season-end value.
+                if ($live->min_price !== null && $live->max_price !== null) {
+                    $row->closing = trim((string) $live->min_price).'-'.trim((string) $live->max_price);
+                }
+            }
+
+            return $row;
+        })->values();
 
         /*
         |--------------------------------------------------------------------------
@@ -2099,11 +2116,6 @@ class ApiController extends Controller
         $temp = [];
 
         foreach ($data as $v) {
-
-            if(count($hasOpenigClosingConcade) > 0){
-                $combineNameForm = $v->name.'_'.$v->form;
-                if(in_array($combineNameForm,$hasOpenigClosingConcade)) continue;
-            }
 
             // If created_at or updated_at is not today, treat as not updated by admin
             $todayStr = $todayDate->format('Y-m-d');
