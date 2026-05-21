@@ -7084,7 +7084,16 @@ if (!file_exists('uploads')) {
     private function rulesValidDaysForSellQuery(): array
     {
         return [
-            'validDays' => ['required', 'date'],
+            'validDays' => [
+                'required',
+                'string',
+                'max:64',
+                function (string $attribute, $value, \Closure $fail): void {
+                    if ($this->normalizeValidDaysInputForRequest($value) === null) {
+                        $fail(__('validation.date', ['attribute' => 'valid till']));
+                    }
+                },
+            ],
         ];
     }
 
@@ -7096,30 +7105,95 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Map legacy field names (validTill, validity, valid_till) into validDays before validation.
+     * Map aliases and normalize validDays to Y-m-d H:i:s before validation.
      */
     private function mergeValidDaysInputAliases(Request $request): void
     {
-        if ($request->filled('validDays')) {
-            return;
+        if (! $request->filled('validDays')) {
+            foreach (['validTill', 'validity', 'valid_till', 'validDaysDatetime', 'valid_till_datetime'] as $field) {
+                if ($request->filled($field)) {
+                    $request->merge(['validDays' => $request->input($field)]);
+                    break;
+                }
+            }
         }
 
-        foreach (['validTill', 'validity', 'valid_till'] as $field) {
-            if ($request->filled($field)) {
-                $request->merge([
-                    'validDays' => $request->input($field),
-                ]);
-
-                return;
+        if ($request->has('validDays') && $request->input('validDays') !== null && $request->input('validDays') !== '') {
+            $normalized = $this->normalizeValidDaysInputForRequest($request->input('validDays'));
+            if ($normalized !== null) {
+                $request->merge(['validDays' => $normalized]);
             }
+        }
+    }
+
+    /**
+     * Accept datetime strings (and legacy day-count integers) for validDays.
+     */
+    private function normalizeValidDaysInputForRequest($value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $tz = config('app.timezone', 'Asia/Kolkata');
+
+        if (preg_match('/^\d{1,3}$/', (string) $value)) {
+            $intVal = (int) $value;
+            if ($intVal >= 1 && $intVal <= 365) {
+                return Carbon::now($tz)->addDays($intVal)->endOfDay()->format('Y-m-d H:i:s');
+            }
+        }
+
+        $raw = trim((string) $value);
+        if ($raw === '') {
+            return null;
+        }
+
+        if (preg_match('/^\d{10,13}$/', $raw)) {
+            $ts = strlen($raw) > 10 ? (int) substr($raw, 0, 10) : (int) $raw;
+
+            return Carbon::createFromTimestamp($ts, $tz)->format('Y-m-d H:i:s');
+        }
+
+        $formats = [
+            'Y-m-d H:i:s',
+            'Y-m-d H:i',
+            'Y-m-d\TH:i:s',
+            'Y-m-d\TH:i',
+            'Y-m-d',
+            'd-m-Y H:i:s',
+            'd-m-Y H:i',
+            'd-m-Y',
+            'd/m/Y H:i:s',
+            'd/m/Y H:i',
+            'd/m/Y',
+            'm/d/Y H:i:s',
+            'm/d/Y H:i',
+        ];
+
+        foreach ($formats as $format) {
+            try {
+                $dt = Carbon::createFromFormat($format, $raw, $tz);
+                if ($dt !== false) {
+                    return $dt->format('Y-m-d H:i:s');
+                }
+            } catch (\Throwable $e) {
+                continue;
+            }
+        }
+
+        try {
+            return Carbon::parse($raw, $tz)->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return null;
         }
     }
 
     private function resolveValidDaysForQuerySave(Request $request): string
     {
-        return Carbon::parse($request->input('validDays'))
-            ->timezone(config('app.timezone', 'Asia/Kolkata'))
-            ->format('Y-m-d H:i:s');
+        $normalized = $this->normalizeValidDaysInputForRequest($request->input('validDays'));
+
+        return $normalized ?? Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
     }
 
     /**
