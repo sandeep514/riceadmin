@@ -1188,11 +1188,10 @@ class ApiController extends Controller
                     ->orderBy('updated_at', 'desc')
                     ->get();
 
-                // Same-day re-saves: latest row per name+form per calendar day (keep compare dates).
+                // Same-day re-saves: keep the row with the latest updated_at per name+form.
                 $data = $data
-                    ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form.'_'.Carbon::parse($row->updated_at)->format('Y-m-d'))
+                    ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
                     ->map(fn ($rows) => $rows->sortByDesc('updated_at')->sortByDesc('id')->first())
-                    ->sortByDesc(fn ($row) => Carbon::parse($row->updated_at)->timestamp)
                     ->values();
 
                 foreach ($data->sortBy('name_rel.order') as $v) {
@@ -1249,17 +1248,14 @@ class ApiController extends Controller
                 }
 
                 $newData = collect($processedData)->map(function ($item) {
-                    return collect($item)->map(function ($innerItem) {
-                        $sortedByUpdatedAt = collect($innerItem)
-                            ->sortByDesc(fn ($row) => Carbon::parse($row->updated_at ?? 0)->timestamp);
-
-                        $onlyKeys = $sortedByUpdatedAt->keys()->all();
-                        $onlyValues = $sortedByUpdatedAt->values()->all();
+                    return collect($item)->map(function ($innerItem) use ($item) {
+                        $onlyValues = array_values($innerItem);
+                        $onlyKeys = array_keys($innerItem);
                         foreach ($onlyValues as $k => $v) {
-                            $onlyValues[$k]['is_hide'] = ($k === 0) ? 'false' : 'true';
+                            $onlyValues[$k]['is_hide'] = ($k == 0) ? 'false' : 'true';
                         }
-
-                        return array_combine($onlyKeys, $onlyValues);
+                        $data = array_combine($onlyKeys, $onlyValues);
+                        return $data;
                     });
                 })->toArray();
 
@@ -1275,9 +1271,7 @@ class ApiController extends Controller
                     foreach ($v as $kk => $vv) {
                         $newDataProcess = [];
                         foreach ($vv as $key => $value) {
-                            $dateRows = collect($value)
-                                ->sortByDesc(fn ($row, $dateKey) => Carbon::parse($row->updated_at ?? $dateKey)->timestamp);
-                            foreach ($dateRows as $ke => $val) {
+                            foreach ($value as $ke => $val) {
                                 $newDataProcess[] = [$ke => $val];
                             }
                             $myNewData[$k][$kk][$key] = $newDataProcess;
