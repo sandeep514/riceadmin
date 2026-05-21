@@ -1126,39 +1126,29 @@ class ApiController extends Controller
 
         $processedData = [];
 
-        // latest entered record for this cropYear
-        $lastRecord = LivePrice::query()
+        $livePriceBaseQuery = fn () => LivePrice::query()
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
             ->where('state', $state)
-            ->when($cropYear, fn($q) => $q->where('cropYear', $cropYear))
-            // ->whereDate('created_at', '<=', $cropYear)
-            ->latest('id')
+            ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear));
+
+        // Latest activity for this state/crop year (admin saves touch updated_at).
+        $lastRecord = $livePriceBaseQuery()
+            ->orderBy('updated_at', 'desc')
             ->first();
 
-            
         if ($lastRecord) {
-            // previous record (for comparison)
-            $lastToLastDate = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->whereNotNull('min_price')
-                ->whereNotNull('max_price')
-                ->where('state', $state)
-                ->when($cropYear, fn($q) => $q->where('cropYear', $cropYear))
-                // ->whereDate('created_at', '<', $lastRecord->created_at->format('Y-m-d'))
-                ->latest()
-                ->first();
-                // dd([
-                //     $lastRecord->created_at->format('Y-m-d'),
-                //     $lastToLastDate->created_at->format('Y-m-d')
-                // ]);
-            if ($lastToLastDate) {
-                // main query
-                
-                $data = LivePrice::query()
+            $latestDate = Carbon::parse($lastRecord->updated_at)->format('Y-m-d');
+
+            $previousDate = $livePriceBaseQuery()
+                ->whereDate('updated_at', '<', $latestDate)
+                ->max(DB::raw('DATE(updated_at)'));
+
+            $compareDates = array_values(array_unique(array_filter([$latestDate, $previousDate])));
+
+            $data = LivePrice::query()
                     ->has('name_rel')
                     ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
                     ->with([
@@ -1194,25 +1184,29 @@ class ApiController extends Controller
                     ->whereNotNull('max_price')
                     ->where('state', $state)
                     ->when($cropYear, fn($q) => $q->where('cropYear', $cropYear))
-                    ->whereIn(DB::raw('date(live_prices.created_at)'), [
-                        $lastRecord->created_at->format('Y-m-d'),
-                        $lastToLastDate->created_at->format('Y-m-d')
-                    ])
+                    ->whereIn(DB::raw('date(live_prices.updated_at)'), $compareDates)
+                    ->orderBy('updated_at', 'desc')
                     ->get();
 
-                   
-                // process
+                // Same-day re-saves: keep the row with the latest updated_at per name+form.
+                $data = $data
+                    ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
+                    ->map(fn ($rows) => $rows->sortByDesc('updated_at')->sortByDesc('id')->first())
+                    ->values();
+
                 foreach ($data->sortBy('name_rel.order') as $v) {
                     $replaceHignfn = explode('-', $v->name_rel->type);
                     $implodeUnderscore = implode('_', $replaceHignfn);
-                    $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                    $priceDate = Carbon::parse($v->updated_at)->format('Y-m-d');
+                    $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$priceDate] = $v;
                 }
 
                 $fiilteredProcessedData = [];
                 foreach ($data->sortBy('form_rel.order') as $v) {
                     $replaceHignfn = explode('-', $v->name_rel->type);
                     $implodeUnderscore = implode('_', $replaceHignfn);
-                    $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
+                    $priceDate = Carbon::parse($v->updated_at)->format('Y-m-d');
+                    $fiilteredProcessedData[$v->name_rel->name][$v->form_rel->form_name][$priceDate] = $v;
                 }
 
                 foreach ($processedData as $k => $v) {
@@ -1221,7 +1215,7 @@ class ApiController extends Controller
                     }
                 }
 
-                $latstRecord = $lastRecord->created_at->format('Y-m-d');
+                $latstRecord = $latestDate;
 
                 foreach ($processedData as $k => $v) {
                     if (is_array($v)) {
@@ -1285,50 +1279,12 @@ class ApiController extends Controller
                     }
                 }
 
-                return response()->json([
-                    'errors' => null,
-                    'prices' => $myNewData,
-                    'latest' => $lastRecord->created_at->format('Y-m-d'),
-                    'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
-                    'oldDate' => $lastToLastDate->created_at->format('Y-m-d')
-                ]);
-            }
-
-            // if only latest record (no previous date found)
-            $prices = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->whereNotNull('min_price')
-                ->whereNotNull('max_price')
-                ->withCount(['trades as tradeCount'  => function ($q) {
-                        $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                        // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                    }])
-                ->whereHas('name_rel', fn($q) => $q->where('type', $ricetype))
-                ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
-                ->with([
-                    'name_rel' => fn($q) =>  $q->where('type', $ricetype),
-                    'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
-                ])
-                ->where('state', $state)
-                ->whereIn(DB::raw('date(live_prices.created_at)'), [
-                    $lastRecord->created_at->format('Y-m-d'),
-                    $lastToLastDate->created_at->format('Y-m-d')
-                ])
-                ->when($cropYear, fn($q) => $q->where('cropYear', $cropYear))
-                ->get();
-
-            foreach ($prices as $v) {
-                $replaceHignfn = explode('-', $v->name_rel->type);
-                $implodeUnderscore = implode('_', $replaceHignfn);
-                $processedData[$implodeUnderscore][$v->name_rel->name][$v->form_rel->form_name][$v->created_at->format('Y-m-d')] = $v;
-            }
-
             return response()->json([
                 'errors' => null,
-                'prices' => json_encode($processedData),
-                'latest' => $lastRecord->created_at->format('d-M-Y, g:i A'),
-                'oldDate' => ''
+                'prices' => $myNewData,
+                'latest' => $latestDate,
+                'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
+                'oldDate' => $previousDate ? Carbon::parse($previousDate)->format('Y-m-d') : '',
             ]);
         }
 
