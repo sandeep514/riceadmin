@@ -1191,7 +1191,7 @@ class ApiController extends Controller
                 // Same-day re-saves: keep the row with the latest updated_at per name+form.
                 $data = $data
                     ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
-                    ->map(fn ($rows) => $rows->sortByDesc('updated_at')->first())
+                    ->map(fn ($rows) => $rows->sortByDesc('id')->first())
                     ->values();
 
                 foreach ($data->sortBy('name_rel.order') as $v) {
