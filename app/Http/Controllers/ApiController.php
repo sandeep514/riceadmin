@@ -1972,6 +1972,7 @@ class ApiController extends Controller
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
             ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
             ->whereDate('live_prices.created_at',$lastEnteredRecord->created_at)
+            ->orderBy('live_prices.updated_at', 'desc')
             ->get();
 
         // Multiple admin updates same day: keep latest row per name+form (highest id), not the first.
