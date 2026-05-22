@@ -1977,7 +1977,7 @@ class ApiController extends Controller
         // Multiple admin updates same day: keep latest row per name+form (highest id), not the first.
         $data = $data
             ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
-            ->map(fn ($rows) => $rows->sortByDesc('id')->first())
+            ->map(fn ($rows) => $rows->sortByDesc('updated_at')->first())
             ->values();
 
         /*
