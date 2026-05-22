@@ -197,60 +197,24 @@ class LivePricesController extends Controller
                 foreach($values as $form => $price){
                     $userDetails = LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->first();
 
-                    if( $userDetails ){
-                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([
-                            'cropYear'  => $request->cropYear[$state][$form], 
-                            'cropGrade' => $request->cropGrade[$state][$form], 
-                            'min_price' => $price,
-                            'is_updated_by_admin'   => 1,
-                            'max_price' => $request->max[$state][$form] , 
-                            'up_down' => $request->up_down[$state][$form],
-                            'monthStart' => $request->monthStart[$state][$form]??'',
-                            'monthEnd' => $request->monthEnd[$state][$form]??'',
-                            'opening' => $request->opening[$state][$form]??'',
-                            'closing' => $request->closing[$state][$form]??'',
-                            'updated_at' => $currentTimestamp
-                        ]); 
+                    $this->createAdminLivePriceEntry(
+                        $request,
+                        $state,
+                        $form,
+                        $price,
+                        $currentTimestamp,
+                        $userDetails
+                    );
 
-                            if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
-                                $openingOrClosing[] = [
-                                    'name' => $request->name,
-                                    'state' => $state,
-                                    'form' => $form,
-                                    'cropYear'  => $request->cropYear[$state][$form],
-                                    'opening' => $request->opening[$state][$form]??'',
-                                    'closing' => $request->closing[$state][$form]??''
-                                ];
-                            }
-                            
-                    }else{
-                        LivePrice::create([
-                            'name'      => $request->name,
-                            'form'      => $form,
-                            'min_price' => $price, 
-                            'is_updated_by_admin' => 1,
-                            'cropYear'  => $request->cropYear[$state][$form],
-                            'cropGrade' => $request->cropGrade[$state][$form],
-                            'max_price' => $request->max[$state][$form],
-                            'state'     => $state,
-                            'opening'   => $request->opening[$state][$form]??'',
-                            'closing'   => $request->closing[$state][$form]??'',
-                            'monthStart'   => $request->monthStart[$state][$form]??'',
-                            'monthEnd'   => $request->monthEnd[$state][$form]??'',
-                            'up_down'   => (array_key_exists($form, $request->up_down[$state])? $request->up_down[$state][$form] : 'up' ),
-                            'created_at' => $currentTimestamp,
-                            'updated_at' => $currentTimestamp,
-                        ]);
-                        if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
-                            $openingOrClosing[] = [
-                                'name'      => $request->name,
-                                'state'     => $state , 
-                                'form'      => $form , 
-                                'cropYear'  => $request->cropYear[$state][$form],
-                                'opening'   => $request->opening[$state][$form]??'',
-                                'closing'   => $request->closing[$state][$form]??'' 
-                            ];
-                        }
+                    if (isset($request->opening[$state][$form]) || isset($request->closing[$state][$form])) {
+                        $openingOrClosing[] = [
+                            'name' => $request->name,
+                            'state' => $state,
+                            'form' => $form,
+                            'cropYear' => $request->cropYear[$state][$form],
+                            'opening' => $request->opening[$state][$form] ?? '',
+                            'closing' => $request->closing[$state][$form] ?? '',
+                        ];
                     }
                     
                 }
@@ -301,19 +265,23 @@ class LivePricesController extends Controller
                         // $priceModel->up_down = $request->up_down[$state][$form];
                         // $priceModel->save();
                         
-                        LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->update([
-                            'cropYear'  => $request->cropYear[$state][$form], 
-                            'cropGrade' => $request->cropGrade[$state][$form],
-                            'min_price' => $price ,
-                            'is_updated_by_admin' => 1, 
-                            'max_price' => $request->max[$state][$form] , 
-                            'up_down'   => $request->up_down[$state][$form],
-                            'opening'   => $request->opening[$state][$form]??'',
-                            'closing'   => $request->closing[$state][$form]??'',
-                            'monthStart'   => $request->monthStart[$state][$form]??'',
-                            'monthEnd'   => $request->monthEnd[$state][$form]??'',
-                            'updated_at' => $currentTimestamp
-                        ]);
+                        $previousRow = LivePrice::where([
+                            'state' => $state,
+                            'form' => $form,
+                            'name' => $request->name,
+                        ])->whereDate('created_at', $todayDate)
+                            ->orderBy('updated_at', 'desc')
+                            ->orderBy('id', 'desc')
+                            ->first();
+
+                        $this->createAdminLivePriceEntry(
+                            $request,
+                            $state,
+                            $form,
+                            $price,
+                            $currentTimestamp,
+                            $previousRow
+                        );
 
                         if( isset($request->opening[$state][$form]) || isset($request->closing[$state][$form]) ){
                             $openingOrClosing[] = [
@@ -444,39 +412,34 @@ class LivePricesController extends Controller
                 'state'     => $state
             ])->whereDate('created_at' , $todayDate);
 
-        if( $livePrices->first() ){
-            $livePrices->update([
-                'min_price'   => $min_price,
-                'max_price'   => $max_price,
-                'is_updated_by_admin'   => 1,
-                'cropYear'    => $cropYear,
-                'cropGrade'   => $cropGrade,
-                'opening'     => $opening,
-                'closing'     => $closing,
-                'monthStart'  => $monthStart,
-                'monthEnd'    => $monthEnd,
-                'up_down'     => $up_down,
-                'updated_at'  => $updatedTime
-            ]);
-        }else{
-            LivePrice::create([
-                'min_price'   => $min_price,
-                'max_price'   => $max_price,
-                'is_updated_by_admin'   => 1,
-                'cropGrade'   => $cropGrade,
-                'opening'     => $opening,
-                'closing'     => $closing,
-                'monthStart'  => $monthStart,
-                'monthEnd'    => $monthEnd,
-                'up_down'     => $up_down,
-                'name'      => $name,
-                'form'      => $form,
-                'cropYear'  => $cropYear,
-                'state'     => $state,
-                'created_at'  => $updatedTime,
-                'updated_at'  => $updatedTime,
-            ]);
-        }
+        $previousRow = $livePrices
+            ->orderBy('updated_at', 'desc')
+            ->orderBy('id', 'desc')
+            ->first();
+
+        LivePrice::create([
+            'min_price' => $min_price,
+            'max_price' => $max_price,
+            'is_updated_by_admin' => 1,
+            'cropGrade' => $cropGrade,
+            'opening' => $opening,
+            'closing' => $closing,
+            'monthStart' => $monthStart,
+            'monthEnd' => $monthEnd,
+            'up_down' => $up_down,
+            'name' => $name,
+            'form' => $form,
+            'cropYear' => $cropYear,
+            'state' => $state,
+            'tradeFor' => $previousRow?->tradeFor ?? 1,
+            'farmingType' => $previousRow?->farmingType ?? 1,
+            'state_order' => $previousRow?->state_order,
+            'name_order' => $previousRow?->name_order,
+            'form_order' => $previousRow?->form_order,
+            'status' => $previousRow?->status ?? 1,
+            'created_at' => $updatedTime,
+            'updated_at' => $updatedTime,
+        ]);
 
         
 
@@ -685,6 +648,44 @@ class LivePricesController extends Controller
     //     Session::flash('success','Success|Price saved successfully!');
     //     return back();
     // }
+
+    /**
+     * Always insert a new live_prices row on admin save (preserve history).
+     */
+    private function createAdminLivePriceEntry(
+        Request $request,
+        string $state,
+        $form,
+        $price,
+        string $currentTimestamp,
+        ?LivePrice $previousRow = null
+    ): LivePrice {
+        return LivePrice::create([
+            'name' => $request->name,
+            'form' => $form,
+            'min_price' => $price,
+            'is_updated_by_admin' => 1,
+            'cropYear' => $request->cropYear[$state][$form],
+            'cropGrade' => $request->cropGrade[$state][$form],
+            'max_price' => $request->max[$state][$form],
+            'state' => $state,
+            'opening' => $request->opening[$state][$form] ?? '',
+            'closing' => $request->closing[$state][$form] ?? '',
+            'monthStart' => $request->monthStart[$state][$form] ?? '',
+            'monthEnd' => $request->monthEnd[$state][$form] ?? '',
+            'up_down' => array_key_exists($form, $request->up_down[$state] ?? [])
+                ? $request->up_down[$state][$form]
+                : ($previousRow?->up_down ?? 'up'),
+            'tradeFor' => $previousRow?->tradeFor ?? 1,
+            'farmingType' => $previousRow?->farmingType ?? 1,
+            'state_order' => $previousRow?->state_order,
+            'name_order' => $previousRow?->name_order,
+            'form_order' => $previousRow?->form_order,
+            'status' => $previousRow?->status ?? 1,
+            'created_at' => $currentTimestamp,
+            'updated_at' => $currentTimestamp,
+        ]);
+    }
 
     public function delete($id){
         LivePrice::find($id)->delete();
