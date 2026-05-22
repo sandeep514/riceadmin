@@ -191,6 +191,16 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('avg-length-map/delete/{id}', ['as' => 'delete.avg-length-map', 'uses' => 'AvgLengthMapController@delete', 'action' => 'delete']);
             });
 
+            // Rice Form Parent–Child Map (for interested module)
+            Route::group(['module'=>'rice_form_parent_map','icon'=>'fa-code-fork'], function() {
+                Route::get('rice-form-parent-map', ['as' => 'rice-form-parent-map', 'uses' => 'RiceFormParentMapController@index', 'action' => 'view']);
+                Route::get('rice-form-parent-map/create', ['as' => 'create.rice-form-parent-map', 'uses' => 'RiceFormParentMapController@create', 'action' => 'create']);
+                Route::post('rice-form-parent-map/save', ['as' => 'save.rice-form-parent-map', 'uses' => 'RiceFormParentMapController@save', 'action' => 'create']);
+                Route::get('rice-form-parent-map/edit/{id}', ['as' => 'edit.rice-form-parent-map', 'uses' => 'RiceFormParentMapController@edit', 'action' => 'edit']);
+                Route::put('rice-form-parent-map/update/{id}', ['as' => 'update.rice-form-parent-map', 'uses' => 'RiceFormParentMapController@update', 'action' => 'edit']);
+                Route::delete('rice-form-parent-map/delete/{id}', ['as' => 'delete.rice-form-parent-map', 'uses' => 'RiceFormParentMapController@delete', 'action' => 'delete']);
+            });
+
             // Rice Form Map
             Route::group(['module'=>'rice_form_map','icon'=>'fa-sitemap'], function() {
                 Route::get('rice-form-map', ['as' => 'rice-form-map', 'uses' => 'WebRiceFormMapController@index','action'=>'view']);

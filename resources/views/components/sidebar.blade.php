@@ -450,6 +450,12 @@
                     <span>Role Category Map</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['rice-form-parent-map','create.rice-form-parent-map','edit.rice-form-parent-map']))?'active':'' }}">
+                <a href="{{ route('rice-form-parent-map') }}">
+                    <i class="fa fa-code-fork"></i>
+                    <span>Rice Form Parent Map</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['rice-form-map','create.rice-form-map','edit.rice-form-map']))?'active':'' }}">
                 <a href="{{ route('rice-form-map') }}">
                     <i class="fa fa-sitemap"></i>
