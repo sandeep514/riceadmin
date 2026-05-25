@@ -1127,8 +1127,8 @@ class ApiController extends Controller
         $processedData = [];
 
         $livePriceBaseQuery = fn () => LivePrice::query()
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
+            // ->where('name', '!=', '0')
+            // ->where('form', '!=', '0')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
             ->where('state', $state)
@@ -1900,8 +1900,8 @@ class ApiController extends Controller
         $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
 
         $lastRecord = LivePrice::query()
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
+            // ->where('name', '!=', '0')
+            // ->where('form', '!=', '0')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
             ->where('state', $state)
@@ -1911,8 +1911,8 @@ class ApiController extends Controller
 
         if(!$lastRecord->exists()){
             $lastRecord = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
+                // ->where('name', '!=', '0')
+                // ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
                 ->where('state', $state)
@@ -2904,8 +2904,8 @@ class ApiController extends Controller
         $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
 
         $lastRecord = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
+                // ->where('name', '!=', '0')
+                // ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
                 ->whereDate('created_at' , $lastEnteredRecord)
@@ -2914,8 +2914,8 @@ class ApiController extends Controller
 
         if( !$lastRecord->exists() ){
             $lastRecord = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
+                // ->where('name', '!=', '0')
+                // ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
                 ->where('cropYear' , $cropYear)
@@ -3039,7 +3039,8 @@ class ApiController extends Controller
 
         $ricename = RiceName::where('type', 'basmati')->pluck('id')->toArray();
 
-        $lastRecord = LivePrice::where('name', '!=', 0)
+        $lastRecord = LivePrice::
+            where('name', '!=', 0)
             ->where('form', '!=', 0)
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
