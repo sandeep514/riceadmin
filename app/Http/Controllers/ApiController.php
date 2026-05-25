@@ -5840,6 +5840,7 @@ if (!file_exists('uploads')) {
         }, 'RiceFormMilestone3', 'riceGrade' => function ($query) {
             return $query->with('getWandType')->get();
         }, 'RicePackingBuyer', 'RicePackingSeller'])->where('status', '!=', 5)->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
+        $allTrade = $this->appendTradeResponseMediaAttributes($allTrade);
 
         // $allTrade = TradeQueriesINR::orderBy('status' , 'ASC')->limit(75)->orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
         //     return $query->where('userId' , $userId)->get();
@@ -6001,10 +6002,10 @@ if (!file_exists('uploads')) {
         $FutureSellQueriesINR = FutureSellQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
         
         // tradeType: 1 = buy, 2 = sell, 3 = future buy, 4 = future sell (tradeFor is App/Web)
-        $BuyQuery = $this->personalLinkedTradesQuery($BuyQueriesINR, 1)->get();
-        $SellQuery = $this->personalLinkedTradesQuery($SellQueriesINR, 2)->get();
-        $FutureBuyQuery = $this->personalLinkedTradesQuery($FutureBuyQueriesINR, 3)->get();
-        $FutureSellQuery = $this->personalLinkedTradesQuery($FutureSellQueriesINR, 4)->get();
+        $BuyQuery = $this->appendTradeResponseMediaAttributes($this->personalLinkedTradesQuery($BuyQueriesINR, 1)->get());
+        $SellQuery = $this->appendTradeResponseMediaAttributes($this->personalLinkedTradesQuery($SellQueriesINR, 2)->get());
+        $FutureBuyQuery = $this->appendTradeResponseMediaAttributes($this->personalLinkedTradesQuery($FutureBuyQueriesINR, 3)->get());
+        $FutureSellQuery = $this->appendTradeResponseMediaAttributes($this->personalLinkedTradesQuery($FutureSellQueriesINR, 4)->get());
 
         return response()->json(['status' => true, 'data' => ['BuyQuery' => $BuyQuery , 'SellQuery' => $SellQuery , 'FutureBuyQuery' => $FutureBuyQuery , 'FutureSellQuery' => $FutureSellQuery]]);
     }
@@ -6133,6 +6134,7 @@ if (!file_exists('uploads')) {
             ])
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
+        $allTrade = $this->appendTradeResponseMediaAttributes($allTrade);
 
         $trade = $allTrade->groupBy('tradeType');
 
@@ -6312,8 +6314,26 @@ if (!file_exists('uploads')) {
                 TradeQueriesINR::resolveFarmingName($trade->farmingType) ?? ''
             );
 
+            $this->applyTradeResponseMediaAttributes($trade);
+
             return $trade;
         });
+    }
+
+    private function appendTradeResponseMediaAttributes($trades)
+    {
+        return $trades->map(function ($trade) {
+            return $this->applyTradeResponseMediaAttributes($trade);
+        });
+    }
+
+    private function applyTradeResponseMediaAttributes($trade)
+    {
+        $videoFile = trim((string) ($trade->video_file ?? ''));
+        $trade->setAttribute('video_file', $videoFile);
+        $trade->setAttribute('video_url', $videoFile !== '' ? asset('uploads/' . $videoFile) : '');
+
+        return $trade;
     }
 
     /**
@@ -6414,6 +6434,7 @@ if (!file_exists('uploads')) {
             ])
             ->withCount('TradeLikeAll')
             ->get();
+        $allTrade = $this->appendTradeResponseMediaAttributes($allTrade);
 
         $tradeStatus = TradeCurrentStatus::first();
 
@@ -6535,6 +6556,9 @@ if (!file_exists('uploads')) {
         $trade = TradeQueriesINR::where('id', $tradeId)->with(['RiceFormMilestone3', 'RiceQualityMaster', 'riceGrade' => function ($query) {
             return $query->with('getWandType')->get();
         }, 'RicePacking'])->first();
+        if ($trade) {
+            $this->applyTradeResponseMediaAttributes($trade);
+        }
 
         return response()->json(['status' => true, 'data' => $trade]);
     }
@@ -6779,7 +6803,9 @@ if (!file_exists('uploads')) {
 
     public function getMyTrades(Request $request)
     {
-        $trade = TradeQueriesINR::where('queryId' , $request->userId)->get();
+        $trade = $this->appendTradeResponseMediaAttributes(
+            TradeQueriesINR::where('queryId' , $request->userId)->get()
+        );
         return response()->json(['status' => true , 'message' => 'Trade get successfully' , 'data' => $trade]);
     }
 

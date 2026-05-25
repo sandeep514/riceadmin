@@ -107,6 +107,10 @@
                                 <input type="file" class="form-control" name="packingImage">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Upload Video','Upload Video (optional)') !!}
+                                <input type="file" class="form-control" name="video_file" accept="video/*">
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Quantity','Quantity') !!}
                                 <input type="text" class="form-control" required placeholder="Quantity" name="quantity">
                             </div>

@@ -30,6 +30,7 @@ use App\TradeCategoryMap;
 use App\Services\TradeWebNotificationService;
 use App\Services\UserInterestService;
 use Carbon\Carbon;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
 class TradeController extends Controller
@@ -103,6 +104,10 @@ class TradeController extends Controller
 
 
     public function save(Request $request){
+        $request->validate([
+            'video_file' => ['nullable', 'file', 'mimes:mp4,mov,avi,wmv,webm,mkv', 'max:102400'],
+        ]);
+
         $data = [];
         $selectedQualityTypeInt = $request->category;
         $queryId = $request->queryId??'';
@@ -135,6 +140,10 @@ class TradeController extends Controller
             }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             $data['packing_file'] = $file_name;
+        }
+
+        if ($videoFile = $this->storeTradeVideoUpload($request)) {
+            $data['video_file'] = $videoFile;
         }
 
 
@@ -246,6 +255,10 @@ class TradeController extends Controller
     }
 
     public function update(Request $request){
+        $request->validate([
+            'video_file' => ['nullable', 'file', 'mimes:mp4,mov,avi,wmv,webm,mkv', 'max:102400'],
+        ]);
+
         $data = [];
         $selectedQualityTypeInt = $request->category;
         $quality = $request->quality;
@@ -277,6 +290,10 @@ class TradeController extends Controller
             }
             move_uploaded_file($file_tmp,"uploads/".$file_name);
             $data['packing_file'] = $file_name;
+        }
+
+        if ($videoFile = $this->storeTradeVideoUpload($request)) {
+            $data['video_file'] = $videoFile;
         }
 
         // if( $request->uncookedFiles != '' && isset($_FILES['uncookedFiles']) ){
@@ -371,6 +388,28 @@ class TradeController extends Controller
 
         return back();
         return View('trade.index');
+    }
+
+    protected function storeTradeVideoUpload(Request $request): ?string
+    {
+        if (! $request->hasFile('video_file')) {
+            return null;
+        }
+
+        $file = $request->file('video_file');
+        if (! $file instanceof UploadedFile || ! $file->isValid()) {
+            return null;
+        }
+
+        if (! file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+
+        $ext = strtolower($file->getClientOriginalExtension() ?: 'mp4');
+        $fileName = 'trade_video_' . uniqid('', true) . '.' . $ext;
+        $file->move('uploads', $fileName);
+
+        return $fileName;
     }
     
     public function changeStatus ( $tradeId , $status ){
