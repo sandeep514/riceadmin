@@ -1134,6 +1134,8 @@ class ApiController extends Controller
             ->where('state', $state)
             ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear));
 
+        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
+
         // Latest activity for this state/crop year (admin saves touch updated_at).
         $lastRecord = $livePriceBaseQuery()
             ->orderBy('updated_at', 'desc')
@@ -1192,6 +1194,10 @@ class ApiController extends Controller
                 $data = $data
                     ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
                     ->map(fn ($rows) => $rows->sortByDesc('id')->first())
+                    ->filter(function ($row) use ($invalidLatestTupleKeys) {
+                        return ! isset($invalidLatestTupleKeys[$this->livePriceTupleKey($row)])
+                            && $this->hasUsableLivePrice($row);
+                    })
                     ->values();
 
                 foreach ($data->sortBy('name_rel.order') as $v) {
@@ -1949,7 +1955,7 @@ class ApiController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeysForWeb($state, $cropYear);
+        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
 
         $data = LivePrice::query()
             ->has('name_rel')
@@ -2170,14 +2176,14 @@ class ApiController extends Controller
         ]);
     }
 
-    private function invalidLatestLivePriceTupleKeysForWeb($state, $cropYear): array
+    private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
     {
         $latestIds = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->where('state', $state)
-            ->where('cropYear', $cropYear)
+            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
             ->groupBy('name', 'form', 'state', 'cropYear');
 
         return LivePrice::query()
