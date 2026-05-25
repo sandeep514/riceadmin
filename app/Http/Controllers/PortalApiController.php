@@ -2319,18 +2319,44 @@ class PortalApiController extends Controller
     }
 
     /**
-     * API 1: Get list of all rice qualities (rice names like 1121, 1509, etc.)
-     * Optionally filter by type: basmati / non-basmati
+     * API 1: Get mapped rice qualities (rice names like 1121, 1509, etc.)
+     * Only returns rice names configured in web_rice_form_map for portal interests.
      */
     public function getRiceQualitiesList(Request $request)
     {
-        $query = RiceName::query();
+        $validator = Validator::make($request->all(), [
+            'type' => 'nullable|in:basmati,non-basmati',
+            'user_id' => 'nullable|integer|exists:users,id',
+        ]);
 
-        if ($request->has('type') && in_array($request->type, ['basmati', 'non-basmati'])) {
-            $query->where('type', $request->type);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
         }
 
-        $riceNames = $query
+        $riceType = $request->input('type');
+
+        $mappedRiceNameIds = WebRiceFormMap::query()
+            ->join('rice_names as rn', 'rn.id', '=', 'web_rice_form_map.rice_name_id')
+            ->when($riceType, function ($q) use ($riceType) {
+                $q->where('rn.type', $riceType)
+                    ->where(function ($q2) use ($riceType) {
+                        // Include old mapping rows where rice_type was not stored yet.
+                        $q2->where('web_rice_form_map.rice_type', $riceType)
+                            ->orWhereNull('web_rice_form_map.rice_type');
+                    });
+            })
+            ->distinct()
+            ->pluck('web_rice_form_map.rice_name_id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->values();
+
+        $riceNames = RiceName::query()
+            ->whereIn('id', $mappedRiceNameIds->all())
             ->orderBy('order', 'asc')
             // ->orderBy('id', 'asc')
             ->get(['id', 'name', 'type','order']);
@@ -2341,6 +2367,7 @@ class PortalApiController extends Controller
             $userId = (int) $request->user_id;
             $rows = UserInterestedMap::where('user_id', $userId)
                 ->where('status', 1)
+                ->whereIn('rice_name_id', $mappedRiceNameIds->all())
                 ->get(['rice_name_id', 'form_id', 'grade']);
 
             $selected = $rows
