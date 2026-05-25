@@ -28,6 +28,7 @@
                                     <th>Rice Form Name</th>
                                     <th>Type</th>
                                     <th>Order</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -39,7 +40,19 @@
                                         <td>{{ $form->type }}</td>
                                         <td>{{ $form->order ?? '-' }}</td>
                                         <td>
+                                            @if((int) $form->status === 1)
+                                                <span class="label label-success">Active</span>
+                                            @else
+                                                <span class="label label-danger">Deactive</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <a href="{{ route('master.get.rice.type', $form->id) }}" class="btn btn-info btn-xs">Edit</a>
+                                            @if((int) $form->status === 1)
+                                                <a href="{{ route('master.change.rice.type.status', [$form->id, 0]) }}" class="btn btn-warning btn-xs" onclick="return confirm('Deactivate this record?')">Deactivate</a>
+                                            @else
+                                                <a href="{{ route('master.change.rice.type.status', [$form->id, 1]) }}" class="btn btn-success btn-xs" onclick="return confirm('Activate this record?')">Activate</a>
+                                            @endif
                                             <a href="{{ route('master.delete.rice.type', $form->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('Delete this record?')">Delete</a>
                                         </td>
                                     </tr>

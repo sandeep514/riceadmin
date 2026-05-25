@@ -40,7 +40,7 @@ class MasterController extends Controller
 	}
 
 	public function listRiceType(){
-		$riceForm = RiceForm::where('status' , 1)->orderBy('order', 'ASC')->get();
+		$riceForm = RiceForm::orderBy('order', 'ASC')->get();
 		return view('master.listRiceForm' , compact('riceForm'));
 	}
 
@@ -89,6 +89,25 @@ class MasterController extends Controller
 
 	public function deleteRiceType($id){
 		RiceForm::where('id' , $id)->delete();
+		return back();
+	}
+
+	public function changeRiceTypeStatus($id, $status)
+	{
+		if (! in_array((int) $status, [0, 1], true)) {
+			Session::flash('error', 'Error|Invalid status selected.');
+			return back();
+		}
+
+		$riceForm = RiceForm::find($id);
+		if (! $riceForm) {
+			Session::flash('error', 'Error|No record found!');
+			return back();
+		}
+
+		$riceForm->update(['status' => (int) $status]);
+		Session::flash('success', 'Success|Rice form ' . ((int) $status === 1 ? 'activated' : 'deactivated') . ' successfully!');
+
 		return back();
 	}
 	public function deleteStatePort($state){

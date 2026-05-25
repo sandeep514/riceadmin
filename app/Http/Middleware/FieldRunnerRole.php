@@ -17,6 +17,14 @@ class FieldRunnerRole
      */
     public function handle($request, Closure $next)
     {
+        if (! Auth::check()) {
+            if ($request->expectsJson()) {
+                return response()->json(['message' => 'Unauthenticated.'], 401);
+            }
+
+            return redirect()->guest(route('login'));
+        }
+
         $role = Auth::user()->role;
         if($role == 3 || $role == 2){
             return $next($request);

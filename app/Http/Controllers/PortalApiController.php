@@ -1007,6 +1007,7 @@ class PortalApiController extends Controller
             }
 
             $user = $user->toArray();
+            unset($user['otp']);
 
             // if( $user['role'] == 12 ){
             //     $user['get_web_business_details']['get_category_details'] =  $user['get_web_business_details']['get_bag_vendor_web'];

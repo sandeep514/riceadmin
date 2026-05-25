@@ -461,6 +461,7 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('list/rice/type' ,           ['as' => 'master.list.rice.type'        ,'uses' => 'MasterController@listRiceType' ] );
         Route::post('create/rice/type' ,        ['as' => 'master.create.rice.type'      ,'uses' => 'MasterController@createRiceType' ] );
         Route::get('delete/rice/type/{id}' ,    ['as' => 'master.delete.rice.type'      ,'uses' => 'MasterController@deleteRiceType' ] );
+        Route::get('rice/type/change/status/{id}/{status}' , ['as' => 'master.change.rice.type.status' ,'uses' => 'MasterController@changeRiceTypeStatus' ] );
         Route::get('get/rice/type/{id}' ,       ['as' => 'master.get.rice.type'         ,'uses' => 'MasterController@getRiceTypeById'] );
         Route::POST('update/rice/type' ,        ['as' => 'master.update.rice.type'      ,'uses' => 'MasterController@updateRiceTypeById'] );
 
