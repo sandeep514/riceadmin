@@ -1949,6 +1949,8 @@ class ApiController extends Controller
         |--------------------------------------------------------------------------
         */
 
+        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeysForWeb($state, $cropYear);
+
         $data = LivePrice::query()
             ->has('name_rel')
             ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC"))
@@ -1965,8 +1967,6 @@ class ApiController extends Controller
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
             ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
             ->select('live_prices.*')
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price')
             ->where('live_prices.state', $state)
             ->where('live_prices.cropYear' , $cropYear)
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
@@ -1978,6 +1978,10 @@ class ApiController extends Controller
         $data = $data
             ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
             ->map(fn ($rows) => $rows->sortByDesc('id')->first())
+            ->filter(function ($row) use ($invalidLatestTupleKeys) {
+                return ! isset($invalidLatestTupleKeys[$this->livePriceTupleKey($row)])
+                    && $this->hasUsableLivePrice($row);
+            })
             ->values();
 
         /*
@@ -2164,6 +2168,49 @@ class ApiController extends Controller
             'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),
             'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
         ]);
+    }
+
+    private function invalidLatestLivePriceTupleKeysForWeb($state, $cropYear): array
+    {
+        $latestIds = LivePrice::query()
+            ->selectRaw('MAX(id) as id')
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->where('state', $state)
+            ->where('cropYear', $cropYear)
+            ->groupBy('name', 'form', 'state', 'cropYear');
+
+        return LivePrice::query()
+            ->whereIn('id', $latestIds)
+            ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
+            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
+            ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
+            ->all();
+    }
+
+    private function livePriceTupleKey($row): string
+    {
+        return implode('|', [
+            (string) ($row->name ?? ''),
+            (string) ($row->form ?? ''),
+            (string) ($row->state ?? ''),
+            (string) ($row->cropYear ?? ''),
+        ]);
+    }
+
+    private function hasUsableLivePrice($row): bool
+    {
+        return $this->isPositiveLivePriceValue($row->min_price ?? null)
+            && $this->isPositiveLivePriceValue($row->max_price ?? null);
+    }
+
+    private function isPositiveLivePriceValue($value): bool
+    {
+        if ($value === null || $value === '') {
+            return false;
+        }
+
+        return is_numeric($value) && (float) $value > 0;
     }
 
 
