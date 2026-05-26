@@ -49,6 +49,15 @@ class DatabaseBackupController extends Controller
         }
 
         try {
+            $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $database);
+            $filename = 'db_backup_' . $safeName . '_' . date('Y-m-d_His') . '.sql';
+            $dumpFile = tempnam(sys_get_temp_dir(), 'db_backup_');
+            if ($dumpFile === false) {
+                Session::flash('error', 'Error|Could not create temporary backup file.');
+
+                return redirect()->route('home');
+            }
+
             $args = [
                 $mysqldump,
                 '--defaults-extra-file=' . $defaultsFile,
@@ -58,6 +67,7 @@ class DatabaseBackupController extends Controller
                 '--events',
                 '--skip-comments',
                 '--default-character-set=utf8mb4',
+                '--result-file=' . $dumpFile,
                 $database,
             ];
 
@@ -67,17 +77,21 @@ class DatabaseBackupController extends Controller
 
             if (! $process->isSuccessful()) {
                 Session::flash('error', 'Error|Backup failed: ' . trim($process->getErrorOutput() ?: $process->getOutput()));
+                @unlink($dumpFile);
 
                 return redirect()->route('home');
             }
 
-            $safeName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $database);
-            $filename = 'db_backup_' . $safeName . '_' . date('Y-m-d_His') . '.sql';
+            if (! is_file($dumpFile) || filesize($dumpFile) === 0) {
+                Session::flash('error', 'Error|Backup file was not created.');
+                @unlink($dumpFile);
 
-            return response($process->getOutput(), 200, [
+                return redirect()->route('home');
+            }
+
+            return response()->download($dumpFile, $filename, [
                 'Content-Type' => 'application/octet-stream',
-                'Content-Disposition' => 'attachment; filename="' . $filename . '"',
-            ]);
+            ])->deleteFileAfterSend(true);
         } finally {
             if (is_string($defaultsFile) && is_file($defaultsFile)) {
                 @unlink($defaultsFile);
