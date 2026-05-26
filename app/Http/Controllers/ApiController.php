@@ -1894,8 +1894,7 @@ class ApiController extends Controller
     {
         $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
         $todayDate = Carbon::now();
-        $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
-        $latestCropYear = $latestCropYearRecord?->cropYear ?? (int) $todayDate->year;
+        $latestCropYear = (int) (LivePrice::max('cropYear') ?: $todayDate->year);
 
         $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
 
@@ -1904,30 +1903,38 @@ class ApiController extends Controller
         $month = $todayDate->month;
 
         $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
+        $lastEnteredStart = Carbon::parse($lastEnteredRecord)->startOfDay();
+        $lastEnteredEnd = Carbon::parse($lastEnteredRecord)->endOfDay();
 
         $lastRecord = LivePrice::query()
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
+            ->where('min_price', '>', 0)
+            ->where('max_price', '>', 0)
             ->where('state', $state)
-            ->whereDate('created_at' , $lastEnteredRecord)
+            ->whereBetween('created_at', [$lastEnteredStart, $lastEnteredEnd])
             ->where('cropYear' , $cropYear)
-            ->latest('id');
+            ->latest('id')
+            ->first();
 
-        if(!$lastRecord->exists()){
+        if(!$lastRecord){
             $lastRecord = LivePrice::query()
                 ->where('name', '!=', '0')
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
+                ->where('min_price', '>', 0)
+                ->where('max_price', '>', 0)
                 ->where('state', $state)
                 ->where('cropYear' , $cropYear)
-                ->whereDate('created_at' ,'<', $lastEnteredRecord)
-                ->latest('id');
+                ->where('created_at' ,'<', $lastEnteredStart)
+                ->latest('id')
+                ->first();
         }
 
-        $lastEnteredRecord = $lastRecord->first();
+        $lastEnteredRecord = $lastRecord;
 
         if (!$lastEnteredRecord) {
             $latestForMeta = LivePrice::query()
@@ -1957,12 +1964,21 @@ class ApiController extends Controller
 
         $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
 
+        $priceDayStart = Carbon::parse($lastEnteredRecord->created_at)->startOfDay();
+        $priceDayEnd = Carbon::parse($lastEnteredRecord->created_at)->endOfDay();
+        $latestPriceIdsForDate = LivePrice::query()
+            ->selectRaw('MAX(id) as id')
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->where('state', $state)
+            ->where('cropYear', $cropYear)
+            ->whereBetween('created_at', [$priceDayStart, $priceDayEnd])
+            ->groupBy('name', 'form', 'state', 'cropYear');
+
         $data = LivePrice::query()
-            ->has('name_rel')
-            ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC"))
             ->with([
-                'name_rel',
-                'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('order', "ASC")
+                'name_rel:id,name,type,order',
+                'form_rel:id,form_name,type,order,status',
             ])
             ->withCount([
                 'trades as tradeCount' => function ($q) {
@@ -1973,17 +1989,17 @@ class ApiController extends Controller
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
             ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
             ->select('live_prices.*')
+            ->whereIn('live_prices.id', $latestPriceIdsForDate)
             ->where('live_prices.state', $state)
             ->where('live_prices.cropYear' , $cropYear)
+            ->where('rn.type', $ricetype)
+            ->where('rf.type', $ricetype)
+            ->where('rf.status', 1)
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
             ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
-            ->whereDate('live_prices.created_at',$lastEnteredRecord->created_at)
             ->get();
 
-        // Multiple admin updates same day: keep latest row per name+form (highest id), not the first.
         $data = $data
-            ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
-            ->map(fn ($rows) => $rows->sortByDesc('id')->first())
             ->filter(function ($row) use ($invalidLatestTupleKeys) {
                 return ! isset($invalidLatestTupleKeys[$this->livePriceTupleKey($row)])
                     && $this->hasUsableLivePrice($row);
@@ -2014,8 +2030,6 @@ class ApiController extends Controller
             ->where('closing', '!=', '')
             ->groupBy('name', 'form', 'cropYear', 'state');
 
-            $stateOrder = LivePrice::distinct('state')->orderBy('state_order')->pluck('state' , 'state_order')->toArray();
-
             $livePricesClosingOpening = LivePricesOpeningClosing::query()
                 ->select('live_price_closing.*')
                 ->join('rice_names as rn', 'rn.id', '=', 'live_price_closing.name')
@@ -2024,11 +2038,6 @@ class ApiController extends Controller
                 ->whereIn('live_price_closing.id', $latestIds)
                 ->where('rn.type', $ricetype)
                 ->where('rf.type', $ricetype)
-
-                /* 1️⃣ State custom order */
-                ->orderByRaw(
-                    "FIELD(live_price_closing.state, '" . implode("','", $stateOrder) . "')"
-                )
 
                 /* 2️⃣ Name order */
                 ->orderBy('rn.order', 'ASC')
