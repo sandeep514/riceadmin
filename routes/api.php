@@ -151,7 +151,9 @@ use Pusher\Pusher;
     Route::get('web/get/farming-types', ['as' => 'web.get.farming.types', 'uses' => 'ApiController@getFarmingTypesWeb']);
     Route::get('get/rice/qualities/{riceType}' , ['as' => 'get.rice.qualities' , 'uses' => 'ApiController@getRiceQualities']);
     Route::get('get/rice/qualities/name/{riceId}' , ['as' => 'get.rice.qualities.name' , 'uses' => 'ApiController@getRiceQualitiesName']);
+    Route::get('web/get/rice/qualities/name/{riceId}', ['as' => 'web.get.rice.qualities.name', 'uses' => 'ApiController@getWebRiceQualitiesName', 'middleware' => 'portal.api.token']);
     Route::get('get/rice/wand/{riceNameId}' , ['as' => 'get.rice.wand' , 'uses' => 'ApiController@getRiceWand']);
+    Route::get('web/get/rice/wand/{riceNameId}', ['as' => 'web.get.rice.wand', 'uses' => 'ApiController@getWebRiceWand', 'middleware' => 'portal.api.token']);
 
 
 

@@ -85,6 +85,7 @@ use App\JobApplication;
 use App\TradeCategoryMap;
 use App\WebBusinessDetails;
 use App\Services\UserInterestService;
+use App\AvgLengthMap;
 
 
 class ApiController extends Controller
@@ -5483,12 +5484,151 @@ dd("kjnik");
         return response()->json(['status' => true, 'data' => $riceQuality , 'riceform' => $riceform]);
     }
 
+    /**
+     * Secure web forms for a rice quality (rice_names.id). Forms from avg_length_maps only.
+     */
+    public function getWebRiceQualitiesName($riceId)
+    {
+        $riceId = (int) $riceId;
+        if ($riceId <= 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid rice quality id.',
+            ], 422);
+        }
+
+        $riceName = RiceName::find($riceId);
+        if (! $riceName) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Rice quality not found.',
+            ], 404);
+        }
+
+        $qualityType = strtolower(trim((string) $riceName->type));
+        if (! in_array($qualityType, ['basmati', 'non-basmati'], true)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid rice quality type for this record.',
+            ], 422);
+        }
+
+        $formIds = AvgLengthMap::query()
+            ->where('quality_type', $qualityType)
+            ->where('rice_name_id', $riceId)
+            ->pluck('form_id')
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($formIds === []) {
+            return response()->json([
+                'status' => true,
+                'data' => [],
+                'rice_name_id' => $riceId,
+                'quality_type' => $qualityType,
+            ]);
+        }
+
+        $forms = RiceFormMilestone3::select(['id', 'name', 'order'])
+            ->whereIn('id', $formIds)
+            ->where('status', 1)
+            ->orderBy('order', 'ASC')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $forms,
+            'rice_name_id' => $riceId,
+            'quality_type' => $qualityType,
+        ]);
+    }
+
     public function getRiceWand($riceNameId)
     {
         $wand = WandModel::select(["id","RiceNameId","wandTypeId","value","order","status"])->where('RiceNameId', $riceNameId)->with(['getWandType' => function($q){
             return $q->select(["id","type","order","status"]);
         }])->orderBy('order', 'ASC')->get();
         return response()->json(['status' => true, 'data' => $wand]);
+    }
+
+    /**
+     * Secure web wands for rice quality + form (avg_length_maps). Requires form_id query param.
+     */
+    public function getWebRiceWand(Request $request, $riceNameId)
+    {
+        $validator = Validator::make(
+            array_merge($request->query(), ['rice_name_id' => $riceNameId]),
+            [
+                'rice_name_id' => ['required', 'integer', 'exists:rice_names,id'],
+                'form_id' => ['required', 'integer', 'exists:rice_form_milestone3,id'],
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => $validator->errors()->first(),
+            ], 422);
+        }
+
+        $riceNameId = (int) $riceNameId;
+        $formId = (int) $request->query('form_id');
+
+        $riceName = RiceName::find($riceNameId);
+        if (! $riceName) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Rice quality not found.',
+            ], 404);
+        }
+
+        $qualityType = strtolower(trim((string) $riceName->type));
+        if (! in_array($qualityType, ['basmati', 'non-basmati'], true)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid rice quality type for this record.',
+            ], 422);
+        }
+
+        $map = AvgLengthMap::query()
+            ->where('quality_type', $qualityType)
+            ->where('rice_name_id', $riceNameId)
+            ->where('form_id', $formId)
+            ->first();
+
+        $wandIds = $map && is_array($map->wand_ids)
+            ? array_values(array_unique(array_map('intval', $map->wand_ids)))
+            : [];
+
+        if ($wandIds === []) {
+            return response()->json([
+                'status' => true,
+                'data' => [],
+                'rice_name_id' => $riceNameId,
+                'form_id' => $formId,
+                'quality_type' => $qualityType,
+            ]);
+        }
+
+        $wand = WandModel::select(['id', 'RiceNameId', 'wandTypeId', 'value', 'order', 'status'])
+            ->where('RiceNameId', $riceNameId)
+            ->whereIn('id', $wandIds)
+            ->where('status', 1)
+            ->with(['getWandType' => function ($q) {
+                $q->select(['id', 'type', 'order', 'status']);
+            }])
+            ->orderBy('order', 'ASC')
+            ->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $wand,
+            'rice_name_id' => $riceNameId,
+            'form_id' => $formId,
+            'quality_type' => $qualityType,
+        ]);
     }
 
     public function getSellerPackingINR()
