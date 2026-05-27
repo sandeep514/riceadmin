@@ -5640,8 +5640,6 @@ dd("kjnik");
 
     public function FutureSubmitSellQuery(Request $request)
     {
-        $this->mergeValidDaysInputAliases($request);
-
         $validator = Validator::make(
             $request->all(),
             array_merge($this->rulesTradeQueryHierarchyIds(), [
@@ -5649,14 +5647,13 @@ dd("kjnik");
                 'crop_year' => ['nullable', 'string', 'max:32'],
                 'changePackingType' => ['required'],
                 'quantity' => ['required'],
-                'offerPrice' => ['required'],
                 'contactPerson' => ['nullable', 'string', 'max:255'],
                 'contactMobile' => ['nullable', 'string', 'max:64'],
                 'type' => ['nullable', 'string', 'max:32'],
                 'extra_file' => ['nullable', 'file', 'max:15360'],
-            ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload(), $this->rulesValidDaysForSellQuery()),
+            ], $this->rulesFarmingWebId(), $this->rulesOptionalReportUpload()),
             [],
-            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames(), $this->validDaysAttributeNames())
+            array_merge($this->tradeQueryHierarchyAttributeNames(), $this->farmingWebAttributeNames())
         );
         if ($validator->fails()) {
             return $this->tradeQueryValidationFailedResponse($validator);
@@ -5671,8 +5668,8 @@ dd("kjnik");
         $selectedGrade = $request->selectedGrade;
         $changePackingType = $request->changePackingType;
         $quantity = $request->quantity;
-        $offerPrice = $request->offerPrice;
-        $validDays = $this->resolveValidDaysForQuerySave($request);
+        $offerPrice = $request->input('offerPrice');
+        $validDays = $this->normalizeValidDaysInputForRequest($request->input('validDays'));
         $contactperson = $request->contactPerson;
         $contactMobile = $request->contactMobile;
         $userId = $request->user_id;
