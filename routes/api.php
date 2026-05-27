@@ -111,6 +111,7 @@ use Pusher\Pusher;
 
     Route::get('get/all/ports/{riceQualityId}/{userId}' , ['as' => 'get.all.ports' , 'uses' => 'ApiController@getAllPorts']);
     Route::get('get/data/for/buyer' , ['as' => 'get.data.for.buyer' ,'uses' =>'ApiController@getAllPortsgetDataForBuyer']);
+    Route::get('web/get/data/for/buyer', ['as' => 'web.get.data.for.buyer', 'uses' => 'ApiController@getWebDataForBuyer', 'middleware' => 'portal.api.token']);
     Route::POST('add/rice/query' , ['as' => 'add.rice.query' ,'uses' =>'ApiController@addRiceQuality']);
     Route::POST('save/bid' , ['as' => 'save.bid' ,'uses' =>'ApiController@saveBid']);
     Route::get('get/buyer/details/{id}' , ['as' => 'get.buyer.details' ,'uses' =>'ApiController@getBuyerDetails']);

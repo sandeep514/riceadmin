@@ -4920,29 +4920,77 @@ dd("kjnik");
 
     public function getAllPortsgetDataForBuyer()
     {
-        $riceQualityMaster = QualityMaster::select(["id","quality","quality_name","quality_type","quality_type_status","status","order"])->get()->groupBy('quality_type');
-        $qualityMaster = RiceName::get()->groupBy('type');
-        $riceQualityArray = [];
+        return response()->json($this->buildDataForBuyerPayload());
+    }
+
+    /**
+     * Secure web buyer data (Bearer / X-API-TOKEN). Requires ?type=basmati|non-basmati
+     */
+    public function getWebDataForBuyer(Request $request)
+    {
+        $type = strtolower(trim((string) $request->query('type', '')));
+        if (! in_array($type, ['basmati', 'non-basmati'], true)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid or missing type. Allowed values: basmati, non-basmati',
+            ], 422);
+        }
+
+        return response()->json($this->buildDataForBuyerPayload($type));
+    }
+
+    private function buildDataForBuyerPayload(?string $type = null): array
+    {
+        $riceQualityMasterQuery = QualityMaster::select([
+            'id', 'quality', 'quality_name', 'quality_type', 'quality_type_status', 'status', 'order',
+        ]);
+        $qualityMasterQuery = RiceName::query();
+
+        if ($type !== null) {
+            $riceQualityMasterQuery->where('quality_type', $type);
+            $qualityMasterQuery->where('type', $type);
+        }
+
+        $riceQualityMaster = $riceQualityMasterQuery->get()->groupBy('quality_type');
+        $qualityMaster = $qualityMasterQuery->get()->groupBy('type');
         $riceQualityDataArray = $qualityMaster->toArray();
-        if ($qualityMaster->count()) {
-            $riceQualityArray = array_keys($qualityMaster->toArray());
-        }
+        $riceQualityArray = $qualityMaster->count() ? array_keys($riceQualityDataArray) : [];
 
-        $usdDefaultMaster = USD_defaultmaster::get()->groupBy('applied_for')->toArray();
         $usdDefaultMasterArray = [];
-        foreach ($usdDefaultMaster as $k => $v) {
-            if ($k == 1) {
-                $usdDefaultMasterArray['basmati'] = $v;
-            } else {
-                $usdDefaultMasterArray['non-basmati'] = $v;
+        if ($type === null) {
+            $usdDefaultMaster = USD_defaultmaster::get()->groupBy('applied_for')->toArray();
+            foreach ($usdDefaultMaster as $k => $v) {
+                if ($k == 1) {
+                    $usdDefaultMasterArray['basmati'] = $v;
+                } else {
+                    $usdDefaultMasterArray['non-basmati'] = $v;
+                }
             }
+        } else {
+            $appliedFor = $type === 'basmati' ? 1 : 0;
+            $usdDefaultMasterArray[$type] = USD_defaultmaster::where('applied_for', $appliedFor)->get()->toArray();
         }
 
-        $portObject = OceanFreight::select('id', 'region', 'country', 'port', 'freight_25MT')->orderBy('port', 'ASC')->where('port', '!=', '')->get();
-        $portArray = $portObject->toArray();
-        $data = ['status' => true, 'riceQualityMasterArray' => $riceQualityMaster->toArray(), 'riceQualityType' => $riceQualityArray, 'riceQualityData' => $usdDefaultMasterArray, 'ports' => $portArray, 'riceQualityDataArray' => $riceQualityDataArray];
+        $portArray = OceanFreight::select('id', 'region', 'country', 'port', 'freight_25MT')
+            ->orderBy('port', 'ASC')
+            ->where('port', '!=', '')
+            ->get()
+            ->toArray();
 
-        return response()->json($data);
+        $payload = [
+            'status' => true,
+            'riceQualityMasterArray' => $riceQualityMaster->toArray(),
+            'riceQualityType' => $riceQualityArray,
+            'riceQualityData' => $usdDefaultMasterArray,
+            'ports' => $portArray,
+            'riceQualityDataArray' => $riceQualityDataArray,
+        ];
+
+        if ($type !== null) {
+            $payload['type'] = $type;
+        }
+
+        return $payload;
     }
 
     public function addRiceQuality(Request $request)
