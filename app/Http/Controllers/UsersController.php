@@ -12,6 +12,7 @@ use App\ChatStatus;
 use App\Services\UserInterestService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 use Session;
 use Mail;
 
@@ -95,6 +96,36 @@ class UsersController extends Controller
         $sellerModel->delete();
         Session::flash('success','Success|Record deleted successfully!');
         return back();
+    }
+
+    public function deleteWebUserWithPin(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'pin' => ['required', 'string', 'in:22334455'],
+            ], [
+                'pin.in' => 'Invalid security PIN.',
+            ]);
+        } catch (ValidationException $e) {
+            Session::flash('error', 'Error|' . ($e->validator->errors()->first('pin') ?: 'Invalid security PIN.'));
+            return back();
+        }
+
+        $user = User::find($id);
+        if (! $user) {
+            Session::flash('error', 'Error|User not found.');
+            return back();
+        }
+
+        if ((string) ($user->user_from ?? '') !== 'web') {
+            Session::flash('error', 'Error|Only web users can be deleted from this action.');
+            return back();
+        }
+
+        $user->delete();
+        Session::flash('success', 'Success|Web user deleted successfully.');
+
+        return redirect()->route('users', $user->role);
     }
     
     public function changeChatStatus(Request $request){

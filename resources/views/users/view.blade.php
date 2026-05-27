@@ -5,6 +5,17 @@
 <div class="content-wrapper">
 	<div class="container">
 		<h2>User Details - ID #{{ $user['id'] }}</h2>
+		@if (($user['user_from'] ?? '') === 'web')
+			<div style="margin: 10px 0 20px 0;">
+				<form id="delete-web-user-form" method="POST" action="{{ route('delete.web.user.with.pin', $user['id']) }}" style="display:inline;">
+					@csrf
+					<input type="hidden" name="pin" id="delete-web-user-pin" value="">
+					<button type="button" class="btn btn-danger btn-sm" id="delete-web-user-btn">
+						<i class="fa fa-trash"></i> Delete Web User
+					</button>
+				</form>
+			</div>
+		@endif
 
 		@if ($errors->any())
 			<div class="alert alert-danger">
@@ -316,6 +327,31 @@ $(document).ready(function() {
 		$('#myModal').modal('show')
 		// $('#imageModal').removeClass('fade')
 
+	});
+
+	$('#delete-web-user-btn').on('click', function () {
+		if (typeof toastr !== 'undefined') {
+			toastr.warning('This action will permanently delete this web user. Enter PIN to continue.', 'Confirm delete');
+		}
+
+		var confirmed = window.confirm('Are you sure you want to delete this web user?');
+		if (!confirmed) return;
+
+		var pin = window.prompt('Enter security PIN to confirm delete:');
+		if (pin === null) return;
+
+		pin = String(pin).trim();
+		if (pin !== '22334455') {
+			if (typeof toastr !== 'undefined') {
+				toastr.error('Invalid PIN. User was not deleted.', 'Error');
+			} else {
+				alert('Invalid PIN. User was not deleted.');
+			}
+			return;
+		}
+
+		$('#delete-web-user-pin').val(pin);
+		$('#delete-web-user-form').trigger('submit');
 	});
 
 	@if ($canAdminManageInterests === true)
