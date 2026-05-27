@@ -208,6 +208,11 @@
                     <i class="fa fa-address-card-o"></i> <span>Master</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['master.rice.form.milestone3','master.create.rice.form.milestone3','master.edit.rice.form.milestone3']))?'active':'' }}">
+                <a href="{{ route('master.rice.form.milestone3') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Rice Form 3</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['change.date.of.existing.user']))?'active':'' }}">
                 <a href="{{ route('change.date.of.existing.user') }}">
                     <i class="fa fa-address-card-o"></i> <span>Change Date of Existing User</span>
@@ -383,13 +388,6 @@
                     <span>News Runner</span>
                 </a>
             </li>
-            <li class="{{ (in_array($currentRoute,['master.rice.form.milestone3']))?'active':'' }}">
-                <a href="{{ route('master.rice.form.milestone3') }}">
-                    <i class="fa fa-address-card-o"></i> 
-                    <span>Rice Form Milestone3</span>
-                </a>
-            </li>
-
             <li class="{{ (in_array($currentRoute,['testimonial.index']))?'active':'' }}">
                 <a href="{{ route('testimonial.index') }}">
                     <i class="fa fa-address-card-o"></i> 

@@ -554,6 +554,7 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('edit/other/rice/forms/{id}' , [ 'as' => 'master.edit.rice.form.milestone3' , 'uses' => 'MasterController@editRiceFormMilestone']);
         Route::put('update/other/rice/forms/{id}' , [ 'as' => 'master.update.rice.form.milestone3' , 'uses' => 'MasterController@updateRiceFormMilestone']);
         Route::delete('delete/other/rice/forms/{id}' , [ 'as' => 'master.delete.rice.form.milestone3' , 'uses' => 'MasterController@deleteRiceFormMilestone']);
+        Route::get('rice/form/3/change/status/{id}/{status}' , [ 'as' => 'master.change.rice.form.milestone3.status' , 'uses' => 'MasterController@changeRiceFormMilestone3Status' ]);
         Route::get('export/other/rice/forms' , [ 'as' => 'master.export.rice.form.milestone3' , 'uses' => 'MasterController@exportRiceFormMilestone']);
 
         // Master Export Routes

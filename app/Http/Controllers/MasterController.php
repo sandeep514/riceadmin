@@ -1046,7 +1046,7 @@ class MasterController extends Controller
 			'order' => $lastOrder ? ($lastOrder->order + 1) : 1,
 			'status' => 1,
 		]);
-		Session::flash('success', 'Success|Rice Form created successfully!');
+		Session::flash('success', 'Success|Rice Form 3 created successfully!');
 		return redirect()->route('master.rice.form.milestone3');
 	}
 	public function editRiceFormMilestone($id)
@@ -1075,7 +1075,7 @@ class MasterController extends Controller
 			'order' => $request->order,
 			'status' => $request->status,
 		]);
-		Session::flash('success', 'Success|Rice Form updated successfully!');
+		Session::flash('success', 'Success|Rice Form 3 updated successfully!');
 		return redirect()->route('master.rice.form.milestone3');
 	}
 	public function deleteRiceFormMilestone($id)
@@ -1085,8 +1085,27 @@ class MasterController extends Controller
 			Session::flash('error', 'Error|No record found!');
 		} else {
 			$form->delete();
-			Session::flash('success', 'Success|Rice Form deleted successfully!');
+			Session::flash('success', 'Success|Rice Form 3 deleted successfully!');
 		}
+		return back();
+	}
+
+	public function changeRiceFormMilestone3Status($id, $status)
+	{
+		if (! in_array((int) $status, [0, 1], true)) {
+			Session::flash('error', 'Error|Invalid status selected.');
+			return back();
+		}
+
+		$form = RiceFormMilestone3::find($id);
+		if (! $form) {
+			Session::flash('error', 'Error|No record found!');
+			return back();
+		}
+
+		$form->update(['status' => (int) $status]);
+		Session::flash('success', 'Success|Rice Form 3 ' . ((int) $status === 1 ? 'activated' : 'deactivated') . ' successfully!');
+
 		return back();
 	}
 	public function exportRiceFormMilestone()

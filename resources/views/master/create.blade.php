@@ -139,6 +139,35 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
+                            <h3 class="box-title">Rice Form 3</h3>
+                        </div>
+                        {!! Form::open(['route'=>'master.save.rice.form.milestone3']) !!}
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        {!! Form::label('name','Rice Form Name*') !!} <small>(e.g. Steam, Raw)</small>
+                                        {!! Form::text('name' , '' , ['class' => 'form-control']) !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary">Save Name</button>
+                                    </div>
+                                    <div class="col-md-8 " style="height: 35px"></div>
+                                    <div class="col-md-2">
+                                        <a class="btn btn-info" href="{{ route('master.rice.form.milestone3') }}">List Rice Form 3</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {!! Form::close() !!}
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
                             <h3 class="box-title">Rice Type</h3>
                         </div>
                         {!! Form::open(['route'=>'master.create.rice.type']) !!}

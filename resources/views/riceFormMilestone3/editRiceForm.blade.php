@@ -3,10 +3,11 @@
 @section('content')
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>Edit Rice Form <small>Milestone 3</small></h1>
+            <h1>Edit Rice Form 3</h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('master.rice.form.milestone3') }}">Rice Forms Milestone 3</a></li>
+                <li><a href="{{ route('master.index') }}">Master</a></li>
+                <li><a href="{{ route('master.rice.form.milestone3') }}">Rice Form 3</a></li>
                 <li class="active">Edit</li>
             </ol>
         </section>
