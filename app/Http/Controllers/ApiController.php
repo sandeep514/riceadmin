@@ -1981,6 +1981,9 @@ class ApiController extends Controller
                 'name_rel:id,name,type,order',
                 'form_rel:id,form_name,type,order,status',
             ])
+            ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
+            ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
+            ->select('live_prices.*')
             ->withCount([
                 'trades as tradeCount' => function ($q) {
                     $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form')
@@ -1988,9 +1991,6 @@ class ApiController extends Controller
                       ->whereRaw('CAST(trade_query_milestone3.crop AS UNSIGNED) = live_prices.cropYear');
                 }
             ])
-            ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
-            ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
-            ->select('live_prices.*')
             ->whereIn('live_prices.id', $latestPriceIdsForDate)
             ->where('live_prices.state', $state)
             ->where('live_prices.cropYear' , $cropYear)
