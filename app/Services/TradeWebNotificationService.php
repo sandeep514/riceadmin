@@ -3,15 +3,19 @@
 namespace App\Services;
 
 use App\Events\WebPortalNotificationEvent;
+use App\Jobs\SendTradeInterestNotificationsJob;
+use App\Jobs\SendTradeWebNotificationsJob;
 use App\TradeQueriesINR;
 use App\User;
 use App\WebUserNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class TradeWebNotificationService
 {
+    public const DEFAULT_CHUNK_SIZE = 500;
     /** Default message for users whose saved interests match the new trade. */
     public const DEFAULT_TRADE_INTEREST_NOTIFY_MESSAGE = 'SNTC send you special notification on a new trade {trade_no}, {quality}, {rice_form}, {grade}.';
 
@@ -41,6 +45,74 @@ Quantity: {quantity}';
         string $title,
         string $messageTemplate
     ): void {
+        $this->processTradeNotification(
+            $trade,
+            $categoryIds,
+            $send,
+            $audienceMode,
+            $selectedUserIds,
+            $title,
+            $messageTemplate
+        );
+    }
+
+    /**
+     * Notify web users who were selected because their saved interests match the trade.
+     *
+     * @param  array<int>  $userIds
+     */
+    public function sendInterestMatch(
+        TradeQueriesINR $trade,
+        array $userIds,
+        string $title,
+        string $messageTemplate
+    ): void {
+        $this->processInterestNotification($trade, $userIds, $title, $messageTemplate);
+    }
+
+    public function queueTradeNotification(
+        int $tradeId,
+        array $categoryIds,
+        bool $send,
+        string $audienceMode,
+        ?array $selectedUserIds,
+        string $title,
+        string $messageTemplate
+    ): void {
+        SendTradeWebNotificationsJob::dispatch(
+            $tradeId,
+            $categoryIds,
+            $send,
+            $audienceMode,
+            $selectedUserIds,
+            $title,
+            $messageTemplate
+        )->onQueue('notifications');
+    }
+
+    public function queueInterestNotification(
+        int $tradeId,
+        array $userIds,
+        string $title,
+        string $messageTemplate
+    ): void {
+        SendTradeInterestNotificationsJob::dispatch(
+            $tradeId,
+            $userIds,
+            $title,
+            $messageTemplate
+        )->onQueue('notifications');
+    }
+
+    public function processTradeNotification(
+        TradeQueriesINR $trade,
+        array $categoryIds,
+        bool $send,
+        string $audienceMode,
+        ?array $selectedUserIds,
+        string $title,
+        string $messageTemplate
+    ): void {
         if (! $send) {
             return;
         }
@@ -51,9 +123,7 @@ Quantity: {quantity}';
         }
 
         $trade->loadMissing(['RiceNameData', 'RiceFormMilestone3', 'riceGrade.getWandType']);
-
         $message = $this->applyTradeMessagePlaceholders($trade, $messageTemplate);
-
         $title = trim($title) !== '' ? trim($title) : 'New Trade alert';
 
         $eligibleIds = $this->eligibleWebUserIds($categoryIds);
@@ -72,46 +142,15 @@ Quantity: {quantity}';
             return;
         }
 
-        $groupId = (string) Str::uuid();
-        $notifyDate = Carbon::now()->format('Y-m-d');
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-
-        $rolesByUser = User::query()->whereIn('id', $targetIds)->pluck('role', 'id');
-        $categoriesByUser = DB::table('web_business_details')
-            ->whereIn('user_id', $targetIds)
-            ->pluck('selected_category', 'user_id');
-
-        $rows = [];
-        foreach ($targetIds as $userId) {
-            $rows[] = [
-                'user_id' => $userId,
-                'notify_date' => $notifyDate,
-                'title' => $title,
-                'message' => $message,
-                'role_id' => isset($rolesByUser[$userId]) ? (int) $rolesByUser[$userId] : null,
-                'category_id' => isset($categoriesByUser[$userId]) ? (int) $categoriesByUser[$userId] : null,
-                'audience_mode' => $audienceMode === 'selected_users' ? 'selected_users' : 'all_category',
-                'broadcast_group_id' => $groupId,
-                'read_at' => null,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-        }
-
-        WebUserNotification::insert($rows);
-
-        $created = WebUserNotification::where('broadcast_group_id', $groupId)->get();
-        foreach ($created as $notification) {
-            broadcast(new WebPortalNotificationEvent($notification));
-        }
+        $this->insertAndBroadcastInChunks(
+            $targetIds,
+            $title,
+            $message,
+            $audienceMode === 'selected_users' ? 'selected_users' : 'all_category'
+        );
     }
 
-    /**
-     * Notify web users who were selected because their saved interests match the trade.
-     *
-     * @param  array<int>  $userIds
-     */
-    public function sendInterestMatch(
+    public function processInterestNotification(
         TradeQueriesINR $trade,
         array $userIds,
         string $title,
@@ -123,7 +162,6 @@ Quantity: {quantity}';
         }
 
         $trade->loadMissing(['RiceNameData', 'RiceFormMilestone3', 'riceGrade.getWandType']);
-
         $message = $this->applyTradeMessagePlaceholders($trade, $messageTemplate);
         $title = trim($title) !== '' ? trim($title) : 'Special trade alert';
 
@@ -139,38 +177,7 @@ Quantity: {quantity}';
             return;
         }
 
-        $groupId = (string) Str::uuid();
-        $notifyDate = Carbon::now()->format('Y-m-d');
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-
-        $rolesByUser = User::query()->whereIn('id', $webUserIds)->pluck('role', 'id');
-        $categoriesByUser = DB::table('web_business_details')
-            ->whereIn('user_id', $webUserIds)
-            ->pluck('selected_category', 'user_id');
-
-        $rows = [];
-        foreach ($webUserIds as $userId) {
-            $rows[] = [
-                'user_id' => $userId,
-                'notify_date' => $notifyDate,
-                'title' => $title,
-                'message' => $message,
-                'role_id' => isset($rolesByUser[$userId]) ? (int) $rolesByUser[$userId] : null,
-                'category_id' => isset($categoriesByUser[$userId]) ? (int) $categoriesByUser[$userId] : null,
-                'audience_mode' => 'trade_interest',
-                'broadcast_group_id' => $groupId,
-                'read_at' => null,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-        }
-
-        WebUserNotification::insert($rows);
-
-        $created = WebUserNotification::where('broadcast_group_id', $groupId)->get();
-        foreach ($created as $notification) {
-            broadcast(new WebPortalNotificationEvent($notification));
-        }
+        $this->insertAndBroadcastInChunks($webUserIds, $title, $message, 'trade_interest');
     }
 
     /**
@@ -193,6 +200,66 @@ Quantity: {quantity}';
             ->map(fn ($id) => (int) $id)
             ->values()
             ->all();
+    }
+
+    private function insertAndBroadcastInChunks(
+        array $targetIds,
+        string $title,
+        string $message,
+        string $audienceMode
+    ): void {
+        $groupId = (string) Str::uuid();
+        $notifyDate = Carbon::now()->format('Y-m-d');
+        $chunkSize = (int) (config('queue.trade_web_notification_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
+        if ($chunkSize < 1) {
+            $chunkSize = self::DEFAULT_CHUNK_SIZE;
+        }
+
+        foreach (array_chunk($targetIds, $chunkSize) as $chunkIds) {
+            $now = Carbon::now()->format('Y-m-d H:i:s');
+            $rolesByUser = User::query()->whereIn('id', $chunkIds)->pluck('role', 'id');
+            $categoriesByUser = DB::table('web_business_details')
+                ->whereIn('user_id', $chunkIds)
+                ->pluck('selected_category', 'user_id');
+
+            $rows = [];
+            foreach ($chunkIds as $userId) {
+                $rows[] = [
+                    'user_id' => $userId,
+                    'notify_date' => $notifyDate,
+                    'title' => $title,
+                    'message' => $message,
+                    'role_id' => isset($rolesByUser[$userId]) ? (int) $rolesByUser[$userId] : null,
+                    'category_id' => isset($categoriesByUser[$userId]) ? (int) $categoriesByUser[$userId] : null,
+                    'audience_mode' => $audienceMode,
+                    'broadcast_group_id' => $groupId,
+                    'read_at' => null,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ];
+            }
+
+            WebUserNotification::insert($rows);
+
+            $created = WebUserNotification::query()
+                ->where('broadcast_group_id', $groupId)
+                ->whereIn('user_id', $chunkIds)
+                ->where('created_at', $now)
+                ->get();
+
+            foreach ($created as $notification) {
+                try {
+                    broadcast(new WebPortalNotificationEvent($notification));
+                } catch (\Throwable $e) {
+                    Log::warning('Trade web notification broadcast failed for user.', [
+                        'group_id' => $groupId,
+                        'user_id' => $notification->user_id,
+                        'notification_id' => $notification->id,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
+        }
     }
 
     private function resolveTradeNo(TradeQueriesINR $trade): string

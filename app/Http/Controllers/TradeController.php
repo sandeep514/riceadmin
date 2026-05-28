@@ -519,20 +519,8 @@ class TradeController extends Controller
         /** @var TradeWebNotificationService $svc */
         $svc = app(TradeWebNotificationService::class);
 
-        $eligible = $svc->eligibleWebUserIds($categoryIds);
-        if ($eligible === []) {
-            return '(Notification not sent: no web users found for selected categories.)';
-        }
-
-        if ($audience === 'selected_users') {
-            $ok = array_values(array_intersect($selected, $eligible));
-            if ($ok === []) {
-                return '(Notification not sent: selected users do not belong to the chosen categories.)';
-            }
-        }
-
-        $svc->send(
-            $trade,
+        $svc->queueTradeNotification(
+            (int) $trade->id,
             $categoryIds,
             true,
             $audience,
@@ -541,7 +529,7 @@ class TradeController extends Controller
             $message
         );
 
-        return '';
+        return '(Notification queued: delivery is running in background.)';
     }
 
     /**
@@ -631,8 +619,8 @@ class TradeController extends Controller
 
         /** @var TradeWebNotificationService $svc */
         $svc = app(TradeWebNotificationService::class);
-        $svc->sendInterestMatch($trade, $userIds, $title, $message);
+        $svc->queueInterestNotification((int) $trade->id, $userIds, $title, $message);
 
-        return '';
+        return '(Interest notification queued: delivery is running in background.)';
     }
 }

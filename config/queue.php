@@ -15,6 +15,9 @@ return [
 
     'default' => env('QUEUE_CONNECTION', 'sync'),
 
+    // Notification fan-out batch size for web trade notifications.
+    'trade_web_notification_chunk_size' => env('TRADE_WEB_NOTIFICATION_CHUNK_SIZE', 500),
+
     /*
     |--------------------------------------------------------------------------
     | Queue Connections
