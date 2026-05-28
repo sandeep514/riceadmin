@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\DB;
 
 class TradeController extends Controller
 {
+    protected array $lastQueuedTradeNotifyUserIds = [];
     public function index(){
         // $sellQueries = TradeQueriesINR::with(['RiceNameData' , 'RiceFormMilestone3','RicePackingBuyer' ,'RicePackingSeller','riceGrade' => function($query){
         //     return $query->with('getWandType');
@@ -510,7 +511,7 @@ class TradeController extends Controller
         }
 
         $selected = $request->input('trade_notify_user_ids', []);
-        $selected = is_array($selected) ? array_values(array_filter(array_map('intval', $selected))) : [];
+        $selected = is_array($selected) ? array_values(array_unique(array_filter(array_map('intval', $selected)))) : [];
 
         if ($audience === 'selected_users' && $selected === []) {
             return '(Notification not sent: no users selected.)';
@@ -518,6 +519,12 @@ class TradeController extends Controller
 
         /** @var TradeWebNotificationService $svc */
         $svc = app(TradeWebNotificationService::class);
+        $targetIds = $svc->resolveTradeTargetUserIds($categoryIds, $audience, $audience === 'selected_users' ? $selected : null);
+        $this->lastQueuedTradeNotifyUserIds = $targetIds;
+
+        if ($targetIds === []) {
+            return '(Notification not sent: no eligible users found.)';
+        }
 
         $svc->queueTradeNotification(
             (int) $trade->id,
@@ -598,14 +605,20 @@ class TradeController extends Controller
      */
     protected function dispatchTradeInterestNotification(TradeQueriesINR $trade, Request $request): string
     {
-        if ((string) $request->input('trade_interest_notify_send', '0') !== '1') {
+        $interestSend = (string) $request->input('trade_interest_notify_send', '0') === '1';
+        if (! $interestSend) {
             return '';
         }
 
         $raw = $request->input('trade_interest_notify_user_ids', []);
-        $userIds = is_array($raw) ? array_values(array_filter(array_map('intval', $raw))) : [];
+        $userIds = is_array($raw) ? array_values(array_unique(array_filter(array_map('intval', $raw)))) : [];
+
+        if ($this->lastQueuedTradeNotifyUserIds !== []) {
+            $userIds = array_values(array_diff($userIds, $this->lastQueuedTradeNotifyUserIds));
+        }
+
         if ($userIds === []) {
-            return '(Interest notification not sent: no users selected.)';
+            return '(Interest notification not sent: selected users already covered in trade notification.)';
         }
 
         $title = (string) $request->input('trade_interest_notify_title', 'Special trade alert');

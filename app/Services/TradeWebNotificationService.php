@@ -126,17 +126,7 @@ Quantity: {quantity}';
         $message = $this->applyTradeMessagePlaceholders($trade, $messageTemplate);
         $title = trim($title) !== '' ? trim($title) : 'New Trade alert';
 
-        $eligibleIds = $this->eligibleWebUserIds($categoryIds);
-        if ($eligibleIds === []) {
-            return;
-        }
-
-        if ($audienceMode === 'selected_users') {
-            $picked = array_values(array_unique(array_filter(array_map('intval', $selectedUserIds ?? []))));
-            $targetIds = array_values(array_intersect($picked, $eligibleIds));
-        } else {
-            $targetIds = $eligibleIds;
-        }
+        $targetIds = $this->resolveTradeTargetUserIds($categoryIds, $audienceMode, $selectedUserIds);
 
         if ($targetIds === []) {
             return;
@@ -200,6 +190,26 @@ Quantity: {quantity}';
             ->map(fn ($id) => (int) $id)
             ->values()
             ->all();
+    }
+
+    /**
+     * @param array<int> $categoryIds
+     * @param array<int>|null $selectedUserIds
+     * @return array<int>
+     */
+    public function resolveTradeTargetUserIds(array $categoryIds, string $audienceMode, ?array $selectedUserIds = null): array
+    {
+        $eligibleIds = $this->eligibleWebUserIds($categoryIds);
+        if ($eligibleIds === []) {
+            return [];
+        }
+
+        if ($audienceMode === 'selected_users') {
+            $picked = array_values(array_unique(array_filter(array_map('intval', $selectedUserIds ?? []))));
+            return array_values(array_intersect($picked, $eligibleIds));
+        }
+
+        return $eligibleIds;
     }
 
     private function insertAndBroadcastInChunks(
