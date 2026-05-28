@@ -1987,8 +1987,7 @@ class ApiController extends Controller
             ->withCount([
                 'trades as tradeCount' => function ($q) {
                     $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form')
-                      ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state')
-                      ->whereRaw('CAST(trade_query_milestone3.crop AS UNSIGNED) = live_prices.cropYear');
+                      ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
                 }
             ])
             ->whereIn('live_prices.id', $latestPriceIdsForDate)
