@@ -973,18 +973,34 @@ class PortalApiController extends Controller
         }
 
 
-        if( $request->has('account_type') ){
-            if( $request->account_type == 'new' ) {
-                $mailTo = 'info@sntcgroup.com';
-                $mailMessage = '';
+        $accountType = strtolower(trim((string) $request->input('account_type', '')));
+        $mailTo = 'info@sntcgroup.com';
+        $mailMessage = '';
+        $mailFrom = 'info@sntcgroup.com';
+        $mailFromName = 'SNTC Team - India';
+        $mailUser = User::query()->where('id', $user_id)->first(['name', 'email']);
+        $mailUserName = trim((string) ($mailUser->name ?? ''));
+        $mailUserEmail = trim((string) ($mailUser->email ?? $userEmailForMail));
+
+        // Send exactly one mail route:
+        // account_type=new -> registration success mail
+        // otherwise        -> profile update mail
+        // Skip sending when user email is unavailable to avoid malformed notifications.
+        if ($mailUserEmail !== '') {
+            if ($accountType === 'new') {
+                $subject = 'New user registration success';
+                $data = [
+                    'userName' => $mailUserName !== '' ? $mailUserName : 'N/A',
+                    'userEmail' => $mailUserEmail,
+                ];
+                Mail::send('mail.newUserAdded', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                    $message->to($mailTo, $mailMessage)->subject($subject);
+                    $message->from($mailFrom, $mailFromName);
+                });
+            } else {
                 $subject = 'User update the profile';
-                $mailFrom = 'info@sntcgroup.com';
-                $mailFromName = 'SNTC Team - India';
-
-
-                $data = ['userEmail' => $userEmailForMail];
-
-                $respose = Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                $data = ['userEmail' => $mailUserEmail];
+                Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
                     $message->to($mailTo, $mailMessage)->subject($subject);
                     $message->from($mailFrom, $mailFromName);
                 });
