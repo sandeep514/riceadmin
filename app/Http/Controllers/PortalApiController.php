@@ -997,18 +997,38 @@ class PortalApiController extends Controller
         return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => ['personalDetails' => $personalDetails, 'businessDetails' => $businessDetails]], 200);
     }
 
+    /**
+     * Dynamic has_validation for portal when admin has not activated the user yet.
+     */
+    private function resolvePortalHasValidationMessage(User $user, ?WebUserAttachment $attachment): string
+    {
+        if ((int) ($user->is_active_by_admin ?? 0) !== 0) {
+            return trim((string) ($user->has_validation ?? ''));
+        }
+
+        if ($attachment === null || ! $attachment->trialDocumentsComplete()) {
+            return 'Please submit your documents to complete your profile.';
+        }
+
+        return 'Document verification in process.';
+    }
+
     public function getUserDetails($userId)
     {
         if ($userId != null) {
-            $user = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
+            $userModel = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
                 return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category' , 'getBagVendorWeb:id,category']);
             }, 'getWebUserAttachment','getWebUserSubscription.planRel','role_rel'])->first();
 
-            if (!$user) {
+            if (!$userModel) {
                 return response()->json(['status' => false, 'message' => 'User not found', 'data' => []], 404);
             }
 
-            $user = $user->toArray();
+            $user = $userModel->toArray();
+            $user['has_validation'] = $this->resolvePortalHasValidationMessage(
+                $userModel,
+                $userModel->getWebUserAttachment
+            );
             unset($user['otp']);
 
             // if( $user['role'] == 12 ){
