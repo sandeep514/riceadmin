@@ -127,6 +127,7 @@ class TradeController extends Controller
         $location = $request->location;
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
+        $isNew = (int) $request->input('is_new', 0);
         $riceSize = $request->riceSize;
         $personal_remarks = $request->personal_remarks??'';
         $sntcLotNo = $request->sntcLotNo??'';
@@ -194,6 +195,7 @@ class TradeController extends Controller
         $data['riceSize'] = $riceSize;
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
+        $data['is_new'] = $isNew;
         $data['personal_remarks'] = $personal_remarks;
         $data['sntcLotNo'] = $sntcLotNo;
 
@@ -277,6 +279,7 @@ class TradeController extends Controller
         $location = $request->location;
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
+        $isNew = (int) $request->input('is_new', 0);
         $personal_remarks = $request->personal_remarks;
         $sntcLotNo = $request->sntcLotNo;
         $sold_at = $request->sold_at;
@@ -366,6 +369,7 @@ class TradeController extends Controller
         $data['tradeType'] = $tradeType;
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
+        $data['is_new'] = $isNew;
         $data['personal_remarks'] = $personal_remarks;
         $data['sntcLotNo'] = $sntcLotNo;
         $data['sold_at'] = ($sold_at != null)? $sold_at : 0;
@@ -378,6 +382,7 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
 
         $data = array_filter($data);
+        $data['is_new'] = $isNew;
         TradeQueriesINR::where('id' , $request['id'])->update(($data));
         $this->syncTradeCategoryMaps((int) $request['id'], $request->input('category_ids', []));
         $tradeRow = TradeQueriesINR::where('id', (int) $request['id'])->first();

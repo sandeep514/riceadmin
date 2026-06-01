@@ -6559,6 +6559,11 @@ if (!file_exists('uploads')) {
                 TradeQueriesINR::resolveFarmingName($trade->farmingType) ?? ''
             );
 
+            $trade->setAttribute(
+                'is_new',
+                ((int) ($trade->getAttributes()['is_new'] ?? $trade->is_new ?? 0)) === 1 ? 'yes' : 'no'
+            );
+
             return $trade;
         });
     }

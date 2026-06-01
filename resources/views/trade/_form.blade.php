@@ -179,6 +179,13 @@
                                     <option value="1">Yes</option>
                                 </select>
                             </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('is_new','Is New') !!}
+                                <select class="form-control" name="is_new" id="is_new">
+                                    <option value="0" selected>No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
 
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0;padding: 0px 20px;">
                                 <div class="row">
