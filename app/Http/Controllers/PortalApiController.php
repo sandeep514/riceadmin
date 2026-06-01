@@ -978,33 +978,19 @@ class PortalApiController extends Controller
         $mailMessage = '';
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
-        $mailUser = User::query()->where('id', $user_id)->first(['name', 'email']);
-        $mailUserName = trim((string) ($mailUser->name ?? ''));
+        $mailUser = User::query()->where('id', $user_id)->first(['email']);
         $mailUserEmail = trim((string) ($mailUser->email ?? $userEmailForMail));
 
-        // Send exactly one mail route:
-        // account_type=new -> registration success mail
-        // otherwise        -> profile update mail
-        // Skip sending when user email is unavailable to avoid malformed notifications.
-        if ($mailUserEmail !== '') {
-            if ($accountType === 'new') {
-                $subject = 'New user registration success';
-                $data = [
-                    'userName' => $mailUserName !== '' ? $mailUserName : 'N/A',
-                    'userEmail' => $mailUserEmail,
-                ];
-                Mail::send('mail.newUserAdded', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                    $message->to($mailTo, $mailMessage)->subject($subject);
-                    $message->from($mailFrom, $mailFromName);
-                });
-            } else {
-                $subject = 'User update the profile';
-                $data = ['userEmail' => $mailUserEmail];
-                Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                    $message->to($mailTo, $mailMessage)->subject($subject);
-                    $message->from($mailFrom, $mailFromName);
-                });
-            }
+        // Admin registration mail ("New User Registration-Webversion") is sent from activateTrialSubscription()
+        // via NewUserRegistrationAdminMail — do not duplicate here when account_type=new.
+        // account_type != new -> profile update notification only.
+        if ($mailUserEmail !== '' && $accountType !== 'new') {
+            $subject = 'User update the profile';
+            $data = ['userEmail' => $mailUserEmail];
+            Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                $message->to($mailTo, $mailMessage)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
         }
 
 
