@@ -22,7 +22,7 @@ class UsersController extends Controller
 
     public function index($role )
     {
-        $users = User::where('role' , $role)->get();
+        $users = User::where('role', $role)->orderBy('id', 'desc')->get();
         return View('users.users',compact('users'));
         // return $dataTable->render('users.index');
     }
@@ -34,7 +34,7 @@ class UsersController extends Controller
 
     public function getVendors()
     {
-        $vendorUsers = User::where('bagCategory' , '!=' , 0 )->with('bagVendor')->get();
+        $vendorUsers = User::where('bagCategory', '!=', 0)->with('bagVendor')->orderBy('id', 'desc')->get();
         return View('users.vendors',compact('vendorUsers'));
     }
 
@@ -376,9 +376,12 @@ class UsersController extends Controller
 
     public function webusers()
     {
-        $vendorUsers = User::where('user_from' , 'web')->with(['getWebPersonalDetails' , 'getWebBusinessDetails' => function($q){
-            return $q->with(['getCategoryDetails:id,category']);
-        }])->get();
+        $vendorUsers = User::where('user_from', 'web')
+            ->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function ($q) {
+                return $q->with(['getCategoryDetails:id,category']);
+            }])
+            ->orderBy('id', 'desc')
+            ->get();
         return view('users.webUser' , compact('vendorUsers'));
     }
 

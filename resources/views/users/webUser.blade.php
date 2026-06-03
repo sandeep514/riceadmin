@@ -4,7 +4,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Vendoe Users
+                Web Users
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
@@ -18,7 +18,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">List of vendor users</h3>
+                            <h3 class="box-title">List of web users</h3>
                         </div>
                         <a href="{{ route('mark.as.viewed') }}" class="btn btn-success btn-sm">Mark as viewed</a>
                         <!-- /.box-header -->

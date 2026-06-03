@@ -51,7 +51,10 @@ class UsersDataTable extends DataTable
      */
     public function query(User $model)
     {
-        return $model->whereRole(request()->role)->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])->newQuery();
+        return $model->whereRole(request()->role)
+            ->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])
+            ->orderBy('id', 'desc')
+            ->newQuery();
     }
 
     /**

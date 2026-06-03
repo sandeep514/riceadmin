@@ -45,10 +45,16 @@ class AllUsersDatatable extends DataTable
     public function query(User $model)
     {
         if (request()->has('from')) {
-            return $model->whereDate('created_at', '>=', request()->from)->whereDate('created_at', '<=', request()->to)->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])->newQuery();
-        } else {
-            return $model->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])->newQuery();
+            return $model->whereDate('created_at', '>=', request()->from)
+                ->whereDate('created_at', '<=', request()->to)
+                ->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])
+                ->orderBy('id', 'desc')
+                ->newQuery();
         }
+
+        return $model->with(['bagVendor', 'role_rel', 'field_runner_rel.designation_rel'])
+            ->orderBy('id', 'desc')
+            ->newQuery();
     }
 
     /**
