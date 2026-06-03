@@ -1006,11 +1006,11 @@ class PortalApiController extends Controller
             return trim((string) ($user->has_validation ?? ''));
         }
 
-        if ($attachment === null || ! $attachment->trialDocumentsComplete()) {
-            return 'Please submit your documents to complete your profile.';
+        if ($attachment !== null && $attachment->hasAnyTrialDocumentUploaded()) {
+            return 'Document verification in process.';
         }
 
-        return 'Document verification in process.';
+        return 'Please submit your documents to complete your profile.';
     }
 
     public function getUserDetails($userId)

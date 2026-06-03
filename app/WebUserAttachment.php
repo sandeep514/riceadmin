@@ -87,4 +87,16 @@ class WebUserAttachment extends Model
             && $full !== null && $full !== ''
             && ! empty($this->farmer_file);
     }
+
+    /**
+     * At least one of PAN, farmer file, or GST/FSSAI has been uploaded.
+     */
+    public function hasAnyTrialDocumentUploaded(): bool
+    {
+        $full = $this->resolveGstFssaiRelativePath();
+
+        return ! empty($this->panCard)
+            || ! empty($this->farmer_file)
+            || ($full !== null && $full !== '');
+    }
 }
