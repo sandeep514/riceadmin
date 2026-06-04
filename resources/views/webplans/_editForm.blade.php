@@ -49,6 +49,7 @@
         <div class="form-group col-md-2">
             <label>Monthly Discount %</label>
             <input type="number" step="0.01" min="0" max="100" class="form-control" name="monthly_discount_percentage" value="{{ $data->monthly_discount_percentage ?? '' }}" placeholder="Enter monthly discount">
+            <input type="text" class="form-control" name="monthly_discounted_amount" value="" readonly placeholder="After discount" style="margin-top: 8px;">
         </div>
         <div class="form-group col-md-2">
             <label>Monthly GST %</label>
@@ -66,6 +67,7 @@
         <div class="form-group col-md-2">
             <label>Yearly Discount %</label>
             <input type="number" step="0.01" min="0" max="100" class="form-control" name="yearly_discount_percentage" value="{{ $data->yearly_discount_percentage ?? '' }}" placeholder="Enter yearly discount">
+            <input type="text" class="form-control" name="yearly_discounted_amount" value="" readonly placeholder="After discount" style="margin-top: 8px;">
         </div>
         <div class="form-group col-md-2">
             <label>Yearly GST %</label>
@@ -122,11 +124,15 @@ function u(){
     var mf=document.querySelector('[name="monthly_final_amount"]');
     var qf=document.querySelector('[name="quarterly_final_amount"]');
     var yf=document.querySelector('[name="yearly_final_amount"]');
+    var mda=document.querySelector('[name="monthly_discounted_amount"]');
     var qda=document.querySelector('[name="quarterly_discounted_amount"]');
+    var yda=document.querySelector('[name="yearly_discounted_amount"]');
     if(mf)mf.value=f(m,dm,gm);
     if(qf)qf.value=f(q,dq,gq);
     if(yf)yf.value=f(y,dy,gy);
+    if(mda)mda.value=h(m,dm);
     if(qda)qda.value=h(q,dq);
+    if(yda)yda.value=h(y,dy);
 }
 ['monthly_price','quarterly_price','yearly_price','monthly_discount_percentage','quarterly_discount_percentage','yearly_discount_percentage','monthly_gst','quarterly_gst','yearly_gst'].forEach(function(n){var el=document.querySelector('[name="'+n+'"]');if(el){el.addEventListener('input',u);}});
 window.addEventListener('load',u);
