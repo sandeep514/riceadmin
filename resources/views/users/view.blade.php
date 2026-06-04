@@ -266,25 +266,26 @@
 							@else
 								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-danger">De-Activate this user</a>
 							@endif
-							<div class="row">
-								<div class="col-md-6">
-									<form class="" method="POST" action="{{ route('reject.user') }}">
-										<input type="hidden" name="userId" value="{{ $user['id'] }}">
-										@csrf
-										<div class="form-group">
-										    <label for="message">Reason of Rejection:</label>
-										    <input type="text" class="form-control" id="message" name="message">
-										</div>
-										<div>
-											<input type="submit" class="btn btn-info btn-sm" name="submit" value="submit">	
-										</div>
-									</form>									
-								</div>
-							</div>
 						</div>
 					</div>
 				@endif
 			@endif
+			<div class="row" style="margin-top: 20px;">
+				<div class="col-md-6">
+					<form class="" method="POST" action="{{ route('reject.user') }}">
+						<input type="hidden" name="userId" value="{{ $user['id'] }}">
+						@csrf
+						<div class="form-group">
+						    <label for="message">Reason of Rejection:</label>
+						    <input type="text" class="form-control" id="message" name="message">
+						</div>
+						<div>
+							<input type="submit" class="btn btn-info btn-sm" name="submit" value="submit">	
+						</div>
+					</form>										
+				</div>
+			</div>
+
 
 	<!-- Trigger the modal with a button -->
 <!-- <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button> -->
