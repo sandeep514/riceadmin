@@ -49,6 +49,7 @@
         <div class="form-group col-md-2">
             <label>Half Yearly Discount %</label>
             <input type="number" step="0.01" min="0" max="100" class="form-control" name="quarterly_discount_percentage" value="" placeholder="Enter Half Yearly discount">
+            <input type="text" class="form-control" name="quarterly_discounted_amount" value="" readonly placeholder="After discount" style="margin-top: 8px;">
         </div>
         <div class="form-group col-md-2">
             <label>Half Yearly GST %</label>
@@ -102,6 +103,7 @@
 </div>
 <script>
 function f(a,d,g){a=parseFloat(a||0);d=parseFloat(d||0);g=parseFloat(g||0);if(!a)return '';var after_disc=a-(a*d/100);return (after_disc+(after_disc*g/100)).toFixed(2);}
+function h(a,d){a=parseFloat(a||0);d=parseFloat(d||0);if(!a)return '';return (a-(a*d/100)).toFixed(2);}
 function u(){
     var m=document.querySelector('[name="monthly_price"]')?.value;
     var q=document.querySelector('[name="quarterly_price"]')?.value;
@@ -115,9 +117,12 @@ function u(){
     var mf=document.querySelector('[name="monthly_final_amount"]');
     var qf=document.querySelector('[name="quarterly_final_amount"]');
     var yf=document.querySelector('[name="yearly_final_amount"]');
+    var qda=document.querySelector('[name="quarterly_discounted_amount"]');
     if(mf)mf.value=f(m,dm,gm);
     if(qf)qf.value=f(q,dq,gq);
     if(yf)yf.value=f(y,dy,gy);
+    if(qda)qda.value=h(q,dq);
 }
 ['monthly_price','quarterly_price','yearly_price','monthly_discount_percentage','quarterly_discount_percentage','yearly_discount_percentage','monthly_gst','quarterly_gst','yearly_gst'].forEach(function(n){var el=document.querySelector('[name="'+n+'"]');if(el){el.addEventListener('input',u);}});
+window.addEventListener('load',u);
 </script>
