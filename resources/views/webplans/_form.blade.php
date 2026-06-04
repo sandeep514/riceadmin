@@ -41,7 +41,8 @@
         <div class="form-group col-md-2">
             <label>Monthly Discount %</label>
             <input type="number" step="0.01" min="0" max="100" class="form-control" name="monthly_discount_percentage" value="" placeholder="Enter monthly discount">
-            <input type="text" class="form-control" name="monthly_discounted_amount" value="" readonly placeholder="After discount" style="margin-top: 8px;">
+            <label style="margin-top: 8px;">Visible Amount</label>
+            <input type="text" class="form-control" name="monthly_discounted_amount" value="" readonly placeholder="After discount">
         </div>
         <div class="form-group col-md-2">
             <label>Monthly GST %</label>
@@ -50,7 +51,8 @@
         <div class="form-group col-md-2">
             <label>Half Yearly Discount %</label>
             <input type="number" step="0.01" min="0" max="100" class="form-control" name="quarterly_discount_percentage" value="" placeholder="Enter Half Yearly discount">
-            <input type="text" class="form-control" name="quarterly_discounted_amount" value="" readonly placeholder="After discount" style="margin-top: 8px;">
+            <label style="margin-top: 8px;">Visible Amount</label>
+            <input type="text" class="form-control" name="quarterly_discounted_amount" value="" readonly placeholder="After discount">
         </div>
         <div class="form-group col-md-2">
             <label>Half Yearly GST %</label>
@@ -59,7 +61,8 @@
         <div class="form-group col-md-2">
             <label>Yearly Discount %</label>
             <input type="number" step="0.01" min="0" max="100" class="form-control" name="yearly_discount_percentage" value="" placeholder="Enter yearly discount">
-            <input type="text" class="form-control" name="yearly_discounted_amount" value="" readonly placeholder="After discount" style="margin-top: 8px;">
+            <label style="margin-top: 8px;">Visible Amount</label>
+            <input type="text" class="form-control" name="yearly_discounted_amount" value="" readonly placeholder="After discount">
         </div>
         <div class="form-group col-md-2">
             <label>Yearly GST %</label>
