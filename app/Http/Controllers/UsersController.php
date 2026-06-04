@@ -10,6 +10,8 @@ use App\User;
 use App\UserInterestedMap;
 use App\ChatStatus;
 use App\Services\UserInterestService;
+use App\WebUserNotification;
+use App\Events\WebPortalNotificationEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -340,9 +342,29 @@ class UsersController extends Controller
             $message->to($mailTo, $mailmessage)->subject($subject);
             $message->from($mailFrom, $mailFromName);
         });
+
+        $this->sendWebUserNotification(
+            (int) $userId,
+            'Account On Hold',
+            'Your account has been rejected by admin. Reason: ' . $mailmessage
+        );
+
         Session::flash('success','Success|User rejected successfully!');
         return back();
 
+    }
+
+    private function sendWebUserNotification(int $userId, string $title, string $message): void
+    {
+        $notification = WebUserNotification::create([
+            'user_id' => $userId,
+            'notify_date' => now()->toDateString(),
+            'title' => $title,
+            'message' => $message,
+            'audience_mode' => 'individual',
+        ]);
+
+        broadcast(new WebPortalNotificationEvent($notification));
     }
 
     public function listWebChangeSttausUser($userId)
@@ -368,6 +390,12 @@ class UsersController extends Controller
                 $message->to($mailTo, $mailMessage)->subject($subject);
                 $message->from($mailFrom, $mailFromName);
             });
+
+            $this->sendWebUserNotification(
+                (int) $userId,
+                'Account Activated',
+                'Your account has been activated by admin. Welcome aboard!'
+            );
         }
 
         Session::flash('success','Success|User status updated successfully!');

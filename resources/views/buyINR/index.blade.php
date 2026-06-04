@@ -34,7 +34,7 @@
                                                 <th style="text-align: center ">Grade</th>
                                                 <th style="text-align: center ">Packing Type</th>
                                                 <th style="text-align: center ">Packing</th>
-                                                <th style="text-align: center ">Qualtity</th>
+                                                <th style="text-align: center ">Quantity</th>
                                                 <th style="text-align: center ">Additional Info</th>
                                                 <th style="text-align: center ">Created By</th>
                                                 <th style="text-align: center ">Contact Person</th>
@@ -98,7 +98,7 @@
                                                 <th style="text-align: center ">Grade</th>
                                                 <th style="text-align: center ">Packing Type</th>
                                                 <th style="text-align: center ">Packing</th>
-                                                <th style="text-align: center ">Qualtity</th>
+                                                <th style="text-align: center ">Quantity</th>
                                                 <th style="text-align: center ">Additional Info</th>
                                                 <th style="text-align: center ">Created By</th>
                                                 <th style="text-align: center ">Contact Person</th>
