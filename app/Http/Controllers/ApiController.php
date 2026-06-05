@@ -6134,7 +6134,7 @@ if (!file_exists('uploads')) {
         ->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
 
         $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
-        $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
+        $allTrade = $this->orderWebTradesActiveBeforeSold($allTrade, $userCategoryId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $trade = $allTrade;
@@ -6496,6 +6496,93 @@ if (!file_exists('uploads')) {
         $id = (int) $selected;
 
         return $id > 0 ? $id : null;
+    }
+
+    /**
+     * Web trade list order:
+     * 1) non-sold buy (tradeType 1,3) by status then id
+     * 2) non-sold sell (tradeType 2,4) by status then id
+     * 3) sold buy
+     * 4) sold sell
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function orderWebTradesActiveBeforeSold($trades, ?int $userCategoryId = null)
+    {
+        $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
+
+        $buyActive = $collection->filter(fn ($trade) => (int) $trade->status !== 3 && $this->isWebBuyTradeType((int) $trade->tradeType));
+        $sellActive = $collection->filter(fn ($trade) => (int) $trade->status !== 3 && $this->isWebSellTradeType((int) $trade->tradeType));
+        $buySold = $collection->filter(fn ($trade) => (int) $trade->status === 3 && $this->isWebBuyTradeType((int) $trade->tradeType));
+        $sellSold = $collection->filter(fn ($trade) => (int) $trade->status === 3 && $this->isWebSellTradeType((int) $trade->tradeType));
+
+        $buckets = [
+            $this->sortWebTradesByStatusThenId($buyActive),
+            $this->sortWebTradesByStatusThenId($sellActive),
+            $this->sortWebTradesByIdDesc($buySold),
+            $this->sortWebTradesByIdDesc($sellSold),
+        ];
+
+        if ($userCategoryId !== null) {
+            $buckets = array_map(
+                fn ($bucket) => $this->orderWebTradesWithUserCategoryFirst($bucket, $userCategoryId),
+                $buckets
+            );
+        }
+
+        $ordered = collect();
+        foreach ($buckets as $bucket) {
+            $ordered = $ordered->concat($bucket->values());
+        }
+
+        return $ordered->values();
+    }
+
+    private function isWebBuyTradeType(int $tradeType): bool
+    {
+        return in_array($tradeType, [1, 3], true);
+    }
+
+    private function isWebSellTradeType(int $tradeType): bool
+    {
+        return in_array($tradeType, [2, 4], true);
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function sortWebTradesByStatusThenId($trades)
+    {
+        $statusOrder = [6 => 0, 4 => 1, 1 => 2, 12 => 3, 11 => 4];
+        $items = ($trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades))->values()->all();
+
+        usort($items, function ($a, $b) use ($statusOrder) {
+            $statusA = $statusOrder[(int) $a->status] ?? 99;
+            $statusB = $statusOrder[(int) $b->status] ?? 99;
+
+            if ($statusA !== $statusB) {
+                return $statusA <=> $statusB;
+            }
+
+            return (int) $b->id <=> (int) $a->id;
+        });
+
+        return collect($items);
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function sortWebTradesByIdDesc($trades)
+    {
+        $items = ($trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades))->values()->all();
+
+        usort($items, fn ($a, $b) => (int) $b->id <=> (int) $a->id);
+
+        return collect($items);
     }
 
     /**

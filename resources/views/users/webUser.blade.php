@@ -31,6 +31,7 @@
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
                                             <th style="text-align: center">Category </th>
+                                            <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
                                             <!-- <th style="text-align: center">country</th> -->
                                             <!-- <th style="text-align: center">Bag Vendor</th> -->
@@ -51,7 +52,19 @@
 
                                                 <td style="text-align: center">{{ ($v->getWebBusinessDetails != null)?  ( $v->getWebBusinessDetails->getCategoryDetails )? ($v->getWebBusinessDetails->getCategoryDetails->category) : '--' : '--' }}</td>
                                                 <td style="text-align: center">
-                                                    <a href="{{ route('view.user' , $v->id) }}" class="btn btn-info btn-xs">View </a>
+                                                    @if((int) ($v->is_active_by_admin ?? 0) === 1)
+                                                        <span class="label label-success">Active</span>
+                                                    @else
+                                                        <span class="label label-warning">Pending</span>
+                                                    @endif
+                                                </td>
+                                                <td style="text-align: center">
+                                                    <a href="{{ route('view.user', $v->id) }}" class="btn btn-info btn-xs">View</a>
+                                                    @if((int) ($v->is_active_by_admin ?? 0) === 0)
+                                                        <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-success btn-xs" onclick="return confirm('Activate this user?');">Activate</a>
+                                                    @else
+                                                        <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('De-activate this user?');">De-Activate</a>
+                                                    @endif
                                                 </td>
                                                 <!-- <td style="text-align: center">{{ $v->country  }}</td> -->
                                                 <!-- {{-- <td style="text-align: center">{{ $v->bagVendor->name  }}</td> --}} -->
@@ -65,6 +78,7 @@
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
                                             <th style="text-align: center">Category </th>
+                                            <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
                                             <!-- <th style="text-align: center">country</th> -->
                                             <!-- <th style="text-align: center">Bag Vendor</th> -->
