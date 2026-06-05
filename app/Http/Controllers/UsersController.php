@@ -328,7 +328,12 @@ class UsersController extends Controller
         $userId = $request->userId;
         $mailmessage = $request->message ?? 'No reason added by admin';
 
-        User::where( ['id' => $userId  ])->update([ 'message' => $mailmessage,'has_validation' => $mailmessage , 'status' => 0 ]);
+        User::where(['id' => $userId])->update([
+            'message' => $mailmessage,
+            'has_validation' => $mailmessage,
+            'status' => 0,
+            'is_active_by_admin' => 0,
+        ]);
         $userDetail = User::where( ['id' => $userId  ])->first();
 
         $data = [ 'userName' => $userDetail['name'] , 'mailmessage' => $mailmessage ] ; 
