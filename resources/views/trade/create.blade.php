@@ -42,3 +42,5 @@
         </section>
     </div>
 @endsection
+
+@include('trade._form_js')

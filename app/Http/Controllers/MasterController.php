@@ -966,11 +966,13 @@ class MasterController extends Controller
 			dd("here");
 		}
 
-
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
+        $livePricesStates = \App\LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
+        $categoryList = \App\Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
+        $selectedTradeCategoryIds = [];
 
-		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query'));
+		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds'));
 	}
 
 	public function listBuyQueries()

@@ -29,7 +29,7 @@
                                 $url = $_SERVER['REQUEST_URI'];
                                 $explodeURL = explode('/' , $url);
                             @endphp
-                            @include('convertTrade._form')
+                            @include('trade._form')
                             @if(!request()->has('date'))
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary">Save Trade</button>
@@ -42,3 +42,5 @@
         </section>
     </div>
 @endsection
+
+@include('trade._form_js')

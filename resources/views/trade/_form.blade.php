@@ -8,14 +8,14 @@
                         <div class="col-md-12">
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('SNTC lot no','SNTC lot no') !!}
-                                <input type="text" class="form-control" placeholder="SNTC Lot no" name="sntcLotNo">
+                                <input type="text" class="form-control" placeholder="SNTC Lot no" name="sntcLotNo" value="{{ $query->sntcLotNo ?? '' }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Trade For','Trade For') !!}
                                 <select class="form-control" required name="tradeFor">
                                     <option value=""> Select </option>
-                                        <option value="1"> App </option>
-                                        <option value="2"> Web </option>
+                                        <option value="1" {{ ($query->tradeFor ?? '') == 1 ? 'selected' : '' }}> App </option>
+                                        <option value="2" {{ ($query->tradeFor ?? '') == 2 ? 'selected' : '' }}> Web </option>
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
@@ -34,7 +34,7 @@
                                 <input type="hidden" name="queryId" value="{{ $explodeURL[count($explodeURL) - 1] }}" /> 
                             @endif
                             
-                            @include('trade._farming_type_select')
+                            @include('trade._farming_type_select', ['selectedFarming' => ($selectedFarming ?? (($query->farming ?? '') !== '' ? (is_numeric($query->farming) ? (int)$query->farming : (strtolower((string)$query->farming) === 'conventional' ? 1 : 2)) : ''))])
 
                             @include('trade._web_categories_grid')
 
@@ -45,7 +45,7 @@
                                 <select class="form-control" required name="category">
                                     <option value=""> Select </option>
                                     @foreach($qualityMaster as $k => $v)
-                                        <option value="{{ $v }}"> {{ strtoupper($k) }} </option>
+                                        <option value="{{ $v }}" {{ ($query->quality_type ?? '') == $v ? 'selected' : '' }}> {{ strtoupper($k) }} </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -73,7 +73,7 @@
                                     <select class="form-control" required name="stateLinkWithLivePrice">
                                         <option>Select any</option>
                                         @foreach($livePricesStates as $k => $v)
-                                            <option value="{{ $v->state }}"> {{ $v->state }} </option>
+                                            <option value="{{ $v->state }}" {{ ($query->stateLinkWithLivePrice ?? '') == $v->state ? 'selected' : '' }}> {{ $v->state }} </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -90,15 +90,15 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing Type','Packing Type') !!}
                                 <select class="form-control" required name="packingStreamType">
-                                    <option value="1">Bulk (50 | 55KG)</option>
-                                    <option value="2">Branded | Labeled: (30 - 26KG) </option>
+                                    <option value="1" {{ ($query->packingStreamType ?? '') == 1 ? 'selected' : '' }}>Bulk (50 | 55KG)</option>
+                                    <option value="2" {{ ($query->packingStreamType ?? '') == 2 ? 'selected' : '' }}>Branded | Labeled: (30 - 26KG) </option>
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing') !!}
                                 <select class="form-control" required name="ricepacking">
                                   @foreach($packing as $k => $v)
-                                        <option value="{{ $v->id }}">{{ $v->size }} {{ $v->packing }}</option>
+                                        <option value="{{ $v->id }}" {{ ($query->packing ?? '') == $v->id ? 'selected' : '' }}>{{ $v->size }} {{ $v->packing }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -112,19 +112,19 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Quantity','Quantity') !!}
-                                <input type="text" class="form-control" required placeholder="Quantity" name="quantity">
+                                <input type="text" class="form-control" required placeholder="Quantity" name="quantity" value="{{ $query->quantity ?? '' }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Offer Price','Offer Price (₹)') !!}<p style="color: gray; font-size: 12px;">eg. 6300/ QTL (CD 2%)</p>
-                                <input type="text" class="form-control" placeholder="Offer Price" name="price">
+                                <input type="text" class="form-control" placeholder="Offer Price" name="price" value="{{ $query->offerPrice ?? '' }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Location','Warehouse Location') !!}
-                                <input type="text" class="form-control" placeholder="location" name="location">
+                                <input type="text" class="form-control" placeholder="location" name="location" value="{{ $query->warehouselocation ?? '' }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Validity','Validity') !!}
-                                <input type="datetime-local" id="validity" name="validity" class="form-control">
+                                <input type="datetime-local" id="validity" name="validity" class="form-control" value="{{ isset($query->validDays) ? \Carbon\Carbon::parse($query->validDays)->format('Y-m-d\TH:i') : '' }}">
                                 {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
                             </div>
                             <div>
@@ -166,24 +166,24 @@
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Crop','Crop') !!}
-                                <input type="text" class="form-control" name="crop">
+                                <input type="text" class="form-control" name="crop" value="{{ $query->crop ?? '' }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Heart','Heart Count') !!}
-                                <input type="text" class="form-control" name="heart">
+                                <input type="text" class="form-control" name="heart" value="{{ $query->heart ?? '' }}">
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('hotdeal','Hot Deal') !!}
                                 <select class="form-control" name="hotdeal" id="hotdeal">
-                                    <option value="0">No</option>
-                                    <option value="1">Yes</option>
+                                    <option value="0" {{ ($query->hotdeal ?? 0) == 0 ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ ($query->hotdeal ?? 0) == 1 ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('is_new','Is New') !!}
                                 <select class="form-control" name="is_new" id="is_new">
-                                    <option value="0" selected>No</option>
-                                    <option value="1">Yes</option>
+                                    <option value="0" {{ ($query->is_new ?? 0) == 0 ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ ($query->is_new ?? 0) == 1 ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
 
@@ -192,27 +192,27 @@
                                     <h3>Spec</h3>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('moisture','Moisture') !!}
-                                        <input type="text" class="form-control" name="moisture">
+                                        <input type="text" class="form-control" name="moisture" value="{{ $query->moisture ?? '' }}">
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('kett','Kett') !!}
-                                        <input type="text" class="form-control" name="kett">
+                                        <input type="text" class="form-control" name="kett" value="{{ $query->kett ?? '' }}">
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('broken','Broken') !!}
-                                        <input type="text" class="form-control" name="broken">
+                                        <input type="text" class="form-control" name="broken" value="{{ $query->broken ?? '' }}">
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('dd','DD') !!}
-                                        <input type="text" class="form-control" name="dd">
+                                        <input type="text" class="form-control" name="dd" value="{{ $query->dd ?? '' }}">
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('admixture','Admixture') !!}
-                                        <input type="text" class="form-control" name="admixture">
+                                        <input type="text" class="form-control" name="admixture" value="{{ $query->admixture ?? '' }}">
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('elongation','Elongation') !!}
-                                        <input type="text" class="form-control" name="elongation">
+                                        <input type="text" class="form-control" name="elongation" value="{{ $query->elongation ?? '' }}">
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
                                         {!! Form::label('Rice Size','Rice Size') !!}
@@ -221,7 +221,7 @@
                                         <select class="form-control" required name="riceSize">
                                             <option value=""> Select </option>
                                             @foreach(TradeQueriesINR::$riceSize as $k => $v)
-                                                <option value="{{ $k }}"> {{$v}} </option>
+                                                <option value="{{ $k }}" {{ ($query->riceSize ?? '') == $k ? 'selected' : '' }}> {{$v}} </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -229,11 +229,11 @@
                             </div>
                              <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Additional Info','Additional Info') !!}
-                                <textarea class="form-control" placeholder="Additional Info" rows="5" name="additioanlInfo"></textarea>
+                                <textarea class="form-control" placeholder="Additional Info" rows="5" name="additioanlInfo">{{ $query->additional_info ?? $query->additioanlInfo ?? '' }}</textarea>
                             </div>
                              <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('personal_remark','Personal Remarks') !!}
-                                <textarea class="form-control" placeholder="Personal Remarks" rows="5" name="personal_remarks"></textarea>
+                                <textarea class="form-control" placeholder="Personal Remarks" rows="5" name="personal_remarks">{{ $query->personal_remarks ?? '' }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -244,121 +244,71 @@
         </div>
     </div>
 </div>
-@section('javascript')
+
+{{-- Pre-populate AJAX dropdowns for convert mode --}}
+@php
+    $hasQuery = isset($query) && is_object($query);
+@endphp
+@if($hasQuery)
 <script type="text/javascript">
-
     $(document).ready(function() {
-        @include('trade._web_categories_select_all_js')
-        @include('trade._web_trade_notification_js')
-        @include('trade._trade_interest_users_js')
-        $('select[name=tradeType]').change(function(event){
-            let tradeType = $('select[name=tradeType] :selected').val();
+        // Pre-populate quality dropdown
+        let preQuality = "{{ $query->quality ?? '' }}";
+        let preQualityType = "{{ $query->quality_type ?? '' }}";
+        if (preQuality && preQualityType) {
             $.ajax({
-                url : 'https://snjtradelink.com/staging/public/api/get/packing/by/'+tradeType,
-                success : function (res){
-                    $("select[name=ricepacking]").html('');
-                    $("select[name=ricepacking]").append('<option value=""> Select </option>');
-                    let objectKeys = Object.keys(res.data);
-
-                    for(let i = 0; i < Object.keys(res.data).length ; i++){
-                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'"> '+res.data[i].packing+' '+res.data[i].description+' </option>');
-                    }
-                },
-                error: function (err){
-                    console.log(err);
-                }
-            })
-        })
-        $('select[name=category]').change(function(event){
-            let riceCategory = $('select[name=category] :selected').val();
-            console.log(riceCategory)
-            $.ajax({
-                url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/'+riceCategory,
-                success : function (res){
+                url: 'https://snjtradelink.com/staging/public/api/get/rice/qualities/' + preQualityType,
+                async: false,
+                success: function(res) {
                     $("select[name=quality]").html('');
                     $("select[name=quality]").append('<option value=""> Select </option>');
-                    let objectKeys = res.data;
-
-                    for(let i = 0; i < objectKeys.length ; i++){
-                        $("select[name=quality]").append('<option value="'+objectKeys[i].id+'"> '+objectKeys[i].name+' </option>');
+                    for (let i = 0; i < res.data.length; i++) {
+                        let selected = (preQuality == res.data[i].id) ? "selected" : "";
+                        $("select[name=quality]").append('<option value="' + res.data[i].id + '" ' + selected + '> ' + res.data[i].name + ' </option>');
                     }
-                },
-                error: function (err){
-                    console.log(err);
                 }
-            })
-        })
+            });
+        }
 
-
-        $('select[name=quality]').change(function(event){
-            console.log("here")
-            let riceCategory = $('select[name=quality] :selected').val();
+        // Pre-populate riceform dropdown
+        let preRiceForm = "{{ $query->quality_form ?? $query->qualityForm ?? '' }}";
+        if (preQuality) {
             $.ajax({
-                url : 'https://snjtradelink.com/staging/public/api/get/rice/qualities/name/' + riceCategory,
-                success : function (res){
+                url: 'https://snjtradelink.com/staging/public/api/get/rice/qualities/name/' + preQuality,
+                async: false,
+                success: function(res) {
                     $("select[name=riceform]").html('');
                     $("select[name=riceform]").append('<option value=""> Select </option>');
-
-                    console.log(res.data);
-                    for(let i = 0; i < res.data.length ; i++){
-                        $("select[name=riceform]").append('<option value="'+res.data[i].id+'"> '+res.data[i].name+' </option>');
+                    for (let i = 0; i < res.data.length; i++) {
+                        let selected = (preRiceForm == res.data[i].id) ? "selected" : "";
+                        $("select[name=riceform]").append('<option value="' + res.data[i].id + '" ' + selected + '> ' + res.data[i].name + ' </option>');
                     }
-                    for(let i = 0; i < res.riceform.length ; i++){
-                        $("select[name=riceformLinkWithLivePrice]").append('<option value="'+res.riceform[i].id+'"> '+res.riceform[i].form_name+' </option>');
+                    // Also populate riceformLinkWithLivePrice
+                    $("select[name=riceformLinkWithLivePrice]").html('');
+                    $("select[name=riceformLinkWithLivePrice]").append('<option>Select any</option>');
+                    for (let i = 0; i < res.riceform.length; i++) {
+                        $("select[name=riceformLinkWithLivePrice]").append('<option value="' + res.riceform[i].id + '"> ' + res.riceform[i].form_name + ' </option>');
                     }
-
-
-                },
-                error: function (err){
-                    console.log(err);
                 }
-            })            
-        })
+            });
+        }
 
-
-        // "get/rice/wand/" + riceNameId
-        $('select[name=riceform]').change(function(event){
-            console.log("here")
-            let riceNameId = $('select[name=quality] :selected').val();
+        // Pre-populate ricegrade dropdown
+        let preGrade = "{{ $query->grade ?? '' }}";
+        if (preQuality) {
             $.ajax({
-                url : 'https://snjtradelink.com/staging/public/api/get/rice/wand/' + riceNameId,
-                success : function (res){
+                url: 'https://snjtradelink.com/staging/public/api/get/rice/wand/' + preQuality,
+                async: false,
+                success: function(res) {
                     $("select[name=ricegrade]").html('');
                     $("select[name=ricegrade]").append('<option value=""> Select </option>');
-
-                    console.log(res.data);
-                    for(let i = 0; i < res.data.length ; i++){
-                        $("select[name=ricegrade]").append('<option value="'+res.data[i].id+'"> '+res.data[i].get_wand_type['type']+' '+res.data[i]['value'] +'</option>');
+                    for (let i = 0; i < res.data.length; i++) {
+                        let selected = (preGrade == res.data[i].id) ? "selected" : "";
+                        $("select[name=ricegrade]").append('<option value="' + res.data[i].id + '" ' + selected + '> ' + res.data[i].get_wand_type.type + ' ' + res.data[i].value + ' </option>');
                     }
-                },
-                error: function (err){
-                    console.log(err);
                 }
-            })            
-        })
-
-
-        // 'get/seller/inr/packing'
-        //     $.ajax({
-        //         url : 'https://snjtradelink.com/staging/public/api/get/seller/inr/packing',
-        //         success : function (res){
-        //             $("select[name=ricepacking]").append('<option value=""> Select </option>');
-
-        //             console.log(res.data);
-        //             for(let i = 0; i < res.data.length ; i++){
-        //                 $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'"> '+res.data[i]['packing']+' </option>');
-        //             }
-        //         },
-        //         error: function (err){
-        //             console.log(err);
-        //         }
-        // })
-
-
-
-
-
-
-    })
+            });
+        }
+    });
 </script>
-@endsection
+@endif
