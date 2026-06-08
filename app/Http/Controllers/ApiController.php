@@ -6265,11 +6265,8 @@ if (!file_exists('uploads')) {
 
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
-        $allTrade = TradeQueriesINR::where('status', 1)
+        $baseTradeQuery = TradeQueriesINR::where('status', 1)
             ->where(function($query) use ($request) {
-                if ($request->has('trade_type')) {
-                    $query->where('tradeType', $request->trade_type);
-                }
                 if ($request->has('farming_type')) {
                     $query->where('farmingType', $request->farming_type);
                 }
@@ -6286,26 +6283,14 @@ if (!file_exists('uploads')) {
                 if ($request->has('rice_size')) {
                     $query->where('riceSize', $request->rice_size);
                 }
+                // trade_type is intentionally not filtered here so that all 4 counts are always returned
                 // Add more filters as needed
-            })
-            ->limit(75)
-            ->orderByRaw('FIELD(status,6,4,3)')
-            ->orderBy('id', 'DESC')
-            ->get();
+            });
 
-        $trade = $allTrade->groupBy('tradeType');
-        $tradeStatus = TradeCurrentStatus::first();
-
-        // return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
-
-
-        // 3 => "sold", 2 => 'expired' , 1 => 'Pending',6=>'Active',4=>'In-Process',5=>'De-active',11 => 'close', 12=> 'hold'   
-        // $tradePre = TradeQueriesINR::whereIn("status", [1,4]);
-
-        $BuyQuery = (clone $allTrade)->where('tradeType' , 1)->count();
-        $SellQuery = (clone $allTrade)->where('tradeType' , 2)->count();
-        $FutureBuyQuery = (clone $allTrade)->where('tradeType' , 3)->count();
-        $FutureSellQuery = (clone $allTrade)->where('tradeType' , 4)->count();
+        $BuyQuery = (clone $baseTradeQuery)->where('tradeType', 1)->count();
+        $SellQuery = (clone $baseTradeQuery)->where('tradeType', 2)->count();
+        $FutureBuyQuery = (clone $baseTradeQuery)->where('tradeType', 3)->count();
+        $FutureSellQuery = (clone $baseTradeQuery)->where('tradeType', 4)->count();
 
         return response()->json(['status' => true, 'data' => ['BuyQuery' => $BuyQuery , 'SellQuery' => $SellQuery , 'FutureBuyQuery' => $FutureBuyQuery , 'FutureSellQuery' => $FutureSellQuery]]);
     }
