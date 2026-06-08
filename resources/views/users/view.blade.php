@@ -270,7 +270,6 @@
 					</div>
 				@endif
 			@endif
-			@if (($user['user_from'] ?? '') === 'web')
 			<div class="row" style="margin-top: 20px;">
 				<div class="col-md-6">
 					<form class="" method="POST" action="{{ route('reject.user') }}">
