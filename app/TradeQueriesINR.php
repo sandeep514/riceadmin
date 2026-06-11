@@ -15,7 +15,7 @@ class TradeQueriesINR extends Model
 {
     protected $table = 'trade_query_milestone3';
 
-    protected $fillable = ['tradeFor','queryId','farmingType','quality_type','quality','qualityForm' ,'qualityFormLinkWithLivePrice','stateLinkWithLivePrice' ,'grade','packing','quantity','offerPrice','validDays','packing_file','video_file','packingStreamType','uncooked_file','uncooked_file1','uncooked_file2','uncooked_file3','cooked_file','cooked_file1','cooked_file2','cooked_file3','additioanlInfo','personal_remarks','location','crop','hotdeal','is_new','tradeType','moisture','kett','broken','dd','admixture','elongation','riceSize','sntcLotNo','sold_at','status','role_id','category_id'];
+    protected $fillable = ['tradeFor','queryId','farmingType','quality_type','quality','qualityForm' ,'qualityFormLinkWithLivePrice','stateLinkWithLivePrice' ,'grade','packing','quantity','offerPrice','validDays','packing_file','video_file','packingStreamType','uncooked_file','uncooked_file1','uncooked_file2','uncooked_file3','cooked_file','cooked_file1','cooked_file2','cooked_file3','additioanlInfo','personal_remarks','location','crop','hotdeal','is_new','valid_datetime_for_is_new','tradeType','moisture','kett','broken','dd','admixture','elongation','riceSize','sntcLotNo','sold_at','status','role_id','category_id'];
 
     public static $tradeStatus = [ 
         3 => "sold", 

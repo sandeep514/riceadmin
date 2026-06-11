@@ -6366,6 +6366,7 @@ if (!file_exists('uploads')) {
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
 
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
@@ -6636,6 +6637,11 @@ if (!file_exists('uploads')) {
                 ((int) ($trade->getAttributes()['is_new'] ?? $trade->is_new ?? 0)) === 1 ? 'yes' : 'no'
             );
 
+            $trade->setAttribute(
+                'valid_datetime_for_is_new',
+                $trade->getAttributes()['valid_datetime_for_is_new'] ?? $trade->valid_datetime_for_is_new ?? null
+            );
+
             return $trade;
         });
     }
@@ -6738,6 +6744,8 @@ if (!file_exists('uploads')) {
             ])
             ->withCount('TradeLikeAll')
             ->get();
+
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $tradeStatus = TradeCurrentStatus::first();
 
@@ -7104,6 +7112,7 @@ if (!file_exists('uploads')) {
     public function getMyTrades(Request $request)
     {
         $trade = TradeQueriesINR::where('queryId' , $request->userId)->get();
+        $trade = $this->formatTradeCollectionValidDays($trade);
         return response()->json(['status' => true , 'message' => 'Trade get successfully' , 'data' => $trade]);
     }
 

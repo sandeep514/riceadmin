@@ -128,6 +128,7 @@ class TradeController extends Controller
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
         $isNew = (int) $request->input('is_new', 0);
+        $validDatetimeForIsNew = $request->input('valid_datetime_for_is_new') ?: null;
         $riceSize = $request->riceSize;
         $personal_remarks = $request->personal_remarks??'';
         $sntcLotNo = $request->sntcLotNo??'';
@@ -196,6 +197,7 @@ class TradeController extends Controller
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
         $data['is_new'] = $isNew;
+        $data['valid_datetime_for_is_new'] = $validDatetimeForIsNew;
         $data['personal_remarks'] = $personal_remarks;
         $data['sntcLotNo'] = $sntcLotNo;
 
@@ -280,6 +282,7 @@ class TradeController extends Controller
         $tradeType = $request->tradeType;
         $isHotdeal = $request->hotdeal;
         $isNew = (int) $request->input('is_new', 0);
+        $validDatetimeForIsNew = $request->input('valid_datetime_for_is_new') ?: null;
         $personal_remarks = $request->personal_remarks;
         $sntcLotNo = $request->sntcLotNo;
         $sold_at = $request->sold_at;
@@ -370,6 +373,7 @@ class TradeController extends Controller
         $data['crop'] = $request->crop;
         $data['hotdeal'] = $isHotdeal;
         $data['is_new'] = $isNew;
+        $data['valid_datetime_for_is_new'] = $validDatetimeForIsNew;
         $data['personal_remarks'] = $personal_remarks;
         $data['sntcLotNo'] = $sntcLotNo;
         $data['sold_at'] = ($sold_at != null)? $sold_at : 0;

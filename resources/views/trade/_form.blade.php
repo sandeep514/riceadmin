@@ -186,6 +186,10 @@
                                     <option value="1" {{ ($query->is_new ?? 0) == 1 ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('valid_datetime_for_is_new','Valid Datetime for Is New') !!}
+                                <input type="datetime-local" class="form-control" name="valid_datetime_for_is_new" id="valid_datetime_for_is_new" value="{{ $query->valid_datetime_for_is_new ?? '' }}">
+                            </div>
 
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0;padding: 0px 20px;">
                                 <div class="row">
