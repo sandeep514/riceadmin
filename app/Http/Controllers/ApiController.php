@@ -2961,9 +2961,7 @@ class ApiController extends Controller
 
         $states = [];
         $ricetype = 'basmati';
-        if( $ricetype == 'basmati' && $request->year == 2026 ){
-            return response()->json(['error' => null, 'data' => []], 200);
-        }
+        
         $todayDate = Carbon::now();
 
         $cropYear = request()->has('year') ? request()->get('year') : $latestCropYear;
@@ -2982,7 +2980,9 @@ class ApiController extends Controller
                 ->whereDate('created_at', $targetDate)
                 ->where('cropYear', $cropYear)
                 ->latest('id');
-
+        if( $ricetype == 'basmati' && $request->year == 2026 ){
+            return response()->json(['error' => $lastRecordQuery, 'data' => []], 200);
+        }
         if (! $lastRecordQuery->exists()) {
             $lastRecordQuery = LivePrice::query()
                 ->where('name', '!=', '0')
