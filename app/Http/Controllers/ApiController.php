@@ -3008,7 +3008,9 @@ class ApiController extends Controller
                 ->orderBy('state_order')
                 ->whereDate('created_at', $lastPriceRow->created_at)
                 ->get();
-
+                if( $ricetype == 'basmati' && $cropYear == 2026 ){
+                    return response()->json(['error' => null, 'data' => []], 200);
+                }
                 $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
                     ->where('cropYear' , $cropYear)
                     ->where(function ($q) {
