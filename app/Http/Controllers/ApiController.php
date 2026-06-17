@@ -2336,10 +2336,15 @@ class ApiController extends Controller
                 ->get();
         } else {
              if( count($explodeTime) > 1 ){
+                $periodEnd = $todayDate->copy()->format('Y-m-d');
+                $periodStart = $todayDate->copy()->subDays($lookbackDays)->format('Y-m-d');
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
                     'form_rel' => $formRelConstraint,
-                ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '<=', $fromDate)->get();
+                ])->where(['state' => $state])
+                    ->whereDate('created_at', '>=', $periodStart)
+                    ->whereDate('created_at', '<=', $periodEnd)
+                    ->get();
 
             }else{
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
@@ -2349,30 +2354,19 @@ class ApiController extends Controller
             }
         }
 
-        // Multiple updates on the same day: keep only the first change of that day (earliest created_at), IST calendar day.
-        $sortedPrices = $prices->sortBy(function ($row) {
-            return $row->created_at?->timestamp ?? 0;
-        });
-        $seenDayKeys = [];
-        $pricesFirstEntryPerDay = collect();
-        foreach ($sortedPrices as $row) {
-            $dayKey = $row->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
-            if (! isset($seenDayKeys[$dayKey])) {
-                $seenDayKeys[$dayKey] = true;
-                $pricesFirstEntryPerDay->push($row);
-            }
-        }
+        // Multiple updates on the same day: keep only the last added row per IST calendar day.
+        $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices);
 
         // Earliest / latest IST dates in the series (season open = first chart point for these params).
         $seasonOpeningDate = null;
         $latestIstDate = null;
-        if ($pricesFirstEntryPerDay->isNotEmpty()) {
-            $seasonOpeningDate = $pricesFirstEntryPerDay
+        if ($pricesLastEntryPerDay->isNotEmpty()) {
+            $seasonOpeningDate = $pricesLastEntryPerDay
                 ->map(function ($r) {
                     return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
                 })
                 ->min();
-            $latestIstDate = $pricesFirstEntryPerDay
+            $latestIstDate = $pricesLastEntryPerDay
                 ->map(function ($r) {
                     return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
                 })
@@ -2381,7 +2375,7 @@ class ApiController extends Controller
 
         $cropYearForOpening = $request->has('year') ? (string) $request->year : null;
         if ($cropYearForOpening === null && $latestIstDate) {
-            $rowForLatest = $pricesFirstEntryPerDay->first(function ($r) use ($latestIstDate) {
+            $rowForLatest = $pricesLastEntryPerDay->first(function ($r) use ($latestIstDate) {
                 return $r->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d') === $latestIstDate;
             });
             if ($rowForLatest && $rowForLatest->cropYear !== null && $rowForLatest->cropYear !== '') {
@@ -2406,7 +2400,7 @@ class ApiController extends Controller
             }
         }
 
-        foreach ($pricesFirstEntryPerDay as $k => $v) {
+        foreach ($pricesLastEntryPerDay as $k => $v) {
             $created_at[] = strtotime($v->created_at->copy()->timezone('Asia/Kolkata')->format('y-m-d'));
             $max_price[] = $v->max_price;
         }
@@ -2609,8 +2603,10 @@ class ApiController extends Controller
             ->whereBetween(DB::raw('date(created_at)'), [$todayDate->subDays($timePeriod), $fromDate])
             ->get();
 
-        foreach ($prices as $v) {
-            $created_at[] = strtotime($v->created_at->format('y-m-d'));
+        $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices);
+
+        foreach ($pricesLastEntryPerDay as $v) {
+            $created_at[] = strtotime($v->created_at->copy()->timezone('Asia/Kolkata')->format('y-m-d'));
             $max_price[] = $v->max_price;
         }
 
@@ -7284,6 +7280,22 @@ if (!file_exists('uploads')) {
         }
 
         return null;
+    }
+
+    /**
+     * When multiple live_prices rows share the same IST calendar day, keep the last added row (highest id).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $prices
+     * @return \Illuminate\Support\Collection
+     */
+    private function collapseLivePricesToLatestPerDay($prices)
+    {
+        return $prices
+            ->filter(fn ($row) => $row->created_at !== null)
+            ->groupBy(fn ($row) => $row->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d'))
+            ->map(fn ($dayRows) => $dayRows->sortByDesc('id')->first())
+            ->sortBy(fn ($row) => $row->created_at->timestamp ?? 0)
+            ->values();
     }
 
     /**
