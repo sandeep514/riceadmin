@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-use Fruitcake\Cors\CorsService;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -51,15 +50,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        $response = parent::render($request, $exception);
-
-        if ($request->is('api/*') || str_contains($request->path(), '/api/')) {
-            $cors = app(CorsService::class);
-            if ($cors->isCorsRequest($request)) {
-                $response = $cors->addActualRequestHeaders($response, $request);
-            }
-        }
-
-        return $response;
+        return parent::render($request, $exception);
     }
 }

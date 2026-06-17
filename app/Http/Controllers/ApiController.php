@@ -2981,32 +2981,75 @@ class ApiController extends Controller
      */
     private function resolveWebRiceStatesList(Request $request, string $ricetype): array
     {
-        $latestCropYearRecord = LivePrice::orderBy('cropYear', 'desc')->first();
-        if (! $latestCropYearRecord) {
-            return [];
-        }
-
-        $latestCropYear = (int) $latestCropYearRecord->cropYear;
-        $cropYear = (int) ($request->has('year') ? $request->get('year') : $latestCropYear);
-        $todayDate = Carbon::now();
-        $calendarYear = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
-        $targetDate = Carbon::createFromDate($calendarYear, $todayDate->month, $todayDate->day)->toDateString();
-
-        $lastPriceRow = LivePrice::query()
+        $lastRecord = LivePrice::query()
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->whereNotNull('min_price')
             ->whereNotNull('max_price')
-            ->where('cropYear', $cropYear)
-            ->whereDate('created_at', '<=', $targetDate)
-            ->latest('id')
-            ->first(['created_at']);
+            ->orderByDesc('id')
+            ->first();
 
-        if (! $lastPriceRow) {
+        if (! $lastRecord) {
             return [];
         }
 
-        $priceDate = $lastPriceRow->created_at->format('Y-m-d');
+        $cropYear = (int) ($request->filled('year') ? $request->get('year') : $lastRecord->cropYear);
+        if ($cropYear <= 0) {
+            return [];
+        }
+
+        $anchorDate = $this->formatLivePriceDate($lastRecord->created_at);
+        $anchor = Carbon::parse($anchorDate);
+        $targetDate = Carbon::createFromDate($cropYear, (int) $anchor->format('m'), (int) $anchor->format('d'))->toDateString();
+
+        $livePriceQuery = LivePrice::query()
+            ->where(function ($q) {
+                $q->whereNull('closing')->orWhere('closing', '');
+            })
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('cropYear', $cropYear)
+            ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
+            ->orderBy('state_order')
+            ->whereDate('created_at', $targetDate);
+
+        if (! $livePriceQuery->exists()) {
+            $fallbackRow = LivePrice::query()
+                ->where('name', '!=', '0')
+                ->where('form', '!=', '0')
+                ->whereNotNull('min_price')
+                ->whereNotNull('max_price')
+                ->where('cropYear', $cropYear)
+                ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
+                ->whereDate('created_at', '<', $targetDate)
+                ->orderByDesc('created_at')
+                ->first(['created_at']);
+
+            if (! $fallbackRow) {
+                return $this->sortWebRiceStatesByOrder(
+                    $this->getWebClosingCropStates($cropYear, $ricetype)
+                );
+            }
+
+            $targetDate = $this->formatLivePriceDate($fallbackRow->created_at);
+        }
+
+        $priceRows = LivePrice::query()
+            ->select(['state', 'name', 'form'])
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('cropYear', $cropYear)
+            ->whereDate('created_at', $targetDate)
+            ->where(function ($q) {
+                $q->whereNull('closing')->orWhere('closing', '');
+            })
+            ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
+            ->when($cropYear === 2023, function ($q) use ($ricetype) {
+                $q->whereHas('form_rel', function ($fq) use ($ricetype) {
+                    $fq->where('type', $ricetype)->where('form_name', 'not like', '%new crop%');
+                });
+            })
+            ->get();
 
         $closingRows = LivePricesOpeningClosing::query()
             ->select(['name', 'form', 'state'])
@@ -3017,29 +3060,14 @@ class ApiController extends Controller
             ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
             ->get();
 
-        $closingCropStates = $closingRows->pluck('state')->filter()->unique()->values()->all();
         $closingNameForms = $closingRows
             ->map(fn ($row) => strtolower((string) $row->name . '_' . (string) $row->form))
             ->unique()
             ->values()
             ->all();
 
-        $priceQuery = LivePrice::query()
-            ->select(['state', 'name', 'form'])
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price')
-            ->where('cropYear', $cropYear)
-            ->whereDate('created_at', $priceDate)
-            ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype));
-
-        if ($cropYear === 2023) {
-            $priceQuery->whereHas('form_rel', function ($q) use ($ricetype) {
-                $q->where('type', $ricetype)->where('form_name', 'not like', '%new crop%');
-            });
-        }
-
         $states = [];
-        foreach ($priceQuery->get() as $row) {
+        foreach ($priceRows as $row) {
             if ($closingNameForms !== []) {
                 $combineNameForm = $row->name . '_' . $row->form;
                 if (! in_array($combineNameForm, $closingNameForms)) {
@@ -3050,13 +3078,41 @@ class ApiController extends Controller
             }
         }
 
-        $states = array_values(array_unique(array_merge($states, $closingCropStates)));
+        $states = array_values(array_unique(array_merge(
+            $states,
+            $closingRows->pluck('state')->filter()->unique()->values()->all()
+        )));
 
         return $this->sortWebRiceStatesByOrder($states);
     }
 
+    private function getWebClosingCropStates(int $cropYear, string $ricetype): array
+    {
+        return LivePricesOpeningClosing::query()
+            ->where('cropYear', $cropYear)
+            ->whereNotNull('closing')
+            ->where('closing', '!=', '')
+            ->whereHas('name_rel', fn ($q) => $q->where('type', $ricetype))
+            ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
+            ->distinct()
+            ->pluck('state')
+            ->filter()
+            ->values()
+            ->all();
+    }
+
+    private function formatLivePriceDate(mixed $value): string
+    {
+        if ($value instanceof \Carbon\CarbonInterface) {
+            return $value->format('Y-m-d');
+        }
+
+        return Carbon::parse((string) $value)->format('Y-m-d');
+    }
+
     private function sortWebRiceStatesByOrder(array $states): array
     {
+        $states = array_values(array_unique(array_filter($states)));
         if ($states === []) {
             return [];
         }
@@ -3070,6 +3126,12 @@ class ApiController extends Controller
             ->unique('state')
             ->pluck('state', 'state_order')
             ->toArray();
+
+        if ($sortArray === []) {
+            sort($states);
+
+            return $states;
+        }
 
         $orderByState = array_flip($sortArray);
 
@@ -3085,6 +3147,10 @@ class ApiController extends Controller
             if (isset($orderByState[$state])) {
                 $sortedMap[(string) $orderByState[$state]] = $state;
             }
+        }
+
+        if ($sortedMap === []) {
+            return $states;
         }
 
         ksort($sortedMap, SORT_NATURAL);
