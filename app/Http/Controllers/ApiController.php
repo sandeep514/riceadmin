@@ -2955,11 +2955,15 @@ class ApiController extends Controller
             return response()->json(['error' => 'No records found', 'data' => []], 200);
         }
 
+       
+
         $latestCropYear = $latestCropYearRecord->cropYear;
 
         $states = [];
         $ricetype = 'basmati';
-
+        if( $ricetype == 'basmati' && $request->year == 2026 ){
+            return response()->json(['error' => null, 'data' => []], 200);
+        }
         $todayDate = Carbon::now();
 
         $cropYear = request()->has('year') ? request()->get('year') : $latestCropYear;
@@ -3008,9 +3012,7 @@ class ApiController extends Controller
                 ->orderBy('state_order')
                 ->whereDate('created_at', $lastPriceRow->created_at)
                 ->get();
-                if( $ricetype == 'basmati' && $cropYear == 2026 ){
-                    return response()->json(['error' => null, 'data' => []], 200);
-                }
+                
                 $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
                     ->where('cropYear' , $cropYear)
                     ->where(function ($q) {
