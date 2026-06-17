@@ -1770,9 +1770,9 @@ class PortalApiController extends Controller
     public function getLatestUpdatedCount()
     {
         $todayDate = Carbon::now()->format('Y-m-d');
-        $livePricesCount = LivePrice::whereDate('created_at' ,  $todayDate)->count();
-        $paddyMandiCount = PaddyPrice::whereDate('created_at' , $todayDate)->count();
-        $tradeCount = TradeQueriesINR::whereDate('created_at' , $todayDate)->count();
+        $livePricesCount = LivePrice::whereDate('created_at' ,  $todayDate)->where('status' , 1)->count();
+        $paddyMandiCount = PaddyPrice::whereDate('created_at' , $todayDate)->where('status' , 1)->count();
+        $tradeCount = TradeQueriesINR::whereDate('created_at' , $todayDate)->where('status' , 1)->count();
 
         return response()->json([
                 'status'  => true,
