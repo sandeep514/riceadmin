@@ -2317,6 +2317,10 @@ class ApiController extends Controller
             }
         }
 
+        if (! $request->has('year')) {
+            $lookbackDays = max($lookbackDays, 365);
+        }
+
         $formRelConstraint = function ($query) use ($productType) {
             $query->where('type', $productType->type);
         };
@@ -2346,11 +2350,16 @@ class ApiController extends Controller
                     ->whereDate('created_at', '<=', $periodEnd)
                     ->get();
 
-            }else{
+            } else {
+                $periodEnd = $todayDate->copy()->format('Y-m-d');
+                $periodStart = $todayDate->copy()->subDays($lookbackDays)->format('Y-m-d');
                 $prices = LivePrice::where('name', $riceName->id)->where('form', $type->id)->with([
                     'name_rel',
                     'form_rel' => $formRelConstraint,
-                ])->where(['state' => $state])->whereBetween(DB::raw('date(created_at)'), [$todayDate->subDays($timePeriod) , $fromDate ])->get();
+                ])->where(['state' => $state])
+                    ->whereDate('created_at', '>=', $periodStart)
+                    ->whereDate('created_at', '<=', $periodEnd)
+                    ->get();
             }
         }
 
@@ -2548,7 +2557,7 @@ class ApiController extends Controller
      * Chart records endpoint with fixed state/time period:
      * - route: /api/get/price/chart/records/{encodedRiceType}/{encodedRice}
      * - state: PUNJAB-HARYANA (hardcoded; matches getPrices / live_prices.state)
-     * - period: 7 days (hardcoded)
+     * - period: 365 days minimum (hardcoded)
      */
     public function getPriceChartRecords($encodedRiceType, $encodedRice)
     {
@@ -2556,7 +2565,7 @@ class ApiController extends Controller
         $state = 'PUNJAB-HARYANA';
         $riceType = $this->decodeEncodedRouteSegment((string) $encodedRiceType);
         $riceInput = $this->decodeEncodedRouteSegment((string) $encodedRice);
-        $timePeriod = 7;
+        $lookbackDays = 365;
 
         $todayDate = Carbon::now();
         $created_at = [];
@@ -2590,7 +2599,8 @@ class ApiController extends Controller
         }
 
         $productTypeValue = (string) $productType->type;
-        $fromDate = Carbon::now()->format('Y-m-d');
+        $periodEnd = $todayDate->copy()->format('Y-m-d');
+        $periodStart = $todayDate->copy()->subDays($lookbackDays)->format('Y-m-d');
         $prices = LivePrice::where('name', $riceName->id)
             ->where('form', $riceForm->id)
             ->with([
@@ -2600,7 +2610,8 @@ class ApiController extends Controller
                 }
             ])
             ->where(['state' => $state])
-            ->whereBetween(DB::raw('date(created_at)'), [$todayDate->subDays($timePeriod), $fromDate])
+            ->whereDate('created_at', '>=', $periodStart)
+            ->whereDate('created_at', '<=', $periodEnd)
             ->get();
 
         $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices);
