@@ -2950,7 +2950,11 @@ class ApiController extends Controller
     }
     public function getBasmatiStateForWeb(Request $request)
     {
-        $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
+        $latestCropYearRecord = LivePrice::orderBy('cropYear', 'desc')->first();
+        if (! $latestCropYearRecord) {
+            return response()->json(['error' => 'No records found', 'data' => []], 200);
+        }
+
         $latestCropYear = $latestCropYearRecord->cropYear;
 
         $states = [];
@@ -2958,56 +2962,52 @@ class ApiController extends Controller
 
         $todayDate = Carbon::now();
 
-        $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
-        $year = ( $todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear ;
+        $cropYear = request()->has('year') ? request()->get('year') : $latestCropYear;
+        $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
 
         $date = $todayDate->day;
         $month = $todayDate->month;
 
-        $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
+        $targetDate = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
 
-        $lastRecord = LivePrice::query()
+        $lastRecordQuery = LivePrice::query()
                 ->where('name', '!=', '0')
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->whereDate('created_at' , $lastEnteredRecord)
-                ->where('cropYear' , $cropYear)
+                ->whereDate('created_at', $targetDate)
+                ->where('cropYear', $cropYear)
                 ->latest('id');
 
-        if( !$lastRecord->exists() ){
-            $lastRecord = LivePrice::query()
+        if (! $lastRecordQuery->exists()) {
+            $lastRecordQuery = LivePrice::query()
                 ->where('name', '!=', '0')
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->where('cropYear' , $cropYear)
-                ->whereDate('created_at' ,'<', $lastEnteredRecord)
+                ->where('cropYear', $cropYear)
+                ->whereDate('created_at', '<', $targetDate)
                 ->latest('id');
-
         }
 
-        $lastEnteredRecord = $lastRecord->first();
+        $lastPriceRow = $lastRecordQuery->first();
+        if (! $lastPriceRow) {
+            return response()->json(['error' => null, 'data' => []], 200);
+        }
 
         $data = LivePrice::query()
                 ->has('name_rel')
-                ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+                ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
                 ->with([
                     'name_rel',
-                    'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
-                ])
-                ->withCount([
-                    'trades as tradeCount' => function ($q) {
-                        $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                        // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                    }
+                    'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
                 ])
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->where('cropYear' , $cropYear)
-                // ->orderBy('name_order')
+                ->where('cropYear', $cropYear)
                 ->orderBy('state_order')
-                ->whereDate('created_at',$lastEnteredRecord->created_at)->get();
+                ->whereDate('created_at', $lastPriceRow->created_at)
+                ->get();
 
                 $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
                     ->where('cropYear' , $cropYear)
@@ -3276,7 +3276,11 @@ class ApiController extends Controller
 
     public function getNONBasmatiStateForWeb(Request $request)
     {
-        $latestCropYearRecord = LivePrice::orderBy('cropYear' , 'desc')->first();
+        $latestCropYearRecord = LivePrice::orderBy('cropYear', 'desc')->first();
+        if (! $latestCropYearRecord) {
+            return response()->json(['error' => 'No records found', 'data' => []], 200);
+        }
+
         $latestCropYear = $latestCropYearRecord->cropYear;
 
         $states = [];
@@ -3284,55 +3288,52 @@ class ApiController extends Controller
 
         $todayDate = Carbon::now();
 
-        $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
+        $cropYear = request()->has('year') ? request()->get('year') : $latestCropYear;
 
-        $year = ( $todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear ;
+        $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
         $date = $todayDate->day;
         $month = $todayDate->month;
 
+        $targetDate = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
 
-        $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
-
-        $lastRecord = LivePrice::query()->orderBy('state_order')
+        $lastRecordQuery = LivePrice::query()->orderBy('state_order')
                 ->where('name', '!=', '0')
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->whereDate('created_at' , $lastEnteredRecord)
-                ->where('cropYear' , $cropYear)
+                ->whereDate('created_at', $targetDate)
+                ->where('cropYear', $cropYear)
                 ->latest('id');
 
-        if( !$lastRecord->exists() ){
-            $lastRecord = LivePrice::query()->orderBy('state_order')
+        if (! $lastRecordQuery->exists()) {
+            $lastRecordQuery = LivePrice::query()->orderBy('state_order')
                 ->where('name', '!=', '0')
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->where('cropYear' , $cropYear)
-                ->whereDate('created_at' ,'<', $lastEnteredRecord)
+                ->where('cropYear', $cropYear)
+                ->whereDate('created_at', '<', $targetDate)
                 ->latest('id');
         }
 
-        $lastEnteredRecord = $lastRecord->first();
-        // dd(LivePrice::query()->orderBy('state_order')->get());
+        $lastPriceRow = $lastRecordQuery->first();
+        if (! $lastPriceRow) {
+            return response()->json(['error' => null, 'data' => []], 200);
+        }
+
         $data = LivePrice::query()->orderBy('state_order')
                 ->has('name_rel')
-                ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
+                ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
                 ->with([
                     'name_rel',
-                    'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
-                ])
-                ->withCount([
-                    'trades as tradeCount' => function ($q) {
-                        $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                        // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                    }
+                    'form_rel' => fn ($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC'),
                 ])
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->where('cropYear' , $cropYear)
+                ->where('cropYear', $cropYear)
                 ->orderBy('name_order')
-                ->whereDate('created_at',$lastEnteredRecord->created_at)->get();
+                ->whereDate('created_at', $lastPriceRow->created_at)
+                ->get();
 
 
             $livePricesClosingOpening = LivePricesOpeningClosing::select(["id","trade_for","farming_type","name","form","cropYear","state","opening","closing"])
