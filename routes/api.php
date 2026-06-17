@@ -56,6 +56,7 @@ use Pusher\Pusher;
     Route::GET('verify/otp/{number}/{id}' , ['as' => 'verify.otp'               , 'uses' => 'ApiController@verifyOTP']);
 
     Route::get('get/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiState']);
+    Route::get('get/web/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiStateForWeb', 'middleware' => 'portal.api.token']);
     Route::get('get/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiState']);
     Route::get('get/web/nonbasmati/state' ,     ['as' => 'get.nonbasmati.state'     , 'uses' => 'ApiController@getNONBasmatiStateForWeb', 'middleware' => 'portal.api.token']);
     Route::get('get/images/for/dashboard' , ['as' => 'get.images.for.dashboard' , 'uses' => 'ApiController@getImagesForDashboard']);
@@ -334,7 +335,6 @@ use Pusher\Pusher;
     });
 
 
-    Route::get('get/web/basmati/state' ,        ['as' => 'get.basmati.state'        , 'uses' => 'ApiController@getBasmatiStateForWeb', 'middleware' => 'portal.api.token']);
 
 
     // Web SPA logout (session cookie) — same handler as portal/logout

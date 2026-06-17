@@ -2996,9 +2996,7 @@ class ApiController extends Controller
         if (! $lastPriceRow) {
             return response()->json(['error' => null, 'data' => []], 200);
         }
-        if( $ricetype == 'basmati' && $request->year == 2026 ){
-            return response()->json(['error' => "hello", 'data' => []], 200);
-        }
+        
         $data = LivePrice::query()
                 ->has('name_rel')
                 ->whereHas('form_rel', fn ($q) => $q->where('type', $ricetype))
