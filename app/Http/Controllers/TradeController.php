@@ -65,8 +65,10 @@ class TradeController extends Controller
         $closingCount = TradeQueriesINR::where('status', 11)->where('created_at', '<=', $cutoff)->count();
         $soldCount    = TradeQueriesINR::where('status', 3)->where('created_at', '<=', $cutoff)->count();
         $expiredCount = TradeQueriesINR::where('status', 2)->where('created_at', '<=', $cutoff)->count();
+        $activeBuyCount = TradeQueriesINR::where('status', 6)->whereIn('tradeType', [1, 3])->count();
+        $activeSellCount = TradeQueriesINR::where('status', 6)->whereIn('tradeType', [2, 4])->count();
 
-        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount'));
+        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount','activeBuyCount','activeSellCount'));
     }
 
     public function purgeOldByStatus(Request $request)

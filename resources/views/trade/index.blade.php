@@ -52,6 +52,12 @@
                                 <a href="javascript:void(0)" class="btn btn-default js-trade-note" data-type="expired">
                                     Expired <span class="badge">{{ $expiredCount ?? 0 }}</span>
                                 </a>
+                                <span class="btn btn-default" style="cursor: default;">
+                                    Active Buy Trades <span class="badge">{{ $activeBuyCount ?? 0 }}</span>
+                                </span>
+                                <span class="btn btn-default" style="cursor: default;">
+                                    Active Sell Trades <span class="badge">{{ $activeSellCount ?? 0 }}</span>
+                                </span>
                             </div>
                         </div>
                         
