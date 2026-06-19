@@ -6462,19 +6462,110 @@ if (!file_exists('uploads')) {
         $allTrade = UserInterestService::orderTradesWithUserInterestsFirst($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
-        $trade = $allTrade;
-        // $trade = $allTrade->groupBy('tradeType');
+        $paginated = $this->paginateOrderedTrades($allTrade, $request);
+        $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
 
         return response()->json([
             'status' => true,
             'data' => $trade,
-            'allTrade' => $allTrade,
+            'allTrade' => $trade,
+            'pagination' => $paginated['pagination'],
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
         ]);
+    }
+
+    /**
+     * Slice an already-ordered trade collection for API pagination (order is unchanged).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return array{items: \Illuminate\Support\Collection, pagination: array<string, int|null>}
+     */
+    private function paginateOrderedTrades($trades, Request $request): array
+    {
+        $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
+        $total = $collection->count();
+        $perPage = $this->resolveTradeFilterPerPage($request);
+        $lastPage = max(1, (int) ceil($total / $perPage));
+        $page = max(1, min($lastPage, $this->resolveTradeFilterPage($request)));
+        $offset = ($page - 1) * $perPage;
+
+        return [
+            'items' => $collection->slice($offset, $perPage)->values(),
+            'pagination' => [
+                'current_page' => $page,
+                'per_page' => $perPage,
+                'total' => $total,
+                'last_page' => $lastPage,
+                'from' => $total === 0 ? null : $offset + 1,
+                'to' => $total === 0 ? null : min($offset + $perPage, $total),
+            ],
+        ];
+    }
+
+    /**
+     * Pagination page from POST body (JSON/form) or query string.
+     */
+    private function resolveTradeFilterPage(Request $request): int
+    {
+        $value = $this->resolveTradeFilterRequestValue($request, ['page']);
+
+        return max(1, (int) ($value ?? 1));
+    }
+
+    /**
+     * Pagination size from POST body (JSON/form) or query string.
+     */
+    private function resolveTradeFilterPerPage(Request $request): int
+    {
+        $value = $this->resolveTradeFilterRequestValue($request, ['per_page', 'perPage', 'limit']);
+
+        return max(1, min(200, (int) ($value ?? 50)));
+    }
+
+    /**
+     * Read a request value from POST payload first, then query string.
+     *
+     * @param  array<int, string>  $keys
+     */
+    private function resolveTradeFilterRequestValue(Request $request, array $keys)
+    {
+        foreach ($keys as $key) {
+            if ($request->request->has($key)) {
+                $value = $request->request->get($key);
+                if ($value !== null && $value !== '') {
+                    return $value;
+                }
+            }
+
+            if ($request->json() && $request->json()->has($key)) {
+                $value = $request->json()->get($key);
+                if ($value !== null && $value !== '') {
+                    return $value;
+                }
+            }
+        }
+
+        foreach ($keys as $key) {
+            if ($request->query->has($key)) {
+                $value = $request->query->get($key);
+                if ($value !== null && $value !== '') {
+                    return $value;
+                }
+            }
+        }
+
+        foreach ($keys as $key) {
+            $value = $request->input($key);
+            if ($value !== null && $value !== '') {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**
