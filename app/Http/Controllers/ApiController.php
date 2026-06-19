@@ -6470,7 +6470,7 @@ if (!file_exists('uploads')) {
         return response()->json([
             'status' => true,
             'data' => $trade,
-            'allTrade' => $trade,
+            // 'allTrade' => $trade,
             'pagination' => $paginated['pagination'],
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
