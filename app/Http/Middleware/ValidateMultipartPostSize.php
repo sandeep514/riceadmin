@@ -17,6 +17,10 @@ class ValidateMultipartPostSize
 
     public function handle(Request $request, Closure $next): Response
     {
+        if ($this->shouldSkipBodySizeValidation($request)) {
+            return $next($request);
+        }
+
         $contentLength = (int) $request->server('CONTENT_LENGTH', 0);
 
         if ($contentLength > 0 && $contentLength > self::MAX_BYTES) {
@@ -61,6 +65,14 @@ class ValidateMultipartPostSize
         }
 
         return response($message, 413);
+    }
+
+    /**
+     * Read-only count endpoints only need small filter params; ignore accidental oversized bodies.
+     */
+    private function shouldSkipBodySizeValidation(Request $request): bool
+    {
+        return $request->is('api/get/all/trades/count');
     }
 
     private function parseSize(string $size): int

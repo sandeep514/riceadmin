@@ -6280,25 +6280,8 @@ if (!file_exists('uploads')) {
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
         $baseTradeQuery = TradeQueriesINR::where('status', 1)
-            ->where(function($query) use ($request) {
-                if ($request->has('farming_type')) {
-                    $query->where('farmingType', $request->farming_type);
-                }
-                if ($request->has('quality_type')) {
-                    $query->where('quality_type', $request->quality_type);
-                }
-                if ($request->has('quality')) {
-                    $query->where('quality', $request->quality);
-                }
-                if ($request->has('quality_form')) {
-                    $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
-                    // $query->where('qualityForm', $request->quality_form);
-                }
-                if ($request->has('rice_size')) {
-                    $query->where('riceSize', $request->rice_size);
-                }
-                // trade_type is intentionally not filtered here so that all 4 counts are always returned
-                // Add more filters as needed
+            ->where(function ($query) use ($request) {
+                $this->applyTradeCountFilters($query, $request);
             });
 
         $BuyQuery = (clone $baseTradeQuery)->where('tradeType', 1)->count();
@@ -6307,6 +6290,27 @@ if (!file_exists('uploads')) {
         $FutureSellQuery = (clone $baseTradeQuery)->where('tradeType', 4)->count();
 
         return response()->json(['status' => true, 'data' => ['BuyQuery' => $BuyQuery , 'SellQuery' => $SellQuery , 'FutureBuyQuery' => $FutureBuyQuery , 'FutureSellQuery' => $FutureSellQuery]]);
+    }
+
+    /**
+     * Optional filters for get/all/trades/count (GET query or small POST JSON body).
+     */
+    private function applyTradeCountFilters($query, Request $request): void
+    {
+        $filters = [
+            'farming_type' => 'farmingType',
+            'quality_type' => 'quality_type',
+            'quality' => 'quality',
+            'quality_form' => 'qualityFormLinkWithLivePrice',
+            'rice_size' => 'riceSize',
+        ];
+
+        foreach ($filters as $requestKey => $column) {
+            $value = $this->resolveTradeFilterRequestValue($request, [$requestKey]);
+            if ($value !== null && $value !== '') {
+                $query->where($column, $value);
+            }
+        }
     }
 
     public function getPersonalQueryCount($userId)
