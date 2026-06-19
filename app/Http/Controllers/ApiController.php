@@ -6111,7 +6111,7 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
-    public function getWebTrades($userId)
+    public function getWebTrades(Request $request, $userId)
     {
         $now = Carbon::now();
         $date = Carbon::parse($now)->toDateString();
@@ -6120,7 +6120,6 @@ if (!file_exists('uploads')) {
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5,11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
         $allTrade = TradeQueriesINR::where('status', '!=', 2)
-        ->limit(75)
         ->orderByRaw('FIELD(status,6,4,12,11,3)')->with(['TradeInterest' => function ($query) use ($userId) {
             return $query->where('userId', $userId)->get();
         }, 'RiceNameData', 'TradeLikeAll' => function ($query) use ($userId) {
@@ -6143,12 +6142,20 @@ if (!file_exists('uploads')) {
         $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
         $allTrade = $this->orderWebTradesActiveBeforeSold($allTrade, $userCategoryId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+        $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
-        $trade = $allTrade;
-        // $trade = $allTrade->groupBy('tradeType');
+        $paginated = $this->paginateOrderedTrades($allTrade, $request);
+        $trade = $paginated['items'];
+
         $tradeStatus = TradeCurrentStatus::first();
 
-        return response()->json(['status' => true, 'data' => $trade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+        return response()->json([
+            'status' => true,
+            'data' => $trade,
+            'pagination' => $paginated['pagination'],
+            'currentStatus' => $tradeStatus['currentStatus'],
+            'statusMessage' => $tradeStatus['message'],
+        ]);
     }
 
 
