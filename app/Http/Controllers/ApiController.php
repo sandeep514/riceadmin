@@ -6461,6 +6461,7 @@ if (!file_exists('uploads')) {
         $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
         $allTrade = UserInterestService::orderTradesWithUserInterestsFirst($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+        $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
         $paginated = $this->paginateOrderedTrades($allTrade, $request);
         $trade = $paginated['items'];
@@ -6742,6 +6743,49 @@ if (!file_exists('uploads')) {
 
             return $trade;
         });
+    }
+
+    /**
+     * Remove created_at / updated_at from eager-loaded relations on trade API responses.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
+     */
+    private function stripTradeCollectionRelationTimestamps($trades)
+    {
+        return $trades->map(function ($trade) {
+            $this->stripLoadedRelationTimestamps($trade);
+
+            return $trade;
+        });
+    }
+
+    /**
+     * @param  \Illuminate\Database\Eloquent\Model  $model
+     */
+    private function stripLoadedRelationTimestamps($model): void
+    {
+        if (! $model instanceof \Illuminate\Database\Eloquent\Model) {
+            return;
+        }
+
+        foreach ($model->getRelations() as $relation) {
+            if ($relation instanceof \Illuminate\Support\Collection) {
+                $relation->each(function ($item) {
+                    if ($item instanceof \Illuminate\Database\Eloquent\Model) {
+                        $item->makeHidden(['created_at', 'updated_at']);
+                        $this->stripLoadedRelationTimestamps($item);
+                    }
+                });
+
+                continue;
+            }
+
+            if ($relation instanceof \Illuminate\Database\Eloquent\Model) {
+                $relation->makeHidden(['created_at', 'updated_at']);
+                $this->stripLoadedRelationTimestamps($relation);
+            }
+        }
     }
 
     /**
