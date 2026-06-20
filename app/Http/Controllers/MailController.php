@@ -70,6 +70,20 @@ class MailController extends Controller
         }
     }
 
+    public static function sendBrandInterestMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
+    {
+        try {
+            return Mail::send('mail.brandInterestReceived', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject) {
+                $message->to($mailTo, 'SNTC Enquiry')->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
+        } catch (\Throwable $th) {
+            \Log::warning('Brand interest mail failed: '.$th->getMessage());
+
+            return false;
+        }
+    }
+
     public static function html_email($file, $from , $to , $data = []) {
         try {
             $respose = Mail::send($file, ['data' => $data], function($message) use ($from , $to) {
