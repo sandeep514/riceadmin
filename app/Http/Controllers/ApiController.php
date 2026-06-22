@@ -6119,28 +6119,32 @@ if (!file_exists('uploads')) {
 
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5,11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
-        $allTrade = TradeQueriesINR::where('status', '!=', 2)
-        ->orderByRaw('FIELD(status,6,4,12,11,3)')->with(['TradeInterest' => function ($query) use ($userId) {
-            return $query->where('userId', $userId)->get();
-        }, 'RiceNameData', 'TradeLikeAll' => function ($query) use ($userId) {
-            return $query->select(['id' ,'tradeId'])->where('userId', $userId);
-        }, 'RiceFormMilestone3', 'riceGrade' => function ($query) {
-            return $query->with('getWandType')->get();
-        }, 'RicePackingBuyer', 'RicePackingSeller'])
-        ->where('status', '!=', 5)
-
-        // ->where(function($q){
-        //     $twoDaysAgo = Carbon::now()->subDays(30)->toDateString();
-        //     $q->where('status', '!=', 3)
-        //       ->orWhere(function($qq) use ($twoDaysAgo){
-        //           $qq->where('status', 3)
-        //              ->whereDate('created_at', '>=', $twoDaysAgo);
-        //       });
-        // })
-        ->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
+        $allTrade = TradeQueriesINR::whereNotIn('status', [2, 5])
+            ->whereIn('tradeType', [1, 2, 3, 4])
+            ->orderByRaw('FIELD(status,6,4,12,11,3)')
+            ->with([
+                'TradeInterest' => function ($query) use ($userId) {
+                    $query->where('userId', $userId);
+                },
+                'RiceNameData',
+                'TradeLikeAll' => function ($query) use ($userId) {
+                    $query->where('userId', $userId);
+                },
+                'RiceFormMilestone3',
+                'RiceFormData',
+                'riceGrade' => function ($query) {
+                    $query->with('getWandType');
+                },
+                'RicePackingBuyer',
+                'RicePackingSeller',
+            ])
+            ->orderBy('id', 'DESC')
+            ->withCount('TradeLikeAll')
+            ->get();
 
         $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
-        $allTrade = $this->orderWebTradesActiveBeforeSold($allTrade, $userCategoryId);
+        $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
+        $allTrade = UserInterestService::orderTradesWithUserInterestsFirst($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6155,6 +6159,7 @@ if (!file_exists('uploads')) {
             'pagination' => $paginated['pagination'],
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
+            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
         ]);
     }
 
