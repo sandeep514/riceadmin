@@ -6121,7 +6121,6 @@ if (!file_exists('uploads')) {
 
         $allTrade = TradeQueriesINR::whereNotIn('status', [2, 5])
             ->whereIn('tradeType', [1, 2, 3, 4])
-            ->orderByRaw('FIELD(status,6,4,12,11,3)')
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
@@ -6142,9 +6141,7 @@ if (!file_exists('uploads')) {
             ->withCount('TradeLikeAll')
             ->get();
 
-        $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
-        $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
-        $allTrade = UserInterestService::orderTradesWithUserInterestsFirst($allTrade, (int) $userId);
+        $allTrade = $this->orderWebTradesForUserListing($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6452,8 +6449,6 @@ if (!file_exists('uploads')) {
                 // }
                 // Add more filters as needed
             })
-            // ->limit(75)
-            ->orderByRaw('FIELD(status,6,4,12,11,3)')
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
@@ -6473,9 +6468,7 @@ if (!file_exists('uploads')) {
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')->get();
 
-        $userCategoryId = $this->resolveWebUserCategoryId((int) $userId);
-        $allTrade = $this->orderWebTradesWithUserCategoryFirst($allTrade, $userCategoryId);
-        $allTrade = UserInterestService::orderTradesWithUserInterestsFirst($allTrade, (int) $userId);
+        $allTrade = $this->orderWebTradesForUserListing($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6597,6 +6590,106 @@ if (!file_exists('uploads')) {
         $id = (int) $selected;
 
         return $id > 0 ? $id : null;
+    }
+
+    /**
+     * Web trade list order:
+     * 1) non-sold trades matching admin web categories for the user's selected_category
+     * 2) non-sold trades matching user preferred products (interests), excluding bucket 1
+     * 3) remaining non-sold trades by id DESC
+     * 4) latest 15 sold trades by id DESC
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function orderWebTradesForUserListing($trades, int $userId)
+    {
+        $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
+        if ($collection->isEmpty()) {
+            return $collection->values();
+        }
+
+        $userCategoryId = $this->resolveWebUserCategoryId($userId);
+        $categoryTradeIds = [];
+        if ($userCategoryId !== null) {
+            $categoryTradeIds = TradeCategoryMap::query()
+                ->where('category_id', $userCategoryId)
+                ->where('status', 1)
+                ->pluck('trade_id')
+                ->flip()
+                ->all();
+        }
+
+        $interestTuples = UserInterestService::getActiveInterestTuplesForUser($userId);
+
+        $sold = $collection->filter(fn ($trade) => (int) $trade->status === 3);
+        $nonSold = $collection->filter(fn ($trade) => (int) $trade->status !== 3);
+
+        $placedIds = [];
+        $bucket1 = [];
+        foreach ($nonSold as $trade) {
+            if (! isset($categoryTradeIds[$trade->id])) {
+                continue;
+            }
+            $placedIds[(int) $trade->id] = true;
+            $trade->setAttribute('matches_user_category', true);
+            $trade->setAttribute('matches_user_interest', false);
+            $trade->setAttribute('interest_match_score', 0);
+            $bucket1[] = $trade;
+        }
+        usort($bucket1, fn ($a, $b) => (int) $b->id <=> (int) $a->id);
+
+        $bucket2 = [];
+        foreach ($nonSold as $trade) {
+            if (isset($placedIds[(int) $trade->id])) {
+                continue;
+            }
+            $score = UserInterestService::scoreTradeAgainstInterests($trade, $interestTuples);
+            if ($score <= 0) {
+                continue;
+            }
+            $placedIds[(int) $trade->id] = true;
+            $trade->setAttribute('matches_user_category', false);
+            $trade->setAttribute('matches_user_interest', true);
+            $trade->setAttribute('interest_match_score', $score);
+            $bucket2[] = $trade;
+        }
+        usort($bucket2, function ($a, $b) {
+            $scoreCmp = (int) $b->interest_match_score <=> (int) $a->interest_match_score;
+            if ($scoreCmp !== 0) {
+                return $scoreCmp;
+            }
+
+            return (int) $b->id <=> (int) $a->id;
+        });
+
+        $bucket3 = [];
+        foreach ($nonSold as $trade) {
+            if (isset($placedIds[(int) $trade->id])) {
+                continue;
+            }
+            $trade->setAttribute('matches_user_category', false);
+            $trade->setAttribute('matches_user_interest', false);
+            $trade->setAttribute('interest_match_score', 0);
+            $bucket3[] = $trade;
+        }
+        usort($bucket3, fn ($a, $b) => (int) $b->id <=> (int) $a->id);
+
+        $bucket4 = $sold
+            ->sortByDesc(fn ($trade) => (int) $trade->id)
+            ->values()
+            ->take(15)
+            ->map(function ($trade) use ($categoryTradeIds, $interestTuples) {
+                $score = UserInterestService::scoreTradeAgainstInterests($trade, $interestTuples);
+                $trade->setAttribute('matches_user_category', isset($categoryTradeIds[$trade->id]));
+                $trade->setAttribute('matches_user_interest', $score > 0);
+                $trade->setAttribute('interest_match_score', $score);
+
+                return $trade;
+            })
+            ->all();
+
+        return collect(array_merge($bucket1, $bucket2, $bucket3, $bucket4))->values();
     }
 
     /**
