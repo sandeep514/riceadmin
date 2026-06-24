@@ -6419,57 +6419,7 @@ if (!file_exists('uploads')) {
         $appliedTradeType = $this->resolveAppliedWebTradeFilterTradeType($request);
 
         $allTrade = TradeQueriesINR::query()
-            ->when(
-                $hasTradeTypeFilter,
-                fn ($query) => $query->whereIn('status', [1, 4, 6]),
-                fn ($query) => $query->whereNotIn('status', [2, 5])
-            )
-            ->where(function ($query) use ($request, $hasTradeTypeFilter, $appliedTradeType) {
-                if ($hasTradeTypeFilter) {
-                    $query->where('tradeType', $appliedTradeType);
-                } else {
-                    $query->whereIn('tradeType', [1, 2, 3, 4]);
-                }
-
-                if ($request->has('farming_type')) {
-                    $query->where('farmingType', $request->farming_type);
-                }
-
-                if ($request->has('quality_type')) {
-                    $query->where('quality_type', $request->quality_type);
-                }
-                
-                if ($request->has('quality')) {
-                    $query->where('quality', $request->quality);
-                }
-                
-                if ($request->has('quality_form')) {
-                    if( $request->has('state') ){
-                        $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
-                    }else{
-                        $query->where('qualityForm', $request->quality_form);    
-                    }
-                }
-
-                if ($request->has('rice_size')) {
-                    $query->where('riceSize', $request->rice_size);
-                }
-               
-                if ($request->has('state')) {
-                    $query->where('stateLinkWithLivePrice', $request->state);
-                }
-
-                if ($request->has('packing')) {
-                    $query->where('packingStreamType', $request->packing);
-                }
-
-                
-
-                // if( $request->has('packing') ) {
-                //     $query->where('packing' , $request->packing);
-                // }
-                // Add more filters as needed
-            })
+            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, $hasTradeTypeFilter, $appliedTradeType))
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
@@ -6699,6 +6649,7 @@ if (!file_exists('uploads')) {
 
     /**
      * Breakdown for web trade list responses (All vs filtered, buy/sell counts, sell page hint).
+     * Active counts come from DB (status IN 1,4,6) per tradeType — not from the in-memory list.
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $orderedTrades
      * @return array<string, mixed>
@@ -6707,42 +6658,127 @@ if (!file_exists('uploads')) {
     {
         $collection = $orderedTrades instanceof \Illuminate\Support\Collection ? $orderedTrades : collect($orderedTrades);
         $perPage = $this->resolveTradeFilterPerPage($request);
+        $activeCounts = $this->countWebActiveTradesForListing($request, $hasTradeTypeFilter, $appliedTradeType);
 
-        $buyActive = 0;
-        $sellActive = 0;
         $soldInList = 0;
-
         foreach ($collection as $trade) {
-            $status = (int) $trade->status;
-            $tradeType = (int) $trade->tradeType;
-            if ($status === 3) {
+            if ((int) $trade->status === 3) {
                 $soldInList++;
-
-                continue;
-            }
-            if ($this->isWebBuyTradeType($tradeType)) {
-                $buyActive++;
-            } elseif ($this->isWebSellTradeType($tradeType)) {
-                $sellActive++;
             }
         }
 
         $sellStartsAtPage = null;
-        if (! $hasTradeTypeFilter && $sellActive > 0) {
-            $sellStartsAtPage = $buyActive === 0
-                ? 1
-                : (int) ceil(($buyActive + 1) / $perPage);
+        $totalActiveSell = $activeCounts['sell_active'] + $activeCounts['future_sell_active'];
+        if (! $hasTradeTypeFilter && $totalActiveSell > 0) {
+            $position = 0;
+            foreach ($collection as $trade) {
+                $position++;
+                if (
+                    $this->isWebSellTradeType((int) $trade->tradeType)
+                    && $this->isWebActiveTradeStatus((int) $trade->status)
+                ) {
+                    $sellStartsAtPage = (int) ceil($position / $perPage);
+                    break;
+                }
+            }
         }
 
         return [
             'trade_type_filter_applied' => $hasTradeTypeFilter,
             'applied_trade_type' => $appliedTradeType,
-            'counts' => [
-                'buy_active' => $buyActive,
-                'sell_active' => $sellActive,
+            'counts' => array_merge($activeCounts, [
                 'sold_in_list' => $soldInList,
-            ],
+            ]),
             'sell_starts_at_page' => $sellStartsAtPage,
+        ];
+    }
+
+    /**
+     * Status / tradeType scope for web trade listing queries.
+     */
+    private function applyWebTradeListScope($query, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): void
+    {
+        if ($hasTradeTypeFilter) {
+            $query->whereIn('status', [1, 4, 6])->where('tradeType', $appliedTradeType);
+        } else {
+            $query->whereNotIn('status', [2, 5])->whereIn('tradeType', [1, 2, 3, 4]);
+        }
+
+        $this->applyWebTradeListOptionalFilters($query, $request);
+    }
+
+    /**
+     * Optional web trade filters (farming, quality, state, packing, etc.).
+     */
+    private function applyWebTradeListOptionalFilters($query, Request $request): void
+    {
+        if ($request->has('farming_type')) {
+            $query->where('farmingType', $request->farming_type);
+        }
+
+        if ($request->has('quality_type')) {
+            $query->where('quality_type', $request->quality_type);
+        }
+
+        if ($request->has('quality')) {
+            $query->where('quality', $request->quality);
+        }
+
+        if ($request->has('quality_form')) {
+            if ($request->has('state')) {
+                $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
+            } else {
+                $query->where('qualityForm', $request->quality_form);
+            }
+        }
+
+        if ($request->has('rice_size')) {
+            $query->where('riceSize', $request->rice_size);
+        }
+
+        if ($request->has('state')) {
+            $query->where('stateLinkWithLivePrice', $request->state);
+        }
+
+        if ($request->has('packing')) {
+            $query->where('packingStreamType', $request->packing);
+        }
+    }
+
+    /**
+     * Active trade counts from DB: status IN (1,4,6), one count per tradeType (1–4).
+     *
+     * @return array{buy_active: int, sell_active: int, future_buy_active: int, future_sell_active: int}
+     */
+    private function countWebActiveTradesForListing(Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): array
+    {
+        $empty = [
+            'buy_active' => 0,
+            'sell_active' => 0,
+            'future_buy_active' => 0,
+            'future_sell_active' => 0,
+        ];
+
+        $base = TradeQueriesINR::query()
+            ->whereIn('status', [1, 4, 6]);
+        $this->applyWebTradeListOptionalFilters($base, $request);
+
+        if ($hasTradeTypeFilter) {
+            $total = (clone $base)->where('tradeType', $appliedTradeType)->count();
+            $key = [1 => 'buy_active', 2 => 'sell_active', 3 => 'future_buy_active', 4 => 'future_sell_active'][$appliedTradeType] ?? null;
+            if ($key === null) {
+                return $empty;
+            }
+            $empty[$key] = $total;
+
+            return $empty;
+        }
+
+        return [
+            'buy_active' => (clone $base)->where('tradeType', 1)->count(),
+            'sell_active' => (clone $base)->where('tradeType', 2)->count(),
+            'future_buy_active' => (clone $base)->where('tradeType', 3)->count(),
+            'future_sell_active' => (clone $base)->where('tradeType', 4)->count(),
         ];
     }
 
@@ -6874,10 +6910,15 @@ if (!file_exists('uploads')) {
         }
 
         $buyActive = $collection->filter(
-            fn ($trade) => (int) $trade->status !== 3 && $this->isWebBuyTradeType((int) $trade->tradeType)
+            fn ($trade) => $this->isWebActiveTradeStatus((int) $trade->status)
+                && $this->isWebBuyTradeType((int) $trade->tradeType)
         );
         $sellActive = $collection->filter(
-            fn ($trade) => (int) $trade->status !== 3 && $this->isWebSellTradeType((int) $trade->tradeType)
+            fn ($trade) => $this->isWebActiveTradeStatus((int) $trade->status)
+                && $this->isWebSellTradeType((int) $trade->tradeType)
+        );
+        $inactiveNonSold = $collection->filter(
+            fn ($trade) => (int) $trade->status !== 3 && ! $this->isWebActiveTradeStatus((int) $trade->status)
         );
         $soldMixed = $collection
             ->filter(fn ($trade) => (int) $trade->status === 3)
@@ -6887,6 +6928,7 @@ if (!file_exists('uploads')) {
 
         return $this->sortWebTradesByStatusThenId($buyActive)
             ->concat($this->sortWebTradesByStatusThenId($sellActive))
+            ->concat($this->sortWebTradesByIdDesc($inactiveNonSold))
             ->concat($soldMixed)
             ->values();
     }
@@ -6940,6 +6982,11 @@ if (!file_exists('uploads')) {
     private function isWebSellTradeType(int $tradeType): bool
     {
         return in_array($tradeType, [2, 4], true);
+    }
+
+    private function isWebActiveTradeStatus(int $status): bool
+    {
+        return in_array($status, [1, 4, 6], true);
     }
 
     /**
