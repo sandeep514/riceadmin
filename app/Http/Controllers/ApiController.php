@@ -6123,8 +6123,8 @@ if (!file_exists('uploads')) {
 
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5,11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
-        $allTrade = TradeQueriesINR::whereNotIn('status', [2, 5])
-            ->whereIn('tradeType', [1, 2, 3, 4])
+        $allTrade = TradeQueriesINR::query()
+            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, false, null))
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
@@ -6689,6 +6689,7 @@ if (!file_exists('uploads')) {
             'counts' => array_merge($activeCounts, [
                 'sold_in_list' => $soldInList,
             ]),
+            'list_total' => array_sum($activeCounts) + $soldInList,
             'sell_starts_at_page' => $sellStartsAtPage,
         ];
     }
@@ -6701,7 +6702,8 @@ if (!file_exists('uploads')) {
         if ($hasTradeTypeFilter) {
             $query->whereIn('status', [1, 4, 6])->where('tradeType', $appliedTradeType);
         } else {
-            $query->whereNotIn('status', [2, 5])->whereIn('tradeType', [1, 2, 3, 4]);
+            // All tab: active trades + sold (for latest-15 bucket); exclude expired, de-active, hold, close.
+            $query->whereIn('status', [1, 4, 6, 3])->whereIn('tradeType', [1, 2, 3, 4]);
         }
 
         $this->applyWebTradeListOptionalFilters($query, $request);
@@ -6917,9 +6919,6 @@ if (!file_exists('uploads')) {
             fn ($trade) => $this->isWebActiveTradeStatus((int) $trade->status)
                 && $this->isWebSellTradeType((int) $trade->tradeType)
         );
-        $inactiveNonSold = $collection->filter(
-            fn ($trade) => (int) $trade->status !== 3 && ! $this->isWebActiveTradeStatus((int) $trade->status)
-        );
         $soldMixed = $collection
             ->filter(fn ($trade) => (int) $trade->status === 3)
             ->sortByDesc(fn ($trade) => (int) $trade->id)
@@ -6928,7 +6927,6 @@ if (!file_exists('uploads')) {
 
         return $this->sortWebTradesByStatusThenId($buyActive)
             ->concat($this->sortWebTradesByStatusThenId($sellActive))
-            ->concat($this->sortWebTradesByIdDesc($inactiveNonSold))
             ->concat($soldMixed)
             ->values();
     }
