@@ -6111,6 +6111,10 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
+    /**
+     * Web trade list (All types). No trade_type filter — buy active, then sell active, then latest 15 sold.
+     * Response includes trade_list_meta.counts and sell_starts_at_page for pagination UX.
+     */
     public function getWebTrades(Request $request, $userId)
     {
         $now = Carbon::now();
@@ -6149,6 +6153,7 @@ if (!file_exists('uploads')) {
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
+        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null);
 
         return response()->json([
             'status' => true,
@@ -6156,6 +6161,7 @@ if (!file_exists('uploads')) {
             'pagination' => $paginated['pagination'],
             'total' => $paginated['pagination']['total'],
             'last_page' => $paginated['pagination']['last_page'],
+            'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
@@ -6396,6 +6402,11 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
+    /**
+     * Web trade list with optional filters.
+     * All tab: omit trade_type (or send 0 / "all") — returns buy then sell then 15 sold; use trade_list_meta.sell_starts_at_page when paginating.
+     * Buy/Sell tab: send trade_type 1–4 — active trades only for that type.
+     */
     public function webFilterTrade(Request $request , $userId)
     {
         $now = Carbon::now();
@@ -6405,6 +6416,7 @@ if (!file_exists('uploads')) {
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
         $hasTradeTypeFilter = $this->hasWebTradeFilterTradeType($request);
+        $appliedTradeType = $this->resolveAppliedWebTradeFilterTradeType($request);
 
         $allTrade = TradeQueriesINR::query()
             ->when(
@@ -6412,9 +6424,9 @@ if (!file_exists('uploads')) {
                 fn ($query) => $query->whereIn('status', [1, 4, 6]),
                 fn ($query) => $query->whereNotIn('status', [2, 5])
             )
-            ->where(function ($query) use ($request, $hasTradeTypeFilter) {
+            ->where(function ($query) use ($request, $hasTradeTypeFilter, $appliedTradeType) {
                 if ($hasTradeTypeFilter) {
-                    $query->where('tradeType', (int) $this->resolveTradeFilterRequestValue($request, ['trade_type']));
+                    $query->where('tradeType', $appliedTradeType);
                 } else {
                     $query->whereIn('tradeType', [1, 2, 3, 4]);
                 }
@@ -6488,6 +6500,7 @@ if (!file_exists('uploads')) {
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
+        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType);
 
         return response()->json([
             'status' => true,
@@ -6496,6 +6509,7 @@ if (!file_exists('uploads')) {
             'pagination' => $paginated['pagination'],
             'total' => $paginated['pagination']['total'],
             'last_page' => $paginated['pagination']['last_page'],
+            'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
@@ -6653,15 +6667,83 @@ if (!file_exists('uploads')) {
 
     /**
      * True when filter payload includes a specific trade_type (Buy/Sell/Future).
+     * Values treated as "All" (no filter): null, empty, 0, "0", "all" (case-insensitive).
      */
     private function hasWebTradeFilterTradeType(Request $request): bool
     {
+        return $this->resolveAppliedWebTradeFilterTradeType($request) !== null;
+    }
+
+    /**
+     * Resolved trade_type filter (1–4) or null when listing all types.
+     */
+    private function resolveAppliedWebTradeFilterTradeType(Request $request): ?int
+    {
         $value = $this->resolveTradeFilterRequestValue($request, ['trade_type']);
         if ($value === null || $value === '') {
-            return false;
+            return null;
         }
 
-        return is_numeric($value) && (int) $value > 0;
+        if (is_string($value) && strtolower(trim($value)) === 'all') {
+            return null;
+        }
+
+        if (! is_numeric($value)) {
+            return null;
+        }
+
+        $tradeType = (int) $value;
+
+        return $tradeType > 0 ? $tradeType : null;
+    }
+
+    /**
+     * Breakdown for web trade list responses (All vs filtered, buy/sell counts, sell page hint).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $orderedTrades
+     * @return array<string, mixed>
+     */
+    private function buildWebTradeListMeta($orderedTrades, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): array
+    {
+        $collection = $orderedTrades instanceof \Illuminate\Support\Collection ? $orderedTrades : collect($orderedTrades);
+        $perPage = $this->resolveTradeFilterPerPage($request);
+
+        $buyActive = 0;
+        $sellActive = 0;
+        $soldInList = 0;
+
+        foreach ($collection as $trade) {
+            $status = (int) $trade->status;
+            $tradeType = (int) $trade->tradeType;
+            if ($status === 3) {
+                $soldInList++;
+
+                continue;
+            }
+            if ($this->isWebBuyTradeType($tradeType)) {
+                $buyActive++;
+            } elseif ($this->isWebSellTradeType($tradeType)) {
+                $sellActive++;
+            }
+        }
+
+        $sellStartsAtPage = null;
+        if (! $hasTradeTypeFilter && $sellActive > 0) {
+            $sellStartsAtPage = $buyActive === 0
+                ? 1
+                : (int) ceil(($buyActive + 1) / $perPage);
+        }
+
+        return [
+            'trade_type_filter_applied' => $hasTradeTypeFilter,
+            'applied_trade_type' => $appliedTradeType,
+            'counts' => [
+                'buy_active' => $buyActive,
+                'sell_active' => $sellActive,
+                'sold_in_list' => $soldInList,
+            ],
+            'sell_starts_at_page' => $sellStartsAtPage,
+        ];
     }
 
     /**

@@ -162,6 +162,8 @@ use Pusher\Pusher;
 
     Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
     Route::get('get/trades/{userId}' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade']);
+    // Web trades: All tab must NOT send trade_type (or send 0/"all"). Sell trades appear after all buys;
+    // use trade_list_meta.sell_starts_at_page when only loading page 1. Manufacturer role does not filter types.
     Route::get('web/get/trades/{userId}' , ['as' => 'web.get.trade' , 'uses' => 'ApiController@getWebTrades', 'middleware' => 'portal.api.token']);
     Route::get('get/personal/trades/{userId}' , ['as' => 'get.personal.trade' , 'uses' => 'ApiController@getPersonalTrade']);
     Route::match(['get', 'post'], 'get/all/trades/count', [
@@ -170,6 +172,7 @@ use Pusher\Pusher;
     ]);
     Route::get('get/personal/query/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQuery']);
     Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade']);
+    // trade_type 1–4 = single type; omit/0/"all" = All (buy → sell → 15 sold). See trade_list_meta in response.
     Route::post('web/get/trades/filter/{userId}' , ['as' => 'web.get.trade.filter' , 'uses' => 'ApiController@webFilterTrade', 'middleware' => 'portal.api.token']);
 
     Route::match(['get', 'post'], 'get/guest/rice-sourcing/trades', [
