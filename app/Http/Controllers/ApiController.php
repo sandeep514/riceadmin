@@ -6141,7 +6141,7 @@ if (!file_exists('uploads')) {
             ->withCount('TradeLikeAll')
             ->get();
 
-        $allTrade = $this->orderWebTradesForUserListing($allTrade, (int) $userId);
+        $allTrade = $this->orderWebTradesAllTypesListing($allTrade);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6404,12 +6404,19 @@ if (!file_exists('uploads')) {
 
         TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
 
-        $allTrade = TradeQueriesINR::whereNotIn('status',[2,5])
-            ->where(function($query) use ($request) {
-                if ($request->has('trade_type')) {
-                    $query->where('tradeType', $request->trade_type);
-                }else{
-                    $query->whereIn('tradeType', [1,2,3,4]);
+        $hasTradeTypeFilter = $this->hasWebTradeFilterTradeType($request);
+
+        $allTrade = TradeQueriesINR::query()
+            ->when(
+                $hasTradeTypeFilter,
+                fn ($query) => $query->whereIn('status', [1, 4, 6]),
+                fn ($query) => $query->whereNotIn('status', [2, 5])
+            )
+            ->where(function ($query) use ($request, $hasTradeTypeFilter) {
+                if ($hasTradeTypeFilter) {
+                    $query->where('tradeType', (int) $this->resolveTradeFilterRequestValue($request, ['trade_type']));
+                } else {
+                    $query->whereIn('tradeType', [1, 2, 3, 4]);
                 }
 
                 if ($request->has('farming_type')) {
@@ -6468,9 +6475,12 @@ if (!file_exists('uploads')) {
                 'RicePackingSeller'
             ])
             ->orderBy('id', 'DESC')
-            ->withCount('TradeLikeAll')->get();
+            ->withCount('TradeLikeAll')
+            ->get();
 
-        $allTrade = $this->orderWebTradesForUserListing($allTrade, (int) $userId);
+        $allTrade = $hasTradeTypeFilter
+            ? $this->orderWebTradesForUserListing($allTrade, (int) $userId)
+            : $this->orderWebTradesAllTypesListing($allTrade);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6642,6 +6652,19 @@ if (!file_exists('uploads')) {
     }
 
     /**
+     * True when filter payload includes a specific trade_type (Buy/Sell/Future).
+     */
+    private function hasWebTradeFilterTradeType(Request $request): bool
+    {
+        $value = $this->resolveTradeFilterRequestValue($request, ['trade_type']);
+        if ($value === null || $value === '') {
+            return false;
+        }
+
+        return is_numeric($value) && (int) $value > 0;
+    }
+
+    /**
      * Web user's primary category from business profile (e.g. Manufacturer); maps to category.id / trade_category_map.category_id.
      */
     private function resolveWebUserCategoryId(int $userId): ?int
@@ -6753,6 +6776,37 @@ if (!file_exists('uploads')) {
             ->all();
 
         return collect(array_merge($bucket1, $bucket2, $bucket3, $bucket4))->values();
+    }
+
+    /**
+     * All trade types (no trade_type filter): buy first, sell second, then latest 15 sold (mixed).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function orderWebTradesAllTypesListing($trades)
+    {
+        $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
+        if ($collection->isEmpty()) {
+            return $collection->values();
+        }
+
+        $buyActive = $collection->filter(
+            fn ($trade) => (int) $trade->status !== 3 && $this->isWebBuyTradeType((int) $trade->tradeType)
+        );
+        $sellActive = $collection->filter(
+            fn ($trade) => (int) $trade->status !== 3 && $this->isWebSellTradeType((int) $trade->tradeType)
+        );
+        $soldMixed = $collection
+            ->filter(fn ($trade) => (int) $trade->status === 3)
+            ->sortByDesc(fn ($trade) => (int) $trade->id)
+            ->values()
+            ->take(15);
+
+        return $this->sortWebTradesByStatusThenId($buyActive)
+            ->concat($this->sortWebTradesByStatusThenId($sellActive))
+            ->concat($soldMixed)
+            ->values();
     }
 
     /**
