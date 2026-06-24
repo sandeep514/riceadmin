@@ -6154,6 +6154,8 @@ if (!file_exists('uploads')) {
             'status' => true,
             'data' => $trade,
             'pagination' => $paginated['pagination'],
+            'total' => $paginated['pagination']['total'],
+            'last_page' => $paginated['pagination']['last_page'],
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
@@ -6482,6 +6484,8 @@ if (!file_exists('uploads')) {
             'data' => $trade,
             // 'allTrade' => $trade,
             'pagination' => $paginated['pagination'],
+            'total' => $paginated['pagination']['total'],
+            'last_page' => $paginated['pagination']['last_page'],
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
@@ -6499,19 +6503,36 @@ if (!file_exists('uploads')) {
         $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
         $total = $collection->count();
         $perPage = $this->resolveTradeFilterPerPage($request);
-        $lastPage = max(1, (int) ceil($total / $perPage));
-        $page = max(1, min($lastPage, $this->resolveTradeFilterPage($request)));
-        $offset = ($page - 1) * $perPage;
+        $requestedPage = $this->resolveTradeFilterPage($request);
+        $lastPage = $total === 0 ? 0 : (int) ceil($total / $perPage);
+
+        if ($total === 0) {
+            $page = max(1, $requestedPage);
+            $items = collect();
+            $from = null;
+            $to = null;
+        } elseif ($lastPage === 0 || $requestedPage > $lastPage) {
+            $page = $requestedPage;
+            $items = collect();
+            $from = null;
+            $to = null;
+        } else {
+            $page = $requestedPage;
+            $offset = ($page - 1) * $perPage;
+            $items = $collection->slice($offset, $perPage)->values();
+            $from = $offset + 1;
+            $to = min($offset + $perPage, $total);
+        }
 
         return [
-            'items' => $collection->slice($offset, $perPage)->values(),
+            'items' => $items,
             'pagination' => [
                 'current_page' => $page,
                 'per_page' => $perPage,
                 'total' => $total,
                 'last_page' => $lastPage,
-                'from' => $total === 0 ? null : $offset + 1,
-                'to' => $total === 0 ? null : min($offset + $perPage, $total),
+                'from' => $from,
+                'to' => $to,
             ],
         ];
     }
@@ -6521,19 +6542,61 @@ if (!file_exists('uploads')) {
      */
     private function resolveTradeFilterPage(Request $request): int
     {
-        $value = $this->resolveTradeFilterRequestValue($request, ['page']);
+        $value = $this->resolveTradeFilterPaginationValue($request, ['page']);
 
         return max(1, (int) ($value ?? 1));
     }
 
     /**
-     * Pagination size from POST body (JSON/form) or query string.
+     * Pagination size from query string or POST body (JSON/form).
      */
     private function resolveTradeFilterPerPage(Request $request): int
     {
-        $value = $this->resolveTradeFilterRequestValue($request, ['per_page', 'perPage', 'limit']);
+        $value = $this->resolveTradeFilterPaginationValue($request, ['per_page', 'perPage', 'limit']);
 
         return max(1, min(200, (int) ($value ?? 50)));
+    }
+
+    /**
+     * Pagination params: query string first (URL), then POST/JSON body.
+     *
+     * @param  array<int, string>  $keys
+     */
+    private function resolveTradeFilterPaginationValue(Request $request, array $keys)
+    {
+        foreach ($keys as $key) {
+            if ($request->query->has($key)) {
+                $value = $request->query->get($key);
+                if ($value !== null && $value !== '') {
+                    return $value;
+                }
+            }
+        }
+
+        foreach ($keys as $key) {
+            if ($request->request->has($key)) {
+                $value = $request->request->get($key);
+                if ($value !== null && $value !== '') {
+                    return $value;
+                }
+            }
+
+            if ($request->json() && $request->json()->has($key)) {
+                $value = $request->json()->get($key);
+                if ($value !== null && $value !== '') {
+                    return $value;
+                }
+            }
+        }
+
+        foreach ($keys as $key) {
+            $value = $request->input($key);
+            if ($value !== null && $value !== '') {
+                return $value;
+            }
+        }
+
+        return null;
     }
 
     /**
