@@ -966,13 +966,34 @@ class MasterController extends Controller
 			dd("here");
 		}
 
+		$convertPrefill = $this->buildConvertTradePrefill($query);
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
         $livePricesStates = \App\LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
         $categoryList = \App\Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = [];
 
-		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds'));
+		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds', 'convertPrefill'));
+	}
+
+	/**
+	 * Normalized prefill values for convert-to-trade form (buy/sell/future query → trade).
+	 *
+	 * @param  \Illuminate\Database\Eloquent\Model|null  $query
+	 * @return array<string, mixed>|null
+	 */
+	private function buildConvertTradePrefill($query): ?array
+	{
+		if ($query === null) {
+			return null;
+		}
+
+		return [
+			'quality_type' => $query->quality_type ?? null,
+			'quality' => $query->quality ?? null,
+			'quality_form' => $query->quality_form ?? $query->qualityForm ?? null,
+			'grade' => $query->grade ?? null,
+		];
 	}
 
 	public function listBuyQueries()
