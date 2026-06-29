@@ -154,7 +154,52 @@ class WebBrandController extends Controller
         $data['status'] = 0;
 
         $webBrands = WebBrands::create($data);
+        $webBrands->load('RiceName:id,name');
+
+        try {
+            $this->sendWebBrandCreatedNotificationMail($webBrands);
+        } catch (\Throwable $e) {
+            \Log::warning('Web brand created notification mail failed: '.$e->getMessage());
+        }
+
         return response()->json(['status' => 'success', 'message' => "Brand added successfully"]);
+    }
+
+    private function sendWebBrandCreatedNotificationMail(WebBrands $brand): void
+    {
+        $userId = (int) ($brand->user_id ?? auth()->id() ?? 0);
+        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email']) : null;
+
+        $logoUrl = null;
+        if (! empty($brand->logo)) {
+            $logoUrl = asset('brands/'.$brand->logo);
+        }
+
+        $mailData = [
+            'brandId' => (int) $brand->id,
+            'brandName' => $brand->name ?: '—',
+            'qualityName' => $brand->RiceName->name ?? '—',
+            'brandYear' => $brand->brand_year ?: '—',
+            'address' => $brand->address ?: '—',
+            'productMode' => $brand->product_mode ?: '—',
+            'description' => $brand->description ?: '—',
+            'logoUrl' => $logoUrl,
+            'statusLabel' => 'Pending',
+            'userId' => $userId > 0 ? $userId : '—',
+            'userName' => $user->name ?? null,
+            'userEmail' => $user->email ?? null,
+            'submittedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
+        ];
+
+        $subject = 'New Web Brand Added – '.($brand->name ?: 'Brand #'.$brand->id);
+
+        MailController::sendWebBrandCreatedMail(
+            'enquiry@sntcgroup.com',
+            'enquiry@sntcgroup.com',
+            'SNTC',
+            $subject,
+            $mailData
+        );
     }
 
     public function edit(Request $request)

@@ -1013,6 +1013,47 @@ class PortalApiController extends Controller
         return 'Please submit your documents to complete your profile.';
     }
 
+    /**
+     * Vendor / service-provider profile fields saved during portal registration (role 11 or 12).
+     *
+     * @return array<string, string|null>|null
+     */
+    private function resolvePortalVendorDetailsForUser(User $user): ?array
+    {
+        $role = (int) ($user->role ?? 0);
+        $userId = (int) $user->id;
+
+        if ($userId < 1) {
+            return null;
+        }
+
+        $record = null;
+        if ($role === 11) {
+            $record = VendorUserMap::query()
+                ->where('user_id', $userId)
+                ->where('status', 1)
+                ->orderByDesc('id')
+                ->first(['type', 'key', 'value', 'remarks']);
+        } elseif ($role === 12) {
+            $record = ServiceProviderUserMap::query()
+                ->where('user_id', $userId)
+                ->where('status', 1)
+                ->orderByDesc('id')
+                ->first(['type', 'key', 'value', 'remarks']);
+        }
+
+        if ($record === null) {
+            return null;
+        }
+
+        return [
+            'vendor_type' => $record->type,
+            'packing_type' => $record->key,
+            'specialisation' => $record->value,
+            'remarks' => $record->remarks,
+        ];
+    }
+
     public function getUserDetails($userId)
     {
         if ($userId != null) {
@@ -1036,6 +1077,16 @@ class PortalApiController extends Controller
             // }
             if (isset($user['get_web_business_details']['get_bag_vendor_web'])) {
                 unset($user['get_web_business_details']['get_bag_vendor_web']);
+            }
+
+            $vendorDetails = $this->resolvePortalVendorDetailsForUser($userModel);
+            if (in_array((int) $userModel->role, [11, 12], true)) {
+                $user['vendor_details'] = $vendorDetails ?? [
+                    'vendor_type' => null,
+                    'packing_type' => null,
+                    'specialisation' => null,
+                    'remarks' => null,
+                ];
             }
 
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
