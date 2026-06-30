@@ -2812,6 +2812,47 @@ class ApiController extends Controller
         }
     }
 
+    /**
+     * Mobile app: check whether an email is already registered.
+     * Registration (no user_id): matches saveUser — active users only (status=1, userType=1).
+     * Profile update (with user_id): matches updateUser — any other user with same email.
+     */
+    public function checkEmailExists(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|max:255',
+            'user_id' => 'nullable|integer|min:1',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'exists' => false,
+                'message' => 'Invalid email.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $email = trim((string) $request->email);
+        $query = User::query()
+            ->where('email', $email)
+            ->where('userType', 1);
+
+        if ($request->filled('user_id')) {
+            $query->where('id', '!=', (int) $request->user_id);
+        } else {
+            $query->where('status', 1);
+        }
+
+        $exists = $query->exists();
+
+        return response()->json([
+            'status' => true,
+            'exists' => $exists,
+            'message' => $exists ? 'Email already exists.' : 'Email is available.',
+        ], 200);
+    }
+
     public function updateUser(Request $request)
     {
         $data = [

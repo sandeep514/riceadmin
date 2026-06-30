@@ -46,6 +46,7 @@ use Pusher\Pusher;
     Route::get('get/gallery/list' ,         ['as' => 'get.gallery.details'      , 'uses' => 'ApiController@getGalleryData']);
     Route::get('get/gallery/details/{id}' , ['as' => 'get.gallery.details.id'   , 'uses' => 'ApiController@getGalleryDetails']);
     Route::POST('save/user' ,               ['as' => 'save.userr' 			    , 'uses' => 'ApiController@saveUser']);
+    Route::POST('check/email' ,             ['as' => 'check.email'              , 'uses' => 'ApiController@checkEmailExists']);
     Route::POST('update/user' ,               ['as' => 'update.userr'            , 'uses' => 'ApiController@updateUser']);
     Route::POST('verify/user' ,             ['as' => 'verify.user'              , 'uses' => 'ApiController@verifyUser']);
 
