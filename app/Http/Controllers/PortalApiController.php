@@ -926,26 +926,24 @@ class PortalApiController extends Controller
 
             if( $request->has('role') && $request->role == 11 ) {
                 $vendorDetails = [
-                    'user_id' => $user_id,
                     'type' => $request['vendorDetails']['type']??'--',
                     'key' => $request['vendorDetails']['key']??'--',
                     'value' => $request['vendorDetails']['value']??'--',
                     'remarks' => $request['vendorDetails']['remarks']??'--',
                     'status' => 1
                 ];
-                VendorUserMap::create($vendorDetails);
+                $this->upsertVendorUserMap($user_id, $vendorDetails);
             }
 
             if( $request->has('role') && $request->role == 12 ) { 
                $serviceProviderDetails = [
-                    'user_id' => $user_id,
                     'type' => $request['serviceProviderDetails']['type']??'--',
                     'key' => $request['serviceProviderDetails']['key']??'--',
                     'value' => $request['serviceProviderDetails']['value']??'--',
                     'remarks' => $request['serviceProviderDetails']['remarks']??'--',
                     'status' => 1
                 ];
-                ServiceProviderUserMap::create($serviceProviderDetails);
+                $this->upsertServiceProviderUserMap($user_id, $serviceProviderDetails);
             }
         }
 
@@ -1011,6 +1009,62 @@ class PortalApiController extends Controller
         }
 
         return 'Please submit your documents to complete your profile.';
+    }
+
+    /**
+     * Keep a single vendor_user_map row per user (update latest, remove duplicates).
+     *
+     * @param  array<string, mixed>  $attributes
+     */
+    private function upsertVendorUserMap(int $userId, array $attributes): void
+    {
+        $payload = array_merge($attributes, [
+            'user_id' => $userId,
+            'status' => (int) ($attributes['status'] ?? 1),
+        ]);
+
+        $existing = VendorUserMap::query()
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->first();
+
+        if ($existing) {
+            $existing->update($payload);
+            VendorUserMap::query()
+                ->where('user_id', $userId)
+                ->where('id', '!=', $existing->id)
+                ->delete();
+        } else {
+            VendorUserMap::create($payload);
+        }
+    }
+
+    /**
+     * Keep a single service_provider_user_map row per user (update latest, remove duplicates).
+     *
+     * @param  array<string, mixed>  $attributes
+     */
+    private function upsertServiceProviderUserMap(int $userId, array $attributes): void
+    {
+        $payload = array_merge($attributes, [
+            'user_id' => $userId,
+            'status' => (int) ($attributes['status'] ?? 1),
+        ]);
+
+        $existing = ServiceProviderUserMap::query()
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->first();
+
+        if ($existing) {
+            $existing->update($payload);
+            ServiceProviderUserMap::query()
+                ->where('user_id', $userId)
+                ->where('id', '!=', $existing->id)
+                ->delete();
+        } else {
+            ServiceProviderUserMap::create($payload);
+        }
     }
 
     /**
