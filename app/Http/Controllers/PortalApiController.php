@@ -1054,6 +1054,36 @@ class PortalApiController extends Controller
         ];
     }
 
+    /**
+     * Expose product and business contact fields on the portal user payload.
+     *
+     * @param  array<string, mixed>  $user
+     * @return array<string, mixed>
+     */
+    private function appendWebBusinessContactFields(array $user): array
+    {
+        $business = $user['get_web_business_details'] ?? null;
+        if (! is_array($business)) {
+            $user['product'] = null;
+            $user['contact_name'] = null;
+            $user['contact_phone'] = null;
+
+            return $user;
+        }
+
+        $product = $business['product'] ?? null;
+        $contactName = $business['contactPerson'] ?? ($business['contact_name'] ?? null);
+        $contactPhone = $business['contactMobile'] ?? ($business['contact_phone'] ?? null);
+
+        $user['get_web_business_details']['contact_name'] = $contactName;
+        $user['get_web_business_details']['contact_phone'] = $contactPhone;
+        $user['product'] = $product;
+        $user['contact_name'] = $contactName;
+        $user['contact_phone'] = $contactPhone;
+
+        return $user;
+    }
+
     public function getUserDetails($userId)
     {
         if ($userId != null) {
@@ -1088,6 +1118,8 @@ class PortalApiController extends Controller
                     'remarks' => null,
                 ];
             }
+
+            $user = $this->appendWebBusinessContactFields($user);
 
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
