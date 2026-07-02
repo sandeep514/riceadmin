@@ -582,15 +582,26 @@ class WebBrandController extends Controller
 
     public function vendorList($vendorType)
     {
+        $webBusinessDetails = WebBusinessDetails::query()
+            ->select(['company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
+            ->where('selected_category', $vendorType)
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'company_name' => $row->company_name,
+                    'product' => $row->product,
+                    'contactPerson' => $row->contactPerson,
+                    'contactMobile' => $row->contactMobile,
+                    'address' => $row->address,
+                    'recommended' => (int) ($row->is_sntc_recommended ?? 0),
+                ];
+            })
+            ->values();
 
-        $webBusinessDetails = WebBusinessDetails::select(["company_name","product","contactPerson","contactMobile","address"])->where('selected_category' , $vendorType)->get();
-        // dd($webBusinessDetails);
-
-        // $bagVendors = BagVendors::select(['id','vendor_name','email','vendor_address','contact_person','contact_number','specialised','vendor_type','status'])->where(['vendor_type' => $vendorType])->get();
         return response()->json([
             'status' => true,
             'message' => 'Vendors get successfully.',
-            'data' => $webBusinessDetails
+            'data' => $webBusinessDetails,
         ], 200);
     }
 
