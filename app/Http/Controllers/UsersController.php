@@ -10,6 +10,7 @@ use App\User;
 use App\UserInterestedMap;
 use App\VendorUserMap;
 use App\ServiceProviderUserMap;
+use App\WebBusinessDetails;
 use App\ChatStatus;
 use App\Services\UserInterestService;
 use App\WebUserNotification;
@@ -260,6 +261,34 @@ class UsersController extends Controller
         }
 
         $map->update([
+            'is_sntc_recommended' => $request->boolean('is_sntc_recommended') ? 1 : 0,
+        ]);
+
+        Session::flash('success', 'Success|SNTC recommended status updated successfully.');
+
+        return redirect()->back();
+    }
+
+    public function updateBusinessDetailsRecommended(Request $request, $userId)
+    {
+        $user = User::find($userId);
+        if (! $user) {
+            Session::flash('error', 'Error|User not found.');
+
+            return redirect()->back();
+        }
+
+        $businessDetails = WebBusinessDetails::query()
+            ->where('user_id', (int) $userId)
+            ->first();
+
+        if (! $businessDetails) {
+            Session::flash('error', 'Error|Business details not found for this user.');
+
+            return redirect()->back();
+        }
+
+        $businessDetails->update([
             'is_sntc_recommended' => $request->boolean('is_sntc_recommended') ? 1 : 0,
         ]);
 

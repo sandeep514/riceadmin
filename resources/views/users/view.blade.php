@@ -232,14 +232,39 @@
 
 		<!-- Business Info -->
 		@if (!empty($user['get_web_business_details']))
+		@php
+			$businessDetails = $user['get_web_business_details'];
+		@endphp
 		<div class="section">
 			<h3>Business Details</h3>
 			<table class="table">
-				<tr><th>Company Name</th><td>{{ $user['get_web_business_details']['company_name'] ?? '-' }}</td></tr>
-				<tr><th>Selected Category</th><td>{{ $user['get_web_business_details']['get_category_details']['category'] ?? ($user['get_web_business_details']['selected_category'] ?? '-') }}</td></tr>
-				<tr><th>Address</th><td>{{ $user['get_web_business_details']['address'] ?? '-' }}</td></tr>
-				<tr><th>City</th><td>{{ $user['get_web_business_details']['city_rel']['city_name'] ?? '-' }}</td></tr>
-				<tr><th>State</th><td>{{ $user['get_web_business_details']['state_rel']['state_name'] ?? '-' }}</td></tr>
+				<tr><th>Company Name</th><td>{{ $businessDetails['company_name'] ?? '-' }}</td></tr>
+				<tr><th>Product</th><td>{{ $businessDetails['product'] ?? '-' }}</td></tr>
+				<tr><th>Contact Name</th><td>{{ $businessDetails['contactPerson'] ?? '-' }}</td></tr>
+				<tr><th>Contact Mobile</th><td>{{ $businessDetails['contactMobile'] ?? '-' }}</td></tr>
+				<tr><th>Selected Category</th><td>{{ $businessDetails['get_category_details']['category'] ?? ($businessDetails['selected_category'] ?? '-') }}</td></tr>
+				<tr><th>Address</th><td>{{ $businessDetails['address'] ?? '-' }}</td></tr>
+				<tr><th>City</th><td>{{ $businessDetails['city_rel']['city_name'] ?? '-' }}</td></tr>
+				<tr><th>State</th><td>{{ $businessDetails['state_rel']['state_name'] ?? '-' }}</td></tr>
+				<tr>
+					<th>SNTC Recommended</th>
+					<td>
+						<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}" style="margin:0;">
+							@csrf
+							<input type="hidden" name="is_sntc_recommended" value="0">
+							<label style="font-weight:normal;margin:0;">
+								<input
+									type="checkbox"
+									name="is_sntc_recommended"
+									value="1"
+									{{ ((int) ($businessDetails['is_sntc_recommended'] ?? 0) === 1) ? 'checked' : '' }}
+								>
+								Recommended
+							</label>
+							<button type="submit" class="btn btn-primary btn-xs" style="margin-left:8px;">Save</button>
+						</form>
+					</td>
+				</tr>
 			</table>
 		</div>
 		@endif
