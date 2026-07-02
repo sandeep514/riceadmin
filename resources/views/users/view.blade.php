@@ -244,6 +244,58 @@
 		</div>
 		@endif
 
+		@if (!empty($vendorProfileType))
+		<div class="section">
+			<h3>{{ $vendorProfileType === 'vendor' ? 'Vendor User Map' : 'Service Provider User Map' }}</h3>
+			@if (isset($vendorProfileMaps) && $vendorProfileMaps->isNotEmpty())
+				<div class="table-responsive">
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Vendor Type</th>
+								<th>Packing Type</th>
+								<th>Specialisation</th>
+								<th>Remarks</th>
+								<th>Status</th>
+								<th style="width:180px;">SNTC Recommended</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach ($vendorProfileMaps as $profileMap)
+								<tr>
+									<td>{{ $profileMap->type ?? '—' }}</td>
+									<td>{{ $profileMap->key ?? '—' }}</td>
+									<td>{{ $profileMap->value ?? '—' }}</td>
+									<td>{{ $profileMap->remarks ?? '—' }}</td>
+									<td>{{ ((int) ($profileMap->status ?? 0) === 1) ? 'Active' : 'Inactive' }}</td>
+									<td>
+										<form method="POST" action="{{ route('update.user.vendor.profile.recommended', $user['id']) }}" class="vendor-profile-recommended-form" style="margin:0;">
+											@csrf
+											<input type="hidden" name="map_id" value="{{ $profileMap->id }}">
+											<input type="hidden" name="is_sntc_recommended" value="0">
+											<label style="font-weight:normal;margin:0;">
+												<input
+													type="checkbox"
+													name="is_sntc_recommended"
+													value="1"
+													{{ ((int) ($profileMap->is_sntc_recommended ?? 0) === 1) ? 'checked' : '' }}
+												>
+												Recommended
+											</label>
+											<button type="submit" class="btn btn-primary btn-xs" style="margin-left:8px;">Save</button>
+										</form>
+									</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			@else
+				<p class="text-muted">No {{ $vendorProfileType === 'vendor' ? 'vendor user map' : 'service provider user map' }} records found.</p>
+			@endif
+		</div>
+		@endif
+
 		@if( array_key_exists('get_web_user_subscription' , $user ) )
 				@if( $user['get_web_user_subscription'] == null )
 					<div style="background: rgba(255, 0, 0, 0.5);opacity: 0.5;padding: 20px 10px;border: 2px solid red;border-radius: 12px;">

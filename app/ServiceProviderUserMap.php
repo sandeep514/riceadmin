@@ -17,6 +17,11 @@ class ServiceProviderUserMap extends Model
         'key',
         'value',
         'remarks',
-        'status'
+        'is_sntc_recommended',
+        'status',
+    ];
+
+    protected $casts = [
+        'is_sntc_recommended' => 'integer',
     ];
 }

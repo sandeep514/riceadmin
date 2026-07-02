@@ -8,6 +8,8 @@ use App\Http\Requests\UserRequest;
 use App\Services\UserService;
 use App\User;
 use App\UserInterestedMap;
+use App\VendorUserMap;
+use App\ServiceProviderUserMap;
 use App\ChatStatus;
 use App\Services\UserInterestService;
 use App\WebUserNotification;
@@ -189,13 +191,81 @@ class UsersController extends Controller
         $userArray = $userModel->toArray();
         $userArray['can_edit_by_admin'] = $canEditByAdmin;
 
+        $roleId = (int) ($userModel->role ?? 0);
+        $vendorProfileMaps = collect();
+        $vendorProfileType = null;
+        if ($roleId === 11) {
+            $vendorProfileType = 'vendor';
+            $vendorProfileMaps = VendorUserMap::query()
+                ->where('user_id', $userId)
+                ->orderByDesc('id')
+                ->get();
+        } elseif ($roleId === 12) {
+            $vendorProfileType = 'service_provider';
+            $vendorProfileMaps = ServiceProviderUserMap::query()
+                ->where('user_id', $userId)
+                ->orderByDesc('id')
+                ->get();
+        }
+
         return view('users.view', [
             'user' => $userArray,
             'interestedMaps' => $interestedMaps,
             'interestEditRows' => $interestEditRows,
             'canAdminManageInterests' => $canAdminManageInterests,
             'canEditByAdmin' => $canEditByAdmin,
+            'vendorProfileMaps' => $vendorProfileMaps,
+            'vendorProfileType' => $vendorProfileType,
         ]);
+    }
+
+    public function updateVendorProfileRecommended(Request $request, $userId)
+    {
+        $user = User::find($userId);
+        if (! $user) {
+            Session::flash('error', 'Error|User not found.');
+
+            return redirect()->back();
+        }
+
+        $roleId = (int) ($user->role ?? 0);
+        if (! in_array($roleId, [11, 12], true)) {
+            Session::flash('error', 'Error|This action is only available for vendor or service provider users.');
+
+            return redirect()->back();
+        }
+
+        $validator = Validator::make($request->all(), [
+            'map_id' => ['required', 'integer', 'min:1'],
+            'is_sntc_recommended' => ['nullable', 'boolean'],
+        ]);
+
+        if ($validator->fails()) {
+            Session::flash('error', 'Error|' . $validator->errors()->first());
+
+            return redirect()->back();
+        }
+
+        $mapId = (int) $request->input('map_id');
+        $mapModel = $roleId === 11 ? VendorUserMap::class : ServiceProviderUserMap::class;
+        $map = $mapModel::query()
+            ->where('id', $mapId)
+            ->where('user_id', (int) $userId)
+            ->first();
+
+        if (! $map) {
+            Session::flash('error', 'Error|Profile record not found for this user.');
+
+            return redirect()->back();
+        }
+
+        $map->update([
+            'is_sntc_recommended' => $request->boolean('is_sntc_recommended') ? 1 : 0,
+        ]);
+
+        Session::flash('success', 'Success|SNTC recommended status updated successfully.');
+
+        return redirect()->back();
     }
 
     private function userAllowsAdminInterestManagement(User $user): bool
