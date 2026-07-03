@@ -6212,7 +6212,8 @@ if (!file_exists('uploads')) {
 
     public function getPersonalQuery($userId)
     {
-        $BuyQueriesINR = $this->applyPackingLogic(
+        $BuyQueriesINR = $this->attachFarmingRelationToQueries(
+            $this->applyPackingLogic(
             BuyQueriesINR::where('created_by', $userId)
                 ->with([
                     'RiceFormMilestone3:id,name',
@@ -6221,9 +6222,11 @@ if (!file_exists('uploads')) {
                     'RicePacking:id,packing,description'
                 ])
                 ->get()
+            )
         );
 
-        $SellQueriesINR = $this->applyPackingLogic(
+        $SellQueriesINR = $this->attachFarmingRelationToQueries(
+            $this->applyPackingLogic(
             SellQueriesINR::where('created_by', $userId)
                 ->selectRaw("
                     sell_query_milestone3.*,
@@ -6245,9 +6248,11 @@ if (!file_exists('uploads')) {
                     'RicePacking:id,packing,description'
                 ])
                 ->get()
+            )
         );
 
-        $FutureBuyQueriesINR = $this->applyPackingLogic(
+        $FutureBuyQueriesINR = $this->attachFarmingRelationToQueries(
+            $this->applyPackingLogic(
             FutureBuyQueriesINR::where('created_by', $userId)
                 ->with([
                     'RiceQualityRiceNames:id,name',
@@ -6257,9 +6262,11 @@ if (!file_exists('uploads')) {
                     'RiceFormMilestone3:id,name'
                 ])
                 ->get()
+            )
         );
 
-        $FutureSellQueriesINR = $this->formatSellQueryCollectionValidDays(
+        $FutureSellQueriesINR = $this->attachFarmingRelationToQueries(
+            $this->formatSellQueryCollectionValidDays(
             $this->applyPackingLogic(
                 FutureSellQueriesINR::where('created_by', $userId)
                     ->selectRaw('future_sell_query_milestone3.*, contactPerson AS contactPerson')
@@ -6271,6 +6278,7 @@ if (!file_exists('uploads')) {
                         'RiceFormMilestone3:id,name',
                     ])
                     ->get()
+            )
             )
         );
 
@@ -6305,6 +6313,29 @@ if (!file_exists('uploads')) {
             return $item;
         });
     }
+
+    /**
+     * Attach farming type details for personal query responses (farming column stores type id).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $collection
+     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
+     */
+    private function attachFarmingRelationToQueries($collection)
+    {
+        return $collection->map(function ($item) {
+            $farmingId = (int) ($item->farming ?? 0);
+            $item->setRelation(
+                'farmingRelation',
+                $farmingId > 0 ? [
+                    'id' => $farmingId,
+                    'name' => TradeQueriesINR::resolveFarmingName($farmingId),
+                ] : null
+            );
+
+            return $item;
+        });
+    }
+
     public function getPersonalTrade($userId)
     {
         $BuyQueriesINR = BuyQueriesINR::where('created_by' , $userId)->pluck('id')->toArray();
