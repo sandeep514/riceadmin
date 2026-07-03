@@ -585,6 +585,7 @@ class WebBrandController extends Controller
         $webBusinessDetails = WebBusinessDetails::query()
             ->select(['company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
             ->where('selected_category', $vendorType)
+            ->where('is_active_listing', 1)
             ->get()
             ->map(function ($row) {
                 return [

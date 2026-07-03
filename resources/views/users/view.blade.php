@@ -299,7 +299,6 @@
 								<th>Specialisation</th>
 								<th>Remarks</th>
 								<th>Status</th>
-								<th style="width:180px;">SNTC Recommended</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -310,23 +309,6 @@
 									<td>{{ $profileMap->value ?? '—' }}</td>
 									<td>{{ $profileMap->remarks ?? '—' }}</td>
 									<td>{{ ((int) ($profileMap->status ?? 0) === 1) ? 'Active' : 'Inactive' }}</td>
-									<td>
-										<form method="POST" action="{{ route('update.user.vendor.profile.recommended', $user['id']) }}" class="vendor-profile-recommended-form" style="margin:0;">
-											@csrf
-											<input type="hidden" name="map_id" value="{{ $profileMap->id }}">
-											<input type="hidden" name="is_sntc_recommended" value="0">
-											<label style="font-weight:normal;margin:0;">
-												<input
-													type="checkbox"
-													name="is_sntc_recommended"
-													value="1"
-													{{ ((int) ($profileMap->is_sntc_recommended ?? 0) === 1) ? 'checked' : '' }}
-												>
-												Recommended
-											</label>
-											<button type="submit" class="btn btn-primary btn-xs" style="margin-left:8px;">Save</button>
-										</form>
-									</td>
 								</tr>
 							@endforeach
 						</tbody>
