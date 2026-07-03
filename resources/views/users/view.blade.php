@@ -246,12 +246,15 @@
 				<tr><th>Address</th><td>{{ $businessDetails['address'] ?? '-' }}</td></tr>
 				<tr><th>City</th><td>{{ $businessDetails['city_rel']['city_name'] ?? '-' }}</td></tr>
 				<tr><th>State</th><td>{{ $businessDetails['state_rel']['state_name'] ?? '-' }}</td></tr>
-				<tr>
-					<th>SNTC Recommended</th>
-					<td>
-						<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}" style="margin:0;">
-							@csrf
-							<input type="hidden" name="is_sntc_recommended" value="0">
+			</table>
+			<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}" style="margin-top:12px;">
+				@csrf
+				<input type="hidden" name="is_sntc_recommended" value="0">
+				<input type="hidden" name="is_active_listing" value="0">
+				<table class="table" style="margin-bottom:0;">
+					<tr>
+						<th style="width:200px;">SNTC Recommended</th>
+						<td>
 							<label style="font-weight:normal;margin:0;">
 								<input
 									type="checkbox"
@@ -261,11 +264,25 @@
 								>
 								Recommended
 							</label>
+						</td>
+					</tr>
+					<tr>
+						<th>Active Listing</th>
+						<td>
+							<label style="font-weight:normal;margin:0;">
+								<input
+									type="checkbox"
+									name="is_active_listing"
+									value="1"
+									{{ ((int) ($businessDetails['is_active_listing'] ?? 0) === 1) ? 'checked' : '' }}
+								>
+								Active Listing
+							</label>
 							<button type="submit" class="btn btn-primary btn-xs" style="margin-left:8px;">Save</button>
-						</form>
-					</td>
-				</tr>
-			</table>
+						</td>
+					</tr>
+				</table>
+			</form>
 		</div>
 		@endif
 

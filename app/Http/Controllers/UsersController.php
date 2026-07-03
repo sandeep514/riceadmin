@@ -290,9 +290,10 @@ class UsersController extends Controller
 
         $businessDetails->update([
             'is_sntc_recommended' => $request->boolean('is_sntc_recommended') ? 1 : 0,
+            'is_active_listing' => $request->boolean('is_active_listing') ? 1 : 0,
         ]);
 
-        Session::flash('success', 'Success|SNTC recommended status updated successfully.');
+        Session::flash('success', 'Success|Business details updated successfully.');
 
         return redirect()->back();
     }
