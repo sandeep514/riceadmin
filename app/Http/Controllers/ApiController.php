@@ -7729,17 +7729,22 @@ if (!file_exists('uploads')) {
 
     public function getBrandAvailability($brandId)
     {
-        $brandAvail = BrandAvailability::query()
-            ->where('brand_id', $brandId)
-            ->whereExists(function ($q) {
-                $q->select(DB::raw(1))
-                    ->from('web_brands')
-                    ->whereColumn('web_brands.id', 'brand_availability.brand_id')
-                    ->where('web_brands.status', 1);
-            })
-            ->with(['state_rel', 'city_rel'])
-            ->get();
-        return response()->json([ 'status' => true , 'message' => 'Brand Availability get successfully' , 'data' => $brandAvail ] , 200);
+        $brandId = (int) $brandId;
+        if ($brandId < 1) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid brand id',
+                'data' => [],
+            ], 422);
+        }
+
+        $brandAvail = BrandAvailability::groupedForBrand($brandId);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Brand Availability get successfully',
+            'data' => $brandAvail,
+        ], 200);
     }
 
     /**

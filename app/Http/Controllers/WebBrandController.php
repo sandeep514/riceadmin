@@ -301,7 +301,7 @@ class WebBrandController extends Controller
 
         $WebBrandVariant = WebBrandVariant::select('id','variant','brand_id','quality_id','form_id','grade','packing','image','cut_image')->with(['qualityRel:id,name' , 'formRel:id,form_name'])->where('brand_id' , $brandId)->where('status' , 1)->get();
 
-        $availability = $this->buildBrandAvailabilityGrouped((int) $brandId);
+        $availability = BrandAvailability::groupedForBrand((int) $brandId, true);
 
         $imagesPath = asset('brands/' . $brandId . '/variant/');
         return response()->json([
@@ -316,74 +316,6 @@ class WebBrandController extends Controller
                 return $variant;
             }),
         ], 200);
-    }
-
-    /**
-     * States and cities where a brand is available (from brand_availability).
-     *
-     * @return array<int, array<string, mixed>>
-     */
-    private function buildBrandAvailabilityGrouped(int $brandId): array
-    {
-        $rows = BrandAvailability::query()
-            ->where('brand_id', $brandId)
-            ->where('status', 1)
-            ->whereExists(function ($q) {
-                $q->select(DB::raw(1))
-                    ->from('web_brands')
-                    ->whereColumn('web_brands.id', 'brand_availability.brand_id')
-                    ->where('web_brands.status', 1);
-            })
-            ->with([
-                'state_rel:id,state_name,state_code,order_no',
-                'city_rel:id,city_name,state_id',
-            ])
-            ->get();
-
-        $grouped = [];
-        foreach ($rows as $row) {
-            $stateId = (int) $row->state_id;
-            if (! isset($grouped[$stateId])) {
-                $grouped[$stateId] = [
-                    'state_id' => $stateId,
-                    'state_name' => $row->state_rel->state_name ?? null,
-                    'state_code' => $row->state_rel->state_code ?? null,
-                    'state_order' => $row->state_rel->order_no ?? null,
-                    'cities' => [],
-                ];
-            }
-
-            if ($row->city_id) {
-                $cityId = (int) $row->city_id;
-                $grouped[$stateId]['cities'][$cityId] = [
-                    'city_id' => $cityId,
-                    'city_name' => $row->city_rel->city_name ?? null,
-                ];
-            }
-        }
-
-        $availability = array_values(array_map(function ($state) {
-            $state['cities'] = array_values($state['cities']);
-            usort($state['cities'], fn ($a, $b) => strcmp((string) $a['city_name'], (string) $b['city_name']));
-
-            return $state;
-        }, $grouped));
-
-        usort($availability, function ($a, $b) {
-            $orderA = $a['state_order'] ?? PHP_INT_MAX;
-            $orderB = $b['state_order'] ?? PHP_INT_MAX;
-            if ($orderA !== $orderB) {
-                return $orderA <=> $orderB;
-            }
-
-            return strcmp((string) $a['state_name'], (string) $b['state_name']);
-        });
-
-        return array_map(function ($state) {
-            unset($state['state_order']);
-
-            return $state;
-        }, $availability);
     }
 
     public function createVariant(Request $request)
