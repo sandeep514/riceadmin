@@ -88,6 +88,10 @@
                 }
             })
         })
+
+        @if(isset($defaultTradeType) && $defaultTradeType !== null && $defaultTradeType !== '')
+        $('select[name=tradeType]').trigger('change');
+        @endif
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
             console.log(riceCategory)

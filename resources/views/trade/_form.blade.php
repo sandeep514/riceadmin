@@ -22,10 +22,10 @@
                                 {!! Form::label('Trade Type','Trade Type') !!}
                                 <select class="form-control" required name="tradeType">
                                     <option value=""> Select </option>
-                                        <option value="1" {{ (in_array("buy" , $explodeURL))?'selected' : '' }}> Buy </option>
-                                        <option value="2" {{ (in_array("sell" , $explodeURL))?'selected' : '' }}> Sell </option>
-                                        <option value="3" {{ (in_array("futurebuying" , $explodeURL))?'selected' : '' }}> Future Buying </option>
-                                        <option value="4" {{ (in_array("futureselling" , $explodeURL))?'selected' : '' }}> Future Selling </option>
+                                        <option value="1" {{ (isset($defaultTradeType) && (int) $defaultTradeType === 1) ? 'selected' : '' }}> Buy </option>
+                                        <option value="2" {{ (isset($defaultTradeType) && (int) $defaultTradeType === 2) ? 'selected' : '' }}> Sell </option>
+                                        <option value="3" {{ (isset($defaultTradeType) && (int) $defaultTradeType === 3) ? 'selected' : '' }}> Future Buying </option>
+                                        <option value="4" {{ (isset($defaultTradeType) && (int) $defaultTradeType === 4) ? 'selected' : '' }}> Future Selling </option>
                                 </select>
                             </div>
 

@@ -967,13 +967,30 @@ class MasterController extends Controller
 		}
 
 		$convertPrefill = $this->buildConvertTradePrefill($query);
+		$defaultTradeType = $this->resolveConvertTradeType($type);
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
         $packing = PublicPacking::get();
         $livePricesStates = \App\LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
         $categoryList = \App\Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = [];
 
-		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds', 'convertPrefill'));
+		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds', 'convertPrefill', 'defaultTradeType'));
+	}
+
+	/**
+	 * Opposite trade type when converting a user query into an admin trade listing.
+	 * Buy query → Sell trade, Sell query → Buy trade, etc.
+	 */
+	private function resolveConvertTradeType(string $queryType): ?int
+	{
+		$map = [
+			'buy' => 2,
+			'sell' => 1,
+			'futurebuying' => 4,
+			'futureselling' => 3,
+		];
+
+		return $map[$queryType] ?? null;
 	}
 
 	/**
