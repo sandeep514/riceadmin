@@ -28,6 +28,10 @@
             Non-Basmati monthly volume: {{ $data['nonBasmatiMonthly'] ?? '—' }}
         </p>
 
+        <p><strong>Interested locations</strong><br>
+            {{ $data['interestedLocations'] ?? '—' }}
+        </p>
+
         <p><strong>Submitted by</strong><br>
             User ID: {{ $data['userId'] ?? '—' }}<br>
             @if(!empty($data['userName']))

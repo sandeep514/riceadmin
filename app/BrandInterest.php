@@ -32,4 +32,14 @@ class BrandInterest extends Model
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    public function locations()
+    {
+        return $this->hasMany(BrandInterestLocation::class, 'brand_interest_id');
+    }
+
+    public function brandInterestMaps()
+    {
+        return $this->hasMany(BrandInterestMap::class, 'brand_interest_id');
+    }
 }
