@@ -6212,8 +6212,7 @@ if (!file_exists('uploads')) {
 
     public function getPersonalQuery($userId)
     {
-        $BuyQueriesINR = $this->attachFarmingRelationToQueries(
-            $this->applyPackingLogic(
+        $BuyQueriesINR = $this->applyPackingLogic(
             BuyQueriesINR::where('created_by', $userId)
                 ->with([
                     'RiceFormMilestone3:id,name',
@@ -6222,37 +6221,26 @@ if (!file_exists('uploads')) {
                     'RicePacking:id,packing,description'
                 ])
                 ->get()
+        );
+
+        $SellQueriesINR = $this->formatSellQueryCollectionValidDays(
+            $this->applyPackingLogic(
+                SellQueriesINR::where('created_by', $userId)
+                    ->selectRaw("
+                        sell_query_milestone3.*,
+                        contactperson AS contactPerson
+                    ")
+                    ->with([
+                        'RiceFormMilestone3:id,name',
+                        'RiceQualityRiceNames:id,name',
+                        'riceGrade:id,value,wandTypeId',
+                        'RicePacking:id,packing,description'
+                    ])
+                    ->get()
             )
         );
 
-        $SellQueriesINR = $this->attachFarmingRelationToQueries(
-            $this->applyPackingLogic(
-            SellQueriesINR::where('created_by', $userId)
-                ->selectRaw("
-                    sell_query_milestone3.*,
-                    contactperson AS contactPerson
-                ")
-                // ->selectRaw("
-                //     sell_query_milestone3.*,
-                //     contactperson AS contactPerson,
-                //     // CASE 
-                //     //     WHEN quality_type = 1 THEN 2
-                //     //     WHEN quality_type = 0 THEN 1
-                //     //     ELSE quality_type
-                //     // END AS quality_type
-                // ")
-                ->with([
-                    'RiceFormMilestone3:id,name',
-                    'RiceQualityRiceNames:id,name',
-                    'riceGrade:id,value,wandTypeId',
-                    'RicePacking:id,packing,description'
-                ])
-                ->get()
-            )
-        );
-
-        $FutureBuyQueriesINR = $this->attachFarmingRelationToQueries(
-            $this->applyPackingLogic(
+        $FutureBuyQueriesINR = $this->applyPackingLogic(
             FutureBuyQueriesINR::where('created_by', $userId)
                 ->with([
                     'RiceQualityRiceNames:id,name',
@@ -6262,11 +6250,9 @@ if (!file_exists('uploads')) {
                     'RiceFormMilestone3:id,name'
                 ])
                 ->get()
-            )
         );
 
-        $FutureSellQueriesINR = $this->attachFarmingRelationToQueries(
-            $this->formatSellQueryCollectionValidDays(
+        $FutureSellQueriesINR = $this->formatSellQueryCollectionValidDays(
             $this->applyPackingLogic(
                 FutureSellQueriesINR::where('created_by', $userId)
                     ->selectRaw('future_sell_query_milestone3.*, contactPerson AS contactPerson')
@@ -6279,14 +6265,16 @@ if (!file_exists('uploads')) {
                     ])
                     ->get()
             )
-            )
         );
 
-        $SellQueriesINR = $this->formatSellQueryCollectionValidDays($SellQueriesINR);
-
         return response()->json([
-            'status' => true, 
-            'data' => [ 'buy' =>  $BuyQueriesINR, 'sell' => $SellQueriesINR , 'futureBuy' => $FutureBuyQueriesINR , 'futureSell' => $FutureSellQueriesINR ]
+            'status' => true,
+            'data' => [
+                'buy' => $this->attachFarmingRelationToQueries($BuyQueriesINR),
+                'sell' => $this->attachFarmingRelationToQueries($SellQueriesINR),
+                'futureBuy' => $this->attachFarmingRelationToQueries($FutureBuyQueriesINR),
+                'futureSell' => $this->attachFarmingRelationToQueries($FutureSellQueriesINR),
+            ],
         ]);
     }
 
@@ -6323,10 +6311,13 @@ if (!file_exists('uploads')) {
     private function attachFarmingRelationToQueries($collection)
     {
         return $collection->map(function ($item) {
-            $farmingId = (int) ($item->farming ?? 0);
-            $item->setRelation(
-                'farmingRelation',
-                $farmingId > 0 ? [
+            $farmingId = TradeQueriesINR::resolveFarmingId(
+                $item->getAttributes()['farming'] ?? $item->farming ?? null
+            );
+
+            $item->setAttribute(
+                'farming_relation',
+                $farmingId !== null ? [
                     'id' => $farmingId,
                     'name' => TradeQueriesINR::resolveFarmingName($farmingId),
                 ] : null

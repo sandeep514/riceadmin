@@ -62,12 +62,37 @@ class TradeQueriesINR extends Model
      */
     public static function resolveFarmingName($farmingType): ?string
     {
-        $key = (int) ($farmingType ?? 0);
-        if ($key <= 0) {
+        $key = static::resolveFarmingId($farmingType);
+        if ($key === null) {
             return null;
         }
 
         return static::$farmingTypeWeb[$key] ?? static::$farmingType[$key] ?? null;
+    }
+
+    /**
+     * Normalize stored farming value (id or legacy label) to a farming type id.
+     */
+    public static function resolveFarmingId($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (is_numeric($value)) {
+            $id = (int) $value;
+
+            return $id > 0 ? $id : null;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+        foreach (array_merge(static::$farmingTypeWeb, static::$farmingType) as $id => $name) {
+            if (strtolower((string) $name) === $normalized) {
+                return (int) $id;
+            }
+        }
+
+        return null;
     }
 
     public function RiceFormMilestone3()
