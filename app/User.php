@@ -45,6 +45,7 @@ class User extends Authenticatable
         'is_usd_active',
         'is_INR_active',
         'is_active_by_admin',
+        'is_deactivated',
         'transaction_id',
         'planId',
         'user_from',
@@ -77,7 +78,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'can_edit_by_admin' => 'integer',
+        'is_deactivated' => 'integer',
     ];
+
+    public function isDeactivated(): bool
+    {
+        if (! Schema::hasColumn($this->getTable(), 'is_deactivated')) {
+            return false;
+        }
+
+        return (int) $this->getAttribute('is_deactivated') === 1;
+    }
 
     public function role_rel()
     {

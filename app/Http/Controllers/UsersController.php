@@ -431,7 +431,7 @@ class UsersController extends Controller
         User::where(['id' => $userId])->update([
             'message' => $mailmessage,
             'has_validation' => $mailmessage,
-            'status' => 0,
+            'is_deactivated' => 1,
             'is_active_by_admin' => 0,
             'api_token' => null,
             'user_token' => null,
@@ -476,21 +476,34 @@ class UsersController extends Controller
 
     public function listWebChangeSttausUser($userId)
     {
-        $user = User::where('id' , $userId);
+        $user = User::where('id', $userId);
         $userDetail = $user->first();
 
-        // If deactivating user, nullify tokens
-        $isDeactivating = $userDetail->is_active_by_admin == 1;
-        $updateData = [ 'is_active_by_admin' => ($userDetail->is_active_by_admin) ? 0 : 1];
-        
-        if($isDeactivating) {
-            $updateData['api_token'] = null;
-            $updateData['user_token'] = null;
+        if (! $userDetail) {
+            Session::flash('error', 'Error|User not found.');
+            return back();
         }
-        
-        $user->update($updateData);
 
-        if($userDetail->is_active_by_admin == 0){
+        $wasPendingActivation = (int) ($userDetail->is_active_by_admin ?? 0) === 0;
+        $wasDeactivated = (int) ($userDetail->is_deactivated ?? 0) === 1;
+
+        if ($wasPendingActivation) {
+            $user->update([
+                'is_active_by_admin' => 1,
+                'is_deactivated' => 0,
+                'has_validation' => '',
+            ]);
+        } elseif ($wasDeactivated) {
+            $user->update(['is_deactivated' => 0]);
+        } else {
+            $user->update([
+                'is_deactivated' => 1,
+                'api_token' => null,
+                'user_token' => null,
+            ]);
+        }
+
+        if ($wasPendingActivation || $wasDeactivated) {
             $data = [];
             $data['user_name'] = $userDetail->name;
 
@@ -500,9 +513,7 @@ class UsersController extends Controller
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
 
-            $user->update([ 'has_validation' => '']);
-
-            $respose = Mail::send('mail.activeUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+            Mail::send('mail.activeUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
                 $message->to($mailTo, $mailMessage)->subject($subject);
                 $message->from($mailFrom, $mailFromName);
             });

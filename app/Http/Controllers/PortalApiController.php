@@ -689,12 +689,8 @@ class PortalApiController extends Controller
             $user = User::where(['mobile' => $mobile, 'otp' => $otp, 'userType' => 2])->first();
 
             if ($user) {
-                // Check if user account is deactivated by admin
-                if ((int) ($user->is_active_by_admin ?? 0) === 0) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.'
-                    ], 403);
+                if ($blocked = $this->portalAccessBlockedResponse($user)) {
+                    return $blocked;
                 }
                 $token = $this->generateAndStoreApiToken((int) $user->id);
                 // ✅ Create Laravel session using 'web' guard (sets httpOnly cookie automatically)
@@ -785,6 +781,9 @@ class PortalApiController extends Controller
             $user = User::where(['id' => $user_id, 'otp' => $otp, 'userType' => 2])->first();
 
             if ($user) {
+                if ($blocked = $this->portalAccessBlockedResponse($user)) {
+                    return $blocked;
+                }
                 $user->update(['is_INR_active' => 1]);
                 $token = $this->generateAndStoreApiToken((int) $user->id);
                 
@@ -1000,6 +999,28 @@ class PortalApiController extends Controller
 
 
         return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => ['personalDetails' => $personalDetails, 'businessDetails' => $businessDetails]], 200);
+    }
+
+    /**
+     * Block portal login/session when admin has deactivated the user or not yet activated them.
+     */
+    private function portalAccessBlockedResponse(User $user): ?\Illuminate\Http\JsonResponse
+    {
+        if ($user->isDeactivated()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',
+            ], 403);
+        }
+
+        if ((int) ($user->is_active_by_admin ?? 0) === 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',
+            ], 403);
+        }
+
+        return null;
     }
 
     /**
@@ -2074,6 +2095,10 @@ class PortalApiController extends Controller
 
         if (! $data) {
             return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        if ($blocked = $this->portalAccessBlockedResponse($data)) {
+            return $blocked;
         }
 
         $hasActivePlan = (bool) $data->getWebUserSubscription;

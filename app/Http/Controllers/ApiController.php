@@ -180,8 +180,8 @@ class ApiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
         }
 
-        // Check if user account is deactivated
-        if ($userModel->status == 0 && $userModel->is_active_by_admin == 0) {
+        // Check if user account is deactivated by admin
+        if ($userModel->isDeactivated()) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.'
@@ -5494,7 +5494,7 @@ dd("kjnik");
 
     public function deleteUser($userId)
     {
-        User::where('id', $userId)->update(['status' => 0]);
+        User::where('id', $userId)->update(['is_deactivated' => 1, 'api_token' => null, 'user_token' => null]);
         return response()->json(['status' => true, 'data' => []], 200);
     }
 

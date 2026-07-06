@@ -44,12 +44,24 @@
 				<tr><th>Mobile</th><td>{{ $user['mobile'] ?? '-' }}</td></tr>
 				<tr><th>Role</th><td>{{ $user['role_rel']['role_name'] ?? ($user['role'] ?? '-') }}</td></tr>
 				<tr>
-					<th>Status</th>
+					<th>Account Status</th>
 					<td>
-						@if(($user['status'] ?? 0) == 1)
+						@if((int) ($user['is_deactivated'] ?? 0) === 1)
+							<span class="status-inactive">Deactivated</span>
+						@elseif(($user['is_active_by_admin'] ?? 0) == 1)
 							<span class="status-active">Active</span>
 						@else
-							<span class="status-inactive">Inactive</span>
+							<span class="status-inactive">Pending Activation</span>
+						@endif
+					</td>
+				</tr>
+				<tr>
+					<th>Verification Status</th>
+					<td>
+						@if(($user['status'] ?? 0) == 1)
+							<span class="status-active">Verified</span>
+						@else
+							<span class="status-inactive">Unverified</span>
 						@endif
 					</td>
 				</tr>
@@ -330,7 +342,7 @@
 				@else
 					<div>
 						<div>
-							@if( $user['is_active_by_admin'] == 0 )
+							@if( (int) ($user['is_active_by_admin'] ?? 0) === 0 )
 							<div>
 								<div>
 									<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-info">
@@ -339,6 +351,8 @@
 								</div>
 								
 							</div>
+							@elseif( (int) ($user['is_deactivated'] ?? 0) === 1 )
+								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-info">Re-Activate this user</a>
 							@else
 								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-danger">De-Activate this user</a>
 							@endif
