@@ -4,13 +4,13 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Vendoe Users
+                Vendor Users
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Users</a></li>
-                <li class="active">Dashboard</li>
+                <li><a href="{{ route('get.new.vendors') }}">New Vendors</a></li>
+                <li class="active">List</li>
             </ol>
         </section>
         <section class="content">

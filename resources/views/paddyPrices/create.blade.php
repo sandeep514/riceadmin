@@ -4,12 +4,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Create Web Plan keys
+                Create Paddy Price
                 <small>Create</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Web Plan keys</a></li>
+                <li><a href="{{ route('list.paddy.price') }}">Paddy Prices</a></li>
                 <li class="active">Create</li>
             </ol>
         </section>

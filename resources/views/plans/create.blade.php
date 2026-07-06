@@ -5,12 +5,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Ports
+                Create Plan
                 <small>Create</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Live Prices</a></li>
+                <li><a href="{{ route('plan.create') }}">Plan</a></li>
                 <li class="active">Create</li>
             </ol>
         </section>

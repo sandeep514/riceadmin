@@ -32,7 +32,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Gallery</a></li>
+                <li><a href="{{ route('gallery') }}">Gallery</a></li>
                 <li class="active">Upload</li>
             </ol>
         </section>

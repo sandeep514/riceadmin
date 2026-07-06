@@ -12,12 +12,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Web Plans keys
-                <small>Plans keys</small>
+                Paddy Prices
+                <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Plans keys</a></li>
+                <li><a href="{{ route('list.paddy.price') }}">Paddy Prices</a></li>
+                <li class="active">List</li>
             </ol>
         </section>
 

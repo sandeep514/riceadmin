@@ -28,13 +28,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Gallery
-                <small>Create</small>
+                Default Values Master
+                <small>Manage</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Default Master</a></li>
-                <li class="active">Upload</li>
+                <li><a href="{{ route('dollarExcel.default.value.master') }}">Default Values Master</a></li>
+                <li class="active">Manage</li>
             </ol>
         </section>
         <section class="content">
@@ -44,7 +44,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Default Master</h3>
+                            <h3 class="box-title">Default Values Master</h3>
                         </div>
                         <!-- /.box-header -->
                         {!! Form::open(['route'=>'dollarExcel.default.value.master.save','files'=>true]) !!}

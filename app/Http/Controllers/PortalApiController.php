@@ -689,6 +689,13 @@ class PortalApiController extends Controller
             $user = User::where(['mobile' => $mobile, 'otp' => $otp, 'userType' => 2])->first();
 
             if ($user) {
+                // Check if user account is deactivated by admin
+                if ((int) ($user->is_active_by_admin ?? 0) === 0) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.'
+                    ], 403);
+                }
                 $token = $this->generateAndStoreApiToken((int) $user->id);
                 // ✅ Create Laravel session using 'web' guard (sets httpOnly cookie automatically)
                 auth('web')->login($user);

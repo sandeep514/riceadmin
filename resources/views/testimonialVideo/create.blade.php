@@ -4,12 +4,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Create Testimonial
+                Create Testimonial Video
                 <small>Create</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Testimonials</a></li>
+                <li><a href="{{ route('testimonial.video.index') }}">Testimonial Video</a></li>
                 <li class="active">Create</li>
             </ol>
         </section>

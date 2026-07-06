@@ -433,6 +433,8 @@ class UsersController extends Controller
             'has_validation' => $mailmessage,
             'status' => 0,
             'is_active_by_admin' => 0,
+            'api_token' => null,
+            'user_token' => null,
         ]);
         $userDetail = User::where( ['id' => $userId  ])->first();
 
@@ -477,7 +479,16 @@ class UsersController extends Controller
         $user = User::where('id' , $userId);
         $userDetail = $user->first();
 
-        $user->update([ 'is_active_by_admin' => ($userDetail->is_active_by_admin) ? 0 : 1]);
+        // If deactivating user, nullify tokens
+        $isDeactivating = $userDetail->is_active_by_admin == 1;
+        $updateData = [ 'is_active_by_admin' => ($userDetail->is_active_by_admin) ? 0 : 1];
+        
+        if($isDeactivating) {
+            $updateData['api_token'] = null;
+            $updateData['user_token'] = null;
+        }
+        
+        $user->update($updateData);
 
         if($userDetail->is_active_by_admin == 0){
             $data = [];

@@ -5,13 +5,13 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Notification
-                    <small>Push Notification</small>
+                    Push Notification
+                    <small>Send</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Notification</a></li>
-                    <li class="active">Notification</li>
+                    <li><a href="{{ route('send.push.notification') }}">Push Notification</a></li>
+                    <li class="active">Send</li>
                 </ol>
             </section>
             <section class="content">

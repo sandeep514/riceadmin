@@ -31,12 +31,12 @@
         <section class="content-header">
             <h1>
                 Gallery
-                <small>Create</small>
+                <small>Edit</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Gallery</a></li>
-                <li class="active">Upload</li>
+                <li><a href="{{ route('gallery') }}">Gallery</a></li>
+                <li class="active">Edit</li>
             </ol>
         </section>
         <section class="content">

@@ -4,12 +4,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Edit Web Plan leys
+                Edit Paddy Mandi
                 <small>Edit</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Web Plan leys</a></li>
+                <li><a href="{{ route('list.web.paddy.mandi') }}">Paddy Mandi</a></li>
                 <li class="active">Edit</li>
             </ol>
         </section>

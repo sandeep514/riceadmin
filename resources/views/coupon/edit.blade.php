@@ -5,13 +5,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Ports
-                <small>Create</small>
+                Edit USD Coupon
+                <small>Edit</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Live Prices</a></li>
-                <li class="active">Create</li>
+                <li><a href="{{ route('get.usd.coupons') }}">Coupons</a></li>
+                <li class="active">Edit</li>
             </ol>
         </section>
         <section class="content">

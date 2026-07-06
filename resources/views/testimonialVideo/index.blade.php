@@ -5,13 +5,13 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Testimonial
+                Testimonial Video
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Testimonial</a></li>
-                <li class="active">Dashboard</li>
+                <li><a href="{{ route('testimonial.video.index') }}">Testimonial Video</a></li>
+                <li class="active">List</li>
             </ol>
         </section>
         <section class="content">

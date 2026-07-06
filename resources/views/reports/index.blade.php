@@ -5,13 +5,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Calculator
-                <small>Create</small>
+                USD Pricing Report
+                <small>Report</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('designations') }}">Calculator</a></li>
-                <li class="active">Create</li>
+                <li><a href="{{ route('report.calculator') }}">USD Pricing Report</a></li>
+                <li class="active">Report</li>
             </ol>
         </section>
         <section class="content">

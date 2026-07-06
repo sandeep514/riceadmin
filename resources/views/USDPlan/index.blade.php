@@ -9,13 +9,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                USD Coupon
-                <small>Create</small>
+                USD Plans
+                <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('designations') }}">USD Coupon</a></li>
-                <li class="active">Create</li>
+                <li><a href="{{ route('get.usd.plan') }}">USD Plans</a></li>
+                <li class="active">List</li>
             </ol>
         </section>
         <section class="content">

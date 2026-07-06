@@ -12,12 +12,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Web Plans
-                <small>Plans</small>
+                Web Brands
+                <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Plans</a></li>
+                <li><a href="{{ route('get.web.brands.list') }}">Web Brands</a></li>
+                <li class="active">List</li>
             </ol>
         </section>
 

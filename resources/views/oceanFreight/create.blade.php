@@ -28,12 +28,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Gallery
-                <small>Create</small>
+                Ocean Freight
+                <small>Upload</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Default Master</a></li>
+                <li><a href="{{ route('dollarExcel.create.ocean.freight') }}">Ocean Freight</a></li>
                 <li class="active">Upload</li>
             </ol>
         </section>
@@ -44,7 +44,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Default Master</h3>
+                            <h3 class="box-title">Ocean Freight</h3>
                         </div>
                         <!-- /.box-header -->
                         {!! Form::open(['route'=>'dollarExcel.save.ocean.freight','files'=>true]) !!}

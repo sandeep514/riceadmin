@@ -4,13 +4,13 @@
             <!-- Content Header (Page header) -->
             <section class="content-header">
                 <h1>
-                    Notification
+                    Hot Deal Notification
                     <small>Push Notifications</small>
                 </h1>
                 <ol class="breadcrumb">
                     <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
-                    <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Gallery</a></li>
-                    <li class="active">Gallery</li>
+                    <li><a href="{{ route('hot.deal.notification.master') }}">Hot Deal Notification</a></li>
+                    <li class="active">Send</li>
                 </ol>
             </section>
             <section class="content" style="margin-bottom: 30px;">

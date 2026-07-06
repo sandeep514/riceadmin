@@ -33,12 +33,12 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Gallery
-                <small>Create</small>
+                FOB Cost
+                <small>Upload</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('documents') }}">Default Master</a></li>
+                <li><a href="{{ route('dollarExcel.create') }}">FOB Cost</a></li>
                 <li class="active">Upload</li>
             </ol>
         </section>
@@ -49,7 +49,7 @@
                     <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Default Master</h3>
+                            <h3 class="box-title">FOB Cost</h3>
                         </div>
                         <!-- /.box-header -->
                         {!! Form::open(['route'=>'dollarExcel.save','files'=>true]) !!}

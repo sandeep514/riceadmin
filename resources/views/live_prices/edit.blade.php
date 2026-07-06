@@ -4,13 +4,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Edit Quality
+                Edit Live Price
                 <small>Edit</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Qualities</a></li>
-                <li class="active">Edit Quality</li>
+                <li><a href="{{ route('live_prices') }}">Live Prices</a></li>
+                <li class="active">Edit</li>
             </ol>
         </section>
         <section class="content">

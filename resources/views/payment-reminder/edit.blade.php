@@ -4,13 +4,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Edit Deals
+                Edit Payment Reminder
                 <small>Edit</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="{{ route('deals') }}">Deals</a></li>
-                <li class="active">Edit Deal</li>
+                <li><a href="{{ route('payment_reminders') }}">Payment Reminders</a></li>
+                <li class="active">Edit</li>
             </ol>
         </section>
         <section class="content">
