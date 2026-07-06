@@ -1002,18 +1002,11 @@ class PortalApiController extends Controller
     }
 
     /**
-     * Block portal login/session when admin has deactivated the user or not yet activated them.
+     * Block portal login/session when admin has deactivated an approved web user.
      */
     private function portalAccessBlockedResponse(User $user): ?\Illuminate\Http\JsonResponse
     {
-        if ($user->isDeactivated()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',
-            ], 403);
-        }
-
-        if ((int) ($user->is_active_by_admin ?? 0) === 0) {
+        if ($user->isAdminDeactivated()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',

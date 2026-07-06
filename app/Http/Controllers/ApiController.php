@@ -180,8 +180,8 @@ class ApiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
         }
 
-        // Check if user account is deactivated by admin
-        if ($userModel->isDeactivated()) {
+        // Check if user account is deactivated by admin (approved user, then deactivated)
+        if ($userModel->isAdminDeactivated()) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.'

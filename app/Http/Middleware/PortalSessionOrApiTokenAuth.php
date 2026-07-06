@@ -59,6 +59,13 @@ class PortalSessionOrApiTokenAuth
             ], 401);
         }
 
+        if ($user->isAdminDeactivated()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',
+            ], 403);
+        }
+
         if ($request->has('user_id') && $request->input('user_id') !== '' && $request->input('user_id') !== null) {
             if ((int) $request->input('user_id') !== (int) $user->id) {
                 return response()->json([

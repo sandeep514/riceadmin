@@ -90,6 +90,15 @@ class User extends Authenticatable
         return (int) $this->getAttribute('is_deactivated') === 1;
     }
 
+    /**
+     * Admin-approved user who was later deactivated (not pending / unverified status).
+     */
+    public function isAdminDeactivated(): bool
+    {
+        return $this->isDeactivated()
+            && (int) ($this->getAttribute('is_active_by_admin') ?? 0) === 1;
+    }
+
     public function role_rel()
     {
         return $this->belongsTo(Role::class, 'role', 'id');

@@ -47,6 +47,13 @@ class PortalApiTokenAuth
             ], 403);
         }
 
+        if ($user->isAdminDeactivated()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',
+            ], 403);
+        }
+
         // Enforce ownership for user-scoped routes/payloads.
         // If an endpoint carries user identity, it must match token owner.
         $routeUserId = $request->route('userId');

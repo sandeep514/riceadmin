@@ -52,7 +52,9 @@
 
                                                 <td style="text-align: center">{{ ($v->getWebBusinessDetails != null)?  ( $v->getWebBusinessDetails->getCategoryDetails )? ($v->getWebBusinessDetails->getCategoryDetails->category) : '--' : '--' }}</td>
                                                 <td style="text-align: center">
-                                                    @if((int) ($v->is_active_by_admin ?? 0) === 1)
+                                                    @if((int) ($v->is_deactivated ?? 0) === 1)
+                                                        <span class="label label-danger">Deactivated</span>
+                                                    @elseif((int) ($v->is_active_by_admin ?? 0) === 1)
                                                         <span class="label label-success">Active</span>
                                                     @else
                                                         <span class="label label-warning">Pending</span>
@@ -62,6 +64,8 @@
                                                     <a href="{{ route('view.user', $v->id) }}" class="btn btn-info btn-xs">View</a>
                                                     @if((int) ($v->is_active_by_admin ?? 0) === 0)
                                                         <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-success btn-xs" onclick="return confirm('Activate this user?');">Activate</a>
+                                                    @elseif((int) ($v->is_deactivated ?? 0) === 1)
+                                                        <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-success btn-xs" onclick="return confirm('Re-activate this user?');">Re-Activate</a>
                                                     @else
                                                         <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('De-activate this user?');">De-Activate</a>
                                                     @endif
