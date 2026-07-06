@@ -52,9 +52,9 @@ class TradeQueriesINR extends Model
     /** Web portal / trade filter farming types. */
     public static $farmingTypeWeb = [
         1 => 'Conventional',
-        2 => 'Organic',
         3 => 'EU Standards',
         4 => 'US Standards',
+        2 => 'Organic',
     ];
 
     /**
