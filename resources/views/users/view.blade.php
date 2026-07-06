@@ -14,6 +14,21 @@
 						<i class="fa fa-trash"></i> Delete Web User
 					</button>
 				</form>
+				@if( array_key_exists('get_web_user_subscription', $user) && $user['get_web_user_subscription'] != null )
+					@if( (int) ($user['is_active_by_admin'] ?? 0) === 0 )
+						<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-info" style="margin-left: 8px;">
+							Activate this user
+						</a>
+					@elseif( (int) ($user['is_deactivated'] ?? 0) === 1 )
+						<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-info" style="margin-left: 8px;">
+							Re-Activate this user
+						</a>
+					@else
+						<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-danger" style="margin-left: 8px;">
+							De-Activate this user
+						</a>
+					@endif
+				@endif
 			</div>
 		@endif
 
@@ -351,34 +366,14 @@
 		</div>
 		@endif
 
-		@if( array_key_exists('get_web_user_subscription' , $user ) )
-				@if( $user['get_web_user_subscription'] == null )
-					<div style="background: rgba(255, 0, 0, 0.5);opacity: 0.5;padding: 20px 10px;border: 2px solid red;border-radius: 12px;">
-						<div style="text-align: center;">
-							<p style="color: #000;padding: 0px;margin: 0px;font-size: 22px;">This person has no any Subscription , Trial plan.</p>
-						</div>
-					</div>
-				@else
-					<div>
-						<div>
-							@if( (int) ($user['is_active_by_admin'] ?? 0) === 0 )
-							<div>
-								<div>
-									<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-info">
-										Activate this user
-									</a>
-								</div>
-								
-							</div>
-							@elseif( (int) ($user['is_deactivated'] ?? 0) === 1 )
-								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-info">Re-Activate this user</a>
-							@else
-								<a href="{{ route('list.web.change.status.user' , $user['id']) }}" class="btn btn-sm btn-danger">De-Activate this user</a>
-							@endif
-						</div>
-					</div>
-				@endif
-			@endif
+		@if( array_key_exists('get_web_user_subscription', $user) && $user['get_web_user_subscription'] == null )
+			<div style="background: rgba(255, 0, 0, 0.5);opacity: 0.5;padding: 20px 10px;border: 2px solid red;border-radius: 12px;">
+				<div style="text-align: center;">
+					<p style="color: #000;padding: 0px;margin: 0px;font-size: 22px;">This person has no any Subscription , Trial plan.</p>
+				</div>
+			</div>
+		@endif
+
 			<div class="section" style="margin-top: 20px;">
 				<div class="box box-danger">
 					<div class="box-header with-border">
