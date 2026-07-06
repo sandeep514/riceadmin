@@ -288,6 +288,26 @@ class UsersController extends Controller
             return redirect()->back();
         }
 
+        $updateField = (string) $request->input('update_field', '');
+
+        if ($updateField === 'is_sntc_recommended') {
+            $businessDetails->update([
+                'is_sntc_recommended' => $request->boolean('is_sntc_recommended') ? 1 : 0,
+            ]);
+            Session::flash('success', 'Success|SNTC recommended status updated successfully.');
+
+            return redirect()->back();
+        }
+
+        if ($updateField === 'is_active_listing') {
+            $businessDetails->update([
+                'is_active_listing' => $request->boolean('is_active_listing') ? 1 : 0,
+            ]);
+            Session::flash('success', 'Success|Active listing status updated successfully.');
+
+            return redirect()->back();
+        }
+
         $businessDetails->update([
             'is_sntc_recommended' => $request->boolean('is_sntc_recommended') ? 1 : 0,
             'is_active_listing' => $request->boolean('is_active_listing') ? 1 : 0,
@@ -425,8 +445,13 @@ class UsersController extends Controller
 
     public function rejectUser(Request $request)
     {
-        $userId = $request->userId;
-        $mailmessage = $request->message ?? 'No reason added by admin';
+        $validated = $request->validate([
+            'userId' => 'required|integer|exists:users,id',
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $userId = (int) $validated['userId'];
+        $mailmessage = trim($validated['message']);
 
         User::where(['id' => $userId])->update([
             'message' => $mailmessage,

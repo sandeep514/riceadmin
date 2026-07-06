@@ -259,42 +259,61 @@
 				<tr><th>City</th><td>{{ $businessDetails['city_rel']['city_name'] ?? '-' }}</td></tr>
 				<tr><th>State</th><td>{{ $businessDetails['state_rel']['state_name'] ?? '-' }}</td></tr>
 			</table>
-			<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}" style="margin-top:12px;">
-				@csrf
-				<input type="hidden" name="is_sntc_recommended" value="0">
-				<input type="hidden" name="is_active_listing" value="0">
-				<table class="table" style="margin-bottom:0;">
-					<tr>
-						<th style="width:200px;">SNTC Recommended</th>
-						<td>
-							<label style="font-weight:normal;margin:0;">
-								<input
-									type="checkbox"
-									name="is_sntc_recommended"
-									value="1"
-									{{ ((int) ($businessDetails['is_sntc_recommended'] ?? 0) === 1) ? 'checked' : '' }}
-								>
-								Recommended
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<th>Active Listing</th>
-						<td>
-							<label style="font-weight:normal;margin:0;">
-								<input
-									type="checkbox"
-									name="is_active_listing"
-									value="1"
-									{{ ((int) ($businessDetails['is_active_listing'] ?? 0) === 1) ? 'checked' : '' }}
-								>
-								Active Listing
-							</label>
-							<button type="submit" class="btn btn-primary btn-xs" style="margin-left:8px;">Save</button>
-						</td>
-					</tr>
-				</table>
-			</form>
+
+			<div class="row" style="margin-top: 16px;">
+				<div class="col-md-6">
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">SNTC Recommended</h3>
+						</div>
+						<div class="box-body">
+							<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}">
+								@csrf
+								<input type="hidden" name="update_field" value="is_sntc_recommended">
+								<input type="hidden" name="is_sntc_recommended" value="0">
+								<div class="checkbox" style="margin-top:0;">
+									<label>
+										<input
+											type="checkbox"
+											name="is_sntc_recommended"
+											value="1"
+											{{ ((int) ($businessDetails['is_sntc_recommended'] ?? 0) === 1) ? 'checked' : '' }}
+										>
+										Mark this business as SNTC Recommended
+									</label>
+								</div>
+								<button type="submit" class="btn btn-primary btn-sm">Save</button>
+							</form>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="box box-success">
+						<div class="box-header with-border">
+							<h3 class="box-title">Active Listing</h3>
+						</div>
+						<div class="box-body">
+							<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}">
+								@csrf
+								<input type="hidden" name="update_field" value="is_active_listing">
+								<input type="hidden" name="is_active_listing" value="0">
+								<div class="checkbox" style="margin-top:0;">
+									<label>
+										<input
+											type="checkbox"
+											name="is_active_listing"
+											value="1"
+											{{ ((int) ($businessDetails['is_active_listing'] ?? 0) === 1) ? 'checked' : '' }}
+										>
+										Show this business in active listings
+									</label>
+								</div>
+								<button type="submit" class="btn btn-success btn-sm">Save</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		@endif
 
@@ -360,19 +379,34 @@
 					</div>
 				@endif
 			@endif
-			<div class="row" style="margin-top: 20px;">
-				<div class="col-md-6">
-					<form class="" method="POST" action="{{ route('reject.user') }}">
-						<input type="hidden" name="userId" value="{{ $user['id'] }}">
-						@csrf
-						<div class="form-group">
-						    <label for="message">Reason of Rejection:</label>
-						    <input type="text" class="form-control" id="message" name="message">
-						</div>
-						<div>
-							<input type="submit" class="btn btn-info btn-sm" name="submit" value="submit">	
-						</div>
-					</form>										
+			<div class="section" style="margin-top: 20px;">
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Reason of Rejection</h3>
+					</div>
+					<div class="box-body">
+						<form method="POST" action="{{ route('reject.user') }}" id="reject-user-form">
+							<input type="hidden" name="userId" value="{{ $user['id'] }}">
+							@csrf
+							<div class="form-group @error('message') has-error @enderror">
+								<label for="reject-message">Reason of Rejection: <span class="text-danger">*</span></label>
+								<textarea
+									class="form-control"
+									id="reject-message"
+									name="message"
+									rows="4"
+									required
+									placeholder="Enter the reason for rejecting this user"
+								>{{ old('message') }}</textarea>
+								@error('message')
+									<span class="help-block text-danger">{{ $message }}</span>
+								@enderror
+							</div>
+							<div>
+								<button type="submit" class="btn btn-danger btn-sm">Reject User</button>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 

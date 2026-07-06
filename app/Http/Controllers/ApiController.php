@@ -47,6 +47,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
@@ -86,6 +87,7 @@ use App\TradeCategoryMap;
 use App\WebBusinessDetails;
 use App\Services\UserInterestService;
 use App\AvgLengthMap;
+use App\WebRiceFormMap;
 
 
 class ApiController extends Controller
@@ -1151,52 +1153,44 @@ class ApiController extends Controller
 
         if ($lastRecord) {
             $latestDate = Carbon::parse($lastRecord->updated_at)->format('Y-m-d');
+            $latestStart = Carbon::parse($latestDate)->startOfDay();
+            $latestEnd = Carbon::parse($latestDate)->endOfDay();
 
             $previousDate = $livePriceBaseQuery()
-                ->whereDate('updated_at', '<', $latestDate)
+                ->where('updated_at', '<', $latestStart)
                 ->max(DB::raw('DATE(updated_at)'));
 
-            $compareDates = array_values(array_unique(array_filter([$latestDate, $previousDate])));
+            $closingMap = $this->latestLivePriceClosingMap($state, $cropYear);
 
             $data = LivePrice::query()
-                    ->has('name_rel')
-                    ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
                     ->with([
-                        'name_rel',
-                        'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
+                        'name_rel:id,name,type,order',
+                        'form_rel:id,form_name,type,order,status',
                     ])
-                    ->withCount([
-                        'trades as tradeCount' => function ($q) {
-                            $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                            // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
+                    ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
+                    ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
+                    ->select('live_prices.*')
+                    ->whereNotNull('live_prices.min_price')
+                    ->whereNotNull('live_prices.max_price')
+                    ->where('live_prices.state', $state)
+                    ->when($cropYear, fn ($q) => $q->where('live_prices.cropYear', $cropYear))
+                    ->where('rn.type', $ricetype)
+                    ->where('rf.type', $ricetype)
+                    ->where('rf.status', 1)
+                    ->where(function ($q) use ($latestStart, $latestEnd, $previousDate) {
+                        $q->whereBetween('live_prices.updated_at', [$latestStart, $latestEnd]);
+                        if ($previousDate) {
+                            $prevStart = Carbon::parse($previousDate)->startOfDay();
+                            $prevEnd = Carbon::parse($previousDate)->endOfDay();
+                            $q->orWhereBetween('live_prices.updated_at', [$prevStart, $prevEnd]);
                         }
-                    ])
-                    ->addSelect([
-                        // 'closing_opening' => DB::table('live_price_closing')
-                        //     ->select('opening')
-                        //     ->whereColumn('live_price_closing.name', 'live_prices.name')
-                        //     ->whereColumn('live_price_closing.form', 'live_prices.form')
-                        //     ->whereRaw('live_price_closing.state COLLATE utf8mb4_unicode_ci = live_prices.state COLLATE utf8mb4_unicode_ci')
-                        //     ->whereColumn('live_price_closing.cropYear', 'live_prices.cropYear')
-                        //     ->orderByDesc('id')
-                        //     ->limit(1),
-                    
-                        'closing_data' => DB::table('live_price_closing')
-                            ->select('closing')
-                            ->whereColumn('live_price_closing.name', 'live_prices.name')
-                            ->whereColumn('live_price_closing.form', 'live_prices.form')
-                            ->whereRaw('live_price_closing.state COLLATE utf8mb4_unicode_ci = live_prices.state COLLATE utf8mb4_unicode_ci')
-                            ->whereColumn('live_price_closing.cropYear', 'live_prices.cropYear')
-                            ->orderByDesc('id')
-                            ->limit(1),
-                    ])
-                    ->whereNotNull('min_price')
-                    ->whereNotNull('max_price')
-                    ->where('state', $state)
-                    ->when($cropYear, fn($q) => $q->where('cropYear', $cropYear))
-                    ->whereIn(DB::raw('date(live_prices.updated_at)'), $compareDates)
-                    ->orderBy('updated_at', 'desc')
+                    })
+                    ->orderBy('live_prices.updated_at', 'desc')
                     ->get();
+
+            $data->each(function ($row) use ($closingMap) {
+                $row->closing_data = $closingMap[$this->livePriceTupleKey($row)] ?? null;
+            });
 
                 // Same-day re-saves: keep the row with the latest updated_at per name+form.
                 $data = $data
@@ -2209,6 +2203,36 @@ class ApiController extends Controller
             ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
             ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
             ->all();
+    }
+
+    /**
+     * Latest closing price per name+form tuple (one query instead of per-row subselect).
+     *
+     * @return array<string, mixed>
+     */
+    private function latestLivePriceClosingMap(string $state, $cropYear = null): array
+    {
+        $latestIdsQuery = DB::table('live_price_closing')
+            ->selectRaw('MAX(id) as id')
+            ->where('state', $state)
+            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
+            ->groupBy('name', 'form', 'state', 'cropYear');
+
+        $rows = DB::table('live_price_closing')
+            ->whereIn('id', $latestIdsQuery)
+            ->get(['name', 'form', 'state', 'cropYear', 'closing']);
+
+        $map = [];
+        foreach ($rows as $row) {
+            $map[implode('|', [
+                (string) $row->name,
+                (string) $row->form,
+                (string) $row->state,
+                (string) $row->cropYear,
+            ])] = $row->closing;
+        }
+
+        return $map;
     }
 
     private function livePriceTupleKey($row): string
@@ -5568,14 +5592,7 @@ dd("kjnik");
             ], 422);
         }
 
-        $formIds = AvgLengthMap::query()
-            ->where('quality_type', $qualityType)
-            ->where('rice_name_id', $riceId)
-            ->pluck('form_id')
-            ->map(fn ($id) => (int) $id)
-            ->unique()
-            ->values()
-            ->all();
+        $formIds = $this->resolveMappedRiceFormIds($riceId, (string) $riceName->type);
 
         if ($formIds === []) {
             return response()->json([
@@ -5647,15 +5664,7 @@ dd("kjnik");
             ], 422);
         }
 
-        $map = AvgLengthMap::query()
-            ->where('quality_type', $qualityType)
-            ->where('rice_name_id', $riceNameId)
-            ->where('form_id', $formId)
-            ->first();
-
-        $wandIds = $map && is_array($map->wand_ids)
-            ? array_values(array_unique(array_map('intval', $map->wand_ids)))
-            : [];
+        $wandIds = $this->resolveMappedRiceWandIds($riceNameId, $formId, (string) $riceName->type);
 
         if ($wandIds === []) {
             return response()->json([
@@ -7776,9 +7785,18 @@ if (!file_exists('uploads')) {
             ], 422);
         }
 
-        // Locked for guests: always PUNJAB-HARYANA + basmati.
-        // Reuse existing endpoint logic so response structure stays exactly aligned.
-        return $this->getPrices('PUNJAB-HARYANA', 'basmati');
+        $cropYear = $request->get('year');
+        $cacheKey = 'api:live_prices_today:'.md5(json_encode(['year' => $cropYear]));
+
+        $payload = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($cropYear) {
+            if ($cropYear !== null && $cropYear !== '') {
+                request()->merge(['year' => $cropYear]);
+            }
+
+            return $this->getPrices('PUNJAB-HARYANA', 'basmati')->getData(true);
+        });
+
+        return response()->json($payload);
     }
 
     public function adminIsViewedByAdmin()
@@ -8401,5 +8419,115 @@ if (!file_exists('uploads')) {
             'message' => 'Validation error.',
             'errors' => $validator->errors(),
         ], 422);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function resolveMappedRiceFormIds(int $riceId, string $riceTypeRaw): array
+    {
+        $formIds = AvgLengthMap::query()
+            ->where('rice_name_id', $riceId)
+            ->pluck('form_id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($formIds !== []) {
+            return $formIds;
+        }
+
+        $formIdSet = [];
+        $maps = WebRiceFormMap::query()
+            ->where('rice_name_id', $riceId)
+            ->when($riceTypeRaw !== '', function ($q) use ($riceTypeRaw) {
+                $q->where(function ($q2) use ($riceTypeRaw) {
+                    $q2->where('rice_type', $riceTypeRaw)->orWhereNull('rice_type');
+                });
+            })
+            ->get(['form_ids']);
+
+        foreach ($maps as $map) {
+            foreach ($this->normalizeWebRiceFormIds($map->form_ids) as $formId) {
+                $formIdSet[$formId] = true;
+            }
+        }
+
+        return array_keys($formIdSet);
+    }
+
+    /**
+     * @return int[]
+     */
+    private function resolveMappedRiceWandIds(int $riceNameId, int $formId, string $riceTypeRaw): array
+    {
+        $map = AvgLengthMap::query()
+            ->where('rice_name_id', $riceNameId)
+            ->where('form_id', $formId)
+            ->first();
+
+        if ($map && is_array($map->wand_ids)) {
+            $wandIds = array_values(array_unique(array_filter(array_map('intval', $map->wand_ids))));
+            if ($wandIds !== []) {
+                return $wandIds;
+            }
+        }
+
+        $formMap = WebRiceFormMap::query()
+            ->where('rice_name_id', $riceNameId)
+            ->when($riceTypeRaw !== '', function ($q) use ($riceTypeRaw) {
+                $q->where(function ($q2) use ($riceTypeRaw) {
+                    $q2->where('rice_type', $riceTypeRaw)->orWhereNull('rice_type');
+                });
+            })
+            ->where(function ($q) use ($formId) {
+                $q->whereJsonContains('form_ids', $formId)
+                    ->orWhereJsonContains('form_ids', (string) $formId)
+                    ->orWhereRaw('CAST(form_ids AS UNSIGNED) = ?', [$formId]);
+            })
+            ->first();
+
+        if (! $formMap || ! is_array($formMap->wand_ids)) {
+            return [];
+        }
+
+        return array_values(array_unique(array_filter(array_map('intval', $formMap->wand_ids))));
+    }
+
+    /**
+     * @param  mixed  $formIds
+     * @return int[]
+     */
+    private function normalizeWebRiceFormIds($formIds): array
+    {
+        if ($formIds === null || $formIds === '') {
+            return [];
+        }
+        if (is_array($formIds)) {
+            $out = [];
+            foreach ($formIds as $value) {
+                if (is_numeric($value)) {
+                    $out[] = (int) $value;
+                }
+            }
+
+            return array_values(array_unique($out));
+        }
+        if (is_numeric($formIds)) {
+            return [(int) $formIds];
+        }
+        if (is_string($formIds)) {
+            $decoded = json_decode($formIds, true);
+            if (is_array($decoded)) {
+                return $this->normalizeWebRiceFormIds($decoded);
+            }
+            if (is_numeric($formIds)) {
+                return [(int) $formIds];
+            }
+        }
+
+        return [];
     }
 }
