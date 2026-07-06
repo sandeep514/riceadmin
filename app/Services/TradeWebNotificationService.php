@@ -87,7 +87,7 @@ Quantity: {quantity}';
             $selectedUserIds,
             $title,
             $messageTemplate
-        )->onQueue('notifications');
+        )->onQueue((string) config('queue.trade_notification_queue', 'default'));
     }
 
     public function queueInterestNotification(
@@ -101,7 +101,7 @@ Quantity: {quantity}';
             $userIds,
             $title,
             $messageTemplate
-        )->onQueue('notifications');
+        )->onQueue((string) config('queue.trade_notification_queue', 'default'));
     }
 
     public function processTradeNotification(

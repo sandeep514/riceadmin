@@ -18,6 +18,9 @@ return [
     // Notification fan-out batch size for web trade notifications.
     'trade_web_notification_chunk_size' => env('TRADE_WEB_NOTIFICATION_CHUNK_SIZE', 500),
 
+    // Queue name for trade web/interest notification jobs (must match queue:work --queue).
+    'trade_notification_queue' => env('TRADE_NOTIFICATION_QUEUE', 'default'),
+
     /*
     |--------------------------------------------------------------------------
     | Queue Connections
