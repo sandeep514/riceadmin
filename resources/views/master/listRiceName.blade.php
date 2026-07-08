@@ -30,6 +30,7 @@
                                     <th>From Month</th>
                                     <th>End Month</th>
                                     <th>Type</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -43,7 +44,19 @@
                                         <td>{{ $form->end_month }}</td>
                                         <td>{{ $form->type }}</td>
                                         <td>
+                                            @if((int) ($form->status ?? 0) === 1)
+                                                <span class="label label-success">Active</span>
+                                            @else
+                                                <span class="label label-danger">Deactive</span>
+                                            @endif
+                                        </td>
+                                        <td>
                                             <a href="{{ route('master.get.rice.quality', $form->id) }}" class="btn btn-info btn-xs">Edit</a>
+                                            @if((int) ($form->status ?? 0) === 1)
+                                                <a href="{{ route('master.change.rice.quality.status', [$form->id, 0]) }}" class="btn btn-warning btn-xs" onclick="return confirm('Deactivate this rice quality?')">Deactivate</a>
+                                            @else
+                                                <a href="{{ route('master.change.rice.quality.status', [$form->id, 1]) }}" class="btn btn-success btn-xs" onclick="return confirm('Activate this rice quality?')">Activate</a>
+                                            @endif
                                             <a href="{{ route('master.delete.rice.quality', $form->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('Delete this record?')">Delete</a>
                                         </td>
                                     </tr>

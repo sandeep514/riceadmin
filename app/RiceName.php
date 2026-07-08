@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class RiceName extends Model
 {
-    protected $fillable = ['name','from_month','end_month','type','type_status','order'];
+    protected $fillable = ['name','from_month','end_month','type','type_status','order','status'];
 
     public static function qualityNames(){
         $namesArray = [];
-        $names = self::get()->groupBy('type');
+        $names = self::orderedForSelect()->get()->groupBy('type');
         foreach($names as $key => $name){
             $namesArray[$key] = $name->pluck('name','id');
         }
@@ -19,11 +19,27 @@ class RiceName extends Model
     
     public static function qualityNamesForLivePrice(){
         $namesArray = [];
-        $names = self::where('name' ,'!=' ,'PR - 47' )->where('name' , '!=', 'PR-14')->where('name' ,'!=' ,'Samba Mansoori')->get()->groupBy('type');
+        $names = self::orderedForSelect()
+            ->where('name', '!=', 'PR - 47')
+            ->where('name', '!=', 'PR-14')
+            ->where('name', '!=', 'Samba Mansoori')
+            ->get()
+            ->groupBy('type');
         foreach($names as $key => $name){
             $namesArray[$key] = $name->pluck('name','id');
         }
         return $namesArray;
+    }
+
+    /**
+     * Master list order: type group, then rice_names.order, then id.
+     */
+    public static function orderedForSelect()
+    {
+        return self::query()
+            ->orderBy('type')
+            ->orderByRaw('COALESCE(`order`, 999999) ASC')
+            ->orderBy('id', 'ASC');
     }
 
     public function wand()

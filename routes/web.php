@@ -472,6 +472,7 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('list/rice/quality' ,            ['as' => 'master.list.rice.quality'     ,'uses' => 'MasterController@listRiceQuality' ] );
         Route::post('create/rice/quality' ,         ['as' => 'master.create.rice.quality'   ,'uses' => 'MasterController@createRiceQuality' ] );
         Route::get('delete/rice/qualitie/{id}',      ['as' => 'master.delete.rice.quality'   ,'uses' => 'MasterController@deleteRiceQuality' ] );
+        Route::get('rice/quality/change/status/{id}/{status}', ['as' => 'master.change.rice.quality.status', 'uses' => 'MasterController@changeRiceQualityStatus']);
 
         // rice brand forms
         Route::get('brand/list/rice/quality' ,            ['as' => 'master.list.rice.brand.quality'     ,'uses' => 'MasterController@listRiceBrandQuality' ] );

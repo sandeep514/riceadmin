@@ -136,6 +136,7 @@ class MasterController extends Controller
 			'type' => $request->riceType,
 			'type_status' => ($request->riceType == 'basmati')? 1: 2,
 			'order' => $request->order ?? null,
+			'status' => 1,
 		]);
 		return back();
 	}
@@ -185,6 +186,27 @@ class MasterController extends Controller
 	
 	public function deleteRiceQuality($id){
 		RiceName::where( 'id' ,$id )->delete();
+		return back();
+	}
+
+	public function changeRiceQualityStatus($id, $status)
+	{
+		if (! in_array((int) $status, [0, 1], true)) {
+			Session::flash('error', 'Error|Invalid status selected.');
+
+			return back();
+		}
+
+		$riceName = RiceName::find($id);
+		if (! $riceName) {
+			Session::flash('error', 'Error|No record found!');
+
+			return back();
+		}
+
+		$riceName->update(['status' => (int) $status]);
+		Session::flash('success', 'Success|Rice quality ' . ((int) $status === 1 ? 'activated' : 'deactivated') . ' successfully!');
+
 		return back();
 	}
 
