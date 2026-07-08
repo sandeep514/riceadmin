@@ -59,7 +59,7 @@ class LivePricesController extends Controller
     public function index(Request $request, $riceName = null)
     {
         $RiceForm = RiceForm::where('status', 1)->get();       // all active forms
-        $RiceName = RiceName::orderedForSelect()->get();                          // all rice names
+        $RiceName = RiceName::orderedForSelect(true)->get();
 
         // lightweight grouped live prices (select only necessary columns)
         // $livePrice = LivePrice::select('id','state','min_price','max_price')->get()->groupBy('state');

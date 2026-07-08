@@ -19,7 +19,7 @@ class RiceName extends Model
     
     public static function qualityNamesForLivePrice(){
         $namesArray = [];
-        $names = self::orderedForSelect()
+        $names = self::orderedForSelect(true)
             ->where('name', '!=', 'PR - 47')
             ->where('name', '!=', 'PR-14')
             ->where('name', '!=', 'Samba Mansoori')
@@ -34,9 +34,15 @@ class RiceName extends Model
     /**
      * Master list order: type group, then rice_names.order, then id.
      */
-    public static function orderedForSelect()
+    public static function orderedForSelect(bool $activeOnly = false)
     {
-        return self::query()
+        $query = self::query();
+
+        if ($activeOnly) {
+            $query->where('status', 1);
+        }
+
+        return $query
             ->orderBy('type')
             ->orderByRaw('COALESCE(`order`, 999999) ASC')
             ->orderBy('id', 'ASC');
