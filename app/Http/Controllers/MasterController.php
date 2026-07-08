@@ -601,18 +601,22 @@ class MasterController extends Controller
 		$dollarrate 	= $request->dollar;
 		$percentageValue= $request->percentage;
 
-		if($ricemin == ''){
+		if($ricemin === '' || $ricemin === null){
             $ricemin = 0;
         }
-        if($ricemax == ''){
+        if($ricemax === '' || $ricemax === null){
             $ricemax = 0;
         }
-        if($transportmin == ''){
+        if($transportmin === '' || $transportmin === null){
             $transportmin = 0;
         }
-        if($transportmax == ''){
+        if($transportmax === '' || $transportmax === null){
             $transportmax = 0;
         }
+        $ricemin = (float) $ricemin;
+        $ricemax = (float) $ricemax;
+        $transportmin = (float) $transportmin;
+        $transportmax = (float) $transportmax;
         if( $ricemax < $ricemin ){
             // alert('Rice max price should be greater than Rice min price.');
             return false;
@@ -739,18 +743,22 @@ class MasterController extends Controller
 		$percentageValue= $request->percentage;
 		$colorStatus= $request->color_status;
 
-		if($ricemin == ''){
+		if($ricemin === '' || $ricemin === null){
             $ricemin = 0;
         }
-        if($ricemax == ''){
+        if($ricemax === '' || $ricemax === null){
             $ricemax = 0;
         }
-        if($transportmin == ''){
+        if($transportmin === '' || $transportmin === null){
             $transportmin = 0;
         }
-        if($transportmax == ''){
+        if($transportmax === '' || $transportmax === null){
             $transportmax = 0;
         }
+        $ricemin = (float) $ricemin;
+        $ricemax = (float) $ricemax;
+        $transportmin = (float) $transportmin;
+        $transportmax = (float) $transportmax;
         if( $ricemax < $ricemin ){
             // alert('Rice max price should be greater than Rice min price.');
             return false;
@@ -1032,7 +1040,31 @@ class MasterController extends Controller
 			'quality' => $query->quality ?? null,
 			'quality_form' => $query->quality_form ?? $query->qualityForm ?? null,
 			'grade' => $query->grade ?? null,
+			'packing_type' => $query->packing_type ?? null,
+			'packing' => $query->packing ?? null,
+			'ricepacking' => $this->resolveConvertTradeRicePackingId($query),
 		];
+	}
+
+	/**
+	 * Map query packing fields to trade form ricepacking option id.
+	 */
+	private function resolveConvertTradeRicePackingId($query): ?int
+	{
+		if ($query === null) {
+			return null;
+		}
+
+		$packing = $query->packing ?? null;
+		if ($packing === null || $packing === '') {
+			return null;
+		}
+
+		if (isset($query->packing_type) && (int) $query->packing_type === 0) {
+			return (int) $packing === 0 ? 2 : ((int) $packing === 1 ? 1 : null);
+		}
+
+		return (int) $packing;
 	}
 
 	public function listBuyQueries()

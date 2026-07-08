@@ -3,6 +3,7 @@
 
     $(document).ready(function() {
         const apiBase = @json(url('/api'));
+        const convertPrefill = @json($convertPrefill ?? null);
 
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
@@ -10,7 +11,7 @@
 
         @if(!empty($convertPrefill ?? null))
         (function () {
-            const prefill = @json($convertPrefill);
+            const prefill = convertPrefill;
             const preQualityType = prefill.quality_type;
             const preQuality = prefill.quality;
             const preRiceForm = prefill.quality_form;
@@ -72,15 +73,22 @@
 
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
+            if (!tradeType) {
+                return;
+            }
+            const selectedPacking = convertPrefill && convertPrefill.ricepacking != null && convertPrefill.ricepacking !== ''
+                ? String(convertPrefill.ricepacking)
+                : '';
             $.ajax({
                 url : apiBase + '/get/packing/by/' + tradeType,
                 success : function (res){
                     $("select[name=ricepacking]").html('');
                     $("select[name=ricepacking]").append('<option value=""> Select </option>');
-                    let objectKeys = Object.keys(res.data);
 
-                    for(let i = 0; i < Object.keys(res.data).length ; i++){
-                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'"> '+res.data[i].packing+' '+res.data[i].description+' </option>');
+                    for(let i = 0; i < res.data.length ; i++){
+                        const optionSelected = selectedPacking !== '' && String(res.data[i].id) === selectedPacking ? 'selected' : '';
+                        const description = res.data[i].description ? (' ' + res.data[i].description) : '';
+                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'" '+optionSelected+'> '+res.data[i].packing+description+' </option>');
                     }
                 },
                 error: function (err){

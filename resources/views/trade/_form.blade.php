@@ -97,9 +97,12 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing') !!}
                                 <select class="form-control" required name="ricepacking">
-                                  @foreach($packing as $k => $v)
-                                        <option value="{{ $v->id }}" {{ ($query->packing ?? '') == $v->id ? 'selected' : '' }}>{{ $v->size }} {{ $v->packing }}</option>
-                                    @endforeach
+                                    <option value=""> Select </option>
+                                    @if(empty($convertPrefill))
+                                        @foreach($packing as $k => $v)
+                                            <option value="{{ $v->id }}" {{ ($query->packing ?? '') == $v->id ? 'selected' : '' }}>{{ $v->size }} {{ $v->packing }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">

@@ -156,49 +156,45 @@
             //     $('#fob').html('$'+Math.round((parseFloat(((exchangeRate*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRate).toFixed(2))).toFixed(2)));
             // })
 
+            function parseCalcNumber(value) {
+                if (value === '' || value === null || value === undefined) {
+                    return 0;
+                }
+                return parseFloat(String(value).replace(/,/g, '')) || 0;
+            }
+
             $('.calculate').click(function(e){
                 e.preventDefault();
                 e.stopPropagation() 
-                let ricemin = $('#ricemin').val();
-                let ricemax = $('#ricemax').val();
-                let transportmin = $('#transportmin').val();
-                let transportmax = $('#transportmax').val();
-                let category = $('#category').val();
-                let charges = $('#charges').val();
-                let dollarrate = $('#dollarrate').val();
+                let ricemin = parseCalcNumber($('#ricemin').val());
+                let ricemax = parseCalcNumber($('#ricemax').val());
+                let transportmin = parseCalcNumber($('#transportmin').val());
+                let transportmax = parseCalcNumber($('#transportmax').val());
+                let category = parseCalcNumber($('#category').val());
+                let charges = parseCalcNumber($('#charges').val());
+                let dollarrate = parseCalcNumber($('#dollarrate').val());
 
                 let total = $('#total').html();
                 let exchangeRate = $('#exchangeRate').html();
-                let percentageValue = $('#percentage').val();
+                let percentageValue = parseCalcNumber($('#percentage').val());
+                const hasPercentage = $('#percentage').val() !== '';
 
-                if(ricemin == ''){
-                    ricemin = 0
-                }
-                if(ricemax == ''){
-                    ricemax = 0
-                }
-                if(transportmin == ''){
-                    transportmin = 0
-                }
-                if(transportmax == ''){
-                    transportmax = 0
-                }
-                if( ricemax < ricemin ){
+                if (ricemax < ricemin) {
                     alert('Rice max price should be greater than Rice min price.');
                     return false;
                 }
-                if( transportmax < transportmin ){
+                if (transportmax < transportmin) {
                     alert('Transport max price should be greater than Transport min price.');
                     return false;
                 }
 
-                if( ricemin != 0 && ricemax != 0 && transportmin != '' && transportmax != '' && category != '' && transportmin != ''&& transportmax != '' && dollarrate != '' && percentageValue != '' && charges != ''){
+                if( ricemin != 0 && ricemax != 0 && transportmin != 0 && transportmax != 0 && category != 0 && dollarrate != 0 && hasPercentage && charges != 0){
                    
                     let totalMin = parseFloat(parseFloat(ricemin)+parseFloat(category)+parseFloat(transportmin)+parseFloat(charges)).toFixed(2);
                     let totalMax = parseFloat(parseFloat(ricemax)+parseFloat(category)+parseFloat(transportmax)+parseFloat(charges)).toFixed(2);
-                    let exchangeRatemin = parseFloat(totalMin / $('#dollarrate').val()).toFixed(2);
+                    let exchangeRatemin = parseFloat(totalMin / dollarrate).toFixed(2);
 
-                    let exchangeRatemax = parseFloat(totalMax / $('#dollarrate').val()).toFixed(2);
+                    let exchangeRatemax = parseFloat(totalMax / dollarrate).toFixed(2);
                     
                     let Fobmin = Math.round((parseFloat(((exchangeRatemin*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemin).toFixed(2))).toFixed(2));
                     let Fobmax = Math.round((parseFloat(((exchangeRatemax*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemax).toFixed(2))).toFixed(2));
@@ -208,11 +204,11 @@
                     $('#fob').html('$'+Math.round(Fobmin)+' - $'+Math.round(Fobmax) );
                 }
 
-                if( ricemin != 0 && ricemax == 0 && transportmin != '' && transportmax != '' && category != '' && transportmin != ''&& transportmax != '' && dollarrate != '' && percentageValue != ''){
+                if( ricemin != 0 && ricemax == 0 && transportmin != 0 && transportmax != 0 && category != 0 && dollarrate != 0 && hasPercentage && charges != 0){
                    
                     let totalMin = parseFloat(parseFloat(ricemin)+parseFloat(category)+parseFloat(transportmin)+parseFloat(charges)).toFixed(2);
                     let totalMax = 0;
-                    let exchangeRatemin = parseFloat((totalMin / $('#dollarrate').val())).toFixed(2);
+                    let exchangeRatemin = parseFloat((totalMin / dollarrate)).toFixed(2);
 
                     let exchangeRatemax = 0;
                     let Fobmin = Math.round((parseFloat(((exchangeRatemin*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemin).toFixed(2))).toFixed(2));
@@ -223,12 +219,12 @@
                     $('#fob').html('$'+Math.round(Fobmin)+' - $'+Math.round(Fobmax) );
                 }
 
-                if( ricemin == 0 && ricemax != 0 && transportmin != '' && transportmax != '' && category != '' && transportmin != ''&& transportmax != '' && dollarrate != '' && percentageValue != ''){
+                if( ricemin == 0 && ricemax != 0 && transportmin != 0 && transportmax != 0 && category != 0 && dollarrate != 0 && hasPercentage && charges != 0){
                    
                     let totalMin = 0;
                     let totalMax = parseFloat(parseFloat(ricemax)+parseFloat(category)+parseFloat(transportmax)+parseFloat(charges)).toFixed(2);
                     let exchangeRatemin = 0;
-                    let exchangeRatemax = parseFloat(totalMax / $('#dollarrate').val()).toFixed(2);
+                    let exchangeRatemax = parseFloat(totalMax / dollarrate).toFixed(2);
 
                     let Fobmin = Math.round((parseFloat(((exchangeRatemin*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemin).toFixed(2))).toFixed(2));
                     let Fobmax = Math.round((parseFloat(((exchangeRatemax*percentageValue)/100 ).toFixed(2)) + parseFloat(parseFloat(exchangeRatemax).toFixed(2))).toFixed(2));
