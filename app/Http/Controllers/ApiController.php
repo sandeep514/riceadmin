@@ -6125,43 +6125,37 @@ if (!file_exists('uploads')) {
 
     public function getTrade($userId)
     {
-        // $trade = TradeQueriesINR::with(['TradeInterest','TradeLikeAll' => function($query) use($userId){
-        //     return $query->where('userId' , $userId);
-        // },'RiceFormMilestone3','RiceQualityMaster','riceGrade' => function($query){
-        //     return $query->with('getWandType')->get();
-        // },'RicePacking'])->withCount('TradeLikeAll')->get()->groupBy('tradeType');
+        $now = $this->expirePastValidDayTrades();
 
-        $now = Carbon::now();
-        $date = Carbon::parse($now)->toDateString();
-        $time = Carbon::parse($now)->format('H:i');
-
-        // dd(Carbon::parse($now)->format('Y-m-d H:i'));
-        // dd($time);
-        // dd(TradeQueriesINR::whereIn('status' , [1,6,4,5,11,12])->where('validDays' ,'<=', Carbon::parse($now)->format('Y-m-d H:i'))->get());
-
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
-
-        // $todayExpired = TradeQueriesINR::orderBy('status' , 'ASC')->where('status' , 2)->get();
-        $allTrade = TradeQueriesINR::where('status', '!=', 2)
-        // ->limit(75)
-        ->orderByRaw('FIELD(status,6,4,3)')->with(['TradeInterest' => function ($query) use ($userId) {
-            return $query->where('userId', $userId)->get();
-        }, 'RiceNameData', 'TradeLikeAll' => function ($query) use ($userId) {
-            return $query->select(['id' ,'tradeId'])->where('userId', $userId);
-        }, 'RiceFormMilestone3', 'riceGrade' => function ($query) {
-            return $query->with('getWandType')->get();
-        }, 'RicePackingBuyer', 'RicePackingSeller'])->where('status', '!=', 5)->orderBy('id' , 'DESC')->withCount('TradeLikeAll')->get();
-
-        // $allTrade = TradeQueriesINR::orderBy('status' , 'ASC')->limit(75)->orderBy('id' , 'DESC')->with(['TradeInterest'=> function($query) use($userId){
-        //     return $query->where('userId' , $userId)->get();
-        // },'RiceNameData','TradeLikeAll' => function($query) use($userId){
-        //     return $query->where('userId' , $userId);
-        // },'RiceFormMilestone3','riceGrade' => function($query){
-        //     return $query->with('getWandType')->get();
-        // },'RicePackingBuyer','RicePackingSeller'])->where('status' ,'!=',5)->withCount('TradeLikeAll')->get();
+        // Active / in-process / pending (+ sold). Exclude expired (2), de-active (5), close (11), hold (12).
+        // Also drop any non-sold rows whose validDays is already past (in case status update missed them).
+        $allTrade = TradeQueriesINR::query()
+            ->whereIn('status', [1, 3, 4, 6])
+            ->where(function ($query) use ($now) {
+                $query->where('status', 3)
+                    ->orWhere('validDays', '>', $now->format('Y-m-d H:i:s'));
+            })
+            ->orderByRaw('FIELD(status,6,4,3,1)')
+            ->with([
+                'TradeInterest' => function ($query) use ($userId) {
+                    return $query->where('userId', $userId)->get();
+                },
+                'RiceNameData',
+                'TradeLikeAll' => function ($query) use ($userId) {
+                    return $query->select(['id', 'tradeId'])->where('userId', $userId);
+                },
+                'RiceFormMilestone3',
+                'riceGrade' => function ($query) {
+                    return $query->with('getWandType')->get();
+                },
+                'RicePackingBuyer',
+                'RicePackingSeller',
+            ])
+            ->orderBy('id', 'DESC')
+            ->withCount('TradeLikeAll')
+            ->get();
 
         $trade = $allTrade->groupBy('tradeType');
-
 
         $tradeStatus = TradeCurrentStatus::first();
 
@@ -6174,11 +6168,7 @@ if (!file_exists('uploads')) {
      */
     public function getWebTrades(Request $request, $userId)
     {
-        $now = Carbon::now();
-        $date = Carbon::parse($now)->toDateString();
-        $time = Carbon::parse($now)->format('H:i');
-
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5,11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
+        $this->expirePastValidDayTrades();
 
         $allTrade = TradeQueriesINR::query()
             ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, false, null))
@@ -6361,14 +6351,10 @@ if (!file_exists('uploads')) {
 
     public function getTradeCounts(Request $request)
     {
-
-        $now = Carbon::now();
-        $date = Carbon::parse($now)->toDateString();
-        $time = Carbon::parse($now)->format('H:i');
-
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
+        $now = $this->expirePastValidDayTrades();
 
         $baseTradeQuery = TradeQueriesINR::where('status', 1)
+            ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
             ->where(function ($query) use ($request) {
                 $this->applyTradeCountFilters($query, $request);
             });
@@ -6422,16 +6408,15 @@ if (!file_exists('uploads')) {
 
     public function filterTrade(Request $request , $userId)
     {
-        
-        $now = Carbon::now();
-        $date = Carbon::parse($now)->toDateString();
-        $time = Carbon::parse($now)->format('H:i');
+        $now = $this->expirePastValidDayTrades();
 
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
-
-        $allTrade = TradeQueriesINR::where('status', '!=', 2)
-            ->where('status', '!=', 5)
-            ->where(function($query) use ($request) {
+        $allTrade = TradeQueriesINR::query()
+            ->whereIn('status', [1, 3, 4, 6])
+            ->where(function ($query) use ($now) {
+                $query->where('status', 3)
+                    ->orWhere('validDays', '>', $now->format('Y-m-d H:i:s'));
+            })
+            ->where(function ($query) use ($request) {
                 if ($request->has('trade_type')) {
                     $query->where('tradeType', $request->trade_type);
                 }
@@ -6446,15 +6431,12 @@ if (!file_exists('uploads')) {
                 }
                 if ($request->has('quality_form')) {
                     $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
-                    // $query->where('qualityForm', $request->quality_form);
                 }
                 if ($request->has('rice_size')) {
                     $query->where('riceSize', $request->rice_size);
                 }
-                // Add more filters as needed
             })
-            // ->limit(75)
-            ->orderByRaw('FIELD(status,6,4,3)')
+            ->orderByRaw('FIELD(status,6,4,3,1)')
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
@@ -6488,11 +6470,7 @@ if (!file_exists('uploads')) {
      */
     public function webFilterTrade(Request $request , $userId)
     {
-        $now = Carbon::now();
-        $date = Carbon::parse($now)->toDateString();
-        $time = Carbon::parse($now)->format('H:i');
-
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])->where('validDays', '<=', Carbon::parse($now)->format('Y-m-d H:i'))->update(['status' => 2]);
+        $this->expirePastValidDayTrades();
 
         $hasTradeTypeFilter = $this->hasWebTradeFilterTradeType($request);
         $appliedTradeType = $this->resolveAppliedWebTradeFilterTradeType($request);
@@ -6774,15 +6752,41 @@ if (!file_exists('uploads')) {
     }
 
     /**
+     * Mark trades past validDays as expired (status = 2).
+     * Returns "now" used for the comparison so list queries stay consistent.
+     */
+    private function expirePastValidDayTrades(): Carbon
+    {
+        $now = Carbon::now(config('app.timezone', 'Asia/Kolkata'));
+        $nowStr = $now->format('Y-m-d H:i:s');
+
+        TradeQueriesINR::whereIn('status', [1, 4, 5, 6, 11, 12])
+            ->whereNotNull('validDays')
+            ->where('validDays', '<=', $nowStr)
+            ->update(['status' => 2]);
+
+        return $now;
+    }
+
+    /**
      * Status / tradeType scope for web trade listing queries.
      */
     private function applyWebTradeListScope($query, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): void
     {
+        $nowStr = Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
+
         if ($hasTradeTypeFilter) {
-            $query->whereIn('status', [1, 4, 6])->where('tradeType', $appliedTradeType);
+            $query->whereIn('status', [1, 4, 6])
+                ->where('validDays', '>', $nowStr)
+                ->where('tradeType', $appliedTradeType);
         } else {
             // All tab: active trades + sold (for latest-15 bucket); exclude expired, de-active, hold, close.
-            $query->whereIn('status', [1, 4, 6, 3])->whereIn('tradeType', [1, 2, 3, 4]);
+            $query->whereIn('status', [1, 4, 6, 3])
+                ->where(function ($q) use ($nowStr) {
+                    $q->where('status', 3)
+                        ->orWhere('validDays', '>', $nowStr);
+                })
+                ->whereIn('tradeType', [1, 2, 3, 4]);
         }
 
         $this->applyWebTradeListOptionalFilters($query, $request);
@@ -6841,7 +6845,8 @@ if (!file_exists('uploads')) {
         ];
 
         $base = TradeQueriesINR::query()
-            ->whereIn('status', [1, 4, 6]);
+            ->whereIn('status', [1, 4, 6])
+            ->where('validDays', '>', Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s'));
         $this->applyWebTradeListOptionalFilters($base, $request);
 
         if ($hasTradeTypeFilter) {
@@ -7255,15 +7260,11 @@ if (!file_exists('uploads')) {
      */
     public function getGuestRiceSourcingTrades(Request $request)
     {
-        $now = Carbon::now();
-
-        TradeQueriesINR::whereIn('status', [1, 6, 4, 5, 11, 12])
-            ->where('validDays', '<=', $now->format('Y-m-d H:i'))
-            ->update(['status' => 2]);
+        $now = $this->expirePastValidDayTrades();
 
         $allTrade = TradeQueriesINR::query()
             ->whereIn('status', [1, 4, 6])
-            ->where('validDays', '>', $now->format('Y-m-d H:i'))
+            ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
             ->where(function ($query) use ($request) {
                 if ($request->has('trade_type')) {
                     $query->where('tradeType', $request->trade_type);
