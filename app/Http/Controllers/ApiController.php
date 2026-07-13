@@ -6127,15 +6127,11 @@ if (!file_exists('uploads')) {
     {
         $now = $this->expirePastValidDayTrades();
 
-        // Active / in-process / pending (+ sold). Exclude expired (2), de-active (5), close (11), hold (12).
-        // Also drop any non-sold rows whose validDays is already past (in case status update missed them).
+        // Active / in-process / pending only. Exclude expired (2), sold (3), de-active (5), close (11), hold (12).
         $allTrade = TradeQueriesINR::query()
-            ->whereIn('status', [1, 3, 4, 6])
-            ->where(function ($query) use ($now) {
-                $query->where('status', 3)
-                    ->orWhere('validDays', '>', $now->format('Y-m-d H:i:s'));
-            })
-            ->orderByRaw('FIELD(status,6,4,3,1)')
+            ->whereIn('status', [1, 4, 6])
+            ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
+            ->orderByRaw('FIELD(status,6,4,1)')
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     return $query->where('userId', $userId)->get();
@@ -6411,11 +6407,8 @@ if (!file_exists('uploads')) {
         $now = $this->expirePastValidDayTrades();
 
         $allTrade = TradeQueriesINR::query()
-            ->whereIn('status', [1, 3, 4, 6])
-            ->where(function ($query) use ($now) {
-                $query->where('status', 3)
-                    ->orWhere('validDays', '>', $now->format('Y-m-d H:i:s'));
-            })
+            ->whereIn('status', [1, 4, 6])
+            ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
             ->where(function ($query) use ($request) {
                 if ($request->has('trade_type')) {
                     $query->where('tradeType', $request->trade_type);
@@ -6436,7 +6429,7 @@ if (!file_exists('uploads')) {
                     $query->where('riceSize', $request->rice_size);
                 }
             })
-            ->orderByRaw('FIELD(status,6,4,3,1)')
+            ->orderByRaw('FIELD(status,6,4,1)')
             ->with([
                 'TradeInterest' => function ($query) use ($userId) {
                     $query->where('userId', $userId);
