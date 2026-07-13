@@ -6126,31 +6126,26 @@ if (!file_exists('uploads')) {
     public function getTrade($userId)
     {
         $now = $this->expirePastValidDayTrades();
+        $nowStr = $now->format('Y-m-d H:i:s');
+        $eagerLoads = $this->mobileTradeListEagerLoads($userId);
 
-        // Active / in-process / pending only. Exclude expired (2), sold (3), de-active (5), close (11), hold (12).
-        $allTrade = TradeQueriesINR::query()
+        $openTrades = TradeQueriesINR::query()
             ->whereIn('status', [1, 4, 6])
-            ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
-            ->orderByRaw('FIELD(status,6,4,1)')
-            ->with([
-                'TradeInterest' => function ($query) use ($userId) {
-                    return $query->where('userId', $userId)->get();
-                },
-                'RiceNameData',
-                'TradeLikeAll' => function ($query) use ($userId) {
-                    return $query->select(['id', 'tradeId'])->where('userId', $userId);
-                },
-                'RiceFormMilestone3',
-                'riceGrade' => function ($query) {
-                    return $query->with('getWandType')->get();
-                },
-                'RicePackingBuyer',
-                'RicePackingSeller',
-            ])
+            ->where('validDays', '>', $nowStr)
+            ->with($eagerLoads)
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')
             ->get();
 
+        $soldTrades = TradeQueriesINR::query()
+            ->where('status', 3)
+            ->with($eagerLoads)
+            ->orderBy('id', 'DESC')
+            ->limit(15)
+            ->withCount('TradeLikeAll')
+            ->get();
+
+        $allTrade = $this->orderMobileTradesListing($openTrades->concat($soldTrades));
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
@@ -6405,49 +6400,49 @@ if (!file_exists('uploads')) {
     public function filterTrade(Request $request , $userId)
     {
         $now = $this->expirePastValidDayTrades();
+        $nowStr = $now->format('Y-m-d H:i:s');
+        $eagerLoads = $this->mobileTradeListEagerLoads($userId);
 
-        $allTrade = TradeQueriesINR::query()
+        $applyFilters = function ($query) use ($request) {
+            if ($request->has('trade_type')) {
+                $query->where('tradeType', $request->trade_type);
+            }
+            if ($request->has('farming_type')) {
+                $query->where('farmingType', $request->farming_type);
+            }
+            if ($request->has('quality_type')) {
+                $query->where('quality_type', $request->quality_type);
+            }
+            if ($request->has('quality')) {
+                $query->where('quality', $request->quality);
+            }
+            if ($request->has('quality_form')) {
+                $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
+            }
+            if ($request->has('rice_size')) {
+                $query->where('riceSize', $request->rice_size);
+            }
+        };
+
+        $openTrades = TradeQueriesINR::query()
             ->whereIn('status', [1, 4, 6])
-            ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
-            ->where(function ($query) use ($request) {
-                if ($request->has('trade_type')) {
-                    $query->where('tradeType', $request->trade_type);
-                }
-                if ($request->has('farming_type')) {
-                    $query->where('farmingType', $request->farming_type);
-                }
-                if ($request->has('quality_type')) {
-                    $query->where('quality_type', $request->quality_type);
-                }
-                if ($request->has('quality')) {
-                    $query->where('quality', $request->quality);
-                }
-                if ($request->has('quality_form')) {
-                    $query->where('qualityFormLinkWithLivePrice', $request->quality_form);
-                }
-                if ($request->has('rice_size')) {
-                    $query->where('riceSize', $request->rice_size);
-                }
-            })
-            ->orderByRaw('FIELD(status,6,4,1)')
-            ->with([
-                'TradeInterest' => function ($query) use ($userId) {
-                    $query->where('userId', $userId);
-                },
-                'RiceNameData',
-                'TradeLikeAll' => function ($query) use ($userId) {
-                    $query->where('userId', $userId);
-                },
-                'RiceFormMilestone3',
-                'riceGrade' => function ($query) {
-                    $query->with('getWandType');
-                },
-                'RicePackingBuyer',
-                'RicePackingSeller'
-            ])
+            ->where('validDays', '>', $nowStr)
+            ->where($applyFilters)
+            ->with($eagerLoads)
             ->orderBy('id', 'DESC')
-            ->withCount('TradeLikeAll')->get();
+            ->withCount('TradeLikeAll')
+            ->get();
 
+        $soldTrades = TradeQueriesINR::query()
+            ->where('status', 3)
+            ->where($applyFilters)
+            ->with($eagerLoads)
+            ->orderBy('id', 'DESC')
+            ->limit(15)
+            ->withCount('TradeLikeAll')
+            ->get();
+
+        $allTrade = $this->orderMobileTradesListing($openTrades->concat($soldTrades));
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $trade = $allTrade->groupBy('tradeType');
 
@@ -6759,6 +6754,64 @@ if (!file_exists('uploads')) {
             ->update(['status' => 2]);
 
         return $now;
+    }
+
+    /**
+     * Eager loads shared by mobile get/filter trade list endpoints.
+     *
+     * @return array<string, mixed>
+     */
+    private function mobileTradeListEagerLoads($userId): array
+    {
+        return [
+            'TradeInterest' => function ($query) use ($userId) {
+                $query->where('userId', $userId);
+            },
+            'RiceNameData',
+            'TradeLikeAll' => function ($query) use ($userId) {
+                $query->select(['id', 'tradeId'])->where('userId', $userId);
+            },
+            'RiceFormMilestone3',
+            'riceGrade' => function ($query) {
+                $query->with('getWandType');
+            },
+            'RicePackingBuyer',
+            'RicePackingSeller',
+        ];
+    }
+
+    /**
+     * Mobile trade list order:
+     * 1) pending (1)
+     * 2) in-process (4)
+     * 3) active (6)
+     * 4) latest 15 sold (3)
+     * Within each status bucket: id DESC.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function orderMobileTradesListing($trades)
+    {
+        $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
+        if ($collection->isEmpty()) {
+            return $collection->values();
+        }
+
+        $bucket = function (int $status) use ($collection) {
+            return $collection
+                ->filter(fn ($trade) => (int) $trade->status === $status)
+                ->sortByDesc(fn ($trade) => (int) $trade->id)
+                ->values();
+        };
+
+        $sold = $bucket(3)->take(15);
+
+        return $bucket(1)
+            ->concat($bucket(4))
+            ->concat($bucket(6))
+            ->concat($sold)
+            ->values();
     }
 
     /**
