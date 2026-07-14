@@ -9,6 +9,10 @@
         return ids;
     }
 
+    function getSelectedRoleId() {
+        return $('#trade_notify_role_id').val() || '';
+    }
+
     function toggleNotifyFields() {
         var on = $('input[name="trade_notify_send"]:checked').val() === '1';
         if (on) {
@@ -36,6 +40,7 @@
 
     function loadNotifyUsers() {
         var ids = getSelectedCategoryIds();
+        var roleId = getSelectedRoleId();
         var $sel = $('#trade_notify_user_ids');
         if ($.fn.select2 && $sel.hasClass('select2-hidden-accessible')) {
             $sel.select2('destroy');
@@ -47,7 +52,11 @@
             }
             return;
         }
-        $.getJSON(base + '/trade/web-notification-users', { category_ids: ids })
+        var params = { category_ids: ids };
+        if (roleId) {
+            params.role_id = roleId;
+        }
+        $.getJSON(base + '/trade/web-notification-users', params)
             .done(function (res) {
                 if (!res || !res.data) {
                     return;
@@ -62,25 +71,29 @@
             });
     }
 
+    function maybeReloadUsers() {
+        if ($('input[name="trade_notify_send"]:checked').val() === '1' &&
+            $('input[name="trade_notify_audience"]:checked').val() === 'selected_users') {
+            loadNotifyUsers();
+        }
+    }
+
     $('input[name="trade_notify_send"]').on('change ifChanged ifToggled click', function () {
         setTimeout(toggleNotifyFields, 0);
     });
     $('input[name="trade_notify_audience"]').on('change ifChanged ifToggled click', function () {
         setTimeout(toggleAudience, 0);
     });
+    $('#trade_notify_role_id').on('change', function () {
+        maybeReloadUsers();
+    });
 
     $(document).on('ifChanged', '#trade-web-categories-grid input[name="category_ids[]"]', function () {
-        if ($('input[name="trade_notify_send"]:checked').val() === '1' &&
-            $('input[name="trade_notify_audience"]:checked').val() === 'selected_users') {
-            loadNotifyUsers();
-        }
+        maybeReloadUsers();
     });
 
     $('#trade-web-categories-grid input[name="category_ids[]"]').on('change', function () {
-        if ($('input[name="trade_notify_send"]:checked').val() === '1' &&
-            $('input[name="trade_notify_audience"]:checked').val() === 'selected_users') {
-            loadNotifyUsers();
-        }
+        maybeReloadUsers();
     });
 
     if ($.fn.select2 && $('#trade_notify_user_ids').length && !$('#trade_notify_user_ids').hasClass('select2-hidden-accessible')) {

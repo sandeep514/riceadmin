@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\CategoryRoleMap;
 use App\Events\WebPortalNotificationEvent;
+use App\Jobs\SendPushNotificationJob;
 use App\Jobs\SendTradeInterestNotificationsJob;
 use App\Jobs\SendTradeWebNotificationsJob;
 use App\TradeQueriesINR;
@@ -20,7 +22,6 @@ class TradeWebNotificationService
     public const DEFAULT_TRADE_INTEREST_NOTIFY_MESSAGE = 'SNTC send you special notification on a new trade {trade_no}, {quality}, {rice_form}, {grade}.';
 
     /** Default notification body; placeholders are replaced from the saved trade. */
-
     public const DEFAULT_TRADE_NOTIFY_MESSAGE = 'A new trade is added (Trade #{trade_no}).
 
 Trade Type: {trade_type}
@@ -31,10 +32,10 @@ Grade: {grade}
 Quantity: {quantity}';
 
     /**
-     * Notify web portal users about a trade. Inserts web_notifications rows and broadcasts per user.
+     * Notify users about a trade (web Reverb + mobile FCM when token exists).
      *
-     * @param  array<int>  $categoryIds  Web category ids (from trade_category_map / form)
-     * @param  array<int>|null  $selectedUserIds  When audience is selected_users
+     * @param  array<int>  $categoryIds
+     * @param  array<int>|null  $selectedUserIds
      */
     public function send(
         TradeQueriesINR $trade,
@@ -43,7 +44,8 @@ Quantity: {quantity}';
         string $audienceMode,
         ?array $selectedUserIds,
         string $title,
-        string $messageTemplate
+        string $messageTemplate,
+        ?int $roleId = null
     ): void {
         $this->processTradeNotification(
             $trade,
@@ -52,13 +54,12 @@ Quantity: {quantity}';
             $audienceMode,
             $selectedUserIds,
             $title,
-            $messageTemplate
+            $messageTemplate,
+            $roleId
         );
     }
 
     /**
-     * Notify web users who were selected because their saved interests match the trade.
-     *
      * @param  array<int>  $userIds
      */
     public function sendInterestMatch(
@@ -77,7 +78,8 @@ Quantity: {quantity}';
         string $audienceMode,
         ?array $selectedUserIds,
         string $title,
-        string $messageTemplate
+        string $messageTemplate,
+        ?int $roleId = null
     ): void {
         SendTradeWebNotificationsJob::dispatch(
             $tradeId,
@@ -86,7 +88,8 @@ Quantity: {quantity}';
             $audienceMode,
             $selectedUserIds,
             $title,
-            $messageTemplate
+            $messageTemplate,
+            $roleId
         )->onQueue((string) config('queue.trade_notification_queue', 'default'));
     }
 
@@ -111,7 +114,8 @@ Quantity: {quantity}';
         string $audienceMode,
         ?array $selectedUserIds,
         string $title,
-        string $messageTemplate
+        string $messageTemplate,
+        ?int $roleId = null
     ): void {
         if (! $send) {
             return;
@@ -126,7 +130,12 @@ Quantity: {quantity}';
         $message = $this->applyTradeMessagePlaceholders($trade, $messageTemplate);
         $title = trim($title) !== '' ? trim($title) : 'New Trade alert';
 
-        $targetIds = $this->resolveTradeTargetUserIds($categoryIds, $audienceMode, $selectedUserIds);
+        $targetIds = $this->resolveTradeTargetUserIds(
+            $categoryIds,
+            $audienceMode,
+            $selectedUserIds,
+            $roleId
+        );
 
         if ($targetIds === []) {
             return;
@@ -136,8 +145,21 @@ Quantity: {quantity}';
             $targetIds,
             $title,
             $message,
-            $audienceMode === 'selected_users' ? 'selected_users' : 'all_category'
+            $audienceMode === 'selected_users' ? 'selected_users' : 'all_category',
+            $roleId
         );
+
+        // App users matching role (+ category-linked roles) get FCM only.
+        $appFcmIds = $this->eligibleAppUserIdsForFcm($categoryIds, $roleId);
+        if ($audienceMode === 'selected_users') {
+            $picked = array_values(array_unique(array_filter(array_map('intval', $selectedUserIds ?? []))));
+            $appFcmIds = array_values(array_intersect($appFcmIds, $picked));
+        }
+        // Avoid double FCM for users already covered as web targets.
+        $appFcmIds = array_values(array_diff($appFcmIds, $targetIds));
+        if ($appFcmIds !== []) {
+            $this->queueFirebasePushForUserIds($appFcmIds, $title, $message);
+        }
     }
 
     public function processInterestNotification(
@@ -167,26 +189,79 @@ Quantity: {quantity}';
             return;
         }
 
-        $this->insertAndBroadcastInChunks($webUserIds, $title, $message, 'trade_interest');
+        $this->insertAndBroadcastInChunks($webUserIds, $title, $message, 'trade_interest', null);
     }
 
     /**
+     * Web portal users matching selected categories (and optional role).
+     *
      * @return array<int>
      */
-    public function eligibleWebUserIds(array $categoryIds): array
+    public function eligibleWebUserIds(array $categoryIds, ?int $roleId = null): array
     {
         $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
         if ($categoryIds === []) {
             return [];
         }
 
-        return User::query()
+        $query = User::query()
             ->where('users.userType', 2)
             ->where('users.user_from', 'web')
             ->join('web_business_details as wbd', 'wbd.user_id', '=', 'users.id')
-            ->whereIn('wbd.selected_category', $categoryIds)
+            ->whereIn('wbd.selected_category', $categoryIds);
+
+        if ($roleId !== null && $roleId > 0) {
+            $query->where('users.role', $roleId);
+        }
+
+        return $query
             ->distinct()
             ->pluck('users.id')
+            ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
+    }
+
+    /**
+     * App/mobile users with FCM tokens for roles linked to the trade categories (or explicit role).
+     *
+     * @return array<int>
+     */
+    public function eligibleAppUserIdsForFcm(array $categoryIds, ?int $roleId = null): array
+    {
+        $roleIds = [];
+        if ($roleId !== null && $roleId > 0) {
+            $roleIds[] = $roleId;
+        } else {
+            $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
+            if ($categoryIds === []) {
+                return [];
+            }
+            $roleIds = CategoryRoleMap::query()
+                ->whereIn('category', $categoryIds)
+                ->where('status', 1)
+                ->pluck('role')
+                ->map(fn ($id) => (int) $id)
+                ->filter(fn ($id) => $id > 0)
+                ->unique()
+                ->values()
+                ->all();
+        }
+
+        if ($roleIds === []) {
+            return [];
+        }
+
+        return User::query()
+            ->where(function ($q) {
+                $q->where('user_from', 'app')
+                    ->orWhere('userType', 1);
+            })
+            ->whereIn('role', $roleIds)
+            ->whereNotNull('user_token')
+            ->where('user_token', '!=', '')
+            ->where('id', '!=', 301)
+            ->pluck('id')
             ->map(fn ($id) => (int) $id)
             ->values()
             ->all();
@@ -197,15 +272,20 @@ Quantity: {quantity}';
      * @param array<int>|null $selectedUserIds
      * @return array<int>
      */
-    public function resolveTradeTargetUserIds(array $categoryIds, string $audienceMode, ?array $selectedUserIds = null): array
-    {
-        $eligibleIds = $this->eligibleWebUserIds($categoryIds);
+    public function resolveTradeTargetUserIds(
+        array $categoryIds,
+        string $audienceMode,
+        ?array $selectedUserIds = null,
+        ?int $roleId = null
+    ): array {
+        $eligibleIds = $this->eligibleWebUserIds($categoryIds, $roleId);
         if ($eligibleIds === []) {
             return [];
         }
 
         if ($audienceMode === 'selected_users') {
             $picked = array_values(array_unique(array_filter(array_map('intval', $selectedUserIds ?? []))));
+
             return array_values(array_intersect($picked, $eligibleIds));
         }
 
@@ -216,7 +296,8 @@ Quantity: {quantity}';
         array $targetIds,
         string $title,
         string $message,
-        string $audienceMode
+        string $audienceMode,
+        ?int $roleId = null
     ): void {
         $groupId = (string) Str::uuid();
         $notifyDate = Carbon::now()->format('Y-m-d');
@@ -239,7 +320,9 @@ Quantity: {quantity}';
                     'notify_date' => $notifyDate,
                     'title' => $title,
                     'message' => $message,
-                    'role_id' => isset($rolesByUser[$userId]) ? (int) $rolesByUser[$userId] : null,
+                    'role_id' => $roleId !== null && $roleId > 0
+                        ? $roleId
+                        : (isset($rolesByUser[$userId]) ? (int) $rolesByUser[$userId] : null),
                     'category_id' => isset($categoriesByUser[$userId]) ? (int) $categoriesByUser[$userId] : null,
                     'audience_mode' => $audienceMode,
                     'broadcast_group_id' => $groupId,
@@ -259,6 +342,7 @@ Quantity: {quantity}';
 
             foreach ($created as $notification) {
                 try {
+                    // Web (Pusher / Reverb private channel)
                     broadcast(new WebPortalNotificationEvent($notification));
                 } catch (\Throwable $e) {
                     Log::warning('Trade web notification broadcast failed for user.', [
@@ -269,13 +353,55 @@ Quantity: {quantity}';
                     ]);
                 }
             }
+
+            // Mobile (Firebase) for the same accounts when they have an FCM token
+            $this->queueFirebasePushForUserIds($chunkIds, $title, $message);
+        }
+    }
+
+    /**
+     * @param  array<int>  $userIds
+     */
+    private function queueFirebasePushForUserIds(array $userIds, string $title, string $message): void
+    {
+        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
+        if ($userIds === []) {
+            return;
+        }
+
+        $tokenUsers = User::query()
+            ->whereIn('id', $userIds)
+            ->whereNotNull('user_token')
+            ->where('user_token', '!=', '')
+            ->select('id', 'user_token')
+            ->get()
+            ->map(fn ($u) => ['id' => (int) $u->id, 'user_token' => (string) $u->user_token])
+            ->values()
+            ->all();
+
+        if ($tokenUsers === []) {
+            return;
+        }
+
+        $chunkSize = (int) (config('queue.trade_web_notification_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
+        if ($chunkSize < 1) {
+            $chunkSize = self::DEFAULT_CHUNK_SIZE;
+        }
+
+        foreach (array_chunk($tokenUsers, $chunkSize) as $chunk) {
+            SendPushNotificationJob::dispatch(
+                $title,
+                $message,
+                $chunk,
+                'trade'
+            )->onQueue((string) config('queue.trade_notification_queue', 'default'));
         }
     }
 
     private function resolveTradeNo(TradeQueriesINR $trade): string
     {
         $qid = trim((string) ($trade->queryId ?? ''));
-        if ($qid !== '') {
+        if ($qid !== '' && $qid !== '0') {
             return $qid;
         }
 

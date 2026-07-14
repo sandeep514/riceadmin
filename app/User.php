@@ -31,6 +31,8 @@ class User extends Authenticatable
         'gst_no',
         'city',
         'api_token',
+        'mobile_api_token',
+        'user_token',
         'state',
         'companyname',
         'role',
@@ -61,6 +63,35 @@ class User extends Authenticatable
     }
 
     /**
+     * Find portal user by web api_token or mobile_api_token.
+     * Sets transient attribute auth_platform = web|mobile when matched.
+     */
+    public static function findByPortalApiToken(string $token, ?callable $scope = null): ?self
+    {
+        $query = static::query()->where(function ($q) use ($token) {
+            $q->where('api_token', $token)
+                ->orWhere('mobile_api_token', $token);
+        });
+
+        if ($scope) {
+            $scope($query);
+        }
+
+        $user = $query->first();
+        if (! $user) {
+            return null;
+        }
+
+        if (hash_equals((string) ($user->mobile_api_token ?? ''), $token) && filled($user->mobile_api_token)) {
+            $user->setAttribute('auth_platform', 'mobile');
+        } else {
+            $user->setAttribute('auth_platform', 'web');
+        }
+
+        return $user;
+    }
+
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -68,6 +99,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'api_token',
+        'mobile_api_token',
+        'otp',
     ];
 
     /**

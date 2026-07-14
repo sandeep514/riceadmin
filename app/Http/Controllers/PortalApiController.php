@@ -87,6 +87,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Support\ClientPlatform;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
@@ -95,15 +96,28 @@ class PortalApiController extends Controller
     /** Maximum upload size for portal attachments (GST/PAN/farmer docs, avatar, etc.), in bytes. */
     private const PORTAL_UPLOAD_MAX_BYTES = 15 * 1024 * 1024;
 
-    private function generateAndStoreApiToken(int $userId): string
+    private function generateAndStoreApiToken(int $userId, string $platform = ClientPlatform::WEB): string
     {
-        do {
-            $token = hash('sha256', Str::random(80) . microtime(true) . $userId);
-        } while (User::where('api_token', $token)->exists());
+        $column = ClientPlatform::tokenColumn($platform);
 
-        User::where('id', $userId)->update(['api_token' => $token]);
+        do {
+            $token = hash('sha256', Str::random(80) . microtime(true) . $userId . $platform);
+        } while (
+            User::where('api_token', $token)->exists()
+            || User::where('mobile_api_token', $token)->exists()
+        );
+
+        User::where('id', $userId)->update([$column => $token]);
 
         return $token;
+    }
+
+    /**
+     * @return ClientPlatform::WEB|ClientPlatform::MOBILE
+     */
+    private function resolveLoginPlatform(Request $request): string
+    {
+        return ClientPlatform::fromRequest($request);
     }
 
     /**
@@ -692,7 +706,7 @@ class PortalApiController extends Controller
                 if ($blocked = $this->portalAccessBlockedResponse($user)) {
                     return $blocked;
                 }
-                $token = $this->generateAndStoreApiToken((int) $user->id);
+                $token = $this->generateAndStoreApiToken((int) $user->id, $this->resolveLoginPlatform($request));
                 // ✅ Create Laravel session using 'web' guard (sets httpOnly cookie automatically)
                 auth('web')->login($user);
                 
@@ -731,6 +745,7 @@ class PortalApiController extends Controller
                     'status' => true, 
                     'message' => 'Success', 
                     'token' => $token,
+                    'platform' => $this->resolveLoginPlatform($request),
                     'hasBasicDetails' => $hasBasicDetails,
                     'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasTrialDone' => $hasTrialDone,
@@ -785,7 +800,7 @@ class PortalApiController extends Controller
                     return $blocked;
                 }
                 $user->update(['is_INR_active' => 1]);
-                $token = $this->generateAndStoreApiToken((int) $user->id);
+                $token = $this->generateAndStoreApiToken((int) $user->id, $this->resolveLoginPlatform($request));
                 
                 // ✅ Create session after OTP verification using 'web' guard
                 auth('web')->login($user);
@@ -825,6 +840,7 @@ class PortalApiController extends Controller
                     'status' => true, 
                     'message' => 'OTP verified successfully', 
                     'token' => $token,
+                    'platform' => $this->resolveLoginPlatform($request),
                     'hasBasicDetails' => $hasBasicDetails,
                     'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasActivePlan' => $hasActivePlan,
@@ -1967,15 +1983,15 @@ class PortalApiController extends Controller
         $allowedFrom = config('portal.api_token_user_from', ['web']);
         $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
 
-        $user = User::where('api_token', $token)
-            ->where('userType', 2)
-            ->where(function ($query) use ($allowedFrom, $allowNullFrom) {
-                $query->whereIn('user_from', $allowedFrom);
-                if ($allowNullFrom) {
-                    $query->orWhereNull('user_from')->orWhere('user_from', '');
-                }
-            })
-            ->first();
+        $user = User::findByPortalApiToken($token, function ($query) use ($allowedFrom, $allowNullFrom) {
+            $query->where('userType', 2)
+                ->where(function ($q) use ($allowedFrom, $allowNullFrom) {
+                    $q->whereIn('user_from', $allowedFrom);
+                    if ($allowNullFrom) {
+                        $q->orWhereNull('user_from')->orWhere('user_from', '');
+                    }
+                });
+        });
 
         if (! $user) {
             return response()->json(['status' => false, 'message' => 'Not authenticated'], 401);
@@ -2132,6 +2148,30 @@ class PortalApiController extends Controller
      */
     public function logout(Request $request)
     {
+        $platform = $request->attributes->get('auth_platform')
+            ?: $this->resolveLoginPlatform($request);
+
+        $token = null;
+        $authHeader = $request->header('Authorization');
+        if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
+            $token = trim($matches[1]);
+        }
+        if (! $token) {
+            $token = $request->header('X-API-TOKEN');
+        }
+
+        if ($token) {
+            $user = User::findByPortalApiToken($token);
+            if ($user) {
+                $platform = $user->getAttribute('auth_platform') ?: $platform;
+                $column = ClientPlatform::tokenColumn($platform);
+                User::where('id', $user->id)->update([$column => null]);
+            }
+        } elseif (auth('web')->check()) {
+            // Cookie session logout without Bearer: clear web token only.
+            User::where('id', auth('web')->id())->update(['api_token' => null]);
+        }
+
         auth('web')->logout();
 
         $request->session()->invalidate();
@@ -2140,6 +2180,7 @@ class PortalApiController extends Controller
         $response = response()->json([
             'status' => true,
             'message' => 'Logged out successfully',
+            'platform' => $platform,
         ], 200);
 
         return $this->withExpiredWebAuthCookies($response);

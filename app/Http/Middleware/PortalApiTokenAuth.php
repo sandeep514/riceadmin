@@ -31,14 +31,14 @@ class PortalApiTokenAuth
         $allowedFrom = config('portal.api_token_user_from', ['web']);
         $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
 
-        $user = User::where('api_token', $token)
-            ->where(function ($query) use ($allowedFrom, $allowNullFrom) {
-                $query->whereIn('user_from', $allowedFrom);
+        $user = User::findByPortalApiToken($token, function ($query) use ($allowedFrom, $allowNullFrom) {
+            $query->where(function ($q) use ($allowedFrom, $allowNullFrom) {
+                $q->whereIn('user_from', $allowedFrom);
                 if ($allowNullFrom) {
-                    $query->orWhereNull('user_from')->orWhere('user_from', '');
+                    $q->orWhereNull('user_from')->orWhere('user_from', '');
                 }
-            })
-            ->first();
+            });
+        });
 
         if (!$user) {
             return response()->json([
@@ -71,6 +71,7 @@ class PortalApiTokenAuth
             ], 403);
         }
 
+        $request->attributes->set('auth_platform', $user->getAttribute('auth_platform') ?: 'web');
         $request->setUserResolver(function () use ($user) {
             return $user;
         });

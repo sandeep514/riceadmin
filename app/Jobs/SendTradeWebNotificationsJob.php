@@ -25,7 +25,8 @@ class SendTradeWebNotificationsJob implements ShouldQueue
         public string $audienceMode,
         public ?array $selectedUserIds,
         public string $title,
-        public string $messageTemplate
+        public string $messageTemplate,
+        public ?int $roleId = null
     ) {
     }
 
@@ -47,7 +48,8 @@ class SendTradeWebNotificationsJob implements ShouldQueue
             $this->audienceMode,
             $this->selectedUserIds,
             $this->title,
-            $this->messageTemplate
+            $this->messageTemplate,
+            $this->roleId
         );
     }
 }

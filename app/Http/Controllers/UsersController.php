@@ -459,6 +459,7 @@ class UsersController extends Controller
             'is_deactivated' => 1,
             'is_active_by_admin' => 0,
             'api_token' => null,
+            'mobile_api_token' => null,
             'user_token' => null,
         ]);
         $userDetail = User::where( ['id' => $userId  ])->first();
@@ -524,6 +525,7 @@ class UsersController extends Controller
             $user->update([
                 'is_deactivated' => 1,
                 'api_token' => null,
+                'mobile_api_token' => null,
                 'user_token' => null,
             ]);
         }

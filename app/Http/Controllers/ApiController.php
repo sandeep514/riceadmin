@@ -193,14 +193,21 @@ class ApiController extends Controller
         $oldPassword = $userModel->password;
 
         if (Hash::check($request->password, $oldPassword)) {
-            $random_token = Str::random(60);
+            do {
+                $random_token = hash('sha256', Str::random(80) . microtime(true) . $userModel->id . 'mobile');
+            } while (
+                User::where('api_token', $random_token)->exists()
+                || User::where('mobile_api_token', $random_token)->exists()
+            );
+
+            // Single-device mobile session: rotate mobile token only (web api_token untouched).
+            User::where('id', $userModel->id)->update(['mobile_api_token' => $random_token]);
 
             if ($userModel->is_usd_active == 0) {
                 if ($userModel->is_INR_active == 0) {
 
                     $checkuser = User::where(['email' => $request->email , 'userType' => 1])->first();
                     if ($checkuser == null) {
-                        dd("here");
                         User::where(['mobile' => $request->email , 'userType' => 1])->update(['is_INR_active' => 1]);
                     } else {
                         User::where(['email' => $request->email , 'userType' => 1])->update(['is_INR_active' => 1]);
@@ -213,8 +220,6 @@ class ApiController extends Controller
                 $userModel = User::where(['mobile' => $request->email , 'userType' => 1])->with(['role_rel', 'role_rel_usd'])->first();
             }
             if ($userModel->status == 0) {
-                User::where(['email' => $request->email, 'status' => 1 ,'userType' => 1])->update(['api_token' => $random_token]);
-
                 $Newotp = $userModel->otp;
                 $mobile = $userModel->mobile;
                 file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$Newotp.'.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
@@ -223,9 +228,19 @@ class ApiController extends Controller
                     $response = MailController::generateMailForOTPThanks($userModel->email, 'no@replay.in', 'SNTC GROUP', 'Thank you for registering on SNTC Rice Live Pricing App.', 'Thank you for registering on SNTC Rice Live Pricing App.', $Newotp);
                 }
 
-                return response()->json(['status' => 'success', 'user' => $userModel]);
+                return response()->json([
+                    'status' => 'success',
+                    'user' => $userModel,
+                    'token' => $random_token,
+                    'platform' => 'mobile',
+                ]);
             }
-            return response()->json(['status' => 'success', 'user' => $userModel]);
+            return response()->json([
+                'status' => 'success',
+                'user' => $userModel,
+                'token' => $random_token,
+                'platform' => 'mobile',
+            ]);
         } else {
             return response()->json(['status' => 'error', 'test' => 1, 'message' => 'Wrong user detail']);
         }
@@ -5518,7 +5533,7 @@ dd("kjnik");
 
     public function deleteUser($userId)
     {
-        User::where('id', $userId)->update(['is_deactivated' => 1, 'api_token' => null, 'user_token' => null]);
+        User::where('id', $userId)->update(['is_deactivated' => 1, 'api_token' => null, 'mobile_api_token' => null, 'user_token' => null]);
         return response()->json(['status' => true, 'data' => []], 200);
     }
 

@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 /**
  * For portal routes that should work with either:
  * - web session cookie (after OTP login), or
- * - Bearer / X-API-TOKEN (same rules as PortalApiTokenAuth).
+ * - Bearer / X-API-TOKEN (web api_token or mobile_api_token).
  *
  * Avoids requiring the API token when the SPA already has a valid session.
  */
@@ -25,6 +25,7 @@ class PortalSessionOrApiTokenAuth
             if ((int) ($user->userType ?? 0) !== 2) {
                 return response()->json(['status' => false, 'message' => 'Forbidden.'], 403);
             }
+            $request->attributes->set('auth_platform', 'web');
         }
 
         if (! $user) {
@@ -41,14 +42,21 @@ class PortalSessionOrApiTokenAuth
                 $allowedFrom = config('portal.api_token_user_from', ['web']);
                 $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
 
-                $user = User::where('api_token', $token)
-                    ->where(function ($query) use ($allowedFrom, $allowNullFrom) {
-                        $query->whereIn('user_from', $allowedFrom);
+                $user = User::findByPortalApiToken($token, function ($query) use ($allowedFrom, $allowNullFrom) {
+                    $query->where(function ($q) use ($allowedFrom, $allowNullFrom) {
+                        $q->whereIn('user_from', $allowedFrom);
                         if ($allowNullFrom) {
-                            $query->orWhereNull('user_from')->orWhere('user_from', '');
+                            $q->orWhereNull('user_from')->orWhere('user_from', '');
                         }
-                    })
-                    ->first();
+                    });
+                });
+
+                if ($user) {
+                    $request->attributes->set(
+                        'auth_platform',
+                        $user->getAttribute('auth_platform') ?: 'web'
+                    );
+                }
             }
         }
 

@@ -26,6 +26,7 @@ use App\TradeLike;
 use App\LivePrice;
 use App\Category;
 use App\CategoryRoleMap;
+use App\Role;
 use App\TradeCategoryMap;
 use App\Services\TradeWebNotificationService;
 use App\Services\UserInterestService;
@@ -101,8 +102,9 @@ class TradeController extends Controller
         $selectedTradeCategoryIds = $categoryList->pluck('id')->map(function ($id) {
             return (int) $id;
         })->all();
+        $webNotifyRoles = Role::where('type', 'web')->orderBy('role_name')->get(['id', 'role_name']);
 
-        return View('trade.create' , compact('qualityMaster','packing','livePricesStates','categoryList','selectedTradeCategoryIds'));
+        return View('trade.create' , compact('qualityMaster','packing','livePricesStates','categoryList','selectedTradeCategoryIds','webNotifyRoles'));
     }
 
 
@@ -256,8 +258,9 @@ class TradeController extends Controller
         // $packing = PublicPacking::get();
         $categoryList = Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = TradeCategoryMap::where('trade_id', (int) $id)->where('status', 1)->pluck('category_id')->all();
+        $webNotifyRoles = Role::where('type', 'web')->orderBy('role_name')->get(['id', 'role_name']);
 
-        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates','categoryList','selectedTradeCategoryIds'));
+        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates','categoryList','selectedTradeCategoryIds','webNotifyRoles'));
 
     }
 
@@ -510,6 +513,9 @@ class TradeController extends Controller
             return '(Notification not sent: select at least one web category.)';
         }
 
+        $roleId = (int) $request->input('trade_notify_role_id', 0);
+        $roleId = $roleId > 0 ? $roleId : null;
+
         $audience = (string) $request->input('trade_notify_audience', 'all_category');
         if (! in_array($audience, ['all_category', 'selected_users'], true)) {
             $audience = 'all_category';
@@ -530,10 +536,15 @@ class TradeController extends Controller
 
         /** @var TradeWebNotificationService $svc */
         $svc = app(TradeWebNotificationService::class);
-        $targetIds = $svc->resolveTradeTargetUserIds($categoryIds, $audience, $audience === 'selected_users' ? $selected : null);
+        $targetIds = $svc->resolveTradeTargetUserIds(
+            $categoryIds,
+            $audience,
+            $audience === 'selected_users' ? $selected : null,
+            $roleId
+        );
         $this->lastQueuedTradeNotifyUserIds = $targetIds;
 
-        if ($targetIds === []) {
+        if ($targetIds === [] && $svc->eligibleAppUserIdsForFcm($categoryIds, $roleId) === []) {
             return '(Notification not sent: no eligible users found.)';
         }
 
@@ -544,10 +555,11 @@ class TradeController extends Controller
             $audience,
             $audience === 'selected_users' ? $selected : null,
             $title,
-            $message
+            $message,
+            $roleId
         );
 
-        return '(Notification queued: delivery is running in background.)';
+        return '(Notification queued: web Pusher + mobile Firebase where available.)';
     }
 
     /**
@@ -562,12 +574,15 @@ class TradeController extends Controller
             return response()->json(['status' => true, 'data' => []]);
         }
 
+        $roleId = (int) $request->input('role_id', 0);
+        $roleId = $roleId > 0 ? $roleId : null;
+
         $svc = app(TradeWebNotificationService::class);
-        $ids = $svc->eligibleWebUserIds($categoryIds);
+        $ids = $svc->eligibleWebUserIds($categoryIds, $roleId);
         $users = User::query()
             ->whereIn('id', $ids)
             ->orderBy('id', 'desc')
-            ->get(['id', 'name', 'mobile', 'email']);
+            ->get(['id', 'name', 'mobile', 'email', 'role']);
 
         return response()->json(['status' => true, 'data' => $users]);
     }

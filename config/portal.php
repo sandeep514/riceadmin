@@ -7,8 +7,12 @@ return [
     | Portal / mobile API token — allowed user_from values
     |--------------------------------------------------------------------------
     |
-    | Native apps (Play Store / App Store) often use the same api_token as the
-    | web portal but may leave user_from empty or set it to mobile/app.
+    | Native apps (Play Store / App Store) and the web portal may use the same
+    | user row. Auth uses two columns:
+    | - api_token          → web session (rotated on web login)
+    | - mobile_api_token   → mobile session (rotated on mobile login)
+    | Send platform=mobile (or X-Client-Platform) on OTP verify / login so the
+    | correct column is updated. See docs/DUAL_PLATFORM_LOGIN.md.
     |
     */
     'api_token_user_from' => array_values(array_filter(array_map(
