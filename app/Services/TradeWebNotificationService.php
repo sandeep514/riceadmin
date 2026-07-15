@@ -305,12 +305,11 @@ Quantity: {quantity}';
 
     private function resolveTradeNo(TradeQueriesINR $trade): string
     {
-        $qid = trim((string) ($trade->queryId ?? ''));
-        if ($qid !== '' && $qid !== '0') {
-            return $qid;
-        }
+        // Admin lists trades as Trade_{id}. queryId is only a linked buy/sell query id
+        // (often 0 on fresh creates) — never use it as the public trade number.
+        $id = (int) ($trade->getKey() ?: $trade->id);
 
-        return (string) $trade->id;
+        return $id > 0 ? (string) $id : '';
     }
 
     /**
