@@ -66,16 +66,14 @@ use Pusher\Pusher;
     Route::get('get/images/for/dashboard' , ['as' => 'get.images.for.dashboard' , 'uses' => 'ApiController@getImagesForDashboard']);
 
     Route::post('send/message' ,            ['as' => 'send.message'             , 'uses' => 'ApiController@saveMessage']);
-    Route::post('update/user/token' ,       ['as' => 'update.user.token'        , 'uses' => 'ApiController@updateUserToken', 'middleware' => 'app.api.token']);
+    // FCM device token: shared by legacy app (userType 1) and portal RN app (userType 2).
+    Route::post('update/user/token',        ['as' => 'update.user.token', 'uses' => 'ApiController@updateUserTokenById', 'middleware' => 'app.or.portal.api.token']);
 
     //ChartIntervals
     Route::get('get/chartinterval' ,        ['as' => 'get.chartinterval'        , 'uses' => 'ApiController@getChartinterval']);
 
     //Orders
     Route::get('check/user/plan/{userId}',  ['as'=>'get.order'                  , 'uses' => 'ApiController@isUserOrderExistAndActive', 'middleware' => 'app.api.token']);
-
-    //Users
-    Route::post('update/user/token',        ['as'=>'update.user.tokenn'          , 'uses' => 'ApiController@updateUserTokenById', 'middleware' => 'app.api.token']);
 
     //Message
     Route::get('get/user/messages/count/{userId}' , ['as' => 'get.user.messages.count' , 'uses' => 'ApiController@getUserMessageCount', 'middleware' => 'app.api.token']);

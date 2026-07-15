@@ -3614,8 +3614,8 @@ class ApiController extends Controller
 
     public function updateUserToken(Request $request)
     {
-        User::where(['id' => $request->id,'userType' => 1])->update(['userToken' => $request->userToken]);
-        return response()->json(['error' => null, 'message' => "Token updated successfully..."]);
+        // Legacy alias — same behavior as updateUserTokenById (supports portal + app users).
+        return $this->updateUserTokenById($request);
     }
 
     // Update User Token
@@ -3710,18 +3710,28 @@ class ApiController extends Controller
 
     public function updateUserTokenById(Request $request)
     {
-        if ($request != null) {
-            if ($request->has('id')) {
-                if ($request->id != '' && $request->id != 'undefined') {
-                    $userModel = User::find($request->id);
-                    $userModel->user_token = $request->user_token;
-                    if ($userModel->save()) {
-                        return response()->json(['status' => 'success', 'message' => "Token updated successfully.."], 200);
-                    }
-                    return response()->json(['status' => 'error', 'message' => "Failed"], 403);
-                }
-            }
+        $id = $request->input('id');
+        $fcmToken = $request->input('user_token', $request->input('userToken'));
+
+        if ($id === null || $id === '' || $id === 'undefined') {
+            return response()->json(['status' => false, 'message' => 'User id is required'], 422);
         }
+
+        if ($fcmToken === null || $fcmToken === '') {
+            return response()->json(['status' => false, 'message' => 'FCM token is required'], 422);
+        }
+
+        $userModel = User::find($id);
+        if (! $userModel) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        $userModel->user_token = $fcmToken;
+        if ($userModel->save()) {
+            return response()->json(['status' => true, 'status_text' => 'success', 'message' => 'Token updated successfully..'], 200);
+        }
+
+        return response()->json(['status' => false, 'message' => 'Failed'], 403);
     }
 
     // Send Push Notification

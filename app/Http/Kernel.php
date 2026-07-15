@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'portal.api.token' => \App\Http\Middleware\PortalApiTokenAuth::class,
         'portal.session_or_token' => \App\Http\Middleware\PortalSessionOrApiTokenAuth::class,
         'app.api.token' => \App\Http\Middleware\AppApiTokenAuth::class,
+        'app.or.portal.api.token' => \App\Http\Middleware\AppOrPortalApiTokenAuth::class,
 
     ];
 }
