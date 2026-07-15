@@ -186,7 +186,7 @@ class ApiController extends Controller
         if ($userModel->isAdminDeactivated()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.'
+                'message' => 'Your account has been deactivated. Please contact the administrator enquiry@sntcgroup.com for further assistance or to reactivate your account.'
             ]);
         }
 
@@ -5884,7 +5884,7 @@ dd("kjnik");
 
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
-        $subject = 'Future Buy with SNTC - Web Version';
+        $subject = 'Future Buy with SNTC ';
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
@@ -6125,7 +6125,7 @@ if (!file_exists('uploads')) {
 
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
-        $subject = 'Sell with SNTC - Web version';
+        $subject = 'Sell with SNTC ';
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
@@ -7577,7 +7577,7 @@ if (!file_exists('uploads')) {
         // $mailTo = "sandy.singh51480@gmail.com";
         $mailMessage = '';
         if( $type == 'web' ){
-            $subject = 'Buy with SNTC - Web Version' ;
+            $subject = 'Buy with SNTC ' ;
         }else{
             $subject = 'Buy with SNTC' ;
         }
@@ -7647,7 +7647,7 @@ if (!file_exists('uploads')) {
         // $mailTo = "sandy.singh51480@gmail.com";
         $mailTo = "enquiry@sntcgroup.com";
         $mailMessage = '';
-        $subject = 'Notification of trade interested SNTC -- Web Version';
+        $subject = 'Notification of trade interested SNTC -';
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 

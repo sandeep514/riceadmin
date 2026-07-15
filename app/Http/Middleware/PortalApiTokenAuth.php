@@ -50,7 +50,7 @@ class PortalApiTokenAuth
         if ($user->isAdminDeactivated()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Your account has been deactivated. Please contact the administrator for further assistance or to reactivate your account.',
+                'message' => 'Your account has been deactivated. Please contact the administrator enquiry@sntcgroup.com for further assistance or to reactivate your account.',
             ], 403);
         }
 

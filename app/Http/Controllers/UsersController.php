@@ -528,6 +528,26 @@ class UsersController extends Controller
                 'mobile_api_token' => null,
                 'user_token' => null,
             ]);
+
+            $mailTo = $userDetail->email;
+            if (! empty($mailTo)) {
+                $data = ['user_name' => $userDetail->name];
+                $subject = 'Account Deactivated';
+                $mailFrom = 'info@sntcgroup.com';
+                $mailFromName = 'SNTC Team - India';
+                $mailMessage = '';
+
+                Mail::send('mail.deactivatedUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
+                    $message->to($mailTo, $mailMessage)->subject($subject);
+                    $message->from($mailFrom, $mailFromName);
+                });
+            }
+
+            $this->sendWebUserNotification(
+                (int) $userId,
+                'Account Deactivated',
+                'Your account has been deactivated by admin. Please contact support if you need help.'
+            );
         }
 
         if ($wasPendingActivation || $wasDeactivated) {
