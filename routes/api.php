@@ -13,7 +13,10 @@ use Pusher\Pusher;
 
     Route::post('login',['uses'=>'ApiController@login']);
 
-    Route::group(['middleware'=>'auth:api'], function(){
+    // Native app session check: invalid/old token => 401 session_expired (first phone kicked after second login).
+    Route::get('app/session', ['as' => 'app.session', 'uses' => 'ApiController@checkAppSession'])->middleware('app.api.token');
+
+    Route::group(['middleware'=>'app.api.token'], function(){
         Route::get('pre-load-sample-data',      ['uses'=>'ApiController@preLoadSampleEntryContent']);
         Route::post('sample/save',              ['uses'=>'ApiController@saveSampleEntry']);
         Route::get('pending/courier/samples',   ['uses'=>'ApiController@pendingCourierSamples']);
@@ -63,29 +66,29 @@ use Pusher\Pusher;
     Route::get('get/images/for/dashboard' , ['as' => 'get.images.for.dashboard' , 'uses' => 'ApiController@getImagesForDashboard']);
 
     Route::post('send/message' ,            ['as' => 'send.message'             , 'uses' => 'ApiController@saveMessage']);
-    Route::post('update/user/token' ,       ['as' => 'update.user.token'        , 'uses' => 'ApiController@updateUserToken']);
+    Route::post('update/user/token' ,       ['as' => 'update.user.token'        , 'uses' => 'ApiController@updateUserToken', 'middleware' => 'app.api.token']);
 
     //ChartIntervals
     Route::get('get/chartinterval' ,        ['as' => 'get.chartinterval'        , 'uses' => 'ApiController@getChartinterval']);
 
     //Orders
-    Route::get('check/user/plan/{userId}',  ['as'=>'get.order'                  , 'uses' => 'ApiController@isUserOrderExistAndActive']);
+    Route::get('check/user/plan/{userId}',  ['as'=>'get.order'                  , 'uses' => 'ApiController@isUserOrderExistAndActive', 'middleware' => 'app.api.token']);
 
     //Users
-    Route::post('update/user/token',        ['as'=>'update.user.tokenn'          , 'uses' => 'ApiController@updateUserTokenById']);
+    Route::post('update/user/token',        ['as'=>'update.user.tokenn'          , 'uses' => 'ApiController@updateUserTokenById', 'middleware' => 'app.api.token']);
 
     //Message
-    Route::get('get/user/messages/count/{userId}' , ['as' => 'get.user.messages.count' , 'uses' => 'ApiController@getUserMessageCount']);
-    Route::get('get/message/contacts/list',['as'=>'get.message.contact','uses'=>'ApiController@getMessageContacts']);
-    Route::get('get/message/{from}/{to}',['as'=>'get.message','uses'=>'ApiController@getMessagesByIds']);
-    Route::post('save/message',['as'=>'save.message','uses'=>'ApiController@saveMessage']);
+    Route::get('get/user/messages/count/{userId}' , ['as' => 'get.user.messages.count' , 'uses' => 'ApiController@getUserMessageCount', 'middleware' => 'app.api.token']);
+    Route::get('get/message/contacts/list',['as'=>'get.message.contact','uses'=>'ApiController@getMessageContacts', 'middleware' => 'app.api.token']);
+    Route::get('get/message/{from}/{to}',['as'=>'get.message','uses'=>'ApiController@getMessagesByIds', 'middleware' => 'app.api.token']);
+    Route::post('save/message',['as'=>'save.message','uses'=>'ApiController@saveMessage', 'middleware' => 'app.api.token']);
 
-    Route::get('get/message/contacts/list/RefactorCode',['as'=>'get.message.contact.refactor','uses'=>'ApiController@getMessageContactsRefator']);
-    Route::get('check/user/expired/{id}',['as'=>'check.user.expired','uses'=>'ApiController@checkUserExpired']);
+    Route::get('get/message/contacts/list/RefactorCode',['as'=>'get.message.contact.refactor','uses'=>'ApiController@getMessageContactsRefator', 'middleware' => 'app.api.token']);
+    Route::get('check/user/expired/{id}',['as'=>'check.user.expired','uses'=>'ApiController@checkUserExpired', 'middleware' => 'app.api.token']);
 
     Route::get('get/transport/states' ,     ['as' => 'get.transport.states' , 'uses' => 'ApiController@getTransportStates']);
     Route::get('get/port/details/{state}' , ['as' => 'get.port.details' , 'uses' => 'ApiController@getPortDetails']);
-    Route::get('get/user/plan/{user_id}' ,  ['as' => 'get.user.plan' , 'uses' => 'ApiController@getUserPlan']);
+    Route::get('get/user/plan/{user_id}' ,  ['as' => 'get.user.plan' , 'uses' => 'ApiController@getUserPlan', 'middleware' => 'app.api.token']);
     Route::get('get/chat/status' ,          ['as' => 'get.chat.status' , 'uses' => 'ApiController@getChatStatus']);
 
     //TV app
@@ -94,7 +97,7 @@ use Pusher\Pusher;
     Route::get('get/all/nonbasmati/{state}' , ['as' => 'get.all.nonbasmati' , 'uses' => 'ApiController@getAllNONBasmatiPrice']);
 
     //Notification
-    Route::get('get/user/notification/{user_id?}', ['as' => 'get.user.notification', 'uses' => 'NotificationController@getUserNotifications']);
+    Route::get('get/user/notification/{user_id?}', ['as' => 'get.user.notification', 'uses' => 'NotificationController@getUserNotifications', 'middleware' => 'app.api.token']);
     Route::get('get/ports', ['as' => 'get.user.notificationn', 'uses' => 'ApiController@getPortsInOrder']);
 
     //version
@@ -134,12 +137,12 @@ use Pusher\Pusher;
     Route::POST('accept/hot/deal/notification' , ['as' => 'accept.hot.deal.notification' ,'uses' =>'ApiController@acceptHotDealNotification']);
     Route::POST('payment/success' , ['as' => 'payment.success' ,'uses' =>'ApiController@paymentSuccess']);
 
-    Route::get('start/trial/period/{userId}' , ['as' => 'start.trial.period' , 'uses' => 'ApiController@startTrialPerid']);
+    Route::get('start/trial/period/{userId}' , ['as' => 'start.trial.period' , 'uses' => 'ApiController@startTrialPerid', 'middleware' => 'app.api.token']);
 
-    Route::get('user/notification/{userId}' , ['as' => 'user.notification' , 'uses' => 'ApiController@userNotification']);
-    Route::get('clear/notification/{userId}' , ['as' => 'clear.notification' , 'uses' => 'ApiController@clearNotifications']);
-    Route::get('delete/user/{userId}' , ['as' => 'delete.userr' , 'uses' => 'ApiController@deleteUser']);
-    Route::POST('get/orderid/razorpay' , ['as' => 'get.orderid.razorpay' , 'uses' => 'ApiController@getRazorpayOrderId']);
+    Route::get('user/notification/{userId}' , ['as' => 'user.notification' , 'uses' => 'ApiController@userNotification', 'middleware' => 'app.api.token']);
+    Route::get('clear/notification/{userId}' , ['as' => 'clear.notification' , 'uses' => 'ApiController@clearNotifications', 'middleware' => 'app.api.token']);
+    Route::get('delete/user/{userId}' , ['as' => 'delete.userr' , 'uses' => 'ApiController@deleteUser', 'middleware' => 'app.api.token']);
+    Route::POST('get/orderid/razorpay' , ['as' => 'get.orderid.razorpay' , 'uses' => 'ApiController@getRazorpayOrderId', 'middleware' => 'app.api.token']);
 
     Route::post('/check/customer', ['as' => 'stripe.customer' , 'uses' => 'StripeController@checkIfCustomer']);
     // Route::get('/stripe-payment', ['as' => 'stripe.pay' , 'uses' => 'StripeController@handleGet']);
@@ -162,17 +165,18 @@ use Pusher\Pusher;
 
 
     Route::get('get/seller/inr/packing' , ['as' => 'get.seller.inr.packing' , 'uses' => 'ApiController@getSellerPackingINR']);
-    Route::get('get/trades/{userId}' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade']);
+    Route::get('get/trades/{userId}' , ['as' => 'get.trade' , 'uses' => 'ApiController@getTrade', 'middleware' => 'app.api.token']);
     // Web trades: All tab must NOT send trade_type (or send 0/"all"). Sell trades appear after all buys;
     // use trade_list_meta.sell_starts_at_page when only loading page 1. Manufacturer role does not filter types.
     Route::get('web/get/trades/{userId}' , ['as' => 'web.get.trade' , 'uses' => 'ApiController@getWebTrades', 'middleware' => 'portal.api.token']);
-    Route::get('get/personal/trades/{userId}' , ['as' => 'get.personal.trade' , 'uses' => 'ApiController@getPersonalTrade']);
+    Route::get('get/personal/trades/{userId}' , ['as' => 'get.personal.trade' , 'uses' => 'ApiController@getPersonalTrade', 'middleware' => 'app.api.token']);
     Route::match(['get', 'post'], 'get/all/trades/count', [
         'as' => 'get.personal.trades.count',
-        'uses' => 'ApiController@getTradeCounts'
+        'uses' => 'ApiController@getTradeCounts',
+        'middleware' => 'app.api.token',
     ]);
-    Route::get('get/personal/query/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQuery']);
-    Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade']);
+    Route::get('get/personal/query/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQuery', 'middleware' => 'app.api.token']);
+    Route::post('get/trades/filter/{userId}' , ['as' => 'get.trade.filter' , 'uses' => 'ApiController@filterTrade', 'middleware' => 'app.api.token']);
     // trade_type 1–4 = single type; omit/0/"all" = All (buy → sell → 15 sold). See trade_list_meta in response.
     Route::post('web/get/trades/filter/{userId}' , ['as' => 'web.get.trade.filter' , 'uses' => 'ApiController@webFilterTrade', 'middleware' => 'portal.api.token']);
 
@@ -192,20 +196,20 @@ use Pusher\Pusher;
     ]);
 
 
-    Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount']);
+    Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount', 'middleware' => 'app.api.token']);
 
 
     //get trade details
     Route::get('get/trade/details/{tradeId}' , ['as' => 'get.trade.details' , 'uses' => 'ApiController@getTradeDetail']);
 
 
-    Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery']);
+    Route::PATCH('submit/sell/query' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQuery', 'middleware' => 'app.api.token']);
     Route::post('submit/sell/query/web' , ['as' => 'submit.sell.query' , 'uses' => 'ApiController@SubmitSellQueryWeb', 'middleware' => 'portal.api.token']);
-    Route::PATCH('submit/buy/query' , ['as' => 'submit.buy.query' , 'uses' => 'ApiController@SubmitBuyQuery']);
+    Route::PATCH('submit/buy/query' , ['as' => 'submit.buy.query' , 'uses' => 'ApiController@SubmitBuyQuery', 'middleware' => 'app.api.token']);
     Route::POST('submit/buy/query/web' , ['as' => 'submit.buy.query.web' , 'uses' => 'ApiController@SubmitBuyQuery', 'middleware' => 'portal.api.token']);
 
-    Route::post('future/submit/sell/query' , ['as' => 'future.submit.sell.query' , 'uses' => 'ApiController@FutureSubmitSellQuery']);
-    Route::post('future/submit/buy/query' , ['as' => 'future.submit.buy.query' , 'uses' => 'ApiController@FutureSubmitBuyQuery']);
+    Route::post('future/submit/sell/query' , ['as' => 'future.submit.sell.query' , 'uses' => 'ApiController@FutureSubmitSellQuery', 'middleware' => 'app.api.token']);
+    Route::post('future/submit/buy/query' , ['as' => 'future.submit.buy.query' , 'uses' => 'ApiController@FutureSubmitBuyQuery', 'middleware' => 'app.api.token']);
 
 
 
@@ -213,10 +217,10 @@ use Pusher\Pusher;
 
     // buy query INR
     Route::get('get/buyer/inr/packing' , ['as' => 'get.buyer.inr.packing' , 'uses' => 'ApiController@getBuyerPackingINR']);
-    Route::POST('like/trade' , ['as' => 'post.like.trade' , 'uses' => 'ApiController@likeTrade']);
-    Route::POST('intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@tradeintrested']);
+    Route::POST('like/trade' , ['as' => 'post.like.trade' , 'uses' => 'ApiController@likeTrade', 'middleware' => 'app.api.token']);
+    Route::POST('intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@tradeintrested', 'middleware' => 'app.api.token']);
     Route::POST('web/intrested/trade' , ['as' => 'post.intrested.trade' , 'uses' => 'ApiController@webTradeintrested', 'middleware' => 'portal.api.token']);
-    Route::POST('get/my/trades' , ['as' => 'get.personal.trades' , 'uses' => 'ApiController@getMyTrades']);
+    Route::POST('get/my/trades' , ['as' => 'get.personal.trades' , 'uses' => 'ApiController@getMyTrades', 'middleware' => 'app.api.token']);
 
 
 

@@ -171,6 +171,22 @@ class ApiController extends Controller
         return $result;
     }
 
+    /**
+     * Lightweight session probe for the native app.
+     * Protected by app.api.token — old phones receive 401 after a new login.
+     */
+    public function checkAppSession(Request $request)
+    {
+        $user = $request->user();
+
+        return response()->json([
+            'status' => true,
+            'session_expired' => false,
+            'user_id' => $user ? (int) $user->id : null,
+            'platform' => 'mobile',
+        ]);
+    }
+
     public function login(Request $request)
     {
         $userModel = User::where(['email' => $request->email , 'userType' => 1])->with(['role_rel', 'role_rel_usd'])->first();
@@ -200,8 +216,12 @@ class ApiController extends Controller
                 || User::where('mobile_api_token', $random_token)->exists()
             );
 
-            // Single-device mobile session: rotate mobile token only (web api_token untouched).
-            User::where('id', $userModel->id)->update(['mobile_api_token' => $random_token]);
+            // Single-device app session: rotate mobile token. Also write api_token so
+            // legacy auth:api / clients sharing that column are kicked on re-login.
+            User::where('id', $userModel->id)->update([
+                'mobile_api_token' => $random_token,
+                'api_token' => $random_token,
+            ]);
 
             if ($userModel->is_usd_active == 0) {
                 if ($userModel->is_INR_active == 0) {
