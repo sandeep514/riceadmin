@@ -32,12 +32,14 @@ class SendPushNotificationJob implements ShouldQueue
      * @param string $body
      * @param array  $users  Array of ['id'=>..., 'user_token'=>...]
      * @param string $userAppType
+     * @param bool   $persistToNotificationTable  Set false when caller already wrote `notification` rows.
      */
     public function __construct(
         public string $title,
         public string $body,
         public array  $users,
-        public string $userAppType
+        public string $userAppType,
+        public bool $persistToNotificationTable = true
     ) {}
 
     /**
@@ -45,25 +47,26 @@ class SendPushNotificationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // 1. Save notification records for this chunk
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-        $postedData = [];
-        foreach ($this->users as $user) {
-            $postedData[] = [
-                'user_id'     => $user['id'],
-                'title'       => $this->title,
-                'message'     => $this->body,
-                'userAppType' => $this->userAppType,
-                'status'      => 1,
-                'created_at'  => $now,
-                'updated_at'  => $now,
-            ];
-        }
-        if (!empty($postedData)) {
-            Notification::insert($postedData);
+        if ($this->persistToNotificationTable) {
+            $now = Carbon::now()->format('Y-m-d H:i:s');
+            $postedData = [];
+            foreach ($this->users as $user) {
+                $postedData[] = [
+                    'user_id'     => $user['id'],
+                    'title'       => $this->title,
+                    'message'     => $this->body,
+                    'userAppType' => $this->userAppType,
+                    'status'      => 1,
+                    'created_at'  => $now,
+                    'updated_at'  => $now,
+                ];
+            }
+            if (! empty($postedData)) {
+                Notification::insert($postedData);
+            }
         }
 
-        // 2. Send FCM multicast for this chunk
+        // Send FCM multicast for this chunk
         $tokens = array_filter(
             array_column($this->users, 'user_token')
         );

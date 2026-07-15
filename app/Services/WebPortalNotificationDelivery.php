@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Events\WebPortalNotificationEvent;
 use App\Jobs\SendPushNotificationJob;
+use App\Notification;
 use App\User;
 use App\WebUserNotification;
 use Carbon\Carbon;
@@ -120,7 +121,18 @@ class WebPortalNotificationDelivery
                 }
             }
 
-            $this->queueFirebasePushForUserIds($chunkIds, $title, $message, $pushType, $chunkSize);
+            // History for portal/Pusher recipients (including users without an FCM token).
+            $this->persistNotificationRows($chunkIds, $title, $message, $pushType, $now);
+
+            // FCM job must not insert again — rows already written above.
+            $this->queueFirebasePushForUserIds(
+                $chunkIds,
+                $title,
+                $message,
+                $pushType,
+                $chunkSize,
+                false
+            );
         }
     }
 
@@ -132,7 +144,8 @@ class WebPortalNotificationDelivery
         string $title,
         string $message,
         string $pushType = 'portal',
-        ?int $chunkSize = null
+        ?int $chunkSize = null,
+        bool $persistToNotificationTable = true
     ): void {
         $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
         if ($userIds === []) {
@@ -163,8 +176,37 @@ class WebPortalNotificationDelivery
                 $title,
                 $message,
                 $chunk,
-                $pushType
+                $pushType,
+                $persistToNotificationTable
             )->onQueue((string) config('queue.trade_notification_queue', 'default'));
+        }
+    }
+
+    /**
+     * @param  array<int>  $userIds
+     */
+    private function persistNotificationRows(
+        array $userIds,
+        string $title,
+        string $message,
+        string $pushType,
+        string $now
+    ): void {
+        $rows = [];
+        foreach ($userIds as $userId) {
+            $rows[] = [
+                'user_id' => $userId,
+                'title' => $title,
+                'message' => $message,
+                'userAppType' => $pushType,
+                'status' => 1,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        if ($rows !== []) {
+            Notification::insert($rows);
         }
     }
 }
