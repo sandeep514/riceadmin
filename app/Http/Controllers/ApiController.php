@@ -219,25 +219,7 @@ class ApiController extends Controller
         $oldPassword = $userModel->password;
 
         if (Hash::check($request->password, $oldPassword)) {
-            do {
-                $random_token = hash('sha256', Str::random(80) . microtime(true) . $userModel->id . 'mobile');
-            } while (
-                User::where('api_token', $random_token)->exists()
-                || User::where('mobile_api_token', $random_token)->exists()
-            );
-
-            $previousFcm = trim((string) ($userModel->user_token ?? ''));
-            $newSessionVersion = (int) ($userModel->session_version ?? 0) + 1;
-
-            // Single-device app session: rotate tokens + bump session_version.
-            User::where('id', $userModel->id)->update([
-                'mobile_api_token' => $random_token,
-                'api_token' => $random_token,
-                'session_version' => $newSessionVersion,
-            ]);
-
-            // Kick previous device still holding an FCM registration for this account.
-            $this->sendAppForceLogoutPush($previousFcm);
+            $random_token = $this->rotateAppSessionForUser($userModel);
 
             if ($userModel->is_usd_active == 0) {
                 if ($userModel->is_INR_active == 0) {
@@ -270,6 +252,37 @@ class ApiController extends Controller
         } else {
             return response()->json(['status' => 'error', 'test' => 1, 'message' => 'Wrong user detail']);
         }
+    }
+
+    /**
+     * Invalidate previous app device session and issue a new API token.
+     * Used by password login and OTP send/verify.
+     */
+    private function rotateAppSessionForUser(User $user): string
+    {
+        do {
+            $random_token = hash('sha256', Str::random(80) . microtime(true) . $user->id . 'mobile');
+        } while (
+            User::where('api_token', $random_token)->exists()
+            || User::where('mobile_api_token', $random_token)->exists()
+        );
+
+        $previousFcm = trim((string) ($user->user_token ?? ''));
+        $newSessionVersion = (int) ($user->session_version ?? 0) + 1;
+
+        User::where('id', $user->id)->update([
+            'mobile_api_token' => $random_token,
+            'api_token' => $random_token,
+            'session_version' => $newSessionVersion,
+        ]);
+
+        $user->mobile_api_token = $random_token;
+        $user->api_token = $random_token;
+        $user->session_version = $newSessionVersion;
+
+        $this->sendAppForceLogoutPush($previousFcm);
+
+        return $random_token;
     }
 
     /**
@@ -360,12 +373,18 @@ class ApiController extends Controller
 
     public function sendOTP($number, $isOTP = false)
     {
-
-
         $otp = rand(1111, 9999);
-        $user = User::where('mobile', $number)->where('status', 1)->first();
+        $user = User::where('mobile', $number)->where('userType', 1)->where('status', 1)->first();
+        if ($user == null) {
+            $user = User::where('mobile', $number)->where('status', 1)->first();
+        }
         if ($user != null) {
-            User::where('mobile', $number)->update(['otp' => $otp]);
+            // Expire any previous app session immediately when OTP is requested.
+            $sessionToken = ((int) ($user->userType ?? 0) === 1)
+                ? $this->rotateAppSessionForUser($user)
+                : null;
+
+            User::where('id', $user->id)->update(['otp' => $otp]);
 
             $message = "Dear Customer, Your SNTC live pricing premium membership is now active, we are so excited to unlock PREMIUM benefits for you , Enjoy free live prices for the all the rice products. TCA.";
             $response = null;
@@ -378,13 +397,29 @@ class ApiController extends Controller
 
             if ($isOTP == false) {
                 file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $number . '&message=Your%20forgot%20password%20OTP%20for%20SNTC%20Rice%20Live%20Pricing%20App%20is+' . $otp . '.SNTCAL&PEID=1701172916686910712&templateid=1707172924586815812');
-                User::where('mobile', $number)->update(['otp' => $otp]);
                 if ($user->email != null) {
                     $response = MailController::generateMailForOTP($user->email, 'no@replay.in', 'SNTC GROUP', null, 'SNTC OTP Verification ', $otp);
                 }
             }
 
-            return response()->json(['error' => null, 'data' => $otp, 'mailResponse' => $response, 'user' => $user], 200);
+            $user = User::where('id', $user->id)->first();
+            $userArr = $user ? $user->toArray() : [];
+            if ($sessionToken !== null) {
+                $userArr['api_token'] = $sessionToken;
+                $userArr['token'] = $sessionToken;
+                $userArr['session_version'] = (int) ($user->session_version ?? 0);
+            }
+
+            return response()->json([
+                'error' => null,
+                'data' => $otp,
+                'mailResponse' => $response,
+                'user' => $userArr,
+                'token' => $sessionToken,
+                'api_token' => $sessionToken,
+                'session_version' => $sessionToken !== null ? (int) ($user->session_version ?? 0) : null,
+                'platform' => 'mobile',
+            ], 200);
         } else {
             return response()->json(['error' => 'No record available for ' . $number, 'user' => $user], 500);
         }
@@ -394,16 +429,45 @@ class ApiController extends Controller
     public function resendOTP($number)
     {
         $otp = rand(1111, 9999);
-        $user = User::where('mobile', $number)->first();
-        User::where('mobile', $number)->update(['otp' => $otp]);
+        $user = User::where('mobile', $number)->where('userType', 1)->first();
+        if ($user == null) {
+            $user = User::where('mobile', $number)->first();
+        }
+        if ($user == null) {
+            return response()->json(['error' => 'No record available for ' . $number, 'data' => null], 500);
+        }
 
+        $sessionToken = ((int) ($user->userType ?? 0) === 1)
+            ? $this->rotateAppSessionForUser($user)
+            : null;
 
-        file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$Newotp.'.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
+        User::where('id', $user->id)->update(['otp' => $otp]);
+
+        $mobile = $user->mobile;
+        file_get_contents('http://www.truebulksms.biz/api.php?username=rijulbajaj&password=158190&sender=SNTCAL&sendto=' . $mobile . '&message=Thank+you+for+registering+on+SNTC+Rice+Live+Pricing+App.+Your+OTP+Code+is+'.$otp.'.+SNTCAL&PEID=1701172916686910712&templateid=1707172924575773908');
+        $response = null;
         if ($user->email != null) {
             $response = MailController::generateMailForOTPThanks($user->email, 'no@replay.in', 'SNTC GROUP', 'Thank you for registering on SNTC Rice Live Pricing App.', 'Thank you for registering on SNTC Rice Live Pricing App.', $otp);
         }
 
-        return response()->json(['error' => null, 'data' => $otp, 'mailResponse' => $response], 200);
+        $user = User::where('id', $user->id)->first();
+        $userArr = $user ? $user->toArray() : [];
+        if ($sessionToken !== null) {
+            $userArr['api_token'] = $sessionToken;
+            $userArr['token'] = $sessionToken;
+            $userArr['session_version'] = (int) ($user->session_version ?? 0);
+        }
+
+        return response()->json([
+            'error' => null,
+            'data' => $otp,
+            'mailResponse' => $response,
+            'user' => $userArr,
+            'token' => $sessionToken,
+            'api_token' => $sessionToken,
+            'session_version' => $sessionToken !== null ? (int) ($user->session_version ?? 0) : null,
+            'platform' => 'mobile',
+        ], 200);
     }
 
 
@@ -3054,8 +3118,14 @@ class ApiController extends Controller
 
         if ($userDetails != null) {
             User::where(['mobile' => $request->mobile, 'otp' => $request->otp,'userType' => 1])->update(['status' => 1]);
-            // $this->sendOTP($request->mobile,false);
-            return response()->json(['error' => "success", 'data' => []], 200);
+            $userDetails = User::where('id', $userDetails->id)->with(['role_rel', 'role_rel_usd'])->first();
+            $token = trim((string) ($userDetails->mobile_api_token ?? $userDetails->api_token ?? ''));
+            if ($token === '') {
+                $token = $this->rotateAppSessionForUser($userDetails);
+                $userDetails = User::where('id', $userDetails->id)->with(['role_rel', 'role_rel_usd'])->first();
+            }
+
+            return $this->appLoginSuccessResponse($userDetails, $token);
         } else {
             return response()->json(['error' => "Wrong OTP.", 'data' => []], 500);
         }
@@ -3063,14 +3133,24 @@ class ApiController extends Controller
 
     public function verifyOTP($number, $otp)
     {
-        $user = User::where(['mobile' => $number, 'otp' => $otp,'userType' => 1])->get();
-        if ($user->count() > 0) {
-            // $this->sendOTP($user[0]->mobile , true);
+        $user = User::where(['mobile' => $number, 'otp' => $otp, 'userType' => 1])->first();
+        if ($user) {
+            $user = User::where('id', $user->id)->with(['role_rel', 'role_rel_usd'])->first();
+            $token = trim((string) ($user->mobile_api_token ?? $user->api_token ?? ''));
+            if ($token === '') {
+                $token = $this->rotateAppSessionForUser($user);
+                $user = User::where('id', $user->id)->with(['role_rel', 'role_rel_usd'])->first();
+            }
 
-            return response()->json(['error' => null, 'data' => $otp], 200);
-        } else {
-            return response()->json(['error' => null, 'data' => null], 500);
+            // Keep legacy `data` (OTP) and add full login session fields for the verifying device.
+            $payload = $this->appLoginSuccessResponse($user, $token)->getData(true);
+            $payload['data'] = $otp;
+            $payload['error'] = null;
+
+            return response()->json($payload, 200);
         }
+
+        return response()->json(['error' => null, 'data' => null], 500);
     }
 
     public function changePassword(Request $request)

@@ -8,7 +8,7 @@ Same user can stay logged in on **one web** and **one mobile** device at the sam
 |--------|----------|
 | `api_token` | Web (portal) / mirrored on native app login |
 | `mobile_api_token` | Mobile / native app |
-| `session_version` | Native app login counter (bumped each `POST /api/login`) |
+| `session_version` | Native app session counter (bumped on password login and OTP send) |
 | `user_token` | FCM only (not login) |
 
 ## Login / OTP verify
@@ -32,13 +32,15 @@ Clients should still send `platform=mobile` explicitly when possible.
 - Web login rotates `api_token` only
 - Mobile login (`platform=mobile` or mobile UA) rotates `mobile_api_token` only
 
-### App password login (`POST /api/login`)
+### App password login / OTP (`POST /api/login`, sendOTP, resendOTP)
 
-On success the server:
+On app password login **or** when OTP is sent/resent for an app user (`userType=1`), the server:
 
-1. Rotates **`mobile_api_token` and `api_token`** to the same new value
+1. Rotates **`mobile_api_token` and `api_token`** to the same new value (old session expires immediately)
 2. Increments **`session_version`**
 3. Sends FCM data push `type=force_logout` to the previous `user_token` (if any)
+
+`verifyOTP` / `verifyUser` return the current session token (issued at OTP send) so the verifying device can complete login.
 
 Response fields (legacy-friendly):
 
@@ -109,5 +111,5 @@ Clears only the token for the request platform (or web `api_token` on cookie-ses
 ## Same-platform kick
 
 - Second web login → previous web token invalid; mobile unchanged
-- Second app login → previous app token + session_version invalid; FCM `force_logout` to old device; web portal unchanged
-- Two phones on the same app account → only the latest login stays
+- Second app login **or OTP send** → previous app token + session_version invalid; FCM `force_logout` to old device; web portal unchanged
+- Two phones on the same app account → only the latest login / OTP session stays
