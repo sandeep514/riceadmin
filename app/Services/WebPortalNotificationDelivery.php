@@ -102,17 +102,25 @@ class WebPortalNotificationDelivery
 
             WebUserNotification::insert($rows);
 
+            // Do not filter by created_at: TIMESTAMP columns / TZ can make exact
+            // equality miss rows and skip every Pusher publish.
             $created = WebUserNotification::query()
                 ->where('broadcast_group_id', $groupId)
                 ->whereIn('user_id', $chunkIds)
-                ->where('created_at', $now)
                 ->get();
+
+            if ($created->isEmpty()) {
+                Log::error('Portal notifications inserted but none loaded for broadcast.', [
+                    'group_id' => $groupId,
+                    'user_ids' => $chunkIds,
+                ]);
+            }
 
             foreach ($created as $notification) {
                 try {
                     broadcast(new WebPortalNotificationEvent($notification));
                 } catch (\Throwable $e) {
-                    Log::warning('Portal notification broadcast failed for user.', [
+                    Log::error('Portal notification broadcast failed for user.', [
                         'group_id' => $groupId,
                         'user_id' => $notification->user_id,
                         'notification_id' => $notification->id,

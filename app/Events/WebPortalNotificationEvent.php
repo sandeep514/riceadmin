@@ -29,11 +29,18 @@ class WebPortalNotificationEvent implements ShouldBroadcastNow
 
     public function broadcastWith(): array
     {
+        $notifyDate = $this->notification->notify_date;
+        if ($notifyDate instanceof \DateTimeInterface) {
+            $notifyDate = $notifyDate->format('Y-m-d');
+        } elseif ($notifyDate !== null) {
+            $notifyDate = (string) $notifyDate;
+        }
+
         return [
             'id' => $this->notification->id,
             'title' => $this->notification->title,
             'message' => $this->notification->message,
-            'notify_date' => $this->notification->notify_date?->format('Y-m-d'),
+            'notify_date' => $notifyDate,
             'role_id' => $this->notification->role_id,
             'category_id' => $this->notification->category_id,
             'broadcast_group_id' => $this->notification->broadcast_group_id,
