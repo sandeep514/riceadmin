@@ -32,7 +32,7 @@
                             @include('trade._form')
                             @if(!request()->has('date'))
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary">Save Trade</button>
+                                    <button type="submit" class="btn btn-primary js-trade-submit">Save Trade</button>
                                 </div>
                             @endif
                         {!! Form::close() !!}

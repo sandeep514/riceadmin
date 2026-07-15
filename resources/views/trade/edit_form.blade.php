@@ -264,6 +264,7 @@
     $(document).ready(function() {
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
+        @include('trade._prevent_double_submit_js')
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
             $.ajax({

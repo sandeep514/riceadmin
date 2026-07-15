@@ -28,7 +28,7 @@
                             @include('trade.edit_form')
                             @if(!request()->has('date'))
                                 <div class="box-footer">
-                                    <button type="submit" class="btn btn-primary">Update Trade</button>
+                                    <button type="submit" class="btn btn-primary js-trade-submit">Update Trade</button>
                                 </div>
                             @endif
                         {!! Form::close() !!}

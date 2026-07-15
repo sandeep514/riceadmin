@@ -8,6 +8,7 @@
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
         @include('trade._trade_interest_users_js')
+        @include('trade._prevent_double_submit_js')
 
         @if(!empty($convertPrefill ?? null))
         (function () {
