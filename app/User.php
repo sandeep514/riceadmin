@@ -33,6 +33,7 @@ class User extends Authenticatable
         'city',
         'api_token',
         'mobile_api_token',
+        'session_version',
         'user_token',
         'state',
         'companyname',
@@ -127,6 +128,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'can_edit_by_admin' => 'integer',
         'is_deactivated' => 'integer',
+        'session_version' => 'integer',
     ];
 
     public function isDeactivated(): bool

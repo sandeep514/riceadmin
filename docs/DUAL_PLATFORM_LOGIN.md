@@ -6,8 +6,9 @@ Same user can stay logged in on **one web** and **one mobile** device at the sam
 
 | Column | Platform |
 |--------|----------|
-| `api_token` | Web (portal) / also mirrored on native app login for kick |
+| `api_token` | Web (portal) / mirrored on native app login |
 | `mobile_api_token` | Mobile / native app |
+| `session_version` | Native app login counter (bumped each `POST /api/login`) |
 | `user_token` | FCM only (not login) |
 
 ## Login / OTP verify
@@ -26,29 +27,71 @@ If omitted:
 
 Clients should still send `platform=mobile` explicitly when possible.
 
-Response still includes `"token": "..."` plus `"platform": "web"|"mobile"`.
-
 ### Portal OTP
 
-- `POST` verify OTP / verify OTP login
 - Web login rotates `api_token` only
 - Mobile login (`platform=mobile` or mobile UA) rotates `mobile_api_token` only
 
 ### App password login (`POST /api/login`)
 
-- Always stores a new token on **`mobile_api_token` and `api_token`** (same value)
-- Previous phone’s token no longer matches → next protected call returns **401** with `session_expired: true`
-- Response: `token` + `platform: mobile`
+On success the server:
 
-## Native app: send the token
+1. Rotates **`mobile_api_token` and `api_token`** to the same new value
+2. Increments **`session_version`**
+3. Sends FCM data push `type=force_logout` to the previous `user_token` (if any)
 
-Protected app routes use middleware `app.api.token`. Send the login token on each call:
+Response fields (legacy-friendly):
+
+```json
+{
+  "status": "success",
+  "token": "<token>",
+  "api_token": "<token>",
+  "session_version": 3,
+  "platform": "mobile",
+  "user": {
+    "id": 123,
+    "api_token": "<token>",
+    "token": "<token>",
+    "session_version": 3
+  }
+}
+```
+
+Persist `token` / `api_token` and `session_version` on the device.
+
+## Native app soft auth (`app.api.token`)
+
+- **No token** → request allowed (legacy apps that only send `userId`)
+- **Stale / wrong token** → `401` with `session_expired: true` (previous phone is kicked)
+- Valid token → request allowed; ownership checks apply when user ids are present
+
+Send token when available:
 
 - `Authorization: Bearer <token>`, or
 - Header `X-API-TOKEN: <token>`, or
 - Query/body `api_token` / `token`
 
-Session probe: `GET /api/app/session` (same auth). Use this on app resume; if `session_expired`, force logout UI.
+### Session probes
+
+- `GET /api/app/session`
+- `GET /api/check/user/expired/{id}` (optional `api_token` / `session_version`)
+
+Both return JSON (HTTP 200 when allowed) including:
+
+- `session_expired` (bool)
+- `session_version` (int)
+
+If `session_expired` is true → clear local session and show login.
+
+### FCM force logout
+
+Data payload (no notification body required):
+
+- `type`: `force_logout`
+- `session_expired`: `true`
+
+App should clear local auth when this arrives.
 
 ## Protected portal APIs
 
@@ -59,8 +102,6 @@ Auth is **platform-scoped**:
 - Mobile request → only `mobile_api_token` is accepted
 - Web request → only `api_token` is accepted
 
-Platform comes from body/header, or from User-Agent when omitted. A leftover web token will not authenticate a mobile client (and vice versa).
-
 ## Logout
 
 Clears only the token for the request platform (or web `api_token` on cookie-session logout). The other platform stays logged in.
@@ -68,5 +109,5 @@ Clears only the token for the request platform (or web `api_token` on cookie-ses
 ## Same-platform kick
 
 - Second web login → previous web token invalid; mobile unchanged
-- Second mobile / app login → previous mobile token invalid; web portal unchanged
-- Two phones on the same app account → only the latest login works (first gets 401)
+- Second app login → previous app token + session_version invalid; FCM `force_logout` to old device; web portal unchanged
+- Two phones on the same app account → only the latest login stays

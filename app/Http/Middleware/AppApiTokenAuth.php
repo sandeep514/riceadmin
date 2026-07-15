@@ -7,55 +7,29 @@ use Closure;
 use Illuminate\Http\Request;
 
 /**
- * Single-device native app session: Bearer / api_token must match users.mobile_api_token.
- * A second login rotates that column, so the first phone gets 401 here.
+ * Soft single-device native app session middleware.
+ *
+ * - No token → allow (legacy app that never sent tokens).
+ * - Stale/wrong token → 401 session_expired (kicks the previous phone).
+ * - Valid token → attach user and enforce ownership when user ids are present.
  */
 class AppApiTokenAuth
 {
     public function handle(Request $request, Closure $next)
     {
-        $token = null;
+        $token = $this->extractToken($request);
 
-        $authHeader = $request->header('Authorization');
-        if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
-            $token = trim($matches[1]);
-        }
-
-        if (! $token) {
-            $token = $request->header('X-API-TOKEN');
-        }
-
-        if (! $token) {
-            $token = $request->input('api_token')
-                ?? $request->input('token')
-                ?? $request->query('api_token')
-                ?? $request->query('token');
-            $token = $token !== null ? trim((string) $token) : null;
-        }
-
-        if (! $token) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Unauthorized: session expired. Please login again.',
-                'session_expired' => true,
-            ], 401);
+        if ($token === null || $token === '') {
+            return $next($request);
         }
 
         $user = User::query()
             ->where('userType', 1)
-            ->where('mobile_api_token', $token)
+            ->where(function ($q) use ($token) {
+                $q->where('mobile_api_token', $token)
+                    ->orWhere('api_token', $token);
+            })
             ->first();
-
-        // Legacy: some older builds may still send a token that only lives on api_token.
-        if (! $user) {
-            $user = User::query()
-                ->where('userType', 1)
-                ->where('api_token', $token)
-                ->where(function ($q) {
-                    $q->whereNull('mobile_api_token')->orWhere('mobile_api_token', '');
-                })
-                ->first();
-        }
 
         if (! $user) {
             return response()->json([
@@ -76,6 +50,11 @@ class AppApiTokenAuth
         foreach (['userId', 'user_id', 'id'] as $param) {
             $routeValue = $request->route($param);
             if ($routeValue !== null && (int) $routeValue !== (int) $user->id) {
+                // Only treat {id} as user id on known user-scoped routes.
+                if ($param === 'id' && ! $this->routeIdIsUserId($request)) {
+                    continue;
+                }
+
                 return response()->json([
                     'status' => false,
                     'message' => 'Forbidden: You are not allowed to access this user data.',
@@ -93,7 +72,6 @@ class AppApiTokenAuth
             }
         }
 
-        // updateUserToken* payloads use body "id" as the app user id.
         if ($request->is('*/update/user/token') || $request->is('api/update/user/token')) {
             if ($request->has('id') && (int) $request->input('id') !== (int) $user->id) {
                 return response()->json([
@@ -107,5 +85,35 @@ class AppApiTokenAuth
         $request->setUserResolver(static fn () => $user);
 
         return $next($request);
+    }
+
+    private function extractToken(Request $request): ?string
+    {
+        $authHeader = $request->header('Authorization');
+        if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
+            return trim($matches[1]);
+        }
+
+        $headerToken = $request->header('X-API-TOKEN');
+        if ($headerToken) {
+            return trim((string) $headerToken);
+        }
+
+        $token = $request->input('api_token')
+            ?? $request->input('token')
+            ?? $request->query('api_token')
+            ?? $request->query('token');
+
+        return $token !== null ? trim((string) $token) : null;
+    }
+
+    private function routeIdIsUserId(Request $request): bool
+    {
+        $path = $request->path();
+
+        return str_contains($path, 'check/user/expired')
+            || str_contains($path, 'get/my/bids')
+            || str_contains($path, 'get/hot/deals')
+            || str_contains($path, 'get/buyer/details');
     }
 }

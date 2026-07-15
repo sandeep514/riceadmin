@@ -48,9 +48,12 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Kreait\Laravel\Firebase\Facades\Firebase;
+use Kreait\Firebase\Messaging\CloudMessage;
 use App\FreeTrialMonths;
 use App\QualityMaster;
 use App\USD_defaultmaster;
@@ -173,15 +176,22 @@ class ApiController extends Controller
 
     /**
      * Lightweight session probe for the native app.
-     * Protected by app.api.token — old phones receive 401 after a new login.
      */
     public function checkAppSession(Request $request)
     {
         $user = $request->user();
+        $sessionExpired = false;
+        $sessionVersion = null;
+
+        if ($user) {
+            $sessionVersion = (int) ($user->session_version ?? 0);
+            $sessionExpired = $this->isAppSessionExpired($request, $user);
+        }
 
         return response()->json([
             'status' => true,
-            'session_expired' => false,
+            'session_expired' => $sessionExpired,
+            'session_version' => $sessionVersion,
             'user_id' => $user ? (int) $user->id : null,
             'platform' => 'mobile',
         ]);
@@ -216,12 +226,18 @@ class ApiController extends Controller
                 || User::where('mobile_api_token', $random_token)->exists()
             );
 
-            // Single-device app session: rotate mobile token. Also write api_token so
-            // legacy auth:api / clients sharing that column are kicked on re-login.
+            $previousFcm = trim((string) ($userModel->user_token ?? ''));
+            $newSessionVersion = (int) ($userModel->session_version ?? 0) + 1;
+
+            // Single-device app session: rotate tokens + bump session_version.
             User::where('id', $userModel->id)->update([
                 'mobile_api_token' => $random_token,
                 'api_token' => $random_token,
+                'session_version' => $newSessionVersion,
             ]);
+
+            // Kick previous device still holding an FCM registration for this account.
+            $this->sendAppForceLogoutPush($previousFcm);
 
             if ($userModel->is_usd_active == 0) {
                 if ($userModel->is_INR_active == 0) {
@@ -248,22 +264,96 @@ class ApiController extends Controller
                     $response = MailController::generateMailForOTPThanks($userModel->email, 'no@replay.in', 'SNTC GROUP', 'Thank you for registering on SNTC Rice Live Pricing App.', 'Thank you for registering on SNTC Rice Live Pricing App.', $Newotp);
                 }
 
-                return response()->json([
-                    'status' => 'success',
-                    'user' => $userModel,
-                    'token' => $random_token,
-                    'platform' => 'mobile',
-                ]);
+                return $this->appLoginSuccessResponse($userModel, $random_token);
             }
-            return response()->json([
-                'status' => 'success',
-                'user' => $userModel,
-                'token' => $random_token,
-                'platform' => 'mobile',
-            ]);
+            return $this->appLoginSuccessResponse($userModel, $random_token);
         } else {
             return response()->json(['status' => 'error', 'test' => 1, 'message' => 'Wrong user detail']);
         }
+    }
+
+    /**
+     * Login payload with token fields legacy apps can persist (bypasses User::$hidden).
+     */
+    private function appLoginSuccessResponse(User $user, string $token)
+    {
+        $userArr = $user->toArray();
+        $sessionVersion = (int) ($user->session_version ?? 0);
+        $userArr['api_token'] = $token;
+        $userArr['token'] = $token;
+        $userArr['session_version'] = $sessionVersion;
+
+        return response()->json([
+            'status' => 'success',
+            'user' => $userArr,
+            'token' => $token,
+            'api_token' => $token,
+            'session_version' => $sessionVersion,
+            'platform' => 'mobile',
+        ]);
+    }
+
+    /**
+     * Data-only FCM so the previous phone can clear local session.
+     */
+    private function sendAppForceLogoutPush(string $fcmToken): void
+    {
+        if ($fcmToken === '') {
+            return;
+        }
+
+        try {
+            $messaging = Firebase::messaging();
+            $message = CloudMessage::withTarget('token', $fcmToken)
+                ->withData([
+                    'type' => 'force_logout',
+                    'session_expired' => 'true',
+                ]);
+            $messaging->send($message);
+        } catch (\Throwable $e) {
+            Log::warning('App force_logout FCM failed: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * True when the client token / session_version does not match the current server session.
+     */
+    private function isAppSessionExpired(Request $request, User $user): bool
+    {
+        $token = null;
+        $authHeader = $request->header('Authorization');
+        if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
+            $token = trim($matches[1]);
+        }
+        if (! $token) {
+            $token = $request->header('X-API-TOKEN');
+        }
+        if (! $token) {
+            $token = $request->input('api_token')
+                ?? $request->input('token')
+                ?? $request->query('api_token')
+                ?? $request->query('token');
+            $token = $token !== null ? trim((string) $token) : null;
+        }
+
+        if ($token !== null && $token !== '') {
+            $mobileToken = (string) ($user->mobile_api_token ?? '');
+            $apiToken = (string) ($user->api_token ?? '');
+            $matchesMobile = $mobileToken !== '' && hash_equals($mobileToken, $token);
+            $matchesApi = $apiToken !== '' && hash_equals($apiToken, $token);
+            if (! $matchesMobile && ! $matchesApi) {
+                return true;
+            }
+        }
+
+        $clientVersion = $request->input('session_version', $request->query('session_version'));
+        if ($clientVersion !== null && $clientVersion !== '') {
+            if ((int) $clientVersion !== (int) ($user->session_version ?? 0)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 
@@ -3792,13 +3882,17 @@ class ApiController extends Controller
         ];
     }
 
-    public function checkUserExpired($userId)
+    public function checkUserExpired(Request $request, $userId)
     {
         $isExpiry = false;
+        $sessionExpired = false;
+        $sessionVersion = 0;
         $user = User::where('id', $userId)->where('userType' , 1)->first();
         $today = Carbon::now();
         $todayDate = $today->format('Y-m-d');
         if ($user != null) {
+            $sessionVersion = (int) ($user->session_version ?? 0);
+            $sessionExpired = $this->isAppSessionExpired($request, $user);
             if ($user->expired_on != null) {
                 if ($user->expired_on > $todayDate) {
                     $isExpiry = false;
@@ -3809,7 +3903,13 @@ class ApiController extends Controller
                 $isExpiry = false;
             }
         }
-        return response()->json(['status' => true, 'data' => $user->expired_on, 'isExpiry' => $isExpiry]);
+        return response()->json([
+            'status' => true,
+            'data' => $user ? $user->expired_on : null,
+            'isExpiry' => $isExpiry,
+            'session_expired' => $sessionExpired,
+            'session_version' => $sessionVersion,
+        ]);
     }
 
     public function getPriceStates()
