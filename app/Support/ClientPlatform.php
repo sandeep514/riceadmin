@@ -25,19 +25,39 @@ class ClientPlatform
             ?? '';
 
         $normalized = strtolower(trim((string) $raw));
-        if ($normalized === '') {
+        if ($normalized !== '') {
+            if (in_array($normalized, ['mobile', 'app', 'android', 'ios', 'iphone', 'ipad'], true)) {
+                return self::MOBILE;
+            }
+
+            if (in_array($normalized, ['web', 'browser', 'spa', 'portal'], true)) {
+                return self::WEB;
+            }
+
             return self::WEB;
         }
 
-        if (in_array($normalized, ['mobile', 'app', 'android', 'ios', 'iphone', 'ipad'], true)) {
-            return self::MOBILE;
+        // No explicit platform: infer from User-Agent so phone browsers rotate/auth
+        // against mobile_api_token (same-platform kick works without client changes).
+        return self::isMobileUserAgent((string) $request->userAgent())
+            ? self::MOBILE
+            : self::WEB;
+    }
+
+    public static function isMobileUserAgent(string $userAgent): bool
+    {
+        $ua = strtolower($userAgent);
+        if ($ua === '') {
+            return false;
         }
 
-        if (in_array($normalized, ['web', 'browser', 'spa', 'portal'], true)) {
-            return self::WEB;
+        foreach (['iphone', 'ipod', 'ipad', 'android', 'mobile', 'webos', 'blackberry', 'iemobile', 'opera mini'] as $needle) {
+            if (str_contains($ua, $needle)) {
+                return true;
+            }
         }
 
-        return self::WEB;
+        return false;
     }
 
     public static function tokenColumn(string $platform): string

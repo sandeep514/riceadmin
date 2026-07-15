@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Support\ClientPlatform;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -63,15 +64,26 @@ class User extends Authenticatable
     }
 
     /**
-     * Find portal user by web api_token or mobile_api_token.
+     * Find portal user by platform-scoped API token.
+     * When $platform is web|mobile, matches only that column (same-platform sessions).
+     * When $platform is null, matches either column (legacy / unknown callers).
      * Sets transient attribute auth_platform = web|mobile when matched.
+     *
+     * @param  ClientPlatform::WEB|ClientPlatform::MOBILE|null  $platform
      */
-    public static function findByPortalApiToken(string $token, ?callable $scope = null): ?self
+    public static function findByPortalApiToken(string $token, ?callable $scope = null, ?string $platform = null): ?self
     {
-        $query = static::query()->where(function ($q) use ($token) {
-            $q->where('api_token', $token)
-                ->orWhere('mobile_api_token', $token);
-        });
+        $query = static::query();
+
+        if ($platform === ClientPlatform::MOBILE || $platform === ClientPlatform::WEB) {
+            $column = ClientPlatform::tokenColumn($platform);
+            $query->where($column, $token);
+        } else {
+            $query->where(function ($q) use ($token) {
+                $q->where('api_token', $token)
+                    ->orWhere('mobile_api_token', $token);
+            });
+        }
 
         if ($scope) {
             $scope($query);
@@ -82,7 +94,9 @@ class User extends Authenticatable
             return null;
         }
 
-        if (hash_equals((string) ($user->mobile_api_token ?? ''), $token) && filled($user->mobile_api_token)) {
+        if ($platform === ClientPlatform::MOBILE || $platform === ClientPlatform::WEB) {
+            $user->setAttribute('auth_platform', $platform);
+        } elseif (hash_equals((string) ($user->mobile_api_token ?? ''), $token) && filled($user->mobile_api_token)) {
             $user->setAttribute('auth_platform', 'mobile');
         } else {
             $user->setAttribute('auth_platform', 'web');

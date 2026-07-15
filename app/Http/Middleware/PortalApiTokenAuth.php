@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\ClientPlatform;
 use App\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class PortalApiTokenAuth
             ], 401);
         }
 
+        $platform = ClientPlatform::fromRequest($request);
         $allowedFrom = config('portal.api_token_user_from', ['web']);
         $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
 
@@ -38,7 +40,7 @@ class PortalApiTokenAuth
                     $q->orWhereNull('user_from')->orWhere('user_from', '');
                 }
             });
-        });
+        }, $platform);
 
         if (!$user) {
             return response()->json([
@@ -71,7 +73,7 @@ class PortalApiTokenAuth
             ], 403);
         }
 
-        $request->attributes->set('auth_platform', $user->getAttribute('auth_platform') ?: 'web');
+        $request->attributes->set('auth_platform', $user->getAttribute('auth_platform') ?: $platform);
         $request->setUserResolver(function () use ($user) {
             return $user;
         });

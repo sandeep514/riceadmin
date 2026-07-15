@@ -1980,6 +1980,7 @@ class PortalApiController extends Controller
             return response()->json(['status' => false, 'message' => 'Not authenticated'], 401);
         }
 
+        $platform = $this->resolveLoginPlatform($request);
         $allowedFrom = config('portal.api_token_user_from', ['web']);
         $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
 
@@ -1991,7 +1992,7 @@ class PortalApiController extends Controller
                         $q->orWhereNull('user_from')->orWhere('user_from', '');
                     }
                 });
-        });
+        }, $platform);
 
         if (! $user) {
             return response()->json(['status' => false, 'message' => 'Not authenticated'], 401);
@@ -2161,7 +2162,7 @@ class PortalApiController extends Controller
         }
 
         if ($token) {
-            $user = User::findByPortalApiToken($token);
+            $user = User::findByPortalApiToken($token, null, $platform);
             if ($user) {
                 $platform = $user->getAttribute('auth_platform') ?: $platform;
                 $column = ClientPlatform::tokenColumn($platform);

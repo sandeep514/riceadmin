@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\ClientPlatform;
 use App\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 /**
  * For portal routes that should work with either:
  * - web session cookie (after OTP login), or
- * - Bearer / X-API-TOKEN (web api_token or mobile_api_token).
+ * - Bearer / X-API-TOKEN scoped to request platform (web api_token or mobile_api_token).
  *
  * Avoids requiring the API token when the SPA already has a valid session.
  */
@@ -19,6 +20,7 @@ class PortalSessionOrApiTokenAuth
     public function handle(Request $request, Closure $next)
     {
         $user = null;
+        $platform = ClientPlatform::fromRequest($request);
 
         if (Auth::guard('web')->check()) {
             $user = Auth::guard('web')->user();
@@ -49,12 +51,12 @@ class PortalSessionOrApiTokenAuth
                             $q->orWhereNull('user_from')->orWhere('user_from', '');
                         }
                     });
-                });
+                }, $platform);
 
                 if ($user) {
                     $request->attributes->set(
                         'auth_platform',
-                        $user->getAttribute('auth_platform') ?: 'web'
+                        $user->getAttribute('auth_platform') ?: $platform
                     );
                 }
             }
