@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use App\Events\WebPortalNotificationEvent;
 use App\Role;
+use App\Services\WebPortalNotificationDelivery;
 use App\User;
 use App\WebPlanModel;
 use App\WebUserNotification;
@@ -12,7 +12,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Str;
 
 class NotifyWebUserController extends Controller
 {
@@ -119,33 +118,20 @@ class NotifyWebUserController extends Controller
             return back()->withInput()->with('error', 'Error|No web users found for this role and category.');
         }
 
-        $groupId = (string) Str::uuid();
-        $notifyDate = Carbon::parse($validated['notify_date'])->format('Y-m-d');
-        $now = Carbon::now()->format('Y-m-d H:i:s');
-
-        $rows = [];
-        foreach ($userIds as $uid) {
-            $rows[] = [
-                'user_id' => $uid,
-                'notify_date' => $notifyDate,
-                'title' => $validated['title'],
-                'message' => $validated['message'],
+        app(WebPortalNotificationDelivery::class)->deliverToUsers(
+            $userIds,
+            $validated['title'],
+            $validated['message'],
+            [
                 'role_id' => $roleId,
                 'category_id' => $categoryId,
                 'audience_mode' => $audienceMode,
-                'broadcast_group_id' => $groupId,
-                'read_at' => null,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ];
-        }
-
-        WebUserNotification::insert($rows);
-
-        $created = WebUserNotification::where('broadcast_group_id', $groupId)->get();
-        foreach ($created as $notification) {
-            broadcast(new WebPortalNotificationEvent($notification));
-        }
+                'notify_date' => Carbon::parse($validated['notify_date'])->format('Y-m-d'),
+                'push_type' => 'admin',
+                'fill_role_from_user' => false,
+                'fill_category_from_business' => false,
+            ]
+        );
 
         Session::flash('success', 'Success|Notification sent to ' . count($userIds) . ' user(s).');
 

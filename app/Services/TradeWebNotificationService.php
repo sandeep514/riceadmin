@@ -3,17 +3,10 @@
 namespace App\Services;
 
 use App\CategoryRoleMap;
-use App\Events\WebPortalNotificationEvent;
-use App\Jobs\SendPushNotificationJob;
 use App\Jobs\SendTradeInterestNotificationsJob;
 use App\Jobs\SendTradeWebNotificationsJob;
 use App\TradeQueriesINR;
 use App\User;
-use App\WebUserNotification;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 
 class TradeWebNotificationService
 {
@@ -30,6 +23,11 @@ Quality: {quality}
 Rice Form: {rice_form}
 Grade: {grade}
 Quantity: {quantity}';
+
+    public function __construct(
+        private WebPortalNotificationDelivery $delivery
+    ) {
+    }
 
     /**
      * Notify users about a trade (web Reverb + mobile FCM when token exists).
@@ -137,17 +135,20 @@ Quantity: {quantity}';
             $roleId
         );
 
-        if ($targetIds === []) {
-            return;
+        if ($targetIds !== []) {
+            $this->delivery->deliverToUsers(
+                $targetIds,
+                $title,
+                $message,
+                [
+                    'audience_mode' => $audienceMode === 'selected_users' ? 'selected_users' : 'all_category',
+                    'role_id' => $roleId !== null && $roleId > 0 ? $roleId : null,
+                    'fill_role_from_user' => $roleId === null || $roleId <= 0,
+                    'fill_category_from_business' => true,
+                    'push_type' => 'trade',
+                ]
+            );
         }
-
-        $this->insertAndBroadcastInChunks(
-            $targetIds,
-            $title,
-            $message,
-            $audienceMode === 'selected_users' ? 'selected_users' : 'all_category',
-            $roleId
-        );
 
         // App users matching role (+ category-linked roles) get FCM only.
         $appFcmIds = $this->eligibleAppUserIdsForFcm($categoryIds, $roleId);
@@ -158,7 +159,7 @@ Quantity: {quantity}';
         // Avoid double FCM for users already covered as web targets.
         $appFcmIds = array_values(array_diff($appFcmIds, $targetIds));
         if ($appFcmIds !== []) {
-            $this->queueFirebasePushForUserIds($appFcmIds, $title, $message);
+            $this->delivery->queueFirebasePushForUserIds($appFcmIds, $title, $message, 'trade');
         }
     }
 
@@ -189,7 +190,17 @@ Quantity: {quantity}';
             return;
         }
 
-        $this->insertAndBroadcastInChunks($webUserIds, $title, $message, 'trade_interest', null);
+        $this->delivery->deliverToUsers(
+            $webUserIds,
+            $title,
+            $message,
+            [
+                'audience_mode' => 'trade_interest',
+                'fill_role_from_user' => true,
+                'fill_category_from_business' => true,
+                'push_type' => 'trade',
+            ]
+        );
     }
 
     /**
@@ -290,112 +301,6 @@ Quantity: {quantity}';
         }
 
         return $eligibleIds;
-    }
-
-    private function insertAndBroadcastInChunks(
-        array $targetIds,
-        string $title,
-        string $message,
-        string $audienceMode,
-        ?int $roleId = null
-    ): void {
-        $groupId = (string) Str::uuid();
-        $notifyDate = Carbon::now()->format('Y-m-d');
-        $chunkSize = (int) (config('queue.trade_web_notification_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
-        if ($chunkSize < 1) {
-            $chunkSize = self::DEFAULT_CHUNK_SIZE;
-        }
-
-        foreach (array_chunk($targetIds, $chunkSize) as $chunkIds) {
-            $now = Carbon::now()->format('Y-m-d H:i:s');
-            $rolesByUser = User::query()->whereIn('id', $chunkIds)->pluck('role', 'id');
-            $categoriesByUser = DB::table('web_business_details')
-                ->whereIn('user_id', $chunkIds)
-                ->pluck('selected_category', 'user_id');
-
-            $rows = [];
-            foreach ($chunkIds as $userId) {
-                $rows[] = [
-                    'user_id' => $userId,
-                    'notify_date' => $notifyDate,
-                    'title' => $title,
-                    'message' => $message,
-                    'role_id' => $roleId !== null && $roleId > 0
-                        ? $roleId
-                        : (isset($rolesByUser[$userId]) ? (int) $rolesByUser[$userId] : null),
-                    'category_id' => isset($categoriesByUser[$userId]) ? (int) $categoriesByUser[$userId] : null,
-                    'audience_mode' => $audienceMode,
-                    'broadcast_group_id' => $groupId,
-                    'read_at' => null,
-                    'created_at' => $now,
-                    'updated_at' => $now,
-                ];
-            }
-
-            WebUserNotification::insert($rows);
-
-            $created = WebUserNotification::query()
-                ->where('broadcast_group_id', $groupId)
-                ->whereIn('user_id', $chunkIds)
-                ->where('created_at', $now)
-                ->get();
-
-            foreach ($created as $notification) {
-                try {
-                    // Web (Pusher / Reverb private channel)
-                    broadcast(new WebPortalNotificationEvent($notification));
-                } catch (\Throwable $e) {
-                    Log::warning('Trade web notification broadcast failed for user.', [
-                        'group_id' => $groupId,
-                        'user_id' => $notification->user_id,
-                        'notification_id' => $notification->id,
-                        'error' => $e->getMessage(),
-                    ]);
-                }
-            }
-
-            // Mobile (Firebase) for the same accounts when they have an FCM token
-            $this->queueFirebasePushForUserIds($chunkIds, $title, $message);
-        }
-    }
-
-    /**
-     * @param  array<int>  $userIds
-     */
-    private function queueFirebasePushForUserIds(array $userIds, string $title, string $message): void
-    {
-        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
-        if ($userIds === []) {
-            return;
-        }
-
-        $tokenUsers = User::query()
-            ->whereIn('id', $userIds)
-            ->whereNotNull('user_token')
-            ->where('user_token', '!=', '')
-            ->select('id', 'user_token')
-            ->get()
-            ->map(fn ($u) => ['id' => (int) $u->id, 'user_token' => (string) $u->user_token])
-            ->values()
-            ->all();
-
-        if ($tokenUsers === []) {
-            return;
-        }
-
-        $chunkSize = (int) (config('queue.trade_web_notification_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
-        if ($chunkSize < 1) {
-            $chunkSize = self::DEFAULT_CHUNK_SIZE;
-        }
-
-        foreach (array_chunk($tokenUsers, $chunkSize) as $chunk) {
-            SendPushNotificationJob::dispatch(
-                $title,
-                $message,
-                $chunk,
-                'trade'
-            )->onQueue((string) config('queue.trade_notification_queue', 'default'));
-        }
     }
 
     private function resolveTradeNo(TradeQueriesINR $trade): string

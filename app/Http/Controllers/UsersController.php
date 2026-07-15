@@ -13,8 +13,7 @@ use App\ServiceProviderUserMap;
 use App\WebBusinessDetails;
 use App\ChatStatus;
 use App\Services\UserInterestService;
-use App\WebUserNotification;
-use App\Events\WebPortalNotificationEvent;
+use App\Services\WebPortalNotificationDelivery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -453,6 +452,13 @@ class UsersController extends Controller
         $userId = (int) $validated['userId'];
         $mailmessage = trim($validated['message']);
 
+        // Notify before clearing tokens so FCM can still reach the device.
+        $this->sendWebUserNotification(
+            $userId,
+            'Account On Hold',
+            'Your account has been rejected by admin. Reason: ' . $mailmessage
+        );
+
         User::where(['id' => $userId])->update([
             'message' => $mailmessage,
             'has_validation' => $mailmessage,
@@ -476,12 +482,6 @@ class UsersController extends Controller
             $message->from($mailFrom, $mailFromName);
         });
 
-        $this->sendWebUserNotification(
-            (int) $userId,
-            'Account On Hold',
-            'Your account has been rejected by admin. Reason: ' . $mailmessage
-        );
-
         Session::flash('success','Success|User rejected successfully!');
         return back();
 
@@ -489,15 +489,17 @@ class UsersController extends Controller
 
     private function sendWebUserNotification(int $userId, string $title, string $message): void
     {
-        $notification = WebUserNotification::create([
-            'user_id' => $userId,
-            'notify_date' => now()->toDateString(),
-            'title' => $title,
-            'message' => $message,
-            'audience_mode' => 'individual',
-        ]);
-
-        broadcast(new WebPortalNotificationEvent($notification));
+        app(WebPortalNotificationDelivery::class)->deliverToUsers(
+            [$userId],
+            $title,
+            $message,
+            [
+                'audience_mode' => 'individual',
+                'push_type' => 'account',
+                'fill_role_from_user' => true,
+                'fill_category_from_business' => true,
+            ]
+        );
     }
 
     public function listWebChangeSttausUser($userId)
@@ -522,6 +524,13 @@ class UsersController extends Controller
         } elseif ($wasDeactivated) {
             $user->update(['is_deactivated' => 0]);
         } else {
+            // Notify before clearing tokens so FCM can still reach the device.
+            $this->sendWebUserNotification(
+                (int) $userId,
+                'Account Deactivated',
+                'Your account has been deactivated by admin. Please contact support if you need help.'
+            );
+
             $user->update([
                 'is_deactivated' => 1,
                 'api_token' => null,
@@ -542,12 +551,6 @@ class UsersController extends Controller
                     $message->from($mailFrom, $mailFromName);
                 });
             }
-
-            $this->sendWebUserNotification(
-                (int) $userId,
-                'Account Deactivated',
-                'Your account has been deactivated by admin. Please contact support if you need help.'
-            );
         }
 
         if ($wasPendingActivation || $wasDeactivated) {
