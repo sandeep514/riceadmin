@@ -19,11 +19,15 @@
                     </a>
                 @endif
                 {!! Form::open(['route' => 'send.reverb.notification', 'method' => 'POST', 'style' => 'display:inline-block;']) !!}
-                    <input type="text" name="message" class="form-control" style="display:inline-block; width: 280px; margin-right: 8px;" placeholder="Optional message for React app" value="">
+                    <input type="number" name="user_id" class="form-control" style="display:inline-block; width: 120px; margin-right: 8px;" placeholder="User ID (mobile)" value="" min="1">
+                    <input type="text" name="message" class="form-control" style="display:inline-block; width: 280px; margin-right: 8px;" placeholder="Test message (web + mobile if User ID set)" value="">
                     <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fa fa-bolt"></i> Send Reverb notification to React
+                        <i class="fa fa-bolt"></i> Send test notification
                     </button>
                 {!! Form::close() !!}
+                <p class="text-muted" style="margin-top: 6px; font-size: 12px;">
+                    Web: admin-events Reverb. Mobile: enter portal user ID (e.g. 23510) for Reverb + FCM push. App must be logged in with notifications enabled.
+                </p>
             </div>
         </section>
 

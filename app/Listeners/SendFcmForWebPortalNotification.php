@@ -5,13 +5,14 @@ namespace App\Listeners;
 use App\Events\WebPortalNotificationEvent;
 use App\Jobs\SendPushNotificationJob;
 use App\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * When a portal notification is broadcast on Reverb (web-user.{id}),
  * also send FCM so the same user logged in on the mobile app gets a push.
+ *
+ * Runs inline (not queued) so FCM still sends when no queue worker is running.
  */
-class SendFcmForWebPortalNotification implements ShouldQueue
+class SendFcmForWebPortalNotification
 {
     public function handle(WebPortalNotificationEvent $event): void
     {
@@ -28,7 +29,7 @@ class SendFcmForWebPortalNotification implements ShouldQueue
             return;
         }
 
-        SendPushNotificationJob::dispatch(
+        SendPushNotificationJob::dispatchSync(
             (string) $notification->title,
             (string) $notification->message,
             [
@@ -44,6 +45,6 @@ class SendFcmForWebPortalNotification implements ShouldQueue
                 'notification_id' => (string) $notification->id,
                 'user_id' => (string) $userId,
             ]
-        )->onQueue((string) config('queue.trade_notification_queue', 'default'));
+        );
     }
 }

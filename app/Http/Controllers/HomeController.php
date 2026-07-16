@@ -11,6 +11,8 @@ use App\OceanFreight;
 use App\QualityMaster;
 use App\Defaultvalue;
 use App\Events\AdminEvent;
+use App\Services\WebPortalNotificationDelivery;
+use App\User;
 use Session;
 use Carbon\Carbon;
 
@@ -42,18 +44,60 @@ class HomeController extends Controller
     }
 
     /**
-     * Send a test Reverb notification to the React app (admin-events channel).
+     * Test notification:
+     * - Web React: AdminEvent on admin-events (Reverb)
+     * - Mobile app: portal notification + FCM when user_id is provided
      */
     public function sendReverbNotification(Request $request)
     {
-        $message = $request->input('message', 'Test notification from admin dashboard at ' . now()->format('H:i:s'));
+        $message = trim((string) $request->input('message', ''));
+        if ($message === '') {
+            $message = 'Test notification from admin dashboard at ' . now()->format('H:i:s');
+        }
+
+        $userId = (int) $request->input('user_id', 0);
 
         broadcast(new AdminEvent('admin_notification', [
             'message' => $message,
             'source' => 'admin_dashboard',
         ]))->toOthers();
 
-        Session::flash('success', 'Success|Reverb notification sent. Check your React app.');
+        $flash = 'Success|Reverb sent to web (admin-events channel).';
+
+        if ($userId > 0) {
+            $user = User::query()
+                ->where('id', $userId)
+                ->where('userType', 2)
+                ->first();
+
+            if (! $user) {
+                Session::flash('error', 'Error|User #' . $userId . ' not found or is not a portal user (userType 2).');
+                return back();
+            }
+
+            app(WebPortalNotificationDelivery::class)->deliverToUsers(
+                [$userId],
+                'Test notification',
+                $message,
+                [
+                    'audience_mode' => 'individual',
+                    'push_type' => 'admin_test',
+                    'fill_role_from_user' => true,
+                    'fill_category_from_business' => true,
+                ]
+            );
+
+            $hasFcm = filled($user->user_token);
+            $flash .= ' Portal notification sent to user #' . $userId . '.';
+            $flash .= $hasFcm
+                ? ' FCM push queued (requires queue worker).'
+                : ' No FCM token on this user — log in on the mobile app and enable notifications first.';
+        } else {
+            $flash .= ' Add a User ID to also send portal Reverb + mobile FCM push.';
+        }
+
+        Session::flash('success', $flash);
+
         return back();
     }
 }
