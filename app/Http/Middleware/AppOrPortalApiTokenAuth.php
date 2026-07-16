@@ -74,6 +74,20 @@ class AppOrPortalApiTokenAuth
             ], 403);
         }
 
+        foreach (['userId', 'user_id', 'id'] as $param) {
+            $routeValue = $request->route($param);
+            if ($routeValue !== null && (int) $routeValue !== (int) $user->id) {
+                if ($param === 'id' && ! $this->routeIdIsUserId($request)) {
+                    continue;
+                }
+
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Forbidden: You are not allowed to access this user data.',
+                ], 403);
+            }
+        }
+
         foreach (['user_id', 'userId'] as $inputKey) {
             if ($request->has($inputKey) && $request->input($inputKey) !== '' && $request->input($inputKey) !== null
                 && (int) $request->input($inputKey) !== (int) $user->id) {
@@ -108,5 +122,15 @@ class AppOrPortalApiTokenAuth
             ?? $request->query('token');
 
         return $token !== null ? trim((string) $token) : null;
+    }
+
+    private function routeIdIsUserId(Request $request): bool
+    {
+        $path = $request->path();
+
+        return str_contains($path, 'check/user/expired')
+            || str_contains($path, 'get/my/bids')
+            || str_contains($path, 'get/hot/deals')
+            || str_contains($path, 'get/buyer/details');
     }
 }

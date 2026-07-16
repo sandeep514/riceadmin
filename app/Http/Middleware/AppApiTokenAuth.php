@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Support\ClientPlatform;
 use App\User;
 use Closure;
 use Illuminate\Http\Request;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
  * - No token → allow (legacy app that never sent tokens).
  * - Stale/wrong token → 401 session_expired (kicks the previous phone).
  * - Valid token → attach user and enforce ownership when user ids are present.
+ * - Portal users (userType 2) are accepted when the website reuses legacy app routes.
  */
 class AppApiTokenAuth
 {
@@ -23,6 +25,8 @@ class AppApiTokenAuth
             return $next($request);
         }
 
+        $platform = ClientPlatform::fromRequest($request);
+
         $user = User::query()
             ->where('userType', 1)
             ->where(function ($q) use ($token) {
@@ -30,6 +34,21 @@ class AppApiTokenAuth
                     ->orWhere('api_token', $token);
             })
             ->first();
+
+        if (! $user) {
+            $allowedFrom = config('portal.api_token_user_from', ['web']);
+            $allowNullFrom = (bool) config('portal.api_token_allow_null_user_from', true);
+
+            $user = User::findByPortalApiToken($token, function ($query) use ($allowedFrom, $allowNullFrom) {
+                $query->where('userType', 2)
+                    ->where(function ($q) use ($allowedFrom, $allowNullFrom) {
+                        $q->whereIn('user_from', $allowedFrom);
+                        if ($allowNullFrom) {
+                            $q->orWhereNull('user_from')->orWhere('user_from', '');
+                        }
+                    });
+            }, $platform);
+        }
 
         if (! $user) {
             return response()->json([
@@ -81,7 +100,7 @@ class AppApiTokenAuth
             }
         }
 
-        $request->attributes->set('auth_platform', 'mobile');
+        $request->attributes->set('auth_platform', $user->getAttribute('auth_platform') ?: $platform);
         $request->setUserResolver(static fn () => $user);
 
         return $next($request);
