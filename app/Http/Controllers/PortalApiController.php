@@ -71,6 +71,8 @@ use App\NewsRunner;
 use App\TradeCurrentStatus;
 use App\WebBusinessDetails;
 use App\WebPersonalDetails;
+use App\WebCities;
+use App\WebStates;
 use App\WebUserAttachment;
 use App\WebPlanModel;
 use App\WebPlanKeysModel;
@@ -714,16 +716,26 @@ class PortalApiController extends Controller
                 $request->session()->save();
                 
                 // ✅ Reload user with relationships using the user ID to ensure we get the correct user
-                $data = User::where('id', $user->id)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
-                    return $q->with(['getCategoryDetails:id,category']);
-                }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
-                    return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
-                }, 'role_rel'])->first();
+                $data = User::where('id', $user->id)->where('userType', 2)->with(array_merge(
+                    $this->portalPersonalDetailsWithRelations(),
+                    [
+                        'getWebBusinessDetails' => function ($q) {
+                            return $q->with(['getCategoryDetails:id,category']);
+                        },
+                        'getWebUserAttachment',
+                        'getWebUserSubscription' => function ($q) {
+                            return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
+                        },
+                        'role_rel',
+                    ]
+                ))->first();
                 
                 // Check if user data was found
                 if (!$data) {
                     return response()->json(['status' => false, 'message' => 'User not found'], 404);
                 }
+
+                $this->hydratePersonalLocationRelations($data->getWebPersonalDetails);
 
                 $hasActivePlan = false;
                 if($data->getWebUserSubscription){
@@ -809,16 +821,26 @@ class PortalApiController extends Controller
                 $request->session()->save();
 
                 // ✅ Reload user with relationships using the user ID to ensure we get the correct user
-                $data = User::where('id', $user->id)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
-                    return $q->with(['getCategoryDetails:id,category']);
-                }, 'getWebUserAttachment','getWebUserSubscription' => function($q){
-                    return $q->whereDate('period_end' , '>=' , Carbon::now()->format('Y-m-d'));
-                }, 'role_rel'])->first();
+                $data = User::where('id', $user->id)->where('userType', 2)->with(array_merge(
+                    $this->portalPersonalDetailsWithRelations(),
+                    [
+                        'getWebBusinessDetails' => function ($q) {
+                            return $q->with(['getCategoryDetails:id,category']);
+                        },
+                        'getWebUserAttachment',
+                        'getWebUserSubscription' => function ($q) {
+                            return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
+                        },
+                        'role_rel',
+                    ]
+                ))->first();
                 
                 // Check if user data was found
                 if (!$data) {
                     return response()->json(['status' => false, 'message' => 'User not found'], 404);
                 }
+
+                $this->hydratePersonalLocationRelations($data->getWebPersonalDetails);
                 
                 $hasActivePlan = false;
                 if($data->getWebUserSubscription){
@@ -1311,16 +1333,73 @@ class PortalApiController extends Controller
         return $user;
     }
 
+    /**
+     * Personal details with state/district master relations.
+     */
+    private function portalPersonalDetailsWithRelations(): array
+    {
+        return [
+            'getWebPersonalDetails' => function ($q) {
+                $q->with([
+                    'stateRel:id,state_name,state_code',
+                    'districtRel:id,city_name,state_id',
+                ]);
+            },
+        ];
+    }
+
+    /**
+     * When state/district were saved as names (legacy farmer form), attach masters by name.
+     */
+    private function hydratePersonalLocationRelations(?WebPersonalDetails $personal): void
+    {
+        if ($personal === null) {
+            return;
+        }
+
+        if ($personal->stateRel === null && filled($personal->state) && ! is_numeric($personal->state)) {
+            $personal->setRelation(
+                'stateRel',
+                WebStates::query()
+                    ->where('state_name', $personal->state)
+                    ->first(['id', 'state_name', 'state_code'])
+            );
+        }
+
+        if ($personal->districtRel === null && filled($personal->district) && ! is_numeric($personal->district)) {
+            $cityQuery = WebCities::query()->where('city_name', $personal->district);
+            if ($personal->stateRel && (int) $personal->stateRel->id > 0) {
+                $cityQuery->where('state_id', (int) $personal->stateRel->id);
+            } elseif (is_numeric($personal->state)) {
+                $cityQuery->where('state_id', (int) $personal->state);
+            }
+            $personal->setRelation(
+                'districtRel',
+                $cityQuery->first(['id', 'city_name', 'state_id'])
+            );
+        }
+    }
+
     public function getUserDetails($userId)
     {
         if ($userId != null) {
-            $userModel = User::where('id', $userId)->where('userType', 2)->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function($q){
-                return $q->with(['cityRel:id,city_name' , 'stateRel:id,state_name', 'getCategoryDetails:id,category' , 'getBagVendorWeb:id,category']);
-            }, 'getWebUserAttachment','getWebUserSubscription.planRel','role_rel'])->first();
+            $userModel = User::where('id', $userId)->where('userType', 2)->with(array_merge(
+                $this->portalPersonalDetailsWithRelations(),
+                [
+                    'getWebBusinessDetails' => function ($q) {
+                        return $q->with(['cityRel:id,city_name', 'stateRel:id,state_name', 'getCategoryDetails:id,category', 'getBagVendorWeb:id,category']);
+                    },
+                    'getWebUserAttachment',
+                    'getWebUserSubscription.planRel',
+                    'role_rel',
+                ]
+            ))->first();
 
             if (!$userModel) {
                 return response()->json(['status' => false, 'message' => 'User not found', 'data' => []], 404);
             }
+
+            $this->hydratePersonalLocationRelations($userModel->getWebPersonalDetails);
 
             $user = $userModel->toArray();
             $user['has_validation'] = $this->resolvePortalHasValidationMessage(
@@ -2226,17 +2305,19 @@ class PortalApiController extends Controller
     {
         $data = User::where('id', $userId)
             ->where('userType', 2)
-            ->with([
-                'getWebPersonalDetails',
-                'getWebBusinessDetails' => function ($q) {
-                    return $q->with(['getCategoryDetails:id,category']);
-                },
-                'getWebUserAttachment',
-                'getWebUserSubscription' => function ($q) {
-                    return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
-                },
-                'role_rel',
-            ])
+            ->with(array_merge(
+                $this->portalPersonalDetailsWithRelations(),
+                [
+                    'getWebBusinessDetails' => function ($q) {
+                        return $q->with(['getCategoryDetails:id,category']);
+                    },
+                    'getWebUserAttachment',
+                    'getWebUserSubscription' => function ($q) {
+                        return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
+                    },
+                    'role_rel',
+                ]
+            ))
             ->first();
 
         if (! $data) {
@@ -2246,6 +2327,8 @@ class PortalApiController extends Controller
         if ($blocked = $this->portalAccessBlockedResponse($data)) {
             return $blocked;
         }
+
+        $this->hydratePersonalLocationRelations($data->getWebPersonalDetails);
 
         $hasActivePlan = (bool) $data->getWebUserSubscription;
         $hasBasicDetails = $this->portalUserHasBasicProfileDetails($data);

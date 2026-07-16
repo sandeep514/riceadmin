@@ -147,9 +147,17 @@ class UsersController extends Controller
 
     public function view($userId)
     {
-        $userModel = User::with(['getWebPersonalDetails', 'getWebBusinessDetails' => function ($q) {
-            return $q->with(['cityRel:id,city_name', 'stateRel:id,state_name', 'getCategoryDetails:id,category']);
-        }, 'getWebUserAttachment', 'getWebUserSubscription', 'role_rel:id,role_name'])->find($userId);
+        $userModel = User::with([
+            'getWebPersonalDetails' => function ($q) {
+                $q->with(['stateRel:id,state_name,state_code', 'districtRel:id,city_name,state_id']);
+            },
+            'getWebBusinessDetails' => function ($q) {
+                return $q->with(['cityRel:id,city_name', 'stateRel:id,state_name', 'getCategoryDetails:id,category']);
+            },
+            'getWebUserAttachment',
+            'getWebUserSubscription',
+            'role_rel:id,role_name',
+        ])->find($userId);
 
         if (! $userModel) {
             abort(404);
