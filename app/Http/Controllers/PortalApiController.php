@@ -898,15 +898,31 @@ class PortalApiController extends Controller
         $personalDetails = [];
         $businessDetails = [];
         $userEmailForMail = '';
-        if ($request->has('personal_details')) {
-            $personalDetails = $request->personal_details;
 
-            $name = $personalDetails['firstname'].' '.$personalDetails['lastname'];
-            $email = $personalDetails['email'];
-            $userEmailForMail = $personalDetails['email'];
+        $rawPersonal = $request->input('personal_details', []);
+        if (! is_array($rawPersonal)) {
+            $rawPersonal = [];
+        }
+        $rawBusiness = $request->input('business_details', []);
+        if (! is_array($rawBusiness)) {
+            $rawBusiness = [];
+        }
+
+        // Farmer registration historically sent UID/PAN/district under business_details,
+        // but those columns live on web_personal_details.
+        $personalDetails = $this->normalizePortalPersonalDetailsPayload($rawPersonal, $rawBusiness);
+        $hasPersonalPayload = $personalDetails !== [];
+        $avatarFile = $request->file('personal_details.avatar')
+            ?? $request->file('personal_details')['avatar'] ?? null;
+
+        if ($hasPersonalPayload || $avatarFile instanceof UploadedFile) {
+            $firstname = trim((string) ($personalDetails['firstname'] ?? ''));
+            $lastname = trim((string) ($personalDetails['lastname'] ?? ''));
+            $email = trim((string) ($personalDetails['email'] ?? ''));
+            $userEmailForMail = $email;
 
             // Prevent duplicate web-user email during basic details save.
-            if (!empty($email)) {
+            if ($email !== '') {
                 $emailAlreadyUsed = User::where('email', $email)
                     ->where('user_from', 'web')
                     ->where('id', '!=', $user_id)
@@ -920,9 +936,33 @@ class PortalApiController extends Controller
                 }
             }
 
-            User::where('id' , $user_id)->update(['name' => $name,'email' => $email]);
+            $userUpdate = [];
+            $fullName = trim($firstname . ' ' . $lastname);
+            if ($fullName !== '') {
+                $userUpdate['name'] = $fullName;
+            }
+            if ($email !== '') {
+                $userUpdate['email'] = $email;
+            }
+            if ($request->filled('role')) {
+                $userUpdate['role'] = $request->input('role');
+            }
+            if ($userUpdate !== []) {
+                User::where('id', $user_id)->update($userUpdate);
+            }
 
-            if (array_key_exists('avatar', $personalDetails)) {
+            if ($avatarFile instanceof UploadedFile) {
+                $basePath = public_path('webPortal/' . $user_id . '/attachments/avatar');
+                $file = $this->uploadAttachments($avatarFile, $basePath, ['jpeg', 'jpg', 'png']);
+                if ($file === false) {
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Avatar must be jpeg, jpg, or png.',
+                    ], 422);
+                }
+                $personalDetails['avatar'] = $file;
+            } elseif (array_key_exists('avatar', $personalDetails)
+                && $personalDetails['avatar'] instanceof UploadedFile) {
                 $basePath = public_path('webPortal/' . $user_id . '/attachments/avatar');
                 $file = $this->uploadAttachments($personalDetails['avatar'], $basePath, ['jpeg', 'jpg', 'png']);
                 if ($file === false) {
@@ -932,19 +972,28 @@ class PortalApiController extends Controller
                     ], 422);
                 }
                 $personalDetails['avatar'] = $file;
+            } else {
+                unset($personalDetails['avatar']);
             }
 
-            $personalDetails['user_id'] = $request['user_id'];
-            if( $request->has('role') ){
-                User::where('id' ,$user_id)->update(['role' => $request->role]);
-            }
-            WebPersonalDetails::updateOrCreate(['user_id' => $user_id], $personalDetails);
+            $personalDetails['user_id'] = $user_id;
+            $personalFillable = array_flip((new WebPersonalDetails)->getFillable());
+            $personalToSave = array_intersect_key($personalDetails, $personalFillable);
+            $personalToSave['user_id'] = $user_id;
+
+            WebPersonalDetails::updateOrCreate(['user_id' => $user_id], $personalToSave);
+            $personalDetails = $personalToSave;
         }
 
-        if ($request->has('business_details')) {
-            $businessDetails = $request->business_details;
-            $businessDetails['user_id'] = $request['user_id'];
-            WebBusinessDetails::updateOrCreate(['user_id' => $user_id], $businessDetails);
+        if ($rawBusiness !== []) {
+            $businessDetails = $this->normalizePortalBusinessDetailsPayload($rawBusiness);
+            $businessDetails['user_id'] = $user_id;
+            $businessFillable = array_flip((new WebBusinessDetails)->getFillable());
+            $businessToSave = array_intersect_key($businessDetails, $businessFillable);
+            $businessToSave['user_id'] = $user_id;
+
+            WebBusinessDetails::updateOrCreate(['user_id' => $user_id], $businessToSave);
+            $businessDetails = $businessToSave;
 
             if( $request->has('role') && $request->role == 11 ) {
                 $vendorDetails = [
@@ -969,7 +1018,10 @@ class PortalApiController extends Controller
             }
         }
 
-        if (($panFile = $this->portalDocumentsUploadedFile($request, 'pan_file')) !== null) {
+        if (($panFile = $this->portalDocumentsUploadedFile($request, 'pan_file')) === null) {
+            $panFile = $this->portalDocumentsUploadedFile($request, 'pancard_file');
+        }
+        if ($panFile !== null) {
             $basePath = public_path('webPortal/' . $user_id . '/attachments/pan');
             $file = $this->uploadAttachments($panFile, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
             if ($file === false) {
@@ -978,7 +1030,10 @@ class PortalApiController extends Controller
             WebUserAttachment::updateOrCreate(['user_id' => $user_id], ['panCard' => $file]);
         }
 
-        if (($farmerFile = $this->portalDocumentsUploadedFile($request, 'farmer_file')) !== null) {
+        if (($farmerFile = $this->portalDocumentsUploadedFile($request, 'farmer_file')) === null) {
+            $farmerFile = $this->portalDocumentsUploadedFile($request, 'uid_file');
+        }
+        if ($farmerFile !== null) {
             $basePath = public_path('webPortal/' . $user_id . '/attachments/farmer_file');
             $file = $this->uploadAttachments($farmerFile, $basePath, ['jpeg', 'jpg', 'png', 'pdf']);
             if ($file === false) {
@@ -1015,6 +1070,87 @@ class PortalApiController extends Controller
 
 
         return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => ['personalDetails' => $personalDetails, 'businessDetails' => $businessDetails]], 200);
+    }
+
+    /**
+     * Map personal_details (+ legacy farmer fields from business_details) onto web_personal_details columns.
+     *
+     * @param  array<string, mixed>  $personal
+     * @param  array<string, mixed>  $business
+     * @return array<string, mixed>
+     */
+    private function normalizePortalPersonalDetailsPayload(array $personal, array $business): array
+    {
+        $out = [];
+
+        foreach ([
+            'firstname',
+            'lastname',
+            'email',
+            'phone_number',
+            'state',
+            'district',
+            'address',
+            'farmer_unique_id',
+            'pan_card',
+            'status',
+        ] as $key) {
+            if (array_key_exists($key, $personal) && $personal[$key] !== null && $personal[$key] !== '') {
+                $out[$key] = is_string($personal[$key]) ? trim($personal[$key]) : $personal[$key];
+            }
+        }
+
+        // Legacy farmer registration put these under business_details.
+        if (! array_key_exists('farmer_unique_id', $out)) {
+            $uid = $business['farmer_uid'] ?? $business['farmer_unique_id'] ?? null;
+            if ($uid !== null && $uid !== '') {
+                $out['farmer_unique_id'] = is_string($uid) ? trim($uid) : $uid;
+            }
+        }
+        if (! array_key_exists('pan_card', $out)) {
+            $pan = $business['farmer_pancard'] ?? $business['pan_card'] ?? null;
+            if ($pan !== null && $pan !== '') {
+                $out['pan_card'] = is_string($pan) ? trim($pan) : $pan;
+            }
+        }
+        if (! array_key_exists('district', $out) && ! empty($business['district'])) {
+            $out['district'] = is_string($business['district']) ? trim($business['district']) : $business['district'];
+        }
+        if (! array_key_exists('state', $out) && ! empty($business['state'])
+            && empty($business['company_name']) && empty($business['city'])) {
+            // Farmer forms often send state only under business_details.
+            $out['state'] = is_string($business['state']) ? trim($business['state']) : $business['state'];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Keep only business table fields; map registered_email aliases.
+     *
+     * @param  array<string, mixed>  $business
+     * @return array<string, mixed>
+     */
+    private function normalizePortalBusinessDetailsPayload(array $business): array
+    {
+        $out = $business;
+
+        if (! empty($business['email']) && empty($business['registered_email'])) {
+            $out['registered_email'] = is_string($business['email']) ? trim($business['email']) : $business['email'];
+        }
+
+        // Not columns on web_business_details — moved to personal details.
+        unset(
+            $out['farmer_uid'],
+            $out['farmer_unique_id'],
+            $out['farmer_pancard'],
+            $out['pan_card'],
+            $out['district'],
+            $out['email'],
+            $out['pincode']
+        );
+
+        return $out;
     }
 
     /**
