@@ -25,7 +25,10 @@ If omitted:
 - **Mobile User-Agent** (`Android`, `iPhone`, `iPad`, `Mobile`, …) → treated as **mobile**
 - Otherwise → treated as **web** (desktop Netlify continues to work)
 
-Clients should still send `platform=mobile` explicitly when possible.
+Clients should send platform explicitly:
+
+- **Native app (`sntcApp`):** `platform=mobile` / `X-Client-Platform: mobile`
+- **Website portal (`sntc-website`):** `platform=web` / `X-Client-Platform: web` (required so phone browsers do not rotate `mobile_api_token`)
 
 ### Portal OTP
 
