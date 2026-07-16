@@ -98,6 +98,17 @@ Data payload (no notification body required):
 
 App should clear local auth when this arrives.
 
+### Portal notification FCM (dual login)
+
+When a portal notification is broadcast on Reverb (`WebPortalNotificationEvent` → `web-user.{id}`), the server also queues FCM to that user's `user_token` (if set) with:
+
+- `type`: `portal_notification`
+- `notification_id`, `user_id`
+
+Web users see the bell update via Reverb; the same account on the mobile app gets a push even when the app is not subscribed to the private channel.
+
+Legacy app-only users (`userType` 1) still receive trade FCM via `TradeWebNotificationService::eligibleAppUserIdsForFcm`.
+
 ## Protected portal APIs
 
 Send `Authorization: Bearer <token>` as today.

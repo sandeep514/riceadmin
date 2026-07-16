@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Listeners;
+
+use App\Events\WebPortalNotificationEvent;
+use App\Jobs\SendPushNotificationJob;
+use App\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+/**
+ * When a portal notification is broadcast on Reverb (web-user.{id}),
+ * also send FCM so the same user logged in on the mobile app gets a push.
+ */
+class SendFcmForWebPortalNotification implements ShouldQueue
+{
+    public function handle(WebPortalNotificationEvent $event): void
+    {
+        $notification = $event->notification;
+        $userId = (int) $notification->user_id;
+
+        $user = User::query()
+            ->where('id', $userId)
+            ->whereNotNull('user_token')
+            ->where('user_token', '!=', '')
+            ->first(['id', 'user_token']);
+
+        if (! $user) {
+            return;
+        }
+
+        SendPushNotificationJob::dispatch(
+            (string) $notification->title,
+            (string) $notification->message,
+            [
+                [
+                    'id' => (int) $user->id,
+                    'user_token' => (string) $user->user_token,
+                ],
+            ],
+            'portal',
+            false,
+            [
+                'type' => 'portal_notification',
+                'notification_id' => (string) $notification->id,
+                'user_id' => (string) $userId,
+            ]
+        )->onQueue((string) config('queue.trade_notification_queue', 'default'));
+    }
+}

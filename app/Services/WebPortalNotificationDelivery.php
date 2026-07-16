@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
 
 /**
  * Dual-channel portal notifications: web_notifications + Reverb/Pusher + Firebase FCM.
+ *
+ * Reverb: WebPortalNotificationEvent on private channel web-user.{id}
+ * FCM: SendFcmForWebPortalNotification listener (same event) for app users with user_token
  */
 class WebPortalNotificationDelivery
 {
@@ -132,15 +135,7 @@ class WebPortalNotificationDelivery
             // History for portal/Pusher recipients (including users without an FCM token).
             $this->persistNotificationRows($chunkIds, $title, $message, $pushType, $now);
 
-            // FCM job must not insert again — rows already written above.
-            $this->queueFirebasePushForUserIds(
-                $chunkIds,
-                $title,
-                $message,
-                $pushType,
-                $chunkSize,
-                false
-            );
+            // FCM is queued by SendFcmForWebPortalNotification when each Reverb event fires.
         }
     }
 

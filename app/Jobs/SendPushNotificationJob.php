@@ -33,13 +33,15 @@ class SendPushNotificationJob implements ShouldQueue
      * @param array  $users  Array of ['id'=>..., 'user_token'=>...]
      * @param string $userAppType
      * @param bool   $persistToNotificationTable  Set false when caller already wrote `notification` rows.
+     * @param array<string, string> $data  Optional FCM data payload (e.g. type=portal_notification).
      */
     public function __construct(
         public string $title,
         public string $body,
         public array  $users,
         public string $userAppType,
-        public bool $persistToNotificationTable = true
+        public bool $persistToNotificationTable = true,
+        public array $data = []
     ) {}
 
     /**
@@ -83,6 +85,12 @@ class SendPushNotificationJob implements ShouldQueue
                     'title' => $this->title,
                     'body'  => $this->body,
                 ]);
+
+            if ($this->data !== []) {
+                $message = $message->withData(
+                    array_map(static fn ($value) => (string) $value, $this->data)
+                );
+            }
 
             $response = $messaging->sendMulticast($message, array_values($tokens));
 
