@@ -18,13 +18,13 @@
                 <h3 class="box-title">Filter</h3>
                 <div>
                     <a class="btn btn-success"
-                       href="{{ route('reports.live-prices', array_merge(request()->query(), ['export' => 'csv'])) }}">
+                       href="{{ request()->fullUrlWithQuery(['from' => $from, 'to' => $to, 'crop_year' => $cropYear, 'export' => 'csv', 'page' => null]) }}">
                         <i class="fa fa-download"></i> Export CSV (Full)
                     </a>
                 </div>
             </div>
             <div class="box-body">
-                <form method="GET" action="{{ route('reports.live-prices') }}" class="form-inline">
+                <form method="GET" action="{{ request()->url() }}" class="form-inline">
                     <div class="form-group">
                         <label for="from">From</label>
                         <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">

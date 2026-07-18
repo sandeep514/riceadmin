@@ -61,31 +61,46 @@ class ReportController extends Controller
 
         // Full export (CSV) with all matching rows, ignoring pagination
         if (!empty($export) && $export === 'csv') {
-            $allRows = $query->orderBy('live_prices.created_at', 'desc')->get();
+            @set_time_limit(0);
+
             $filename = 'live_prices_' . ($from ?? 'start') . '_' . ($to ?? 'end') . ($cropYear ? '_'.$cropYear : '') . '.csv';
-            $headers = [
-                'Content-Type' => 'text/csv',
-                'Content-Disposition' => "attachment; filename=\"$filename\"",
-            ];
-            $callback = function() use ($allRows) {
+
+            // Stream in chunks so large date ranges do not exhaust memory
+            $exportQuery = $query->clone()->select([
+                'live_prices.id',
+                'live_prices.created_at',
+                'live_prices.cropYear',
+                'live_prices.min_price',
+                'live_prices.max_price',
+                'live_prices.opening',
+                'live_prices.closing',
+                'rice_names.name as rice_name',
+                DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name'),
+            ]);
+
+            return response()->streamDownload(function () use ($exportQuery) {
                 $out = fopen('php://output', 'w');
-                // CSV header
-                fputcsv($out, ['Rice Name','Rice Form','Date','Crop Year','Min Price','Max Price','Opening','Closing']);
-                foreach ($allRows as $r) {
-                    fputcsv($out, [
-                        $r->rice_name,
-                        $r->rice_form_name,
-                        Carbon::parse($r->created_at)->format('Y-m-d'),
-                        $r->cropYear,
-                        $r->min_price,
-                        $r->max_price,
-                        $r->opening,
-                        $r->closing
-                    ]);
-                }
+                fputcsv($out, ['Rice Name', 'Rice Form', 'Date', 'Crop Year', 'Min Price', 'Max Price', 'Opening', 'Closing'], ',', '"', '\\');
+
+                $exportQuery->chunkById(1000, function ($rows) use ($out) {
+                    foreach ($rows as $r) {
+                        fputcsv($out, [
+                            (string) ($r->rice_name ?? ''),
+                            (string) ($r->rice_form_name ?? ''),
+                            $r->created_at ? Carbon::parse($r->created_at)->format('Y-m-d') : '',
+                            $r->cropYear ?? '',
+                            $r->min_price ?? '',
+                            $r->max_price ?? '',
+                            $r->opening ?? '',
+                            $r->closing ?? '',
+                        ], ',', '"', '\\');
+                    }
+                }, 'live_prices.id', 'id');
+
                 fclose($out);
-            };
-            return response()->stream($callback, 200, $headers);
+            }, $filename, [
+                'Content-Type' => 'text/csv; charset=UTF-8',
+            ]);
         }
 
         // Paginated table for screen
