@@ -60,6 +60,7 @@
                         <tr>
                             <th>Rice Name</th>
                             <th>Rice Form</th>
+                            <th>State</th>
                             <th>Date</th>
                             <th>Crop Year</th>
                             <th>Min Price</th>
@@ -73,6 +74,7 @@
                             <tr>
                                 <td>{{ $r->rice_name }}</td>
                                 <td>{{ $r->rice_form_name }}</td>
+                                <td>{{ $r->state }}</td>
                                 <td>{{ \Carbon\Carbon::parse($r->created_at)->format('Y-m-d') }}</td>
                                 <td>{{ $r->cropYear }}</td>
                                 <td>{{ $r->min_price }}</td>

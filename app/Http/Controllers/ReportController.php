@@ -68,6 +68,7 @@ class ReportController extends Controller
             // Stream in chunks so large date ranges do not exhaust memory
             $exportQuery = $query->clone()->select([
                 'live_prices.id',
+                'live_prices.state',
                 'live_prices.created_at',
                 'live_prices.cropYear',
                 'live_prices.min_price',
@@ -80,13 +81,14 @@ class ReportController extends Controller
 
             return response()->streamDownload(function () use ($exportQuery) {
                 $out = fopen('php://output', 'w');
-                fputcsv($out, ['Rice Name', 'Rice Form', 'Date', 'Crop Year', 'Min Price', 'Max Price', 'Opening', 'Closing'], ',', '"', '\\');
+                fputcsv($out, ['Rice Name', 'Rice Form', 'State', 'Date', 'Crop Year', 'Min Price', 'Max Price', 'Opening', 'Closing'], ',', '"', '\\');
 
                 $exportQuery->chunkById(1000, function ($rows) use ($out) {
                     foreach ($rows as $r) {
                         fputcsv($out, [
                             (string) ($r->rice_name ?? ''),
                             (string) ($r->rice_form_name ?? ''),
+                            (string) ($r->state ?? ''),
                             $r->created_at ? Carbon::parse($r->created_at)->format('Y-m-d') : '',
                             $r->cropYear ?? '',
                             $r->min_price ?? '',
