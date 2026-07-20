@@ -198,6 +198,11 @@
                     <i class="fa fa-address-card-o"></i> <span>Push Notification</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['push.notification.v2','push.notification.v2.store']))?'active':'' }}">
+                <a href="{{ route('push.notification.v2') }}">
+                    <i class="fa fa-bell"></i> <span>Push Notification new version</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['trial.period']))?'active':'' }}">
                 <a href="{{ route('trial.period') }}">
                     <i class="fa fa-address-card-o"></i> <span>User App Trial</span>

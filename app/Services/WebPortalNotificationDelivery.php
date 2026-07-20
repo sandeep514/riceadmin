@@ -175,13 +175,14 @@ class WebPortalNotificationDelivery
         }
 
         foreach (array_chunk($tokenUsers, $chunkSize) as $chunk) {
-            SendPushNotificationJob::dispatch(
+            // Sync so trade create/update FCM is not left sitting in the database queue.
+            SendPushNotificationJob::dispatchSync(
                 $title,
                 $message,
                 $chunk,
                 $pushType,
                 $persistToNotificationTable
-            )->onQueue((string) config('queue.trade_notification_queue', 'default'));
+            );
         }
     }
 

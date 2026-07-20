@@ -1,7 +1,8 @@
 <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0;">
-    {!! Form::label('web_categories', 'Web categories (optional)') !!}
+    {!! Form::label('web_categories', 'Web categories') !!}
     <p class="help-block" style="font-size:12px;margin-top:0;">
         Select one or more categories for this trade.
+        <strong>Required when Send notification = Yes</strong> (recipients are matched by category).
         <label style="font-weight:normal;margin-left:10px;display:inline;white-space:nowrap;">
             <input type="checkbox" id="trade-web-categories-select-all" title="Select or clear all categories"> All
         </label>

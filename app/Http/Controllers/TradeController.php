@@ -544,7 +544,14 @@ class TradeController extends Controller
         );
         $this->lastQueuedTradeNotifyUserIds = $targetIds;
 
-        if ($targetIds === [] && $svc->eligibleAppUserIdsForFcm($categoryIds, $roleId) === []) {
+        $appFcmIds = $svc->eligibleAppUserIdsForFcm($categoryIds, $roleId);
+        if ($audience === 'selected_users') {
+            $appFcmIds = array_values(array_intersect($appFcmIds, $selected));
+        }
+        // App users already covered as web targets get FCM via the Reverb event listener.
+        $appOnlyFcmIds = array_values(array_diff($appFcmIds, $targetIds));
+
+        if ($targetIds === [] && $appFcmIds === []) {
             return '(Notification not sent: no eligible users found.)';
         }
 
@@ -559,7 +566,14 @@ class TradeController extends Controller
             $roleId
         );
 
-        return '(Notification queued: web Pusher + mobile Firebase where available.)';
+        $webCount = count($targetIds);
+        $appOnlyFcmCount = count($appOnlyFcmIds);
+
+        return sprintf(
+            '(Notification sent: %d web, %d app FCM.)',
+            $webCount,
+            $appOnlyFcmCount
+        );
     }
 
     /**
@@ -660,6 +674,6 @@ class TradeController extends Controller
         $svc = app(TradeWebNotificationService::class);
         $svc->queueInterestNotification((int) $trade->id, $userIds, $title, $message);
 
-        return '(Interest notification queued: delivery is running in background.)';
+        return sprintf('(Interest notification sent: %d user(s).)', count($userIds));
     }
 }

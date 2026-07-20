@@ -11,6 +11,8 @@
         <p class="help-block" style="font-size:12px;margin-top:0;">
             Notifies users whose <strong>role</strong> and <strong>business category</strong> match the selections below.
             <br>
+            Select at least one <strong>web category</strong> above when Send = Yes.
+            <br>
             Delivery: <strong>Pusher/Reverb</strong> for web portal login, <strong>Firebase</strong> when the same account has a mobile app token (both if logged in on web and mobile).
             <br>
             Placeholders: <code>{trade_no}</code>, <code>{trade_type}</code>, <code>{farming_type}</code>, <code>{quality}</code>,

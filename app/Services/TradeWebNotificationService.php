@@ -79,7 +79,9 @@ Quantity: {quantity}';
         string $messageTemplate,
         ?int $roleId = null
     ): void {
-        SendTradeWebNotificationsJob::dispatch(
+        // Run inline so create/update trade notifications deliver without a queue worker
+        // (same reliability as Notify Web Users). Nested FCM jobs also use dispatchSync.
+        SendTradeWebNotificationsJob::dispatchSync(
             $tradeId,
             $categoryIds,
             $send,
@@ -88,7 +90,7 @@ Quantity: {quantity}';
             $title,
             $messageTemplate,
             $roleId
-        )->onQueue((string) config('queue.trade_notification_queue', 'default'));
+        );
     }
 
     public function queueInterestNotification(
@@ -97,12 +99,12 @@ Quantity: {quantity}';
         string $title,
         string $messageTemplate
     ): void {
-        SendTradeInterestNotificationsJob::dispatch(
+        SendTradeInterestNotificationsJob::dispatchSync(
             $tradeId,
             $userIds,
             $title,
             $messageTemplate
-        )->onQueue((string) config('queue.trade_notification_queue', 'default'));
+        );
     }
 
     public function processTradeNotification(

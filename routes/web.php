@@ -390,6 +390,8 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('deal/lab/{sntc_no}',['as'=>'deal.lab.report.details','uses'=>'AjaxController@getDataForDealLabReport']);
             Route::get('push/notification' , ['as' => 'send.push.notification' , 'uses' => 'NotificationController@index']);
             Route::POST('send/push/notification' , ['as' => 'post.push.notification' , 'uses' => 'NotificationController@sendNotification']);
+            Route::get('push/notification/v2', ['as' => 'push.notification.v2', 'uses' => 'PushNotificationV2Controller@index']);
+            Route::post('push/notification/v2', ['as' => 'push.notification.v2.store', 'uses' => 'PushNotificationV2Controller@store']);
             Route::get('trial/period' , ['as' => 'trial.period' , 'uses' => 'TrialPeriodController@index']);
             Route::post('trial/period/save' , ['as' => 'trialPeriod.savee' , 'uses' => 'TrialPeriodController@save']);
 
