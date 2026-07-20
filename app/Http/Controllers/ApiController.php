@@ -5935,8 +5935,9 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Web trade list (All types). No trade_type filter — buy active, then sell active, then latest 15 sold.
-     * Response includes trade_list_meta.counts and sell_starts_at_page for pagination UX.
+     * Web trade list (All types). No trade_type filter.
+     * Order by login role: Seller/Supplier → sell, buy, sold; Buyer/others → buy, sell, sold.
+     * Response includes trade_list_meta.counts and sell/buy_starts_at_page for pagination UX.
      */
     public function getWebTrades(Request $request, $userId)
     {
@@ -5964,7 +5965,7 @@ if (!file_exists('uploads')) {
             ->withCount('TradeLikeAll')
             ->get();
 
-        $allTrade = $this->orderWebTradesAllTypesListing($allTrade);
+        $allTrade = $this->orderWebTradesAllTypesListing($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -5972,7 +5973,7 @@ if (!file_exists('uploads')) {
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
-        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null);
+        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null, (int) $userId);
 
         return response()->json([
             'status' => true,
@@ -6234,7 +6235,8 @@ if (!file_exists('uploads')) {
 
     /**
      * Web trade list with optional filters.
-     * All tab: omit trade_type (or send 0 / "all") — returns buy then sell then 15 sold; use trade_list_meta.sell_starts_at_page when paginating.
+     * All tab: omit trade_type (or send 0 / "all") — role-aware buy/sell order then 15 sold;
+     * use trade_list_meta.sell_starts_at_page / buy_starts_at_page when paginating.
      * Buy/Sell tab: send trade_type 1–4 — active trades only for that type.
      */
     public function webFilterTrade(Request $request , $userId)
@@ -6268,7 +6270,7 @@ if (!file_exists('uploads')) {
 
         $allTrade = $hasTradeTypeFilter
             ? $this->orderWebTradesForUserListing($allTrade, (int) $userId)
-            : $this->orderWebTradesAllTypesListing($allTrade);
+            : $this->orderWebTradesAllTypesListing($allTrade, (int) $userId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6276,7 +6278,7 @@ if (!file_exists('uploads')) {
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
-        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType);
+        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType, (int) $userId);
 
         return response()->json([
             'status' => true,
@@ -6474,17 +6476,18 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Breakdown for web trade list responses (All vs filtered, buy/sell counts, sell page hint).
+     * Breakdown for web trade list responses (All vs filtered, buy/sell counts, sell/buy page hints).
      * Active counts come from DB (status IN 1,4,6) per tradeType — not from the in-memory list.
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $orderedTrades
      * @return array<string, mixed>
      */
-    private function buildWebTradeListMeta($orderedTrades, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): array
+    private function buildWebTradeListMeta($orderedTrades, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType, ?int $userId = null): array
     {
         $collection = $orderedTrades instanceof \Illuminate\Support\Collection ? $orderedTrades : collect($orderedTrades);
         $perPage = $this->resolveTradeFilterPerPage($request);
         $activeCounts = $this->countWebActiveTradesForListing($request, $hasTradeTypeFilter, $appliedTradeType);
+        $listOrder = $this->resolveWebTradeListSideOrder($userId);
 
         $soldInList = 0;
         foreach ($collection as $trade) {
@@ -6494,17 +6497,36 @@ if (!file_exists('uploads')) {
         }
 
         $sellStartsAtPage = null;
+        $buyStartsAtPage = null;
         $totalActiveSell = $activeCounts['sell_active'] + $activeCounts['future_sell_active'];
-        if (! $hasTradeTypeFilter && $totalActiveSell > 0) {
-            $position = 0;
-            foreach ($collection as $trade) {
-                $position++;
-                if (
-                    $this->isWebSellTradeType((int) $trade->tradeType)
-                    && $this->isWebActiveTradeStatus((int) $trade->status)
-                ) {
-                    $sellStartsAtPage = (int) ceil($position / $perPage);
-                    break;
+        $totalActiveBuy = $activeCounts['buy_active'] + $activeCounts['future_buy_active'];
+
+        if (! $hasTradeTypeFilter) {
+            if ($totalActiveSell > 0) {
+                $position = 0;
+                foreach ($collection as $trade) {
+                    $position++;
+                    if (
+                        $this->isWebSellTradeType((int) $trade->tradeType)
+                        && $this->isWebActiveTradeStatus((int) $trade->status)
+                    ) {
+                        $sellStartsAtPage = (int) ceil($position / $perPage);
+                        break;
+                    }
+                }
+            }
+
+            if ($totalActiveBuy > 0) {
+                $position = 0;
+                foreach ($collection as $trade) {
+                    $position++;
+                    if (
+                        $this->isWebBuyTradeType((int) $trade->tradeType)
+                        && $this->isWebActiveTradeStatus((int) $trade->status)
+                    ) {
+                        $buyStartsAtPage = (int) ceil($position / $perPage);
+                        break;
+                    }
                 }
             }
         }
@@ -6512,11 +6534,13 @@ if (!file_exists('uploads')) {
         return [
             'trade_type_filter_applied' => $hasTradeTypeFilter,
             'applied_trade_type' => $appliedTradeType,
+            'list_side_order' => $listOrder,
             'counts' => array_merge($activeCounts, [
                 'sold_in_list' => $soldInList,
             ]),
             'list_total' => array_sum($activeCounts) + $soldInList,
             'sell_starts_at_page' => $sellStartsAtPage,
+            'buy_starts_at_page' => $buyStartsAtPage,
         ];
     }
 
@@ -6810,12 +6834,14 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * All trade types (no trade_type filter): buy first, sell second, then latest 15 sold (mixed).
+     * All trade types (no trade_type filter), role-aware side order, then latest 15 sold (mixed).
+     * - Seller / Supplier: sell → buy → sold
+     * - Buyer (and all other roles): buy → sell → sold
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection
      */
-    private function orderWebTradesAllTypesListing($trades)
+    private function orderWebTradesAllTypesListing($trades, ?int $userId = null)
     {
         $collection = $trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades);
         if ($collection->isEmpty()) {
@@ -6836,10 +6862,52 @@ if (!file_exists('uploads')) {
             ->values()
             ->take(15);
 
-        return $this->sortWebTradesByStatusThenId($buyActive)
-            ->concat($this->sortWebTradesByStatusThenId($sellActive))
+        $buySorted = $this->sortWebTradesByStatusThenId($buyActive);
+        $sellSorted = $this->sortWebTradesByStatusThenId($sellActive);
+
+        if ($this->resolveWebTradeListSideOrder($userId) === 'sell_first') {
+            return $sellSorted
+                ->concat($buySorted)
+                ->concat($soldMixed)
+                ->values();
+        }
+
+        return $buySorted
+            ->concat($sellSorted)
             ->concat($soldMixed)
             ->values();
+    }
+
+    /**
+     * Preferred active-trade side order for the All-trades web list.
+     * Seller (4) / Supplier (6) → sell_first; Buyer (5) and everyone else → buy_first.
+     *
+     * @return 'sell_first'|'buy_first'
+     */
+    private function resolveWebTradeListSideOrder(?int $userId): string
+    {
+        if ($userId === null || $userId <= 0) {
+            return 'buy_first';
+        }
+
+        $user = User::query()
+            ->select(['id', 'role'])
+            ->with(['role_rel:id,role_name'])
+            ->find($userId);
+
+        if (! $user) {
+            return 'buy_first';
+        }
+
+        $roleId = (int) ($user->role ?? 0);
+        $roleName = strtolower(trim((string) optional($user->role_rel)->role_name));
+
+        // Known IDs: Seller=4, Supplier=6. Also match by role_name for safety.
+        if (in_array($roleId, [4, 6], true) || in_array($roleName, ['seller', 'supplier'], true)) {
+            return 'sell_first';
+        }
+
+        return 'buy_first';
     }
 
     /**
