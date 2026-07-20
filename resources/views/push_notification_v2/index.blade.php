@@ -48,25 +48,27 @@
                             <div class="form-group col-md-12" style="padding-left:0;">
                                 <label>Categories <span class="text-danger">*</span></label>
                                 <p class="help-block" style="margin-top:0;font-size:12px;">
-                                    Select one or more categories.
+                                    Categories update when you change the role. Select one or more.
                                     <label style="font-weight:normal;margin-left:10px;display:inline;white-space:nowrap;">
                                         <input type="checkbox" id="push-v2-categories-select-all" title="Select or clear all"> All
                                     </label>
                                 </p>
                                 <div id="push-v2-categories-grid" class="row" style="clear:both;max-height:260px;overflow-y:auto;border:1px solid #ddd;border-radius:4px;padding:10px 6px;background:#fafafa;margin-left:0;margin-right:0;">
                                     @php $oldCats = array_map('intval', (array) old('category_ids', [])); @endphp
-                                    @forelse($categories as $cat)
-                                        <div class="col-md-3 col-sm-4 col-xs-6" style="margin-bottom:8px;">
-                                            <label style="font-weight:normal;margin-bottom:0;">
-                                                <input type="checkbox" name="category_ids[]" value="{{ $cat->id }}"
-                                                    class="push-v2-category"
-                                                    {{ in_array((int) $cat->id, $oldCats, true) ? 'checked' : '' }}>
-                                                {{ $cat->category }}
-                                            </label>
-                                        </div>
-                                    @empty
-                                        <div class="col-md-12 text-muted" style="padding:8px;">No active categories found.</div>
-                                    @endforelse
+                                    @if(($categories ?? collect())->isEmpty())
+                                        <div class="col-md-12 text-muted push-v2-empty" style="padding:8px;">Select a role to load categories.</div>
+                                    @else
+                                        @foreach($categories as $cat)
+                                            <div class="col-md-3 col-sm-4 col-xs-6" style="margin-bottom:8px;">
+                                                <label style="font-weight:normal;margin-bottom:0;">
+                                                    <input type="checkbox" name="category_ids[]" value="{{ $cat->id }}"
+                                                        class="push-v2-category"
+                                                        {{ in_array((int) $cat->id, $oldCats, true) ? 'checked' : '' }}>
+                                                    {{ $cat->category }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 </div>
                                 @error('category_ids')
                                     <span class="text-danger">{{ $message }}</span>
@@ -144,8 +146,73 @@
 @section('javascript')
 <script>
 $(function () {
+    var base = window.route || '{{ url('/administrator') }}';
+    var oldCategoryIds = @json(array_map('intval', (array) old('category_ids', [])));
+
     if ($.fn.select2) {
         $('#push_v2_role_id').select2({ width: '100%' });
+    }
+
+    function escapeHtml(text) {
+        return $('<div>').text(text == null ? '' : String(text)).html();
+    }
+
+    function renderCategories(list, selectedIds) {
+        selectedIds = selectedIds || [];
+        var $grid = $('#push-v2-categories-grid');
+        $grid.empty();
+        $('#push-v2-categories-select-all').prop('checked', false);
+        if ($.fn.iCheck) {
+            $('#push-v2-categories-select-all').iCheck('update');
+        }
+
+        if (!list || !list.length) {
+            $grid.append('<div class="col-md-12 text-muted push-v2-empty" style="padding:8px;">No categories found for this role.</div>');
+            return;
+        }
+
+        list.forEach(function (c) {
+            var checked = selectedIds.indexOf(parseInt(c.id, 10)) !== -1 ? ' checked' : '';
+            $grid.append(
+                '<div class="col-md-3 col-sm-4 col-xs-6" style="margin-bottom:8px;">' +
+                    '<label style="font-weight:normal;margin-bottom:0;">' +
+                        '<input type="checkbox" name="category_ids[]" value="' + c.id + '" class="push-v2-category"' + checked + '> ' +
+                        escapeHtml(c.category) +
+                    '</label>' +
+                '</div>'
+            );
+        });
+
+        if ($.fn.iCheck) {
+            $grid.find('input.push-v2-category').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue'
+            });
+        }
+    }
+
+    function loadCategories(roleId, selectedIds) {
+        if (!roleId) {
+            $('#push-v2-categories-grid').html(
+                '<div class="col-md-12 text-muted push-v2-empty" style="padding:8px;">Select a role to load categories.</div>'
+            );
+            $('#push-v2-categories-select-all').prop('checked', false);
+            return;
+        }
+
+        $('#push-v2-categories-grid').html(
+            '<div class="col-md-12 text-muted" style="padding:8px;">Loading categories…</div>'
+        );
+
+        $.getJSON(base + '/push/notification/v2/categories/' + roleId)
+            .done(function (res) {
+                renderCategories((res && res.data) ? res.data : [], selectedIds || []);
+            })
+            .fail(function () {
+                $('#push-v2-categories-grid').html(
+                    '<div class="col-md-12 text-danger" style="padding:8px;">Failed to load categories.</div>'
+                );
+            });
     }
 
     function setAllCategories(checked) {
@@ -155,6 +222,10 @@ $(function () {
             $boxes.iCheck(checked ? 'check' : 'uncheck');
         }
     }
+
+    $('#push_v2_role_id').on('change', function () {
+        loadCategories($(this).val(), []);
+    });
 
     $('#push-v2-categories-select-all').on('change ifChanged', function () {
         setAllCategories($(this).is(':checked'));

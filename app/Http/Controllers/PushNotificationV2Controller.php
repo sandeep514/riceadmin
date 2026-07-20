@@ -6,6 +6,7 @@ use App\Category;
 use App\Role;
 use App\Services\TradeWebNotificationService;
 use App\Services\WebPortalNotificationDelivery;
+use App\WebPlanModel;
 use App\WebUserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -25,10 +26,6 @@ class PushNotificationV2Controller extends Controller
     public function index()
     {
         $roles = Role::query()->orderBy('role_name')->get(['id', 'role_name', 'type']);
-        $categories = Category::query()
-            ->where('status', 1)
-            ->orderBy('category')
-            ->get(['id', 'category']);
 
         $sampleIds = DB::table('web_notifications')
             ->selectRaw('MAX(id) as id')
@@ -50,7 +47,25 @@ class PushNotificationV2Controller extends Controller
                 ->limit(100)
                 ->get();
 
+        $oldRoleId = (int) old('role_id', 0);
+        $categories = $oldRoleId > 0
+            ? $this->categoriesForRole($oldRoleId)
+            : collect();
+
         return view('push_notification_v2.index', compact('roles', 'categories', 'history', 'recipientCounts'));
+    }
+
+    public function categoriesByRole($roleId)
+    {
+        $roleId = (int) $roleId;
+        if ($roleId <= 0) {
+            return response()->json(['status' => true, 'data' => []]);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => $this->categoriesForRole($roleId)->values(),
+        ]);
     }
 
     public function store(Request $request)
@@ -65,6 +80,15 @@ class PushNotificationV2Controller extends Controller
 
         $roleId = (int) $validated['role_id'];
         $categoryIds = array_values(array_unique(array_filter(array_map('intval', $validated['category_ids']))));
+        $allowedIds = $this->categoriesForRole($roleId)->pluck('id')->map(fn ($id) => (int) $id)->all();
+        $categoryIds = array_values(array_intersect($categoryIds, $allowedIds));
+
+        if ($categoryIds === []) {
+            return back()
+                ->withInput()
+                ->with('error', 'Error|Select at least one category that belongs to the selected role.');
+        }
+
         $title = trim($validated['title']);
         $message = trim($validated['message']);
 
@@ -113,5 +137,30 @@ class PushNotificationV2Controller extends Controller
         );
 
         return redirect()->route('push.notification.v2');
+    }
+
+    /**
+     * Active categories linked to the role via web plans (same source as Notify Web User).
+     *
+     * @return \Illuminate\Support\Collection<int, \App\Category>
+     */
+    private function categoriesForRole(int $roleId)
+    {
+        $categoryIds = WebPlanModel::query()
+            ->where('role_id', $roleId)
+            ->where('status', 1)
+            ->whereNotNull('category_id')
+            ->distinct()
+            ->pluck('category_id');
+
+        if ($categoryIds->isEmpty()) {
+            return collect();
+        }
+
+        return Category::query()
+            ->whereIn('id', $categoryIds)
+            ->where('status', 1)
+            ->orderBy('category')
+            ->get(['id', 'category']);
     }
 }

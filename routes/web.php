@@ -392,6 +392,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::POST('send/push/notification' , ['as' => 'post.push.notification' , 'uses' => 'NotificationController@sendNotification']);
             Route::get('push/notification/v2', ['as' => 'push.notification.v2', 'uses' => 'PushNotificationV2Controller@index']);
             Route::post('push/notification/v2', ['as' => 'push.notification.v2.store', 'uses' => 'PushNotificationV2Controller@store']);
+            Route::get('push/notification/v2/categories/{roleId}', ['as' => 'push.notification.v2.categories', 'uses' => 'PushNotificationV2Controller@categoriesByRole']);
             Route::get('trial/period' , ['as' => 'trial.period' , 'uses' => 'TrialPeriodController@index']);
             Route::post('trial/period/save' , ['as' => 'trialPeriod.savee' , 'uses' => 'TrialPeriodController@save']);
 

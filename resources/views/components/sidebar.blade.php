@@ -34,20 +34,25 @@
                 </div>  
             </div>
         </div>
-        <!-- search form -->
-        <!--  <form action="#" method="get" class="sidebar-form">
+        <!-- sidebar search -->
+        <div class="sidebar-form" style="margin:10px 10px 5px;">
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Search...">
+                <input type="text" id="sidebar-menu-search" class="form-control" placeholder="Search menu..." autocomplete="off">
                 <span class="input-group-btn">
-                <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-                </button>
-             </span>
+                    <button type="button" id="sidebar-menu-search-clear" class="btn btn-flat" title="Clear" style="display:none;">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <button type="button" class="btn btn-flat" tabindex="-1" aria-hidden="true">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
             </div>
-        </form> -->
+        </div>
+        <p id="sidebar-menu-search-empty" class="text-center" style="display:none;color:#b8c7ce;font-size:12px;padding:8px 10px;">No menu items match.</p>
         @php
             $currentRoute = request()->route()->getName();
         @endphp
-        <!-- /.search form -->
+        <!-- /.sidebar search -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION FOR INR </li>
@@ -541,3 +546,101 @@
     </section>
     <!-- /.sidebar -->
 </aside>
+<style>
+    #sidebar-menu-search {
+        background: #374850;
+        border-color: #374850;
+        color: #fff;
+    }
+    #sidebar-menu-search::placeholder {
+        color: #aaa;
+    }
+    .sidebar-menu > li.sidebar-search-hidden,
+    .sidebar-menu .treeview-menu > li.sidebar-search-hidden {
+        display: none !important;
+    }
+    .sidebar-menu > li.header.sidebar-search-hidden {
+        display: none !important;
+    }
+</style>
+<script>
+(function () {
+    function menuText($el) {
+        var $span = $el.children('a').children('span').first();
+        if ($span.length) {
+            return $.trim($span.clone().children().remove().end().text()).toLowerCase();
+        }
+        return $.trim($el.children('a').text()).toLowerCase();
+    }
+
+    function filterSidebarMenu(query) {
+        query = $.trim(query || '').toLowerCase();
+        var $menus = $('.main-sidebar .sidebar-menu');
+        var $empty = $('#sidebar-menu-search-empty');
+        var $clear = $('#sidebar-menu-search-clear');
+
+        $clear.toggle(query.length > 0);
+
+        if (!query) {
+            $menus.find('li').removeClass('sidebar-search-hidden');
+            $empty.hide();
+            return;
+        }
+
+        var anyVisible = false;
+
+        $menus.each(function () {
+            var $menu = $(this);
+
+            $menu.children('li.header').addClass('sidebar-search-hidden');
+
+            $menu.children('li').not('.header').each(function () {
+                var $li = $(this);
+                var label = menuText($li);
+                var isTree = $li.hasClass('treeview');
+
+                if (isTree) {
+                    var parentMatch = label.indexOf(query) !== -1;
+                    var childMatch = false;
+
+                    $li.find('> .treeview-menu > li').each(function () {
+                        var $child = $(this);
+                        var childLabel = menuText($child);
+                        if (childLabel.indexOf(query) !== -1 || parentMatch) {
+                            $child.removeClass('sidebar-search-hidden');
+                            childMatch = true;
+                        } else {
+                            $child.addClass('sidebar-search-hidden');
+                        }
+                    });
+
+                    if (parentMatch || childMatch) {
+                        $li.removeClass('sidebar-search-hidden').addClass('menu-open');
+                        $li.children('.treeview-menu').show();
+                        anyVisible = true;
+                    } else {
+                        $li.addClass('sidebar-search-hidden');
+                    }
+                } else {
+                    if (label.indexOf(query) !== -1) {
+                        $li.removeClass('sidebar-search-hidden');
+                        anyVisible = true;
+                    } else {
+                        $li.addClass('sidebar-search-hidden');
+                    }
+                }
+            });
+        });
+
+        $empty.toggle(!anyVisible);
+    }
+
+    $(document).on('input keyup', '#sidebar-menu-search', function () {
+        filterSidebarMenu($(this).val());
+    });
+
+    $(document).on('click', '#sidebar-menu-search-clear', function () {
+        $('#sidebar-menu-search').val('').trigger('input').focus();
+    });
+})();
+</script>
