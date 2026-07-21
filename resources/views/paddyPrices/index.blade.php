@@ -46,15 +46,13 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Crop Year</label>
-                                    <input
-                                        type="number"
-                                        class="form-control"
-                                        name="crop_year"
-                                        min="1900"
-                                        max="{{ date('Y') }}"
-                                        value="{{ old('crop_year', date('Y')) }}"
-                                        required
-                                    >
+                                    <select class="form-control" name="crop_year" required>
+                                        @for($year = (int) date('Y'); $year >= (int) date('Y') - 5; $year--)
+                                            <option value="{{ $year }}" {{ (int) old('crop_year', date('Y')) === $year ? 'selected' : '' }}>
+                                                {{ $year }}
+                                            </option>
+                                        @endfor
+                                    </select>
                                     @error('crop_year')
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
