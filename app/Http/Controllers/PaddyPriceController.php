@@ -46,72 +46,43 @@ class PaddyPriceController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'quality_id' => 'required|integer',
-            'mandi' => 'required',
-            // 'state' => 'required|string|max:256',
-            // 'handCutting' => 'required|string|max:256',
-            // 'machineCutting' => 'required|string|max:256',
-            // 'moisture' => 'required|string|max:256',
-            // 'bags' => 'required|string|max:256',
-            // 'change' => 'required|string|max:256'
+            'date' => 'required|date_format:Y-m-d|before_or_equal:today',
+            'quality_id' => 'required|integer|exists:rice_names,id',
+            'mandi' => 'required|integer|exists:paddyMandi,id',
+            'handCutting' => 'nullable|string|max:256',
+            'machineCutting' => 'nullable|string|max:256',
+            'moisture' => 'nullable|string|max:256',
+            'bags' => 'nullable|string|max:256',
+            'change' => 'nullable|string|max:256',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-        $mandiData = PaddyMandiModel::where('id' , $request->mandi)->first();
-        $todayDate = Carbon::today()->format('Y-m-d');
+        $mandiData = PaddyMandiModel::findOrFail($request->mandi);
+        $entryDate = Carbon::createFromFormat(
+            'Y-m-d',
+            $request->date,
+            config('app.timezone', 'Asia/Kolkata')
+        )->startOfDay();
 
-        // $lastEnterRow = PaddyPrice::orderBy('created_at' , 'desc')->first();
-        // if( $lastEnterRow ){
-        //     $lastEnterDate = $lastEnterRow->created_at->format('Y-m-d');
+        // Every submission is historical data: always insert a new row, even if
+        // another row has the same date, mandi, state, quality and price values.
+        $paddyPrice = new PaddyPrice([
+            'mandi' => (int) $request->mandi,
+            'state' => (int) $mandiData->state_id,
+            'quality_id' => (int) $request->quality_id,
+            'hand_cutting_price' => $request->handCutting ?? '----',
+            'machine_cutting_price' => $request->machineCutting ?? '----',
+            'moisture' => $request->moisture ?? '----',
+            'total_arrivals' => $request->bags ?? '----',
+            'change' => $request->change ?? '----',
+            'status' => 1,
+        ]);
+        $paddyPrice->created_at = $entryDate;
+        $paddyPrice->updated_at = now();
+        $paddyPrice->save();
 
-            
-        //     if( $lastEnterDate != $todayDate ){
-        //         $lastEnteredRecords = PaddyPrice::select("mandi","state","quality_id","hand_cutting_price","machine_cutting_price","moisture","total_arrivals","change","status")->whereDate('created_at' , $lastEnterDate)->get()
-        //             ->map(function ($item) {
-        //                 $item['created_at'] = now();
-        //                 return $item;
-        //             })
-        //             ->toArray();
-        //         PaddyPrice::insert($lastEnteredRecords);
-        //     }
-        // }
-        $paddy = PaddyPrice::where('mandi', $request->mandi)
-            ->where('state', $mandiData->state_id)
-            ->where('quality_id', $request->quality_id)
-            ->whereDate('created_at', $todayDate);
-            
-
-        if ($paddy->first()) {
-            // update existing
-            $paddy->update([
-                'hand_cutting_price'   => $request->handCutting ?? '----',
-                'machine_cutting_price'=> $request->machineCutting ?? '----',
-                'moisture'             => $request->moisture ?? '----',
-                'total_arrivals'       => $request->bags ?? '----',
-                'change'               => $request->change ?? '----',
-                'status'               => 1
-            ]);
-        } else {
-            // create new
-            PaddyPrice::create([
-                'mandi'                => $request->mandi,
-                'state'                => $mandiData->state_id,
-                'quality_id'           => $request->quality_id,
-                'hand_cutting_price'   => $request->handCutting ?? '----',
-                'machine_cutting_price'=> $request->machineCutting ?? '----',
-                'moisture'             => $request->moisture ?? '----',
-                'total_arrivals'       => $request->bags ?? '----',
-                'change'               => $request->change ?? '----',
-                'status'               => 1
-            ]);
-        }
-
-       
-        
-        
-        // PaddyPrice::create($data);
-        return redirect()->route('list.paddy.price')->with('sucess', 'Paddy Price created successfully.');
+        return redirect()->route('list.paddy.price')->with('success', 'Paddy Price created successfully.');
     }
 
     public function show(PaddyPrice $paddyPrice)

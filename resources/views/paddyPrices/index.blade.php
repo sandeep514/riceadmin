@@ -30,6 +30,20 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div>
+                                <div class="form-group col-md-3">
+                                    <label>Date</label>
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        name="date"
+                                        value="{{ old('date', date('Y-m-d')) }}"
+                                        max="{{ date('Y-m-d') }}"
+                                        required
+                                    >
+                                    @error('date')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 {{-- <div class="form-group col-md-3">
                                     <label>State</label>
                                     <select class="form-control" name="state">
@@ -124,7 +138,9 @@
                                                                 <td>{{ $paddyPrice->moisture }}</td>
                                                                 <td>{{ $paddyPrice->total_arrivals }}</td>
                                                                 <td>{{ $paddyPrice->change }}</td>
-                                                                <td>{{ $paddyPrice->created_at }}</td>
+                                                                <td data-order="{{ optional($paddyPrice->created_at)->timestamp }}">
+                                                                    {{ $paddyPrice->created_at ? $paddyPrice->created_at->format('Y-m-d') : '' }}
+                                                                </td>
                                                                 <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
                                                                 <td>
                                                                     {{-- <a href="{{ route('paddy-prices.show', $paddyPrice) }}" class="btn btn-info btn-sm">View</a>
