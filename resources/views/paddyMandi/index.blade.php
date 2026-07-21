@@ -32,7 +32,7 @@
                                     <div class="row text-left" style="margin-top: 20px;">
                                         <a href="{{ route('create.web.paddy.mandi') }}" class="btn btn-sm btn-info">Create</a>
                                         <div class="col-md-12 inputs">
-                                            <table class="table table-striped">
+                                            <table class="table table-striped table-bordered paddy-datatable" width="100%">
                                                 <thead>
                                                 <tr>
                                                     <th>Mandi</th>
@@ -66,6 +66,14 @@
     </div>
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('js/live-price.js?ref='.rand(1111,9999)) }}"></script>
+@section('javascript')
+<script>
+    $(function () {
+        $('.paddy-datatable').DataTable({
+            pageLength: 25,
+            order: [[0, 'asc']],
+            columnDefs: [{ orderable: false, targets: [2] }]
+        });
+    });
+</script>
 @endsection

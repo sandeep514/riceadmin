@@ -714,6 +714,7 @@ Route::group(['prefix'=>'administrator'], function(){
 
 
     Route::get('get/web/brands' , ['as' => 'get.web.brands.list' , 'uses' => 'WebBrandController@showBrandsToAdmin']);
+    Route::get('get/web/brands/{id}' , ['as' => 'get.web.brands.show' , 'uses' => 'WebBrandController@showBrandToAdmin']);
     Route::get('toggle/web/brands/status/{id}' , ['as' => 'toggle.web.brands.status' , 'uses' => 'WebBrandController@toggleWebBrandsStatus']);
 
 

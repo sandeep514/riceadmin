@@ -268,9 +268,27 @@ class WebBrandController extends Controller
 
     public function showBrandsToAdmin()
     {
-        $brands = webBrands::orderBy('id' , 'desc')->get();
+        $brands = WebBrands::with(['RiceName:id,name'])
+            ->orderBy('id', 'desc')
+            ->get();
 
-        return View('webBrands.list' , compact('brands'));
+        return View('webBrands.list', compact('brands'));
+    }
+
+    public function showBrandToAdmin($id)
+    {
+        $brand = WebBrands::with([
+            'RiceName:id,name',
+            'userRel:id,name,email,mobile',
+            'getVariants.qualityRel:id,name',
+            'getVariants.formRel:id,form_name',
+        ])->findOrFail($id);
+
+        $availability = BrandAvailability::groupedForBrand((int) $id, false);
+        $logoUrl = ! empty($brand->logo) ? asset('brands/'.$brand->logo) : null;
+        $variantImageBase = asset('brands/'.$brand->id.'/variant');
+
+        return view('webBrands.show', compact('brand', 'availability', 'logoUrl', 'variantImageBase'));
     }
 
     public function toggleWebBrandsStatus($id)
@@ -282,6 +300,7 @@ class WebBrandController extends Controller
             $brand->update(['status' => $newStatus]);
 
             Session::flash('success' , 'Success|Status updated successfully');
+            return back();
         }
         Session::flash('error' , 'Error|Something went wrong');
         return back();

@@ -95,7 +95,7 @@
                                             {{-- <a href="{{ route('paddy-prices.create') }}" class="btn btn-primary mb-3">Add New Price</a> --}}
                                             <div class="col-md-12 inputs">
                                                 
-                                                <table class="table">
+                                                <table class="table table-bordered table-striped paddy-datatable" width="100%">
                                                     <thead>
                                                         <tr>
                                                             <th>ID</th>
@@ -152,6 +152,15 @@
     </div>
 @endsection
 
-@section('scripts')
-    <script src="{{ asset('js/live-price.js?ref='.rand(1111,9999)) }}"></script>
+@section('javascript')
+<script>
+    $(function () {
+        $('.paddy-datatable').DataTable({
+            pageLength: 25,
+            order: [[9, 'desc']],
+            scrollX: true,
+            columnDefs: [{ orderable: false, targets: [11] }]
+        });
+    });
+</script>
 @endsection

@@ -4,9 +4,18 @@
 <style>
     .nonbasmatitabs .nav>li>a {
         padding: 10px 11px;
-    }    
+    }
     .basmatitabs .nav>li>a {
         padding: 10px 11px;
+    }
+    .web-brand-logo-thumb {
+        max-width: 56px;
+        max-height: 56px;
+        object-fit: contain;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #fff;
+        padding: 2px;
     }
 </style>
     <div class="content-wrapper">
@@ -50,14 +59,27 @@
                                                     @foreach($brands as $key => $value)
                                                         <tr>
                                                             <td style="text-transform: capitalize;">{{ $value->name ?? '' }}</td>
-                                                            <td style="text-transform: capitalize;">{{ $value->quality ?? '' }}</td>
+                                                            <td style="text-transform: capitalize;">{{ $value->RiceName->name ?? $value->quality ?? '' }}</td>
                                                             <td style="text-transform: capitalize;">{{ $value->brand_year ?? '' }}</td>
                                                             <td style="text-transform: capitalize;">{{ $value->address ?? '' }}</td>
                                                             <td style="text-transform: capitalize;">{{ $value->product_mode ?? '' }}</td>
-                                                            <td style="text-transform: capitalize;">{{ $value->logo ?? '' }}</td>
-                                                            <td style="text-transform: capitalize;">{{ $value->description ?? '' }}</td>
-
                                                             <td>
+                                                                @if(!empty($value->logo))
+                                                                    <img src="{{ asset('brands/'.$value->logo) }}"
+                                                                         alt="{{ $value->name }}"
+                                                                         class="web-brand-logo-thumb"
+                                                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                                    <span style="display:none;font-size:11px;color:#999;">No image</span>
+                                                                @else
+                                                                    <span class="text-muted">—</span>
+                                                                @endif
+                                                            </td>
+                                                            <td style="text-transform: capitalize;">{{ \Illuminate\Support\Str::limit($value->description ?? '', 80) }}</td>
+
+                                                            <td style="white-space:nowrap;">
+                                                                <a class="btn btn-sm btn-primary" href="{{ route('get.web.brands.show', $value->id) }}">
+                                                                    <i class="fa fa-eye"></i> View
+                                                                </a>
                                                                 <a class="btn btn-sm btn-{{($value->status == 0) ? 'info' : 'danger'}}" href="{{ route('toggle.web.brands.status' , $value->id ) }}"> {{ ($value->status == 0)? 'Active' : 'De-Active' }} </a>
                                                             </td>
                                                         </tr>

@@ -22,6 +22,11 @@ class WebBrands extends Model
         return $this->belongsTo(RiceName::class , 'quality' , 'id');
     }
 
+    public function userRel()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
     public function getVariants()
     {
         return $this->hasMany(WebBrandVariant::class , 'brand_id' , 'id');
