@@ -31,6 +31,38 @@
                         <div class="col-md-12">
                             <div>
                                 <div class="form-group col-md-3">
+                                    <label>State</label>
+                                    <select class="form-control" name="state" id="paddy-state" required>
+                                        <option value="">-- Select State --</option>
+                                        @foreach($paddyStateModel as $v)
+                                            <option value="{{ $v->id }}" {{ (int) old('state') === (int) $v->id ? 'selected' : '' }}>
+                                                {{ $v->state }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('state')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Mandi</label>
+                                    <select class="form-control" name="mandi" id="paddy-mandi" required>
+                                        <option value="">-- Select Mandi --</option>
+                                        @foreach($paddyMandiModel as $v)
+                                            <option
+                                                value="{{ $v->id }}"
+                                                data-state-id="{{ $v->state_id }}"
+                                                {{ (int) old('mandi') === (int) $v->id ? 'selected' : '' }}
+                                            >
+                                                {{ $v->mandi }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('mandi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-3">
                                     <label>Date</label>
                                     <input
                                         type="date"
@@ -57,56 +89,46 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
-                                {{-- <div class="form-group col-md-3">
-                                    <label>State</label>
-                                    <select class="form-control" name="state">
-                                        @foreach($paddyStateModel as $k => $v)
-                                            <option value="{{ $v->id }}">{{ $v->state }}</option>
-                                        @endforeach
-                                    </select>
-                                </div> --}}
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div>
                                 <div class="form-group col-md-3">
-                                    <label>Mandi</label>
-                                    <select class="form-control" name="mandi">
-                                        @foreach($paddyMandiModel as $k => $v)
-                                            <option value="{{ $v->id }}">{{ $v->mandi }}</option>
+                                    <label>Quality</label>
+                                    <select class="form-control" name="quality_id" required>
+                                        @foreach($quality as $k => $v)
+                                            <option value="{{ $v->id }}" {{ (int) old('quality_id') === (int) $v->id ? 'selected' : '' }}>
+                                                {{ $v->name }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Quality</label>
-                                    <select class="form-control" name="quality_id">
-                                        @foreach($quality as $k => $v)
-                                            <option value="{{ $v->id }}">{{ $v->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label>Hand Cutting Price</label>
+                                    <input type="text" class="form-control" name="handCutting" value="{{ old('handCutting') }}">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Machine Cutting Price</label>
+                                    <input type="text" class="form-control" name="machineCutting" value="{{ old('machineCutting') }}">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Moisture</label>
+                                    <input type="text" class="form-control" name="moisture" value="{{ old('moisture') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div>
                                 <div class="form-group col-md-3">
-                                    <label>Hand Cutting Price</label>
-                                    <input type="text" class="form-control" name="handCutting">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Machine Cutting Price</label>
-                                    <input type="text" class="form-control" name="machineCutting">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label>Moisture</label>
-                                    <input type="text" class="form-control" name="moisture">
-                                </div>
-                                <div class="form-group col-md-3">
                                     <label>Total Arrival (Bags)</label>
-                                    <input type="text" class="form-control" name="bags">
+                                    <input type="text" class="form-control" name="bags" value="{{ old('bags') }}">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Moisture</label>
+                                    <label>Change</label>
                                     <select class="form-control" name="change">
-                                        <option>Stable</option>
-                                        <option>Down</option>
-                                        <option>Up</option>
+                                        @foreach(['Stable', 'Down', 'Up'] as $change)
+                                            <option value="{{ $change }}" {{ old('change', 'Stable') === $change ? 'selected' : '' }}>{{ $change }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -186,6 +208,40 @@
 @section('javascript')
 <script>
     $(function () {
+        var $state = $('#paddy-state');
+        var $mandi = $('#paddy-mandi');
+        var mandiOptions = $mandi.find('option[data-state-id]').clone();
+        var oldMandi = @json((string) old('mandi', ''));
+
+        function loadMandis(stateId, selectedMandi) {
+            $mandi.empty().append('<option value="">-- Select Mandi --</option>');
+
+            if (!stateId) {
+                $mandi.prop('disabled', true);
+                return;
+            }
+
+            mandiOptions.each(function () {
+                var $option = $(this);
+                if (String($option.data('state-id')) === String(stateId)) {
+                    $mandi.append($option.clone());
+                }
+            });
+
+            $mandi.prop('disabled', false);
+            if (selectedMandi && $mandi.find('option[value="' + selectedMandi + '"]').length) {
+                $mandi.val(selectedMandi);
+            } else {
+                $mandi.val('');
+            }
+        }
+
+        $state.on('change', function () {
+            loadMandis($(this).val(), '');
+        });
+
+        loadMandis($state.val(), oldMandi);
+
         $('.paddy-datatable').DataTable({
             pageLength: 25,
             order: [[10, 'desc']],

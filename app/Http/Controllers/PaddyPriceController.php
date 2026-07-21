@@ -8,6 +8,7 @@ use App\PaddyPrice;
 use App\RiceName;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
 class PaddyPriceController extends Controller
@@ -48,7 +49,14 @@ class PaddyPriceController extends Controller
         $validator = Validator::make($request->all(), [
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'quality_id' => 'required|integer|exists:rice_names,id',
-            'mandi' => 'required|integer|exists:paddyMandi,id',
+            'state' => 'required|integer|exists:paddyStates,id',
+            'mandi' => [
+                'required',
+                'integer',
+                Rule::exists('paddyMandi', 'id')->where(function ($query) use ($request) {
+                    $query->where('state_id', $request->state)->where('status', 1);
+                }),
+            ],
             'crop_year' => 'required|integer|digits:4|min:1900|max:'.now()->year,
             'handCutting' => 'nullable|string|max:256',
             'machineCutting' => 'nullable|string|max:256',
