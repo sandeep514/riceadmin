@@ -18,6 +18,7 @@ class PaddyPrice extends Model
         'mandi',
         'state',
         'quality_id',
+        'crop_year',
         'hand_cutting_price',
         'machine_cutting_price',
         'moisture',

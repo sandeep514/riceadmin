@@ -44,6 +44,21 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
+                                <div class="form-group col-md-3">
+                                    <label>Crop Year</label>
+                                    <input
+                                        type="number"
+                                        class="form-control"
+                                        name="crop_year"
+                                        min="1900"
+                                        max="{{ date('Y') }}"
+                                        value="{{ old('crop_year', date('Y')) }}"
+                                        required
+                                    >
+                                    @error('crop_year')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
                                 {{-- <div class="form-group col-md-3">
                                     <label>State</label>
                                     <select class="form-control" name="state">
@@ -116,6 +131,7 @@
                                                             <th>Mandi</th>
                                                             <th>State</th>
                                                             <th>Quality ID</th>
+                                                            <th>Crop Year</th>
                                                             <th>Hand Cutting Price</th>
                                                             <th>Machine Cutting Price</th>
                                                             <th>Moisture</th>
@@ -133,6 +149,7 @@
                                                                 <td>{{ $paddyPrice->getMandi_rel->mandi }}</td>
                                                                 <td>{{ $paddyPrice->getState_rel->state }}</td>
                                                                 <td>{{ $paddyPrice->quality_rel->name }}</td>
+                                                                <td>{{ $paddyPrice->crop_year }}</td>
                                                                 <td>{{ $paddyPrice->hand_cutting_price }}</td>
                                                                 <td>{{ $paddyPrice->machine_cutting_price }}</td>
                                                                 <td>{{ $paddyPrice->moisture }}</td>
@@ -173,9 +190,9 @@
     $(function () {
         $('.paddy-datatable').DataTable({
             pageLength: 25,
-            order: [[9, 'desc']],
+            order: [[10, 'desc']],
             scrollX: true,
-            columnDefs: [{ orderable: false, targets: [11] }]
+            columnDefs: [{ orderable: false, targets: [12] }]
         });
     });
 </script>

@@ -49,6 +49,7 @@ class PaddyPriceController extends Controller
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
             'quality_id' => 'required|integer|exists:rice_names,id',
             'mandi' => 'required|integer|exists:paddyMandi,id',
+            'crop_year' => 'required|integer|digits:4|min:1900|max:'.now()->year,
             'handCutting' => 'nullable|string|max:256',
             'machineCutting' => 'nullable|string|max:256',
             'moisture' => 'nullable|string|max:256',
@@ -71,6 +72,7 @@ class PaddyPriceController extends Controller
             'mandi' => (int) $request->mandi,
             'state' => (int) $mandiData->state_id,
             'quality_id' => (int) $request->quality_id,
+            'crop_year' => (int) $request->crop_year,
             'hand_cutting_price' => $request->handCutting ?? '----',
             'machine_cutting_price' => $request->machineCutting ?? '----',
             'moisture' => $request->moisture ?? '----',
@@ -99,6 +101,7 @@ class PaddyPriceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'quality_id' => 'required|integer',
+            'crop_year' => 'required|integer|digits:4|min:1900|max:'.now()->year,
             'hand_cutting_price' => 'required|string|max:256',
             'machine_cutting_price' => 'required|string|max:256',
             'moisture' => 'required|string|max:256',
