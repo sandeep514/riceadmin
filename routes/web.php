@@ -421,6 +421,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('edit/web/paddy/state/{paddyStateId}',      ['as' => 'edit.web.paddy.state',    'uses' => 'PaddyStateController@editWebPaddyState']);
             Route::POST('update/web/paddy/state',   ['as' => 'update.web.paddy.state',    'uses' => 'PaddyStateController@updateWebPaddyState']);
             Route::get('update/status/web/paddy/state/{paddyStateId}',   ['as' => 'update.status.web.paddy.state',    'uses' => 'PaddyStateController@updateState']);
+            Route::post('update/order/web/paddy/state', ['as' => 'update.order.web.paddy.state', 'uses' => 'PaddyStateController@updateOrder']);
 
                         
             Route::get('list/web/paddy/mandi',                  ['as' => 'list.web.paddy.mandi',    'uses' => 'PaddyMandiController@listWebPaddyMandi']);
@@ -429,6 +430,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('edit/web/paddy/mandi/{paddyMandiId}',   ['as' => 'edit.web.paddy.mandi',    'uses' => 'PaddyMandiController@editWebPaddyMandi']);
             Route::POST('update/web/paddy/mandi',               ['as' => 'update.web.paddy.mandi',    'uses' => 'PaddyMandiController@updateWebPaddyMandi']);
             Route::get('update/status/web/paddy/mandi/{paddyMandiId}',   ['as' => 'update.status.web.paddy.mandi',    'uses' => 'PaddyMandiController@updateStatus']);
+            Route::post('update/order/web/paddy/mandi', ['as' => 'update.order.web.paddy.mandi', 'uses' => 'PaddyMandiController@updateOrder']);
 
 
 

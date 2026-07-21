@@ -47,6 +47,8 @@ class PaddyApiController extends Controller
                 ->select('id', 'state')
                 ->where('status', 1)
                 ->whereIn('id', $selectedStatesIds)
+                ->orderByRaw('order_no IS NULL, order_no ASC')
+                ->orderBy('id')
                 ->get();
 
         return response()->json([
@@ -81,6 +83,8 @@ class PaddyApiController extends Controller
                 ->where('state_id', $stateId)
                 ->whereIn('id', $selectedMandiIds)
                 ->where('status', 1)
+                ->orderByRaw('order_no IS NULL, order_no ASC')
+                ->orderBy('id')
                 ->get();
 
         return response()->json([

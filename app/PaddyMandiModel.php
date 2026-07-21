@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class PaddyMandiModel extends Model
 {
     protected $table = "paddyMandi";
-    protected $fillable = ['mandi' , 'state_id' , 'status'];
+    protected $fillable = ['mandi', 'state_id', 'status', 'order_no'];
 
     public function state_rel()
     {

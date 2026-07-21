@@ -35,6 +35,7 @@
                                             <table class="table table-striped table-bordered paddy-datatable" width="100%">
                                                 <thead>
                                                 <tr>
+                                                    <th>Order</th>
                                                     <th>State</th>
                                                     <th>Action</th>
                                                 </tr>
@@ -42,6 +43,20 @@
                                                 <tbody>
                                                     @foreach($paddyState as $key => $value)
                                                         <tr>
+                                                            <td>
+                                                                <form method="POST" action="{{ route('update.order.web.paddy.state') }}" class="form-inline">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $value->id }}">
+                                                                    <div class="input-group input-group-sm" style="width:130px;">
+                                                                        <input type="number" name="order_no" class="form-control" min="1" value="{{ $value->order_no }}" required>
+                                                                        <span class="input-group-btn">
+                                                                            <button type="submit" class="btn btn-info" title="Change order">
+                                                                                <i class="fa fa-save"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </div>
+                                                                </form>
+                                                            </td>
                                                             <td style="text-transform: capitalize;">{{ $value->state }}</td>
                                                             <td>
                                                                 <a class="btn btn-sm btn-info" href="{{ route('edit.web.paddy.state' , $value->id ) }}"> Edit </a>
@@ -70,7 +85,7 @@
         $('.paddy-datatable').DataTable({
             pageLength: 25,
             order: [[0, 'asc']],
-            columnDefs: [{ orderable: false, targets: [1] }]
+            columnDefs: [{ orderable: false, targets: [2] }]
         });
     });
 </script>

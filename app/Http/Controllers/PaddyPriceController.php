@@ -16,8 +16,14 @@ class PaddyPriceController extends Controller
     {
         $paddyPrices = PaddyPrice::with(['getMandi_rel','getState_rel','quality_rel'])->orderBy('id' , 'DESC')->get();
         
-        $paddyStateModel = PaddyStateModel::where('status' , 1)->get();
-        $paddyMandiModel = PaddyMandiModel::where('status' , 1)->get();
+        $paddyStateModel = PaddyStateModel::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
+        $paddyMandiModel = PaddyMandiModel::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
         $quality = RiceName::where('status' , 1)->get();
 
         return view('paddyPrices.index', compact('paddyPrices' , 'paddyStateModel' , 'paddyMandiModel','quality'));
@@ -25,8 +31,14 @@ class PaddyPriceController extends Controller
 
     public function create()
     {
-        $paddyStateModel = PaddyStateModel::where('status' , 1)->get();
-        $paddyMandiModel = PaddyMandiModel::where('status' , 1)->get();
+        $paddyStateModel = PaddyStateModel::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
+        $paddyMandiModel = PaddyMandiModel::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
 
         return view('paddyPrices.create' , compact('paddyStateModel' , 'paddyMandiModel'));
     }

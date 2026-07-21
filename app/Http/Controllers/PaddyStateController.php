@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Validator;
 class PaddyStateController extends Controller
 {
     public function listWebPaddyState(){
-        $paddyState = PaddyStateModel::orderBy('id' , 'DESC')->get();
+        $paddyState = PaddyStateModel::orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
         return View('paddyState.index' , compact('paddyState'));
     }
 
@@ -35,7 +37,12 @@ class PaddyStateController extends Controller
             ], 422);
         }
 
-        PaddyStateModel::create(['state' => $request->state, 'status' => 1]);
+        $nextOrder = ((int) PaddyStateModel::max('order_no')) + 1;
+        PaddyStateModel::create([
+            'state' => $request->state,
+            'status' => 1,
+            'order_no' => $nextOrder,
+        ]);
 
         Session::flash('sucess' , 'Paddy state created successfully.');
         return back();
@@ -73,6 +80,39 @@ class PaddyStateController extends Controller
         ]);
 
         Session::flash('sucess', 'Paddy state status updated successfully.');
+        return back();
+    }
+
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:paddyStates,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        DB::transaction(function () use ($request) {
+            $state = PaddyStateModel::lockForUpdate()->findOrFail($request->id);
+            $newOrder = (int) $request->order_no;
+            $oldOrder = $state->order_no;
+
+            if ((int) $oldOrder === $newOrder) {
+                return;
+            }
+
+            $other = PaddyStateModel::lockForUpdate()
+                ->where('order_no', $newOrder)
+                ->where('id', '!=', $state->id)
+                ->first();
+
+            $state->update(['order_no' => null]);
+            if ($other) {
+                $other->update(['order_no' => $oldOrder]);
+            }
+            $state->update(['order_no' => $newOrder]);
+        });
+
+        Session::flash('success', 'Success|Paddy state order updated successfully.');
+
         return back();
     }
 }
