@@ -130,7 +130,7 @@ class TradeController extends Controller
         $additioanlInfo = $request->additioanlInfo;
         $location = $request->location;
         $tradeType = $request->tradeType;
-        $isHotdeal = $request->hotdeal;
+        $isHotdeal = (int) $request->input('hotdeal', 0);
         $isNew = (int) $request->input('is_new', 0);
         $validDatetimeForIsNew = $request->input('valid_datetime_for_is_new') ?: null;
         $riceSize = $request->riceSize;
@@ -285,7 +285,7 @@ class TradeController extends Controller
         $additioanlInfo = $request->additioanlInfo;
         $location = $request->location;
         $tradeType = $request->tradeType;
-        $isHotdeal = $request->hotdeal;
+        $isHotdeal = (int) $request->input('hotdeal', 0);
         $isNew = (int) $request->input('is_new', 0);
         $validDatetimeForIsNew = $request->input('valid_datetime_for_is_new') ?: null;
         $personal_remarks = $request->personal_remarks;
@@ -390,7 +390,11 @@ class TradeController extends Controller
         $data['admixture'] = $request->admixture;
         $data['elongation'] = $request->elongation;
 
-        $data = array_filter($data);
+        // Keep 0 values (hotdeal / is_new / sold_at); only drop empty strings & nulls.
+        $data = array_filter($data, function ($value) {
+            return $value !== null && $value !== '';
+        });
+        $data['hotdeal'] = $isHotdeal;
         $data['is_new'] = $isNew;
         TradeQueriesINR::where('id' , $request['id'])->update(($data));
         $this->syncTradeCategoryMaps((int) $request['id'], $request->input('category_ids', []));

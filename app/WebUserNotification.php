@@ -18,11 +18,13 @@ class WebUserNotification extends Model
         'audience_mode',
         'broadcast_group_id',
         'read_at',
+        'is_cleared',
     ];
 
     protected $casts = [
         'notify_date' => 'date',
         'read_at' => 'datetime',
+        'is_cleared' => 'integer',
     ];
 
     public function user()

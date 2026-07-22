@@ -182,8 +182,8 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('hotdeal','Hot Deal') !!}
                                 <select class="form-control" name="hotdeal" id="hotdeal">
-                                    <option value="0" {{ ($tradequeriesinr->hotdeal == 0) }}>No</option>
-                                    <option value="1" {{ ($tradequeriesinr->hotdeal == 1) }}>Yes</option>
+                                    <option value="0" {{ (int) ($tradequeriesinr->hotdeal ?? 0) === 0 ? 'selected' : '' }}>No</option>
+                                    <option value="1" {{ (int) ($tradequeriesinr->hotdeal ?? 0) === 1 ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">

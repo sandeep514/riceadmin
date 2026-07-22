@@ -10,8 +10,22 @@ use Carbon\Carbon;
 class Notification extends Model
 {
     public $table = "notification";
-    protected $fillable = [ 'user_id','title', 'message','userAppType','created_at' , 'updated_at' ];
+    protected $fillable = [
+        'user_id',
+        'title',
+        'message',
+        'userAppType',
+        'status',
+        'is_cleared',
+        'created_at',
+        'updated_at',
+    ];
     public $timestamps = true;
+
+    protected $casts = [
+        'status' => 'integer',
+        'is_cleared' => 'integer',
+    ];
 
 
 }

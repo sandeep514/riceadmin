@@ -269,7 +269,11 @@ class NotificationController extends Controller
             return response()->json(['status' => false, 'message' => 'Required Parameters Missing !'], 200);
         }
 
-        $notifications = Notification::where('user_id', $user_id)->latest()->take(50)->get();
+        $notifications = Notification::where('user_id', $user_id)
+            ->where('is_cleared', 0)
+            ->latest()
+            ->take(50)
+            ->get();
 
         if ($notifications->count() <= 0) {
             return response()->json(['status' => false, 'message' => 'User not found !'], 200);

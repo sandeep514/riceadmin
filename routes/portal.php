@@ -61,5 +61,6 @@
             Route::post('web/subscription-history', [PortalApiController::class, 'getWebSubscriptionHistory']);
             Route::get('web/notifications', [PortalApiController::class, 'getWebPortalNotifications']);
             Route::post('web/notifications', [PortalApiController::class, 'getWebPortalNotifications']);
+            Route::post('web/notifications/clear', [PortalApiController::class, 'clearWebPortalNotifications']);
         });
     });

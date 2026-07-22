@@ -2742,6 +2742,7 @@ class PortalApiController extends Controller
         $userId = (int) $user->id;
 
         $rows = WebUserNotification::where('user_id', $userId)
+            ->where('is_cleared', 0)
             ->orderBy('id', 'desc')
             ->limit($limit)
             ->get()
@@ -2761,6 +2762,29 @@ class PortalApiController extends Controller
             'status' => true,
             'message' => 'Notifications fetched successfully.',
             'data' => $rows,
+        ], 200);
+    }
+
+    /**
+     * Soft-clear all web portal notifications for the authenticated token owner.
+     */
+    public function clearWebPortalNotifications(Request $request)
+    {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized.',
+            ], 401);
+        }
+
+        $cleared = WebUserNotification::where('user_id', (int) $user->id)
+            ->where('is_cleared', 0)
+            ->update(['is_cleared' => 1]);
+
+        return response()->json([
+            'status' => true,
+            'cleared' => (int) $cleared,
         ], 200);
     }
 

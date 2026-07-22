@@ -5260,14 +5260,24 @@ class ApiController extends Controller
 
     public function userNotification($userId)
     {
-        $listNotifications = Notification::where('user_id', $userId)->where('status', 0)->get();
+        $listNotifications = Notification::where('user_id', $userId)
+            ->where('status', 0)
+            ->where('is_cleared', 0)
+            ->get();
         return response()->json(['status' => true, 'data' => $listNotifications->count()], 200);
     }
 
     public function clearNotifications($userId)
     {
-        Notification::where('user_id', $userId)->update(['status' => 1]);
-        return response()->json(['status' => true, 'data' => []], 200);
+        $cleared = Notification::where('user_id', $userId)
+            ->where('is_cleared', 0)
+            ->update(['is_cleared' => 1]);
+
+        return response()->json([
+            'status' => true,
+            'cleared' => (int) $cleared,
+            'data' => [],
+        ], 200);
     }
 
     public function getRazorpayOrderId(Request $request)
