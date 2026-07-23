@@ -2904,9 +2904,20 @@ class ApiController extends Controller
         ]);
     }
 
-    public function getGalleryData()
+    public function getGalleryData(Request $request)
     {
-        $gallery = Gallery::get()->groupBy('type');
+        $limit = (int) $request->query('limit', 0);
+
+        if ($limit > 0) {
+            // Return the last N gallery rows (by id), then group by type.
+            $gallery = Gallery::orderBy('id', 'desc')
+                ->limit($limit)
+                ->get()
+                ->groupBy('type');
+        } else {
+            $gallery = Gallery::get()->groupBy('type');
+        }
+
         return response()->json(['errors' => null, 'data' => $gallery]);
     }
 
