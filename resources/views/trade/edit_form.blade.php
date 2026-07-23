@@ -98,7 +98,8 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing Image') !!}
                                 <input type="file" class="form-control" name="packingImage">
-                                <img src="{{ asset('uploads/'.$tradequeriesinr->packing_file) }}" />
+                                <vi
+                                <img src="{{ asset('uploads/'.$tradequeriesinr->packing_file) }}" style="width: 200px;" />
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Upload Video','Upload Video (optional)') !!}
