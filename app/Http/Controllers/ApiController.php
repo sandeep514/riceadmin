@@ -2909,11 +2909,20 @@ class ApiController extends Controller
         $limit = (int) $request->query('limit', 0);
 
         if ($limit > 0) {
-            // Return the last N gallery rows (by id), then group by type.
-            $gallery = Gallery::orderBy('id', 'desc')
-                ->limit($limit)
-                ->get()
-                ->groupBy('type');
+            // Last N per type (basmati + nonbasmati), then group by type.
+            $types = ['basmati', 'nonbasmati'];
+            $rows = collect();
+
+            foreach ($types as $type) {
+                $rows = $rows->merge(
+                    Gallery::where('type', $type)
+                        ->orderBy('id', 'desc')
+                        ->limit($limit)
+                        ->get()
+                );
+            }
+
+            $gallery = $rows->groupBy('type');
         } else {
             $gallery = Gallery::get()->groupBy('type');
         }
