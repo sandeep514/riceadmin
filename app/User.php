@@ -179,6 +179,21 @@ class User extends Authenticatable
         return null;
     }
 
+    /**
+     * When a request token is already cleared, still surface deactivate/reject messaging
+     * if the client sends a user id that matches a blocked account.
+     */
+    public static function authAccessBlockedMessageForUserId($userId): ?string
+    {
+        if ($userId === null || $userId === '') {
+            return null;
+        }
+
+        $user = static::query()->find((int) $userId);
+
+        return $user ? $user->authAccessBlockedMessage() : null;
+    }
+
     public function role_rel()
     {
         return $this->belongsTo(Role::class, 'role', 'id');

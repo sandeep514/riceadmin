@@ -5329,7 +5329,8 @@ class ApiController extends Controller
 
     public function deleteUser($userId)
     {
-        User::where('id', $userId)->update(['is_deactivated' => 1, 'api_token' => null, 'mobile_api_token' => null, 'user_token' => null]);
+        // Keep api_token / mobile_api_token so open sessions get the blocked-account message.
+        User::where('id', $userId)->update(['is_deactivated' => 1, 'user_token' => null]);
         return response()->json(['status' => true, 'data' => []], 200);
     }
 

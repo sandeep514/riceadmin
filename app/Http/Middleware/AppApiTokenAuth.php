@@ -51,6 +51,18 @@ class AppApiTokenAuth
         }
 
         if (! $user) {
+            $candidateId = $request->input('user_id')
+                ?? $request->route('userId')
+                ?? $request->route('user_id');
+
+            if ($blockedMessage = User::authAccessBlockedMessageForUserId($candidateId)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $blockedMessage,
+                    'session_expired' => true,
+                ], 403);
+            }
+
             return response()->json([
                 'status' => false,
                 'message' => 'Unauthorized: session expired. Please login again.',

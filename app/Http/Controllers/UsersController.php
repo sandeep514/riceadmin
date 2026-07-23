@@ -467,13 +467,13 @@ class UsersController extends Controller
             'Your account has been rejected by admin. Reason: ' . $mailmessage
         );
 
+        // Keep api_token / mobile_api_token so other open sessions still resolve the user
+        // and receive the reject/on-hold message from auth middleware (not "Invalid API token").
         User::where(['id' => $userId])->update([
             'message' => $mailmessage,
             'has_validation' => $mailmessage,
             'is_deactivated' => 1,
             'is_active_by_admin' => 0,
-            'api_token' => null,
-            'mobile_api_token' => null,
             'user_token' => null,
         ]);
         $userDetail = User::where( ['id' => $userId  ])->first();
@@ -539,10 +539,10 @@ class UsersController extends Controller
                 'Your account has been deactivated by admin. Please contact support if you need help.'
             );
 
+            // Keep api_token / mobile_api_token so other open sessions still resolve the user
+            // and receive the deactivated message from auth middleware (not "Invalid API token").
             $user->update([
                 'is_deactivated' => 1,
-                'api_token' => null,
-                'mobile_api_token' => null,
                 'user_token' => null,
             ]);
 
