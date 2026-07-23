@@ -464,7 +464,7 @@ class UsersController extends Controller
         $this->sendWebUserNotification(
             $userId,
             'Account On Hold',
-            'Your account has been rejected by admin. Reason: ' . $mailmessage
+            'Your account has been rejected . Reason: ' . $mailmessage
         );
 
         // Keep api_token / mobile_api_token so other open sessions still resolve the user
@@ -536,7 +536,7 @@ class UsersController extends Controller
             $this->sendWebUserNotification(
                 (int) $userId,
                 'Account Deactivated',
-                'Your account has been deactivated by admin. Please contact support if you need help.'
+                'Your account has been deactivated . Please contact support if you need help.'
             );
 
             // Keep api_token / mobile_api_token so other open sessions still resolve the user
@@ -579,7 +579,7 @@ class UsersController extends Controller
             $this->sendWebUserNotification(
                 (int) $userId,
                 'Account Activated',
-                'Your account has been activated by admin. Welcome aboard!'
+                'Your account has been activated. Welcome aboard!'
             );
         }
 

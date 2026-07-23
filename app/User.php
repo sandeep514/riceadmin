@@ -150,7 +150,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Rejected / put on hold by admin (is_deactivated + not admin-approved).
+     * Rejected / put on hold  (is_deactivated + not admin-approved).
      */
     public function isAdminRejected(): bool
     {
@@ -170,10 +170,10 @@ class User extends Authenticatable
         if ($this->isAdminRejected()) {
             $reason = trim((string) ($this->getAttribute('has_validation') ?: $this->getAttribute('message') ?: ''));
             if ($reason !== '') {
-                return 'Your account has been put on hold by admin. Reason: ' . $reason . ' Please contact enquiry@sntcgroup.com for further assistance.';
+                return 'Your account has been put on hold . Reason: ' . $reason . ' Please contact enquiry@sntcgroup.com for further assistance.';
             }
 
-            return 'Your account has been put on hold by admin. Please contact enquiry@sntcgroup.com for further assistance.';
+            return 'Your account has been put on hold . Please contact enquiry@sntcgroup.com for further assistance.';
         }
 
         return null;

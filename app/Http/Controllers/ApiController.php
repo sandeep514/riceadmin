@@ -208,7 +208,7 @@ class ApiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
         }
 
-        // Check if user account is deactivated or rejected by admin
+        // Check if user account is deactivated or rejected 
         if ($blockedMessage = $userModel->authAccessBlockedMessage()) {
             return response()->json([
                 'status' => 'error',
@@ -2294,7 +2294,7 @@ class ApiController extends Controller
                 if(in_array($combineNameForm,$hasOpenigClosingConcade)) continue;
             }
 
-            // If created_at or updated_at is not today, treat as not updated by admin
+            // If created_at or updated_at is not today, treat as not updated 
             $todayStr = $todayDate->format('Y-m-d');
             $createdNotToday = $v->created_at ? $v->created_at->format('Y-m-d') !== $todayStr : true;
             $updatedNotToday = $v->updated_at ? $v->updated_at->format('Y-m-d') !== $todayStr : true;
