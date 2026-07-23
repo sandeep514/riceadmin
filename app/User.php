@@ -149,6 +149,36 @@ class User extends Authenticatable
             && (int) ($this->getAttribute('is_active_by_admin') ?? 0) === 1;
     }
 
+    /**
+     * Rejected / put on hold by admin (is_deactivated + not admin-approved).
+     */
+    public function isAdminRejected(): bool
+    {
+        return $this->isDeactivated()
+            && (int) ($this->getAttribute('is_active_by_admin') ?? 0) === 0;
+    }
+
+    /**
+     * Auth/login block message for deactivated or rejected accounts; null if allowed.
+     */
+    public function authAccessBlockedMessage(): ?string
+    {
+        if ($this->isAdminDeactivated()) {
+            return 'Your account has been deactivated. Please contact the administrator enquiry@sntcgroup.com for further assistance or to reactivate your account.';
+        }
+
+        if ($this->isAdminRejected()) {
+            $reason = trim((string) ($this->getAttribute('has_validation') ?: $this->getAttribute('message') ?: ''));
+            if ($reason !== '') {
+                return 'Your account has been put on hold by admin. Reason: ' . $reason . ' Please contact enquiry@sntcgroup.com for further assistance.';
+            }
+
+            return 'Your account has been put on hold by admin. Please contact enquiry@sntcgroup.com for further assistance.';
+        }
+
+        return null;
+    }
+
     public function role_rel()
     {
         return $this->belongsTo(Role::class, 'role', 'id');

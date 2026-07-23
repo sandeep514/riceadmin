@@ -69,10 +69,10 @@ class PortalSessionOrApiTokenAuth
             ], 401);
         }
 
-        if ($user->isAdminDeactivated()) {
+        if ($blockedMessage = $user->authAccessBlockedMessage()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Your account has been deactivated. Please contact the administrator enquiry@sntcgroup.com for further assistance or to reactivate your account.',
+                'message' => $blockedMessage,
             ], 403);
         }
 

@@ -208,11 +208,11 @@ class ApiController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Wrong user detail']);
         }
 
-        // Check if user account is deactivated by admin (approved user, then deactivated)
-        if ($userModel->isAdminDeactivated()) {
+        // Check if user account is deactivated or rejected by admin
+        if ($blockedMessage = $userModel->authAccessBlockedMessage()) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Your account has been deactivated. Please contact the administrator enquiry@sntcgroup.com for further assistance or to reactivate your account.'
+                'message' => $blockedMessage,
             ]);
         }
 
