@@ -75,6 +75,7 @@ use Auth;
 use App\NewsRunner;
 use App\TradeCurrentStatus;
 use App\WebBrands;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Session;
 use App\RiceBrandForm;
@@ -152,6 +153,7 @@ class WebBrandController extends Controller
             }
         }
         $data['status'] = 0;
+        $data['order_no'] = ((int) WebBrands::max('order_no')) + 1;
 
         $webBrands = WebBrands::create($data);
         $webBrands->load('RiceName:id,name');
@@ -269,10 +271,44 @@ class WebBrandController extends Controller
     public function showBrandsToAdmin()
     {
         $brands = WebBrands::with(['RiceName:id,name'])
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('id', 'desc')
             ->get();
 
         return View('webBrands.list', compact('brands'));
+    }
+
+    public function updateWebBrandOrder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:web_brands,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        DB::transaction(function () use ($request) {
+            $brand = WebBrands::lockForUpdate()->findOrFail($request->id);
+            $newOrder = (int) $request->order_no;
+            $oldOrder = $brand->order_no;
+
+            if ((int) $oldOrder === $newOrder) {
+                return;
+            }
+
+            $other = WebBrands::lockForUpdate()
+                ->where('order_no', $newOrder)
+                ->where('id', '!=', $brand->id)
+                ->first();
+
+            $brand->update(['order_no' => null]);
+            if ($other) {
+                $other->update(['order_no' => $oldOrder]);
+            }
+            $brand->update(['order_no' => $newOrder]);
+        });
+
+        Session::flash('success', 'Success|Web brand order updated successfully.');
+
+        return back();
     }
 
     public function showBrandToAdmin($id)

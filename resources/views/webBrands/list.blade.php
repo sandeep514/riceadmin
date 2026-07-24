@@ -45,6 +45,7 @@
                                             <table class="table table-striped example2" id="example2">
                                                 <thead>
                                                 <tr>
+                                                    <td>Order</td>
                                                     <td>Name</td>
                                                     <td>Quality</td>
                                                     <td>Brand year</td>
@@ -58,6 +59,20 @@
                                                 <tbody>
                                                     @foreach($brands as $key => $value)
                                                         <tr>
+                                                            <td>
+                                                                <form method="POST" action="{{ route('update.order.web.brands') }}" class="form-inline">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" value="{{ $value->id }}">
+                                                                    <div class="input-group input-group-sm" style="width:130px;">
+                                                                        <input type="number" name="order_no" class="form-control" min="1" value="{{ $value->order_no }}" required>
+                                                                        <span class="input-group-btn">
+                                                                            <button type="submit" class="btn btn-info" title="Change order">
+                                                                                <i class="fa fa-save"></i>
+                                                                            </button>
+                                                                        </span>
+                                                                    </div>
+                                                                </form>
+                                                            </td>
                                                             <td style="text-transform: capitalize;">{{ $value->name ?? '' }}</td>
                                                             <td style="text-transform: capitalize;">{{ $value->RiceName->name ?? $value->quality ?? '' }}</td>
                                                             <td style="text-transform: capitalize;">{{ $value->brand_year ?? '' }}</td>

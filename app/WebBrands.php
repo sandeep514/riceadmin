@@ -9,7 +9,7 @@ use App\WebBrandVariant;
 class WebBrands extends Model
 {
     protected $table = "web_brands";
-    protected $fillable = ['name' ,'user_id','quality' ,'brand_year', 'address' ,'product_mode','description','logo','status'];
+    protected $fillable = ['name' ,'user_id','quality' ,'brand_year', 'address' ,'product_mode','description','logo','status','order_no'];
 
 
     // public function getAttachments()
