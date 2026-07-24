@@ -75,7 +75,6 @@ use Auth;
 use App\NewsRunner;
 use App\TradeCurrentStatus;
 use App\WebBrands;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Session;
 use App\RiceBrandForm;
