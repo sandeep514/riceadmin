@@ -33,13 +33,75 @@ class HomeController extends Controller
 
     public function clonePreviousDayRecord()
     {
-        $date = Carbon::now()->format('Y-m-d');
-        $lastInsertedDataDate = LivePrice::orderBy('created_at' , 'desc')->whereDate('created_at' , '<=' , $date)->first()->created_at;
+        $today = Carbon::today();
 
-        $lastInsertedData = LivePrice::select("tradeFor","farmingType","name","form","cropGrade","cropYear","min_price","max_price","state","up_down","opening","closing","monthStart","monthEnd","status","state_order","name_order","form_order")->whereDate('created_at' , Carbon::parse($lastInsertedDataDate)->format('Y-m-d'))->get()->toArray();
+        if (LivePrice::whereDate('created_at', $today)->exists()) {
+            Session::flash('error', 'Error|Today already has live prices. Clone skipped to avoid duplicates.');
+            return back();
+        }
 
-        LivePrice::insert($lastInsertedData);
-        Session::flash('success','Success|Price cloned successfully!');
+        $sourceDate = LivePrice::whereDate('created_at', '<', $today)
+            ->orderBy('created_at', 'desc')
+            ->value('created_at');
+
+        if (! $sourceDate) {
+            Session::flash('error', 'Error|No previous day live prices found to clone.');
+            return back();
+        }
+
+        $sourceDay = Carbon::parse($sourceDate)->toDateString();
+        $now = Carbon::now()->toDateTimeString();
+        $columns = [
+            'tradeFor',
+            'farmingType',
+            'name',
+            'form',
+            'cropGrade',
+            'cropYear',
+            'min_price',
+            'max_price',
+            'state',
+            'up_down',
+            'opening',
+            'closing',
+            'monthStart',
+            'monthEnd',
+            'status',
+            'state_order',
+            'name_order',
+            'form_order',
+        ];
+
+        $cloned = 0;
+
+        LivePrice::query()
+            ->select(array_merge(['id'], $columns))
+            ->whereDate('created_at', $sourceDay)
+            ->orderBy('id')
+            ->chunkById(500, function ($rows) use ($columns, $now, &$cloned) {
+                $payload = $rows->map(function ($row) use ($columns, $now) {
+                    $data = [];
+                    foreach ($columns as $column) {
+                        $data[$column] = $row->getAttribute($column);
+                    }
+                    $data['created_at'] = $now;
+                    $data['updated_at'] = $now;
+
+                    return $data;
+                })->all();
+
+                if ($payload !== []) {
+                    LivePrice::insert($payload);
+                    $cloned += count($payload);
+                }
+            });
+
+        if ($cloned === 0) {
+            Session::flash('error', 'Error|No previous day live prices found to clone.');
+            return back();
+        }
+
+        Session::flash('success', 'Success|Price cloned successfully from ' . $sourceDay . ' (' . $cloned . ' rows).');
         return back();
     }
 
