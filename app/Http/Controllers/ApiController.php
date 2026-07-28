@@ -2169,13 +2169,14 @@ class ApiController extends Controller
 
         $priceDayStart = Carbon::parse($lastEnteredRecord->created_at)->startOfDay();
         $priceDayEnd = Carbon::parse($lastEnteredRecord->created_at)->endOfDay();
-        // Prefer latest usable row per name+form (ignore newer null clones).
-        $latestPriceIdsForDate = $this->latestUsableLivePriceIdsQuery(
-            $state,
-            $cropYear,
-            $priceDayStart,
-            $priceDayEnd
-        );
+        $latestPriceIdsForDate = LivePrice::query()
+            ->selectRaw('MAX(id) as id')
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->where('state', $state)
+            ->where('cropYear', $cropYear)
+            ->whereBetween('created_at', [$priceDayStart, $priceDayEnd])
+            ->groupBy('name', 'form', 'state', 'cropYear');
 
         $data = LivePrice::query()
             ->with([
@@ -2387,33 +2388,8 @@ class ApiController extends Controller
         ]);
     }
 
-    /**
-     * Latest live_prices.id per name+form that still has usable min/max.
-     * Newer null clones are ignored so same-day priced rows still display.
-     */
-    private function latestUsableLivePriceIdsQuery(
-        string $state,
-        $cropYear = null,
-        $createdFrom = null,
-        $createdTo = null
-    ) {
-        return LivePrice::query()
-            ->selectRaw('MAX(id) as id')
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
-            ->where('state', $state)
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price')
-            ->where('min_price', '>', 0)
-            ->where('max_price', '>', 0)
-            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
-            ->when($createdFrom !== null && $createdTo !== null, fn ($q) => $q->whereBetween('created_at', [$createdFrom, $createdTo]))
-            ->groupBy('name', 'form', 'state', 'cropYear');
-    }
-
     private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
     {
-        // Overall latest row per tuple (may be a null clone).
         $latestIds = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
@@ -2422,32 +2398,11 @@ class ApiController extends Controller
             ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
             ->groupBy('name', 'form', 'state', 'cropYear');
 
-        $unusableLatest = LivePrice::query()
+        return LivePrice::query()
             ->whereIn('id', $latestIds)
             ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
-            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row));
-
-        if ($unusableLatest->isEmpty()) {
-            return [];
-        }
-
-        // Only treat as invalid when the tuple has no usable price at all.
-        $usableTupleKeys = LivePrice::query()
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
-            ->where('state', $state)
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price')
-            ->where('min_price', '>', 0)
-            ->where('max_price', '>', 0)
-            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
-            ->get(['name', 'form', 'state', 'cropYear'])
+            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
             ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
-            ->all();
-
-        return $unusableLatest
-            ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
-            ->filter(fn ($_, $key) => ! isset($usableTupleKeys[$key]))
             ->all();
     }
 
@@ -3333,8 +3288,8 @@ class ApiController extends Controller
             $closedNameForms[strtolower($row->name . '_' . $row->form)] = true;
         }
 
-        // Latest usable id per name+form+state on that day (same rule as getPricesWeb).
-        $latestUsableIds = DB::table('live_prices as lp')
+        // Latest row per name+form+state on that day (null/0 latest wins — no older fallback).
+        $latestIds = DB::table('live_prices as lp')
             ->join('rice_forms as rf', function ($join) use ($ricetype) {
                 $join->on('rf.id', '=', 'lp.form')
                     ->where('rf.type', '=', $ricetype)
@@ -3346,10 +3301,6 @@ class ApiController extends Controller
             })
             ->where('lp.name', '!=', '0')
             ->where('lp.form', '!=', '0')
-            ->whereNotNull('lp.min_price')
-            ->whereNotNull('lp.max_price')
-            ->where('lp.min_price', '>', 0)
-            ->where('lp.max_price', '>', 0)
             ->where('lp.cropYear', $cropYear)
             ->whereBetween('lp.created_at', [$priceDayStart, $priceDayEnd])
             ->when(
@@ -3360,11 +3311,15 @@ class ApiController extends Controller
             ->selectRaw('MAX(lp.id) as id');
 
         $liveRows = DB::table('live_prices as lp')
-            ->whereIn('lp.id', $latestUsableIds)
+            ->whereIn('lp.id', $latestIds)
+            ->whereNotNull('lp.min_price')
+            ->whereNotNull('lp.max_price')
+            ->where('lp.min_price', '>', 0)
+            ->where('lp.max_price', '>', 0)
             ->select('lp.state', 'lp.name', 'lp.form', 'lp.state_order')
             ->get();
 
-        // Only states with at least one open (displayable) live price for this type/year.
+        // Only states with at least one latest usable live price for this type/year.
         $stateOrders = [];
         foreach ($liveRows as $row) {
             if ($closedNameForms !== [] && isset($closedNameForms[strtolower($row->name . '_' . $row->form)])) {
