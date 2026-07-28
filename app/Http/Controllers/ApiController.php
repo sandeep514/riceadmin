@@ -6765,9 +6765,9 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Web trade list order:
-     * 1) non-sold trades matching admin web categories for the user's selected_category
-     * 2) non-sold trades matching user preferred products (interests), excluding bucket 1
+     * Web trade list order (Buy/Sell filtered tabs):
+     * 1) non-sold trades matching user Preferred products (interests)
+     * 2) non-sold trades matching admin web categories (excluding bucket 1)
      * 3) remaining non-sold trades by id DESC
      * 4) latest 15 sold trades by id DESC
      *
@@ -6798,35 +6798,21 @@ if (!file_exists('uploads')) {
         $nonSold = $collection->filter(fn ($trade) => (int) $trade->status !== 3);
 
         $placedIds = [];
+
+        // 1) Preferred interests first (exact grade score before name+form).
         $bucket1 = [];
         foreach ($nonSold as $trade) {
-            if (! isset($categoryTradeIds[$trade->id])) {
-                continue;
-            }
-            $placedIds[(int) $trade->id] = true;
-            $trade->setAttribute('matches_user_category', true);
-            $trade->setAttribute('matches_user_interest', false);
-            $trade->setAttribute('interest_match_score', 0);
-            $bucket1[] = $trade;
-        }
-        usort($bucket1, fn ($a, $b) => (int) $b->id <=> (int) $a->id);
-
-        $bucket2 = [];
-        foreach ($nonSold as $trade) {
-            if (isset($placedIds[(int) $trade->id])) {
-                continue;
-            }
             $score = UserInterestService::scoreTradeAgainstInterests($trade, $interestTuples);
             if ($score <= 0) {
                 continue;
             }
             $placedIds[(int) $trade->id] = true;
-            $trade->setAttribute('matches_user_category', false);
+            $trade->setAttribute('matches_user_category', isset($categoryTradeIds[$trade->id]));
             $trade->setAttribute('matches_user_interest', true);
             $trade->setAttribute('interest_match_score', $score);
-            $bucket2[] = $trade;
+            $bucket1[] = $trade;
         }
-        usort($bucket2, function ($a, $b) {
+        usort($bucket1, function ($a, $b) {
             $scoreCmp = (int) $b->interest_match_score <=> (int) $a->interest_match_score;
             if ($scoreCmp !== 0) {
                 return $scoreCmp;
@@ -6835,6 +6821,24 @@ if (!file_exists('uploads')) {
             return (int) $b->id <=> (int) $a->id;
         });
 
+        // 2) Category matches next (excluding already-preferred).
+        $bucket2 = [];
+        foreach ($nonSold as $trade) {
+            if (isset($placedIds[(int) $trade->id])) {
+                continue;
+            }
+            if (! isset($categoryTradeIds[$trade->id])) {
+                continue;
+            }
+            $placedIds[(int) $trade->id] = true;
+            $trade->setAttribute('matches_user_category', true);
+            $trade->setAttribute('matches_user_interest', false);
+            $trade->setAttribute('interest_match_score', 0);
+            $bucket2[] = $trade;
+        }
+        usort($bucket2, fn ($a, $b) => (int) $b->id <=> (int) $a->id);
+
+        // 3) Remaining active trades.
         $bucket3 = [];
         foreach ($nonSold as $trade) {
             if (isset($placedIds[(int) $trade->id])) {
