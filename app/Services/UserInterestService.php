@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\RiceForm;
 use App\RiceFormMilestone3;
 use App\RiceFormParentMap;
 use App\RiceName;
@@ -15,6 +16,9 @@ class UserInterestService
 {
     /** @var array<int, string> */
     private static array $formNameCache = [];
+
+    /** @var array<int, string> */
+    private static array $liveFormNameCache = [];
 
     /** @var array<int, string> */
     private static array $wandValueCache = [];
@@ -172,10 +176,25 @@ class UserInterestService
      */
     public static function getActiveInterestTuplesForUser(int $userId): array
     {
-        return UserInterestedMap::query()
+        if ($userId <= 0) {
+            return [];
+        }
+
+        // Prefer status=1; if none (legacy rows), still return rows for this user.
+        $rows = UserInterestedMap::query()
             ->where('user_id', $userId)
-            ->where('status', 1)
-            ->get(['rice_name_id', 'form_id', 'grade'])
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhere('status', true)->orWhereNull('status');
+            })
+            ->get(['rice_name_id', 'form_id', 'grade']);
+
+        if ($rows->isEmpty()) {
+            $rows = UserInterestedMap::query()
+                ->where('user_id', $userId)
+                ->get(['rice_name_id', 'form_id', 'grade']);
+        }
+
+        return $rows
             ->map(function ($row) {
                 $grade = $row->grade;
                 if ($grade === null || $grade === '') {
@@ -192,18 +211,19 @@ class UserInterestService
                     'grade' => (int) $grade,
                 ];
             })
+            ->filter(fn ($row) => $row['rice_name_id'] > 0)
             ->values()
             ->all();
     }
 
     /**
-     * Match trade against user interests (trade.quality = rice name, qualityForm = milestone3 form, grade = wand).
-     * 3 = name + form + exact grade (id or same wand value)
-     * 2 = name + form (Preferred) — grade is NOT required
-     * 0 = no match
+     * Match trade against user Preferred products (rice name + rice form).
      *
-     * Preferred requires both rice name AND rice form.
-     * Form match: same qualityForm id, parent/child form map, or normalized form name.
+     * Scores (higher first):
+     * 3 = rice name + form + grade
+     * 2 = rice name + form  ← Preferred product match
+     * 1 = rice name only    ← still Preferred so quality floats up if form ids diverge
+     * 0 = no match
      */
     public static function scoreTradeAgainstInterests(object $trade, array $tuples): int
     {
@@ -217,56 +237,99 @@ class UserInterestService
         }
 
         $tradeFormId = (int) ($trade->qualityForm ?? 0);
+        $tradeLiveFormId = (int) ($trade->qualityFormLinkWithLivePrice ?? 0);
         $tradeGrade = (int) ($trade->grade ?? 0);
 
-        // Labels: master tables first, then eager-loaded relations (UI source of truth).
-        $tradeRiceLabel = self::cachedRiceNameLabel($quality);
-        if ($tradeRiceLabel === '') {
-            $tradeRiceLabel = self::normalizeLabel(
-                (string) (data_get($trade, 'RiceNameData.name')
-                    ?? data_get($trade, 'rice_name_data.name')
-                    ?? '')
-            );
-        }
-
-        $tradeFormLabel = $tradeFormId > 0 ? self::cachedFormNameLabel($tradeFormId) : '';
-        if ($tradeFormLabel === '') {
-            $relFormName = (string) (data_get($trade, 'RiceFormMilestone3.name')
-                ?? data_get($trade, 'rice_form_milestone3.name')
-                ?? '');
-            $tradeFormLabel = self::normalizeLabel($relFormName);
-            if ($tradeFormId <= 0) {
-                $tradeFormId = (int) (data_get($trade, 'RiceFormMilestone3.id')
-                    ?? data_get($trade, 'rice_form_milestone3.id')
-                    ?? 0);
-            }
-        }
-
+        $tradeRiceLabel = self::resolveTradeRiceLabel($trade, $quality);
+        $tradeFormLabel = self::resolveTradeFormLabel($trade, $tradeFormId, $tradeLiveFormId);
         $tradeWandLabel = $tradeGrade > 0 ? self::cachedWandValueLabel($tradeGrade) : '';
         $best = 0;
 
         foreach ($tuples as $tuple) {
             $interestNameId = (int) $tuple['rice_name_id'];
-            $interestFormId = (int) $tuple['form_id'];
+            $interestFormId = (int) ($tuple['form_id'] ?? 0);
             $interestGrade = $tuple['grade'] !== null ? (int) $tuple['grade'] : null;
+
+            if ($interestNameId <= 0) {
+                continue;
+            }
 
             if (! self::riceNamesMatch($quality, $interestNameId, $tradeRiceLabel)) {
                 continue;
             }
 
-            // Preferred = rice name + rice form (form is mandatory).
-            if (! self::formsMatch($tradeFormId, $interestFormId, $tradeFormLabel)) {
-                continue;
-            }
+            // Name alone is enough to mark Preferred (keeps PR-11/14 above unrelated).
+            $best = max($best, 1);
 
-            $best = max($best, 2);
+            if ($interestFormId > 0 && self::formsMatch($tradeFormId, $interestFormId, $tradeFormLabel, $tradeLiveFormId)) {
+                $best = max($best, 2);
 
-            if ($interestGrade !== null && $interestGrade > 0 && self::gradesMatch($tradeGrade, $interestGrade, $tradeWandLabel)) {
-                $best = max($best, 3);
+                if ($interestGrade !== null && $interestGrade > 0 && self::gradesMatch($tradeGrade, $interestGrade, $tradeWandLabel)) {
+                    $best = max($best, 3);
+                }
             }
         }
 
         return $best;
+    }
+
+    /**
+     * Resolve trade rice-name label from master table or eager relation.
+     */
+    private static function resolveTradeRiceLabel(object $trade, int $quality): string
+    {
+        $label = self::cachedRiceNameLabel($quality);
+        if ($label !== '') {
+            return $label;
+        }
+
+        return self::normalizeLabel(
+            (string) (data_get($trade, 'RiceNameData.name')
+                ?? data_get($trade, 'rice_name_data.name')
+                ?? data_get($trade, 'RiceQualityMaster.quality_name')
+                ?? data_get($trade, 'RiceQualityMaster.quality')
+                ?? '')
+        );
+    }
+
+    /**
+     * Resolve trade form label from milestone3, live-price form, or relations.
+     */
+    private static function resolveTradeFormLabel(object $trade, int $tradeFormId, int $tradeLiveFormId): string
+    {
+        if ($tradeFormId > 0) {
+            $label = self::cachedFormNameLabel($tradeFormId);
+            if ($label !== '') {
+                return $label;
+            }
+            // qualityForm may point at legacy rice_forms id on older rows.
+            $label = self::cachedLiveFormNameLabel($tradeFormId);
+            if ($label !== '') {
+                return $label;
+            }
+        }
+
+        $rel = self::normalizeLabel(
+            (string) (data_get($trade, 'RiceFormMilestone3.name')
+                ?? data_get($trade, 'rice_form_milestone3.name')
+                ?? '')
+        );
+        if ($rel !== '') {
+            return $rel;
+        }
+
+        if ($tradeLiveFormId > 0) {
+            $label = self::cachedLiveFormNameLabel($tradeLiveFormId);
+            if ($label !== '') {
+                return $label;
+            }
+        }
+
+        return self::normalizeLabel(
+            (string) (data_get($trade, 'RiceFormData.form_name')
+                ?? data_get($trade, 'rice_form_data.form_name')
+                ?? '')
+        );
     }
 
     /**
@@ -284,6 +347,27 @@ class UserInterestService
     private static function labelsEqual(string $a, string $b): bool
     {
         return $a !== '' && $b !== '' && $a === $b;
+    }
+
+    /**
+     * Form labels: exact match, or shorter label (min 3 chars) is prefix of longer
+     * so "raw" matches "rawrice", "steam" matches "steamsuper".
+     */
+    private static function formLabelsEqual(string $a, string $b): bool
+    {
+        if (self::labelsEqual($a, $b)) {
+            return true;
+        }
+        if ($a === '' || $b === '') {
+            return false;
+        }
+        $short = strlen($a) <= strlen($b) ? $a : $b;
+        $long = strlen($a) <= strlen($b) ? $b : $a;
+        if (strlen($short) < 3) {
+            return false;
+        }
+
+        return str_starts_with($long, $short);
     }
 
     private static function cachedRiceNameLabel(int $id): string
@@ -314,6 +398,24 @@ class UserInterestService
         return self::$formNameCache[$id];
     }
 
+    private static function cachedLiveFormNameLabel(int $id): string
+    {
+        if ($id <= 0) {
+            return '';
+        }
+        if (! array_key_exists($id, self::$liveFormNameCache)) {
+            try {
+                self::$liveFormNameCache[$id] = self::normalizeLabel(
+                    (string) (RiceForm::query()->where('id', $id)->value('form_name') ?? '')
+                );
+            } catch (\Throwable $e) {
+                self::$liveFormNameCache[$id] = '';
+            }
+        }
+
+        return self::$liveFormNameCache[$id];
+    }
+
     private static function cachedWandValueLabel(int $id): string
     {
         if ($id <= 0) {
@@ -339,7 +441,7 @@ class UserInterestService
         return self::labelsEqual($tradeRiceLabel, $interestLabel);
     }
 
-    private static function formsMatch(int $tradeFormId, int $interestFormId, string $tradeFormLabel): bool
+    private static function formsMatch(int $tradeFormId, int $interestFormId, string $tradeFormLabel, int $tradeLiveFormId = 0): bool
     {
         if ($interestFormId <= 0) {
             return false;
@@ -349,33 +451,67 @@ class UserInterestService
             return true;
         }
 
-        if ($tradeFormId > 0 && self::formsLinkedByParentMap($tradeFormId, $interestFormId)) {
+        // Expanded parent/child (and sibling) form ids for Preferred form map.
+        if ($tradeFormId > 0) {
+            $expanded = self::expandedFormIds($interestFormId);
+            if (isset($expanded[$tradeFormId])) {
+                return true;
+            }
+        }
+
+        $interestLabel = self::cachedFormNameLabel($interestFormId);
+        if (self::formLabelsEqual($tradeFormLabel, $interestLabel)) {
             return true;
         }
 
-        // Name match is enough when ids differ (duplicate "Raw" rows, etc.).
-        // Also works when tradeFormId is 0 but relation label was resolved.
-        $interestLabel = self::cachedFormNameLabel($interestFormId);
+        // Live-price form name (rice_forms) may still equal Preferred form name.
+        if ($tradeLiveFormId > 0) {
+            $liveLabel = self::cachedLiveFormNameLabel($tradeLiveFormId);
+            if (self::formLabelsEqual($liveLabel, $interestLabel)) {
+                return true;
+            }
+        }
 
-        return self::labelsEqual($tradeFormLabel, $interestLabel);
+        return false;
+    }
+
+    /**
+     * Interest form id + its parents + children (for parent/child form maps).
+     *
+     * @return array<int, true>
+     */
+    private static function expandedFormIds(int $formId): array
+    {
+        if ($formId <= 0) {
+            return [];
+        }
+
+        self::bootFormParentChildIndex();
+        $index = self::$formParentChildIndex ?? [];
+        $parentToChildren = $index['parent_to_children'] ?? [];
+        $childToParents = $index['child_to_parents'] ?? [];
+
+        $set = [$formId => true];
+
+        foreach ($parentToChildren[$formId] ?? [] as $childId) {
+            $set[(int) $childId] = true;
+        }
+        foreach ($childToParents[$formId] ?? [] as $parentId) {
+            $parentId = (int) $parentId;
+            $set[$parentId] = true;
+            foreach ($parentToChildren[$parentId] ?? [] as $siblingId) {
+                $set[(int) $siblingId] = true;
+            }
+        }
+
+        return $set;
     }
 
     private static function formsLinkedByParentMap(int $formA, int $formB): bool
     {
-        self::bootFormParentChildIndex();
-        $index = self::$formParentChildIndex ?? [];
+        $expanded = self::expandedFormIds($formA);
 
-        $childrenOfA = $index['parent_to_children'][$formA] ?? [];
-        if (in_array($formB, $childrenOfA, true)) {
-            return true;
-        }
-
-        $childrenOfB = $index['parent_to_children'][$formB] ?? [];
-        if (in_array($formA, $childrenOfB, true)) {
-            return true;
-        }
-
-        return false;
+        return isset($expanded[$formB]);
     }
 
     private static function bootFormParentChildIndex(): void
@@ -385,6 +521,7 @@ class UserInterestService
         }
 
         $parentToChildren = [];
+        $childToParents = [];
         try {
             $rows = RiceFormParentMap::query()
                 ->where(function ($q) {
@@ -402,6 +539,8 @@ class UserInterestService
                     $childId = (int) $childId;
                     if ($childId > 0) {
                         $children[] = $childId;
+                        $childToParents[$childId] = $childToParents[$childId] ?? [];
+                        $childToParents[$childId][] = $parentId;
                     }
                 }
                 if ($children !== []) {
@@ -410,10 +549,12 @@ class UserInterestService
             }
         } catch (\Throwable $e) {
             $parentToChildren = [];
+            $childToParents = [];
         }
 
         self::$formParentChildIndex = [
             'parent_to_children' => $parentToChildren,
+            'child_to_parents' => $childToParents,
         ];
     }
 

@@ -5998,6 +5998,7 @@ if (!file_exists('uploads')) {
             ->withCount('TradeLikeAll')
             ->get();
 
+        $interestTuples = UserInterestService::getActiveInterestTuplesForUser($interestUserId);
         $allTrade = $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
@@ -6017,7 +6018,9 @@ if (!file_exists('uploads')) {
             'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
-            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser($interestUserId) !== [],
+            'user_interests_applied' => $interestTuples !== [],
+            'preferred_interest_user_id' => $interestUserId,
+            'preferred_interest_count' => count($interestTuples),
         ]);
     }
 
@@ -6302,6 +6305,7 @@ if (!file_exists('uploads')) {
             ->withCount('TradeLikeAll')
             ->get();
 
+        $interestTuples = UserInterestService::getActiveInterestTuplesForUser($interestUserId);
         $allTrade = $hasTradeTypeFilter
             ? $this->orderWebTradesForUserListing($allTrade, $interestUserId)
             : $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
@@ -6324,7 +6328,9 @@ if (!file_exists('uploads')) {
             'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
-            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser($interestUserId) !== [],
+            'user_interests_applied' => $interestTuples !== [],
+            'preferred_interest_user_id' => $interestUserId,
+            'preferred_interest_count' => count($interestTuples),
         ]);
     }
 
@@ -6914,14 +6920,12 @@ if (!file_exists('uploads')) {
     /**
      * All trade types (no trade_type filter), Preferred first, then role-aware side order, then latest 15 sold.
      *
-     * With Preferred interests:
-     * 1) Preferred primary side (buyer→buy / seller→sell)
-     * 2) Preferred other side
-     * 3) Non-preferred primary side
-     * 4) Non-preferred other side
-     * 5) Sold (latest 15)
-     *
-     * Without Preferred: primary → other → sold (Case1 only).
+     * Sort keys (active trades):
+     * 1) Preferred (interest score > 0) before non-preferred
+     * 2) Role side: buyer → buy first; seller/supplier → sell first
+     * 3) Higher interest score (name+form+grade > name+form > name)
+     * 4) Status priority, then newer id
+     * Then sold (latest 15).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection
@@ -6933,62 +6937,79 @@ if (!file_exists('uploads')) {
             return $collection->values();
         }
 
-        $buyActive = $collection->filter(
-            fn ($trade) => $this->isWebActiveTradeStatus((int) $trade->status)
-                && $this->isWebBuyTradeType((int) $trade->tradeType)
-        );
-        $sellActive = $collection->filter(
-            fn ($trade) => $this->isWebActiveTradeStatus((int) $trade->status)
-                && $this->isWebSellTradeType((int) $trade->tradeType)
-        );
-        $soldMixed = $collection
-            ->filter(fn ($trade) => (int) $trade->status === 3)
-            ->sortByDesc(fn ($trade) => (int) $trade->id)
-            ->values()
-            ->take(15);
-
         $interestTuples = ($userId !== null && $userId > 0)
             ? UserInterestService::getActiveInterestTuplesForUser($userId)
             : [];
 
         $sellFirst = $this->resolveWebTradeListSideOrder($userId) === 'sell_first';
+        $statusOrder = [6 => 0, 4 => 1, 1 => 2, 12 => 3, 11 => 4];
 
-        if ($interestTuples === []) {
-            $buySorted = $this->annotateAndSortWebTradesByStatusThenId($buyActive, []);
-            $sellSorted = $this->annotateAndSortWebTradesByStatusThenId($sellActive, []);
+        $active = [];
+        $sold = [];
 
-            if ($sellFirst) {
-                return $sellSorted->concat($buySorted)->concat($soldMixed)->values();
+        foreach ($collection as $trade) {
+            $status = (int) $trade->status;
+            if ($status === 3) {
+                $sold[] = $trade;
+                continue;
+            }
+            if (! $this->isWebActiveTradeStatus($status)) {
+                continue;
             }
 
-            return $buySorted->concat($sellSorted)->concat($soldMixed)->values();
+            $score = $interestTuples === []
+                ? 0
+                : UserInterestService::scoreTradeAgainstInterests($trade, $interestTuples);
+
+            $trade->setAttribute('matches_user_interest', $score > 0);
+            $trade->setAttribute('interest_match_score', $score);
+            // Force into JSON even if model $hidden / serialization quirks
+            $trade->matches_user_interest = $score > 0;
+            $trade->interest_match_score = $score;
+
+            $tradeType = (int) $trade->tradeType;
+            $isBuy = $this->isWebBuyTradeType($tradeType);
+            $isSell = $this->isWebSellTradeType($tradeType);
+            // Primary side first: buyer → buy=0; seller → sell=0
+            if ($sellFirst) {
+                $sideRank = $isSell ? 0 : ($isBuy ? 1 : 2);
+            } else {
+                $sideRank = $isBuy ? 0 : ($isSell ? 1 : 2);
+            }
+
+            $active[] = [
+                'trade' => $trade,
+                'preferred' => $score > 0 ? 0 : 1,
+                'side' => $sideRank,
+                'score' => $score,
+                'status' => $statusOrder[$status] ?? 99,
+                'id' => (int) $trade->id,
+            ];
         }
 
-        [$buyPreferred, $buyOther] = $this->splitWebTradesByInterest($buyActive, $interestTuples);
-        [$sellPreferred, $sellOther] = $this->splitWebTradesByInterest($sellActive, $interestTuples);
+        usort($active, function ($a, $b) {
+            if ($a['preferred'] !== $b['preferred']) {
+                return $a['preferred'] <=> $b['preferred'];
+            }
+            if ($a['side'] !== $b['side']) {
+                return $a['side'] <=> $b['side'];
+            }
+            if ($a['score'] !== $b['score']) {
+                return $b['score'] <=> $a['score'];
+            }
+            if ($a['status'] !== $b['status']) {
+                return $a['status'] <=> $b['status'];
+            }
 
-        $buyPreferredSorted = $this->sortWebTradesByInterestScoreThenStatusId($buyPreferred);
-        $sellPreferredSorted = $this->sortWebTradesByInterestScoreThenStatusId($sellPreferred);
-        $buyOtherSorted = $this->sortWebTradesByStatusThenId($buyOther);
-        $sellOtherSorted = $this->sortWebTradesByStatusThenId($sellOther);
+            return $b['id'] <=> $a['id'];
+        });
 
-        if ($sellFirst) {
-            // Seller/Supplier: preferred sell → preferred buy → other sell → other buy → sold
-            return $sellPreferredSorted
-                ->concat($buyPreferredSorted)
-                ->concat($sellOtherSorted)
-                ->concat($buyOtherSorted)
-                ->concat($soldMixed)
-                ->values();
-        }
+        usort($sold, fn ($a, $b) => (int) $b->id <=> (int) $a->id);
+        $sold = array_slice($sold, 0, 15);
 
-        // Buyer/others: preferred buy → preferred sell → other buy → other sell → sold
-        return $buyPreferredSorted
-            ->concat($sellPreferredSorted)
-            ->concat($buyOtherSorted)
-            ->concat($sellOtherSorted)
-            ->concat($soldMixed)
-            ->values();
+        $ordered = array_map(static fn ($row) => $row['trade'], $active);
+
+        return collect(array_merge($ordered, $sold))->values();
     }
 
     /**
