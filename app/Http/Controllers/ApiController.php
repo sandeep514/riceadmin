@@ -5974,15 +5974,17 @@ if (!file_exists('uploads')) {
     {
         $this->expirePastValidDayTrades();
 
+        $interestUserId = $this->resolveWebTradeInterestUserId($request, $userId);
+
         $allTrade = TradeQueriesINR::query()
             ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, false, null))
             ->with([
-                'TradeInterest' => function ($query) use ($userId) {
-                    $query->where('userId', $userId);
+                'TradeInterest' => function ($query) use ($interestUserId) {
+                    $query->where('userId', $interestUserId);
                 },
                 'RiceNameData',
-                'TradeLikeAll' => function ($query) use ($userId) {
-                    $query->where('userId', $userId);
+                'TradeLikeAll' => function ($query) use ($interestUserId) {
+                    $query->where('userId', $interestUserId);
                 },
                 'RiceFormMilestone3',
                 'RiceFormData',
@@ -5996,7 +5998,7 @@ if (!file_exists('uploads')) {
             ->withCount('TradeLikeAll')
             ->get();
 
-        $allTrade = $this->orderWebTradesAllTypesListing($allTrade, (int) $userId);
+        $allTrade = $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6004,7 +6006,7 @@ if (!file_exists('uploads')) {
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
-        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null, (int) $userId);
+        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null, $interestUserId);
 
         return response()->json([
             'status' => true,
@@ -6015,7 +6017,7 @@ if (!file_exists('uploads')) {
             'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
-            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
+            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser($interestUserId) !== [],
         ]);
     }
 
@@ -6274,18 +6276,19 @@ if (!file_exists('uploads')) {
     {
         $this->expirePastValidDayTrades();
 
+        $interestUserId = $this->resolveWebTradeInterestUserId($request, $userId);
         $hasTradeTypeFilter = $this->hasWebTradeFilterTradeType($request);
         $appliedTradeType = $this->resolveAppliedWebTradeFilterTradeType($request);
 
         $allTrade = TradeQueriesINR::query()
             ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, $hasTradeTypeFilter, $appliedTradeType))
             ->with([
-                'TradeInterest' => function ($query) use ($userId) {
-                    $query->where('userId', $userId);
+                'TradeInterest' => function ($query) use ($interestUserId) {
+                    $query->where('userId', $interestUserId);
                 },
                 'RiceNameData',
-                'TradeLikeAll' => function ($query) use ($userId) {
-                    $query->where('userId', $userId);
+                'TradeLikeAll' => function ($query) use ($interestUserId) {
+                    $query->where('userId', $interestUserId);
                 },
                 'RiceFormMilestone3',
                 'RiceFormData',
@@ -6300,8 +6303,8 @@ if (!file_exists('uploads')) {
             ->get();
 
         $allTrade = $hasTradeTypeFilter
-            ? $this->orderWebTradesForUserListing($allTrade, (int) $userId)
-            : $this->orderWebTradesAllTypesListing($allTrade, (int) $userId);
+            ? $this->orderWebTradesForUserListing($allTrade, $interestUserId)
+            : $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
@@ -6309,7 +6312,7 @@ if (!file_exists('uploads')) {
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
-        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType, (int) $userId);
+        $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType, $interestUserId);
 
         return response()->json([
             'status' => true,
@@ -6321,7 +6324,7 @@ if (!file_exists('uploads')) {
             'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
-            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser((int) $userId) !== [],
+            'user_interests_applied' => UserInterestService::getActiveInterestTuplesForUser($interestUserId) !== [],
         ]);
     }
 
@@ -6748,6 +6751,19 @@ if (!file_exists('uploads')) {
             'future_buy_active' => (clone $base)->where('tradeType', 3)->count(),
             'future_sell_active' => (clone $base)->where('tradeType', 4)->count(),
         ];
+    }
+
+    /**
+     * Prefer authenticated portal token user for Preferred/order; fall back to route userId.
+     */
+    private function resolveWebTradeInterestUserId(Request $request, $routeUserId): int
+    {
+        $authUser = $request->user();
+        if ($authUser && (int) ($authUser->id ?? 0) > 0) {
+            return (int) $authUser->id;
+        }
+
+        return (int) $routeUserId;
     }
 
     /**
