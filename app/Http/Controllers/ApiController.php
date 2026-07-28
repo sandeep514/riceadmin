@@ -3225,15 +3225,27 @@ class ApiController extends Controller
         $cropYear = ($yearParam !== null && $yearParam !== '') ? $yearParam : $latestCropYear;
         $asOfDate = Carbon::now()->toDateString();
 
-        $lastPriceAt = LivePrice::query()
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price')
-            ->where('cropYear', $cropYear)
-            ->whereDate('created_at', '<=', $asOfDate)
-            ->orderByDesc('created_at')
-            ->value('created_at');
+        // Latest day with usable (non-null, > 0) prices for this rice type + crop year.
+        $lastPriceAt = DB::table('live_prices as lp')
+            ->join('rice_forms as rf', function ($join) use ($ricetype) {
+                $join->on('rf.id', '=', 'lp.form')
+                    ->where('rf.type', '=', $ricetype)
+                    ->where('rf.status', '=', 1);
+            })
+            ->join('rice_names as rn', function ($join) use ($ricetype) {
+                $join->on('rn.id', '=', 'lp.name')
+                    ->where('rn.type', '=', $ricetype);
+            })
+            ->where('lp.name', '!=', '0')
+            ->where('lp.form', '!=', '0')
+            ->whereNotNull('lp.min_price')
+            ->whereNotNull('lp.max_price')
+            ->where('lp.min_price', '>', 0)
+            ->where('lp.max_price', '>', 0)
+            ->where('lp.cropYear', $cropYear)
+            ->whereDate('lp.created_at', '<=', $asOfDate)
+            ->orderByDesc('lp.created_at')
+            ->value('lp.created_at');
 
         if (! $lastPriceAt) {
             return [];
@@ -3268,11 +3280,16 @@ class ApiController extends Controller
                     ->where('rf.type', '=', $ricetype)
                     ->where('rf.status', '=', 1);
             })
-            ->join('rice_names as rn', 'rn.id', '=', 'lp.name')
+            ->join('rice_names as rn', function ($join) use ($ricetype) {
+                $join->on('rn.id', '=', 'lp.name')
+                    ->where('rn.type', '=', $ricetype);
+            })
             ->where('lp.name', '!=', '0')
             ->where('lp.form', '!=', '0')
             ->whereNotNull('lp.min_price')
             ->whereNotNull('lp.max_price')
+            ->where('lp.min_price', '>', 0)
+            ->where('lp.max_price', '>', 0)
             ->where('lp.cropYear', $cropYear)
             ->whereDate('lp.created_at', $lastDate)
             ->select('lp.state', 'lp.name', 'lp.form', 'lp.state_order');
