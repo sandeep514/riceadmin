@@ -6865,9 +6865,16 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * All trade types (no trade_type filter), role-aware side order, then latest 15 sold (mixed).
-     * - Seller / Supplier: sell → buy → sold
-     * - Buyer (and all other roles): buy → sell → sold
+     * All trade types (no trade_type filter), Preferred first, then role-aware side order, then latest 15 sold.
+     *
+     * With Preferred interests:
+     * 1) Preferred primary side (buyer→buy / seller→sell)
+     * 2) Preferred other side
+     * 3) Non-preferred primary side
+     * 4) Non-preferred other side
+     * 5) Sold (latest 15)
+     *
+     * Without Preferred: primary → other → sold (Case1 only).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection
@@ -6893,20 +6900,125 @@ if (!file_exists('uploads')) {
             ->values()
             ->take(15);
 
-        $buySorted = $this->sortWebTradesByStatusThenId($buyActive);
-        $sellSorted = $this->sortWebTradesByStatusThenId($sellActive);
+        $interestTuples = ($userId !== null && $userId > 0)
+            ? UserInterestService::getActiveInterestTuplesForUser($userId)
+            : [];
 
-        if ($this->resolveWebTradeListSideOrder($userId) === 'sell_first') {
-            return $sellSorted
-                ->concat($buySorted)
+        $sellFirst = $this->resolveWebTradeListSideOrder($userId) === 'sell_first';
+
+        if ($interestTuples === []) {
+            $buySorted = $this->annotateAndSortWebTradesByStatusThenId($buyActive, []);
+            $sellSorted = $this->annotateAndSortWebTradesByStatusThenId($sellActive, []);
+
+            if ($sellFirst) {
+                return $sellSorted->concat($buySorted)->concat($soldMixed)->values();
+            }
+
+            return $buySorted->concat($sellSorted)->concat($soldMixed)->values();
+        }
+
+        [$buyPreferred, $buyOther] = $this->splitWebTradesByInterest($buyActive, $interestTuples);
+        [$sellPreferred, $sellOther] = $this->splitWebTradesByInterest($sellActive, $interestTuples);
+
+        $buyPreferredSorted = $this->sortWebTradesByInterestScoreThenStatusId($buyPreferred);
+        $sellPreferredSorted = $this->sortWebTradesByInterestScoreThenStatusId($sellPreferred);
+        $buyOtherSorted = $this->sortWebTradesByStatusThenId($buyOther);
+        $sellOtherSorted = $this->sortWebTradesByStatusThenId($sellOther);
+
+        if ($sellFirst) {
+            // Seller/Supplier: preferred sell → preferred buy → other sell → other buy → sold
+            return $sellPreferredSorted
+                ->concat($buyPreferredSorted)
+                ->concat($sellOtherSorted)
+                ->concat($buyOtherSorted)
                 ->concat($soldMixed)
                 ->values();
         }
 
-        return $buySorted
-            ->concat($sellSorted)
+        // Buyer/others: preferred buy → preferred sell → other buy → other sell → sold
+        return $buyPreferredSorted
+            ->concat($sellPreferredSorted)
+            ->concat($buyOtherSorted)
+            ->concat($sellOtherSorted)
             ->concat($soldMixed)
             ->values();
+    }
+
+    /**
+     * Annotate interest flags (score 0) and sort by status then id.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @param  array<int, array{rice_name_id:int, form_id:int, grade:int|null}>  $interestTuples
+     * @return \Illuminate\Support\Collection
+     */
+    private function annotateAndSortWebTradesByStatusThenId($trades, array $interestTuples)
+    {
+        $items = ($trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades))->values();
+        foreach ($items as $trade) {
+            $score = $interestTuples === []
+                ? 0
+                : UserInterestService::scoreTradeAgainstInterests($trade, $interestTuples);
+            $trade->setAttribute('matches_user_interest', $score > 0);
+            $trade->setAttribute('interest_match_score', $score);
+        }
+
+        return $this->sortWebTradesByStatusThenId($items);
+    }
+
+    /**
+     * Split active trades into preferred (score > 0) and non-preferred.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @param  array<int, array{rice_name_id:int, form_id:int, grade:int|null}>  $interestTuples
+     * @return array{0: \Illuminate\Support\Collection, 1: \Illuminate\Support\Collection}
+     */
+    private function splitWebTradesByInterest($trades, array $interestTuples): array
+    {
+        $preferred = collect();
+        $other = collect();
+
+        foreach (($trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades)) as $trade) {
+            $score = UserInterestService::scoreTradeAgainstInterests($trade, $interestTuples);
+            $trade->setAttribute('matches_user_interest', $score > 0);
+            $trade->setAttribute('interest_match_score', $score);
+
+            if ($score > 0) {
+                $preferred->push($trade);
+            } else {
+                $other->push($trade);
+            }
+        }
+
+        return [$preferred, $other];
+    }
+
+    /**
+     * Preferred bucket: higher interest score first, then status priority, then newer id.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return \Illuminate\Support\Collection
+     */
+    private function sortWebTradesByInterestScoreThenStatusId($trades)
+    {
+        $statusOrder = [6 => 0, 4 => 1, 1 => 2, 12 => 3, 11 => 4];
+        $items = ($trades instanceof \Illuminate\Support\Collection ? $trades : collect($trades))->values()->all();
+
+        usort($items, function ($a, $b) use ($statusOrder) {
+            $scoreCmp = (int) ($b->interest_match_score ?? 0) <=> (int) ($a->interest_match_score ?? 0);
+            if ($scoreCmp !== 0) {
+                return $scoreCmp;
+            }
+
+            $statusA = $statusOrder[(int) $a->status] ?? 99;
+            $statusB = $statusOrder[(int) $b->status] ?? 99;
+            if ($statusA !== $statusB) {
+                return $statusA <=> $statusB;
+            }
+
+            return (int) $b->id <=> (int) $a->id;
+        });
+
+        return collect($items);
     }
 
     /**
