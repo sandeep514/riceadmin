@@ -199,10 +199,11 @@ class UserInterestService
     /**
      * Match trade against user interests (trade.quality = rice name, qualityForm = milestone3 form, grade = wand).
      * 3 = name + form + exact grade (id or same wand value)
-     * 2 = name + form (Preferred)
+     * 2 = name + form (Preferred) — grade is NOT required
      * 0 = no match
      *
-     * Form match: same qualityForm id, same form name, or parent/child form map.
+     * Preferred requires both rice name AND rice form.
+     * Form match: same qualityForm id, parent/child form map, or normalized form name.
      */
     public static function scoreTradeAgainstInterests(object $trade, array $tuples): int
     {
@@ -217,8 +218,30 @@ class UserInterestService
 
         $tradeFormId = (int) ($trade->qualityForm ?? 0);
         $tradeGrade = (int) ($trade->grade ?? 0);
+
+        // Labels: master tables first, then eager-loaded relations (UI source of truth).
         $tradeRiceLabel = self::cachedRiceNameLabel($quality);
+        if ($tradeRiceLabel === '') {
+            $tradeRiceLabel = self::normalizeLabel(
+                (string) (data_get($trade, 'RiceNameData.name')
+                    ?? data_get($trade, 'rice_name_data.name')
+                    ?? '')
+            );
+        }
+
         $tradeFormLabel = $tradeFormId > 0 ? self::cachedFormNameLabel($tradeFormId) : '';
+        if ($tradeFormLabel === '') {
+            $relFormName = (string) (data_get($trade, 'RiceFormMilestone3.name')
+                ?? data_get($trade, 'rice_form_milestone3.name')
+                ?? '');
+            $tradeFormLabel = self::normalizeLabel($relFormName);
+            if ($tradeFormId <= 0) {
+                $tradeFormId = (int) (data_get($trade, 'RiceFormMilestone3.id')
+                    ?? data_get($trade, 'rice_form_milestone3.id')
+                    ?? 0);
+            }
+        }
+
         $tradeWandLabel = $tradeGrade > 0 ? self::cachedWandValueLabel($tradeGrade) : '';
         $best = 0;
 
@@ -231,11 +254,11 @@ class UserInterestService
                 continue;
             }
 
+            // Preferred = rice name + rice form (form is mandatory).
             if (! self::formsMatch($tradeFormId, $interestFormId, $tradeFormLabel)) {
                 continue;
             }
 
-            // Name + form only counts as Preferred (not name-alone).
             $best = max($best, 2);
 
             if ($interestGrade !== null && $interestGrade > 0 && self::gradesMatch($tradeGrade, $interestGrade, $tradeWandLabel)) {
@@ -246,13 +269,21 @@ class UserInterestService
         return $best;
     }
 
+    /**
+     * Normalize for equality: "PR-11/14", "PR 11/14", "PR-11-14" → "pr1114"; "Raw" → "raw".
+     */
     private static function normalizeLabel(?string $value): string
     {
         $value = strtolower(trim((string) $value));
-        $value = str_replace(['/', '_'], '-', $value);
-        $value = preg_replace('/\s+/', '', $value) ?? '';
+        // Keep only letters/digits so punctuation/spacing variants still match.
+        $value = preg_replace('/[^a-z0-9]+/', '', $value) ?? '';
 
         return $value;
+    }
+
+    private static function labelsEqual(string $a, string $b): bool
+    {
+        return $a !== '' && $b !== '' && $a === $b;
     }
 
     private static function cachedRiceNameLabel(int $id): string
@@ -299,13 +330,13 @@ class UserInterestService
 
     private static function riceNamesMatch(int $tradeQualityId, int $interestNameId, string $tradeRiceLabel): bool
     {
-        if ($tradeQualityId === $interestNameId) {
+        if ($tradeQualityId > 0 && $tradeQualityId === $interestNameId) {
             return true;
         }
 
         $interestLabel = self::cachedRiceNameLabel($interestNameId);
 
-        return $tradeRiceLabel !== '' && $interestLabel !== '' && $tradeRiceLabel === $interestLabel;
+        return self::labelsEqual($tradeRiceLabel, $interestLabel);
     }
 
     private static function formsMatch(int $tradeFormId, int $interestFormId, string $tradeFormLabel): bool
@@ -322,14 +353,11 @@ class UserInterestService
             return true;
         }
 
-        if ($tradeFormId > 0) {
-            $interestLabel = self::cachedFormNameLabel($interestFormId);
-            if ($tradeFormLabel !== '' && $interestLabel !== '' && $tradeFormLabel === $interestLabel) {
-                return true;
-            }
-        }
+        // Name match is enough when ids differ (duplicate "Raw" rows, etc.).
+        // Also works when tradeFormId is 0 but relation label was resolved.
+        $interestLabel = self::cachedFormNameLabel($interestFormId);
 
-        return false;
+        return self::labelsEqual($tradeFormLabel, $interestLabel);
     }
 
     private static function formsLinkedByParentMap(int $formA, int $formB): bool

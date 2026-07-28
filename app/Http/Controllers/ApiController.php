@@ -6524,9 +6524,21 @@ if (!file_exists('uploads')) {
         $listOrder = $this->resolveWebTradeListSideOrder($userId);
 
         $soldInList = 0;
+        $preferredActive = 0;
+        $preferredBuyActive = 0;
+        $preferredSellActive = 0;
         foreach ($collection as $trade) {
             if ((int) $trade->status === 3) {
                 $soldInList++;
+                continue;
+            }
+            if (! empty($trade->matches_user_interest) || (int) ($trade->interest_match_score ?? 0) > 0) {
+                $preferredActive++;
+                if ($this->isWebBuyTradeType((int) $trade->tradeType)) {
+                    $preferredBuyActive++;
+                } elseif ($this->isWebSellTradeType((int) $trade->tradeType)) {
+                    $preferredSellActive++;
+                }
             }
         }
 
@@ -6565,12 +6577,20 @@ if (!file_exists('uploads')) {
             }
         }
 
+        $interestCount = ($userId !== null && $userId > 0)
+            ? count(UserInterestService::getActiveInterestTuplesForUser($userId))
+            : 0;
+
         return [
             'trade_type_filter_applied' => $hasTradeTypeFilter,
             'applied_trade_type' => $appliedTradeType,
             'list_side_order' => $listOrder,
+            'user_interest_rows' => $interestCount,
             'counts' => array_merge($activeCounts, [
                 'sold_in_list' => $soldInList,
+                'preferred_active' => $preferredActive,
+                'preferred_buy_active' => $preferredBuyActive,
+                'preferred_sell_active' => $preferredSellActive,
             ]),
             'list_total' => array_sum($activeCounts) + $soldInList,
             'sell_starts_at_page' => $sellStartsAtPage,
@@ -6758,12 +6778,19 @@ if (!file_exists('uploads')) {
      */
     private function resolveWebTradeInterestUserId(Request $request, $routeUserId): int
     {
+        // Prefer the route userId (whose list this is). Fall back to auth user.
+        // Route id is the source of truth for Preferred interests on web/get/trades/{userId}.
+        $routeId = (int) $routeUserId;
+        if ($routeId > 0) {
+            return $routeId;
+        }
+
         $authUser = $request->user();
         if ($authUser && (int) ($authUser->id ?? 0) > 0) {
             return (int) $authUser->id;
         }
 
-        return (int) $routeUserId;
+        return 0;
     }
 
     /**
