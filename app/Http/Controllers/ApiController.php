@@ -2097,38 +2097,31 @@ class ApiController extends Controller
         $lastEnteredStart = Carbon::parse($lastEnteredRecord)->startOfDay();
         $lastEnteredEnd = Carbon::parse($lastEnteredRecord)->endOfDay();
 
-        // Must be type-scoped: otherwise a basmati-only day is chosen and non-basmati prices are empty.
-        $webPriceLastRecordQuery = function () use ($state, $cropYear, $ricetype) {
-            return LivePrice::query()
-                ->join('rice_names as rn', function ($join) use ($ricetype) {
-                    $join->on('rn.id', '=', 'live_prices.name')
-                        ->where('rn.type', '=', $ricetype);
-                })
-                ->join('rice_forms as rf', function ($join) use ($ricetype) {
-                    $join->on('rf.id', '=', 'live_prices.form')
-                        ->where('rf.type', '=', $ricetype)
-                        ->where('rf.status', '=', 1);
-                })
-                ->where('live_prices.name', '!=', '0')
-                ->where('live_prices.form', '!=', '0')
-                ->whereNotNull('live_prices.min_price')
-                ->whereNotNull('live_prices.max_price')
-                ->where('live_prices.min_price', '>', 0)
-                ->where('live_prices.max_price', '>', 0)
-                ->where('live_prices.state', $state)
-                ->where('live_prices.cropYear', $cropYear)
-                ->select('live_prices.*');
-        };
-
-        $lastRecord = $webPriceLastRecordQuery()
-            ->whereBetween('live_prices.created_at', [$lastEnteredStart, $lastEnteredEnd])
-            ->latest('live_prices.id')
+        $lastRecord = LivePrice::query()
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('min_price', '>', 0)
+            ->where('max_price', '>', 0)
+            ->where('state', $state)
+            ->whereBetween('created_at', [$lastEnteredStart, $lastEnteredEnd])
+            ->where('cropYear' , $cropYear)
+            ->latest('id')
             ->first();
 
-        if (! $lastRecord) {
-            $lastRecord = $webPriceLastRecordQuery()
-                ->where('live_prices.created_at', '<', $lastEnteredStart)
-                ->latest('live_prices.id')
+        if(!$lastRecord){
+            $lastRecord = LivePrice::query()
+                ->where('name', '!=', '0')
+                ->where('form', '!=', '0')
+                ->whereNotNull('min_price')
+                ->whereNotNull('max_price')
+                ->where('min_price', '>', 0)
+                ->where('max_price', '>', 0)
+                ->where('state', $state)
+                ->where('cropYear' , $cropYear)
+                ->where('created_at' ,'<', $lastEnteredStart)
+                ->latest('id')
                 ->first();
         }
 
@@ -3282,14 +3275,6 @@ class ApiController extends Controller
     }
 
     /**
-     * States that would actually show prices in getPricesWeb for this rice type + crop year.
-     *
-     * Mirrors getPricesWeb rules per state:
-     * - usable min/max (> 0)
-     * - rice name + form type match
-     * - latest price day for that state (type-scoped)
-     * - exclude fully-closed name+form pairs
-     *
      * @return array<int, string>
      */
     private function computeWebRiceTypeStates(string $ricetype, $yearParam = null): array
@@ -3300,9 +3285,24 @@ class ApiController extends Controller
         }
 
         $cropYear = ($yearParam !== null && $yearParam !== '') ? $yearParam : $latestCropYear;
-        $asOfEnd = Carbon::now()->endOfDay();
+        $asOfDate = Carbon::now()->toDateString();
 
-        // Closed name+form for this type/year (same idea as getPricesWeb opening/closing skip).
+        $lastPriceAt = LivePrice::query()
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('cropYear', $cropYear)
+            ->whereDate('created_at', '<=', $asOfDate)
+            ->orderByDesc('created_at')
+            ->value('created_at');
+
+        if (! $lastPriceAt) {
+            return [];
+        }
+
+        $lastDate = Carbon::parse($lastPriceAt)->toDateString();
+
         $closingRows = DB::table('live_price_closing as lpc')
             ->join('rice_forms as rf', function ($join) use ($ricetype) {
                 $join->on('rf.id', '=', 'lpc.form')
@@ -3316,124 +3316,69 @@ class ApiController extends Controller
             ->where('lpc.cropYear', $cropYear)
             ->whereNotNull('lpc.closing')
             ->where('lpc.closing', '!=', '')
-            ->select('lpc.name', 'lpc.form')
+            ->select('lpc.name', 'lpc.form', 'lpc.state')
             ->get();
 
         $closedNameForms = [];
+        $closingStates = [];
         foreach ($closingRows as $row) {
-            $closedNameForms[strtolower((string) $row->name . '_' . (string) $row->form)] = true;
+            $closedNameForms[strtolower($row->name . '_' . $row->form)] = true;
+            if ($row->state !== null && $row->state !== '') {
+                $closingStates[$row->state] = true;
+            }
         }
 
-        // Latest usable price day per state for THIS rice type only (not basmati day for non-basmati).
-        $latestDayByState = DB::table('live_prices as lp')
+        $liveQuery = DB::table('live_prices as lp')
             ->join('rice_forms as rf', function ($join) use ($ricetype) {
                 $join->on('rf.id', '=', 'lp.form')
                     ->where('rf.type', '=', $ricetype)
                     ->where('rf.status', '=', 1);
             })
-            ->join('rice_names as rn', function ($join) use ($ricetype) {
-                $join->on('rn.id', '=', 'lp.name')
-                    ->where('rn.type', '=', $ricetype);
-            })
+            ->join('rice_names as rn', 'rn.id', '=', 'lp.name')
             ->where('lp.name', '!=', '0')
             ->where('lp.form', '!=', '0')
             ->whereNotNull('lp.min_price')
             ->whereNotNull('lp.max_price')
-            ->where('lp.min_price', '>', 0)
-            ->where('lp.max_price', '>', 0)
             ->where('lp.cropYear', $cropYear)
-            ->where('lp.created_at', '<=', $asOfEnd)
-            ->whereNotNull('lp.state')
-            ->where('lp.state', '!=', '')
-            ->groupBy('lp.state')
-            ->select('lp.state', DB::raw('MAX(DATE(lp.created_at)) as last_day'))
-            ->get()
-            ->keyBy('state');
+            ->whereDate('lp.created_at', $lastDate)
+            ->select('lp.state', 'lp.name', 'lp.form', 'lp.state_order');
 
-        if ($latestDayByState->isEmpty()) {
-            return [];
+        if ((string) $cropYear === '2023' || (int) $cropYear === 2023) {
+            $liveQuery->whereRaw('LOWER(rf.form_name) NOT LIKE ?', ['%new crop%']);
         }
 
         $stateOrders = [];
-
-        foreach ($latestDayByState as $state => $meta) {
-            $lastDay = (string) $meta->last_day;
-            if ($lastDay === '') {
+        foreach ($liveQuery->get() as $row) {
+            if ($closedNameForms !== [] && isset($closedNameForms[strtolower($row->name . '_' . $row->form)])) {
                 continue;
             }
-
-            $dayStart = Carbon::parse($lastDay)->startOfDay();
-            $dayEnd = Carbon::parse($lastDay)->endOfDay();
-
-            // Latest row per name+form on that day (same as getPricesWeb MAX(id) grouping).
-            $latestIds = DB::table('live_prices')
-                ->selectRaw('MAX(id) as id')
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->where('state', $state)
-                ->where('cropYear', $cropYear)
-                ->whereBetween('created_at', [$dayStart, $dayEnd])
-                ->groupBy('name', 'form', 'state', 'cropYear');
-
-            $rows = DB::table('live_prices as lp')
-                ->join('rice_forms as rf', function ($join) use ($ricetype) {
-                    $join->on('rf.id', '=', 'lp.form')
-                        ->where('rf.type', '=', $ricetype)
-                        ->where('rf.status', '=', 1);
-                })
-                ->join('rice_names as rn', function ($join) use ($ricetype) {
-                    $join->on('rn.id', '=', 'lp.name')
-                        ->where('rn.type', '=', $ricetype);
-                })
-                ->whereIn('lp.id', $latestIds)
-                ->where('lp.state', $state)
-                ->where('lp.cropYear', $cropYear)
-                ->where('lp.min_price', '>', 0)
-                ->where('lp.max_price', '>', 0)
-                ->select('lp.name', 'lp.form', 'lp.state_order', 'lp.min_price', 'lp.max_price')
-                ->get();
-
-            $hasDisplayable = false;
-            $bestOrder = PHP_INT_MAX;
-
-            foreach ($rows as $row) {
-                $tupleKey = strtolower((string) $row->name . '_' . (string) $row->form);
-                if ($closedNameForms !== [] && isset($closedNameForms[$tupleKey])) {
-                    continue;
-                }
-                if (! $this->hasUsableLivePrice($row)) {
-                    continue;
-                }
-                $hasDisplayable = true;
-                if ($row->state_order !== null) {
-                    $bestOrder = min($bestOrder, (int) $row->state_order);
-                }
+            if ($row->state === null || $row->state === '') {
+                continue;
             }
-
-            if ($hasDisplayable) {
-                $stateOrders[$state] = $bestOrder;
+            $order = $row->state_order !== null ? (int) $row->state_order : PHP_INT_MAX;
+            if (! isset($stateOrders[$row->state]) || $order < $stateOrders[$row->state]) {
+                $stateOrders[$row->state] = $order;
             }
         }
 
-        if ($stateOrders === []) {
-            return [];
+        foreach (array_keys($closingStates) as $state) {
+            if (! isset($stateOrders[$state])) {
+                $stateOrders[$state] = PHP_INT_MAX;
+            }
         }
 
-        // Backfill missing state_order from any type-scoped row.
-        $needOrder = array_keys(array_filter(
-            $stateOrders,
-            static fn ($order) => $order === PHP_INT_MAX
-        ));
+        $needOrder = [];
+        foreach ($stateOrders as $state => $order) {
+            if ($order === PHP_INT_MAX) {
+                $needOrder[] = $state;
+            }
+        }
         if ($needOrder !== []) {
-            $orderMap = DB::table('live_prices as lp')
-                ->join('rice_forms as rf', function ($join) use ($ricetype) {
-                    $join->on('rf.id', '=', 'lp.form')
-                        ->where('rf.type', '=', $ricetype);
-                })
-                ->whereIn('lp.state', $needOrder)
-                ->whereNotNull('lp.state_order')
-                ->groupBy('lp.state')
-                ->select('lp.state', DB::raw('MIN(lp.state_order) as state_order'))
+            $orderMap = DB::table('live_prices')
+                ->whereIn('state', $needOrder)
+                ->whereNotNull('state_order')
+                ->groupBy('state')
+                ->select('state', DB::raw('MIN(state_order) as state_order'))
                 ->pluck('state_order', 'state');
             foreach ($needOrder as $state) {
                 if (isset($orderMap[$state])) {
@@ -3442,19 +3387,14 @@ class ApiController extends Controller
             }
         }
 
-        $withOrder = [];
-        $withoutOrder = [];
-        foreach ($stateOrders as $state => $order) {
-            if ($order === PHP_INT_MAX) {
-                $withoutOrder[] = $state;
-            } else {
-                $withOrder[$state] = $order;
-            }
-        }
-        asort($withOrder, SORT_NUMERIC);
-        sort($withoutOrder);
+        // Match prior behavior: only keep states that have a known state_order.
+        $stateOrders = array_filter(
+            $stateOrders,
+            static fn ($order) => $order !== PHP_INT_MAX
+        );
+        asort($stateOrders, SORT_NUMERIC);
 
-        return array_values(array_merge(array_keys($withOrder), $withoutOrder));
+        return array_values(array_keys($stateOrders));
     }
 
     
