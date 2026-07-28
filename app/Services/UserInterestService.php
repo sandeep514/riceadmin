@@ -199,8 +199,7 @@ class UserInterestService
     /**
      * Match trade against user interests (trade.quality = rice name, qualityForm = milestone3 form, grade = wand).
      * 3 = name + form + exact grade (id or same wand value)
-     * 2 = name + form
-     * 1 = name only (Preferred rice quality, e.g. any PR-11/14)
+     * 2 = name + form (Preferred)
      * 0 = no match
      *
      * Form match: same qualityForm id, same form name, or parent/child form map.
@@ -232,14 +231,11 @@ class UserInterestService
                 continue;
             }
 
-            // Name alone → Preferred over unrelated qualities (e.g. 1509).
-            $best = max($best, 1);
-
             if (! self::formsMatch($tradeFormId, $interestFormId, $tradeFormLabel)) {
                 continue;
             }
 
-            // Name + form.
+            // Name + form only counts as Preferred (not name-alone).
             $best = max($best, 2);
 
             if ($interestGrade !== null && $interestGrade > 0 && self::gradesMatch($tradeGrade, $interestGrade, $tradeWandLabel)) {
