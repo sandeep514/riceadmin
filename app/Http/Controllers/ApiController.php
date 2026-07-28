@@ -6918,14 +6918,18 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * All trade types (no trade_type filter), Preferred first, then role-aware side order, then latest 15 sold.
+     * All trade types (no trade_type filter), role side blocks first, Preferred on top within each side.
+     *
+     * Buyer / others:
+     *   1) Preferred BUY  2) Other BUY  3) Preferred SELL  4) Other SELL  5) Sold (15)
+     *
+     * Seller / Supplier:
+     *   1) Preferred SELL  2) Other SELL  3) Preferred BUY  4) Other BUY  5) Sold (15)
      *
      * Sort keys (active trades):
-     * 1) Preferred (interest score > 0) before non-preferred
-     * 2) Role side: buyer → buy first; seller/supplier → sell first
-     * 3) Higher interest score (name+form+grade > name+form > name)
-     * 4) Status priority, then newer id
-     * Then sold (latest 15).
+     * 1) Side block (role-aware)
+     * 2) Preferred (score > 0) before non-preferred within that side
+     * 3) Higher interest score, status priority, newer id
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection
@@ -6963,14 +6967,13 @@ if (!file_exists('uploads')) {
 
             $trade->setAttribute('matches_user_interest', $score > 0);
             $trade->setAttribute('interest_match_score', $score);
-            // Force into JSON even if model $hidden / serialization quirks
             $trade->matches_user_interest = $score > 0;
             $trade->interest_match_score = $score;
 
             $tradeType = (int) $trade->tradeType;
             $isBuy = $this->isWebBuyTradeType($tradeType);
             $isSell = $this->isWebSellTradeType($tradeType);
-            // Primary side first: buyer → buy=0; seller → sell=0
+            // Side block first (keeps all buys together, then all sells — or reverse for seller).
             if ($sellFirst) {
                 $sideRank = $isSell ? 0 : ($isBuy ? 1 : 2);
             } else {
@@ -6979,20 +6982,21 @@ if (!file_exists('uploads')) {
 
             $active[] = [
                 'trade' => $trade,
-                'preferred' => $score > 0 ? 0 : 1,
                 'side' => $sideRank,
+                'preferred' => $score > 0 ? 0 : 1,
                 'score' => $score,
                 'status' => $statusOrder[$status] ?? 99,
                 'id' => (int) $trade->id,
             ];
         }
 
+        // Side first, then Preferred within that side (not Preferred across both sides).
         usort($active, function ($a, $b) {
-            if ($a['preferred'] !== $b['preferred']) {
-                return $a['preferred'] <=> $b['preferred'];
-            }
             if ($a['side'] !== $b['side']) {
                 return $a['side'] <=> $b['side'];
+            }
+            if ($a['preferred'] !== $b['preferred']) {
+                return $a['preferred'] <=> $b['preferred'];
             }
             if ($a['score'] !== $b['score']) {
                 return $b['score'] <=> $a['score'];
