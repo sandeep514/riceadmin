@@ -3029,6 +3029,9 @@ class PortalApiController extends Controller
     public function saveUserInterestedMap(Request $request)
     {
         $interestedItems = $request->input('interested', $request->input('intrested'));
+        if (! is_array($interestedItems)) {
+            $interestedItems = [];
+        }
 
         $validator = Validator::make(
             array_merge($request->all(), ['interested' => $interestedItems]),
@@ -3036,7 +3039,8 @@ class PortalApiController extends Controller
                 'user_id' => 'required|exists:users,id',
                 // 1 = let SNTC approve search experience; 0 = user manages interests themselves
                 'can_edit_by_admin' => 'required|in:0,1',
-                'interested' => 'required|array|min:1',
+                // Empty array is allowed so users can clear all preferred items.
+                'interested' => 'present|array',
                 'interested.*.name_id' => 'required|exists:rice_names,id',
                 'interested.*.form_id' => 'required|exists:rice_form_milestone3,id',
                 'interested.*.grades' => 'nullable|array',
