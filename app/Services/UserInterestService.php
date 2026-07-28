@@ -219,11 +219,12 @@ class UserInterestService
     /**
      * Match trade against user Preferred products (rice name + rice form).
      *
+     * Preferred only when BOTH match (e.g. PR-11/14 + Raw — not every PR-11/14).
+     *
      * Scores (higher first):
      * 3 = rice name + form + grade
-     * 2 = rice name + form  ← Preferred product match
-     * 1 = rice name only    ← still Preferred so quality floats up if form ids diverge
-     * 0 = no match
+     * 2 = rice name + form  ← Preferred
+     * 0 = no match (name alone is NOT preferred)
      */
     public static function scoreTradeAgainstInterests(object $trade, array $tuples): int
     {
@@ -250,23 +251,23 @@ class UserInterestService
             $interestFormId = (int) ($tuple['form_id'] ?? 0);
             $interestGrade = $tuple['grade'] !== null ? (int) $tuple['grade'] : null;
 
-            if ($interestNameId <= 0) {
+            if ($interestNameId <= 0 || $interestFormId <= 0) {
                 continue;
             }
 
+            // Both rice name AND form are required for Preferred.
             if (! self::riceNamesMatch($quality, $interestNameId, $tradeRiceLabel)) {
                 continue;
             }
 
-            // Name alone is enough to mark Preferred (keeps PR-11/14 above unrelated).
-            $best = max($best, 1);
+            if (! self::formsMatch($tradeFormId, $interestFormId, $tradeFormLabel, $tradeLiveFormId)) {
+                continue;
+            }
 
-            if ($interestFormId > 0 && self::formsMatch($tradeFormId, $interestFormId, $tradeFormLabel, $tradeLiveFormId)) {
-                $best = max($best, 2);
+            $best = max($best, 2);
 
-                if ($interestGrade !== null && $interestGrade > 0 && self::gradesMatch($tradeGrade, $interestGrade, $tradeWandLabel)) {
-                    $best = max($best, 3);
-                }
+            if ($interestGrade !== null && $interestGrade > 0 && self::gradesMatch($tradeGrade, $interestGrade, $tradeWandLabel)) {
+                $best = max($best, 3);
             }
         }
 
