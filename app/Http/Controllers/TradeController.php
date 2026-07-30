@@ -137,49 +137,51 @@ class TradeController extends Controller
         $personal_remarks = $request->personal_remarks??'';
         $sntcLotNo = $request->sntcLotNo??'';
 
-        if( isset($_FILES['packingImage']) ){
-            $file_name      = $_FILES['packingImage']['name'];
-            $file_size      = $_FILES['packingImage']['size'];
-            $file_tmp       = $_FILES['packingImage']['tmp_name'];
-            $file_type      = $_FILES['packingImage']['type'];
-            if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
+        if (!file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+
+        if (isset($_FILES['packingImage']) && ! empty($_FILES['packingImage']['tmp_name'])) {
+            $file_name = $_FILES['packingImage']['name'];
+            $file_tmp = $_FILES['packingImage']['tmp_name'];
+            if (is_string($file_tmp) && $file_tmp !== '' && is_uploaded_file($file_tmp) && $file_name !== '') {
+                move_uploaded_file($file_tmp, "uploads/".$file_name);
+                $data['packing_file'] = $file_name;
             }
-            move_uploaded_file($file_tmp,"uploads/".$file_name);
-            $data['packing_file'] = $file_name;
         }
 
         if ($videoFile = $this->storeTradeVideoUpload($request)) {
             $data['video_file'] = $videoFile;
         }
 
-
-        foreach($_FILES["cookedFiles"]["tmp_name"] as $key=>$tmp_name) {
-            $file_name=$_FILES["cookedFiles"]["name"][$key];
-            $file_tmp=$_FILES["cookedFiles"]["tmp_name"][$key];
-            if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
+        if (! empty($_FILES['cookedFiles']['tmp_name']) && is_array($_FILES['cookedFiles']['tmp_name'])) {
+            foreach ($_FILES['cookedFiles']['tmp_name'] as $key => $tmp_name) {
+                $file_name = $_FILES['cookedFiles']['name'][$key] ?? '';
+                if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
+                    continue;
+                }
+                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                if ((int) $key === 0) {
+                    $data['cooked_file'] = $file_name;
+                } else {
+                    $data['cooked_file'.$key] = $file_name;
+                }
             }
-            move_uploaded_file($file_tmp,"uploads/".$file_name);
-            if( $key == 0 ) {
-                $data['cooked_file'] = $file_name;
-            }else{
-                $data['cooked_file'.$key] = $file_name;
-            } 
         }
 
-        foreach($_FILES["uncookedFiles"]["tmp_name"] as $key=>$tmp_name) {
-            $file_name=$_FILES["uncookedFiles"]["name"][$key];
-            $file_tmp=$_FILES["uncookedFiles"]["tmp_name"][$key];
-            if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
+        if (! empty($_FILES['uncookedFiles']['tmp_name']) && is_array($_FILES['uncookedFiles']['tmp_name'])) {
+            foreach ($_FILES['uncookedFiles']['tmp_name'] as $key => $tmp_name) {
+                $file_name = $_FILES['uncookedFiles']['name'][$key] ?? '';
+                if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
+                    continue;
+                }
+                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                if ((int) $key === 0) {
+                    $data['uncooked_file'] = $file_name;
+                } else {
+                    $data['uncooked_file'.$key] = $file_name;
+                }
             }
-            move_uploaded_file($file_tmp,"uploads/".$file_name);
-            if( $key == 0 ) {
-                $data['uncooked_file'] = $file_name;
-            }else{
-                $data['uncooked_file'.$key] = $file_name;
-            } 
         }
 
         $data['quality_type'] = $selectedQualityTypeInt;
@@ -292,72 +294,51 @@ class TradeController extends Controller
         $sntcLotNo = $request->sntcLotNo;
         $sold_at = $request->sold_at;
 
-        if( $request->packingImage != '' && isset($_FILES['packingImage']) ){
-            $file_name      = $_FILES['packingImage']['name'];
-            $file_size      = $_FILES['packingImage']['size'];
-            $file_tmp       = $_FILES['packingImage']['tmp_name'];
-            $file_type      = $_FILES['packingImage']['type'];
-            if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
+        if (!file_exists('uploads')) {
+            mkdir('uploads', 0755, true);
+        }
+
+        if ($request->packingImage != '' && isset($_FILES['packingImage']) && ! empty($_FILES['packingImage']['tmp_name'])) {
+            $file_name = $_FILES['packingImage']['name'];
+            $file_tmp = $_FILES['packingImage']['tmp_name'];
+            if (is_string($file_tmp) && $file_tmp !== '' && is_uploaded_file($file_tmp)) {
+                move_uploaded_file($file_tmp, "uploads/".$file_name);
+                $data['packing_file'] = $file_name;
             }
-            move_uploaded_file($file_tmp,"uploads/".$file_name);
-            $data['packing_file'] = $file_name;
         }
 
         if ($videoFile = $this->storeTradeVideoUpload($request)) {
             $data['video_file'] = $videoFile;
         }
 
-        // if( $request->uncookedFiles != '' && isset($_FILES['uncookedFiles']) ){
-        //     $file_name      = $_FILES['uncookedFiles']['name'];
-        //     $file_size      = $_FILES['uncookedFiles']['size'];
-        //     $file_tmp       = $_FILES['uncookedFiles']['tmp_name'];
-        //     $file_type      = $_FILES['uncookedFiles']['type'];
-        if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
+        if (! empty($_FILES['cookedFiles']['tmp_name']) && is_array($_FILES['cookedFiles']['tmp_name'])) {
+            foreach ($_FILES['cookedFiles']['tmp_name'] as $key => $tmp_name) {
+                $file_name = $_FILES['cookedFiles']['name'][$key] ?? '';
+                if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
+                    continue;
+                }
+                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                if ((int) $key === 0) {
+                    $data['cooked_file'] = $file_name;
+                } else {
+                    $data['cooked_file'.$key] = $file_name;
+                }
             }
-        //     move_uploaded_file($file_tmp,"uploads/".$file_name);
-        //     $data['uncooked_file'] = $file_name;
-        // }
-        
-        // if( $request->cookedFiles != '' && isset($_FILES['cookedFiles']) ){
-        //     $file_name      = $_FILES['cookedFiles']['name'];
-        //     $file_size      = $_FILES['cookedFiles']['size'];
-        //     $file_tmp       = $_FILES['cookedFiles']['tmp_name'];
-        //     $file_type      = $_FILES['cookedFiles']['type'];
-        if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
-            }
-        //     move_uploaded_file($file_tmp,"uploads/".$file_name);
-        //     $data['cooked_file'] = $file_name;
-        // }
-
-        foreach($_FILES["cookedFiles"]["tmp_name"] as $key=>$tmp_name) {
-            $file_name=$_FILES["cookedFiles"]["name"][$key];
-            $file_tmp=$_FILES["cookedFiles"]["tmp_name"][$key];
-            if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
-            }
-            move_uploaded_file($file_tmp,"uploads/".$file_name);
-            if( $key == 0 ) {
-                $data['cooked_file'] = $file_name;
-            }else{
-                $data['cooked_file'.$key] = $file_name;
-            } 
         }
 
-        foreach($_FILES["uncookedFiles"]["tmp_name"] as $key=>$tmp_name) {
-            $file_name=$_FILES["uncookedFiles"]["name"][$key];
-            $file_tmp=$_FILES["uncookedFiles"]["tmp_name"][$key];
-            if (!file_exists('uploads')) {
-                mkdir('uploads', 0755, true);
+        if (! empty($_FILES['uncookedFiles']['tmp_name']) && is_array($_FILES['uncookedFiles']['tmp_name'])) {
+            foreach ($_FILES['uncookedFiles']['tmp_name'] as $key => $tmp_name) {
+                $file_name = $_FILES['uncookedFiles']['name'][$key] ?? '';
+                if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
+                    continue;
+                }
+                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                if ((int) $key === 0) {
+                    $data['uncooked_file'] = $file_name;
+                } else {
+                    $data['uncooked_file'.$key] = $file_name;
+                }
             }
-            move_uploaded_file($file_tmp,"uploads/".$file_name);
-            if( $key == 0 ) {
-                $data['uncooked_file'] = $file_name;
-            }else{
-                $data['uncooked_file'.$key] = $file_name;
-            } 
         }
 
         $data['quality_type'] = $selectedQualityTypeInt;
@@ -396,6 +377,34 @@ class TradeController extends Controller
         });
         $data['hotdeal'] = $isHotdeal;
         $data['is_new'] = $isNew;
+
+        // Apply media removals after filter so empty values are kept (clear DB fields).
+        // New uploads above take precedence over remove flags for the same field.
+        // cooked_file / uncooked_file columns are non-nullable in schema → use ''.
+        $mediaRemoveMap = [
+            'remove_packing_file' => 'packing_file',
+            'remove_video_file' => 'video_file',
+            'remove_uncooked_file' => 'uncooked_file',
+            'remove_uncooked_file1' => 'uncooked_file1',
+            'remove_uncooked_file2' => 'uncooked_file2',
+            'remove_uncooked_file3' => 'uncooked_file3',
+            'remove_cooked_file' => 'cooked_file',
+            'remove_cooked_file1' => 'cooked_file1',
+            'remove_cooked_file2' => 'cooked_file2',
+            'remove_cooked_file3' => 'cooked_file3',
+        ];
+        $nonNullableMedia = ['cooked_file', 'uncooked_file'];
+        foreach ($mediaRemoveMap as $inputName => $column) {
+            if ((string) $request->input($inputName, '0') !== '1') {
+                continue;
+            }
+            // Do not clear a field that was just re-uploaded in this request.
+            if (array_key_exists($column, $data) && $data[$column] !== null && $data[$column] !== '') {
+                continue;
+            }
+            $data[$column] = in_array($column, $nonNullableMedia, true) ? '' : null;
+        }
+
         TradeQueriesINR::where('id' , $request['id'])->update(($data));
         $this->syncTradeCategoryMaps((int) $request['id'], $request->input('category_ids', []));
         $tradeRow = TradeQueriesINR::where('id', (int) $request['id'])->first();

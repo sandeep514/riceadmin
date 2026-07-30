@@ -95,17 +95,49 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                            <div class="col-md-12 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing Image') !!}
-                                <input type="file" class="form-control" name="packingImage">
-                                <img src="{{ asset('uploads/'.$tradequeriesinr->packing_file) }}" style="width: 200px;" />
+                                <div class="input-group">
+                                    <input type="file" class="form-control trade-media-input" name="packingImage" accept="image/*">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                            <i class="fa fa-times"></i> Clear
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
+                                @if(!empty($tradequeriesinr->packing_file))
+                                    <div class="trade-media-existing" style="margin-top:10px;" data-remove-name="remove_packing_file">
+                                        <img src="{{ asset('uploads/'.$tradequeriesinr->packing_file) }}" alt="Packing" style="width: 200px; max-width:100%;" />
+                                        <div style="margin-top:6px;">
+                                            <label class="text-danger" style="font-weight:normal;">
+                                                <input type="checkbox" name="remove_packing_file" value="1" class="trade-media-remove">
+                                                Remove existing packing image
+                                            </label>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                            <div class="col-md-12 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Upload Video','Upload Video (optional)') !!}
-                                <input type="file" class="form-control" name="video_file" accept="video/*">
+                                <div class="input-group">
+                                    <input type="file" class="form-control trade-media-input" name="video_file" accept="video/*">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                            <i class="fa fa-times"></i> Clear
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
                                 @if(!empty($tradequeriesinr->video_file))
-                                    <div style="margin-top:10px;">
+                                    <div class="trade-media-existing" style="margin-top:10px;" data-remove-name="remove_video_file">
                                         <video src="{{ asset('uploads/'.$tradequeriesinr->video_file) }}" controls style="max-width:320px;width:100%;"></video>
+                                        <div style="margin-top:6px;">
+                                            <label class="text-danger" style="font-weight:normal;">
+                                                <input type="checkbox" name="remove_video_file" value="1" class="trade-media-remove">
+                                                Remove existing video
+                                            </label>
+                                        </div>
                                     </div>
                                 @endif
                             </div>
@@ -127,51 +159,77 @@
                                 {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
                             </div>
 
+                            @php
+                                $uncookedSlots = [
+                                    ['field' => 'uncooked_file', 'remove' => 'remove_uncooked_file'],
+                                    ['field' => 'uncooked_file1', 'remove' => 'remove_uncooked_file1'],
+                                    ['field' => 'uncooked_file2', 'remove' => 'remove_uncooked_file2'],
+                                    ['field' => 'uncooked_file3', 'remove' => 'remove_uncooked_file3'],
+                                ];
+                                $cookedSlots = [
+                                    ['field' => 'cooked_file', 'remove' => 'remove_cooked_file'],
+                                    ['field' => 'cooked_file1', 'remove' => 'remove_cooked_file1'],
+                                    ['field' => 'cooked_file2', 'remove' => 'remove_cooked_file2'],
+                                    ['field' => 'cooked_file3', 'remove' => 'remove_cooked_file3'],
+                                ];
+                            @endphp
+
                             <div class="row" style="padding: 0px 20px">
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->uncooked_file) }}" style="width: 100px" />
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->uncooked_file1) }}" style="width: 100px" />
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->uncooked_file2) }}" style="width: 100px" />
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->uncooked_file3) }}" style="width: 100px" />
-                                </div>
+                                @foreach($uncookedSlots as $slot)
+                                    @php $existing = $tradequeriesinr->{$slot['field']} ?? null; @endphp
+                                    <div class="col-md-3 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                        <div class="input-group">
+                                            <input type="file" class="form-control trade-media-input" name="uncookedFiles[]" accept="image/*">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
+                                        @if(!empty($existing))
+                                            <div class="trade-media-existing" style="margin-top:8px;" data-remove-name="{{ $slot['remove'] }}">
+                                                <img src="{{ asset('uploads/'.$existing) }}" alt="Uncooked" style="width: 100px; max-width:100%;" />
+                                                <div style="margin-top:6px;">
+                                                    <label class="text-danger" style="font-weight:normal;">
+                                                        <input type="checkbox" name="{{ $slot['remove'] }}" value="1" class="trade-media-remove">
+                                                        Remove
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
 
                             <div class="row" style="padding: 0px 20px">
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->cooked_file) }}" style="width: 100px;"/>
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->cooked_file1) }}" style="width: 100px;"/>
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->cooked_file2) }}" style="width: 100px;"/>
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                    <img src="{{ asset('uploads/'.$tradequeriesinr->cooked_file3) }}" style="width: 100px;"/>
-                                </div>
-                                
+                                @foreach($cookedSlots as $slot)
+                                    @php $existing = $tradequeriesinr->{$slot['field']} ?? null; @endphp
+                                    <div class="col-md-3 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Cooked image','Cooked image') !!}
+                                        <div class="input-group">
+                                            <input type="file" class="form-control trade-media-input" name="cookedFiles[]" accept="image/*">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
+                                        @if(!empty($existing))
+                                            <div class="trade-media-existing" style="margin-top:8px;" data-remove-name="{{ $slot['remove'] }}">
+                                                <img src="{{ asset('uploads/'.$existing) }}" alt="Cooked" style="width: 100px; max-width:100%;" />
+                                                <div style="margin-top:6px;">
+                                                    <label class="text-danger" style="font-weight:normal;">
+                                                        <input type="checkbox" name="{{ $slot['remove'] }}" value="1" class="trade-media-remove">
+                                                        Remove
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @endforeach
                             </div>
 
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
@@ -265,6 +323,7 @@
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
         @include('trade._prevent_double_submit_js')
+        @include('trade._media_clear_js')
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
             $.ajax({

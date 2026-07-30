@@ -9,6 +9,7 @@
         @include('trade._web_trade_notification_js')
         @include('trade._trade_interest_users_js')
         @include('trade._prevent_double_submit_js')
+        @include('trade._media_clear_js')
 
         @if(!empty($convertPrefill ?? null))
         (function () {

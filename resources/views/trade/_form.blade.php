@@ -105,13 +105,29 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                            <div class="col-md-12 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing Image') !!}
-                                <input type="file" class="form-control" name="packingImage">
+                                <div class="input-group">
+                                    <input type="file" class="form-control trade-media-input" name="packingImage" accept="image/*">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                            <i class="fa fa-times"></i> Clear
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
                             </div>
-                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                            <div class="col-md-12 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Upload Video','Upload Video (optional)') !!}
-                                <input type="file" class="form-control" name="video_file" accept="video/*">
+                                <div class="input-group">
+                                    <input type="file" class="form-control trade-media-input" name="video_file" accept="video/*">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                            <i class="fa fa-times"></i> Clear
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Quantity','Quantity') !!}
@@ -130,42 +146,37 @@
                                 <input type="datetime-local" id="validity" name="validity" class="form-control" value="{{ isset($query->validDays) ? \Carbon\Carbon::parse($query->validDays)->format('Y-m-d\TH:i') : '' }}">
                                 {{-- <input type="text" class="form-control" placeholder="Validity ( in Days )" name="validity"> --}}
                             </div>
-                            <div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
-                                    <input type="file" class="form-control" name="uncookedFiles[]" >
-                                </div>
+                            <div class="row" style="margin-left:0;margin-right:0;">
+                                @for($i = 0; $i < 4; $i++)
+                                    <div class="col-md-3 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Un-Cooked image','Un-Cooked image') !!}
+                                        <div class="input-group">
+                                            <input type="file" class="form-control trade-media-input" name="uncookedFiles[]" accept="image/*">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
+                                    </div>
+                                @endfor
                             </div>
-                            <div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                </div>
-                                <div class="col-md-3" style="margin-bottom: 20px;padding-left: 0">
-                                    {!! Form::label('Cooked image','Cooked image') !!}
-                                    <input type="file" class="form-control" name="cookedFiles[]">
-                                </div>
-                                
+                            <div class="row" style="margin-left:0;margin-right:0;">
+                                @for($i = 0; $i < 4; $i++)
+                                    <div class="col-md-3 trade-media-field" style="margin-bottom: 20px;padding-left: 0">
+                                        {!! Form::label('Cooked image','Cooked image') !!}
+                                        <div class="input-group">
+                                            <input type="file" class="form-control trade-media-input" name="cookedFiles[]" accept="image/*">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default trade-media-clear" title="Clear selected file">
+                                                    <i class="fa fa-times"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
+                                    </div>
+                                @endfor
                             </div>
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Crop','Crop') !!}
