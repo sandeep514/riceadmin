@@ -94,13 +94,15 @@
                                                     <td>{{ App\SellQueriesINR::$status[$v->status] }}</td>
                                                     <td>{{ \Carbon\Carbon::parse($v->created_at)->format('d-m-Y') }}</td>
 
-                                                    <td style="text-align: center;">
+                                                    <td style="text-align: center; white-space: nowrap;">
+                                                        <a href="{{ route('master.view.sell.query.INR', $v->id) }}" class="btn btn-primary btn-xs" title="View full details">
+                                                            <i class="fa fa-eye"></i> View
+                                                        </a>
                                                         @if( $v->status == 1)
                                                             <a href="{{ route('convert.to.trade.queries' ,['type' => 'sell' , 'id' => $v->id]) }}" class="btn btn-success btn-xs">Convert to trade</a>
                                                             <a href="{{ route('move.to.trade.sell.queries' , $v->id) }}" class="btn btn-info btn-xs">Moved to trade</a>
                                                             <a href="{{ route('close.sell.queries' , $v->id) }}" class="btn btn-danger btn-xs">Close deal</a>
                                                         @endif
-                                                       
                                                     </td>
                                                 </tr>
                                                 

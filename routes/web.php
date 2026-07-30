@@ -628,6 +628,9 @@ Route::group(['prefix'=>'administrator'], function(){
 
 
     Route::get('list/sell/queries/INR' , ['as' => 'master.list.sell.queries.INR' , 'uses' => 'MasterController@listSellQueries']);
+    Route::get('list/sell/queries/INR/{sellQueryId}' , ['as' => 'master.view.sell.query.INR' , 'uses' => 'MasterController@viewSellQuery']);
+    Route::get('list/sell/queries/INR/{sellQueryId}/download/{field}' , ['as' => 'master.download.sell.query.file' , 'uses' => 'MasterController@downloadSellQueryFile']);
+    Route::get('list/sell/queries/INR/{sellQueryId}/download-all' , ['as' => 'master.download.sell.query.files' , 'uses' => 'MasterController@downloadSellQueryAllFiles']);
     Route::get('list/future/sell/queries/INR' , ['as' => 'master.future.list.sell.queries.INR' , 'uses' => 'MasterController@listFutureSellQueries']);
 
 

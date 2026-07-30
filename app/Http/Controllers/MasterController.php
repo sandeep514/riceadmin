@@ -929,6 +929,160 @@ class MasterController extends Controller
 		return View('sellINR.index' , compact('sellerQueries'));
 	}
 
+	public function viewSellQuery($sellQueryId)
+	{
+		$query = SellQueriesINR::with([
+			'RiceFormMilestone3',
+			'RiceQualityRiceNames',
+			'UserDetail',
+			'RicePacking',
+			'riceGrade.getWandType',
+		])->findOrFail($sellQueryId);
+
+		$mediaFiles = $this->sellQueryMediaFiles($query);
+
+		return View('sellINR.view', compact('query', 'mediaFiles'));
+	}
+
+	/**
+	 * Download a single sell-query media file (packing / cooked / uncooked / extra / report).
+	 */
+	public function downloadSellQueryFile($sellQueryId, $field)
+	{
+		$query = SellQueriesINR::findOrFail($sellQueryId);
+		$allowed = array_keys($this->sellQueryMediaFieldLabels());
+		if (! in_array($field, $allowed, true)) {
+			Session::flash('error', 'Error|Invalid file type.');
+			return back();
+		}
+
+		$value = $query->{$field} ?? null;
+		$path = $this->resolveUploadPath($value);
+		if (! $path) {
+			Session::flash('error', 'Error|File not found on server.');
+			return back();
+		}
+
+		$downloadName = $this->safeDownloadName($field, basename($path), (int) $query->id);
+
+		return response()->download($path, $downloadName);
+	}
+
+	/**
+	 * Download all available sell-query media files as a ZIP archive.
+	 */
+	public function downloadSellQueryAllFiles($sellQueryId)
+	{
+		$query = SellQueriesINR::findOrFail($sellQueryId);
+		$files = $this->sellQueryMediaFiles($query);
+		$existing = array_filter($files, fn ($f) => ! empty($f['path']));
+
+		if ($existing === []) {
+			Session::flash('error', 'Error|No downloadable images found for this sell query.');
+			return back();
+		}
+
+		if (! class_exists(\ZipArchive::class)) {
+			Session::flash('error', 'Error|ZIP support is not available on this server.');
+			return back();
+		}
+
+		$zipName = 'sell_query_' . $query->id . '_images_' . date('Ymd_His') . '.zip';
+		$zipPath = storage_path('app/' . $zipName);
+
+		$zip = new \ZipArchive();
+		if ($zip->open($zipPath, \ZipArchive::CREATE | \ZipArchive::OVERWRITE) !== true) {
+			Session::flash('error', 'Error|Could not create ZIP archive.');
+			return back();
+		}
+
+		foreach ($existing as $item) {
+			$zip->addFile($item['path'], $item['download_name']);
+		}
+		$zip->close();
+
+		return response()->download($zipPath, $zipName)->deleteFileAfterSend(true);
+	}
+
+	/**
+	 * @return array<string, string>
+	 */
+	protected function sellQueryMediaFieldLabels(): array
+	{
+		return [
+			'packing_file' => 'Packing Image',
+			'uncooked_file' => 'Uncooked Image',
+			'cooked_file' => 'Cooked Image',
+			'extra_file' => 'Extra File',
+			'report_file' => 'Report File',
+		];
+	}
+
+	/**
+	 * @return array<int, array{field:string,label:string,filename:?string,url:?string,path:?string,download_name:string,exists:bool}>
+	 */
+	protected function sellQueryMediaFiles(SellQueriesINR $query): array
+	{
+		$out = [];
+		foreach ($this->sellQueryMediaFieldLabels() as $field => $label) {
+			$filename = $query->{$field} ?? null;
+			$filename = is_string($filename) ? trim($filename) : null;
+			if ($filename === '') {
+				$filename = null;
+			}
+			$path = $this->resolveUploadPath($filename);
+			$downloadName = $this->safeDownloadName($field, $filename ? basename((string) $filename) : $field, (int) $query->id);
+
+			$out[] = [
+				'field' => $field,
+				'label' => $label,
+				'filename' => $filename,
+				'url' => $filename ? asset('uploads/' . ltrim(str_replace('\\', '/', $filename), '/')) : null,
+				'path' => $path,
+				'download_name' => $downloadName,
+				'exists' => $path !== null,
+			];
+		}
+
+		return $out;
+	}
+
+	protected function resolveUploadPath(?string $filename): ?string
+	{
+		if ($filename === null || trim($filename) === '') {
+			return null;
+		}
+
+		$filename = str_replace(['\\', "\0"], ['/', ''], trim($filename));
+		// Reject path traversal
+		if (str_contains($filename, '..')) {
+			return null;
+		}
+
+		$candidates = [
+			public_path('uploads/' . ltrim($filename, '/')),
+			base_path('uploads/' . ltrim($filename, '/')),
+			public_path(ltrim($filename, '/')),
+			base_path(ltrim($filename, '/')),
+		];
+
+		foreach ($candidates as $path) {
+			if (is_string($path) && is_file($path) && is_readable($path)) {
+				return $path;
+			}
+		}
+
+		return null;
+	}
+
+	protected function safeDownloadName(string $field, string $original, int $queryId): string
+	{
+		$original = $original !== '' ? $original : $field;
+		$original = preg_replace('/[^A-Za-z0-9._-]+/', '_', $original) ?: $field;
+
+		return 'sell_query_' . $queryId . '_' . $field . '_' . $original;
+	}
+
 	public function listFutureSellQueries()
 	{
 		$sellerQueries = FutureSellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();		
