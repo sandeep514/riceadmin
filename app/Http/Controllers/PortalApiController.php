@@ -1452,8 +1452,10 @@ class PortalApiController extends Controller
 
     public function getPlans()
     {
-        $webKeys = WebPlanKeysModel::select(["id","key","status"])
+        $webKeys = WebPlanKeysModel::select(["id","key","status","order_no"])
             ->where(['status'  =>  1])
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
             ->get()
             ->pluck('key','id');
         $activeWebKeyIds = $webKeys->keys()->map(fn($id) => (int) $id)->toArray();
@@ -1820,8 +1822,10 @@ class PortalApiController extends Controller
         $roleId = (int) $request->role;
         $categoryId = (int) $request->category;
 
-        $webKeys = WebPlanKeysModel::select(['id', 'key', 'status'])
+        $webKeys = WebPlanKeysModel::select(['id', 'key', 'status', 'order_no'])
             ->where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
             ->get()
             ->pluck('key', 'id');
         $activeWebKeyIds = $webKeys->keys()->map(fn($id) => (int) $id)->toArray();

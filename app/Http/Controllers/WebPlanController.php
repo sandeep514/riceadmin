@@ -9,6 +9,7 @@ use App\WebPlanKeysMapModel;
 use App\Events\AdminEvent;
 use App\Role;
 use App\CategoryRoleMap;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 use Session;
@@ -16,7 +17,9 @@ use Session;
 class WebPlanController extends Controller
 {
     public function indexKeys(){
-        $webPlanKeys = WebPlanKeysModel::get();
+        $webPlanKeys = WebPlanKeysModel::orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
         return View('webplanskeys.index' , compact('webPlanKeys'));
     }
 
@@ -37,8 +40,11 @@ class WebPlanController extends Controller
             ], 422);
         }
 
+        $nextOrder = (int) WebPlanKeysModel::max('order_no') + 1;
+
         WebPlanKeysModel::create([
-            'key' => $request->planKey
+            'key' => $request->planKey,
+            'order_no' => $nextOrder,
         ]);
 
         Session::flash('success' , 'Plan key generated successfully|');
@@ -86,6 +92,37 @@ class WebPlanController extends Controller
         return redirect()->route('list.web.plans.keys')->with('success', 'Key status updated successfully');
     }
 
+    public function changeKeyOrder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:web_plan_keys,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        DB::transaction(function () use ($request) {
+            $key = WebPlanKeysModel::lockForUpdate()->findOrFail($request->id);
+            $newOrder = (int) $request->order_no;
+            $oldOrder = $key->order_no;
+
+            if ((int) $oldOrder === $newOrder) {
+                return;
+            }
+
+            $other = WebPlanKeysModel::lockForUpdate()
+                ->where('order_no', $newOrder)
+                ->where('id', '!=', $key->id)
+                ->first();
+
+            $key->update(['order_no' => null]);
+            if ($other) {
+                $other->update(['order_no' => $oldOrder]);
+            }
+            $key->update(['order_no' => $newOrder]);
+        });
+
+        Session::flash('success', 'Plan key order updated successfully.');
+        return redirect()->route('list.web.plans.keys');
+    }
 
     public function indexPlan(){
         $webPlanKeys = WebPlanModel::get();
@@ -101,7 +138,10 @@ class WebPlanController extends Controller
     }
 
     public function createPlan(){
-        $WebPlanKeysModel = WebPlanKeysModel::where('status', 1)->get();
+        $WebPlanKeysModel = WebPlanKeysModel::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
         $roles = Role::where('type', 'web')->pluck('role_name', 'id');
         return View('webplans.create', compact('WebPlanKeysModel', 'roles'));
     }
@@ -189,7 +229,10 @@ class WebPlanController extends Controller
             // return $q->with(['getPlanKey']);
         }])->first();
         $selectedMapKeys = $data->getPlanKeyMap->pluck( 'value' , 'key_id' );
-        $WebPlanKeysModel = WebPlanKeysModel::where('status', 1)->get();
+        $WebPlanKeysModel = WebPlanKeysModel::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
         $roles = Role::where('type', 'web')->pluck('role_name', 'id');
         return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel','roles'));
     }
