@@ -13,7 +13,7 @@
             <br>
             Select at least one <strong>web category</strong> above when Send = Yes.
             <br>
-            Delivery: <strong>Pusher/Reverb</strong> for web portal login, <strong>Firebase</strong> when the same account has a mobile app token (both if logged in on web and mobile).
+            Delivery: <strong>Socket (Reverb/Pusher)</strong> for web portal login, and <strong>Firebase push</strong> when the account has a mobile app token (both channels sent independently; app-only users in matching roles also get FCM).
             <br>
             Placeholders: <code>{trade_no}</code>, <code>{trade_type}</code>, <code>{farming_type}</code>, <code>{quality}</code>,
             <code>{rice_form}</code>, <code>{grade}</code>, <code>{quantity}</code>.

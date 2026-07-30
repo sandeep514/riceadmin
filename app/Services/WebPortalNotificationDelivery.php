@@ -15,15 +15,17 @@ use Illuminate\Support\Str;
 /**
  * Dual-channel portal notifications: web_notifications + Reverb/Pusher + Firebase FCM.
  *
+ * Socket and push are sent independently so one channel failing does not block the other.
+ *
  * Reverb: WebPortalNotificationEvent on private channel web-user.{id}
- * FCM: SendFcmForWebPortalNotification listener (same event) for app users with user_token
+ * FCM: SendPushNotificationJob for users with user_token
  */
 class WebPortalNotificationDelivery
 {
     public const DEFAULT_CHUNK_SIZE = 500;
 
     /**
-     * Deliver to each user via web (DB + Pusher) and mobile FCM when user_token is set.
+     * Deliver to each user via web (DB + Pusher/Reverb) and mobile FCM when user_token is set.
      *
      * @param  array<int>  $userIds
      * @param  array{
@@ -34,7 +36,8 @@ class WebPortalNotificationDelivery
      *     broadcast_group_id?: string|null,
      *     push_type?: string,
      *     fill_role_from_user?: bool,
-     *     fill_category_from_business?: bool
+     *     fill_category_from_business?: bool,
+     *     payload?: array<string, mixed>
      * }  $meta
      */
     public function deliverToUsers(
@@ -59,6 +62,7 @@ class WebPortalNotificationDelivery
         $fixedCategoryId = array_key_exists('category_id', $meta) ? $meta['category_id'] : null;
         $fillRoleFromUser = (bool) ($meta['fill_role_from_user'] ?? ($fixedRoleId === null));
         $fillCategoryFromBusiness = (bool) ($meta['fill_category_from_business'] ?? ($fixedCategoryId === null));
+        $payload = is_array($meta['payload'] ?? null) ? $meta['payload'] : [];
 
         $chunkSize = (int) (config('queue.trade_web_notification_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
         if ($chunkSize < 1) {
@@ -119,11 +123,12 @@ class WebPortalNotificationDelivery
                 ]);
             }
 
+            // 1) Socket / Reverb — independent of FCM
             foreach ($created as $notification) {
                 try {
-                    broadcast(new WebPortalNotificationEvent($notification));
+                    broadcast(new WebPortalNotificationEvent($notification, $payload));
                 } catch (\Throwable $e) {
-                    Log::error('Portal notification broadcast failed for user.', [
+                    Log::error('Portal notification socket broadcast failed for user.', [
                         'group_id' => $groupId,
                         'user_id' => $notification->user_id,
                         'notification_id' => $notification->id,
@@ -132,15 +137,26 @@ class WebPortalNotificationDelivery
                 }
             }
 
-            // History for portal/Pusher recipients (including users without an FCM token).
+            // History for portal recipients (including users without an FCM token).
             $this->persistNotificationRows($chunkIds, $title, $message, $pushType, $now);
 
-            // FCM is queued by SendFcmForWebPortalNotification when each Reverb event fires.
+            // 2) FCM push — independent of socket (explicit; not only via event listener)
+            $fcmData = $this->buildFcmDataPayload($payload, $pushType);
+            $this->queueFirebasePushForUserIds(
+                $chunkIds,
+                $title,
+                $message,
+                $pushType,
+                $chunkSize,
+                false,
+                $fcmData
+            );
         }
     }
 
     /**
      * @param  array<int>  $userIds
+     * @param  array<string, string>  $data  Optional FCM data payload
      */
     public function queueFirebasePushForUserIds(
         array $userIds,
@@ -148,7 +164,8 @@ class WebPortalNotificationDelivery
         string $message,
         string $pushType = 'portal',
         ?int $chunkSize = null,
-        bool $persistToNotificationTable = true
+        bool $persistToNotificationTable = true,
+        array $data = []
     ): void {
         $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
         if ($userIds === []) {
@@ -174,16 +191,54 @@ class WebPortalNotificationDelivery
             $chunkSize = self::DEFAULT_CHUNK_SIZE;
         }
 
+        $stringData = [];
+        foreach ($data as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            $stringData[(string) $key] = is_scalar($value) ? (string) $value : json_encode($value);
+        }
+
         foreach (array_chunk($tokenUsers, $chunkSize) as $chunk) {
             // Sync so trade create/update FCM is not left sitting in the database queue.
-            SendPushNotificationJob::dispatchSync(
-                $title,
-                $message,
-                $chunk,
-                $pushType,
-                $persistToNotificationTable
-            );
+            try {
+                SendPushNotificationJob::dispatchSync(
+                    $title,
+                    $message,
+                    $chunk,
+                    $pushType,
+                    $persistToNotificationTable,
+                    $stringData
+                );
+            } catch (\Throwable $e) {
+                Log::error('Portal FCM push chunk failed.', [
+                    'push_type' => $pushType,
+                    'user_count' => count($chunk),
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     * @return array<string, string>
+     */
+    private function buildFcmDataPayload(array $payload, string $pushType): array
+    {
+        $data = [];
+        foreach ($payload as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            $data[(string) $key] = is_scalar($value) ? (string) $value : json_encode($value);
+        }
+
+        if (! isset($data['type'])) {
+            $data['type'] = $pushType === 'trade' ? 'trade_notification' : 'portal_notification';
+        }
+
+        return $data;
     }
 
     /**

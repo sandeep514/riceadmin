@@ -137,7 +137,10 @@ Quantity: {quantity}';
             $roleId
         );
 
+        $tradePayload = $this->tradeNotificationPayload($trade);
+
         if ($targetIds !== []) {
+            // Web portal: Reverb/socket + FCM (when user_token set) via delivery service.
             $this->delivery->deliverToUsers(
                 $targetIds,
                 $title,
@@ -148,6 +151,7 @@ Quantity: {quantity}';
                     'fill_role_from_user' => $roleId === null || $roleId <= 0,
                     'fill_category_from_business' => true,
                     'push_type' => 'trade',
+                    'payload' => $tradePayload,
                 ]
             );
         }
@@ -161,7 +165,15 @@ Quantity: {quantity}';
         // Avoid double FCM for users already covered as web targets.
         $appFcmIds = array_values(array_diff($appFcmIds, $targetIds));
         if ($appFcmIds !== []) {
-            $this->delivery->queueFirebasePushForUserIds($appFcmIds, $title, $message, 'trade');
+            $this->delivery->queueFirebasePushForUserIds(
+                $appFcmIds,
+                $title,
+                $message,
+                'trade',
+                null,
+                true,
+                $tradePayload
+            );
         }
     }
 
@@ -201,8 +213,25 @@ Quantity: {quantity}';
                 'fill_role_from_user' => true,
                 'fill_category_from_business' => true,
                 'push_type' => 'trade',
+                'payload' => $this->tradeNotificationPayload($trade),
             ]
         );
+    }
+
+    /**
+     * Extra fields for socket + FCM so clients can deep-link to the trade.
+     *
+     * @return array<string, string>
+     */
+    private function tradeNotificationPayload(TradeQueriesINR $trade): array
+    {
+        $tradeId = (int) ($trade->getKey() ?: $trade->id);
+
+        return [
+            'type' => 'trade_notification',
+            'trade_id' => $tradeId > 0 ? (string) $tradeId : '',
+            'trade_no' => $tradeId > 0 ? (string) $tradeId : '',
+        ];
     }
 
     /**

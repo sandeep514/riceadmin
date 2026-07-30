@@ -13,8 +13,13 @@ class WebPortalNotificationEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public WebUserNotification $notification)
-    {
+    /**
+     * @param  array<string, mixed>  $extra  Extra payload fields (e.g. type, trade_id)
+     */
+    public function __construct(
+        public WebUserNotification $notification,
+        public array $extra = []
+    ) {
     }
 
     public function broadcastOn(): array
@@ -36,7 +41,7 @@ class WebPortalNotificationEvent implements ShouldBroadcastNow
             $notifyDate = (string) $notifyDate;
         }
 
-        return [
+        $payload = [
             'id' => $this->notification->id,
             'title' => $this->notification->title,
             'message' => $this->notification->message,
@@ -44,6 +49,17 @@ class WebPortalNotificationEvent implements ShouldBroadcastNow
             'role_id' => $this->notification->role_id,
             'category_id' => $this->notification->category_id,
             'broadcast_group_id' => $this->notification->broadcast_group_id,
+            'user_id' => $this->notification->user_id,
         ];
+
+        foreach ($this->extra as $key => $value) {
+            if ($value === null) {
+                continue;
+            }
+            // FCM/socket clients expect string data values for common keys.
+            $payload[$key] = is_scalar($value) ? (string) $value : $value;
+        }
+
+        return $payload;
     }
 }
