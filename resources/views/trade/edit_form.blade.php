@@ -17,6 +17,8 @@
                                     <option value=""> Select </option>
                                         <option {{ ($tradequeriesinr->tradeType == 1)?'selected' : '' }} value="1"> Buy </option>
                                         <option {{ ($tradequeriesinr->tradeType == 2)?'selected' : '' }} value="2"> Sell </option>
+                                        <option {{ ($tradequeriesinr->tradeType == 3)?'selected' : '' }} value="3"> Future Buying </option>
+                                        <option {{ ($tradequeriesinr->tradeType == 4)?'selected' : '' }} value="4"> Future Selling </option>
                                 </select>
                             </div>
 
