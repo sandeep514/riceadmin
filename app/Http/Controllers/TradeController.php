@@ -370,6 +370,8 @@ class TradeController extends Controller
         $data['dd'] = $request->dd;
         $data['admixture'] = $request->admixture;
         $data['elongation'] = $request->elongation;
+        $data['tradeFor'] = $request->tradeFor;
+        $data['farmingType'] = $request->farmingType;
 
         // Keep 0 values (hotdeal / is_new / sold_at); only drop empty strings & nulls.
         $data = array_filter($data, function ($value) {

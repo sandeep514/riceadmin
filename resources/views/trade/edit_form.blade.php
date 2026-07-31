@@ -12,6 +12,14 @@
                             </div>
                             <input type="hidden" name="id" value="{{ $tradequeriesinr->id }}">
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
+                                {!! Form::label('Trade For','Trade For') !!}
+                                <select class="form-control" required name="tradeFor">
+                                    <option value=""> Select </option>
+                                        <option value="1" {{ ($tradequeriesinr->tradeFor ?? '') == 1 ? 'selected' : '' }}> App </option>
+                                        <option value="2" {{ ($tradequeriesinr->tradeFor ?? '') == 2 ? 'selected' : '' }}> Web </option>
+                                </select>
+                            </div>
+                            <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Trade Type','Trade Type') !!}
                                 <select class="form-control" required name="tradeType">
                                     <option value=""> Select </option>
@@ -21,6 +29,8 @@
                                         <option {{ ($tradequeriesinr->tradeType == 4)?'selected' : '' }} value="4"> Future Selling </option>
                                 </select>
                             </div>
+
+                            @include('trade._farming_type_select', ['selectedFarming' => ($tradequeriesinr->farmingType ?? '')])
 
                             @include('trade._web_categories_grid')
 
