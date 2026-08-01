@@ -379,6 +379,9 @@ class TradeController extends Controller
         });
         $data['hotdeal'] = $isHotdeal;
         $data['is_new'] = $isNew;
+        // Allow clearing text fields that previously had values.
+        $data['additioanlInfo'] = $additioanlInfo ?? '';
+        $data['personal_remarks'] = $personal_remarks ?? '';
 
         // Apply media removals after filter so empty values are kept (clear DB fields).
         // New uploads above take precedence over remove flags for the same field.
