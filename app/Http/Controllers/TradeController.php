@@ -374,14 +374,34 @@ class TradeController extends Controller
         $data['farmingType'] = $request->farmingType;
 
         // Keep 0 values (hotdeal / is_new / sold_at); only drop empty strings & nulls.
+        // Media upload keys are only present when a file was uploaded, so filtering
+        // empty strings here avoids wiping unrelated columns — but form text fields
+        // must be re-applied after so users can clear existing values.
         $data = array_filter($data, function ($value) {
             return $value !== null && $value !== '';
         });
         $data['hotdeal'] = $isHotdeal;
         $data['is_new'] = $isNew;
-        // Allow clearing text fields that previously had values.
+
+        // Clearable fields: empty submit must overwrite previous DB values.
         $data['additioanlInfo'] = $additioanlInfo ?? '';
         $data['personal_remarks'] = $personal_remarks ?? '';
+        $data['sntcLotNo'] = $sntcLotNo ?? '';
+        $data['location'] = $location ?? '';
+        $data['crop'] = $request->crop ?? '';
+        $data['offerPrice'] = $offerPrice ?? '';
+        $data['validDays'] = $validDays ?: null;
+        $data['valid_datetime_for_is_new'] = $validDatetimeForIsNew;
+        $data['moisture'] = $request->moisture ?? '';
+        $data['kett'] = $request->kett ?? '';
+        $data['broken'] = $request->broken ?? '';
+        $data['dd'] = $request->dd ?? '';
+        $data['admixture'] = $request->admixture ?? '';
+        $data['elongation'] = $request->elongation ?? '';
+        $data['sold_at'] = ($sold_at !== null && $sold_at !== '') ? $sold_at : 0;
+        $data['qualityFormLinkWithLivePrice'] = $riceformLinkWithLivePrice ?? '';
+        $data['stateLinkWithLivePrice'] = $stateLinkWithLivePrice ?? '';
+        $data['packingStreamType'] = $packingStreamType ?? '';
 
         // Apply media removals after filter so empty values are kept (clear DB fields).
         // New uploads above take precedence over remove flags for the same field.
