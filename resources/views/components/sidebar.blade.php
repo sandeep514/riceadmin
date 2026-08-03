@@ -503,6 +503,12 @@
                     <span>Paddy Mandi </span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['list.paddy.quality','create.paddy.quality','edit.paddy.quality']))?'active':'' }}">
+                <a href="{{ route('list.paddy.quality') }}">
+                    <i class="fa fa-address-card-o"></i>
+                    <span>Paddy Quality</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['list.paddy.price']))?'active':'' }}">
                 <a href="{{ route('list.paddy.price') }}">
                     <i class="fa fa-address-card-o"></i> 

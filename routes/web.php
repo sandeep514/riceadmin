@@ -432,6 +432,15 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('update/status/web/paddy/mandi/{paddyMandiId}',   ['as' => 'update.status.web.paddy.mandi',    'uses' => 'PaddyMandiController@updateStatus']);
             Route::post('update/order/web/paddy/mandi', ['as' => 'update.order.web.paddy.mandi', 'uses' => 'PaddyMandiController@updateOrder']);
 
+            // paddy quality master
+            Route::get('list/paddy/quality', ['as' => 'list.paddy.quality', 'uses' => 'PaddyQualityController@listPaddyQuality']);
+            Route::get('create/paddy/quality', ['as' => 'create.paddy.quality', 'uses' => 'PaddyQualityController@createPaddyQuality']);
+            Route::POST('save/paddy/quality', ['as' => 'save.paddy.quality', 'uses' => 'PaddyQualityController@savePaddyQuality']);
+            Route::get('edit/paddy/quality/{id}', ['as' => 'edit.paddy.quality', 'uses' => 'PaddyQualityController@editPaddyQuality']);
+            Route::POST('update/paddy/quality', ['as' => 'update.paddy.quality', 'uses' => 'PaddyQualityController@updatePaddyQuality']);
+            Route::get('update/status/paddy/quality/{id}', ['as' => 'update.status.paddy.quality', 'uses' => 'PaddyQualityController@updateStatus']);
+            Route::post('update/order/paddy/quality', ['as' => 'update.order.paddy.quality', 'uses' => 'PaddyQualityController@updateOrder']);
+
 
 
 
