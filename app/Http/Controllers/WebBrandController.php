@@ -92,6 +92,10 @@ class WebBrandController extends Controller
 
     public function brandsForDistributers($userId)
     {
+        /*
+         * Previous availability-based response (nearCityBrands / otherBrands).
+         * Kept for later — client will switch back to this method after some time.
+         *
         $imagePre = asset('brands');
         $userDetails = WebBusinessDetails::where('user_id' , $userId)->first();
         if( $userDetails )  {
@@ -107,7 +111,21 @@ class WebBrandController extends Controller
         }
         
         return response()->json(['status' => 'success', 'message' => "Brand get successfully" ,'imagePre' => $imagePre ,'nearCityBrands' => $nearCityBrands , 'otherBrands' => $otherBrands]);
-        
+         */
+
+        // Temporary: return all active brands ordered by order_no
+        $imagePre = asset('brands');
+        $brands = WebBrands::where('status', 1)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Brand get successfully',
+            'imagePre' => $imagePre,
+            'data' => $brands,
+        ]);
     }
 
     public function create(Request $request)
