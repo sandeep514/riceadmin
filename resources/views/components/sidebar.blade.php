@@ -223,6 +223,11 @@
                     <i class="fa fa-address-card-o"></i> <span>Rice Form 3</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['list.paddy.quality','create.paddy.quality','edit.paddy.quality']))?'active':'' }}">
+                <a href="{{ route('list.paddy.quality') }}">
+                    <i class="fa fa-address-card-o"></i> <span>Paddy Quality</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['change.date.of.existing.user']))?'active':'' }}">
                 <a href="{{ route('change.date.of.existing.user') }}">
                     <i class="fa fa-address-card-o"></i> <span>Change Date of Existing User</span>
@@ -501,12 +506,6 @@
                 <a href="{{ route('list.web.paddy.mandi') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Paddy Mandi </span>
-                </a>
-            </li>
-            <li class="{{ (in_array($currentRoute,['list.paddy.quality','create.paddy.quality','edit.paddy.quality']))?'active':'' }}">
-                <a href="{{ route('list.paddy.quality') }}">
-                    <i class="fa fa-address-card-o"></i>
-                    <span>Paddy Quality</span>
                 </a>
             </li>
             <li class="{{ (in_array($currentRoute,['list.paddy.price']))?'active':'' }}">
