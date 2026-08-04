@@ -10,6 +10,7 @@ class LivePriceEvent extends Model
         'quality_type_id',
         'quality_id',
         'quality_form_id',
+        'title',
         'event_date',
         'note',
         'status',

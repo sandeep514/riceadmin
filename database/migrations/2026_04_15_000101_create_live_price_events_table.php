@@ -13,6 +13,7 @@ class CreateLivePriceEventsTable extends Migration
             $table->unsignedBigInteger('quality_type_id')->nullable();
             $table->unsignedBigInteger('quality_id')->nullable();
             $table->unsignedBigInteger('quality_form_id')->nullable();
+            $table->string('title')->nullable();
             $table->date('event_date');
             $table->text('note');
             $table->unsignedTinyInteger('status')->default(1);

@@ -1670,6 +1670,7 @@ class PortalApiController extends Controller
         $events = $query->limit($limit)->get()->map(function ($row) {
             return [
                 'id' => $row->id,
+                'title' => $row->title,
                 'event_date' => $row->event_date,
                 'note' => $row->note,
                 'quality_type' => $row->qualityType ? [

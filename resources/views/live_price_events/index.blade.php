@@ -29,7 +29,8 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Date</th>
+                                    <th>Title of Event</th>
+                                    <th>Date of Event</th>
                                     <th>Quality Type</th>
                                     <th>Quality</th>
                                     <th>Quality Form</th>
@@ -41,11 +42,12 @@
                                 @forelse($events as $event)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $event->title ?: '-' }}</td>
                                         <td>{{ \Carbon\Carbon::parse($event->event_date)->format('d-m-Y') }}</td>
                                         <td>{{ optional($event->qualityType)->name ?? '-' }}</td>
                                         <td>{{ optional($event->quality)->name ?? '-' }}</td>
                                         <td>{{ optional($event->qualityForm)->form_name ?? '-' }}</td>
-                                        <td>{{ $event->note }}</td>
+                                        <td>{{ \Illuminate\Support\Str::limit(strip_tags($event->note), 80) }}</td>
                                         <td style="white-space: nowrap;">
                                             <a href="{{ route('edit.live.price.event', $event->id) }}" class="btn btn-warning btn-xs">Edit</a>
                                             <form action="{{ route('delete.live.price.event', $event->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Delete this event?')">
@@ -57,7 +59,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="text-center">No events found.</td>
+                                        <td colspan="8" class="text-center">No events found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>

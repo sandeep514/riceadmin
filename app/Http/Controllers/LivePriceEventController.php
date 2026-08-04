@@ -94,6 +94,7 @@ class LivePriceEventController extends Controller
             'quality_type_id' => 'nullable|integer|exists:rice_types,id',
             'quality_id' => 'nullable|integer|exists:rice_names,id',
             'quality_form_id' => 'nullable|integer|exists:rice_forms,id',
+            'title' => 'required|string|max:255',
             'event_date' => 'required|date',
             'note' => 'required|string',
         ]);

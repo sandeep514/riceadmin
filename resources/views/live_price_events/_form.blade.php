@@ -7,6 +7,29 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
+            <label>Title of Event <span class="text-danger">*</span></label>
+            <input
+                type="text"
+                name="title"
+                class="form-control"
+                value="{{ old('title', isset($event) ? $event->title : '') }}"
+                maxlength="255"
+                required
+            >
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>Date of Event <span class="text-danger">*</span></label>
+            <input type="date" name="event_date" class="form-control" value="{{ old('event_date', isset($event) ? $event->event_date : '') }}" required>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
             <label>Quality Type (Optional)</label>
             <select name="quality_type_id" id="quality_type_id" class="form-control">
                 <option value="">Select quality type</option>
@@ -56,18 +79,11 @@
             </select>
         </div>
     </div>
-
-    <div class="col-md-6">
-        <div class="form-group">
-            <label>Date <span class="text-danger">*</span></label>
-            <input type="date" name="event_date" class="form-control" value="{{ old('event_date', isset($event) ? $event->event_date : '') }}" required>
-        </div>
-    </div>
 </div>
 
 <div class="form-group">
     <label>Note <span class="text-danger">*</span></label>
-    <textarea name="note" class="form-control" rows="4" required>{{ old('note', isset($event) ? $event->note : '') }}</textarea>
+    <textarea name="note" id="event_note" class="form-control" rows="8" required>{{ old('note', isset($event) ? $event->note : '') }}</textarea>
 </div>
 
 <div class="box-footer">
@@ -106,6 +122,22 @@
         $(document).ready(function () {
             applyTypeFilter();
             $('#quality_type_id').on('change', applyTypeFilter);
+
+            // Rich text editor for Note (bold, bullets, lists, etc.)
+            if ($.fn.wysihtml5) {
+                $('#event_note').wysihtml5({
+                    toolbar: {
+                        'font-styles': true,
+                        'emphasis': true,
+                        'lists': true,
+                        'html': false,
+                        'link': true,
+                        'image': false,
+                        'color': false,
+                        'blockquote': true
+                    }
+                });
+            }
         });
     })();
 </script>
