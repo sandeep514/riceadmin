@@ -441,6 +441,10 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('update/status/paddy/quality/{id}', ['as' => 'update.status.paddy.quality', 'uses' => 'PaddyQualityController@updateStatus']);
             Route::post('update/order/paddy/quality', ['as' => 'update.order.paddy.quality', 'uses' => 'PaddyQualityController@updateOrder']);
 
+            // paddy sell queries
+            Route::get('list/paddy/sell/queries', ['as' => 'list.paddy.sell.queries', 'uses' => 'PaddySellQueryController@index']);
+            Route::get('close/paddy/sell/query/{id}', ['as' => 'close.paddy.sell.query', 'uses' => 'PaddySellQueryController@close']);
+
 
 
 

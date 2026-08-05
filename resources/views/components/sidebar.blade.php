@@ -514,6 +514,12 @@
                     <span>Paddy Prices </span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['list.paddy.sell.queries']))?'active':'' }}">
+                <a href="{{ route('list.paddy.sell.queries') }}">
+                    <i class="fa fa-address-card-o"></i>
+                    <span>Paddy Sell Queries</span>
+                </a>
+            </li>
             <li class="header">Web Brands</li>
             <li class="{{ (in_array($currentRoute,['get.web.brands.list']))?'active':'' }}">
                 <a href="{{ route('get.web.brands.list') }}">

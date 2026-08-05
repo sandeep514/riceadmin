@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
 use App\PaddyQuality;
+use App\PaddySellQuery;
 use App\PaddyStateModel;
 use App\RiceName;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class PaddyApiController extends Controller
 {
@@ -288,6 +290,118 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy qualities list',
             'data' => $qualities,
+        ], 200);
+    }
+
+    /**
+     * Submit paddy sell query (web/app).
+     *
+     * Expected fields (multipart/form-data or JSON):
+     * - category (basmati|non-basmati)
+     * - quality (paddy_qualities id)
+     * - qualityName (optional display name)
+     * - hand_combined
+     * - packing (optional)
+     * - contactNumber (required; legacy key "contact" also accepted)
+     * - contactperson
+     * - image (optional file)
+     * - location
+     * - quantity
+     * - rate
+     * - type (web|app)
+     * - userId
+     * - validDays
+     */
+    public function submitPaddySellQuery(Request $request)
+    {
+        // Prefer contactNumber; fall back to legacy "contact"
+        if (! $request->filled('contactNumber') && $request->filled('contact')) {
+            $request->merge(['contactNumber' => $request->input('contact')]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'category' => 'required|in:basmati,non-basmati',
+            'quality' => 'required|integer|exists:paddy_qualities,id',
+            'qualityName' => 'nullable|string|max:255',
+            'hand_combined' => 'required|string|max:100',
+            'packing' => 'nullable|string|max:255',
+            'contactNumber' => 'required|string|max:50',
+            'contactperson' => 'required|string|max:255',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png,gif,webp|max:10240',
+            'location' => 'required|string|max:255',
+            'quantity' => 'required|string|max:100',
+            'rate' => 'required|string|max:100',
+            'type' => 'nullable|string|max:50',
+            'userId' => 'required|integer|exists:users,id',
+            'validDays' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $imageName = null;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $uploadDir = public_path('uploads');
+            if (! is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+
+            $imageName = 'paddy_sell_' . time() . '_' . Str::random(6) . '.' . $file->getClientOriginalExtension();
+            $file->move($uploadDir, $imageName);
+        }
+
+        $qualityName = $request->input('qualityName');
+        if (! $qualityName) {
+            $qualityName = optional(PaddyQuality::find($request->quality))->quality;
+        }
+
+        $row = PaddySellQuery::create([
+            'category' => $request->category,
+            'quality' => (int) $request->quality,
+            'quality_name' => $qualityName,
+            'hand_combined' => $request->hand_combined,
+            'packing' => $request->input('packing'),
+            'contact_number' => $request->contactNumber,
+            'contact_person' => $request->contactperson,
+            'image' => $imageName,
+            'location' => $request->location,
+            'quantity' => $request->quantity,
+            'rate' => $request->rate,
+            'valid_days' => $request->validDays,
+            'type' => $request->input('type', 'web'),
+            'user_id' => (int) $request->userId,
+            'status' => 1,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy sell query submitted successfully.',
+            'data' => [
+                'id' => $row->id,
+                'category' => $row->category,
+                'quality' => $row->quality,
+                'qualityName' => $row->quality_name,
+                'hand_combined' => $row->hand_combined,
+                'packing' => $row->packing,
+                'contactNumber' => $row->contact_number,
+                'contactperson' => $row->contact_person,
+                'image' => $row->image,
+                'imageUrl' => $row->image_url,
+                'location' => $row->location,
+                'quantity' => $row->quantity,
+                'rate' => $row->rate,
+                'validDays' => $row->valid_days,
+                'type' => $row->type,
+                'userId' => $row->user_id,
+                'status' => $row->status,
+                'created_at' => $row->created_at,
+            ],
         ], 200);
     }
 }
