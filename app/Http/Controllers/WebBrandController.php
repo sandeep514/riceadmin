@@ -556,16 +556,26 @@ class WebBrandController extends Controller
 
     public function vendorType()
     {
-        $role = [11,12];
-        $categories = CategoryRoleMap::whereIn('role' , $role)->where('status' , 1)->pluck('category');
-        $category = Category::whereIn('id' , $categories)->select('category' , 'id' , 'image')->where('status' , 1)->get();
+        $role = [11, 12];
+
+        // Only active category-role maps and active categories (status = 1)
+        $categoryIds = CategoryRoleMap::whereIn('role', $role)
+            ->where('status', 1)
+            ->pluck('category');
+
+        $category = Category::query()
+            ->select(['id', 'category', 'image'])
+            ->whereIn('id', $categoryIds)
+            ->where('status', 1)
+            ->orderByRaw('COALESCE(`order`, 999999)')
+            ->orderBy('category')
+            ->get();
 
         return response()->json([
             'status' => true,
             'message' => 'Vendor type get successfully.',
             'filePath' => asset('bagimages/'),
             'data' => $category,
-
         ], 200);
     }
 
