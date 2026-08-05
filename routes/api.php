@@ -232,6 +232,7 @@ use Pusher\Pusher;
 
     Route::get('list/web/paddy/state',      ['as' => 'list.web.paddy.state',    'uses' => 'PaddyApiController@listPaddy', 'middleware' => 'portal.api.token']);
     Route::get('list/web/paddy/mandi/{stateId}',      ['as' => 'list.web.paddy.state.mandi',    'uses' => 'PaddyApiController@listPaddyMandi', 'middleware' => 'portal.api.token']);
+    Route::get('list/web/paddy/quality',   ['as' => 'list.web.paddy.quality', 'uses' => 'PaddyApiController@listPaddyQualities', 'middleware' => 'portal.api.token']);
 
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
     Route::get('get/paddy/prices/by/paddy/{stateId}/{paddyId}',      ['as' => 'get.paddy.prices.by.paddy',    'uses' => 'PaddyApiController@getPaddyPricesByPaddy']);

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\PaddyMandiModel;
 use App\PaddyPrice;
+use App\PaddyQuality;
 use App\PaddyStateModel;
 use App\RiceName;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PaddyApiController extends Controller
 {
@@ -239,6 +241,54 @@ class PaddyApiController extends Controller
                 'machine_cutting_price' => $machine_cutting_price,
             ],
         ]);
+    }
+
+    /**
+     * List available (active) paddy qualities from master.
+     *
+     * Optional query params:
+     * - type: basmati | non-basmati
+     */
+    public function listPaddyQualities(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'type' => 'nullable|in:basmati,non-basmati',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $query = PaddyQuality::query()
+            ->select(['id', 'type', 'quality', 'description', 'order'])
+            ->where('status', 1)
+            ->orderByRaw('`order` IS NULL, `order` ASC')
+            ->orderBy('id');
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        $qualities = $query->get()->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'type' => $row->type,
+                'type_label' => $row->type_label,
+                'quality' => $row->quality,
+                'description' => $row->description,
+                'order' => $row->order,
+            ];
+        })->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy qualities list',
+            'data' => $qualities,
+        ], 200);
     }
 }
 
