@@ -6262,16 +6262,20 @@ if (!file_exists('uploads')) {
 
     public function getPersonalQueryCount($userId)
     {
+        $paddySellCount = PaddySellQuery::where('user_id', $userId)->count();
+
         $availableQueries =
             BuyQueriesINR::where('created_by', $userId)->count()
             + SellQueriesINR::where('created_by', $userId)->count()
             + FutureBuyQueriesINR::where('created_by', $userId)->count()
-            + FutureSellQueriesINR::where('created_by', $userId)->count();
+            + FutureSellQueriesINR::where('created_by', $userId)->count()
+            + $paddySellCount;
 
         return response()->json([
             'status' => true,
             'data' => [
                 'availableQueries' => $availableQueries,
+                'paddySell' => $paddySellCount,
                 'trades' => $this->countPersonalMovedToTradeQueries($userId),
                 'soldCount' => $this->countPersonalLinkedTrades($userId, 3),
             ],
