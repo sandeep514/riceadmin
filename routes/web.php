@@ -443,6 +443,8 @@ Route::group(['prefix'=>'administrator'], function(){
 
             // paddy sell queries
             Route::get('list/paddy/sell/queries', ['as' => 'list.paddy.sell.queries', 'uses' => 'PaddySellQueryController@index']);
+            Route::get('view/paddy/sell/query/{id}', ['as' => 'view.paddy.sell.query', 'uses' => 'PaddySellQueryController@view']);
+            Route::get('download/paddy/sell/query/image/{id}', ['as' => 'download.paddy.sell.query.image', 'uses' => 'PaddySellQueryController@downloadImage']);
             Route::get('close/paddy/sell/query/{id}', ['as' => 'close.paddy.sell.query', 'uses' => 'PaddySellQueryController@close']);
 
 

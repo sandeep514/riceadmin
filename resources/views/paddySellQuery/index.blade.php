@@ -63,9 +63,16 @@
                                         <td>{{ $query->contact_number }}</td>
                                         <td>
                                             @if($query->image)
-                                                <a href="{{ $query->image_url }}" target="_blank">
-                                                    <img src="{{ $query->image_url }}" alt="image" style="width: 60px; height: 60px; object-fit: cover;">
-                                                </a>
+                                                <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                                                    <a href="{{ $query->image_url }}" target="_blank">
+                                                        <img src="{{ $query->image_url }}" alt="image" style="width: 60px; height: 60px; object-fit: cover;">
+                                                    </a>
+                                                    <a href="{{ route('download.paddy.sell.query.image', $query->id) }}"
+                                                       class="btn btn-default btn-xs"
+                                                       title="Download image">
+                                                        <i class="fa fa-download"></i> Download
+                                                    </a>
+                                                </div>
                                             @else
                                                 -
                                             @endif
@@ -87,14 +94,17 @@
                                         </td>
                                         <td>{{ $query->created_at ? \Carbon\Carbon::parse($query->created_at)->format('d-m-Y H:i') : '-' }}</td>
                                         <td style="white-space: nowrap;">
+                                            <a href="{{ route('view.paddy.sell.query', $query->id) }}"
+                                               class="btn btn-primary btn-xs"
+                                               title="View full details">
+                                                <i class="fa fa-eye"></i> View
+                                            </a>
                                             @if((int) $query->status === 1)
                                                 <a href="{{ route('close.paddy.sell.query', $query->id) }}"
                                                    class="btn btn-danger btn-xs"
                                                    onclick="return confirm('Close this paddy sell query?')">
                                                     Close
                                                 </a>
-                                            @else
-                                                -
                                             @endif
                                         </td>
                                     </tr>

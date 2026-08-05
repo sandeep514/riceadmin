@@ -514,7 +514,7 @@
                     <span>Paddy Prices </span>
                 </a>
             </li>
-            <li class="{{ (in_array($currentRoute,['list.paddy.sell.queries']))?'active':'' }}">
+            <li class="{{ (in_array($currentRoute,['list.paddy.sell.queries','view.paddy.sell.query']))?'active':'' }}">
                 <a href="{{ route('list.paddy.sell.queries') }}">
                     <i class="fa fa-address-card-o"></i>
                     <span>Paddy Sell Queries</span>
