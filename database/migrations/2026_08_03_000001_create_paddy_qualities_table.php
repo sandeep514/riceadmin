@@ -10,11 +10,14 @@ class CreatePaddyQualitiesTable extends Migration
     {
         Schema::create('paddy_qualities', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('rice_type_id')->nullable();
             $table->string('quality', 255);
             $table->text('description')->nullable();
             $table->unsignedInteger('order')->nullable();
             $table->integer('status')->default(1);
             $table->timestamps();
+
+            $table->index('rice_type_id');
         });
     }
 

@@ -23,6 +23,7 @@
                                 <thead>
                                 <tr>
                                     <th>Order</th>
+                                    <th>Rice Type</th>
                                     <th>Quality</th>
                                     <th>Description</th>
                                     <th>Status</th>
@@ -46,6 +47,7 @@
                                                     </div>
                                                 </form>
                                             </td>
+                                            <td>{{ optional($value->riceType)->name ?? '-' }}</td>
                                             <td style="text-transform: capitalize;">{{ $value->quality }}</td>
                                             <td>{{ $value->description }}</td>
                                             <td>{{ ((int) $value->status === 1) ? 'Active' : 'Inactive' }}</td>
@@ -74,7 +76,7 @@
         $('.paddy-quality-datatable').DataTable({
             pageLength: 25,
             order: [[0, 'asc']],
-            columnDefs: [{ orderable: false, targets: [4] }]
+            columnDefs: [{ orderable: false, targets: [5] }]
         });
     });
 </script>

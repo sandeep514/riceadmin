@@ -174,10 +174,14 @@
                             <div class="box-body">
                                 <div class="row">
                                     <div class="form-group col-md-4">
+                                        {!! Form::label('rice_type_id','Rice Type*') !!}
+                                        {!! Form::select('rice_type_id', \App\RiceType::riceTypes(), null, ['class' => 'form-control', 'placeholder' => 'Select Rice Type', 'required' => true]) !!}
+                                    </div>
+                                    <div class="form-group col-md-4">
                                         {!! Form::label('quality','Quality*') !!}
                                         {!! Form::text('quality' , '' , ['class' => 'form-control', 'required' => true]) !!}
                                     </div>
-                                    <div class="form-group col-md-8">
+                                    <div class="form-group col-md-4">
                                         {!! Form::label('description','Description') !!}
                                         {!! Form::textarea('description' , '' , ['class' => 'form-control', 'rows' => 2]) !!}
                                     </div>
