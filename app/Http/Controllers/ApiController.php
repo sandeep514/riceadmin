@@ -73,6 +73,7 @@ use App\SellerPackingINR;
 use App\RiceFormMilestone3;
 use App\LivePriceStatusMessage;
 use App\SellQueriesINR;
+use App\PaddySellQuery;
 use App\TradeQueriesINR;
 use App\TradeStatusMessages;
 use App\Buyerpackinginr;
@@ -6111,6 +6112,38 @@ if (!file_exists('uploads')) {
             )
         );
 
+        $paddySell = PaddySellQuery::query()
+            ->with(['paddyQuality:id,quality,type'])
+            ->where('user_id', $userId)
+            ->orderByDesc('id')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'category' => $row->category,
+                    'category_label' => $row->category_label,
+                    'quality' => $row->quality,
+                    'qualityName' => $row->quality_name ?: optional($row->paddyQuality)->quality,
+                    'hand_combined' => $row->hand_combined,
+                    'packing' => $row->packing,
+                    'contactNumber' => $row->contact_number,
+                    'contactperson' => $row->contact_person,
+                    'image' => $row->image,
+                    'imageUrl' => $row->image_url,
+                    'location' => $row->location,
+                    'quantity' => $row->quantity,
+                    'rate' => $row->rate,
+                    'validDays' => $row->valid_days,
+                    'type' => $row->type,
+                    'userId' => $row->user_id,
+                    'status' => $row->status,
+                    'status_label' => $row->status_label,
+                    'created_at' => $row->created_at,
+                    'updated_at' => $row->updated_at,
+                ];
+            })
+            ->values();
+
         return response()->json([
             'status' => true,
             'data' => [
@@ -6118,6 +6151,7 @@ if (!file_exists('uploads')) {
                 'sell' => $this->attachFarmingRelationToQueries($SellQueriesINR),
                 'futureBuy' => $this->attachFarmingRelationToQueries($FutureBuyQueriesINR),
                 'futureSell' => $this->attachFarmingRelationToQueries($FutureSellQueriesINR),
+                'paddySell' => $paddySell,
             ],
         ]);
     }
