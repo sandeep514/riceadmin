@@ -1,19 +1,19 @@
 @php
-    $riceTypeOptions = $riceTypes ?? \App\RiceType::orderBy('name')->pluck('name', 'id');
+    $riceTypeOptions = \App\PaddyQuality::riceTypeOptions();
+    $selectedType = old('type', 'basmati');
 @endphp
 <div class="box-body">
     <div class="row">
         <div class="form-group col-md-6">
             <label>Rice Type <span class="text-danger">*</span></label>
-            <select name="rice_type_id" class="form-control" required>
-                <option value="">Select Rice Type</option>
-                @foreach($riceTypeOptions as $id => $name)
-                    <option value="{{ $id }}" {{ (string) old('rice_type_id') === (string) $id ? 'selected' : '' }}>
-                        {{ $name }}
+            <select name="type" class="form-control" required>
+                @foreach($riceTypeOptions as $value => $label)
+                    <option value="{{ $value }}" {{ (string) $selectedType === (string) $value ? 'selected' : '' }}>
+                        {{ $label }}
                     </option>
                 @endforeach
             </select>
-            @error('rice_type_id')
+            @error('type')
                 <span class="text-danger">{{ $message }}</span>
             @enderror
         </div>

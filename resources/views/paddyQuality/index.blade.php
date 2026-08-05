@@ -47,7 +47,7 @@
                                                     </div>
                                                 </form>
                                             </td>
-                                            <td>{{ optional($value->riceType)->name ?? '-' }}</td>
+                                            <td>{{ $value->type_label }}</td>
                                             <td style="text-transform: capitalize;">{{ $value->quality }}</td>
                                             <td>{{ $value->description }}</td>
                                             <td>{{ ((int) $value->status === 1) ? 'Active' : 'Inactive' }}</td>

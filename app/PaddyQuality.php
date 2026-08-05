@@ -9,16 +9,28 @@ class PaddyQuality extends Model
     protected $table = 'paddy_qualities';
 
     protected $fillable = [
-        'rice_type_id',
+        'type',
         'quality',
         'description',
         'order',
         'status',
     ];
 
-    public function riceType()
+    /**
+     * Same options as Rice Name master (basmati / non-basmati).
+     */
+    public static function riceTypeOptions(): array
     {
-        return $this->belongsTo(RiceType::class, 'rice_type_id');
+        return [
+            'basmati' => 'Basmati',
+            'non-basmati' => 'Non Basmati',
+        ];
+    }
+
+    public function getTypeLabelAttribute(): string
+    {
+        return self::riceTypeOptions()[$this->type] ?? ($this->type ?: '-');
     }
 }
+
 

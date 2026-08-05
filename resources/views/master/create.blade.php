@@ -174,8 +174,11 @@
                             <div class="box-body">
                                 <div class="row">
                                     <div class="form-group col-md-4">
-                                        {!! Form::label('rice_type_id','Rice Type*') !!}
-                                        {!! Form::select('rice_type_id', \App\RiceType::riceTypes(), null, ['class' => 'form-control', 'placeholder' => 'Select Rice Type', 'required' => true]) !!}
+                                        {!! Form::label('type','Rice Type*') !!}
+                                        <select class="form-control" name="type" required>
+                                            <option value="basmati">Basmati</option>
+                                            <option value="non-basmati">Non Basmati</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-md-4">
                                         {!! Form::label('quality','Quality*') !!}

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\PaddyQuality;
-use App\RiceType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -13,8 +12,7 @@ class PaddyQualityController extends Controller
 {
     public function listPaddyQuality()
     {
-        $paddyQualities = PaddyQuality::with('riceType')
-            ->orderByRaw('`order` IS NULL, `order` ASC')
+        $paddyQualities = PaddyQuality::orderByRaw('`order` IS NULL, `order` ASC')
             ->orderBy('id')
             ->get();
 
@@ -23,15 +21,13 @@ class PaddyQualityController extends Controller
 
     public function createPaddyQuality()
     {
-        $riceTypes = RiceType::orderBy('name')->pluck('name', 'id');
-
-        return View('paddyQuality.create', compact('riceTypes'));
+        return View('paddyQuality.create');
     }
 
     public function savePaddyQuality(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'rice_type_id' => 'required|integer|exists:rice_types,id',
+            'type' => 'required|in:basmati,non-basmati',
             'quality' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
@@ -43,7 +39,7 @@ class PaddyQualityController extends Controller
         $nextOrder = ((int) PaddyQuality::max('order')) + 1;
 
         PaddyQuality::create([
-            'rice_type_id' => $request->rice_type_id,
+            'type' => $request->type,
             'quality' => $request->quality,
             'description' => $request->description,
             'order' => $nextOrder > 0 ? $nextOrder : 1,
@@ -58,16 +54,15 @@ class PaddyQualityController extends Controller
     public function editPaddyQuality($id)
     {
         $data = PaddyQuality::findOrFail($id);
-        $riceTypes = RiceType::orderBy('name')->pluck('name', 'id');
 
-        return View('paddyQuality.edit', compact('data', 'riceTypes'));
+        return View('paddyQuality.edit', compact('data'));
     }
 
     public function updatePaddyQuality(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'id' => 'required|integer|exists:paddy_qualities,id',
-            'rice_type_id' => 'required|integer|exists:rice_types,id',
+            'type' => 'required|in:basmati,non-basmati',
             'quality' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
@@ -77,7 +72,7 @@ class PaddyQualityController extends Controller
         }
 
         PaddyQuality::where('id', $request->id)->update([
-            'rice_type_id' => $request->rice_type_id,
+            'type' => $request->type,
             'quality' => $request->quality,
             'description' => $request->description,
         ]);

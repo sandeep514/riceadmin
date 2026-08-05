@@ -4,11 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-/**
- * Adds basmati/non-basmati type (same as rice_names.type).
- * Also cleans up rice_type_id if it was added earlier by mistake.
- */
-class AddRiceTypeIdToPaddyQualitiesTable extends Migration
+class AddTypeToPaddyQualitiesTable extends Migration
 {
     public function up()
     {
@@ -18,6 +14,7 @@ class AddRiceTypeIdToPaddyQualitiesTable extends Migration
             });
         }
 
+        // Clean up earlier rice_type_id FK-style column if present
         if (Schema::hasColumn('paddy_qualities', 'rice_type_id')) {
             Schema::table('paddy_qualities', function (Blueprint $table) {
                 $table->dropColumn('rice_type_id');
