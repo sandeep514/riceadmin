@@ -485,7 +485,8 @@ class PaddyApiController extends Controller
      * - category: basmati | non-basmati
      * - quality: paddy_qualities id
      * - packing_id: seller packing id
-     * - user_id: original seller user id
+     * - userId | user_id: logged-in user (for per-trade is_interested / already_interested)
+     * - seller_user_id: filter trades by original seller user id
      * - status: default 1 (active). Pass "all" for every status.
      * - page: default 1
      * - per_page | perPage | limit: default 15, max 100
@@ -496,7 +497,9 @@ class PaddyApiController extends Controller
             'category' => 'nullable|in:basmati,non-basmati',
             'quality' => 'nullable|integer|exists:paddy_qualities,id',
             'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
+            'userId' => 'nullable|integer|exists:users,id',
             'user_id' => 'nullable|integer|exists:users,id',
+            'seller_user_id' => 'nullable|integer|exists:users,id',
             'status' => 'nullable',
             'page' => 'nullable|integer|min:1',
             'per_page' => 'nullable|integer|min:1|max:100',
@@ -521,6 +524,8 @@ class PaddyApiController extends Controller
         $perPage = max(1, min(100, $perPage));
         $page = max(1, (int) $request->input('page', 1));
 
+        $interestUserId = $this->resolveInterestUserId($request);
+
         $query = PaddyTrade::query()
             ->with([
                 'paddyQuality:id,quality,type',
@@ -543,14 +548,32 @@ class PaddyApiController extends Controller
         if ($request->filled('packing_id')) {
             $query->where('packing_id', (int) $request->packing_id);
         }
-        if ($request->filled('user_id')) {
-            $query->where('user_id', (int) $request->user_id);
+        if ($request->filled('seller_user_id')) {
+            $query->where('user_id', (int) $request->seller_user_id);
         }
 
         $paginator = $query->paginate($perPage, ['*'], 'page', $page);
 
-        $data = collect($paginator->items())->map(function ($row) {
-            return $this->formatPaddyTradeResponse($row);
+        $interestedTradeIds = [];
+        if ($interestUserId) {
+            $pageTradeIds = collect($paginator->items())->pluck('id')->filter()->values()->all();
+            if ($pageTradeIds !== []) {
+                $interestedTradeIds = PaddyTradeInterested::query()
+                    ->where('user_id', $interestUserId)
+                    ->where('status', 1)
+                    ->whereIn('paddy_trade_id', $pageTradeIds)
+                    ->pluck('paddy_trade_id')
+                    ->map(fn ($id) => (int) $id)
+                    ->all();
+            }
+        }
+
+        $data = collect($paginator->items())->map(function ($row) use ($interestUserId, $interestedTradeIds) {
+            $isInterested = $interestUserId
+                ? in_array((int) $row->id, $interestedTradeIds, true)
+                : false;
+
+            return $this->formatPaddyTradeResponse($row, $isInterested, $interestUserId);
         })->values();
 
         $marketStatus = PaddyTradeCurrentStatus::current();
@@ -559,6 +582,7 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy trades list',
             'data' => $data,
+            'userId' => $interestUserId,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => [
@@ -581,8 +605,9 @@ class PaddyApiController extends Controller
 
     /**
      * Single paddy trade detail for app & web portal.
+     * Optional query: userId | user_id — for is_interested flag.
      */
-    public function getPaddyTradeDetail($id)
+    public function getPaddyTradeDetail(Request $request, $id)
     {
         $trade = PaddyTrade::query()
             ->with([
@@ -599,12 +624,23 @@ class PaddyApiController extends Controller
             ], 404);
         }
 
+        $interestUserId = $this->resolveInterestUserId($request);
+        $isInterested = false;
+        if ($interestUserId) {
+            $isInterested = PaddyTradeInterested::query()
+                ->where('paddy_trade_id', $trade->id)
+                ->where('user_id', $interestUserId)
+                ->where('status', 1)
+                ->exists();
+        }
+
         $marketStatus = PaddyTradeCurrentStatus::current();
 
         return response()->json([
             'status' => true,
             'message' => 'Paddy trade details',
-            'data' => $this->formatPaddyTradeResponse($trade),
+            'data' => $this->formatPaddyTradeResponse($trade, $isInterested, $interestUserId),
+            'userId' => $interestUserId,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => [
@@ -613,6 +649,21 @@ class PaddyApiController extends Controller
                 'message' => $marketStatus->message,
             ],
         ], 200);
+    }
+
+    /**
+     * Resolve logged-in user id for interest flags (userId preferred, then user_id).
+     */
+    private function resolveInterestUserId(Request $request): ?int
+    {
+        $value = $request->input('userId', $request->input('user_id'));
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $id = (int) $value;
+
+        return $id > 0 ? $id : null;
     }
 
     /**
@@ -776,7 +827,7 @@ class PaddyApiController extends Controller
     /**
      * Normalize paddy trade payload for mobile/web clients.
      */
-    private function formatPaddyTradeResponse(PaddyTrade $row): array
+    private function formatPaddyTradeResponse(PaddyTrade $row, bool $isInterested = false, ?int $interestUserId = null): array
     {
         $packingLabel = $row->packing_label;
 
@@ -806,6 +857,9 @@ class PaddyApiController extends Controller
                 'email' => $row->user->email,
                 'phone' => $row->user->phone ?? null,
             ] : null,
+            'is_interested' => $isInterested,
+            'already_interested' => $isInterested,
+            'interest_user_id' => $interestUserId,
             'remarks' => $row->remarks,
             'status' => $row->status,
             'status_label' => $row->status_label,
