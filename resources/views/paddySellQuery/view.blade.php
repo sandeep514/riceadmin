@@ -48,10 +48,19 @@
                     </a>
                 @endif
                 @if((int) $query->status === 1)
+                    <a href="{{ route('convert.paddy.sell.query', $query->id) }}"
+                       class="btn btn-success btn-sm">
+                        <i class="fa fa-exchange"></i> Convert to paddy trade
+                    </a>
                     <a href="{{ route('close.paddy.sell.query', $query->id) }}"
                        class="btn btn-danger btn-sm"
                        onclick="return confirm('Close this paddy sell query?')">
                         Close
+                    </a>
+                @elseif((int) $query->status === 2 && optional($query->paddyTrade)->id)
+                    <a href="{{ route('view.paddy.trade', $query->paddyTrade->id) }}"
+                       class="btn btn-info btn-sm">
+                        <i class="fa fa-link"></i> View paddy trade
                     </a>
                 @endif
             </div>
@@ -75,6 +84,8 @@
                                     <td>
                                         @if((int) $query->status === 1)
                                             <span class="label label-warning">Pending</span>
+                                        @elseif((int) $query->status === 2)
+                                            <span class="label label-success">Converted to trade</span>
                                         @else
                                             <span class="label label-default">Closed</span>
                                         @endif

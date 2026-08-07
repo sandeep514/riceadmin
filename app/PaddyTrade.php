@@ -4,11 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PaddySellQuery extends Model
+class PaddyTrade extends Model
 {
-    protected $table = 'paddy_sell_queries';
+    protected $table = 'paddy_trades';
 
     protected $fillable = [
+        'paddy_sell_query_id',
         'category',
         'quality',
         'quality_name',
@@ -23,18 +24,19 @@ class PaddySellQuery extends Model
         'valid_days',
         'type',
         'user_id',
+        'remarks',
         'status',
+        'created_by',
     ];
 
     public static $statusLabels = [
         0 => 'Closed',
-        1 => 'Pending',
-        2 => 'Converted to trade',
+        1 => 'Active',
     ];
 
-    public function paddyTrade()
+    public function paddySellQuery()
     {
-        return $this->hasOne(PaddyTrade::class, 'paddy_sell_query_id');
+        return $this->belongsTo(PaddySellQuery::class, 'paddy_sell_query_id');
     }
 
     public function paddyQuality()
@@ -47,14 +49,14 @@ class PaddySellQuery extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
     public function getCategoryLabelAttribute(): string
     {
-        $map = [
-            'basmati' => 'Basmati',
-            'non-basmati' => 'Non Basmati',
-        ];
-
-        return $map[$this->category] ?? ($this->category ?: '-');
+        return PaddyQuality::riceTypeOptions()[$this->category] ?? ($this->category ?: '-');
     }
 
     public function getStatusLabelAttribute(): string

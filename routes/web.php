@@ -445,7 +445,14 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('list/paddy/sell/queries', ['as' => 'list.paddy.sell.queries', 'uses' => 'PaddySellQueryController@index']);
             Route::get('view/paddy/sell/query/{id}', ['as' => 'view.paddy.sell.query', 'uses' => 'PaddySellQueryController@view']);
             Route::get('download/paddy/sell/query/image/{id}', ['as' => 'download.paddy.sell.query.image', 'uses' => 'PaddySellQueryController@downloadImage']);
+            Route::get('convert/paddy/sell/query/{id}', ['as' => 'convert.paddy.sell.query', 'uses' => 'PaddySellQueryController@convertToTrade']);
+            Route::post('convert/paddy/sell/query/{id}', ['as' => 'save.convert.paddy.sell.query', 'uses' => 'PaddySellQueryController@saveConvertToTrade']);
             Route::get('close/paddy/sell/query/{id}', ['as' => 'close.paddy.sell.query', 'uses' => 'PaddySellQueryController@close']);
+
+            // paddy trades
+            Route::get('list/paddy/trades', ['as' => 'list.paddy.trades', 'uses' => 'PaddySellQueryController@listTrades']);
+            Route::get('view/paddy/trade/{id}', ['as' => 'view.paddy.trade', 'uses' => 'PaddySellQueryController@viewTrade']);
+            Route::get('close/paddy/trade/{id}', ['as' => 'close.paddy.trade', 'uses' => 'PaddySellQueryController@closeTrade']);
 
 
 
