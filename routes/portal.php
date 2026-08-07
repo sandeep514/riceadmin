@@ -23,6 +23,8 @@
 
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
         Route::get('live/price/events', [PortalApiController::class, 'getLivePriceEvents']);
+        Route::get('paddy/trades', [\App\Http\Controllers\PaddyApiController::class, 'listPaddyTrades']);
+        Route::get('paddy/trade/{id}', [\App\Http\Controllers\PaddyApiController::class, 'getPaddyTradeDetail']);
 
         // Interested functionality APIs
         Route::get('interested/rice-qualities', [PortalApiController::class, 'getRiceQualitiesList']);

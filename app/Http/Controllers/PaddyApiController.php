@@ -7,6 +7,7 @@ use App\PaddyPrice;
 use App\PaddyQuality;
 use App\PaddySellQuery;
 use App\PaddyStateModel;
+use App\PaddyTrade;
 use App\RiceName;
 use App\SellerPackingINR;
 use Carbon\Carbon;
@@ -419,6 +420,166 @@ class PaddyApiController extends Controller
                 'created_at' => $row->created_at,
             ],
         ], 200);
+    }
+
+    /**
+     * List active paddy trades for app & web portal (paginated).
+     *
+     * Optional query params:
+     * - category: basmati | non-basmati
+     * - quality: paddy_qualities id
+     * - packing_id: seller packing id
+     * - user_id: original seller user id
+     * - status: default 1 (active). Pass "all" for every status.
+     * - page: default 1
+     * - per_page | perPage | limit: default 15, max 100
+     */
+    public function listPaddyTrades(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'category' => 'nullable|in:basmati,non-basmati',
+            'quality' => 'nullable|integer|exists:paddy_qualities,id',
+            'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
+            'user_id' => 'nullable|integer|exists:users,id',
+            'status' => 'nullable',
+            'page' => 'nullable|integer|min:1',
+            'per_page' => 'nullable|integer|min:1|max:100',
+            'perPage' => 'nullable|integer|min:1|max:100',
+            'limit' => 'nullable|integer|min:1|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $perPage = (int) (
+            $request->input('per_page')
+            ?? $request->input('perPage')
+            ?? $request->input('limit')
+            ?? 15
+        );
+        $perPage = max(1, min(100, $perPage));
+        $page = max(1, (int) $request->input('page', 1));
+
+        $query = PaddyTrade::query()
+            ->with([
+                'paddyQuality:id,quality,type',
+                'packingRel:id,packing',
+                'user:id,name,email,phone',
+            ])
+            ->orderByDesc('id');
+
+        $status = $request->input('status', 1);
+        if ($status !== 'all' && $status !== null && $status !== '') {
+            $query->where('status', (int) $status);
+        }
+
+        if ($request->filled('category')) {
+            $query->where('category', $request->category);
+        }
+        if ($request->filled('quality')) {
+            $query->where('quality', (int) $request->quality);
+        }
+        if ($request->filled('packing_id')) {
+            $query->where('packing_id', (int) $request->packing_id);
+        }
+        if ($request->filled('user_id')) {
+            $query->where('user_id', (int) $request->user_id);
+        }
+
+        $paginator = $query->paginate($perPage, ['*'], 'page', $page);
+
+        $data = collect($paginator->items())->map(function ($row) {
+            return $this->formatPaddyTradeResponse($row);
+        })->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy trades list',
+            'data' => $data,
+            'pagination' => [
+                'current_page' => $paginator->currentPage(),
+                'per_page' => $paginator->perPage(),
+                'total' => $paginator->total(),
+                'last_page' => $paginator->lastPage(),
+                'from' => $paginator->firstItem(),
+                'to' => $paginator->lastItem(),
+            ],
+            'total' => $paginator->total(),
+            'last_page' => $paginator->lastPage(),
+        ], 200);
+    }
+
+    /**
+     * Single paddy trade detail for app & web portal.
+     */
+    public function getPaddyTradeDetail($id)
+    {
+        $trade = PaddyTrade::query()
+            ->with([
+                'paddyQuality:id,quality,type',
+                'packingRel:id,packing',
+                'user:id,name,email,phone',
+            ])
+            ->find($id);
+
+        if (! $trade) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Paddy trade not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy trade details',
+            'data' => $this->formatPaddyTradeResponse($trade),
+        ], 200);
+    }
+
+    /**
+     * Normalize paddy trade payload for mobile/web clients.
+     */
+    private function formatPaddyTradeResponse(PaddyTrade $row): array
+    {
+        $packingLabel = $row->packing_label;
+
+        return [
+            'id' => $row->id,
+            'paddy_sell_query_id' => $row->paddy_sell_query_id,
+            'category' => $row->category,
+            'category_label' => $row->category_label,
+            'quality' => $row->quality,
+            'qualityName' => $row->quality_name ?: optional($row->paddyQuality)->quality,
+            'hand_combined' => $row->hand_combined,
+            'packing_id' => $row->packing_id,
+            'packing' => $packingLabel !== '-' ? $packingLabel : null,
+            'contactNumber' => $row->contact_number,
+            'contactperson' => $row->contact_person,
+            'image' => $row->image,
+            'imageUrl' => $row->image_url,
+            'location' => $row->location,
+            'quantity' => $row->quantity,
+            'rate' => $row->rate,
+            'validDays' => $row->valid_days,
+            'type' => $row->type,
+            'userId' => $row->user_id,
+            'user' => $row->user ? [
+                'id' => $row->user->id,
+                'name' => $row->user->name,
+                'email' => $row->user->email,
+                'phone' => $row->user->phone ?? null,
+            ] : null,
+            'remarks' => $row->remarks,
+            'status' => $row->status,
+            'status_label' => $row->status_label,
+            'created_at' => $row->created_at,
+            'updated_at' => $row->updated_at,
+        ];
     }
 }
 

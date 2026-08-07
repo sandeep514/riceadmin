@@ -235,6 +235,13 @@ use Pusher\Pusher;
     Route::get('list/web/paddy/quality',   ['as' => 'list.web.paddy.quality', 'uses' => 'PaddyApiController@listPaddyQualities', 'middleware' => 'portal.api.token']);
     Route::post('submit/paddy/sell/query', ['as' => 'submit.paddy.sell.query', 'uses' => 'PaddyApiController@submitPaddySellQuery', 'middleware' => 'portal.api.token']);
 
+    // Paddy trades — app
+    Route::get('list/paddy/trades', ['as' => 'list.paddy.trades.api', 'uses' => 'PaddyApiController@listPaddyTrades', 'middleware' => 'app.api.token']);
+    Route::get('get/paddy/trade/{id}', ['as' => 'get.paddy.trade.api', 'uses' => 'PaddyApiController@getPaddyTradeDetail', 'middleware' => 'app.api.token']);
+    // Paddy trades — web portal
+    Route::get('list/web/paddy/trades', ['as' => 'list.web.paddy.trades.api', 'uses' => 'PaddyApiController@listPaddyTrades', 'middleware' => 'portal.api.token']);
+    Route::get('web/get/paddy/trade/{id}', ['as' => 'web.get.paddy.trade.api', 'uses' => 'PaddyApiController@getPaddyTradeDetail', 'middleware' => 'portal.api.token']);
+
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
     Route::get('get/paddy/prices/by/paddy/{stateId}/{paddyId}',      ['as' => 'get.paddy.prices.by.paddy',    'uses' => 'PaddyApiController@getPaddyPricesByPaddy']);
     Route::get('get/states/by/paddy/{stateId}',      ['as' => 'get.paddy.states',    'uses' => 'PaddyApiController@getPaddyQualities']);
