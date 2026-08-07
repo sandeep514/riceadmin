@@ -453,6 +453,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('list/paddy/trades', ['as' => 'list.paddy.trades', 'uses' => 'PaddySellQueryController@listTrades']);
             Route::get('view/paddy/trade/{id}', ['as' => 'view.paddy.trade', 'uses' => 'PaddySellQueryController@viewTrade']);
             Route::get('close/paddy/trade/{id}', ['as' => 'close.paddy.trade', 'uses' => 'PaddySellQueryController@closeTrade']);
+            Route::get('update/paddy/market/status/{tradeStatus}', ['as' => 'update.paddy.market.status', 'uses' => 'PaddySellQueryController@updateMarketStatus']);
 
 
 

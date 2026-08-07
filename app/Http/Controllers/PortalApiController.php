@@ -19,6 +19,8 @@ use App\Role;
 use App\Gallery;
 use App\Contact;
 use App\PaddyPrice;
+use App\PaddyTrade;
+use App\PaddyTradeCurrentStatus;
 use App\RiceName;
 use App\RiceType;
 use App\RiceForm;
@@ -2644,6 +2646,10 @@ class PortalApiController extends Controller
             $planTitle = \App\WebPlanModel::where('id', $planId)->value('title');
         }
 
+        // Active paddy trades available on portal/app
+        $paddyTradeCount = PaddyTrade::query()->where('status', 1)->count();
+        $paddyMarketStatus = PaddyTradeCurrentStatus::current();
+
         return response()->json([
             'status' => true,
             'message' => 'Web access permissions retrieved successfully',
@@ -2668,7 +2674,13 @@ class PortalApiController extends Controller
                     'period_end' => $subscription->period_end
                 ],
                 'web_access' => $permissions,
-                'years' => $yearsAccess
+                'years' => $yearsAccess,
+                'paddy_trade_count' => $paddyTradeCount,
+                'paddy_market_status' => [
+                    'currentStatus' => (int) $paddyMarketStatus->currentStatus,
+                    'label' => $paddyMarketStatus->status_label,
+                    'message' => $paddyMarketStatus->message,
+                ],
             ]
         ], 200);
     }

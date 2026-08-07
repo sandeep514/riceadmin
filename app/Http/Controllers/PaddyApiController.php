@@ -8,10 +8,15 @@ use App\PaddyQuality;
 use App\PaddySellQuery;
 use App\PaddyStateModel;
 use App\PaddyTrade;
+use App\PaddyTradeCurrentStatus;
+use App\PaddyTradeInterested;
 use App\RiceName;
 use App\SellerPackingINR;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -395,6 +400,8 @@ class PaddyApiController extends Controller
 
         $row->load('packingRel');
 
+        $this->sendPaddySellQueryEnquiryMail($row);
+
         return response()->json([
             'status' => true,
             'message' => 'Paddy sell query submitted successfully.',
@@ -420,6 +427,55 @@ class PaddyApiController extends Controller
                 'created_at' => $row->created_at,
             ],
         ], 200);
+    }
+
+    /**
+     * Notify enquiry mailbox when a new paddy sell query is submitted.
+     */
+    private function sendPaddySellQueryEnquiryMail(PaddySellQuery $row): void
+    {
+        try {
+            $user = User::query()
+                ->where('id', (int) $row->user_id)
+                ->first(['name', 'email', 'phone', 'mobile']);
+
+            $phone = $user ? ($user->phone ?: $user->mobile) : null;
+
+            $mailPayload = [
+                'creator_name' => $user->name ?? '—',
+                'creator_email' => $user->email ?? '—',
+                'creator_phone' => $phone ?: '—',
+                'query_id' => $row->id,
+                'category' => $row->category,
+                'category_label' => $row->category_label,
+                'quality_name' => $row->quality_name ?: optional($row->paddyQuality)->quality,
+                'hand_combined' => $row->hand_combined,
+                'packing' => $row->packing_label !== '-' ? $row->packing_label : '—',
+                'quantity' => $row->quantity,
+                'rate' => $row->rate,
+                'valid_days' => $row->valid_days,
+                'location' => $row->location,
+                'contact_person' => $row->contact_person,
+                'contact_number' => $row->contact_number,
+                'type' => $row->type,
+                'image_url' => $row->image_url,
+            ];
+
+            $mailTo = 'enquiry@sntcgroup.com';
+            $subject = 'New Paddy Sell Query #' . $row->id;
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
+
+            Mail::send('mail.PaddySellQueryReceived', $mailPayload, function ($message) use ($mailTo, $subject, $mailFrom, $mailFromName) {
+                $message->to($mailTo)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
+        } catch (\Throwable $e) {
+            // Do not fail the API if mail fails
+            Log::error('Paddy sell query enquiry mail failed: ' . $e->getMessage(), [
+                'paddy_sell_query_id' => $row->id ?? null,
+            ]);
+        }
     }
 
     /**
@@ -497,10 +553,19 @@ class PaddyApiController extends Controller
             return $this->formatPaddyTradeResponse($row);
         })->values();
 
+        $marketStatus = PaddyTradeCurrentStatus::current();
+
         return response()->json([
             'status' => true,
             'message' => 'Paddy trades list',
             'data' => $data,
+            'currentStatus' => (int) $marketStatus->currentStatus,
+            'statusMessage' => $marketStatus->message,
+            'market_status' => [
+                'currentStatus' => (int) $marketStatus->currentStatus,
+                'label' => $marketStatus->status_label,
+                'message' => $marketStatus->message,
+            ],
             'pagination' => [
                 'current_page' => $paginator->currentPage(),
                 'per_page' => $paginator->perPage(),
@@ -534,11 +599,178 @@ class PaddyApiController extends Controller
             ], 404);
         }
 
+        $marketStatus = PaddyTradeCurrentStatus::current();
+
         return response()->json([
             'status' => true,
             'message' => 'Paddy trade details',
             'data' => $this->formatPaddyTradeResponse($trade),
+            'currentStatus' => (int) $marketStatus->currentStatus,
+            'statusMessage' => $marketStatus->message,
+            'market_status' => [
+                'currentStatus' => (int) $marketStatus->currentStatus,
+                'label' => $marketStatus->status_label,
+                'message' => $marketStatus->message,
+            ],
         ], 200);
+    }
+
+    /**
+     * Show interest on a paddy trade (app & web).
+     *
+     * Payload:
+     * - paddy_trade_id | tradeId | trade_id (required)
+     * - user_id | userId (required)
+     */
+    public function showPaddyTradeInterest(Request $request)
+    {
+        if (! $request->filled('paddy_trade_id')) {
+            if ($request->filled('tradeId')) {
+                $request->merge(['paddy_trade_id' => $request->input('tradeId')]);
+            } elseif ($request->filled('trade_id')) {
+                $request->merge(['paddy_trade_id' => $request->input('trade_id')]);
+            }
+        }
+        if (! $request->filled('user_id') && $request->filled('userId')) {
+            $request->merge(['user_id' => $request->input('userId')]);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'paddy_trade_id' => 'required|integer|exists:paddy_trades,id',
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $tradeId = (int) $request->paddy_trade_id;
+        $userId = (int) $request->user_id;
+
+        $trade = PaddyTrade::query()
+            ->with(['paddyQuality:id,quality,type', 'packingRel:id,packing'])
+            ->find($tradeId);
+
+        if (! $trade) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Paddy trade not found',
+            ], 404);
+        }
+
+        if ((int) $trade->status !== 1) {
+            return response()->json([
+                'status' => false,
+                'message' => 'This paddy trade is not available for interest',
+            ], 422);
+        }
+
+        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketCode = (int) $marketStatus->currentStatus;
+        if ($marketCode !== 1) {
+            $msg = $marketCode === 12
+                ? 'Paddy market is on hold. Interest cannot be submitted right now.'
+                : 'Paddy market is closed. Interest cannot be submitted right now.';
+
+            return response()->json([
+                'status' => false,
+                'message' => $msg,
+                'currentStatus' => $marketCode,
+                'statusMessage' => $marketStatus->message,
+            ], 422);
+        }
+
+        $existing = PaddyTradeInterested::query()
+            ->where('paddy_trade_id', $tradeId)
+            ->where('user_id', $userId)
+            ->first();
+
+        if ($existing) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Interest already registered for this paddy trade',
+                'data' => [
+                    'id' => $existing->id,
+                    'paddy_trade_id' => $existing->paddy_trade_id,
+                    'user_id' => $existing->user_id,
+                    'already_interested' => true,
+                ],
+            ], 200);
+        }
+
+        $interest = PaddyTradeInterested::create([
+            'paddy_trade_id' => $tradeId,
+            'user_id' => $userId,
+            'status' => 1,
+        ]);
+
+        $this->sendPaddyTradeInterestEnquiryMail($trade, $userId);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Interest submitted successfully',
+            'data' => [
+                'id' => $interest->id,
+                'paddy_trade_id' => $interest->paddy_trade_id,
+                'user_id' => $interest->user_id,
+                'already_interested' => false,
+            ],
+        ], 200);
+    }
+
+    /**
+     * Notify enquiry mailbox when a user shows interest on a paddy trade.
+     */
+    private function sendPaddyTradeInterestEnquiryMail(PaddyTrade $trade, int $userId): void
+    {
+        try {
+            $user = User::query()
+                ->where('id', $userId)
+                ->first(['id', 'name', 'email', 'phone', 'mobile', 'companyname']);
+
+            $phone = $user ? ($user->phone ?: $user->mobile) : null;
+            $packingLabel = $trade->packing_label;
+
+            $mailPayload = [
+                'username' => $user->name ?? '—',
+                'email' => $user->email ?? '—',
+                'mobile' => $phone ?: '—',
+                'companyName' => $user->companyname ?? '—',
+                'userId' => $userId,
+                'tradeId' => $trade->id,
+                'category' => $trade->category,
+                'category_label' => $trade->category_label,
+                'qualityName' => $trade->quality_name ?: optional($trade->paddyQuality)->quality,
+                'hand_combined' => $trade->hand_combined,
+                'packing' => $packingLabel !== '-' ? $packingLabel : '—',
+                'quantity' => $trade->quantity,
+                'rate' => $trade->rate,
+                'validDays' => $trade->valid_days,
+                'location' => $trade->location,
+                'contactperson' => $trade->contact_person,
+                'contactNumber' => $trade->contact_number,
+                'imageUrl' => $trade->image_url,
+            ];
+
+            $mailTo = 'enquiry@sntcgroup.com';
+            $subject = 'Paddy Trade Interest - PaddyTrade_' . $trade->id;
+            $mailFrom = 'info@sntcgroup.com';
+            $mailFromName = 'SNTC Team - India';
+
+            Mail::send('mail.PaddyTradeInterest', $mailPayload, function ($message) use ($mailTo, $subject, $mailFrom, $mailFromName) {
+                $message->to($mailTo)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
+        } catch (\Throwable $e) {
+            Log::error('Paddy trade interest enquiry mail failed: ' . $e->getMessage(), [
+                'paddy_trade_id' => $trade->id ?? null,
+                'user_id' => $userId,
+            ]);
+        }
     }
 
     /**

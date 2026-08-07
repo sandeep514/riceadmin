@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\PaddyQuality;
 use App\PaddySellQuery;
 use App\PaddyTrade;
+use App\PaddyTradeCurrentStatus;
 use App\SellerPackingINR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -189,7 +190,42 @@ class PaddySellQueryController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('paddySellQuery.trades', compact('trades'));
+        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatusLabels = PaddyTradeCurrentStatus::$marketStatus;
+        $currentMarketStatus = (int) $marketStatus->currentStatus;
+        $currentMarketLabel = $marketStatusLabels[$currentMarketStatus] ?? $marketStatus->message;
+
+        return view('paddySellQuery.trades', compact(
+            'trades',
+            'marketStatus',
+            'currentMarketStatus',
+            'currentMarketLabel'
+        ));
+    }
+
+    /**
+     * Update paddy market status: 1 open, 11 closed, 12 hold.
+     */
+    public function updateMarketStatus($tradeStatus)
+    {
+        $tradeStatus = (int) $tradeStatus;
+        $allowed = PaddyTradeCurrentStatus::$marketStatusMessages;
+
+        if (! array_key_exists($tradeStatus, $allowed)) {
+            Session::flash('error', 'Error|Invalid market status.');
+
+            return back();
+        }
+
+        $row = PaddyTradeCurrentStatus::current();
+        $row->update([
+            'currentStatus' => $tradeStatus,
+            'message' => $allowed[$tradeStatus],
+        ]);
+
+        Session::flash('success', 'Success|Paddy market status updated to ' . ($allowed[$tradeStatus] ?? $tradeStatus) . '.');
+
+        return back();
     }
 
     public function viewTrade($id)

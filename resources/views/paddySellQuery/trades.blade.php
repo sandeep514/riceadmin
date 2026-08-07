@@ -17,8 +17,29 @@
             <div class="box">
                 <div class="box-header">
                     <h3 class="box-title">Paddy Trades</h3>
+                    <div class="pull-right">
+                        <span class="label label-{{ (int)($currentMarketStatus ?? 1) === 1 ? 'success' : ((int)($currentMarketStatus ?? 1) === 12 ? 'warning' : 'danger') }}" style="font-size: 13px; padding: 6px 10px;">
+                            Market: {{ ucfirst($currentMarketLabel ?? 'open') }}
+                        </span>
+                    </div>
                 </div>
                 <div class="box-body">
+                    <div class="row" style="margin-bottom: 15px;">
+                        <div class="col-md-12" style="display: inline-flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                            <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 1]) }}"
+                               class="btn btn-success btn-sm {{ (int)($currentMarketStatus ?? 1) === 1 ? 'active' : '' }}">
+                                Open Market
+                            </a>
+                            <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 11]) }}"
+                               class="btn btn-danger btn-sm {{ (int)($currentMarketStatus ?? 1) === 11 ? 'active' : '' }}">
+                                Close Market
+                            </a>
+                            <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 12]) }}"
+                               class="btn btn-warning btn-sm {{ (int)($currentMarketStatus ?? 1) === 12 ? 'active' : '' }}">
+                                Hold Market
+                            </a>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-bordered table-striped paddy-trade-datatable" width="100%">
                             <thead>
