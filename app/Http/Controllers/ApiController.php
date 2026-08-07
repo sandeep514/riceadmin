@@ -6113,7 +6113,7 @@ if (!file_exists('uploads')) {
         );
 
         $paddySell = PaddySellQuery::query()
-            ->with(['paddyQuality:id,quality,type'])
+            ->with(['paddyQuality:id,quality,type', 'packingRel:id,packing'])
             ->where('user_id', $userId)
             ->orderByDesc('id')
             ->get()
@@ -6125,7 +6125,8 @@ if (!file_exists('uploads')) {
                     'quality' => $row->quality,
                     'qualityName' => $row->quality_name ?: optional($row->paddyQuality)->quality,
                     'hand_combined' => $row->hand_combined,
-                    'packing' => $row->packing,
+                    'packing_id' => $row->packing_id,
+                    'packing' => $row->packing_label !== '-' ? $row->packing_label : null,
                     'contactNumber' => $row->contact_number,
                     'contactperson' => $row->contact_person,
                     'image' => $row->image,

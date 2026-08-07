@@ -104,7 +104,7 @@
                                 </tr>
                                 <tr>
                                     <th>Packing</th>
-                                    <td>{{ $trade->packing ?: '-' }}</td>
+                                    <td>{{ $trade->packing_label }}</td>
                                 </tr>
                                 <tr>
                                     <th>Quantity</th>

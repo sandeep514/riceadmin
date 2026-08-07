@@ -14,7 +14,8 @@ class CreatePaddySellQueriesTable extends Migration
             $table->unsignedBigInteger('quality')->nullable(); // paddy_qualities.id
             $table->string('quality_name', 255)->nullable();
             $table->string('hand_combined', 100)->nullable();
-            $table->string('packing', 255)->nullable();
+            $table->unsignedBigInteger('packing_id')->nullable();
+            $table->string('packing', 255)->nullable(); // denormalized label from packing master
             $table->string('contact_number', 50)->nullable();
             $table->string('contact_person', 255)->nullable();
             $table->string('image', 255)->nullable();

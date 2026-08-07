@@ -57,7 +57,7 @@
                                         <td>{{ $trade->category_label }}</td>
                                         <td>{{ $trade->quality_name ?: (optional($trade->paddyQuality)->quality ?? '-') }}</td>
                                         <td>{{ $trade->hand_combined ?: '-' }}</td>
-                                        <td>{{ $trade->packing ?: '-' }}</td>
+                                        <td>{{ $trade->packing_label }}</td>
                                         <td>{{ $trade->quantity }}</td>
                                         <td>{{ $trade->rate }}</td>
                                         <td>{{ $trade->valid_days }}</td>

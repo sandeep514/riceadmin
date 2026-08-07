@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\PaddyQuality;
 use App\PaddySellQuery;
 use App\PaddyTrade;
+use App\SellerPackingINR;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +17,7 @@ class PaddySellQueryController extends Controller
 {
     public function index()
     {
-        $queries = PaddySellQuery::with(['paddyQuality', 'user'])
+        $queries = PaddySellQuery::with(['paddyQuality', 'user', 'packingRel'])
             ->orderByDesc('id')
             ->get();
 
@@ -25,7 +26,7 @@ class PaddySellQueryController extends Controller
 
     public function view($id)
     {
-        $query = PaddySellQuery::with(['paddyQuality', 'user', 'paddyTrade'])->findOrFail($id);
+        $query = PaddySellQuery::with(['paddyQuality', 'user', 'paddyTrade', 'packingRel'])->findOrFail($id);
 
         return view('paddySellQuery.view', compact('query'));
     }
@@ -76,12 +77,18 @@ class PaddySellQueryController extends Controller
             ->orderBy('quality')
             ->get(['id', 'quality', 'type']);
 
+        $packings = SellerPackingINR::query()
+            ->where('status', 1)
+            ->orderBy('packing')
+            ->get(['id', 'packing']);
+
         $categoryOptions = PaddyQuality::riceTypeOptions();
         $handCombinedOptions = ['Hand' => 'Hand', 'Combined' => 'Combined'];
 
         return view('paddySellQuery.convert', compact(
             'query',
             'qualities',
+            'packings',
             'categoryOptions',
             'handCombinedOptions'
         ));
@@ -109,9 +116,8 @@ class PaddySellQueryController extends Controller
         $validator = Validator::make($request->all(), [
             'category' => 'required|in:basmati,non-basmati',
             'quality' => 'required|integer|exists:paddy_qualities,id',
-            'quality_name' => 'nullable|string|max:255',
             'hand_combined' => 'required|string|max:100',
-            'packing' => 'nullable|string|max:255',
+            'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
             'contact_number' => 'required|string|max:50',
             'contact_person' => 'required|string|max:255',
             'image' => 'nullable|file|mimes:jpg,jpeg,png,gif,webp|max:10240',
@@ -138,19 +144,23 @@ class PaddySellQueryController extends Controller
             $file->move($uploadDir, $imageName);
         }
 
-        $qualityName = $request->input('quality_name');
-        if (! $qualityName) {
-            $qualityName = optional(PaddyQuality::find($request->quality))->quality;
-        }
+        // Quality label comes from master (dropdown selection only)
+        $qualityName = optional(PaddyQuality::find($request->quality))->quality;
 
-        DB::transaction(function () use ($request, $query, $imageName, $qualityName) {
+        $packingId = $request->filled('packing_id') ? (int) $request->packing_id : null;
+        $packingLabel = $packingId
+            ? optional(SellerPackingINR::find($packingId))->packing
+            : null;
+
+        DB::transaction(function () use ($request, $query, $imageName, $qualityName, $packingId, $packingLabel) {
             PaddyTrade::create([
                 'paddy_sell_query_id' => $query->id,
                 'category' => $request->category,
                 'quality' => (int) $request->quality,
                 'quality_name' => $qualityName,
                 'hand_combined' => $request->hand_combined,
-                'packing' => $request->input('packing'),
+                'packing_id' => $packingId,
+                'packing' => $packingLabel,
                 'contact_number' => $request->contact_number,
                 'contact_person' => $request->contact_person,
                 'image' => $imageName,
@@ -175,7 +185,7 @@ class PaddySellQueryController extends Controller
 
     public function listTrades()
     {
-        $trades = PaddyTrade::with(['paddyQuality', 'user', 'paddySellQuery'])
+        $trades = PaddyTrade::with(['paddyQuality', 'user', 'paddySellQuery', 'packingRel'])
             ->orderByDesc('id')
             ->get();
 
@@ -184,7 +194,7 @@ class PaddySellQueryController extends Controller
 
     public function viewTrade($id)
     {
-        $trade = PaddyTrade::with(['paddyQuality', 'user', 'paddySellQuery', 'creator'])->findOrFail($id);
+        $trade = PaddyTrade::with(['paddyQuality', 'user', 'paddySellQuery', 'creator', 'packingRel'])->findOrFail($id);
 
         return view('paddySellQuery.trade_view', compact('trade'));
     }

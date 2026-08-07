@@ -14,6 +14,7 @@ class PaddyTrade extends Model
         'quality',
         'quality_name',
         'hand_combined',
+        'packing_id',
         'packing',
         'contact_number',
         'contact_person',
@@ -44,9 +45,20 @@ class PaddyTrade extends Model
         return $this->belongsTo(PaddyQuality::class, 'quality', 'id');
     }
 
+    public function packingRel()
+    {
+        return $this->belongsTo(SellerPackingINR::class, 'packing_id', 'id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function getPackingLabelAttribute(): string
+    {
+        return optional($this->packingRel)->packing
+            ?? ($this->packing ?: '-');
     }
 
     public function creator()

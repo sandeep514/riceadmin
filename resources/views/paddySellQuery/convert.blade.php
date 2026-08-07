@@ -73,13 +73,6 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label>Quality Name</label>
-                            <input type="text" name="quality_name" id="quality_name" class="form-control"
-                                   value="{{ old('quality_name', $query->quality_name) }}"
-                                   placeholder="e.g. 1121">
-                        </div>
-
-                        <div class="form-group col-md-4">
                             <label>Hand / Combined <span class="text-danger">*</span></label>
                             @php $selectedHand = old('hand_combined', $query->hand_combined); @endphp
                             <select name="hand_combined" class="form-control" required>
@@ -96,9 +89,15 @@
 
                         <div class="form-group col-md-4">
                             <label>Packing <small class="text-muted">(optional)</small></label>
-                            <input type="text" name="packing" class="form-control"
-                                   value="{{ old('packing', $query->packing) }}"
-                                   placeholder="e.g. 50Kg PP+inner">
+                            <select name="packing_id" class="form-control">
+                                <option value="">Select packing</option>
+                                @foreach($packings as $packing)
+                                    <option value="{{ $packing->id }}"
+                                        {{ (string) old('packing_id', $query->packing_id) === (string) $packing->id ? 'selected' : '' }}>
+                                        {{ $packing->packing }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
 
                         <div class="form-group col-md-4">
@@ -213,24 +212,13 @@
                 var selectedType = String($quality.find('option:selected').data('type') || '');
                 if (category && selectedType && selectedType !== String(category)) {
                     $quality.val('');
-                    $('#quality_name').val('');
                 }
             }
         }
 
         $(document).ready(function () {
             filterQualitiesByCategory();
-
-            $('#category').on('change', function () {
-                filterQualitiesByCategory();
-            });
-
-            $('#quality').on('change', function () {
-                var name = $(this).find('option:selected').data('name') || '';
-                if (name) {
-                    $('#quality_name').val(name);
-                }
-            });
+            $('#category').on('change', filterQualitiesByCategory);
         });
     })();
 </script>

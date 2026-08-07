@@ -54,7 +54,7 @@
                                             @endif
                                         </td>
                                         <td>{{ $query->hand_combined ?: '-' }}</td>
-                                        <td>{{ $query->packing ?: '-' }}</td>
+                                        <td>{{ $query->packing_label }}</td>
                                         <td>{{ $query->quantity }}</td>
                                         <td>{{ $query->rate }}</td>
                                         <td>{{ $query->valid_days }}</td>

@@ -114,7 +114,7 @@
                                 </tr>
                                 <tr>
                                     <th>Packing</th>
-                                    <td>{{ $query->packing ?: '-' }}</td>
+                                    <td>{{ $query->packing_label }}</td>
                                 </tr>
                                 <tr>
                                     <th>Quantity</th>
