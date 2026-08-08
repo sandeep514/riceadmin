@@ -58,6 +58,7 @@
                                     <th>Image</th>
                                     <th>User</th>
                                     <th>Status</th>
+                                    <th>Sold At</th>
                                     <th>Created</th>
                                     <th>Action</th>
                                 </tr>
@@ -104,10 +105,18 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if((int) $trade->status === 1)
-                                                <span class="label label-success">Active</span>
+                                            <span class="label label-{{ $trade->status_badge_class }}">
+                                                {{ $trade->status_label }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            @if((int) $trade->status === 3)
+                                                {{ $trade->sold_at_amount ?: '-' }}
+                                                @if($trade->sold_at)
+                                                    <br><small>{{ \Carbon\Carbon::parse($trade->sold_at)->format('d-m-Y H:i') }}</small>
+                                                @endif
                                             @else
-                                                <span class="label label-default">Closed</span>
+                                                -
                                             @endif
                                         </td>
                                         <td>{{ $trade->created_at ? \Carbon\Carbon::parse($trade->created_at)->format('d-m-Y H:i') : '-' }}</td>
@@ -115,18 +124,12 @@
                                             <a href="{{ route('view.paddy.trade', $trade->id) }}" class="btn btn-primary btn-xs">
                                                 <i class="fa fa-eye"></i> View
                                             </a>
-                                            @if((int) $trade->status === 1)
-                                                <a href="{{ route('close.paddy.trade', $trade->id) }}"
-                                                   class="btn btn-danger btn-xs"
-                                                   onclick="return confirm('Close this paddy trade?')">
-                                                    Close
-                                                </a>
-                                            @endif
+                                            @include('paddySellQuery._trade_status_actions', ['trade' => $trade])
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="16" class="text-center">No paddy trades found.</td>
+                                        <td colspan="17" class="text-center">No paddy trades found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -136,6 +139,8 @@
             </div>
         </section>
     </div>
+
+    @include('paddySellQuery._trade_status_modal')
 @endsection
 
 @section('javascript')
@@ -144,7 +149,48 @@
         $('.paddy-trade-datatable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [11, 15] }]
+            columnDefs: [{ orderable: false, targets: [11, 16] }]
+        });
+
+        var statusForm = document.getElementById('paddyTradeStatusForm');
+        var statusValue = document.getElementById('paddyTradeStatusValue');
+        var soldAmountHidden = document.getElementById('paddyTradeSoldAmountHidden');
+        var pendingSoldTradeId = null;
+        var statusUrlBase = @json(url('administrator/update/paddy/trade/status'));
+
+        function submitStatus(tradeId, status, soldAmount) {
+            statusForm.action = statusUrlBase + '/' + tradeId;
+            statusValue.value = status;
+            soldAmountHidden.value = soldAmount || '';
+            statusForm.submit();
+        }
+
+        $(document).on('click', '.js-paddy-trade-status', function (e) {
+            e.preventDefault();
+            var $el = $(this);
+            var tradeId = $el.data('id');
+            var status = parseInt($el.data('status'), 10);
+            var label = $el.data('label') || 'this status';
+
+            if (status === 3) {
+                pendingSoldTradeId = tradeId;
+                $('#paddyTradeSoldIdLabel').text(tradeId);
+                $('#paddyTradeSoldAmountInput').val($el.data('sold-amount') || '');
+                $('#paddyTradeSoldModal').modal('show');
+                return;
+            }
+
+            if (confirm('Set trade #' + tradeId + ' status to ' + label + '?')) {
+                submitStatus(tradeId, status, '');
+            }
+        });
+
+        $('#paddyTradeSoldConfirmBtn').on('click', function () {
+            if (!pendingSoldTradeId) {
+                return;
+            }
+            var amount = $('#paddyTradeSoldAmountInput').val() || '';
+            submitStatus(pendingSoldTradeId, 3, amount);
         });
     });
 </script>

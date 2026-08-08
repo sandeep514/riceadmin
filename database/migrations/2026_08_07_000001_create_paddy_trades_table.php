@@ -27,7 +27,9 @@ class CreatePaddyTradesTable extends Migration
             $table->string('type', 50)->default('web');
             $table->unsignedBigInteger('user_id')->nullable(); // original seller user
             $table->text('remarks')->nullable();
-            $table->unsignedTinyInteger('status')->default(1); // 1 active, 0 closed
+            $table->unsignedTinyInteger('status')->default(1); // 1 Active, 4 In-Process, 12 Hold, 3 Sold
+            $table->string('sold_at_amount', 100)->nullable();
+            $table->timestamp('sold_at')->nullable();
             $table->unsignedBigInteger('created_by')->nullable(); // admin user id
             $table->timestamps();
 

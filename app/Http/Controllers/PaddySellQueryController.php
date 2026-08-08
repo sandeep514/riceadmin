@@ -237,10 +237,52 @@ class PaddySellQueryController extends Controller
 
     public function closeTrade($id)
     {
+        // Legacy close route — map to Hold. Prefer updateTradeStatus for full status set.
         $trade = PaddyTrade::findOrFail($id);
-        $trade->update(['status' => 0]);
+        $trade->update(['status' => 12]);
 
-        Session::flash('success', 'Success|Paddy trade closed successfully.');
+        Session::flash('success', 'Success|Paddy trade set to Hold.');
+
+        return back();
+    }
+
+    /**
+     * Update individual paddy trade status.
+     * status: 1 Active, 4 In-Process, 12 Hold, 3 Sold
+     * sold_at_amount optional when status = Sold
+     */
+    public function updateTradeStatus(Request $request, $id)
+    {
+        $trade = PaddyTrade::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|integer|in:1,4,12,3',
+            'sold_at_amount' => 'nullable|string|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $status = (int) $request->status;
+        $payload = ['status' => $status];
+
+        if ($status === 3) {
+            // Sold — amount optional (empty string clears it)
+            $payload['sold_at_amount'] = $request->filled('sold_at_amount')
+                ? $request->sold_at_amount
+                : null;
+            $payload['sold_at'] = now();
+        } else {
+            // Leaving sold state clears sold meta
+            $payload['sold_at_amount'] = null;
+            $payload['sold_at'] = null;
+        }
+
+        $trade->update($payload);
+
+        $label = PaddyTrade::$statusLabels[$status] ?? $status;
+        Session::flash('success', 'Success|Paddy trade status updated to ' . $label . '.');
 
         return back();
     }

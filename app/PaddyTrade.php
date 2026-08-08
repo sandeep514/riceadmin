@@ -27,13 +27,39 @@ class PaddyTrade extends Model
         'user_id',
         'remarks',
         'status',
+        'sold_at_amount',
+        'sold_at',
         'created_by',
     ];
 
-    public static $statusLabels = [
-        0 => 'Closed',
-        1 => 'Active',
+    protected $casts = [
+        'sold_at' => 'datetime',
     ];
+
+    /**
+     * Individual trade status (admin).
+     * 1 Active, 4 In-Process, 12 Hold, 3 Sold
+     */
+    public static $statusLabels = [
+        1 => 'Active',
+        4 => 'In-Process',
+        12 => 'Hold',
+        3 => 'Sold',
+        0 => 'Closed', // legacy
+    ];
+
+    public static $statusBadgeClass = [
+        1 => 'success',
+        4 => 'info',
+        12 => 'warning',
+        3 => 'primary',
+        0 => 'default',
+    ];
+
+    public function getStatusBadgeClassAttribute(): string
+    {
+        return self::$statusBadgeClass[(int) $this->status] ?? 'default';
+    }
 
     public function paddySellQuery()
     {

@@ -863,6 +863,8 @@ class PaddyApiController extends Controller
             'remarks' => $row->remarks,
             'status' => $row->status,
             'status_label' => $row->status_label,
+            'sold_at_amount' => $row->sold_at_amount,
+            'sold_at' => $row->sold_at,
             'created_at' => $row->created_at,
             'updated_at' => $row->updated_at,
         ];
