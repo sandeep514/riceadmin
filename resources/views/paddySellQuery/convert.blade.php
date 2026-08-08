@@ -142,6 +142,14 @@
                                    value="{{ old('type', $query->type ?: 'web') }}">
                         </div>
 
+                        <div class="form-group col-md-4">
+                            <label>Is New</label>
+                            <select name="is_new" class="form-control">
+                                <option value="0" {{ (string) old('is_new', '0') === '0' ? 'selected' : '' }}>No</option>
+                                <option value="1" {{ (string) old('is_new', '0') === '1' ? 'selected' : '' }}>Yes</option>
+                            </select>
+                        </div>
+
                         <div class="form-group col-md-8">
                             <label>Remarks <small class="text-muted">(optional)</small></label>
                             <textarea name="remarks" class="form-control" rows="2">{{ old('remarks') }}</textarea>

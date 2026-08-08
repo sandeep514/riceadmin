@@ -63,6 +63,7 @@
                                     <th>Image</th>
                                     <th>User</th>
                                     <th>Status</th>
+                                    <th>Is New</th>
                                     <th>Sold At</th>
                                     <th>Created</th>
                                     <th>Action</th>
@@ -115,6 +116,15 @@
                                             </span>
                                         </td>
                                         <td>
+                                            <form method="POST" action="{{ route('update.paddy.trade.is_new', $trade->id) }}" style="display:inline-block; min-width: 90px;">
+                                                @csrf
+                                                <select name="is_new" class="form-control input-sm js-paddy-is-new" onchange="this.form.submit()">
+                                                    <option value="0" {{ (int) $trade->is_new === 0 ? 'selected' : '' }}>No</option>
+                                                    <option value="1" {{ (int) $trade->is_new === 1 ? 'selected' : '' }}>Yes</option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                        <td>
                                             @if((int) $trade->status === 3)
                                                 {{ $trade->sold_at_amount ?: '-' }}
                                                 @if($trade->sold_at)
@@ -134,7 +144,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="17" class="text-center">No paddy trades found.</td>
+                                        <td colspan="18" class="text-center">No paddy trades found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -154,7 +164,7 @@
         $('.paddy-trade-datatable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [11, 16] }]
+            columnDefs: [{ orderable: false, targets: [11, 14, 17] }]
         });
 
         var statusForm = document.getElementById('paddyTradeStatusForm');

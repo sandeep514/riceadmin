@@ -27,6 +27,7 @@ class PaddyTrade extends Model
         'user_id',
         'remarks',
         'status',
+        'is_new',
         'sold_at_amount',
         'sold_at',
         'created_by',
@@ -34,6 +35,7 @@ class PaddyTrade extends Model
 
     protected $casts = [
         'sold_at' => 'datetime',
+        'is_new' => 'integer',
     ];
 
     /**
@@ -105,6 +107,11 @@ class PaddyTrade extends Model
     public function getStatusLabelAttribute(): string
     {
         return self::$statusLabels[(int) $this->status] ?? (string) $this->status;
+    }
+
+    public function getIsNewLabelAttribute(): string
+    {
+        return ((int) $this->is_new === 1) ? 'Yes' : 'No';
     }
 
     public function getImageUrlAttribute(): ?string

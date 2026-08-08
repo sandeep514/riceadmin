@@ -203,6 +203,7 @@ class PaddySellQueryController extends Controller
             'valid_days' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'remarks' => 'nullable|string',
+            'is_new' => 'nullable|in:0,1',
         ];
 
         if ($adminCreate) {
@@ -253,6 +254,7 @@ class PaddySellQueryController extends Controller
             'user_id' => $options['user_id'] ?? null,
             'remarks' => $request->input('remarks'),
             'status' => 1,
+            'is_new' => (int) $request->input('is_new', 0) === 1 ? 1 : 0,
             'created_by' => Auth::id(),
         ];
     }
@@ -315,6 +317,29 @@ class PaddySellQueryController extends Controller
         $trade->update(['status' => 12]);
 
         Session::flash('success', 'Success|Paddy trade set to Hold.');
+
+        return back();
+    }
+
+    /**
+     * Toggle is_new Yes/No on a paddy trade.
+     */
+    public function updateTradeIsNew(Request $request, $id)
+    {
+        $trade = PaddyTrade::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'is_new' => 'required|in:0,1',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $isNew = (int) $request->is_new === 1 ? 1 : 0;
+        $trade->update(['is_new' => $isNew]);
+
+        Session::flash('success', 'Success|Paddy trade Is New set to ' . ($isNew ? 'Yes' : 'No') . '.');
 
         return back();
     }

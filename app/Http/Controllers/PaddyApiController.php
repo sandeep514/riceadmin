@@ -887,6 +887,8 @@ class PaddyApiController extends Controller
             'remarks' => $row->remarks,
             'status' => $row->status,
             'status_label' => $row->status_label,
+            'is_new' => ((int) $row->is_new === 1) ? 1 : 0,
+            'is_new_label' => ((int) $row->is_new === 1) ? 'yes' : 'no',
             'sold_at_amount' => $row->sold_at_amount,
             'sold_at' => $row->sold_at,
             'created_at' => $row->created_at,

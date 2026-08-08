@@ -70,6 +70,23 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th>Is New</th>
+                                    <td>
+                                        <form method="POST" action="{{ route('update.paddy.trade.is_new', $trade->id) }}" class="form-inline">
+                                            @csrf
+                                            <select name="is_new" class="form-control input-sm" onchange="this.form.submit()" style="width: 120px;">
+                                                <option value="0" {{ (int) $trade->is_new === 0 ? 'selected' : '' }}>No</option>
+                                                <option value="1" {{ (int) $trade->is_new === 1 ? 'selected' : '' }}>Yes</option>
+                                            </select>
+                                            @if((int) $trade->is_new === 1)
+                                                <span class="label label-success" style="margin-left: 8px;">Yes</span>
+                                            @else
+                                                <span class="label label-default" style="margin-left: 8px;">No</span>
+                                            @endif
+                                        </form>
+                                    </td>
+                                </tr>
                                 @if((int) $trade->status === 3)
                                     <tr>
                                         <th>Sold at amount</th>
