@@ -44,5 +44,15 @@
                 Sold
             </a>
         </li>
+        <li class="divider"></li>
+        <li class="{{ $status === 5 ? 'active' : '' }}">
+            <a href="javascript:void(0)"
+               class="js-paddy-trade-status text-danger"
+               data-id="{{ $trade->id }}"
+               data-status="5"
+               data-label="Deactivated">
+                Deactivate
+            </a>
+        </li>
     </ul>
 </div>

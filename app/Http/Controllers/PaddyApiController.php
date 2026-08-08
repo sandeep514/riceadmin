@@ -483,6 +483,7 @@ class PaddyApiController extends Controller
      *
      * Default statuses (UI shows badge per trade):
      * - 1 Active, 4 In-Process, 12 Hold, 3 Sold
+     * Deactivated (5) is excluded from default list; use status=5 or status=all.
      *
      * Optional query params:
      * - category: basmati | non-basmati
@@ -529,8 +530,8 @@ class PaddyApiController extends Controller
 
         $interestUserId = $this->resolveInterestUserId($request);
 
-        // Default: Active + In-Process + Hold + Sold (UI badges show status_label)
-        $listableStatuses = [1, 4, 12, 3];
+        // Default portal list (not Deactivated)
+        $listableStatuses = PaddyTrade::$listableStatuses;
 
         $query = PaddyTrade::query()
             ->with([
@@ -538,7 +539,7 @@ class PaddyApiController extends Controller
                 'packingRel:id,packing',
                 'user:id,name,email,phone',
             ])
-            ->orderByRaw('FIELD(status, 1, 4, 12, 3)')
+            ->orderByRaw('FIELD(status, 1, 4, 12, 3, 5)')
             ->orderByDesc('id');
 
         $statusParam = $request->input('status');
@@ -734,9 +735,12 @@ class PaddyApiController extends Controller
         }
 
         if ((int) $trade->status !== 1) {
+            $statusLabel = $trade->status_label;
             return response()->json([
                 'status' => false,
-                'message' => 'This paddy trade is not available for interest',
+                'message' => (int) $trade->status === 5
+                    ? 'This paddy trade is deactivated and not available for interest'
+                    : 'This paddy trade is not available for interest (status: ' . $statusLabel . ')',
             ], 422);
         }
 

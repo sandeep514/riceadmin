@@ -38,13 +38,14 @@ class PaddyTrade extends Model
 
     /**
      * Individual trade status (admin).
-     * 1 Active, 4 In-Process, 12 Hold, 3 Sold
+     * 1 Active, 4 In-Process, 12 Hold, 3 Sold, 5 Deactivated
      */
     public static $statusLabels = [
         1 => 'Active',
         4 => 'In-Process',
         12 => 'Hold',
         3 => 'Sold',
+        5 => 'Deactivated',
         0 => 'Closed', // legacy
     ];
 
@@ -53,8 +54,12 @@ class PaddyTrade extends Model
         4 => 'info',
         12 => 'warning',
         3 => 'primary',
+        5 => 'default',
         0 => 'default',
     ];
+
+    /** Statuses shown on app/web portal list by default */
+    public static $listableStatuses = [1, 4, 12, 3];
 
     public function getStatusBadgeClassAttribute(): string
     {

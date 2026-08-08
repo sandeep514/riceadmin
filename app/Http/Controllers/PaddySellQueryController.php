@@ -329,7 +329,7 @@ class PaddySellQueryController extends Controller
         $trade = PaddyTrade::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'status' => 'required|integer|in:1,4,12,3',
+            'status' => 'required|integer|in:1,4,12,3,5',
             'sold_at_amount' => 'nullable|string|max:100',
         ]);
 
