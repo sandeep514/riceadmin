@@ -2646,8 +2646,10 @@ class PortalApiController extends Controller
             $planTitle = \App\WebPlanModel::where('id', $planId)->value('title');
         }
 
-        // Active paddy trades available on portal/app
-        $paddyTradeCount = PaddyTrade::query()->where('status', 1)->count();
+        // Paddy trades shown on portal/app (Active, In-Process, Hold, Sold)
+        $paddyTradeCount = PaddyTrade::query()
+            ->whereIn('status', [1, 4, 12, 3])
+            ->count();
         $paddyMarketStatus = PaddyTradeCurrentStatus::current();
 
         return response()->json([

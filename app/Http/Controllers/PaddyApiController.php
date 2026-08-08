@@ -479,7 +479,10 @@ class PaddyApiController extends Controller
     }
 
     /**
-     * List active paddy trades for app & web portal (paginated).
+     * List paddy trades for app & web portal (paginated).
+     *
+     * Default statuses (UI shows badge per trade):
+     * - 1 Active, 4 In-Process, 12 Hold, 3 Sold
      *
      * Optional query params:
      * - category: basmati | non-basmati
@@ -487,7 +490,7 @@ class PaddyApiController extends Controller
      * - packing_id: seller packing id
      * - userId | user_id: logged-in user (for per-trade is_interested / already_interested)
      * - seller_user_id: filter trades by original seller user id
-     * - status: default 1 (active). Pass "all" for every status.
+     * - status: single status code, or comma list (e.g. 1,4,12,3), or "all"
      * - page: default 1
      * - per_page | perPage | limit: default 15, max 100
      */
@@ -526,17 +529,34 @@ class PaddyApiController extends Controller
 
         $interestUserId = $this->resolveInterestUserId($request);
 
+        // Default: Active + In-Process + Hold + Sold (UI badges show status_label)
+        $listableStatuses = [1, 4, 12, 3];
+
         $query = PaddyTrade::query()
             ->with([
                 'paddyQuality:id,quality,type',
                 'packingRel:id,packing',
                 'user:id,name,email,phone',
             ])
+            ->orderByRaw('FIELD(status, 1, 4, 12, 3)')
             ->orderByDesc('id');
 
-        $status = $request->input('status', 1);
-        if ($status !== 'all' && $status !== null && $status !== '') {
-            $query->where('status', (int) $status);
+        $statusParam = $request->input('status');
+        if ($statusParam === null || $statusParam === '') {
+            $query->whereIn('status', $listableStatuses);
+        } elseif ($statusParam !== 'all') {
+            $statusIds = collect(explode(',', (string) $statusParam))
+                ->map(fn ($s) => (int) trim($s))
+                ->filter(fn ($s) => $s > 0)
+                ->unique()
+                ->values()
+                ->all();
+
+            if ($statusIds !== []) {
+                $query->whereIn('status', $statusIds);
+            } else {
+                $query->whereIn('status', $listableStatuses);
+            }
         }
 
         if ($request->filled('category')) {
