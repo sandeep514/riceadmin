@@ -7,6 +7,7 @@ use App\PaddySellQuery;
 use App\PaddyTrade;
 use App\PaddyTradeCurrentStatus;
 use App\SellerPackingINR;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -54,6 +55,41 @@ class PaddySellQueryController extends Controller
     }
 
     /**
+     * Admin create paddy trade form (no sell query required).
+     */
+    public function createTrade()
+    {
+        $formData = $this->paddyTradeFormData();
+
+        return view('paddySellQuery.create_trade', $formData);
+    }
+
+    /**
+     * Admin save new paddy trade.
+     */
+    public function saveTrade(Request $request)
+    {
+        $validator = Validator::make($request->all(), $this->paddyTradeValidationRules(true));
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $payload = $this->buildPaddyTradePayload($request, [
+            'paddy_sell_query_id' => null,
+            'user_id' => $request->filled('user_id') ? (int) $request->user_id : null,
+            'type' => $request->input('type', 'admin'),
+            'image_fallback' => null,
+        ]);
+
+        $trade = PaddyTrade::create($payload);
+
+        Session::flash('success', 'Success|Paddy trade created successfully.');
+
+        return redirect()->route('view.paddy.trade', $trade->id);
+    }
+
+    /**
      * Convert to paddy trade — prefilled form page.
      */
     public function convertToTrade($id)
@@ -72,27 +108,11 @@ class PaddySellQueryController extends Controller
             return redirect()->route('list.paddy.sell.queries');
         }
 
-        $qualities = PaddyQuality::query()
-            ->where('status', 1)
-            ->orderByRaw('`order` IS NULL, `order` ASC')
-            ->orderBy('quality')
-            ->get(['id', 'quality', 'type']);
+        $formData = $this->paddyTradeFormData();
 
-        $packings = SellerPackingINR::query()
-            ->where('status', 1)
-            ->orderBy('packing')
-            ->get(['id', 'packing']);
-
-        $categoryOptions = PaddyQuality::riceTypeOptions();
-        $handCombinedOptions = ['Hand' => 'Hand', 'Combined' => 'Combined'];
-
-        return view('paddySellQuery.convert', compact(
-            'query',
-            'qualities',
-            'packings',
-            'categoryOptions',
-            'handCombinedOptions'
-        ));
+        return view('paddySellQuery.convert', array_merge($formData, [
+            'query' => $query,
+        ]));
     }
 
     /**
@@ -114,7 +134,62 @@ class PaddySellQueryController extends Controller
             return redirect()->route('list.paddy.sell.queries');
         }
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), $this->paddyTradeValidationRules(false));
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $payload = $this->buildPaddyTradePayload($request, [
+            'paddy_sell_query_id' => $query->id,
+            'user_id' => $query->user_id,
+            'type' => $request->input('type', $query->type ?: 'web'),
+            'image_fallback' => $query->image,
+        ]);
+
+        DB::transaction(function () use ($query, $payload) {
+            PaddyTrade::create($payload);
+            $query->update(['status' => 2]);
+        });
+
+        Session::flash('success', 'Success|Paddy sell query converted to paddy trade successfully.');
+
+        return redirect()->route('list.paddy.trades');
+    }
+
+    /**
+     * Shared dropdown data for create/convert paddy trade forms.
+     */
+    private function paddyTradeFormData(): array
+    {
+        $qualities = PaddyQuality::query()
+            ->where('status', 1)
+            ->orderByRaw('`order` IS NULL, `order` ASC')
+            ->orderBy('quality')
+            ->get(['id', 'quality', 'type']);
+
+        $packings = SellerPackingINR::query()
+            ->where('status', 1)
+            ->orderBy('packing')
+            ->get(['id', 'packing']);
+
+        $users = User::query()
+            ->orderByDesc('id')
+            ->limit(500)
+            ->get(['id', 'name', 'email', 'phone', 'mobile', 'companyname']);
+
+        return [
+            'qualities' => $qualities,
+            'packings' => $packings,
+            'users' => $users,
+            'categoryOptions' => PaddyQuality::riceTypeOptions(),
+            'handCombinedOptions' => ['Hand' => 'Hand', 'Combined' => 'Combined'],
+        ];
+    }
+
+    private function paddyTradeValidationRules(bool $adminCreate): array
+    {
+        $rules = [
             'category' => 'required|in:basmati,non-basmati',
             'quality' => 'required|integer|exists:paddy_qualities,id',
             'hand_combined' => 'required|string|max:100',
@@ -128,13 +203,21 @@ class PaddySellQueryController extends Controller
             'valid_days' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'remarks' => 'nullable|string',
-        ]);
+        ];
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+        if ($adminCreate) {
+            $rules['user_id'] = 'nullable|integer|exists:users,id';
         }
 
-        $imageName = $query->image;
+        return $rules;
+    }
+
+    /**
+     * @param  array{paddy_sell_query_id:?int,user_id:?int,type:string,image_fallback:?string}  $options
+     */
+    private function buildPaddyTradePayload(Request $request, array $options): array
+    {
+        $imageName = $options['image_fallback'] ?? null;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $uploadDir = public_path('uploads');
@@ -145,43 +228,33 @@ class PaddySellQueryController extends Controller
             $file->move($uploadDir, $imageName);
         }
 
-        // Quality label comes from master (dropdown selection only)
         $qualityName = optional(PaddyQuality::find($request->quality))->quality;
-
         $packingId = $request->filled('packing_id') ? (int) $request->packing_id : null;
         $packingLabel = $packingId
             ? optional(SellerPackingINR::find($packingId))->packing
             : null;
 
-        DB::transaction(function () use ($request, $query, $imageName, $qualityName, $packingId, $packingLabel) {
-            PaddyTrade::create([
-                'paddy_sell_query_id' => $query->id,
-                'category' => $request->category,
-                'quality' => (int) $request->quality,
-                'quality_name' => $qualityName,
-                'hand_combined' => $request->hand_combined,
-                'packing_id' => $packingId,
-                'packing' => $packingLabel,
-                'contact_number' => $request->contact_number,
-                'contact_person' => $request->contact_person,
-                'image' => $imageName,
-                'location' => $request->location,
-                'quantity' => $request->quantity,
-                'rate' => $request->rate,
-                'valid_days' => $request->valid_days,
-                'type' => $request->input('type', $query->type ?: 'web'),
-                'user_id' => $query->user_id,
-                'remarks' => $request->input('remarks'),
-                'status' => 1,
-                'created_by' => Auth::id(),
-            ]);
-
-            $query->update(['status' => 2]);
-        });
-
-        Session::flash('success', 'Success|Paddy sell query converted to paddy trade successfully.');
-
-        return redirect()->route('list.paddy.trades');
+        return [
+            'paddy_sell_query_id' => $options['paddy_sell_query_id'] ?? null,
+            'category' => $request->category,
+            'quality' => (int) $request->quality,
+            'quality_name' => $qualityName,
+            'hand_combined' => $request->hand_combined,
+            'packing_id' => $packingId,
+            'packing' => $packingLabel,
+            'contact_number' => $request->contact_number,
+            'contact_person' => $request->contact_person,
+            'image' => $imageName,
+            'location' => $request->location,
+            'quantity' => $request->quantity,
+            'rate' => $request->rate,
+            'valid_days' => $request->valid_days,
+            'type' => $options['type'] ?? $request->input('type', 'admin'),
+            'user_id' => $options['user_id'] ?? null,
+            'remarks' => $request->input('remarks'),
+            'status' => 1,
+            'created_by' => Auth::id(),
+        ];
     }
 
     public function listTrades()

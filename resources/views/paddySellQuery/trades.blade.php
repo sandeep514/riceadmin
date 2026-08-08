@@ -25,7 +25,7 @@
                 </div>
                 <div class="box-body">
                     <div class="row" style="margin-bottom: 15px;">
-                        <div class="col-md-12" style="display: inline-flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                        <div class="col-md-10" style="display: inline-flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                             <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 1]) }}"
                                class="btn btn-success btn-sm {{ (int)($currentMarketStatus ?? 1) === 1 ? 'active' : '' }}">
                                 Open Market
@@ -37,6 +37,11 @@
                             <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 12]) }}"
                                class="btn btn-warning btn-sm {{ (int)($currentMarketStatus ?? 1) === 12 ? 'active' : '' }}">
                                 Hold Market
+                            </a>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <a href="{{ route('create.paddy.trade') }}" class="btn btn-primary btn-sm">
+                                <i class="fa fa-plus"></i> Create Trade
                             </a>
                         </div>
                     </div>
