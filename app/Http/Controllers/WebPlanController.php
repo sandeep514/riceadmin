@@ -132,9 +132,11 @@ class WebPlanController extends Controller
     public function updateStatus($id)
     {
         $webPlan = WebPlanModel::findOrFail($id);
-        $webPlan->update(['status' => !$webPlan->status]);
+        $webPlan->update(['status' => (int) $webPlan->status === 1 ? 0 : 1]);
 
-        return redirect()->route('webplans.index')->with('success', 'Status updated successfully');
+        Session::flash('success', 'Success|Plan status updated successfully.');
+
+        return redirect()->route('list.web.plans');
     }
 
     public function createPlan(){
