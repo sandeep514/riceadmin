@@ -82,16 +82,10 @@
                         </div>
 
                         <div class="form-group col-md-4">
-                            <label>Packing <small class="text-muted">(optional)</small></label>
-                            <select name="packing_id" class="form-control">
-                                <option value="">Select packing</option>
-                                @foreach($packings as $packing)
-                                    <option value="{{ $packing->id }}"
-                                        {{ (string) old('packing_id') === (string) $packing->id ? 'selected' : '' }}>
-                                        {{ $packing->packing }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <label>Packing <small class="text-muted">(optional text)</small></label>
+                            <input type="text" name="packing" class="form-control"
+                                   value="{{ old('packing') }}"
+                                   placeholder="e.g. 50Kg PP+inner">
                         </div>
 
                         <div class="form-group col-md-4">

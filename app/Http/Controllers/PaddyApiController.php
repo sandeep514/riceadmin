@@ -11,7 +11,6 @@ use App\PaddyTrade;
 use App\PaddyTradeCurrentStatus;
 use App\PaddyTradeInterested;
 use App\RiceName;
-use App\SellerPackingINR;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -308,7 +307,7 @@ class PaddyApiController extends Controller
      * - quality (paddy_qualities id)
      * - qualityName (optional display name)
      * - hand_combined
-     * - packing_id (optional; sellerPackingINR id). Legacy key "packing" accepted as id.
+     * - packing (optional free text; packing_id is no longer sent from frontend)
      * - contactNumber (required; legacy key "contact" also accepted)
      * - contactperson
      * - image (optional file)
@@ -326,17 +325,12 @@ class PaddyApiController extends Controller
             $request->merge(['contactNumber' => $request->input('contact')]);
         }
 
-        // Prefer packing_id; fall back to packing when it is a numeric id
-        if (! $request->filled('packing_id') && $request->filled('packing') && is_numeric($request->input('packing'))) {
-            $request->merge(['packing_id' => (int) $request->input('packing')]);
-        }
-
         $validator = Validator::make($request->all(), [
             'category' => 'required|in:basmati,non-basmati',
             'quality' => 'required|integer|exists:paddy_qualities,id',
             'qualityName' => 'nullable|string|max:255',
             'hand_combined' => 'required|string|max:100',
-            'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
+            'packing' => 'nullable|string|max:255',
             'contactNumber' => 'required|string|max:50',
             'contactperson' => 'required|string|max:255',
             'image' => 'nullable|file|mimes:jpg,jpeg,png,gif,webp|max:10240',
@@ -373,10 +367,12 @@ class PaddyApiController extends Controller
             $qualityName = optional(PaddyQuality::find($request->quality))->quality;
         }
 
-        $packingId = $request->filled('packing_id') ? (int) $request->packing_id : null;
-        $packingLabel = null;
-        if ($packingId) {
-            $packingLabel = optional(SellerPackingINR::find($packingId))->packing;
+        // Frontend sends free-text packing only (no packing_id)
+        $packingText = $request->filled('packing')
+            ? trim((string) $request->input('packing'))
+            : null;
+        if ($packingText === '') {
+            $packingText = null;
         }
 
         $row = PaddySellQuery::create([
@@ -384,8 +380,8 @@ class PaddyApiController extends Controller
             'quality' => (int) $request->quality,
             'quality_name' => $qualityName,
             'hand_combined' => $request->hand_combined,
-            'packing_id' => $packingId,
-            'packing' => $packingLabel,
+            'packing_id' => null,
+            'packing' => $packingText,
             'contact_number' => $request->contactNumber,
             'contact_person' => $request->contactperson,
             'image' => $imageName,
@@ -398,8 +394,6 @@ class PaddyApiController extends Controller
             'status' => 1,
         ]);
 
-        $row->load('packingRel');
-
         $this->sendPaddySellQueryEnquiryMail($row);
 
         return response()->json([
@@ -411,8 +405,7 @@ class PaddyApiController extends Controller
                 'quality' => $row->quality,
                 'qualityName' => $row->quality_name,
                 'hand_combined' => $row->hand_combined,
-                'packing_id' => $row->packing_id,
-                'packing' => $row->packing_label !== '-' ? $row->packing_label : null,
+                'packing' => $row->packing,
                 'contactNumber' => $row->contact_number,
                 'contactperson' => $row->contact_person,
                 'image' => $row->image,

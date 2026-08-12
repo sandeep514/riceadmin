@@ -139,6 +139,9 @@
                                             <a href="{{ route('view.paddy.trade', $trade->id) }}" class="btn btn-primary btn-xs">
                                                 <i class="fa fa-eye"></i> View
                                             </a>
+                                            <a href="{{ route('edit.paddy.trade', $trade->id) }}" class="btn btn-warning btn-xs">
+                                                <i class="fa fa-pencil"></i> Edit
+                                            </a>
                                             @include('paddySellQuery._trade_status_actions', ['trade' => $trade])
                                         </td>
                                     </tr>

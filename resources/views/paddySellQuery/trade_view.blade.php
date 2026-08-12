@@ -40,6 +40,9 @@
                 <a href="{{ route('list.paddy.trades') }}" class="btn btn-default btn-sm">
                     <i class="fa fa-arrow-left"></i> Back to list
                 </a>
+                <a href="{{ route('edit.paddy.trade', $trade->id) }}" class="btn btn-warning btn-sm">
+                    <i class="fa fa-pencil"></i> Edit
+                </a>
                 @if($trade->paddy_sell_query_id)
                     <a href="{{ route('view.paddy.sell.query', $trade->paddy_sell_query_id) }}" class="btn btn-info btn-sm">
                         <i class="fa fa-link"></i> Source sell query

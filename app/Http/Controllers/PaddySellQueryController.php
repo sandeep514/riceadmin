@@ -90,6 +90,49 @@ class PaddySellQueryController extends Controller
     }
 
     /**
+     * Admin edit paddy trade form.
+     */
+    public function editTrade($id)
+    {
+        $trade = PaddyTrade::with(['paddyQuality', 'user', 'packingRel'])->findOrFail($id);
+        $formData = $this->paddyTradeFormData();
+
+        return view('paddySellQuery.edit_trade', array_merge($formData, [
+            'trade' => $trade,
+        ]));
+    }
+
+    /**
+     * Admin update paddy trade.
+     */
+    public function updateTrade(Request $request, $id)
+    {
+        $trade = PaddyTrade::findOrFail($id);
+
+        $validator = Validator::make($request->all(), $this->paddyTradeValidationRules(true));
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $payload = $this->buildPaddyTradePayload($request, [
+            'paddy_sell_query_id' => $trade->paddy_sell_query_id,
+            'user_id' => $request->filled('user_id') ? (int) $request->user_id : null,
+            'type' => $request->input('type', $trade->type ?: 'admin'),
+            'image_fallback' => $trade->image,
+        ]);
+
+        // Do not overwrite admin status / sold meta on field edit
+        unset($payload['status'], $payload['created_by'], $payload['sold_at_amount'], $payload['sold_at']);
+
+        $trade->update($payload);
+
+        Session::flash('success', 'Success|Paddy trade updated successfully.');
+
+        return redirect()->route('view.paddy.trade', $trade->id);
+    }
+
+    /**
      * Convert to paddy trade — prefilled form page.
      */
     public function convertToTrade($id)
@@ -193,6 +236,7 @@ class PaddySellQueryController extends Controller
             'category' => 'required|in:basmati,non-basmati',
             'quality' => 'required|integer|exists:paddy_qualities,id',
             'hand_combined' => 'required|string|max:100',
+            'packing' => 'nullable|string|max:255',
             'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
             'contact_number' => 'required|string|max:50',
             'contact_person' => 'required|string|max:255',
@@ -230,10 +274,18 @@ class PaddySellQueryController extends Controller
         }
 
         $qualityName = optional(PaddyQuality::find($request->quality))->quality;
+
+        // Prefer free-text packing; optional packing_id still resolves label if provided
         $packingId = $request->filled('packing_id') ? (int) $request->packing_id : null;
-        $packingLabel = $packingId
-            ? optional(SellerPackingINR::find($packingId))->packing
-            : null;
+        $packingLabel = null;
+        if ($request->filled('packing')) {
+            $packingLabel = trim((string) $request->input('packing'));
+            if ($packingLabel === '') {
+                $packingLabel = null;
+            }
+        } elseif ($packingId) {
+            $packingLabel = optional(SellerPackingINR::find($packingId))->packing;
+        }
 
         return [
             'paddy_sell_query_id' => $options['paddy_sell_query_id'] ?? null,
