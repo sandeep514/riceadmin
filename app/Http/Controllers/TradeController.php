@@ -250,14 +250,28 @@ class TradeController extends Controller
         $WandType = (WandTypeModel::pluck('id' , 'type'));
         $wandModel = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->orderBy('order' , 'ASC')->get();
 
-        if( $tradeType == 2 ){
-            $packingType  = Buyerpackinginr::get();
-        }else{
-            $packingType  = SellerPackingINR::get();
+        // Same packing master as create trade (public_packing_milestone3 — full list)
+        $packingType = PublicPacking::query()
+            ->orderByRaw('`order` IS NULL, `order` ASC')
+            ->orderBy('id')
+            ->get();
+
+        // Keep currently saved packing selectable if it is not in the public master
+        $currentPackingId = $tradequeriesinr->packing ?? null;
+        if ($currentPackingId && ! $packingType->contains('id', (int) $currentPackingId)) {
+            $fallback = SellerPackingINR::find($currentPackingId) ?: Buyerpackinginr::find($currentPackingId);
+            if ($fallback) {
+                $packingType = $packingType->push((object) [
+                    'id' => $fallback->id,
+                    'size' => $fallback->packing ?? '',
+                    'packing' => $fallback->description ?? ($fallback->packing ?? ''),
+                    'order' => null,
+                    'status' => 1,
+                ]);
+            }
         }
 
         $qualityMaster = RiceName::pluck('type_status' , 'type');
-        // $packing = PublicPacking::get();
         $categoryList = Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = TradeCategoryMap::where('trade_id', (int) $id)->where('status', 1)->pluck('category_id')->all();
         $webNotifyRoles = Role::where('type', 'web')->orderBy('role_name')->get(['id', 'role_name']);

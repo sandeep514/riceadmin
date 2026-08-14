@@ -70,6 +70,7 @@ use App\Brand;
 use App\WandModel;
 use App\WandTypeModel;
 use App\SellerPackingINR;
+use App\PublicPacking;
 use App\RiceFormMilestone3;
 use App\LivePriceStatusMessage;
 use App\SellQueriesINR;
@@ -5988,6 +5989,7 @@ if (!file_exists('uploads')) {
             ->get();
 
         $allTrade = $this->orderMobileTradesListing($openTrades->concat($soldTrades));
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
@@ -7355,8 +7357,55 @@ if (!file_exists('uploads')) {
                 $trade->getAttributes()['valid_datetime_for_is_new'] ?? $trade->valid_datetime_for_is_new ?? null
             );
 
+            // Single packing object for frontend (avoids rice_packing_buyer + rice_packing_seller confusion)
+            $trade->setAttribute('rice_packing', $this->resolveTradeRicePackingPayload($trade));
+            $trade->unsetRelation('RicePackingBuyer');
+            $trade->unsetRelation('RicePackingSeller');
+            $trade->makeHidden(['RicePackingBuyer', 'RicePackingSeller', 'rice_packing_buyer', 'rice_packing_seller']);
+
             return $trade;
         });
+    }
+
+    /**
+     * Resolve one packing payload for a trade.
+     * Sell (tradeType 2) → buyer packing table; otherwise seller packing table.
+     * Falls back to the other relation, then public packing master.
+     *
+     * @return array{id:int|null,packing:?string,description:?string,label:?string}|null
+     */
+    private function resolveTradeRicePackingPayload($trade): ?array
+    {
+        $tradeType = (int) ($trade->tradeType ?? 0);
+        $buyer = $trade->relationLoaded('RicePackingBuyer') ? $trade->RicePackingBuyer : null;
+        $seller = $trade->relationLoaded('RicePackingSeller') ? $trade->RicePackingSeller : null;
+
+        // Same rule as admin trade list / packing-by-type API
+        $model = $tradeType === 2
+            ? ($buyer ?: $seller)
+            : ($seller ?: $buyer);
+
+        if (! $model && ! empty($trade->packing)) {
+            $model = PublicPacking::query()->find($trade->packing);
+        }
+
+        if (! $model) {
+            return null;
+        }
+
+        $packing = $model->packing ?? null;
+        $description = $model->description ?? ($model->size ?? null);
+        $label = trim(($packing ?? '') . ' ' . ($description ?? ''));
+        if ($label === '') {
+            $label = null;
+        }
+
+        return [
+            'id' => $model->id ?? null,
+            'packing' => $packing,
+            'description' => $description,
+            'label' => $label,
+        ];
     }
 
     /**

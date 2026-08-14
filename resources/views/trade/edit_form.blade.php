@@ -105,12 +105,8 @@
                                     <option value=""> Select </option>
                                     @foreach($packingType as $k => $v)
                                         @php
-                                            // Seller/Buyer packing masters use packing + description (same as create AJAX)
-                                            $packingLabel = trim(
-                                                ($v->packing ?? '')
-                                                . ' '
-                                                . ($v->description ?? ($v->size ?? ''))
-                                            );
+                                            // Same as create: public packing = size + packing type
+                                            $packingLabel = trim(($v->size ?? '') . ' ' . ($v->packing ?? ''));
                                         @endphp
                                         <option {{ ((string) $tradequeriesinr->packing === (string) $v->id) ? 'selected' : '' }}
                                                 value="{{ $v->id }}">{{ $packingLabel }}</option>
@@ -346,29 +342,8 @@
         @include('trade._web_trade_notification_js')
         @include('trade._prevent_double_submit_js')
         @include('trade._media_clear_js')
-        $('select[name=tradeType]').change(function(event){
-            let tradeType = $('select[name=tradeType] :selected').val();
-            let selectedPacking = String($("select[name=ricepacking]").val() || '');
-            let apiBase = (window.route || '').replace(/\/administrator\/?$/, '') + '/api';
-            $.ajax({
-                url : apiBase + '/get/packing/by/' + tradeType,
-                success : function (res){
-                    $("select[name=ricepacking]").html('');
-                    $("select[name=ricepacking]").append('<option value=""> Select </option>');
-                    for (let i = 0; i < res.data.length; i++) {
-                        let packing = res.data[i].packing || '';
-                        let description = res.data[i].description ? (' ' + res.data[i].description) : '';
-                        let optionSelected = selectedPacking !== '' && String(res.data[i].id) === selectedPacking ? 'selected' : '';
-                        $("select[name=ricepacking]").append(
-                            '<option value="'+res.data[i].id+'" '+optionSelected+'> '+packing+description+' </option>'
-                        );
-                    }
-                },
-                error: function (err){
-                    console.log(err);
-                }
-            })
-        })
+        // Keep full public packing list on trade type change (same master as create).
+        // Do not swap to smaller seller/buyer packing tables.
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
             console.log(riceCategory)
