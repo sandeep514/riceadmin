@@ -173,6 +173,25 @@
                             <textarea name="remarks" class="form-control" rows="2">{{ old('remarks', $trade->remarks) }}</textarea>
                         </div>
 
+                        <div class="form-group col-md-12">
+                            <label>Additional Information <small class="text-muted">(optional)</small></label>
+                            <textarea name="additional_information" class="form-control" rows="3" placeholder="Additional information">{{ old('additional_information', $trade->additional_information) }}</textarea>
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>Lot Number <small class="text-muted">(optional)</small></label>
+                            <input type="text" name="lot_number" class="form-control"
+                                   value="{{ old('lot_number', $trade->lot_number) }}"
+                                   placeholder="e.g. LOT-001">
+                        </div>
+
+                        <div class="form-group col-md-4">
+                            <label>Crop Year <small class="text-muted">(optional)</small></label>
+                            <input type="text" name="crop_year" class="form-control"
+                                   value="{{ old('crop_year', $trade->crop_year) }}"
+                                   placeholder="e.g. 2025">
+                        </div>
+
                         <div class="form-group col-md-6">
                             <label>Image <small class="text-muted">(optional — leave empty to keep current)</small></label>
                             <input type="file" name="image" class="form-control" accept="image/*">

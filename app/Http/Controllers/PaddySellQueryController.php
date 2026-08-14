@@ -247,6 +247,9 @@ class PaddySellQueryController extends Controller
             'valid_days' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
             'remarks' => 'nullable|string',
+            'additional_information' => 'nullable|string',
+            'lot_number' => 'nullable|string|max:100',
+            'crop_year' => 'nullable|string|max:50',
             'is_new' => 'nullable|in:0,1',
         ];
 
@@ -305,6 +308,9 @@ class PaddySellQueryController extends Controller
             'type' => $options['type'] ?? $request->input('type', 'admin'),
             'user_id' => $options['user_id'] ?? null,
             'remarks' => $request->input('remarks'),
+            'additional_information' => $request->input('additional_information'),
+            'lot_number' => $request->filled('lot_number') ? trim((string) $request->input('lot_number')) : null,
+            'crop_year' => $request->filled('crop_year') ? trim((string) $request->input('crop_year')) : null,
             'status' => 1,
             'is_new' => (int) $request->input('is_new', 0) === 1 ? 1 : 0,
             'created_by' => Auth::id(),

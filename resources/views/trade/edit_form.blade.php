@@ -102,8 +102,18 @@
                             <div class="col-md-12" style="margin-bottom: 20px;padding-left: 0">
                                 {!! Form::label('Packing','Packing') !!}
                                 <select class="form-control" required name="ricepacking">
+                                    <option value=""> Select </option>
                                     @foreach($packingType as $k => $v)
-                                        <option {{ ($tradequeriesinr->packing == $v->id)?'selected': '' }} value="{{ $v->id }}">{{ $v->size }} {{ $v->packing }}</option>
+                                        @php
+                                            // Seller/Buyer packing masters use packing + description (same as create AJAX)
+                                            $packingLabel = trim(
+                                                ($v->packing ?? '')
+                                                . ' '
+                                                . ($v->description ?? ($v->size ?? ''))
+                                            );
+                                        @endphp
+                                        <option {{ ((string) $tradequeriesinr->packing === (string) $v->id) ? 'selected' : '' }}
+                                                value="{{ $v->id }}">{{ $packingLabel }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -338,15 +348,20 @@
         @include('trade._media_clear_js')
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
+            let selectedPacking = String($("select[name=ricepacking]").val() || '');
+            let apiBase = (window.route || '').replace(/\/administrator\/?$/, '') + '/api';
             $.ajax({
-                url : 'https://snjtradelink.com/staging/public/api/get/packing/by/'+tradeType,
+                url : apiBase + '/get/packing/by/' + tradeType,
                 success : function (res){
                     $("select[name=ricepacking]").html('');
                     $("select[name=ricepacking]").append('<option value=""> Select </option>');
-                    let objectKeys = Object.keys(res.data);
-
-                    for(let i = 0; i < Object.keys(res.data).length ; i++){
-                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'"> '+res.data[i].packing+' '+res.data[i].description+' </option>');
+                    for (let i = 0; i < res.data.length; i++) {
+                        let packing = res.data[i].packing || '';
+                        let description = res.data[i].description ? (' ' + res.data[i].description) : '';
+                        let optionSelected = selectedPacking !== '' && String(res.data[i].id) === selectedPacking ? 'selected' : '';
+                        $("select[name=ricepacking]").append(
+                            '<option value="'+res.data[i].id+'" '+optionSelected+'> '+packing+description+' </option>'
+                        );
                     }
                 },
                 error: function (err){

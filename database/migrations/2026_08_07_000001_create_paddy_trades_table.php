@@ -27,6 +27,9 @@ class CreatePaddyTradesTable extends Migration
             $table->string('type', 50)->default('web');
             $table->unsignedBigInteger('user_id')->nullable(); // original seller user
             $table->text('remarks')->nullable();
+            $table->text('additional_information')->nullable();
+            $table->string('lot_number', 100)->nullable();
+            $table->string('crop_year', 50)->nullable();
             $table->unsignedTinyInteger('status')->default(1); // 1 Active, 4 In-Process, 12 Hold, 3 Sold
             $table->unsignedTinyInteger('is_new')->default(0); // 1 yes, 0 no
             $table->string('sold_at_amount', 100)->nullable();

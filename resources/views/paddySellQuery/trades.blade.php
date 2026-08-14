@@ -53,6 +53,8 @@
                                     <th>Sell Query</th>
                                     <th>Category</th>
                                     <th>Quality</th>
+                                    <th>Lot Number</th>
+                                    <th>Crop Year</th>
                                     <th>Hand/Combined</th>
                                     <th>Packing</th>
                                     <th>Quantity</th>
@@ -84,6 +86,8 @@
                                         </td>
                                         <td>{{ $trade->category_label }}</td>
                                         <td>{{ $trade->quality_name ?: (optional($trade->paddyQuality)->quality ?? '-') }}</td>
+                                        <td>{{ $trade->lot_number ?: '-' }}</td>
+                                        <td>{{ $trade->crop_year ?: '-' }}</td>
                                         <td>{{ $trade->hand_combined ?: '-' }}</td>
                                         <td>{{ $trade->packing_label }}</td>
                                         <td>{{ $trade->quantity }}</td>
@@ -147,7 +151,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="18" class="text-center">No paddy trades found.</td>
+                                        <td colspan="20" class="text-center">No paddy trades found.</td>
                                     </tr>
                                 @endforelse
                             </tbody>
@@ -167,7 +171,7 @@
         $('.paddy-trade-datatable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [11, 14, 17] }]
+            columnDefs: [{ orderable: false, targets: [13, 16, 19] }]
         });
 
         var statusForm = document.getElementById('paddyTradeStatusForm');

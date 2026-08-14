@@ -161,6 +161,18 @@
                                     <td>{{ $trade->remarks ?: '-' }}</td>
                                 </tr>
                                 <tr>
+                                    <th>Additional Information</th>
+                                    <td style="white-space: pre-wrap;">{{ $trade->additional_information ?: '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Lot Number</th>
+                                    <td>{{ $trade->lot_number ?: '-' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Crop Year</th>
+                                    <td>{{ $trade->crop_year ?: '-' }}</td>
+                                </tr>
+                                <tr>
                                     <th>Seller User</th>
                                     <td>
                                         @if($trade->user)
