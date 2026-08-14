@@ -50,7 +50,7 @@ class CreateTradeQueryMilestone3Table extends Migration
             $table->integer('sold_at')->default(0);
             $table->integer('status')->default(1)->comment('3 => "sold", 2 => \'expired\' , 1 => \'Pending\',6=>\'Active\',4=>\'In-Process\',5=>\'De-active\',11 => \'close\', 12=> \'hold\'');
             $table->timestamp('created_at')->useCurrent();
-            $table->integer('updated_at');
+            $table->timestamp('updated_at')->nullable()->useCurrent()->useCurrentOnUpdate();
         });
     }
 
