@@ -481,6 +481,20 @@
                     <span>Avg Length Map</span>
                 </a>
             </li>
+            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification']))?'active':'' }}">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-handshake-o"></i>
+                    <span>Vendor Flow</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ in_array($currentRoute, ['vendor-specifications','create.vendor-specification','edit.vendor-specification']) ? 'active' : '' }}">
+                        <a href="{{ route('vendor-specifications') }}"><i class="fa fa-circle-o"></i> Specification</a>
+                    </li>
+                </ul>
+            </li>
             <li class="treeview {{ (in_array($currentRoute,['reports.live-prices']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-file-text-o"></i>

@@ -194,6 +194,17 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('avg-length-map/delete/{id}', ['as' => 'delete.avg-length-map', 'uses' => 'AvgLengthMapController@delete', 'action' => 'delete']);
             });
 
+            // Vendor Flow — Specification master
+            Route::group(['module' => 'vendor_specification', 'icon' => 'fa-list-alt'], function () {
+                Route::get('vendor-flow/specifications', ['as' => 'vendor-specifications', 'uses' => 'VendorSpecificationController@index', 'action' => 'view']);
+                Route::get('vendor-flow/specifications/create', ['as' => 'create.vendor-specification', 'uses' => 'VendorSpecificationController@create', 'action' => 'create']);
+                Route::post('vendor-flow/specifications/save', ['as' => 'save.vendor-specification', 'uses' => 'VendorSpecificationController@save', 'action' => 'create']);
+                Route::get('vendor-flow/specifications/edit/{id}', ['as' => 'edit.vendor-specification', 'uses' => 'VendorSpecificationController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/specifications/update/{id}', ['as' => 'update.vendor-specification', 'uses' => 'VendorSpecificationController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/specifications/delete/{id}', ['as' => 'delete.vendor-specification', 'uses' => 'VendorSpecificationController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/specifications/change-status/{id}', ['as' => 'vendor-specification.change-status', 'uses' => 'VendorSpecificationController@changeStatus', 'action' => 'edit']);
+            });
+
             // Rice Form Parent–Child Map (for interested module)
             Route::group(['module'=>'rice_form_parent_map','icon'=>'fa-code-fork'], function() {
                 Route::get('rice-form-parent-map', ['as' => 'rice-form-parent-map', 'uses' => 'RiceFormParentMapController@index', 'action' => 'view']);
