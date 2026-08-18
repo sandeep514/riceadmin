@@ -481,7 +481,7 @@
                     <span>Avg Length Map</span>
                 </a>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-handshake-o"></i>
                     <span>Vendor Flow</span>
@@ -490,6 +490,9 @@
                     </span>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ in_array($currentRoute, ['vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for']) ? 'active' : '' }}">
+                        <a href="{{ route('vendor-spec-fors') }}"><i class="fa fa-circle-o"></i> Spec For</a>
+                    </li>
                     <li class="{{ in_array($currentRoute, ['vendor-specifications','create.vendor-specification','edit.vendor-specification']) ? 'active' : '' }}">
                         <a href="{{ route('vendor-specifications') }}"><i class="fa fa-circle-o"></i> Specification</a>
                     </li>

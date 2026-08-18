@@ -15,24 +15,17 @@ class VendorSpecification extends Model
     protected $fillable = [
         'specification',
         'description',
-        'spec_for',
+        'spec_for_id',
         'status',
     ];
 
-    public static function specForOptions(): array
+    public function specFor()
     {
-        return [
-            'vendor' => 'Vendor',
-            'product' => 'Product',
-            'quality' => 'Quality',
-            'packing' => 'Packing',
-            'bag' => 'Bag',
-            'service' => 'Service',
-        ];
+        return $this->belongsTo(VendorSpecFor::class, 'spec_for_id');
     }
 
     public function getSpecForLabelAttribute(): string
     {
-        return self::specForOptions()[$this->spec_for] ?? ($this->spec_for ?: '-');
+        return $this->specFor->name ?? '—';
     }
 }

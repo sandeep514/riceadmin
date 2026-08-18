@@ -194,6 +194,17 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('avg-length-map/delete/{id}', ['as' => 'delete.avg-length-map', 'uses' => 'AvgLengthMapController@delete', 'action' => 'delete']);
             });
 
+            // Vendor Flow — Spec For master
+            Route::group(['module' => 'vendor_spec_for', 'icon' => 'fa-tags'], function () {
+                Route::get('vendor-flow/spec-for', ['as' => 'vendor-spec-fors', 'uses' => 'VendorSpecForController@index', 'action' => 'view']);
+                Route::get('vendor-flow/spec-for/create', ['as' => 'create.vendor-spec-for', 'uses' => 'VendorSpecForController@create', 'action' => 'create']);
+                Route::post('vendor-flow/spec-for/save', ['as' => 'save.vendor-spec-for', 'uses' => 'VendorSpecForController@save', 'action' => 'create']);
+                Route::get('vendor-flow/spec-for/edit/{id}', ['as' => 'edit.vendor-spec-for', 'uses' => 'VendorSpecForController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/spec-for/update/{id}', ['as' => 'update.vendor-spec-for', 'uses' => 'VendorSpecForController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/spec-for/delete/{id}', ['as' => 'delete.vendor-spec-for', 'uses' => 'VendorSpecForController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/spec-for/change-status/{id}', ['as' => 'vendor-spec-for.change-status', 'uses' => 'VendorSpecForController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Specification master
             Route::group(['module' => 'vendor_specification', 'icon' => 'fa-list-alt'], function () {
                 Route::get('vendor-flow/specifications', ['as' => 'vendor-specifications', 'uses' => 'VendorSpecificationController@index', 'action' => 'view']);

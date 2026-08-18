@@ -7,10 +7,13 @@
                 <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
-        <div class="form-group col-md-6 @error('spec_for') has-error @enderror">
-            {!! Form::label('spec_for', 'Spec For*') !!}
-            {!! Form::select('spec_for', ['' => '-- Select --'] + \App\VendorSpecification::specForOptions(), null, ['class' => 'form-control', 'id' => 'spec_for']) !!}
-            @error('spec_for')
+        <div class="form-group col-md-6 @error('spec_for_id') has-error @enderror">
+            {!! Form::label('spec_for_id', 'Spec For*') !!}
+            {!! Form::select('spec_for_id', ['' => '-- Select --'] + ($specForOptions ?? []), null, ['class' => 'form-control', 'id' => 'spec_for_id']) !!}
+            @if(empty($specForOptions))
+                <small class="help-block">No active Spec For found. Add one under Vendor Flow → Spec For.</small>
+            @endif
+            @error('spec_for_id')
                 <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>

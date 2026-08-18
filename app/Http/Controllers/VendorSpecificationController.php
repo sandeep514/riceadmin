@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VendorSpecificationRequest;
+use App\VendorSpecFor;
 use App\VendorSpecification;
 use Session;
 
@@ -10,14 +11,16 @@ class VendorSpecificationController extends Controller
 {
     public function index()
     {
-        $records = VendorSpecification::orderByDesc('id')->get();
+        $records = VendorSpecification::with('specFor')->orderByDesc('id')->get();
 
         return view('vendor-specifications.index', compact('records'));
     }
 
     public function create()
     {
-        return view('vendor-specifications.create');
+        $specForOptions = VendorSpecFor::options();
+
+        return view('vendor-specifications.create', compact('specForOptions'));
     }
 
     public function save(VendorSpecificationRequest $request)
@@ -25,7 +28,7 @@ class VendorSpecificationController extends Controller
         VendorSpecification::create($request->only([
             'specification',
             'description',
-            'spec_for',
+            'spec_for_id',
             'status',
         ]));
 
@@ -43,7 +46,9 @@ class VendorSpecificationController extends Controller
             return back();
         }
 
-        return view('vendor-specifications.edit', compact('model'));
+        $specForOptions = VendorSpecFor::options((int) $model->spec_for_id);
+
+        return view('vendor-specifications.edit', compact('model', 'specForOptions'));
     }
 
     public function update(VendorSpecificationRequest $request, $id)
@@ -58,7 +63,7 @@ class VendorSpecificationController extends Controller
         $model->update($request->only([
             'specification',
             'description',
-            'spec_for',
+            'spec_for_id',
             'status',
         ]));
 
