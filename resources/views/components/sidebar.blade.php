@@ -481,7 +481,7 @@
                     <span>Avg Length Map</span>
                 </a>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular','vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-handshake-o"></i>
                     <span>Vendor Flow</span>
@@ -495,6 +495,12 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['vendor-specifications','create.vendor-specification','edit.vendor-specification']) ? 'active' : '' }}">
                         <a href="{{ route('vendor-specifications') }}"><i class="fa fa-circle-o"></i> Specification</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular']) ? 'active' : '' }}">
+                        <a href="{{ route('vendor-container-particulars') }}"><i class="fa fa-circle-o"></i> Container Particulars</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge']) ? 'active' : '' }}">
+                        <a href="{{ route('vendor-port-charges') }}"><i class="fa fa-circle-o"></i> Port Charges</a>
                     </li>
                 </ul>
             </li>

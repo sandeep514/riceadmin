@@ -205,6 +205,28 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/spec-for/change-status/{id}', ['as' => 'vendor-spec-for.change-status', 'uses' => 'VendorSpecForController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Container Particulars master
+            Route::group(['module' => 'vendor_container_particular', 'icon' => 'fa-cube'], function () {
+                Route::get('vendor-flow/container-particulars', ['as' => 'vendor-container-particulars', 'uses' => 'VendorContainerParticularController@index', 'action' => 'view']);
+                Route::get('vendor-flow/container-particulars/create', ['as' => 'create.vendor-container-particular', 'uses' => 'VendorContainerParticularController@create', 'action' => 'create']);
+                Route::post('vendor-flow/container-particulars/save', ['as' => 'save.vendor-container-particular', 'uses' => 'VendorContainerParticularController@save', 'action' => 'create']);
+                Route::get('vendor-flow/container-particulars/edit/{id}', ['as' => 'edit.vendor-container-particular', 'uses' => 'VendorContainerParticularController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/container-particulars/update/{id}', ['as' => 'update.vendor-container-particular', 'uses' => 'VendorContainerParticularController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/container-particulars/delete/{id}', ['as' => 'delete.vendor-container-particular', 'uses' => 'VendorContainerParticularController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/container-particulars/change-status/{id}', ['as' => 'vendor-container-particular.change-status', 'uses' => 'VendorContainerParticularController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Port Charges master
+            Route::group(['module' => 'vendor_port_charge', 'icon' => 'fa-money'], function () {
+                Route::get('vendor-flow/port-charges', ['as' => 'vendor-port-charges', 'uses' => 'VendorPortChargeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/port-charges/create', ['as' => 'create.vendor-port-charge', 'uses' => 'VendorPortChargeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/port-charges/save', ['as' => 'save.vendor-port-charge', 'uses' => 'VendorPortChargeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/port-charges/edit/{id}', ['as' => 'edit.vendor-port-charge', 'uses' => 'VendorPortChargeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/port-charges/update/{id}', ['as' => 'update.vendor-port-charge', 'uses' => 'VendorPortChargeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/port-charges/delete/{id}', ['as' => 'delete.vendor-port-charge', 'uses' => 'VendorPortChargeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/port-charges/change-status/{id}', ['as' => 'vendor-port-charge.change-status', 'uses' => 'VendorPortChargeController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Specification master
             Route::group(['module' => 'vendor_specification', 'icon' => 'fa-list-alt'], function () {
                 Route::get('vendor-flow/specifications', ['as' => 'vendor-specifications', 'uses' => 'VendorSpecificationController@index', 'action' => 'view']);
