@@ -227,6 +227,28 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/port-charges/change-status/{id}', ['as' => 'vendor-port-charge.change-status', 'uses' => 'VendorPortChargeController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Cartoon Type master
+            Route::group(['module' => 'cartoon_type', 'icon' => 'fa-square-o'], function () {
+                Route::get('vendor-flow/cartoon-types', ['as' => 'cartoon-types', 'uses' => 'CartoonTypeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/cartoon-types/create', ['as' => 'create.cartoon-type', 'uses' => 'CartoonTypeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/cartoon-types/save', ['as' => 'save.cartoon-type', 'uses' => 'CartoonTypeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/cartoon-types/edit/{id}', ['as' => 'edit.cartoon-type', 'uses' => 'CartoonTypeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/cartoon-types/update/{id}', ['as' => 'update.cartoon-type', 'uses' => 'CartoonTypeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/cartoon-types/delete/{id}', ['as' => 'delete.cartoon-type', 'uses' => 'CartoonTypeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/cartoon-types/change-status/{id}', ['as' => 'cartoon-type.change-status', 'uses' => 'CartoonTypeController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Cylinder Type master
+            Route::group(['module' => 'cylinder_type', 'icon' => 'fa-circle-o'], function () {
+                Route::get('vendor-flow/cylinder-types', ['as' => 'cylinder-types', 'uses' => 'CylinderTypeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/cylinder-types/create', ['as' => 'create.cylinder-type', 'uses' => 'CylinderTypeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/cylinder-types/save', ['as' => 'save.cylinder-type', 'uses' => 'CylinderTypeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/cylinder-types/edit/{id}', ['as' => 'edit.cylinder-type', 'uses' => 'CylinderTypeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/cylinder-types/update/{id}', ['as' => 'update.cylinder-type', 'uses' => 'CylinderTypeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/cylinder-types/delete/{id}', ['as' => 'delete.cylinder-type', 'uses' => 'CylinderTypeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/cylinder-types/change-status/{id}', ['as' => 'cylinder-type.change-status', 'uses' => 'CylinderTypeController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Specification master
             Route::group(['module' => 'vendor_specification', 'icon' => 'fa-list-alt'], function () {
                 Route::get('vendor-flow/specifications', ['as' => 'vendor-specifications', 'uses' => 'VendorSpecificationController@index', 'action' => 'view']);
