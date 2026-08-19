@@ -19,7 +19,7 @@
                 <div>
                     <a class="btn btn-success"
                        href="{{ request()->fullUrlWithQuery(['from' => $from, 'to' => $to, 'crop_year' => $cropYear, 'export' => 'csv', 'page' => null]) }}">
-                        <i class="fa fa-download"></i> Export CSV (Full)
+                        <i class="fa fa-download"></i> Export CSV (Latest)
                     </a>
                 </div>
             </div>

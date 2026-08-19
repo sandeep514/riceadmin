@@ -59,25 +59,63 @@ class ReportController extends Controller
             $query->where('live_prices.cropYear', (int) $cropYear);
         }
 
-        // Full export (CSV) with all matching rows, ignoring pagination
+        // CSV: one latest row per name + form + state + crop year (by created_at, then id)
         if (!empty($export) && $export === 'csv') {
             @set_time_limit(0);
 
             $filename = 'live_prices_' . ($from ?? 'start') . '_' . ($to ?? 'end') . ($cropYear ? '_'.$cropYear : '') . '.csv';
 
-            // Stream in chunks so large date ranges do not exhaust memory
-            $exportQuery = $query->clone()->select([
-                'live_prices.id',
-                'live_prices.state',
-                'live_prices.created_at',
-                'live_prices.cropYear',
-                'live_prices.min_price',
-                'live_prices.max_price',
-                'live_prices.opening',
-                'live_prices.closing',
-                'rice_names.name as rice_name',
-                DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name'),
-            ]);
+            $latestPerGroup = LivePrice::query()
+                ->select([
+                    'name',
+                    'form',
+                    'state',
+                    'cropYear',
+                    DB::raw('MAX(created_at) as max_created'),
+                ])
+                ->whereNotNull('name')
+                ->whereNotNull('form')
+                ->where('name', '>', 0)
+                ->where('form', '>', 0);
+
+            if (!empty($from)) {
+                $latestPerGroup->where('created_at', '>=', Carbon::parse($from)->startOfDay());
+            }
+            if (!empty($to)) {
+                $latestPerGroup->where('created_at', '<=', Carbon::parse($to)->endOfDay());
+            }
+            if (!empty($cropYear)) {
+                $latestPerGroup->where('cropYear', (int) $cropYear);
+            }
+
+            $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear');
+
+            $latestIds = LivePrice::query()
+                ->from('live_prices as lp')
+                ->selectRaw('MAX(lp.id) as id')
+                ->joinSub($latestPerGroup, 'latest', function ($join) {
+                    $join->on('lp.name', '=', 'latest.name')
+                        ->on('lp.form', '=', 'latest.form')
+                        ->on('lp.state', '=', 'latest.state')
+                        ->on('lp.created_at', '=', 'latest.max_created')
+                        ->whereRaw('lp.cropYear <=> latest.cropYear');
+                })
+                ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear');
+
+            $exportQuery = $query->clone()
+                ->whereIn('live_prices.id', $latestIds)
+                ->select([
+                    'live_prices.id',
+                    'live_prices.state',
+                    'live_prices.created_at',
+                    'live_prices.cropYear',
+                    'live_prices.min_price',
+                    'live_prices.max_price',
+                    'live_prices.opening',
+                    'live_prices.closing',
+                    'rice_names.name as rice_name',
+                    DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name'),
+                ]);
 
             return response()->streamDownload(function () use ($exportQuery) {
                 $out = fopen('php://output', 'w');
