@@ -18,7 +18,7 @@
                 <h3 class="box-title">Filter</h3>
                 <div>
                     <a class="btn btn-success"
-                       href="{{ request()->fullUrlWithQuery(['from' => $from, 'to' => $to, 'crop_year' => $cropYear, 'name' => $nameId, 'form' => $formId, 'state' => $state, 'export' => 'csv', 'page' => null]) }}">
+                       href="{{ request()->fullUrlWithQuery(['from' => $from, 'to' => $to, 'crop_year' => $cropYear, 'name' => $nameId, 'form' => $formId, 'state' => $state, 'hide_empty_prices' => !empty($hideEmptyPrices) ? 1 : null, 'export' => 'csv', 'page' => null]) }}">
                         <i class="fa fa-download"></i> Export CSV (Full)
                     </a>
                 </div>
@@ -74,6 +74,12 @@
                                 @endif
                             </select>
                         </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 10px;">
+                        <label style="font-weight: normal;">
+                            <input type="checkbox" name="hide_empty_prices" value="1" {{ !empty($hideEmptyPrices) ? 'checked' : '' }}>
+                            Hide rows where min price or max price is empty or 0
+                        </label>
                     </div>
                     <button type="submit" class="btn btn-primary">Apply</button>
                     <a href="{{ route('reports.live-prices') }}" class="btn btn-default">Reset</a>

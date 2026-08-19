@@ -17,6 +17,7 @@ class ReportController extends Controller
         $nameId = $request->get('name');
         $formId = $request->get('form');
         $state = $request->get('state');
+        $hideEmptyPrices = $request->boolean('hide_empty_prices');
         $export = $request->get('export');
 
         // Default to today's records when no dates are provided
@@ -49,10 +50,10 @@ class ReportController extends Controller
                 DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name')
             ]);
 
-        $this->applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, 'live_prices');
+        $this->applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, $hideEmptyPrices, 'live_prices');
 
         // One latest row per name + form + state + crop year + date
-        $query->whereIn('live_prices.id', $this->latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state));
+        $query->whereIn('live_prices.id', $this->latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state, $hideEmptyPrices));
 
         // Full export (CSV) with filtered latest rows, ignoring pagination
         if (!empty($export) && $export === 'csv') {
@@ -146,10 +147,11 @@ class ReportController extends Controller
             'nameId' => $nameId,
             'formId' => $formId,
             'state' => $state,
+            'hideEmptyPrices' => $hideEmptyPrices,
         ]);
     }
 
-    private function applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, string $table = 'live_prices')
+    private function applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, bool $hideEmptyPrices, string $table = 'live_prices')
     {
         $prefix = $table !== '' ? $table.'.' : '';
 
@@ -171,12 +173,18 @@ class ReportController extends Controller
         if ($state !== null && $state !== '') {
             $query->where($prefix.'state', $state);
         }
+        if ($hideEmptyPrices) {
+            $minCol = $prefix.'min_price';
+            $maxCol = $prefix.'max_price';
+            $query->whereRaw("CAST(COALESCE(NULLIF(TRIM({$minCol}), ''), '0') AS DECIMAL(18,4)) > 0")
+                ->whereRaw("CAST(COALESCE(NULLIF(TRIM({$maxCol}), ''), '0') AS DECIMAL(18,4)) > 0");
+        }
     }
 
     /**
      * Latest live_prices.id for each name + form + state + crop year + calendar date.
      */
-    private function latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state)
+    private function latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state, bool $hideEmptyPrices)
     {
         $latestPerGroup = LivePrice::query()
             ->select([
@@ -192,7 +200,7 @@ class ReportController extends Controller
             ->where('name', '>', 0)
             ->where('form', '>', 0);
 
-        $this->applyLivePriceReportFilters($latestPerGroup, $from, $to, $cropYear, $nameId, $formId, $state, '');
+        $this->applyLivePriceReportFilters($latestPerGroup, $from, $to, $cropYear, $nameId, $formId, $state, $hideEmptyPrices, '');
 
         $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear', DB::raw('DATE(created_at)'));
 
