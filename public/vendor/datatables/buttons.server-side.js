@@ -1,6 +1,13 @@
 (function ($, DataTable) {
     "use strict";
 
+    if (!DataTable || !DataTable.ext) {
+        return;
+    }
+    if (!DataTable.ext.buttons) {
+        DataTable.ext.buttons = {};
+    }
+
     var _buildParams = function (dt, action, onlyVisibles) {
         var params = dt.ajax.params();
         params.action = action;
