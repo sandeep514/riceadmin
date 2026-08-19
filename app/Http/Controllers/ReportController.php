@@ -59,7 +59,7 @@ class ReportController extends Controller
             $query->where('live_prices.cropYear', (int) $cropYear);
         }
 
-        // CSV: one latest row per name + form + state + crop year (by created_at, then id)
+        // CSV: every filtered day, latest row per name + form + state + crop year + date
         if (!empty($export) && $export === 'csv') {
             @set_time_limit(0);
 
@@ -71,6 +71,7 @@ class ReportController extends Controller
                     'form',
                     'state',
                     'cropYear',
+                    DB::raw('DATE(created_at) as price_date'),
                     DB::raw('MAX(created_at) as max_created'),
                 ])
                 ->whereNotNull('name')
@@ -88,7 +89,7 @@ class ReportController extends Controller
                 $latestPerGroup->where('cropYear', (int) $cropYear);
             }
 
-            $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear');
+            $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear', DB::raw('DATE(created_at)'));
 
             $latestIds = LivePrice::query()
                 ->from('live_prices as lp')
@@ -98,9 +99,10 @@ class ReportController extends Controller
                         ->on('lp.form', '=', 'latest.form')
                         ->on('lp.state', '=', 'latest.state')
                         ->on('lp.created_at', '=', 'latest.max_created')
-                        ->whereRaw('lp.cropYear <=> latest.cropYear');
+                        ->whereRaw('lp.cropYear <=> latest.cropYear')
+                        ->whereRaw('DATE(lp.created_at) = latest.price_date');
                 })
-                ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear');
+                ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear', DB::raw('DATE(lp.created_at)'));
 
             $exportQuery = $query->clone()
                 ->whereIn('live_prices.id', $latestIds)
