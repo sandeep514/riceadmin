@@ -49,35 +49,17 @@ class ReportController extends Controller
                 DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name')
             ]);
 
-        if (!empty($from)) {
-            $fromDate = Carbon::parse($from)->startOfDay();
-            $query->where('live_prices.created_at', '>=', $fromDate);
-        }
-        if (!empty($to)) {
-            $toDate = Carbon::parse($to)->endOfDay();
-            $query->where('live_prices.created_at', '<=', $toDate);
-        }
+        $this->applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, 'live_prices');
 
-        if (!empty($cropYear)) {
-            $query->where('live_prices.cropYear', (int) $cropYear);
-        }
-        if (!empty($nameId)) {
-            $query->where('live_prices.name', (int) $nameId);
-        }
-        if (!empty($formId)) {
-            $query->where('live_prices.form', (int) $formId);
-        }
-        if ($state !== null && $state !== '') {
-            $query->where('live_prices.state', $state);
-        }
+        // One latest row per name + form + state + crop year + date
+        $query->whereIn('live_prices.id', $this->latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state));
 
-        // Full export (CSV) with all matching rows, ignoring pagination
+        // Full export (CSV) with filtered latest rows, ignoring pagination
         if (!empty($export) && $export === 'csv') {
             @set_time_limit(0);
 
             $filename = 'live_prices_' . ($from ?? 'start') . '_' . ($to ?? 'end') . ($cropYear ? '_'.$cropYear : '') . '.csv';
 
-            // Stream in chunks so large date ranges do not exhaust memory
             $exportQuery = $query->clone()->select([
                 'live_prices.id',
                 'live_prices.state',
@@ -165,5 +147,66 @@ class ReportController extends Controller
             'formId' => $formId,
             'state' => $state,
         ]);
+    }
+
+    private function applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, string $table = 'live_prices')
+    {
+        $prefix = $table !== '' ? $table.'.' : '';
+
+        if (!empty($from)) {
+            $query->where($prefix.'created_at', '>=', Carbon::parse($from)->startOfDay());
+        }
+        if (!empty($to)) {
+            $query->where($prefix.'created_at', '<=', Carbon::parse($to)->endOfDay());
+        }
+        if (!empty($cropYear)) {
+            $query->where($prefix.'cropYear', (int) $cropYear);
+        }
+        if (!empty($nameId)) {
+            $query->where($prefix.'name', (int) $nameId);
+        }
+        if (!empty($formId)) {
+            $query->where($prefix.'form', (int) $formId);
+        }
+        if ($state !== null && $state !== '') {
+            $query->where($prefix.'state', $state);
+        }
+    }
+
+    /**
+     * Latest live_prices.id for each name + form + state + crop year + calendar date.
+     */
+    private function latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state)
+    {
+        $latestPerGroup = LivePrice::query()
+            ->select([
+                'name',
+                'form',
+                'state',
+                'cropYear',
+                DB::raw('DATE(created_at) as price_date'),
+                DB::raw('MAX(created_at) as max_created'),
+            ])
+            ->whereNotNull('name')
+            ->whereNotNull('form')
+            ->where('name', '>', 0)
+            ->where('form', '>', 0);
+
+        $this->applyLivePriceReportFilters($latestPerGroup, $from, $to, $cropYear, $nameId, $formId, $state, '');
+
+        $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear', DB::raw('DATE(created_at)'));
+
+        return LivePrice::query()
+            ->from('live_prices as lp')
+            ->selectRaw('MAX(lp.id) as id')
+            ->joinSub($latestPerGroup, 'latest', function ($join) {
+                $join->on('lp.name', '=', 'latest.name')
+                    ->on('lp.form', '=', 'latest.form')
+                    ->on('lp.state', '=', 'latest.state')
+                    ->on('lp.created_at', '=', 'latest.max_created')
+                    ->whereRaw('lp.cropYear <=> latest.cropYear')
+                    ->whereRaw('DATE(lp.created_at) = latest.price_date');
+            })
+            ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear', DB::raw('DATE(lp.created_at)'));
     }
 }
