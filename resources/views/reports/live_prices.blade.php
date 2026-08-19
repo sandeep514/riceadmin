@@ -18,35 +18,65 @@
                 <h3 class="box-title">Filter</h3>
                 <div>
                     <a class="btn btn-success"
-                       href="{{ request()->fullUrlWithQuery(['from' => $from, 'to' => $to, 'crop_year' => $cropYear, 'export' => 'csv', 'page' => null]) }}">
-                        <i class="fa fa-download"></i> Export CSV
+                       href="{{ request()->fullUrlWithQuery(['from' => $from, 'to' => $to, 'crop_year' => $cropYear, 'name' => $nameId, 'form' => $formId, 'state' => $state, 'export' => 'csv', 'page' => null]) }}">
+                        <i class="fa fa-download"></i> Export CSV (Full)
                     </a>
                 </div>
             </div>
             <div class="box-body">
-                <form method="GET" action="{{ request()->url() }}" class="form-inline">
-                    <div class="form-group">
-                        <label for="from">From</label>
-                        <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">
-                    </div>
-                    <div class="form-group" style="margin-left:10px;">
-                        <label for="to">To</label>
-                        <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
-                    </div>
-                    <div class="form-group" style="margin-left:10px;">
-                        <label for="crop_year">Crop Year</label>
-                        <select id="crop_year" name="crop_year" class="form-control">
-                            <option value="">All</option>
-                            @if(!empty($cropYears))
-                                @foreach($cropYears as $y)
-                                    <option value="{{ $y }}" {{ (isset($cropYear) && (int)$cropYear === (int)$y) ? 'selected' : '' }}>
-                                        {{ $y }}
-                                    </option>
+                <form method="GET" action="{{ request()->url() }}">
+                    <div class="row">
+                        <div class="form-group col-md-2">
+                            <label for="from">From</label>
+                            <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="to">To</label>
+                            <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="name">Name</label>
+                            <select id="name" name="name" class="form-control select2">
+                                <option value="">All</option>
+                                @foreach($riceNames as $id => $label)
+                                    <option value="{{ $id }}" {{ (string) ($nameId ?? '') === (string) $id ? 'selected' : '' }}>{{ $label }}</option>
                                 @endforeach
-                            @endif
-                        </select>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="form">Form</label>
+                            <select id="form" name="form" class="form-control select2">
+                                <option value="">All</option>
+                                @foreach($riceForms as $id => $label)
+                                    <option value="{{ $id }}" {{ (string) ($formId ?? '') === (string) $id ? 'selected' : '' }}>{{ $label }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="state">State</label>
+                            <select id="state" name="state" class="form-control select2">
+                                <option value="">All</option>
+                                @foreach($states as $stateName)
+                                    <option value="{{ $stateName }}" {{ (string) ($state ?? '') === (string) $stateName ? 'selected' : '' }}>{{ $stateName }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="crop_year">Crop Year</label>
+                            <select id="crop_year" name="crop_year" class="form-control">
+                                <option value="">All</option>
+                                @if(!empty($cropYears))
+                                    @foreach($cropYears as $y)
+                                        <option value="{{ $y }}" {{ (isset($cropYear) && (int)$cropYear === (int)$y) ? 'selected' : '' }}>
+                                            {{ $y }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="margin-left:10px;">Apply</button>
+                    <button type="submit" class="btn btn-primary">Apply</button>
+                    <a href="{{ route('reports.live-prices') }}" class="btn btn-default">Reset</a>
                 </form>
             </div>
         </div>

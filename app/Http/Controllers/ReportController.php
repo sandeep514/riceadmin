@@ -14,6 +14,9 @@ class ReportController extends Controller
         $from = $request->get('from');
         $to   = $request->get('to');
         $cropYear = $request->get('crop_year');
+        $nameId = $request->get('name');
+        $formId = $request->get('form');
+        $state = $request->get('state');
         $export = $request->get('export');
 
         // Default to today's records when no dates are provided
@@ -58,66 +61,35 @@ class ReportController extends Controller
         if (!empty($cropYear)) {
             $query->where('live_prices.cropYear', (int) $cropYear);
         }
+        if (!empty($nameId)) {
+            $query->where('live_prices.name', (int) $nameId);
+        }
+        if (!empty($formId)) {
+            $query->where('live_prices.form', (int) $formId);
+        }
+        if ($state !== null && $state !== '') {
+            $query->where('live_prices.state', $state);
+        }
 
-        // CSV: every filtered day, latest row per name + form + state + crop year + date
+        // Full export (CSV) with all matching rows, ignoring pagination
         if (!empty($export) && $export === 'csv') {
             @set_time_limit(0);
 
             $filename = 'live_prices_' . ($from ?? 'start') . '_' . ($to ?? 'end') . ($cropYear ? '_'.$cropYear : '') . '.csv';
 
-            $latestPerGroup = LivePrice::query()
-                ->select([
-                    'name',
-                    'form',
-                    'state',
-                    'cropYear',
-                    DB::raw('DATE(created_at) as price_date'),
-                    DB::raw('MAX(created_at) as max_created'),
-                ])
-                ->whereNotNull('name')
-                ->whereNotNull('form')
-                ->where('name', '>', 0)
-                ->where('form', '>', 0);
-
-            if (!empty($from)) {
-                $latestPerGroup->where('created_at', '>=', Carbon::parse($from)->startOfDay());
-            }
-            if (!empty($to)) {
-                $latestPerGroup->where('created_at', '<=', Carbon::parse($to)->endOfDay());
-            }
-            if (!empty($cropYear)) {
-                $latestPerGroup->where('cropYear', (int) $cropYear);
-            }
-
-            $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear', DB::raw('DATE(created_at)'));
-
-            $latestIds = LivePrice::query()
-                ->from('live_prices as lp')
-                ->selectRaw('MAX(lp.id) as id')
-                ->joinSub($latestPerGroup, 'latest', function ($join) {
-                    $join->on('lp.name', '=', 'latest.name')
-                        ->on('lp.form', '=', 'latest.form')
-                        ->on('lp.state', '=', 'latest.state')
-                        ->on('lp.created_at', '=', 'latest.max_created')
-                        ->whereRaw('lp.cropYear <=> latest.cropYear')
-                        ->whereRaw('DATE(lp.created_at) = latest.price_date');
-                })
-                ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear', DB::raw('DATE(lp.created_at)'));
-
-            $exportQuery = $query->clone()
-                ->whereIn('live_prices.id', $latestIds)
-                ->select([
-                    'live_prices.id',
-                    'live_prices.state',
-                    'live_prices.created_at',
-                    'live_prices.cropYear',
-                    'live_prices.min_price',
-                    'live_prices.max_price',
-                    'live_prices.opening',
-                    'live_prices.closing',
-                    'rice_names.name as rice_name',
-                    DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name'),
-                ]);
+            // Stream in chunks so large date ranges do not exhaust memory
+            $exportQuery = $query->clone()->select([
+                'live_prices.id',
+                'live_prices.state',
+                'live_prices.created_at',
+                'live_prices.cropYear',
+                'live_prices.min_price',
+                'live_prices.max_price',
+                'live_prices.opening',
+                'live_prices.closing',
+                'rice_names.name as rice_name',
+                DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as rice_form_name'),
+            ]);
 
             return response()->streamDownload(function () use ($exportQuery) {
                 $out = fopen('php://output', 'w');
@@ -148,12 +120,50 @@ class ReportController extends Controller
         // Paginated table for screen
         $rows = $query->orderBy('live_prices.created_at', 'desc')->paginate(50)->withQueryString();
 
+        $riceNames = LivePrice::query()
+            ->join('rice_names', 'live_prices.name', '=', 'rice_names.id')
+            ->where('live_prices.name', '>', 0)
+            ->select('rice_names.id', 'rice_names.name')
+            ->distinct()
+            ->orderBy('rice_names.name')
+            ->pluck('rice_names.name', 'rice_names.id');
+
+        $riceForms = LivePrice::query()
+            ->leftJoin('rice_forms', 'live_prices.form', '=', 'rice_forms.id')
+            ->leftJoin('rice_form_milestone3 as rfm3', 'live_prices.form', '=', 'rfm3.id')
+            ->where('live_prices.form', '>', 0)
+            ->select([
+                'live_prices.form as id',
+                DB::raw('COALESCE(rice_forms.form_name, rfm3.name) as form_name'),
+            ])
+            ->distinct()
+            ->orderBy('form_name')
+            ->get()
+            ->filter(function ($row) {
+                return ! empty($row->form_name);
+            })
+            ->pluck('form_name', 'id');
+
+        $states = LivePrice::query()
+            ->whereNotNull('state')
+            ->where('state', '!=', '')
+            ->select('state')
+            ->distinct()
+            ->orderBy('state')
+            ->pluck('state');
+
         return view('reports.live_prices', [
             'rows' => $rows,
             'from' => $from,
             'to'   => $to,
             'cropYears' => $cropYears,
-            'cropYear' => $cropYear
+            'cropYear' => $cropYear,
+            'riceNames' => $riceNames,
+            'riceForms' => $riceForms,
+            'states' => $states,
+            'nameId' => $nameId,
+            'formId' => $formId,
+            'state' => $state,
         ]);
     }
 }
