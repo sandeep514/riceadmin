@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\DatabaseBackupLog;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\URL;
@@ -37,5 +39,27 @@ class AppServiceProvider extends ServiceProvider
             }
         }
         Schema::defaultStringLength(191);
+
+        View::composer('components.header', function ($view) {
+            $last = null;
+            $overdue = false;
+            $daysAgo = null;
+
+            try {
+                $last = DatabaseBackupLog::lastDownload();
+                $overdue = DatabaseBackupLog::isOverdue($last);
+                $daysAgo = DatabaseBackupLog::daysSinceLastDownload($last);
+            } catch (\Throwable $e) {
+                $last = null;
+                $overdue = false;
+                $daysAgo = null;
+            }
+
+            $view->with([
+                'backupOverdue' => $overdue,
+                'lastBackupAt' => $last?->downloaded_at,
+                'lastBackupDaysAgo' => $daysAgo,
+            ]);
+        });
     }
 }

@@ -12,7 +12,24 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
             <span class="sr-only">Toggle navigation</span>
         </a>
-              
+        @if(!empty($backupOverdue))
+            <div class="backup-overdue-banner">
+                <i class="fa fa-exclamation-triangle"></i>
+                <strong>Database backup overdue.</strong>
+                @if(!empty($lastBackupAt))
+                    Last backup was {{ (int) $lastBackupDaysAgo }} day{{ (int) $lastBackupDaysAgo === 1 ? '' : 's' }} ago
+                    ({{ $lastBackupAt->format('d M Y H:i') }}).
+                @else
+                    No backup has been downloaded yet.
+                @endif
+                @if(auth()->check() && (int) auth()->user()->role === 2)
+                    <a href="{{ route('database.backup.download') }}">Download now</a>
+                @else
+                    Please download a backup from the dashboard.
+                @endif
+            </div>
+        @endif
+
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
                 <!-- User Account: style can be found in dropdown.less -->
@@ -50,6 +67,43 @@
         </div>
     </nav>
 </header>
+<style>
+    .backup-overdue-banner {
+        display: inline-block;
+        vertical-align: middle;
+        margin: 8px 12px;
+        padding: 7px 14px;
+        max-width: calc(100% - 280px);
+        background: #f39c12;
+        color: #111;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 3px;
+        box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.35);
+        animation: backup-overdue-pulse 1.6s ease-in-out infinite;
+    }
+    .backup-overdue-banner a {
+        color: #111;
+        text-decoration: underline;
+        margin-left: 6px;
+        font-weight: 700;
+    }
+    .backup-overdue-banner i {
+        margin-right: 6px;
+    }
+    @keyframes backup-overdue-pulse {
+        0%, 100% { background: #f39c12; }
+        50% { background: #ffb84d; }
+    }
+    @media (max-width: 767px) {
+        .backup-overdue-banner {
+            display: block;
+            max-width: none;
+            margin: 0 10px 8px;
+            white-space: normal;
+        }
+    }
+</style>
 {{-- <script>
     const toggleBtn = document.querySelector("a[data-toggle='push-menu']")
     const body = document.querySelector("body")

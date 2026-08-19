@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DatabaseBackupLog;
 use Illuminate\Support\Facades\Session;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -89,6 +90,8 @@ class DatabaseBackupController extends Controller
                 return redirect()->route('home');
             }
 
+            $this->logDownload($filename);
+
             return response()->download($dumpFile, $filename, [
                 'Content-Type' => 'application/octet-stream',
             ])->deleteFileAfterSend(true);
@@ -110,7 +113,22 @@ class DatabaseBackupController extends Controller
 
         $filename = 'db_backup_' . date('Y-m-d_His') . '.sqlite';
 
+        $this->logDownload($filename);
+
         return response()->download($path, $filename);
+    }
+
+    private function logDownload(string $filename): void
+    {
+        try {
+            DatabaseBackupLog::create([
+                'user_id' => auth()->id(),
+                'filename' => $filename,
+                'downloaded_at' => now(),
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
     /**

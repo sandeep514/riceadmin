@@ -17,6 +17,16 @@
                     <a href="{{ route('database.backup.download') }}" class="btn btn-default btn-sm" style="margin-right: 8px;">
                         <i class="fa fa-download"></i> Download database backup
                     </a>
+                    @php
+                        $dashboardLastBackup = \App\DatabaseBackupLog::lastDownload();
+                    @endphp
+                    @if($dashboardLastBackup)
+                        <span class="text-muted" style="margin-right: 10px;">
+                            Last backup: {{ $dashboardLastBackup->downloaded_at->format('d M Y H:i') }}
+                        </span>
+                    @else
+                        <span class="text-muted" style="margin-right: 10px;">No backup downloaded yet</span>
+                    @endif
                 @endif
                 {!! Form::open(['route' => 'send.reverb.notification', 'method' => 'POST', 'style' => 'display:inline-block;']) !!}
                     <input type="number" name="user_id" class="form-control" style="display:inline-block; width: 120px; margin-right: 8px;" placeholder="User ID (mobile)" value="" min="1">
