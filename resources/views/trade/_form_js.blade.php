@@ -73,7 +73,7 @@
         })();
         @endif
 
-        const packingLists = @json($packingLists ?? ['1' => [], '2' => [], '3' => [], '4' => []]);
+        const packingLists = @json($packingLists ?? []);
 
         function fillPackingSelect(tradeType, selectedId) {
             const list = packingLists[String(tradeType)] || packingLists['1'] || [];
