@@ -130,10 +130,17 @@
                                                     <td>{{ ($v->stateLinkWithLivePrice )?? '--'}}</td>
                                                     <td>{{ $v->riceGrade?->getWandType?->type ?? '--' }} {{ $v->riceGrade?->value ?? '--' }}</td>
                                                     @php
-                                                        $rowPackings = ((int) $v->tradeType === 2) ? $buyerPackings : $sellerPackings;
-                                                        $currentPackingLabel = ((int) $v->tradeType === 2)
-                                                            ? trim((optional($v->RicePackingBuyer)->packing ?? '').' '.(optional($v->RicePackingBuyer)->description ?? ''))
-                                                            : trim((string) (optional($v->RicePackingSeller)->description ?? ''));
+                                                        $isBranded = (int) ($v->packingStreamType ?? 1) === 2;
+                                                        $rowPackings = $isBranded
+                                                            ? $publicPackings
+                                                            : (((int) $v->tradeType === 2) ? $buyerPackings : $sellerPackings);
+                                                        if ($isBranded) {
+                                                            $currentPackingLabel = \App\TradeQueriesINR::packingLabel($v->RicePackingPublic ?: (object) []);
+                                                        } else {
+                                                            $currentPackingLabel = ((int) $v->tradeType === 2)
+                                                                ? trim((optional($v->RicePackingBuyer)->packing ?? '').' '.(optional($v->RicePackingBuyer)->description ?? ''))
+                                                                : trim((string) (optional($v->RicePackingSeller)->description ?? ''));
+                                                        }
                                                         if ($currentPackingLabel === '') {
                                                             $currentPackingLabel = optional($rowPackings->firstWhere('id', (int) $v->packing))->label ?? '--';
                                                         }

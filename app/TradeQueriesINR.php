@@ -9,6 +9,7 @@ use App\QualityMaster;
 use App\WandModel;
 use App\SellerPackingINR;
 use App\Buyerpackinginr;
+use App\PublicPacking;
 use App\TradeLike;
 
 class TradeQueriesINR extends Model
@@ -151,6 +152,28 @@ class TradeQueriesINR extends Model
         });
     }
 
+    public static function publicPackingOptions()
+    {
+        return PublicPacking::query()
+            ->orderByRaw('`order` IS NULL, `order` ASC')
+            ->orderBy('id')
+            ->get()
+            ->map(function ($row) {
+                $row->label = self::packingLabel($row);
+
+                return $row;
+            });
+    }
+
+    public static function packingOptionsForTrade($tradeType, $packingStreamType = 1)
+    {
+        if ((int) $packingStreamType === 2) {
+            return self::publicPackingOptions();
+        }
+
+        return self::packingOptionsForTradeType($tradeType);
+    }
+
     public static function packingListsForJs(): array
     {
         $toJs = function ($rows) {
@@ -164,12 +187,16 @@ class TradeQueriesINR extends Model
 
         $buy = $toJs(self::packingOptionsForTradeType(1));
         $sell = $toJs(self::packingOptionsForTradeType(2));
+        $branded = $toJs(self::publicPackingOptions());
 
         return [
-            '1' => $buy,
-            '2' => $sell,
-            '3' => $buy,
-            '4' => $buy,
+            'bulk' => [
+                '1' => $buy,
+                '2' => $sell,
+                '3' => $buy,
+                '4' => $buy,
+            ],
+            'branded' => $branded,
         ];
     }
     public function RicePackingBuyer()
@@ -179,6 +206,11 @@ class TradeQueriesINR extends Model
     public function RicePackingSeller()
     {
         return $this->belongsTo(SellerPackingINR::class , 'packing', 'id');
+    }
+
+    public function RicePackingPublic()
+    {
+        return $this->belongsTo(PublicPacking::class, 'packing', 'id');
     }
 
     public function TradeLike()

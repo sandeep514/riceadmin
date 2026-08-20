@@ -73,10 +73,19 @@
         })();
         @endif
 
-        const packingLists = @json($packingLists ?? []);
+        const packingLists = @json($packingLists ?? ['bulk' => [], 'branded' => []]);
+
+        function currentPackingList(tradeType, streamType) {
+            if (String(streamType) === '2') {
+                return packingLists.branded || [];
+            }
+            const bulk = packingLists.bulk || {};
+            return bulk[String(tradeType)] || bulk['1'] || [];
+        }
 
         function fillPackingSelect(tradeType, selectedId) {
-            const list = packingLists[String(tradeType)] || packingLists['1'] || [];
+            const streamType = $('select[name=packingStreamType]').val() || '1';
+            const list = currentPackingList(tradeType || $('select[name=tradeType]').val() || '1', streamType);
             const $sel = $("select[name=ricepacking]");
             const current = selectedId || $sel.val() || '';
             $sel.html('<option value=""> Select </option>');
@@ -86,20 +95,15 @@
             }
         }
 
-        $('select[name=tradeType]').change(function(event){
+        $('select[name=tradeType], select[name=packingStreamType]').change(function(){
             let tradeType = $('select[name=tradeType] :selected').val();
-            if (!tradeType) {
-                return;
-            }
             const selectedPacking = convertPrefill && convertPrefill.ricepacking != null && convertPrefill.ricepacking !== ''
                 ? String(convertPrefill.ricepacking)
                 : ($("select[name=ricepacking]").val() || '');
             fillPackingSelect(tradeType, selectedPacking);
         })
 
-        if ($('select[name=tradeType]').val()) {
-            $('select[name=tradeType]').trigger('change');
-        }
+        fillPackingSelect($('select[name=tradeType]').val() || '1', convertPrefill && convertPrefill.ricepacking ? String(convertPrefill.ricepacking) : ($("select[name=ricepacking]").val() || ''));
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
             console.log(riceCategory)

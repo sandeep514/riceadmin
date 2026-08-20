@@ -342,28 +342,39 @@
     $(document).ready(function() {
         const apiBase = @json(url('/api'));
         const currentPackingId = @json((string) ($tradequeriesinr->packing ?? ''));
+        const packingLists = @json($packingLists ?? ['bulk' => [], 'branded' => []]);
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
         @include('trade._prevent_double_submit_js')
         @include('trade._media_clear_js')
-        $('select[name=tradeType]').change(function(){
-            let tradeType = $('select[name=tradeType] :selected').val();
-            if (!tradeType) {
-                return;
+        function currentPackingList(tradeType, streamType) {
+            if (String(streamType) === '2') {
+                return packingLists.branded || [];
             }
-            const selectedPacking = $('select[name=ricepacking]').val() || currentPackingId;
-            $.ajax({
-                url : apiBase + '/get/packing/by/' + tradeType,
-                success : function (res){
-                    $("select[name=ricepacking]").html('');
-                    $("select[name=ricepacking]").append('<option value=""> Select </option>');
-                    for(let i = 0; i < res.data.length ; i++){
-                        const optionSelected = selectedPacking !== '' && String(res.data[i].id) === String(selectedPacking) ? 'selected' : '';
-                        const label = res.data[i].label || $.trim((res.data[i].packing || '') + ' ' + (res.data[i].description || ''));
-                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'" '+optionSelected+'> '+label+' </option>');
-                    }
+            const bulk = packingLists.bulk || {};
+            return bulk[String(tradeType)] || bulk['1'] || [];
+        }
+        function fillPackingSelect(selectedId) {
+            const tradeType = $('select[name=tradeType]').val() || '1';
+            const streamType = $('select[name=packingStreamType]').val() || '1';
+            const list = currentPackingList(tradeType, streamType);
+            const $sel = $("select[name=ricepacking]");
+            const current = selectedId || $sel.val() || currentPackingId || '';
+            $sel.html('<option value=""> Select </option>');
+            let found = false;
+            for (let i = 0; i < list.length; i++) {
+                const optionSelected = current !== '' && String(list[i].id) === String(current) ? 'selected' : '';
+                if (optionSelected) {
+                    found = true;
                 }
-            });
+                $sel.append('<option value="'+list[i].id+'" '+optionSelected+'> '+(list[i].label || '')+' </option>');
+            }
+            if (current && !found) {
+                $sel.append('<option value="'+current+'" selected> Current packing </option>');
+            }
+        }
+        $('select[name=tradeType], select[name=packingStreamType]').change(function(){
+            fillPackingSelect($('select[name=ricepacking]').val() || currentPackingId);
         });
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();

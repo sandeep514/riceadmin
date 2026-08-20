@@ -48,6 +48,7 @@ class TradeController extends Controller
             'RiceFormMilestone3',
             'RicePackingBuyer',
             'RicePackingSeller',
+            'RicePackingPublic',
             'riceGrade' => function ($query) {
                 return $query->with('getWandType');
             }
@@ -71,8 +72,9 @@ class TradeController extends Controller
 
         $sellerPackings = TradeQueriesINR::packingOptionsForTradeType(1);
         $buyerPackings = TradeQueriesINR::packingOptionsForTradeType(2);
+        $publicPackings = TradeQueriesINR::publicPackingOptions();
 
-        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount','activeBuyCount','activeSellCount','sellerPackings','buyerPackings'));
+        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount','activeBuyCount','activeSellCount','sellerPackings','buyerPackings','publicPackings'));
     }
 
     public function purgeOldByStatus(Request $request)
@@ -254,13 +256,15 @@ class TradeController extends Controller
         $WandType = (WandTypeModel::pluck('id' , 'type'));
         $wandModel = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->orderBy('order' , 'ASC')->get();
 
-        // Same packing source as create (GET /api/get/packing/by/{tradeType}) and the trade list.
-        $packingType = TradeQueriesINR::packingOptionsForTradeType($tradeType);
+        $packingStreamType = $tradequeriesinr->packingStreamType ?? 1;
+        $packingType = TradeQueriesINR::packingOptionsForTrade($tradeType, $packingStreamType);
+        $packingLists = TradeQueriesINR::packingListsForJs();
 
-        // Keep currently saved packing selectable if it only exists on the public master
         $currentPackingId = $tradequeriesinr->packing ?? null;
         if ($currentPackingId && ! $packingType->contains('id', (int) $currentPackingId)) {
-            $fallback = PublicPacking::find($currentPackingId);
+            $fallback = PublicPacking::find($currentPackingId)
+                ?: SellerPackingINR::find($currentPackingId)
+                ?: Buyerpackinginr::find($currentPackingId);
             if ($fallback) {
                 $packingType = $packingType->push((object) [
                     'id' => $fallback->id,
@@ -274,7 +278,7 @@ class TradeController extends Controller
         $selectedTradeCategoryIds = TradeCategoryMap::where('trade_id', (int) $id)->where('status', 1)->pluck('category_id')->all();
         $webNotifyRoles = Role::where('type', 'web')->orderBy('role_name')->get(['id', 'role_name']);
 
-        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','WandType','livePricesStates','categoryList','selectedTradeCategoryIds','webNotifyRoles'));
+        return View('trade.edit' , compact('qualityMaster','tradequeriesinr','tradeType','type','riceNameId','riceName','riceForm','ricefm','wandModel','packingType','packingLists','WandType','livePricesStates','categoryList','selectedTradeCategoryIds','webNotifyRoles'));
 
     }
 
@@ -489,10 +493,9 @@ class TradeController extends Controller
             return response()->json(['status' => false, 'message' => 'Please select a packing.'], 422);
         }
 
-        $options = TradeQueriesINR::packingOptionsForTradeType($trade->tradeType);
+        $options = TradeQueriesINR::packingOptionsForTrade($trade->tradeType, $trade->packingStreamType ?? 1);
         $allowed = $options->contains('id', $packingId)
-            || (int) $trade->packing === $packingId
-            || PublicPacking::query()->where('id', $packingId)->exists();
+            || (int) $trade->packing === $packingId;
 
         if (! $allowed) {
             return response()->json(['status' => false, 'message' => 'Invalid packing for this trade type.'], 422);

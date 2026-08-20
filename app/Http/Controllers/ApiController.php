@@ -6025,6 +6025,7 @@ if (!file_exists('uploads')) {
                 },
                 'RicePackingBuyer',
                 'RicePackingSeller',
+                'RicePackingPublic',
             ])
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')
@@ -6368,7 +6369,8 @@ if (!file_exists('uploads')) {
                     $query->with('getWandType');
                 },
                 'RicePackingBuyer',
-                'RicePackingSeller'
+                'RicePackingSeller',
+                'RicePackingPublic'
             ])
             ->orderBy('id', 'DESC')
             ->withCount('TradeLikeAll')
@@ -6711,6 +6713,7 @@ if (!file_exists('uploads')) {
             },
             'RicePackingBuyer',
             'RicePackingSeller',
+            'RicePackingPublic',
         ];
     }
 
@@ -7361,7 +7364,8 @@ if (!file_exists('uploads')) {
             $trade->setAttribute('rice_packing', $this->resolveTradeRicePackingPayload($trade));
             $trade->unsetRelation('RicePackingBuyer');
             $trade->unsetRelation('RicePackingSeller');
-            $trade->makeHidden(['RicePackingBuyer', 'RicePackingSeller', 'rice_packing_buyer', 'rice_packing_seller']);
+            $trade->unsetRelation('RicePackingPublic');
+            $trade->makeHidden(['RicePackingBuyer', 'RicePackingSeller', 'rice_packing_buyer', 'rice_packing_seller', 'RicePackingPublic', 'rice_packing_public']);
 
             return $trade;
         });
@@ -7369,7 +7373,8 @@ if (!file_exists('uploads')) {
 
     /**
      * Resolve one packing payload for a trade.
-     * Sell (tradeType 2) → buyer packing table; otherwise seller packing table.
+     * Branded (packingStreamType 2) → public packing master.
+     * Bulk: Sell (tradeType 2) → buyer packing; otherwise seller packing.
      * Falls back to the other relation, then public packing master.
      *
      * @return array{id:int|null,packing:?string,description:?string,label:?string}|null
@@ -7377,13 +7382,23 @@ if (!file_exists('uploads')) {
     private function resolveTradeRicePackingPayload($trade): ?array
     {
         $tradeType = (int) ($trade->tradeType ?? 0);
+        $streamType = (int) ($trade->packingStreamType ?? 1);
         $buyer = $trade->relationLoaded('RicePackingBuyer') ? $trade->RicePackingBuyer : null;
         $seller = $trade->relationLoaded('RicePackingSeller') ? $trade->RicePackingSeller : null;
+        $public = $trade->relationLoaded('RicePackingPublic')
+            ? $trade->RicePackingPublic
+            : (! empty($trade->packing) ? PublicPacking::query()->find($trade->packing) : null);
 
-        // Same rule as admin trade list / packing-by-type API
-        $model = $tradeType === 2
-            ? ($buyer ?: $seller)
-            : ($seller ?: $buyer);
+        if ($streamType === 2) {
+            $model = $public ?: ($tradeType === 2 ? ($buyer ?: $seller) : ($seller ?: $buyer));
+        } else {
+            $model = $tradeType === 2
+                ? ($buyer ?: $seller)
+                : ($seller ?: $buyer);
+            if (! $model) {
+                $model = $public;
+            }
+        }
 
         if (! $model && ! empty($trade->packing)) {
             $model = PublicPacking::query()->find($trade->packing);
@@ -7393,9 +7408,9 @@ if (!file_exists('uploads')) {
             return null;
         }
 
+        $label = TradeQueriesINR::packingLabel($model);
         $packing = $model->packing ?? null;
         $description = $model->description ?? ($model->size ?? null);
-        $label = trim(($packing ?? '') . ' ' . ($description ?? ''));
         if ($label === '') {
             $label = null;
         }
@@ -7405,6 +7420,7 @@ if (!file_exists('uploads')) {
             'packing' => $packing,
             'description' => $description,
             'label' => $label,
+            'packing_stream_type' => $streamType,
         ];
     }
 
@@ -7542,6 +7558,7 @@ if (!file_exists('uploads')) {
                 },
                 'RicePackingBuyer',
                 'RicePackingSeller',
+                'RicePackingPublic',
             ])
             ->withCount('TradeLikeAll')
             ->get();
@@ -7847,13 +7864,15 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $news], 200);
     }
 
-    public function getPackingByTradeType($tradeType)
+    public function getPackingByTradeType(Request $request, $tradeType)
     {
-        $packingType = TradeQueriesINR::packingOptionsForTradeType($tradeType)->map(function ($row) {
+        $streamType = $request->input('packingStreamType', $request->input('packing_stream_type', 1));
+        $packingType = TradeQueriesINR::packingOptionsForTrade($tradeType, $streamType)->map(function ($row) {
             return [
                 'id' => $row->id,
                 'packing' => $row->packing ?? null,
-                'description' => $row->description ?? null,
+                'description' => $row->description ?? ($row->size ?? null),
+                'size' => $row->size ?? null,
                 'label' => $row->label ?? TradeQueriesINR::packingLabel($row),
             ];
         })->values();
