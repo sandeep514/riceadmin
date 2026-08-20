@@ -89,8 +89,8 @@
 
                     for(let i = 0; i < res.data.length ; i++){
                         const optionSelected = selectedPacking !== '' && String(res.data[i].id) === selectedPacking ? 'selected' : '';
-                        const description = res.data[i].description ? (' ' + res.data[i].description) : '';
-                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'" '+optionSelected+'> '+res.data[i].packing+description+' </option>');
+                        const label = res.data[i].label || $.trim((res.data[i].packing || '') + ' ' + (res.data[i].description || ''));
+                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'" '+optionSelected+'> '+label+' </option>');
                     }
                 },
                 error: function (err){

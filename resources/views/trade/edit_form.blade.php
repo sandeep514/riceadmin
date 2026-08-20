@@ -105,8 +105,10 @@
                                     <option value=""> Select </option>
                                     @foreach($packingType as $k => $v)
                                         @php
-                                            // Same as create: public packing = size + packing type
-                                            $packingLabel = trim(($v->size ?? '') . ' ' . ($v->packing ?? ''));
+                                            $packingLabel = trim((string) ($v->label ?? ''));
+                                            if ($packingLabel === '') {
+                                                $packingLabel = trim(($v->size ?? '').' '.($v->packing ?? '').' '.($v->description ?? ''));
+                                            }
                                         @endphp
                                         <option {{ ((string) $tradequeriesinr->packing === (string) $v->id) ? 'selected' : '' }}
                                                 value="{{ $v->id }}">{{ $packingLabel }}</option>
@@ -338,12 +340,31 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+        const apiBase = @json(url('/api'));
+        const currentPackingId = @json((string) ($tradequeriesinr->packing ?? ''));
         @include('trade._web_categories_select_all_js')
         @include('trade._web_trade_notification_js')
         @include('trade._prevent_double_submit_js')
         @include('trade._media_clear_js')
-        // Keep full public packing list on trade type change (same master as create).
-        // Do not swap to smaller seller/buyer packing tables.
+        $('select[name=tradeType]').change(function(){
+            let tradeType = $('select[name=tradeType] :selected').val();
+            if (!tradeType) {
+                return;
+            }
+            const selectedPacking = $('select[name=ricepacking]').val() || currentPackingId;
+            $.ajax({
+                url : apiBase + '/get/packing/by/' + tradeType,
+                success : function (res){
+                    $("select[name=ricepacking]").html('');
+                    $("select[name=ricepacking]").append('<option value=""> Select </option>');
+                    for(let i = 0; i < res.data.length ; i++){
+                        const optionSelected = selectedPacking !== '' && String(res.data[i].id) === String(selectedPacking) ? 'selected' : '';
+                        const label = res.data[i].label || $.trim((res.data[i].packing || '') + ' ' + (res.data[i].description || ''));
+                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'" '+optionSelected+'> '+label+' </option>');
+                    }
+                }
+            });
+        });
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
             console.log(riceCategory)

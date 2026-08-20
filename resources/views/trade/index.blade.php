@@ -129,7 +129,27 @@
                                                     <td>{{ ($v->RiceFormData->form_name )?? '--'}}</td>
                                                     <td>{{ ($v->stateLinkWithLivePrice )?? '--'}}</td>
                                                     <td>{{ $v->riceGrade?->getWandType?->type ?? '--' }} {{ $v->riceGrade?->value ?? '--' }}</td>
-                                                    <td>{{  ($v->tradeType == 2) ? $v->RicePackingBuyer->packing.' '.$v->RicePackingBuyer->description : $v->RicePackingSeller->description }}</td>
+                                                    @php
+                                                        $rowPackings = ((int) $v->tradeType === 2) ? $buyerPackings : $sellerPackings;
+                                                        $currentPackingLabel = ((int) $v->tradeType === 2)
+                                                            ? trim((optional($v->RicePackingBuyer)->packing ?? '').' '.(optional($v->RicePackingBuyer)->description ?? ''))
+                                                            : trim((string) (optional($v->RicePackingSeller)->description ?? ''));
+                                                        if ($currentPackingLabel === '') {
+                                                            $currentPackingLabel = optional($rowPackings->firstWhere('id', (int) $v->packing))->label ?? '--';
+                                                        }
+                                                    @endphp
+                                                    <td data-order="{{ $currentPackingLabel }}">
+                                                        <select class="form-control input-sm js-trade-packing" style="min-width:140px;max-width:180px;"
+                                                                data-trade-id="{{ $v->id }}"
+                                                                data-original="{{ $v->packing }}">
+                                                            @foreach($rowPackings as $opt)
+                                                                <option value="{{ $opt->id }}" {{ (string) $v->packing === (string) $opt->id ? 'selected' : '' }}>{{ $opt->label }}</option>
+                                                            @endforeach
+                                                            @if($v->packing && ! $rowPackings->contains('id', (int) $v->packing))
+                                                                <option value="{{ $v->packing }}" selected>{{ $currentPackingLabel !== '' ? $currentPackingLabel : 'Current packing' }}</option>
+                                                            @endif
+                                                        </select>
+                                                    </td>
                                                     <td>{{ ($v->quantity )?? '--'}}</td>
                                                     <td>{{ ($v->offerPrice )?? '--'}}</td>
                                                     <td>{{ ($v->validDays )?? '--'}}</td>
@@ -209,8 +229,41 @@
         $('#purgeType').val(type);
         $('#tradeNoteModal').modal('show');
     });
-</script>
-@endsection
 
-@section('scripts')
+    $(document).on('change', '.js-trade-packing', function () {
+        var $select = $(this);
+        var tradeId = $select.data('trade-id');
+        var packingId = $select.val();
+        var previous = $select.data('original');
+
+        $select.prop('disabled', true);
+        $.ajax({
+            url: window.route + '/trade/update-packing/' + tradeId,
+            method: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                packing: packingId
+            },
+            success: function (res) {
+                $select.data('original', packingId);
+                $select.closest('td').attr('data-order', $select.find('option:selected').text());
+                if (typeof toastr !== 'undefined') {
+                    toastr.success((res && res.message) ? res.message : 'Packing updated.', 'Success');
+                }
+            },
+            error: function (xhr) {
+                $select.val(previous);
+                var msg = (xhr.responseJSON && xhr.responseJSON.message) ? xhr.responseJSON.message : 'Could not update packing.';
+                if (typeof toastr !== 'undefined') {
+                    toastr.error(msg, 'Error');
+                } else {
+                    alert(msg);
+                }
+            },
+            complete: function () {
+                $select.prop('disabled', false);
+            }
+        });
+    });
+</script>
 @endsection

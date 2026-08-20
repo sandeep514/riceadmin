@@ -69,7 +69,10 @@ class TradeController extends Controller
         $activeBuyCount = TradeQueriesINR::whereIn('status', [1,6,4])->whereIn('tradeType', [1, 3])->count();
         $activeSellCount = TradeQueriesINR::whereIn('status', [1,6,4])->whereIn('tradeType', [2, 4])->count();
 
-        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount','activeBuyCount','activeSellCount'));
+        $sellerPackings = TradeQueriesINR::packingOptionsForTradeType(1);
+        $buyerPackings = TradeQueriesINR::packingOptionsForTradeType(2);
+
+        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount','activeBuyCount','activeSellCount','sellerPackings','buyerPackings'));
     }
 
     public function purgeOldByStatus(Request $request)
@@ -96,7 +99,7 @@ class TradeController extends Controller
 
     public function create(){
         $qualityMaster = RiceName::pluck('type_status' , 'type');
-        $packing = PublicPacking::get();
+        $packing = collect();
         $livePricesStates =  LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
         $categoryList = Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = $categoryList->pluck('id')->map(function ($id) {
@@ -250,23 +253,17 @@ class TradeController extends Controller
         $WandType = (WandTypeModel::pluck('id' , 'type'));
         $wandModel = WandModel::where('RiceNameId' , $riceNameId)->with(['getWandType'])->orderBy('order' , 'ASC')->get();
 
-        // Same packing master as create trade (public_packing_milestone3 — full list)
-        $packingType = PublicPacking::query()
-            ->orderByRaw('`order` IS NULL, `order` ASC')
-            ->orderBy('id')
-            ->get();
+        // Same packing source as create (GET /api/get/packing/by/{tradeType}) and the trade list.
+        $packingType = TradeQueriesINR::packingOptionsForTradeType($tradeType);
 
-        // Keep currently saved packing selectable if it is not in the public master
+        // Keep currently saved packing selectable if it only exists on the public master
         $currentPackingId = $tradequeriesinr->packing ?? null;
         if ($currentPackingId && ! $packingType->contains('id', (int) $currentPackingId)) {
-            $fallback = SellerPackingINR::find($currentPackingId) ?: Buyerpackinginr::find($currentPackingId);
+            $fallback = PublicPacking::find($currentPackingId);
             if ($fallback) {
                 $packingType = $packingType->push((object) [
                     'id' => $fallback->id,
-                    'size' => $fallback->packing ?? '',
-                    'packing' => $fallback->description ?? ($fallback->packing ?? ''),
-                    'order' => null,
-                    'status' => 1,
+                    'label' => TradeQueriesINR::packingLabel($fallback),
                 ]);
             }
         }
@@ -479,6 +476,40 @@ class TradeController extends Controller
         return $fileName;
     }
     
+    public function updatePacking(Request $request, $tradeId)
+    {
+        $trade = TradeQueriesINR::find($tradeId);
+        if ($trade === null) {
+            return response()->json(['status' => false, 'message' => 'Trade not found.'], 404);
+        }
+
+        $packingId = (int) $request->input('packing');
+        if ($packingId < 1) {
+            return response()->json(['status' => false, 'message' => 'Please select a packing.'], 422);
+        }
+
+        $options = TradeQueriesINR::packingOptionsForTradeType($trade->tradeType);
+        $allowed = $options->contains('id', $packingId)
+            || (int) $trade->packing === $packingId
+            || PublicPacking::query()->where('id', $packingId)->exists();
+
+        if (! $allowed) {
+            return response()->json(['status' => false, 'message' => 'Invalid packing for this trade type.'], 422);
+        }
+
+        $trade->packing = $packingId;
+        $trade->save();
+
+        $selected = $options->firstWhere('id', $packingId);
+        $label = $selected ? ($selected->label ?? TradeQueriesINR::packingLabel($selected)) : '';
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Packing updated.',
+            'label' => $label,
+        ]);
+    }
+
     public function changeStatus ( $tradeId , $status ){
         TradeQueriesINR::where('id' , $tradeId)->update(['status' => $status]);
         // Session::flash('success','Status changed successfully!');

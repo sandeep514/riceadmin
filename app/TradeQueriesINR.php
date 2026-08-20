@@ -122,6 +122,34 @@ class TradeQueriesINR extends Model
     {
         return $this->belongsTo(SellerPackingINR::class , 'packing', 'id');
     }
+
+    public static function packingLabel($row): string
+    {
+        $packing = trim((string) ($row->packing ?? ''));
+        $description = trim((string) ($row->description ?? ''));
+        $size = trim((string) ($row->size ?? ''));
+        if ($size !== '' && $packing !== '') {
+            return trim($size.' '.$packing);
+        }
+        if ($packing !== '' && $description !== '' && strcasecmp($packing, $description) !== 0) {
+            return trim($packing.' '.$description);
+        }
+
+        return $description !== '' ? $description : ($packing !== '' ? $packing : $size);
+    }
+
+    public static function packingOptionsForTradeType($tradeType)
+    {
+        $rows = (int) $tradeType === 2
+            ? Buyerpackinginr::query()->orderBy('id')->get()
+            : SellerPackingINR::query()->orderBy('id')->get();
+
+        return $rows->map(function ($row) {
+            $row->label = self::packingLabel($row);
+
+            return $row;
+        });
+    }
     public function RicePackingBuyer()
     {
         return $this->belongsTo(Buyerpackinginr::class , 'packing', 'id');

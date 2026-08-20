@@ -9,6 +9,7 @@ use App\RiceType;
 use App\RiceBrandForm;
 use App\Port;
 use App\PublicPacking;
+use App\TradeQueriesINR;
 use App\LivePrice;
 use Session;
 use Carbon\Carbon;
@@ -1153,7 +1154,7 @@ class MasterController extends Controller
 		$convertPrefill = $this->buildConvertTradePrefill($query);
 		$defaultTradeType = $this->resolveConvertTradeType($type);
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
-        $packing = PublicPacking::get();
+        $packing = TradeQueriesINR::packingOptionsForTradeType($defaultTradeType);
         $livePricesStates = \App\LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
         $categoryList = \App\Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = [];

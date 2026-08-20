@@ -7849,11 +7849,15 @@ if (!file_exists('uploads')) {
 
     public function getPackingByTradeType($tradeType)
     {
-        if ($tradeType == 2) {
-            $packingType  = Buyerpackinginr::get();
-        } else {
-            $packingType  = SellerPackingINR::get();
-        }
+        $packingType = TradeQueriesINR::packingOptionsForTradeType($tradeType)->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'packing' => $row->packing ?? null,
+                'description' => $row->description ?? null,
+                'label' => $row->label ?? TradeQueriesINR::packingLabel($row),
+            ];
+        })->values();
+
         return response()->json(['status' => true, 'data' => $packingType], 200);
     }
 

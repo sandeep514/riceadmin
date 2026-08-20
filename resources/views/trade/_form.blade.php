@@ -100,7 +100,7 @@
                                     <option value=""> Select </option>
                                     @if(empty($convertPrefill))
                                         @foreach($packing as $k => $v)
-                                            <option value="{{ $v->id }}" {{ ($query->packing ?? '') == $v->id ? 'selected' : '' }}>{{ $v->size }} {{ $v->packing }}</option>
+                                            <option value="{{ $v->id }}" {{ ($query->packing ?? '') == $v->id ? 'selected' : '' }}>{{ $v->label ?? trim(($v->packing ?? '').' '.($v->description ?? '')) }}</option>
                                         @endforeach
                                     @endif
                                 </select>
