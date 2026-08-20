@@ -1154,12 +1154,13 @@ class MasterController extends Controller
 		$convertPrefill = $this->buildConvertTradePrefill($query);
 		$defaultTradeType = $this->resolveConvertTradeType($type);
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
-        $packing = TradeQueriesINR::packingOptionsForTradeType($defaultTradeType);
+        $packingLists = TradeQueriesINR::packingListsForJs();
+        $packing = TradeQueriesINR::packingOptionsForTradeType($defaultTradeType ?: 1);
         $livePricesStates = \App\LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
         $categoryList = \App\Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = [];
 
-		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds', 'convertPrefill', 'defaultTradeType'));
+		return View('convertTrade.create' , compact('type' , 'id', 'qualityMaster' , 'packing' , 'packingLists' , 'query', 'livePricesStates', 'categoryList', 'selectedTradeCategoryIds', 'convertPrefill', 'defaultTradeType'));
 	}
 
 	/**

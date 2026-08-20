@@ -99,7 +99,8 @@ class TradeController extends Controller
 
     public function create(){
         $qualityMaster = RiceName::pluck('type_status' , 'type');
-        $packing = collect();
+        $packingLists = TradeQueriesINR::packingListsForJs();
+        $packing = TradeQueriesINR::packingOptionsForTradeType(1);
         $livePricesStates =  LivePrice::select('state', 'state_order')->distinct()->orderBy('state_order')->get();
         $categoryList = Category::where('status', 1)->orderByRaw('COALESCE(`order`, 999999)')->orderBy('category')->get();
         $selectedTradeCategoryIds = $categoryList->pluck('id')->map(function ($id) {
@@ -107,7 +108,7 @@ class TradeController extends Controller
         })->all();
         $webNotifyRoles = Role::where('type', 'web')->orderBy('role_name')->get(['id', 'role_name']);
 
-        return View('trade.create' , compact('qualityMaster','packing','livePricesStates','categoryList','selectedTradeCategoryIds','webNotifyRoles'));
+        return View('trade.create' , compact('qualityMaster','packing','packingLists','livePricesStates','categoryList','selectedTradeCategoryIds','webNotifyRoles'));
     }
 
 

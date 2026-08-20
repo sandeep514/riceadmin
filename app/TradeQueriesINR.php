@@ -150,6 +150,28 @@ class TradeQueriesINR extends Model
             return $row;
         });
     }
+
+    public static function packingListsForJs(): array
+    {
+        $toJs = function ($rows) {
+            return $rows->map(function ($row) {
+                return [
+                    'id' => $row->id,
+                    'label' => $row->label ?? self::packingLabel($row),
+                ];
+            })->values()->all();
+        };
+
+        $buy = $toJs(self::packingOptionsForTradeType(1));
+        $sell = $toJs(self::packingOptionsForTradeType(2));
+
+        return [
+            '1' => $buy,
+            '2' => $sell,
+            '3' => $buy,
+            '4' => $buy,
+        ];
+    }
     public function RicePackingBuyer()
     {
         return $this->belongsTo(Buyerpackinginr::class , 'packing', 'id');

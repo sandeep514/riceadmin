@@ -73,6 +73,19 @@
         })();
         @endif
 
+        const packingLists = @json($packingLists ?? ['1' => [], '2' => [], '3' => [], '4' => []]);
+
+        function fillPackingSelect(tradeType, selectedId) {
+            const list = packingLists[String(tradeType)] || packingLists['1'] || [];
+            const $sel = $("select[name=ricepacking]");
+            const current = selectedId || $sel.val() || '';
+            $sel.html('<option value=""> Select </option>');
+            for (let i = 0; i < list.length; i++) {
+                const optionSelected = current !== '' && String(list[i].id) === String(current) ? 'selected' : '';
+                $sel.append('<option value="'+list[i].id+'" '+optionSelected+'> '+(list[i].label || '')+' </option>');
+            }
+        }
+
         $('select[name=tradeType]').change(function(event){
             let tradeType = $('select[name=tradeType] :selected').val();
             if (!tradeType) {
@@ -80,28 +93,13 @@
             }
             const selectedPacking = convertPrefill && convertPrefill.ricepacking != null && convertPrefill.ricepacking !== ''
                 ? String(convertPrefill.ricepacking)
-                : '';
-            $.ajax({
-                url : apiBase + '/get/packing/by/' + tradeType,
-                success : function (res){
-                    $("select[name=ricepacking]").html('');
-                    $("select[name=ricepacking]").append('<option value=""> Select </option>');
-
-                    for(let i = 0; i < res.data.length ; i++){
-                        const optionSelected = selectedPacking !== '' && String(res.data[i].id) === selectedPacking ? 'selected' : '';
-                        const label = res.data[i].label || $.trim((res.data[i].packing || '') + ' ' + (res.data[i].description || ''));
-                        $("select[name=ricepacking]").append('<option value="'+res.data[i].id+'" '+optionSelected+'> '+label+' </option>');
-                    }
-                },
-                error: function (err){
-                    console.log(err);
-                }
-            })
+                : ($("select[name=ricepacking]").val() || '');
+            fillPackingSelect(tradeType, selectedPacking);
         })
 
-        @if(isset($defaultTradeType) && $defaultTradeType !== null && $defaultTradeType !== '')
-        $('select[name=tradeType]').trigger('change');
-        @endif
+        if ($('select[name=tradeType]').val()) {
+            $('select[name=tradeType]').trigger('change');
+        }
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
             console.log(riceCategory)
