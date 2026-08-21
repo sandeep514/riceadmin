@@ -1876,23 +1876,14 @@ class PortalApiController extends Controller
             ->orderBy('id', 'desc')
             ->get()
             ->map(function ($q) use ($activeWebKeyIds) {
-                // Avoid IEEE-754 noise in JSON (long float tails) by rounding to 2 decimals via string.
-                $roundMoney = function ($value) {
-                    if ($value === null || $value === '') {
-                        return null;
-                    }
-
-                    return json_decode(sprintf('%.2f', (float) $value));
-                };
-
-                $afterDiscount = function ($price, $discountPct) use ($roundMoney) {
+                $afterDiscount = function ($price, $discountPct) {
                     if ($price === null || $price === '') {
                         return null;
                     }
                     $p = (float) $price;
                     $d = (float) ($discountPct ?? 0);
 
-                    return $roundMoney($p * (1 - $d / 100));
+                    return $p * (1 - $d / 100);
                 };
 
                 return [
@@ -1907,22 +1898,22 @@ class PortalApiController extends Controller
                         'monthly' => [
                             'price' => $q->monthly_price,
                             'discount_percentage' => $q->monthly_discount_percentage,
-                            'afterDiscountValue' => round($afterDiscount($q->monthly_price, $q->monthly_discount_percentage)),
-                            'final_amount' => round($roundMoney($q->monthly_final_amount)),
+                            'afterDiscountValue' => $afterDiscount($q->monthly_price, $q->monthly_discount_percentage),
+                            'final_amount' => $q->monthly_final_amount,
                             'gst' => $q->monthly_gst,
                         ],
                         'quarterly' => [
                             'price' => $q->quarterly_price,
                             'discount_percentage' => $q->quarterly_discount_percentage,
-                            'afterDiscountValue' => round($afterDiscount($q->quarterly_price, $q->quarterly_discount_percentage)),
-                            'final_amount' => round($roundMoney($q->quarterly_final_amount)),
+                            'afterDiscountValue' => $afterDiscount($q->quarterly_price, $q->quarterly_discount_percentage),
+                            'final_amount' => $q->quarterly_final_amount,
                             'gst' => $q->quarterly_gst,
                         ],
                         'yearly' => [
                             'price' => $q->yearly_price,
                             'discount_percentage' => $q->yearly_discount_percentage,
-                            'afterDiscountValue' => round($afterDiscount($q->yearly_price, $q->yearly_discount_percentage)),
-                            'final_amount' => round($roundMoney($q->yearly_final_amount)),
+                            'afterDiscountValue' => $afterDiscount($q->yearly_price, $q->yearly_discount_percentage),
+                            'final_amount' => $q->yearly_final_amount,
                             'gst' => $q->yearly_gst,
                         ],
                     ],

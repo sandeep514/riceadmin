@@ -97,6 +97,7 @@ class PaymentInvoiceService
             'customer_company' => $customerCompany,
             'customer_gst' => $customerGst,
             'customer_address' => $customerAddress,
+            'hsn_code' => (string) config('invoice.hsn_code', '998396'),
             'plan_title' => $plan->title ?? 'SNTC Web Plan',
             'period_label' => $periodLabel,
             'period_start' => $subscription->period_start
@@ -194,13 +195,15 @@ class PaymentInvoiceService
         $tableTop = 560;
         $pdf->rect(40, $tableTop - 6, 515, 24);
         $pdf->text(48, $tableTop, 'Description', 10, true);
-        $pdf->text(320, $tableTop, 'Period', 10, true);
+        $pdf->text(250, $tableTop, 'HSN', 10, true);
+        $pdf->text(330, $tableTop, 'Period', 10, true);
         $pdf->text(470, $tableTop, 'Amount', 10, true);
 
         $desc = $d['plan_title'].' ('.$d['period_label'].' subscription)';
         $pdf->text(48, $tableTop - 28, $desc, 9);
+        $pdf->text(250, $tableTop - 28, $d['hsn_code'] ?: '998396', 9);
         $period = trim($d['period_start'].' - '.$d['period_end']);
-        $pdf->text(320, $tableTop - 28, $period, 9);
+        $pdf->text(330, $tableTop - 28, $period, 9);
         $pdf->text(470, $tableTop - 28, $money($d['taxable']), 9);
 
         $pdf->line(40, $tableTop - 42, 555, $tableTop - 42);

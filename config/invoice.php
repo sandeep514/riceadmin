@@ -7,4 +7,5 @@ return [
     'seller_phone' => env('INVOICE_SELLER_PHONE', ''),
     'seller_gstin' => env('INVOICE_SELLER_GSTIN', ''),
     'seller_pan' => env('INVOICE_SELLER_PAN', ''),
+    'hsn_code' => env('INVOICE_HSN_CODE', '998396'),
 ];
