@@ -91,6 +91,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Validator;
 use App\Support\ClientPlatform;
 use App\Services\PaymentInvoiceService;
@@ -2780,13 +2781,29 @@ class PortalApiController extends Controller
             ->orderBy('id', 'desc')
             ->get()
             ->map(function ($row) {
+                $canInvoice = $row->hasDownloadableInvoice();
+                $invoiceUrl = null;
+                if ($canInvoice) {
+                    try {
+                        $invoiceUrl = URL::signedRoute('portal.web.invoice', ['id' => $row->id]);
+                    } catch (\Throwable $e) {
+                        $invoiceUrl = url('/api/portal/web/invoice/'.$row->id);
+                    }
+                }
+
                 return [
+                    'id' => $row->id,
                     'date_of_payment' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d H:i:s') : null,
                     'plan' => $row->planRel ? $row->planRel->title : null,
                     'plan_type' => $row->subscription_type,
                     'purchased_on' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d') : null,
                     'start_date' => $row->period_start,
                     'end_date' => $row->period_end,
+                    'amount' => $row->displayAmount(),
+                    'currency' => $row->currency ?: ($canInvoice ? 'INR' : null),
+                    'invoice_number' => $row->invoiceNumber(),
+                    'has_invoice' => $canInvoice,
+                    'invoice_url' => $invoiceUrl,
                 ];
             })
             ->values();
@@ -2796,6 +2813,33 @@ class PortalApiController extends Controller
             'message' => 'Subscription history fetched successfully.',
             'data' => $history,
         ], 200);
+    }
+
+    /**
+     * Download a subscription invoice PDF.
+     * Auth: signed invoice_url from payment history, or portal API token (owner only).
+     */
+    public function downloadWebInvoice(Request $request, $id)
+    {
+        $payment = WebUserSubscriptionModel::with(['userRel', 'planRel'])->find($id);
+        if ($payment === null || ! $payment->hasDownloadableInvoice()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invoice not found.',
+            ], 404);
+        }
+
+        if (! $request->attributes->get('invoice_signed')) {
+            $user = $request->user();
+            if (! $user || (int) $payment->user_id !== (int) $user->id) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Forbidden: You are not allowed to download this invoice.',
+                ], 403);
+            }
+        }
+
+        return app(WebPaymentController::class)->downloadInvoice($id);
     }
 
     /**

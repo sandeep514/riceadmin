@@ -43,6 +43,12 @@
         Route::post('upload/document-chunk', [PortalApiController::class, 'uploadPortalDocumentChunk'])
             ->middleware(['portal.session_or_token']);
 
+        // Invoice PDF: signed URL from payment history, or same Bearer/X-API-TOKEN as other portal APIs.
+        Route::get('web/invoice/{id}', [PortalApiController::class, 'downloadWebInvoice'])
+            ->name('portal.web.invoice')
+            ->middleware('signed.or.portal.token')
+            ->where('id', '[0-9]+');
+
         Route::group(['middleware' => ['portal.api.token']], function () {
 
             Route::get('get/user/details/{userId}', [PortalApiController::class, 'getUserDetails']);

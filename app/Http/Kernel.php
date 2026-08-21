@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'admin' => AdminRole::class,
         'field_runner' => FieldRunnerRole::class,
         'portal.api.token' => \App\Http\Middleware\PortalApiTokenAuth::class,
+        'signed.or.portal.token' => \App\Http\Middleware\SignedOrPortalApiToken::class,
         'portal.session_or_token' => \App\Http\Middleware\PortalSessionOrApiTokenAuth::class,
         'app.api.token' => \App\Http\Middleware\AppApiTokenAuth::class,
         'app.or.portal.api.token' => \App\Http\Middleware\AppOrPortalApiTokenAuth::class,

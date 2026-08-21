@@ -34,7 +34,7 @@ class WebPaymentController extends Controller
     public function downloadInvoice($id)
     {
         $payment = WebUserSubscriptionModel::with(['userRel', 'planRel'])->find($id);
-        if ($payment === null) {
+        if ($payment === null || ! $payment->hasDownloadableInvoice()) {
             abort(404);
         }
 

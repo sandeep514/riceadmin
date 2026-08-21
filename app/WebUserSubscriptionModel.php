@@ -50,6 +50,24 @@ class WebUserSubscriptionModel extends Model
         return null;
     }
 
+    public function hasDownloadableInvoice(): bool
+    {
+        return strtolower((string) $this->subscription_type) !== 'trial';
+    }
+
+    public function invoiceNumber(): ?string
+    {
+        if (! $this->hasDownloadableInvoice()) {
+            return null;
+        }
+
+        $year = $this->created_at
+            ? \Carbon\Carbon::parse($this->created_at)->format('Y')
+            : date('Y');
+
+        return 'SNTC/INV/'.$year.'/'.str_pad((string) $this->id, 5, '0', STR_PAD_LEFT);
+    }
+
     public function displayAmount(): ?float
     {
         if ($this->amount !== null && $this->amount !== '') {
