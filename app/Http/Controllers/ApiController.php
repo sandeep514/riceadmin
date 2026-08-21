@@ -3089,8 +3089,8 @@ class ApiController extends Controller
 
         $email = trim((string) $request->email);
         $query = User::query()
-            ->where('email', $email)
-            ->where('userType', 1);
+            ->where('email', $email);
+            // ->where('userType', 1);
 
         if ($request->filled('user_id')) {
             $query->where('id', '!=', (int) $request->user_id);
