@@ -7,6 +7,7 @@
         <p>Thank you for subscribing to SNTC.</p>
         
         <p>Your subscription has been successfully activated, You can now explore our platform.</p>
+        <p>Please find your payment invoice attached with this email as a PDF.</p>
 
 
         <p style="font-size:0.9em;">Regards,<br />SNTC Agro Technology Pvt. Ltd.</p>

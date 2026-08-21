@@ -770,6 +770,9 @@ Route::group(['prefix'=>'administrator'], function(){
 
 
 
+    Route::get('payments', ['as' => 'web-payments', 'uses' => 'WebPaymentController@index']);
+    Route::get('payments/invoice/{id}', ['as' => 'web-payments.invoice', 'uses' => 'WebPaymentController@downloadInvoice']);
+
     Route::get('web/plans' , ['as' => 'list.web.plans' , 'uses' => 'WebPlanController@indexPlan']);
     Route::get('web/plans/create' , ['as' => 'list.web.plans.create' , 'uses' => 'WebPlanController@createPlan']);
     Route::post('web/plans/save' , ['as' => 'web.plans.save' , 'uses' => 'WebPlanController@savePlan']);

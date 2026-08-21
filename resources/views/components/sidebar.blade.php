@@ -439,6 +439,12 @@
                     <span>Web Plans</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['web-payments','web-payments.invoice']))?'active':'' }}">
+                <a href="{{ route('web-payments') }}">
+                    <i class="fa fa-credit-card"></i>
+                    <span>Payments</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['web-side-menu','create.web-side-menu','edit.web-side-menu']))?'active':'' }}">
                 <a href="{{ route('web-side-menu') }}">
                     <i class="fa fa-bars"></i> 

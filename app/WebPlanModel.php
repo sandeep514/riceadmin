@@ -36,4 +36,14 @@ class WebPlanModel extends Model
     {
         return $this->hasMany(WebPlanKeysMapModel::class , 'plan_id' , 'id');
     }
+
+    public function roleRel()
+    {
+        return $this->belongsTo(Role::class, 'role_id', 'id');
+    }
+
+    public function categoryRel()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
 }

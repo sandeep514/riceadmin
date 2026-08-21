@@ -89,9 +89,11 @@ use Razorpay\Api\Api;
 use Exception;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Support\ClientPlatform;
+use App\Services\PaymentInvoiceService;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
@@ -1591,6 +1593,21 @@ class PortalApiController extends Controller
         ], 200);
     }
 
+    private function planFinalAmount(?WebPlanModel $plan, string $subscriptionType): float
+    {
+        if ($plan === null) {
+            return 0.0;
+        }
+        if ($subscriptionType === 'yearly') {
+            return (float) ($plan->yearly_final_amount ?? $plan->yearly_price ?? 0);
+        }
+        if (in_array($subscriptionType, ['quarterly', 'half_yearly'], true)) {
+            return (float) ($plan->quarterly_final_amount ?? $plan->quarterly_price ?? 0);
+        }
+
+        return (float) ($plan->monthly_final_amount ?? $plan->monthly_price ?? 0);
+    }
+
     private function getSubscriptionAddedDays(string $subscriptionType): int
     {
         if ($subscriptionType === 'trial') {
@@ -2133,18 +2150,78 @@ class PortalApiController extends Controller
             $totalAvailableDays = $this->getTotalAvailableSubscriptionDays((int) $userId);
 
             $userDetails = User::where(['id' => $userId])->first();
+            if ($userDetails === null) {
+                return response()->json([
+                    'status'  => true,
+                    'message' => '✅ Payment verified and subscription activated.',
+                    'total_available_days' => $totalAvailableDays,
+                    'data'    => $subscription
+                ]);
+            }
 
-            $mailTo = $userDetails->email;
+            $mailTo = $userDetails->email ?? '';
             $mailMessage = '';
             $subject = 'Subscription Activated – Welcome to SNTC';
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
 
+            $invoiceAttach = null;
+            try {
+                $paidTotal = 0.0;
+                $currency = 'INR';
+                try {
+                    $rzpPayment = $api->payment->fetch($razorpayPaymentId);
+                    $paidTotal = ((float) ($rzpPayment['amount'] ?? 0)) / 100;
+                    $currency = (string) ($rzpPayment['currency'] ?? 'INR');
+                } catch (\Throwable $e) {
+                    $planForAmount = WebPlanModel::find($planId);
+                    $paidTotal = $this->planFinalAmount($planForAmount, $subscriptionType);
+                }
+
+                $plan = WebPlanModel::find($planId);
+                $invoiceAttach = (new PaymentInvoiceService())->makePdf(
+                    $userDetails,
+                    $subscription,
+                    $plan,
+                    $paidTotal,
+                    $currency
+                );
+
+                $paymentUpdate = [];
+                if (Schema::hasColumn('web_user_subscription', 'amount')) {
+                    $paymentUpdate['amount'] = $paidTotal;
+                }
+                if (Schema::hasColumn('web_user_subscription', 'currency')) {
+                    $paymentUpdate['currency'] = $currency;
+                }
+                if (is_array($invoiceAttach) && ! empty($invoiceAttach['filename']) && Schema::hasColumn('web_user_subscription', 'invoice_path')) {
+                    $paymentUpdate['invoice_path'] = 'invoices/'.$invoiceAttach['filename'];
+                }
+                if ($paymentUpdate) {
+                    $subscription->fill($paymentUpdate);
+                    $subscription->save();
+                }
+            } catch (\Throwable $e) {
+                report($e);
+            }
+
             $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
-            $respose = Mail::send('mail.AccrountActiveWebMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
+            if ($mailTo !== '') {
+                try {
+                    Mail::send('mail.AccrountActiveWebMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName, $invoiceAttach) {
+                        $message->to($mailTo, $mailMessage)->subject($subject);
+                        $message->from($mailFrom, $mailFromName);
+                        if (is_array($invoiceAttach) && ! empty($invoiceAttach['path']) && is_file($invoiceAttach['path'])) {
+                            $message->attach($invoiceAttach['path'], [
+                                'as' => ($invoiceAttach['filename'] ?? 'SNTC-Invoice.pdf'),
+                                'mime' => 'application/pdf',
+                            ]);
+                        }
+                    });
+                } catch (\Throwable $e) {
+                    report($e);
+                }
+            }
 
             return response()->json([
                 'status'  => true,
