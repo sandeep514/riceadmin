@@ -2013,8 +2013,11 @@ class PortalApiController extends Controller
             config('services.razorpay.secret')
         );
 
+        // Razorpay requires amount as an integer in the smallest currency unit (paise).
+        $amountInPaise = (int) round((float) $amount * 100);
+
         $order = $api->order->create([
-            'amount' => $amount * 100, // amount in paise
+            'amount' => $amountInPaise,
             'currency' => $currency,
             'receipt' => 'receipt_' . $userId . '_' . time(),
             'notes' => [
