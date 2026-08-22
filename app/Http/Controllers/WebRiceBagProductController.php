@@ -129,6 +129,109 @@ class WebRiceBagProductController extends Controller
         ], 200);
     }
 
+    public function show(Request $request, $id)
+    {
+        $product = WebRiceBagProduct::with(['images', 'packingSizes'])->find((int) $id);
+        if ($product === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Rice bag product not found.',
+            ], 404);
+        }
+
+        $authUser = $request->user();
+        if ($authUser && (int) $product->user_id !== (int) $authUser->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Forbidden: You are not allowed to access this product.',
+            ], 403);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Rice bag product fetched successfully.',
+            'data' => $this->serializeProduct($product),
+            'imageBasePath' => $this->imageBasePath((int) $product->user_id),
+        ], 200);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        $product = WebRiceBagProduct::with('images')->find((int) $id);
+        if ($product === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Rice bag product not found.',
+            ], 404);
+        }
+
+        $authUser = $request->user();
+        if ($authUser && (int) $product->user_id !== (int) $authUser->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Forbidden: You are not allowed to delete this product.',
+            ], 403);
+        }
+
+        $basePath = public_path($this->imageBasePath((int) $product->user_id));
+        foreach ($product->images as $image) {
+            $filePath = $basePath . '/' . $image->file_name;
+            if (is_file($filePath)) {
+                @unlink($filePath);
+            }
+        }
+
+        $product->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Rice bag product deleted successfully.',
+        ], 200);
+    }
+
+    public function deleteImage(Request $request, $imageId)
+    {
+        $image = WebRiceBagProductImage::find((int) $imageId);
+        if ($image === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Image not found.',
+            ], 404);
+        }
+
+        $product = WebRiceBagProduct::find($image->product_id);
+        if ($product === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Rice bag product not found.',
+            ], 404);
+        }
+
+        $authUser = $request->user();
+        if ($authUser && (int) $product->user_id !== (int) $authUser->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Forbidden: You are not allowed to delete this image.',
+            ], 403);
+        }
+
+        $filePath = public_path($this->imageBasePath((int) $product->user_id) . '/' . $image->file_name);
+        if (is_file($filePath)) {
+            @unlink($filePath);
+        }
+
+        $image->delete();
+
+        $product->load(['images', 'packingSizes']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Image deleted successfully.',
+            'data' => $this->serializeProduct($product),
+            'imageBasePath' => $this->imageBasePath((int) $product->user_id),
+        ], 200);
+    }
+
     private function createRules(): array
     {
         return array_merge($this->parentRules(required: true), $this->packingSizesRules(required: true), [

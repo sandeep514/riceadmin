@@ -7895,6 +7895,29 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getPackingSize()
+    {
+        $packingSizes = PublicPacking::query()
+            ->where('status', 1)
+            ->orderBy('order')
+            ->orderBy('id')
+            ->get(['id', 'size', 'packing', 'order', 'status']);
+
+        if ($packingSizes->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Packing sizes not found.',
+                'data' => [],
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Packing sizes fetched successfully.',
+            'data' => $packingSizes,
+        ], 200);
+    }
+
     public function getTestimonial()
     {
         $testimonial = Testimonial::get();

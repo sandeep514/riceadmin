@@ -63,6 +63,9 @@
             Route::post('web/rice-bag-product/create', [\App\Http\Controllers\WebRiceBagProductController::class, 'create']);
             Route::post('web/rice-bag-product/update', [\App\Http\Controllers\WebRiceBagProductController::class, 'update']);
             Route::get('web/rice-bag-product/list/{userId}', [\App\Http\Controllers\WebRiceBagProductController::class, 'listByUser']);
+            Route::delete('web/rice-bag-product/image/{imageId}', [\App\Http\Controllers\WebRiceBagProductController::class, 'deleteImage']);
+            Route::get('web/rice-bag-product/{id}', [\App\Http\Controllers\WebRiceBagProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/rice-bag-product/{id}', [\App\Http\Controllers\WebRiceBagProductController::class, 'delete'])->where('id', '[0-9]+');
 
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
