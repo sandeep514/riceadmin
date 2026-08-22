@@ -11,6 +11,10 @@ class Packing extends Model
         "50 kg PP",
         "55 kg PP"
     ];
+    public static $packingForms = [
+        1 => "Normal",
+        2 => "Gusset"
+    ];
     public static function packings(){
         return self::get();
 //        return self::pluck('code','value');

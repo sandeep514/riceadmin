@@ -7886,6 +7886,15 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $packingType], 200);
     }
 
+    public function getPackingForms()
+    {
+        return response()->json([
+            'status' => true,
+            'message' => 'Packing forms fetched successfully.',
+            'data' => Packing::$packingForms,
+        ], 200);
+    }
+
     public function getTestimonial()
     {
         $testimonial = Testimonial::get();
