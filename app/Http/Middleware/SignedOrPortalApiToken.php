@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\WebUserSubscriptionModel;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -9,8 +10,10 @@ class SignedOrPortalApiToken
 {
     public function handle(Request $request, Closure $next)
     {
-        if ($request->has('signature')) {
-            if ($request->hasValidSignature() || $request->hasValidSignature(false)) {
+        $signature = (string) $request->query('signature', '');
+        if ($signature !== '') {
+            $id = (int) $request->route('id');
+            if ($id > 0 && WebUserSubscriptionModel::invoiceAccessTokenIsValid($id, $signature)) {
                 $request->attributes->set('invoice_signed', true);
 
                 return $next($request);

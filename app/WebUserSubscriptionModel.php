@@ -68,6 +68,46 @@ class WebUserSubscriptionModel extends Model
         return 'SNTC/INV/'.$year.'/'.str_pad((string) $this->id, 5, '0', STR_PAD_LEFT);
     }
 
+    /**
+     * Host-independent HMAC so invoice links work under /staging/public and https proxies.
+     * Laravel signed routes hash the full URL and fail when APP_URL != request URL.
+     */
+    public static function invoiceAccessTokenForId(int $id): string
+    {
+        return hash_hmac('sha256', 'web-invoice|'.$id, (string) config('app.key'));
+    }
+
+    public static function invoiceAccessTokenIsValid(int $id, ?string $token): bool
+    {
+        if (! is_string($token) || $token === '') {
+            return false;
+        }
+
+        return hash_equals(self::invoiceAccessTokenForId($id), $token);
+    }
+
+    public function invoiceAccessToken(): string
+    {
+        return self::invoiceAccessTokenForId((int) $this->id);
+    }
+
+    public function invoiceDownloadUrl(): ?string
+    {
+        if (! $this->hasDownloadableInvoice()) {
+            return null;
+        }
+
+        try {
+            $base = route('portal.web.invoice', ['id' => $this->id], true);
+        } catch (\Throwable $e) {
+            $base = url('/api/portal/web/invoice/'.$this->id);
+        }
+
+        $base = preg_replace('/\?.*$/', '', (string) $base);
+
+        return $base.'?signature='.$this->invoiceAccessToken();
+    }
+
     public function displayAmount(): ?float
     {
         if ($this->amount !== null && $this->amount !== '') {
