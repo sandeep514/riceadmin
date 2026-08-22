@@ -60,6 +60,10 @@
             Route::post('web/create-order', [PortalApiController::class, 'webCreateOrder']);
             Route::post('web/verify-payment', [PortalApiController::class, 'webVerifyPayment']);
 
+            Route::post('web/rice-bag-product/create', [\App\Http\Controllers\WebRiceBagProductController::class, 'create']);
+            Route::post('web/rice-bag-product/update', [\App\Http\Controllers\WebRiceBagProductController::class, 'update']);
+            Route::get('web/rice-bag-product/list/{userId}', [\App\Http\Controllers\WebRiceBagProductController::class, 'listByUser']);
+
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
             
