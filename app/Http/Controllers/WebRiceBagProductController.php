@@ -423,7 +423,23 @@ class WebRiceBagProductController extends Controller
                 if (! is_array($row)) {
                     continue;
                 }
+                $existingImage = $row['existingImage']
+                    ?? $row['existing_image']
+                    ?? $row['image']
+                    ?? $row['image_name']
+                    ?? null;
+                if (is_string($existingImage) && $existingImage !== '') {
+                    // Frontend may send full URL — keep only filename.
+                    $existingImage = basename(parse_url($existingImage, PHP_URL_PATH) ?: $existingImage);
+                    if ($existingImage === '' || str_contains($existingImage, ' ')) {
+                        $existingImage = null;
+                    }
+                } else {
+                    $existingImage = null;
+                }
+
                 $normalizedRows[] = [
+                    'id' => $row['id'] ?? $row['packing_size_row_id'] ?? null,
                     'packingSizeId' => $row['packingSizeId'] ?? $row['packing_size_id'] ?? null,
                     'packingSize' => $row['packingSize'] ?? $row['packing_size'] ?? null,
                     'rate' => $row['rate'] ?? null,
@@ -431,7 +447,7 @@ class WebRiceBagProductController extends Controller
                     'totalPrice' => $row['totalPrice'] ?? $row['total_price'] ?? null,
                     'bagSize' => $row['bagSize'] ?? $row['bag_size'] ?? null,
                     'bagWeight' => $row['bagWeight'] ?? $row['bag_weight'] ?? null,
-                    'existingImage' => $row['existingImage'] ?? $row['image'] ?? null,
+                    'existingImage' => $existingImage,
                     '_index' => is_numeric($index) ? (int) $index : null,
                 ];
             }
@@ -499,21 +515,22 @@ class WebRiceBagProductController extends Controller
             $packingSizes = [];
         }
 
-        if ($replace) {
-            $basePath = public_path($this->imageBasePath((int) $product->user_id));
-            $existing = WebRiceBagProductPackingSize::where('product_id', $product->id)->get();
-            foreach ($existing as $old) {
-                if ($old->image) {
-                    $filePath = $basePath . '/' . $old->image;
-                    if (is_file($filePath)) {
-                        @unlink($filePath);
-                    }
-                }
-            }
-            WebRiceBagProductPackingSize::where('product_id', $product->id)->delete();
-        }
+        $basePath = public_path($this->imageBasePath((int) $product->user_id));
+        $existingRows = WebRiceBagProductPackingSize::where('product_id', $product->id)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get();
 
+        $existingById = $existingRows->keyBy('id');
+        $existingByPackingSizeId = $existingRows
+            ->filter(fn ($row) => $row->packing_size_id !== null)
+            ->keyBy(fn ($row) => (string) $row->packing_size_id);
+        $existingByIndex = $existingRows->values();
+
+        $keptImageNames = [];
         $sortOrder = 0;
+        $createdIds = [];
+
         foreach ($packingSizes as $row) {
             if (! is_array($row)) {
                 continue;
@@ -521,9 +538,41 @@ class WebRiceBagProductController extends Controller
 
             $sortOrder++;
             $index = $row['_index'] ?? ($sortOrder - 1);
-            $imageName = $this->resolvePackingSizeImage($request, $product, $index, $row);
 
-            WebRiceBagProductPackingSize::create([
+            $matched = null;
+            if (! empty($row['id']) && $existingById->has((int) $row['id'])) {
+                $matched = $existingById->get((int) $row['id']);
+            } elseif (! empty($row['packingSizeId']) && $existingByPackingSizeId->has((string) $row['packingSizeId'])) {
+                $matched = $existingByPackingSizeId->get((string) $row['packingSizeId']);
+            } elseif ($existingByIndex->has($index)) {
+                $matched = $existingByIndex->get($index);
+            }
+
+            $previousImage = $matched?->image;
+            $imageName = $this->resolvePackingSizeImage(
+                $request,
+                $product,
+                $index,
+                $row,
+                $previousImage
+            );
+
+            if ($imageName) {
+                $keptImageNames[] = $imageName;
+            }
+
+            // If a new file replaced an old one, remove the old file.
+            if ($previousImage
+                && $imageName
+                && $previousImage !== $imageName
+            ) {
+                $oldPath = $basePath . '/' . $previousImage;
+                if (is_file($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+
+            $created = WebRiceBagProductPackingSize::create([
                 'product_id' => $product->id,
                 'packing_size_id' => isset($row['packingSizeId']) && $row['packingSizeId'] !== ''
                     ? (int) $row['packingSizeId']
@@ -537,11 +586,35 @@ class WebRiceBagProductController extends Controller
                 'image' => $imageName,
                 'sort_order' => $sortOrder,
             ]);
+            $createdIds[] = $created->id;
+        }
+
+        if ($replace) {
+            // Delete old DB rows (not the newly created ones).
+            WebRiceBagProductPackingSize::where('product_id', $product->id)
+                ->whereNotIn('id', $createdIds)
+                ->delete();
+
+            // Delete only image files that are no longer referenced.
+            foreach ($existingRows as $old) {
+                if (! $old->image || in_array($old->image, $keptImageNames, true)) {
+                    continue;
+                }
+                $filePath = $basePath . '/' . $old->image;
+                if (is_file($filePath)) {
+                    @unlink($filePath);
+                }
+            }
         }
     }
 
-    private function resolvePackingSizeImage(Request $request, WebRiceBagProduct $product, $index, array $row): ?string
-    {
+    private function resolvePackingSizeImage(
+        Request $request,
+        WebRiceBagProduct $product,
+        $index,
+        array $row,
+        ?string $previousImage = null
+    ): ?string {
         $file = $request->file("packing_sizes.{$index}.image")
             ?? $request->file("packingSizes.{$index}.image");
 
@@ -550,8 +623,20 @@ class WebRiceBagProductController extends Controller
         }
 
         $existing = $row['existingImage'] ?? null;
-        if (is_string($existing) && $existing !== '' && ! str_contains($existing, '/')) {
-            return $existing;
+        if (is_string($existing) && $existing !== '') {
+            $filename = basename(parse_url($existing, PHP_URL_PATH) ?: $existing);
+            if ($filename !== '' && is_file(public_path($this->imageBasePath((int) $product->user_id) . '/' . $filename))) {
+                return $filename;
+            }
+            // Still accept known previous filename even if path check fails (moved dirs etc.)
+            if ($filename !== '' && ! str_contains($filename, '/')) {
+                return $filename;
+            }
+        }
+
+        // Keep previous image when frontend did not send a new file.
+        if (is_string($previousImage) && $previousImage !== '') {
+            return $previousImage;
         }
 
         return null;
