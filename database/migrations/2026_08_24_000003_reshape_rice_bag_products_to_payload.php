@@ -5,8 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Reshape web_rice_bag_products + web_rice_bag_product_packing_sizes
- * to match frontend payload (packing_forms[], packing_sizes[]).
+ * Reshape web_rice_bag_product_packing_sizes to match frontend payload.
+ * Packing form lives on web_rice_bag_products (one form, many size variants).
  */
 class ReshapeRiceBagProductsToPayload extends Migration
 {
@@ -16,31 +16,17 @@ class ReshapeRiceBagProductsToPayload extends Migration
             return;
         }
 
-        // Parent: drop legacy single packing form columns.
         Schema::table('web_rice_bag_products', function (Blueprint $table) {
-            if (Schema::hasColumn('web_rice_bag_products', 'packing_form_id')) {
-                $table->dropColumn('packing_form_id');
+            if (! Schema::hasColumn('web_rice_bag_products', 'packing_form_id')) {
+                $table->unsignedBigInteger('packing_form_id')->nullable()->after('additional_information');
             }
-            if (Schema::hasColumn('web_rice_bag_products', 'packing_form')) {
-                $table->dropColumn('packing_form');
+            if (! Schema::hasColumn('web_rice_bag_products', 'packing_form')) {
+                $table->string('packing_form', 64)->nullable()->after('packing_form_id');
             }
         });
 
-        if (! Schema::hasTable('web_rice_bag_product_packing_forms')) {
-            Schema::create('web_rice_bag_product_packing_forms', function (Blueprint $table) {
-                $table->id();
-                $table->unsignedBigInteger('product_id');
-                $table->unsignedBigInteger('packing_form_id')->nullable();
-                $table->string('packing_form', 64)->nullable();
-                $table->timestamps();
-
-                $table->index('product_id');
-                $table->index('packing_form_id');
-                $table->foreign('product_id')
-                    ->references('id')
-                    ->on('web_rice_bag_products')
-                    ->onDelete('cascade');
-            });
+        if (Schema::hasTable('web_rice_bag_product_packing_forms')) {
+            Schema::dropIfExists('web_rice_bag_product_packing_forms');
         }
 
         if (! Schema::hasTable('web_rice_bag_product_packing_sizes')) {

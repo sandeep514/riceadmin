@@ -14,18 +14,14 @@ class WebRiceBagProduct extends Model
         'specification',
         'description',
         'additional_information',
+        'packing_form_id',
+        'packing_form',
         'status',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
-    }
-
-    public function packingForms()
-    {
-        return $this->hasMany(WebRiceBagProductPackingForm::class, 'product_id', 'id')
-            ->orderBy('id');
     }
 
     public function packingSizes()
