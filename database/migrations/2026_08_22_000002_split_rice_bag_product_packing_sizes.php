@@ -23,7 +23,6 @@ class SplitRiceBagProductPackingSizes extends Migration
                 $table->unsignedBigInteger('product_id');
                 $table->unsignedBigInteger('packing_id')->nullable();
                 $table->string('packing', 255)->nullable();
-                $table->string('packing_form', 64)->nullable();
                 $table->decimal('available_quantity', 12, 2)->nullable();
                 $table->decimal('price', 12, 2)->nullable();
                 $table->unsignedInteger('sort_order')->default(0);
@@ -39,14 +38,11 @@ class SplitRiceBagProductPackingSizes extends Migration
         }
 
         if (Schema::hasColumn('web_rice_bag_products', 'packing_id')) {
-            $products = DB::table('web_rice_bag_products')->get([
-                'id',
-                'packing_id',
-                'packing',
-                'packing_form',
-                'available_quantity',
-                'price',
-            ]);
+            $select = ['id', 'packing_id', 'packing', 'available_quantity', 'price'];
+            if (Schema::hasColumn('web_rice_bag_products', 'packing_form')) {
+                $select[] = 'packing_form';
+            }
+            $products = DB::table('web_rice_bag_products')->get($select);
 
             foreach ($products as $product) {
                 $already = DB::table('web_rice_bag_product_packing_sizes')
@@ -58,7 +54,6 @@ class SplitRiceBagProductPackingSizes extends Migration
 
                 if ($product->packing_id === null
                     && ($product->packing === null || $product->packing === '')
-                    && ($product->packing_form === null || $product->packing_form === '')
                     && $product->available_quantity === null
                     && $product->price === null
                 ) {
@@ -69,7 +64,6 @@ class SplitRiceBagProductPackingSizes extends Migration
                     'product_id' => $product->id,
                     'packing_id' => $product->packing_id,
                     'packing' => $product->packing,
-                    'packing_form' => $product->packing_form,
                     'available_quantity' => $product->available_quantity,
                     'price' => $product->price,
                     'sort_order' => 1,
@@ -79,15 +73,12 @@ class SplitRiceBagProductPackingSizes extends Migration
             }
 
             Schema::table('web_rice_bag_products', function (Blueprint $table) {
-                if (Schema::hasColumn('web_rice_bag_products', 'packing_id')) {
-                    $table->dropColumn([
-                        'packing_id',
-                        'packing',
-                        'packing_form',
-                        'available_quantity',
-                        'price',
-                    ]);
+                $drop = ['packing_id', 'packing', 'available_quantity', 'price'];
+                // Only drop packing_form here if it was the old size-level field living beside packing_id.
+                if (Schema::hasColumn('web_rice_bag_products', 'packing_form')) {
+                    $drop[] = 'packing_form';
                 }
+                $table->dropColumn($drop);
             });
         }
     }

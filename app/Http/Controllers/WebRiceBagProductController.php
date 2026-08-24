@@ -24,7 +24,7 @@ class WebRiceBagProductController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validation failed. Expected payload fields: userId, productName, riceNameId, riceFormId, riceForm, bagColor, description, packingSizes[{packingId,packing,packingForm,availableQuantity,price}], images (multipart files).',
+                'message' => 'Validation failed. Expected: userId, bagTypeId, specification, description, additionalInformation, packingFormId, packingForm, packingSizes[{packingId,packing,availableQuantity,price}], images.',
                 'errors' => $validator->errors(),
                 'received_keys' => array_values(array_keys($request->except(['images']))),
             ], 422);
@@ -62,6 +62,7 @@ class WebRiceBagProductController extends Controller
             return response()->json([
                 'status' => false,
                 'errors' => $validator->errors(),
+                'received_keys' => array_values(array_keys($request->except(['images']))),
             ], 422);
         }
 
@@ -223,7 +224,6 @@ class WebRiceBagProductController extends Controller
         }
 
         $image->delete();
-
         $product->load(['images', 'packingSizes']);
 
         return response()->json([
@@ -236,59 +236,49 @@ class WebRiceBagProductController extends Controller
 
     private function createRules(): array
     {
-        return array_merge($this->parentRules(required: true), $this->packingSizesRules(required: true), [
-            // Allow missing/non-file image URIs from clients; only real uploads are stored.
+        $packingForms = array_values(Packing::$packingForms);
+
+        return [
+            'user_id' => ['required', 'integer', 'exists:users,id'],
+            'bagTypeId' => ['required', 'integer'],
+            'specification' => ['nullable', 'string'],
+            'description' => ['nullable', 'string'],
+            'additionalInformation' => ['nullable', 'string'],
+            'packingFormId' => ['required', 'integer'],
+            'packingForm' => ['required', 'string', 'in:' . implode(',', $packingForms)],
+            'packingSizes' => ['required', 'array', 'min:1'],
+            'packingSizes.*.packingId' => ['required', 'integer'],
+            'packingSizes.*.packing' => ['nullable', 'string', 'max:255'],
+            'packingSizes.*.availableQuantity' => ['required', 'numeric'],
+            'packingSizes.*.price' => ['required', 'numeric'],
             'images' => ['nullable'],
-        ]);
+        ];
     }
 
     private function updateRules(): array
     {
-        return array_merge([
+        $packingForms = array_values(Packing::$packingForms);
+
+        return [
             'id' => ['required', 'integer', 'exists:web_rice_bag_products,id'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
-            'images' => ['nullable'],
-        ], $this->parentRules(required: false), $this->packingSizesRules(required: false));
-    }
-
-    private function parentRules(bool $required): array
-    {
-        $req = $required ? ['required'] : ['sometimes', 'required'];
-
-        // Matches client payload only:
-        // userId, productName, riceNameId, riceFormId, riceForm, bagColor,
-        // description, packingSizes[], images (printType is not used).
-        return [
-            'user_id' => $required
-                ? ['required', 'integer', 'exists:users,id']
-                : ['nullable', 'integer', 'exists:users,id'],
-            'productName' => array_merge($req, ['string', 'max:255']),
-            'riceNameId' => array_merge($req, ['integer']),
-            'riceFormId' => array_merge($req, ['integer']),
-            'riceForm' => ['nullable', 'string', 'max:255'],
-            'bagColor' => array_merge($req, ['string', 'max:64']),
+            'bagTypeId' => ['sometimes', 'required', 'integer'],
+            'specification' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
-        ];
-    }
-
-    private function packingSizesRules(bool $required): array
-    {
-        $packingForms = array_values(Packing::$packingForms);
-        $listRule = $required ? ['required', 'array', 'min:1'] : ['sometimes', 'array', 'min:1'];
-
-        return [
-            'packingSizes' => $listRule,
+            'additionalInformation' => ['nullable', 'string'],
+            'packingFormId' => ['sometimes', 'required', 'integer'],
+            'packingForm' => ['sometimes', 'required', 'string', 'in:' . implode(',', $packingForms)],
+            'packingSizes' => ['sometimes', 'array', 'min:1'],
             'packingSizes.*.packingId' => ['required', 'integer'],
             'packingSizes.*.packing' => ['nullable', 'string', 'max:255'],
-            'packingSizes.*.packingForm' => ['required', 'string', 'in:' . implode(',', $packingForms)],
             'packingSizes.*.availableQuantity' => ['required', 'numeric'],
             'packingSizes.*.price' => ['required', 'numeric'],
+            'images' => ['nullable'],
         ];
     }
 
     private function normalizeIncomingPayload(Request $request): void
     {
-        // 1) Unwrap common client wrappers: payload/data/body as JSON string or array.
         foreach (['payload', 'data', 'body', 'json'] as $wrapKey) {
             if (! $request->exists($wrapKey)) {
                 continue;
@@ -304,16 +294,13 @@ class WebRiceBagProductController extends Controller
             }
         }
 
-        // 2) If JSON was posted but not parsed into request params (wrong Content-Type),
-        // try decoding the raw body.
-        if (! $request->filled('productName') && ! $request->filled('product_name')) {
+        if (! $request->filled('bagTypeId') && ! $request->filled('bag_type_id')) {
             $raw = $request->getContent();
             if (is_string($raw) && $raw !== '') {
                 $trimmed = ltrim($raw);
                 if ($trimmed !== '' && ($trimmed[0] === '{' || $trimmed[0] === '[')) {
                     $decoded = json_decode($raw, true);
                     if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                        // If body is [{...}] take first object; if {payload:{...}} merge root.
                         if (array_is_list($decoded) && isset($decoded[0]) && is_array($decoded[0])) {
                             $request->merge($decoded[0]);
                         } else {
@@ -324,16 +311,12 @@ class WebRiceBagProductController extends Controller
             }
         }
 
-        // 3) snake_case -> camelCase so validation keys match.
         $aliases = [
-            'product_name' => 'productName',
-            'rice_name_id' => 'riceNameId',
-            'rice_form_id' => 'riceFormId',
-            'rice_form' => 'riceForm',
-            'bag_color' => 'bagColor',
+            'bag_type_id' => 'bagTypeId',
+            'additional_information' => 'additionalInformation',
+            'packing_form_id' => 'packingFormId',
+            'packing_form' => 'packingForm',
             'packing_sizes' => 'packingSizes',
-            'available_quantity' => 'availableQuantity',
-            'userId' => 'userId',
         ];
         foreach ($aliases as $from => $to) {
             if ($request->exists($from) && ! $request->exists($to)) {
@@ -348,7 +331,23 @@ class WebRiceBagProductController extends Controller
             $request->merge(['userId' => $request->input('user_id')]);
         }
 
-        // 4) Decode packingSizes JSON string / normalize row keys.
+        // packingFormId 1/2 -> label Normal/Gusset when packingForm missing
+        if ($request->filled('packingFormId') && ! $request->filled('packingForm')) {
+            $formId = (int) $request->input('packingFormId');
+            if (isset(Packing::$packingForms[$formId])) {
+                $request->merge(['packingForm' => Packing::$packingForms[$formId]]);
+            }
+        }
+        if ($request->filled('packingForm') && is_numeric($request->input('packingForm'))) {
+            $formId = (int) $request->input('packingForm');
+            if (isset(Packing::$packingForms[$formId])) {
+                $request->merge([
+                    'packingFormId' => $formId,
+                    'packingForm' => Packing::$packingForms[$formId],
+                ]);
+            }
+        }
+
         $packingSizes = $request->input('packingSizes', $request->input('packing_sizes'));
         if (is_string($packingSizes) && trim($packingSizes) !== '') {
             $decoded = json_decode($packingSizes, true);
@@ -363,60 +362,15 @@ class WebRiceBagProductController extends Controller
                 if (! is_array($row)) {
                     continue;
                 }
-                $normalizedRows[] = $this->normalizePackingSizeRow($row);
+                $normalizedRows[] = [
+                    'packingId' => $row['packingId'] ?? $row['packing_id'] ?? null,
+                    'packing' => $row['packing'] ?? $row['packing_name'] ?? null,
+                    'availableQuantity' => $row['availableQuantity'] ?? $row['available_quantity'] ?? null,
+                    'price' => $row['price'] ?? null,
+                ];
             }
             $request->merge(['packingSizes' => $normalizedRows]);
         }
-
-        // 5) Screenshot payload also sends flat packing fields on parent — build packingSizes if missing.
-        if (! is_array($request->input('packingSizes')) || count($request->input('packingSizes')) === 0) {
-            $hasFlatPacking = $request->filled('packingId')
-                || $request->filled('packing_id')
-                || $request->filled('packingForm')
-                || $request->filled('packing_form')
-                || $request->filled('availableQuantity')
-                || $request->filled('available_quantity')
-                || $request->filled('price');
-
-            if ($hasFlatPacking) {
-                $request->merge([
-                    'packingSizes' => [
-                        $this->normalizePackingSizeRow([
-                            'packingId' => $request->input('packingId', $request->input('packing_id')),
-                            'packing' => $request->input('packing'),
-                            'packingForm' => $request->input('packingForm', $request->input('packing_form')),
-                            'availableQuantity' => $request->input('availableQuantity', $request->input('available_quantity')),
-                            'price' => $request->input('price'),
-                        ]),
-                    ],
-                ]);
-            }
-        }
-    }
-
-    private function normalizePackingSizeRow(array $row): array
-    {
-        $packingId = $row['packingId'] ?? $row['packing_id'] ?? null;
-        $packing = $row['packing'] ?? null;
-        $packingForm = $row['packingForm'] ?? $row['packing_form'] ?? null;
-        $availableQuantity = $row['availableQuantity'] ?? $row['available_quantity'] ?? null;
-        $price = $row['price'] ?? null;
-
-        // Accept packingForm as id (1/2) or label (Normal/Gusset).
-        if ($packingForm !== null && $packingForm !== '' && ! is_string($packingForm)) {
-            $packingForm = (string) $packingForm;
-        }
-        if (is_numeric($packingForm) && isset(Packing::$packingForms[(int) $packingForm])) {
-            $packingForm = Packing::$packingForms[(int) $packingForm];
-        }
-
-        return [
-            'packingId' => $packingId,
-            'packing' => $packing,
-            'packingForm' => $packingForm,
-            'availableQuantity' => $availableQuantity,
-            'price' => $price,
-        ];
     }
 
     private function denyIfUserMismatch(Request $request)
@@ -440,12 +394,12 @@ class WebRiceBagProductController extends Controller
     private function payloadToAttributes(Request $request, bool $partial = false): array
     {
         $map = [
-            'productName' => 'product_name',
-            'riceNameId' => 'rice_name_id',
-            'riceFormId' => 'rice_form_id',
-            'riceForm' => 'rice_form',
-            'bagColor' => 'bag_color',
+            'bagTypeId' => 'bag_type_id',
+            'specification' => 'specification',
             'description' => 'description',
+            'additionalInformation' => 'additional_information',
+            'packingFormId' => 'packing_form_id',
+            'packingForm' => 'packing_form',
         ];
 
         $attrs = [];
@@ -463,7 +417,7 @@ class WebRiceBagProductController extends Controller
             }
 
             $value = $request->input($inputKey);
-            if (in_array($column, ['rice_name_id', 'rice_form_id'], true)) {
+            if (in_array($column, ['bag_type_id', 'packing_form_id'], true)) {
                 $attrs[$column] = $value === null || $value === '' ? null : (int) $value;
             } else {
                 $attrs[$column] = $value;
@@ -496,7 +450,6 @@ class WebRiceBagProductController extends Controller
                     ? (int) $row['packingId']
                     : null,
                 'packing' => $row['packing'] ?? null,
-                'packing_form' => $row['packingForm'] ?? null,
                 'available_quantity' => $row['availableQuantity'] ?? null,
                 'price' => $row['price'] ?? null,
                 'sort_order' => $sortOrder,
@@ -563,7 +516,6 @@ class WebRiceBagProductController extends Controller
                 'id' => (int) $size->id,
                 'packingId' => $size->packing_id !== null ? (int) $size->packing_id : null,
                 'packing' => $size->packing,
-                'packingForm' => $size->packing_form,
                 'availableQuantity' => $size->available_quantity !== null ? (string) $size->available_quantity : null,
                 'price' => $size->price !== null ? (string) $size->price : null,
                 'sortOrder' => (int) $size->sort_order,
@@ -573,12 +525,12 @@ class WebRiceBagProductController extends Controller
         return [
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
-            'productName' => $product->product_name,
-            'riceNameId' => $product->rice_name_id !== null ? (int) $product->rice_name_id : null,
-            'riceFormId' => $product->rice_form_id !== null ? (int) $product->rice_form_id : null,
-            'riceForm' => $product->rice_form,
-            'bagColor' => $product->bag_color,
+            'bagTypeId' => $product->bag_type_id !== null ? (int) $product->bag_type_id : null,
+            'specification' => $product->specification,
             'description' => $product->description,
+            'additionalInformation' => $product->additional_information,
+            'packingFormId' => $product->packing_form_id !== null ? (int) $product->packing_form_id : null,
+            'packingForm' => $product->packing_form,
             'status' => (int) $product->status,
             'packingSizes' => $packingSizes,
             'images' => $images,

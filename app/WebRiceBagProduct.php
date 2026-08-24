@@ -10,13 +10,12 @@ class WebRiceBagProduct extends Model
 
     protected $fillable = [
         'user_id',
-        'product_name',
-        'rice_name_id',
-        'rice_form_id',
-        'rice_form',
-        'bag_color',
-        'print_type',
+        'bag_type_id',
+        'specification',
         'description',
+        'additional_information',
+        'packing_form_id',
+        'packing_form',
         'status',
     ];
 
@@ -37,10 +36,5 @@ class WebRiceBagProduct extends Model
         return $this->hasMany(WebRiceBagProductImage::class, 'product_id', 'id')
             ->orderBy('sort_order')
             ->orderBy('id');
-    }
-
-    public function riceName()
-    {
-        return $this->belongsTo(RiceName::class, 'rice_name_id', 'id');
     }
 }
