@@ -23,6 +23,7 @@ class SplitRiceBagProductPackingSizes extends Migration
                 $table->unsignedBigInteger('product_id');
                 $table->unsignedBigInteger('packing_id')->nullable();
                 $table->string('packing', 255)->nullable();
+                $table->string('packing_form', 64)->nullable();
                 $table->decimal('available_quantity', 12, 2)->nullable();
                 $table->decimal('price', 12, 2)->nullable();
                 $table->unsignedInteger('sort_order')->default(0);

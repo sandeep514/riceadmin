@@ -56,13 +56,7 @@ class ReshapeWebRiceBagProductsColumns extends Migration
             });
         }
 
-        if (Schema::hasTable('web_rice_bag_product_packing_sizes')
-            && Schema::hasColumn('web_rice_bag_product_packing_sizes', 'packing_form')
-        ) {
-            Schema::table('web_rice_bag_product_packing_sizes', function (Blueprint $table) {
-                $table->dropColumn('packing_form');
-            });
-        }
+        // Keep packing_form on packing_sizes — it comes from packingSizes[].packingForm in payload.
     }
 
     public function down()
@@ -111,12 +105,5 @@ class ReshapeWebRiceBagProductsColumns extends Migration
             });
         }
 
-        if (Schema::hasTable('web_rice_bag_product_packing_sizes')
-            && ! Schema::hasColumn('web_rice_bag_product_packing_sizes', 'packing_form')
-        ) {
-            Schema::table('web_rice_bag_product_packing_sizes', function (Blueprint $table) {
-                $table->string('packing_form', 64)->nullable()->after('packing');
-            });
-        }
     }
 }

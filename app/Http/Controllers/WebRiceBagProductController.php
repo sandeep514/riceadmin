@@ -24,7 +24,7 @@ class WebRiceBagProductController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validation failed. Expected: userId, bagTypeId, specification, description, additionalInformation, packingFormId, packingForm, packingSizes[{packingId,packing,availableQuantity,price}], images.',
+                'message' => 'Validation failed. Expected: userId, bagTypeId, specification, description, additionalInformation, packingFormId, packingForm, packingSizes[{packingId,packing,packingForm,availableQuantity,price}], images.',
                 'errors' => $validator->errors(),
                 'received_keys' => array_values(array_keys($request->except(['images']))),
             ], 422);
@@ -249,6 +249,7 @@ class WebRiceBagProductController extends Controller
             'packingSizes' => ['required', 'array', 'min:1'],
             'packingSizes.*.packingId' => ['required', 'integer'],
             'packingSizes.*.packing' => ['nullable', 'string', 'max:255'],
+            'packingSizes.*.packingForm' => ['required', 'string', 'in:' . implode(',', $packingForms)],
             'packingSizes.*.availableQuantity' => ['required', 'numeric'],
             'packingSizes.*.price' => ['required', 'numeric'],
             'images' => ['nullable'],
@@ -271,6 +272,7 @@ class WebRiceBagProductController extends Controller
             'packingSizes' => ['sometimes', 'array', 'min:1'],
             'packingSizes.*.packingId' => ['required', 'integer'],
             'packingSizes.*.packing' => ['nullable', 'string', 'max:255'],
+            'packingSizes.*.packingForm' => ['required', 'string', 'in:' . implode(',', $packingForms)],
             'packingSizes.*.availableQuantity' => ['required', 'numeric'],
             'packingSizes.*.price' => ['required', 'numeric'],
             'images' => ['nullable'],
@@ -362,9 +364,14 @@ class WebRiceBagProductController extends Controller
                 if (! is_array($row)) {
                     continue;
                 }
+                $packingForm = $row['packingForm'] ?? $row['packing_form'] ?? null;
+                if (is_numeric($packingForm) && isset(Packing::$packingForms[(int) $packingForm])) {
+                    $packingForm = Packing::$packingForms[(int) $packingForm];
+                }
                 $normalizedRows[] = [
                     'packingId' => $row['packingId'] ?? $row['packing_id'] ?? null,
                     'packing' => $row['packing'] ?? $row['packing_name'] ?? null,
+                    'packingForm' => $packingForm,
                     'availableQuantity' => $row['availableQuantity'] ?? $row['available_quantity'] ?? null,
                     'price' => $row['price'] ?? null,
                 ];
@@ -450,6 +457,7 @@ class WebRiceBagProductController extends Controller
                     ? (int) $row['packingId']
                     : null,
                 'packing' => $row['packing'] ?? null,
+                'packing_form' => $row['packingForm'] ?? null,
                 'available_quantity' => $row['availableQuantity'] ?? null,
                 'price' => $row['price'] ?? null,
                 'sort_order' => $sortOrder,
@@ -516,6 +524,7 @@ class WebRiceBagProductController extends Controller
                 'id' => (int) $size->id,
                 'packingId' => $size->packing_id !== null ? (int) $size->packing_id : null,
                 'packing' => $size->packing,
+                'packingForm' => $size->packing_form,
                 'availableQuantity' => $size->available_quantity !== null ? (string) $size->available_quantity : null,
                 'price' => $size->price !== null ? (string) $size->price : null,
                 'sortOrder' => (int) $size->sort_order,
