@@ -343,9 +343,9 @@
                 </a>
             </li>
 
-            <li class="{{ (in_array($currentRoute,['public.packing.master']))?'active':'' }}">
+            <li class="{{ (in_array($currentRoute,['public.packing.master','public.packing.master.create','public.packing.master.edit']))?'active':'' }}">
                 <a href="{{ route('public.packing.master') }}">
-                    <i class="fa fa-address-card-o"></i> 
+                    <i class="fa fa-address-card-o"></i>
                     <span>Public Packing</span>
                 </a>
             </li>
@@ -516,6 +516,20 @@
                     </li>
                 </ul>
             </li>
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show']))?'active':'' }}">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-cubes"></i>
+                    <span>Vendor Products</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ in_array($currentRoute, ['get.web.rice.bag.products.list','get.web.rice.bag.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.rice.bag.products.list') }}"><i class="fa fa-circle-o"></i> Rice Bag Products</a>
+                    </li>
+                </ul>
+            </li>
             <li class="treeview {{ (in_array($currentRoute,['reports.live-prices']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-file-text-o"></i>
@@ -566,12 +580,6 @@
                 <a href="{{ route('get.web.brands.list') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Web Brands</span>
-                </a>
-            </li>
-            <li class="{{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show']))?'active':'' }}">
-                <a href="{{ route('get.web.rice.bag.products.list') }}">
-                    <i class="fa fa-shopping-bag"></i>
-                    <span>Rice Bag Products</span>
                 </a>
             </li>
 

@@ -696,7 +696,11 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::GET('hot/deal/notification/master' , ['as' => 'hot.deal.notification.master' , 'uses' => 'NotificationController@hotDealIndex']);
 
     Route::GET('packing/public/master' , ['as' => 'public.packing.master' , 'uses' => 'PublicPackingMasterController@index']);
-    
+    Route::GET('packing/public/master/create' , ['as' => 'public.packing.master.create' , 'uses' => 'PublicPackingMasterController@create']);
+    Route::POST('packing/public/master/store' , ['as' => 'public.packing.master.store' , 'uses' => 'PublicPackingMasterController@store']);
+    Route::GET('packing/public/master/edit/{id}' , ['as' => 'public.packing.master.edit' , 'uses' => 'PublicPackingMasterController@edit']);
+    Route::POST('packing/public/master/update' , ['as' => 'public.packing.master.update' , 'uses' => 'PublicPackingMasterController@update']);
+    Route::GET('packing/public/master/change/status/{id}' , ['as' => 'public.packing.master.change.status' , 'uses' => 'PublicPackingMasterController@changeStatus']);
     Route::POST('public/packing/master/controller' , ['as' => 'public.packing.master.controller' , 'uses' => 'PublicPackingMasterController@save']);
 
     Route::GET('update/hot/deal/status/{statusType}/{hotDealNotifId}' , ['as' => 'update.hot.deal.status' , 'uses' => 'NotificationController@updateHotDealStatus']);

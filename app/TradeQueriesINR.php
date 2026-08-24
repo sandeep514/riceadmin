@@ -155,6 +155,7 @@ class TradeQueriesINR extends Model
     public static function publicPackingOptions()
     {
         return PublicPacking::query()
+            ->where('status', 1)
             ->orderByRaw('`order` IS NULL, `order` ASC')
             ->orderBy('id')
             ->get()

@@ -20,6 +20,7 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li>Vendor Products</li>
             <li><a href="{{ route('get.web.rice.bag.products.list') }}">Rice Bag Products</a></li>
             <li class="active">List</li>
         </ol>
