@@ -562,10 +562,16 @@
                 </a>
             </li>
             <li class="header">Web Brands</li>
-            <li class="{{ (in_array($currentRoute,['get.web.brands.list']))?'active':'' }}">
+            <li class="{{ (in_array($currentRoute,['get.web.brands.list','get.web.brands.show']))?'active':'' }}">
                 <a href="{{ route('get.web.brands.list') }}">
                     <i class="fa fa-address-card-o"></i> 
                     <span>Web Brands</span>
+                </a>
+            </li>
+            <li class="{{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show']))?'active':'' }}">
+                <a href="{{ route('get.web.rice.bag.products.list') }}">
+                    <i class="fa fa-shopping-bag"></i>
+                    <span>Rice Bag Products</span>
                 </a>
             </li>
 

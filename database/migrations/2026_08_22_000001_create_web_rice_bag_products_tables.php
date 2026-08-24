@@ -17,7 +17,7 @@ class CreateWebRiceBagProductsTables extends Migration
             $table->text('additional_information')->nullable();
             $table->unsignedBigInteger('packing_form_id')->nullable();
             $table->string('packing_form', 64)->nullable();
-            $table->unsignedTinyInteger('status')->default(1);
+            $table->unsignedTinyInteger('status')->default(0);
             $table->timestamps();
 
             $table->index('user_id');

@@ -823,6 +823,10 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('toggle/web/brands/status/{id}' , ['as' => 'toggle.web.brands.status' , 'uses' => 'WebBrandController@toggleWebBrandsStatus']);
     Route::post('update/order/web/brands' , ['as' => 'update.order.web.brands' , 'uses' => 'WebBrandController@updateWebBrandOrder']);
 
+    Route::get('get/web/rice-bag-products', ['as' => 'get.web.rice.bag.products.list', 'uses' => 'WebRiceBagProductController@showProductsToAdmin']);
+    Route::get('get/web/rice-bag-products/{id}', ['as' => 'get.web.rice.bag.products.show', 'uses' => 'WebRiceBagProductController@showProductToAdmin']);
+    Route::get('toggle/web/rice-bag-products/status/{id}', ['as' => 'toggle.web.rice.bag.products.status', 'uses' => 'WebRiceBagProductController@toggleWebRiceBagProductStatus']);
+
 
 
     Route::get('web/users' , ['as' => 'web.user' , 'uses' => 'UsersController@webusers']);

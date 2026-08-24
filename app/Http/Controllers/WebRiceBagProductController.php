@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Packing;
+use App\PackingType;
 use App\WebRiceBagProduct;
 use App\WebRiceBagProductPackingSize;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Session;
 
 class WebRiceBagProductController extends Controller
 {
@@ -32,7 +34,7 @@ class WebRiceBagProductController extends Controller
 
         $product = DB::transaction(function () use ($request) {
             $attrs = $this->payloadToAttributes($request);
-            $attrs['status'] = 1;
+            $attrs['status'] = 0;
 
             $product = WebRiceBagProduct::create($attrs);
             $this->syncPackingSizes($product, $request->input('packingSizes', []), $request, replace: true);
@@ -54,6 +56,11 @@ class WebRiceBagProductController extends Controller
 
         if ($denied = $this->denyIfUserMismatch($request)) {
             return $denied;
+        }
+
+        $productId = $request->input('id');
+        if ($productId === null || $productId === '' || (int) $productId <= 0) {
+            return $this->create($request);
         }
 
         $validator = Validator::make($request->all(), $this->updateRules());
@@ -236,6 +243,45 @@ class WebRiceBagProductController extends Controller
         ], 200);
     }
 
+    public function showProductsToAdmin()
+    {
+        $products = WebRiceBagProduct::with(['user:id,name,email,mobile', 'packingSizes'])
+            ->orderByDesc('id')
+            ->get();
+
+        $bagTypes = PackingType::pluck('name', 'id');
+
+        return view('webRiceBagProducts.list', compact('products', 'bagTypes'));
+    }
+
+    public function showProductToAdmin($id)
+    {
+        $product = WebRiceBagProduct::with([
+            'user:id,name,email,mobile',
+            'packingSizes',
+        ])->findOrFail((int) $id);
+
+        $bagTypes = PackingType::pluck('name', 'id');
+        $imageBasePath = $this->imageBasePath((int) $product->user_id);
+
+        return view('webRiceBagProducts.show', compact('product', 'bagTypes', 'imageBasePath'));
+    }
+
+    public function toggleWebRiceBagProductStatus($id)
+    {
+        $product = WebRiceBagProduct::find((int) $id);
+
+        if ($product === null) {
+            Session::flash('error', 'Error|Rice bag product not found.');
+            return back();
+        }
+
+        $product->update(['status' => (int) $product->status === 1 ? 0 : 1]);
+        Session::flash('success', 'Success|Status updated successfully.');
+
+        return back();
+    }
+
     private function createRules(): array
     {
         $packingForms = array_values(Packing::$packingForms);
@@ -330,6 +376,10 @@ class WebRiceBagProductController extends Controller
 
         if ($request->filled('userId') && ! $request->filled('user_id')) {
             $request->merge(['user_id' => $request->input('userId')]);
+        }
+
+        if ($request->has('id') && ($request->input('id') === '' || $request->input('id') === null)) {
+            $request->request->remove('id');
         }
 
         // One product = one packing form. Frontend may send packing_forms[] / packing_form_ids[] — use first value.
