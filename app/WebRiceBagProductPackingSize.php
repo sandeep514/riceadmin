@@ -10,11 +10,14 @@ class WebRiceBagProductPackingSize extends Model
 
     protected $fillable = [
         'product_id',
-        'packing_id',
-        'packing',
-        'packing_form',
-        'available_quantity',
-        'price',
+        'packing_size_id',
+        'packing_size',
+        'rate',
+        'gst',
+        'total_price',
+        'bag_size',
+        'bag_weight',
+        'image',
         'sort_order',
     ];
 

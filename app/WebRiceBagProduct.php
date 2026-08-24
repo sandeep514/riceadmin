@@ -14,8 +14,6 @@ class WebRiceBagProduct extends Model
         'specification',
         'description',
         'additional_information',
-        'packing_form_id',
-        'packing_form',
         'status',
     ];
 
@@ -24,16 +22,15 @@ class WebRiceBagProduct extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function packingSizes()
+    public function packingForms()
     {
-        return $this->hasMany(WebRiceBagProductPackingSize::class, 'product_id', 'id')
-            ->orderBy('sort_order')
+        return $this->hasMany(WebRiceBagProductPackingForm::class, 'product_id', 'id')
             ->orderBy('id');
     }
 
-    public function images()
+    public function packingSizes()
     {
-        return $this->hasMany(WebRiceBagProductImage::class, 'product_id', 'id')
+        return $this->hasMany(WebRiceBagProductPackingSize::class, 'product_id', 'id')
             ->orderBy('sort_order')
             ->orderBy('id');
     }
