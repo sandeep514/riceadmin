@@ -24,7 +24,7 @@ class WebRiceBagProductController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validation failed. Send JSON body or multipart fields for productName, riceNameId, riceFormId, bagColor, printType, packingSizes. For images use multipart file uploads (file:// paths are ignored).',
+                'message' => 'Validation failed. Expected payload fields: userId, productName, riceNameId, riceFormId, riceForm, bagColor, description, packingSizes[{packingId,packing,packingForm,availableQuantity,price}], images (multipart files).',
                 'errors' => $validator->errors(),
                 'received_keys' => array_values(array_keys($request->except(['images']))),
             ], 422);
@@ -255,6 +255,9 @@ class WebRiceBagProductController extends Controller
     {
         $req = $required ? ['required'] : ['sometimes', 'required'];
 
+        // Matches client payload only:
+        // userId, productName, riceNameId, riceFormId, riceForm, bagColor,
+        // description, packingSizes[], images (printType is not used).
         return [
             'user_id' => $required
                 ? ['required', 'integer', 'exists:users,id']
@@ -264,7 +267,6 @@ class WebRiceBagProductController extends Controller
             'riceFormId' => array_merge($req, ['integer']),
             'riceForm' => ['nullable', 'string', 'max:255'],
             'bagColor' => array_merge($req, ['string', 'max:64']),
-            'printType' => array_merge($req, ['string', 'max:64']),
             'description' => ['nullable', 'string'],
         ];
     }
@@ -329,7 +331,6 @@ class WebRiceBagProductController extends Controller
             'rice_form_id' => 'riceFormId',
             'rice_form' => 'riceForm',
             'bag_color' => 'bagColor',
-            'print_type' => 'printType',
             'packing_sizes' => 'packingSizes',
             'available_quantity' => 'availableQuantity',
             'userId' => 'userId',
@@ -444,7 +445,6 @@ class WebRiceBagProductController extends Controller
             'riceFormId' => 'rice_form_id',
             'riceForm' => 'rice_form',
             'bagColor' => 'bag_color',
-            'printType' => 'print_type',
             'description' => 'description',
         ];
 
@@ -578,7 +578,6 @@ class WebRiceBagProductController extends Controller
             'riceFormId' => $product->rice_form_id !== null ? (int) $product->rice_form_id : null,
             'riceForm' => $product->rice_form,
             'bagColor' => $product->bag_color,
-            'printType' => $product->print_type,
             'description' => $product->description,
             'status' => (int) $product->status,
             'packingSizes' => $packingSizes,
