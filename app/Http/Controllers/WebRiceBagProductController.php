@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Packing;
 use App\PackingType;
+use App\WebBusinessDetails;
 use App\WebRiceBagProduct;
 use App\WebRiceBagProductPackingSize;
 use Illuminate\Http\Request;
@@ -133,6 +134,76 @@ class WebRiceBagProductController extends Controller
             'message' => 'Rice bag products fetched successfully.',
             'data' => $products,
             'imageBasePath' => $this->imageBasePath((int) $userId),
+        ], 200);
+    }
+
+    /**
+     * Public vendor products by web_business_details.id
+     * Returns verified products with packing size variants.
+     */
+    public function listByVendorId(Request $request, $id)
+    {
+        $vendor = WebBusinessDetails::query()
+            ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
+            ->where('id', (int) $id)
+            ->where('is_active_listing', 1)
+            ->first();
+
+        if ($vendor === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Vendor not found.',
+            ], 404);
+        }
+
+        $userId = (int) ($vendor->user_id ?? 0);
+        if ($userId <= 0) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Vendor products fetched successfully.',
+                'vendor' => [
+                    'id' => (int) $vendor->id,
+                    'company_name' => $vendor->company_name,
+                    'product' => $vendor->product,
+                    'contactPerson' => $vendor->contactPerson,
+                    'contactMobile' => $vendor->contactMobile,
+                    'address' => $vendor->address,
+                    'recommended' => (int) ($vendor->is_sntc_recommended ?? 0),
+                ],
+                'data' => [],
+                'imageBasePath' => null,
+            ], 200);
+        }
+
+        $products = WebRiceBagProduct::with(['packingSizes'])
+            ->where('user_id', $userId)
+            ->where('status', 1)
+            ->orderByDesc('id')
+            ->get();
+
+        $bagTypes = PackingType::whereIn(
+            'id',
+            $products->pluck('bag_type_id')->filter()->unique()->values()->all()
+        )->pluck('name', 'id');
+
+        $data = $products->map(function (WebRiceBagProduct $product) use ($bagTypes) {
+            return $this->serializeVendorProduct($product, $bagTypes);
+        })->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendor products fetched successfully.',
+            'vendor' => [
+                'id' => (int) $vendor->id,
+                'company_name' => $vendor->company_name,
+                'product' => $vendor->product,
+                'contactPerson' => $vendor->contactPerson,
+                'contactMobile' => $vendor->contactMobile,
+                'address' => $vendor->address,
+                'recommended' => (int) ($vendor->is_sntc_recommended ?? 0),
+            ],
+            'data' => $data,
+            'imageBasePath' => $this->imageBasePath($userId),
         ], 200);
     }
 
@@ -692,6 +763,49 @@ class WebRiceBagProductController extends Controller
             'packingForm' => $product->packing_form,
             'status' => (int) $product->status,
             'packingSizes' => $packingSizes,
+        ];
+    }
+
+    /** Public vendor catalog payload — packing sizes exposed as variants. */
+    private function serializeVendorProduct(WebRiceBagProduct $product, $bagTypes = null): array
+    {
+        $basePath = $this->imageBasePath((int) $product->user_id);
+
+        $variants = $product->packingSizes->map(function (WebRiceBagProductPackingSize $size) use ($basePath) {
+            return [
+                'id' => (int) $size->id,
+                'packingSizeId' => $size->packing_size_id !== null ? (int) $size->packing_size_id : null,
+                'packingSize' => $size->packing_size,
+                'rate' => $size->rate !== null ? (string) $size->rate : null,
+                'gst' => $size->gst !== null ? (string) $size->gst : null,
+                'totalPrice' => $size->total_price !== null ? (string) $size->total_price : null,
+                'bagSize' => $size->bag_size,
+                'bagWeight' => $size->bag_weight,
+                'image' => $size->image,
+                'imageUrl' => $size->image ? asset($basePath . '/' . $size->image) : null,
+                'sortOrder' => (int) $size->sort_order,
+            ];
+        })->values()->all();
+
+        $bagTypeName = null;
+        if ($product->bag_type_id !== null) {
+            if ($bagTypes !== null) {
+                $bagTypeName = $bagTypes[$product->bag_type_id] ?? null;
+            } else {
+                $bagTypeName = optional(PackingType::find($product->bag_type_id))->name;
+            }
+        }
+
+        return [
+            'id' => (int) $product->id,
+            'bagTypeId' => $product->bag_type_id !== null ? (int) $product->bag_type_id : null,
+            'bagTypeName' => $bagTypeName,
+            'specification' => $product->specification,
+            'description' => $product->description,
+            'additionalInformation' => $product->additional_information,
+            'packingFormId' => $product->packing_form_id !== null ? (int) $product->packing_form_id : null,
+            'packingForm' => $product->packing_form,
+            'variants' => $variants,
         ];
     }
 }

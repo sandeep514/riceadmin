@@ -261,7 +261,8 @@ use Pusher\Pusher;
 
 
     Route::get('web/vendor/type' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorType', 'middleware' => 'portal.api.token' ]); 
-    Route::get('web/vendor/list/{vendorType}' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorList', 'middleware' => 'portal.api.token' ]); 
+    Route::get('web/vendor/list/{vendorType}' , ['as' => 'web.vendor.list' , 'uses' => 'WebBrandController@vendorList', 'middleware' => 'portal.api.token' ]); 
+    Route::get('web/vendor/products/{id}' , ['as' => 'web.vendor.products' , 'uses' => 'WebRiceBagProductController@listByVendorId', 'middleware' => 'portal.api.token' ]);
 
     
 
