@@ -10,6 +10,7 @@
         border-radius: 4px;
         background: #fff;
         padding: 4px;
+        cursor: pointer;
     }
     .rice-bag-detail-table th {
         width: 200px;
@@ -153,8 +154,12 @@
                                         <td>{{ $size->bag_weight ?? '—' }}</td>
                                         <td>
                                             @if(!empty($size->image))
-                                                <a href="{{ asset($imageBasePath.'/'.$size->image) }}" target="_blank" rel="noopener">
-                                                    <img src="{{ asset($imageBasePath.'/'.$size->image) }}"
+                                                @php $imgUrl = asset($imageBasePath.'/'.$size->image); @endphp
+                                                <a href="javascript:void(0);"
+                                                   class="rice-bag-image-preview"
+                                                   data-img="{{ $imgUrl }}"
+                                                   data-title="{{ $size->packing_size ?? $size->image }}">
+                                                    <img src="{{ $imgUrl }}"
                                                          alt="packing size"
                                                          class="rice-bag-size-img"
                                                          onerror="this.style.display='none';">
@@ -178,4 +183,43 @@
         </div>
     </section>
 </div>
+
+<div class="modal fade" id="riceBagImageModal" tabindex="-1" role="dialog" aria-labelledby="riceBagImageModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="riceBagImageModalLabel">Packing image</h4>
+            </div>
+            <div class="modal-body text-center">
+                <img src="" alt="Packing image" id="riceBagImageModalImg"
+                     style="max-width:100%; max-height:70vh; object-fit:contain;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('javascript')
+<script>
+    $(function () {
+        $(document).on('click', '.rice-bag-image-preview', function (e) {
+            e.preventDefault();
+            var img = $(this).data('img');
+            var title = $(this).data('title') || 'Packing image';
+            $('#riceBagImageModalLabel').text(title);
+            $('#riceBagImageModalImg').attr('src', img);
+            $('#riceBagImageModal').modal('show');
+        });
+
+        $('#riceBagImageModal').on('hidden.bs.modal', function () {
+            $('#riceBagImageModalImg').attr('src', '');
+        });
+    });
+</script>
 @endsection

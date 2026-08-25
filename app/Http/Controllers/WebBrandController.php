@@ -80,6 +80,7 @@ use Session;
 use App\RiceBrandForm;
 use App\WebBusinessDetails;
 use App\BrandAvailability;
+use App\WebRiceBagProduct;
 
 class WebBrandController extends Controller
 {
@@ -597,26 +598,43 @@ class WebBrandController extends Controller
     public function vendorList($vendorType)
     {
         $webBusinessDetails = WebBusinessDetails::query()
-            ->select(['company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
+            ->select(['user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
             ->where('selected_category', $vendorType)
             ->where('is_active_listing', 1)
-            ->get()
-            ->map(function ($row) {
-                return [
-                    'company_name' => $row->company_name,
-                    'product' => $row->product,
-                    'contactPerson' => $row->contactPerson,
-                    'contactMobile' => $row->contactMobile,
-                    'address' => $row->address,
-                    'recommended' => (int) ($row->is_sntc_recommended ?? 0),
-                ];
-            })
-            ->values();
+            ->get();
+
+        $userIds = $webBusinessDetails->pluck('user_id')->filter()->unique()->values()->all();
+        $usersWithProducts = [];
+        if ($userIds !== []) {
+            $usersWithProducts = WebRiceBagProduct::query()
+                ->whereIn('user_id', $userIds)
+                ->where('status', 1)
+                ->distinct()
+                ->pluck('user_id')
+                ->map(fn ($id) => (int) $id)
+                ->all();
+            $usersWithProducts = array_fill_keys($usersWithProducts, true);
+        }
+
+        $data = $webBusinessDetails->map(function ($row) use ($usersWithProducts) {
+            $userId = (int) ($row->user_id ?? 0);
+
+            return [
+                'userId' => $userId > 0 ? $userId : null,
+                'company_name' => $row->company_name,
+                'product' => $row->product,
+                'contactPerson' => $row->contactPerson,
+                'contactMobile' => $row->contactMobile,
+                'address' => $row->address,
+                'recommended' => (int) ($row->is_sntc_recommended ?? 0),
+                'has_products' => $userId > 0 && isset($usersWithProducts[$userId]),
+            ];
+        })->values();
 
         return response()->json([
             'status' => true,
             'message' => 'Vendors get successfully.',
-            'data' => $webBusinessDetails,
+            'data' => $data,
         ], 200);
     }
 
