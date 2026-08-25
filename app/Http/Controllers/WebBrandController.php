@@ -598,7 +598,7 @@ class WebBrandController extends Controller
     public function vendorList($vendorType)
     {
         $webBusinessDetails = WebBusinessDetails::query()
-            ->select(['user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
+            ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
             ->where('selected_category', $vendorType)
             ->where('is_active_listing', 1)
             ->get();
@@ -620,7 +620,7 @@ class WebBrandController extends Controller
             $userId = (int) ($row->user_id ?? 0);
 
             return [
-                'id' => $userId > 0 ? $userId : null,
+                'id' => (int) $row->id,
                 'company_name' => $row->company_name,
                 'product' => $row->product,
                 'contactPerson' => $row->contactPerson,
