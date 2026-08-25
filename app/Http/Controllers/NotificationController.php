@@ -32,51 +32,59 @@ class NotificationController extends Controller
     public function sendNotification(Request $request)
     {
         $request->validate([
-            'userType'    => 'required',
+            'userType'    => 'required|array',
             'title'       => 'required',
             'message'     => 'required',
-            'userAppType' => 'required',
+            'userAppType' => 'required|array',
+            'userAppType.*' => 'in:usd,inr',
         ]);
-    
-        if ($request->userAppType == 'usd') {
-            $users = User::query()
-                ->whereIn('usd_role', $request->userType)
-                ->where('id', '!=', 301)
-                ->whereNotNull('user_token')
-                ->select('user_token', 'id')
-                ->get();
-        } else {
-            $users = User::query()
-                ->whereIn('role', $request->userType)
-                ->where('id', '!=', 301)
-                ->whereNotNull('user_token')
-                ->select('user_token', 'id')
-                ->get();
+
+        $appTypes = array_values(array_unique(array_filter((array) $request->userAppType)));
+        $totalUsers = 0;
+        $chunkCount = 0;
+        $chunkSize = 500;
+
+        foreach ($appTypes as $userAppType) {
+            if ($userAppType === 'usd') {
+                $users = User::query()
+                    ->whereIn('usd_role', $request->userType)
+                    ->where('id', '!=', 301)
+                    ->whereNotNull('user_token')
+                    ->select('user_token', 'id')
+                    ->get();
+            } else {
+                $users = User::query()
+                    ->whereIn('role', $request->userType)
+                    ->where('id', '!=', 301)
+                    ->whereNotNull('user_token')
+                    ->select('user_token', 'id')
+                    ->get();
+            }
+
+            if ($users->isEmpty()) {
+                continue;
+            }
+
+            $totalUsers += $users->count();
+            $chunked = array_chunk($users->toArray(), $chunkSize);
+
+            foreach ($chunked as $chunk) {
+                SendPushNotificationJob::dispatch(
+                    $request->title,
+                    $request->message,
+                    $chunk,
+                    $userAppType
+                );
+                $chunkCount++;
+            }
         }
-    
-        $totalUsers = $users->count();
-    
+
         if ($totalUsers === 0) {
             return back()->with('message', 'No users found with tokens.');
         }
-    
-        // Split into chunks of 500 and dispatch a background job per chunk
-        $chunkSize = 500;
-        $chunks = $users->toArray();
-        $chunked = array_chunk($chunks, $chunkSize);
-    
-        foreach ($chunked as $chunk) {
-            SendPushNotificationJob::dispatch(
-                $request->title,
-                $request->message,
-                $chunk,
-                $request->userAppType
-            );
-        }
-    
-        $chunkCount = count($chunked);
+
         $message = "Notification queued for {$totalUsers} users in {$chunkCount} batch(es).";
-    
+
         return back()->with('message', $message);
     }
 

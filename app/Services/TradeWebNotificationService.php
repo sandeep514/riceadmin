@@ -266,16 +266,19 @@ Quantity: {quantity}';
 
     /**
      * App/mobile users with FCM tokens for roles linked to the trade categories (or explicit role).
+     * When category_ids are provided, require matching web_business_details.selected_category
+     * so per-category sends do not notify every user of that role.
      *
      * @return array<int>
      */
     public function eligibleAppUserIdsForFcm(array $categoryIds, ?int $roleId = null): array
     {
+        $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
+
         $roleIds = [];
         if ($roleId !== null && $roleId > 0) {
             $roleIds[] = $roleId;
         } else {
-            $categoryIds = array_values(array_unique(array_filter(array_map('intval', $categoryIds))));
             if ($categoryIds === []) {
                 return [];
             }
@@ -294,7 +297,7 @@ Quantity: {quantity}';
             return [];
         }
 
-        return User::query()
+        $query = User::query()
             ->where(function ($q) {
                 $q->where('user_from', 'app')
                     ->orWhere('userType', 1);
@@ -302,7 +305,18 @@ Quantity: {quantity}';
             ->whereIn('role', $roleIds)
             ->whereNotNull('user_token')
             ->where('user_token', '!=', '')
-            ->where('id', '!=', 301)
+            ->where('id', '!=', 301);
+
+        if ($categoryIds !== []) {
+            $query->whereExists(function ($q) use ($categoryIds) {
+                $q->selectRaw('1')
+                    ->from('web_business_details as wbd')
+                    ->whereColumn('wbd.user_id', 'users.id')
+                    ->whereIn('wbd.selected_category', $categoryIds);
+            });
+        }
+
+        return $query
             ->pluck('id')
             ->map(fn ($id) => (int) $id)
             ->values()

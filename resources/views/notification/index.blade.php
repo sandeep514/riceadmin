@@ -17,7 +17,7 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <form method="POST" action="{{ route('post.push.notification') }}">
+                        <form method="POST" action="{{ route('post.push.notification') }}" id="push-notification-form">
                             {{ csrf_field() }}
 
                             <div class="row" style="border-bottom: 2px solid #fff;padding-bottom: 10px"> 
@@ -30,13 +30,13 @@
                                     <div class="col-md-2"></div>
                                     <div class="col-md-4">
                                         <div class="checkbox">
-                                            <label><input type="checkbox" name="userAppType" value="usd"> USD</label>
+                                            <label><input type="checkbox" name="userAppType[]" value="usd"> USD</label>
                                         </div>        
                                     </div>
                                     
                                     <div class="col-md-4">
                                         <div class="checkbox">
-                                            <label><input type="checkbox" name="userAppType" value="inr"> INR</label>
+                                            <label><input type="checkbox" name="userAppType[]" value="inr"> INR</label>
                                         </div>        
                                     </div>  
                                     <div class="col-md-2"></div>
@@ -94,7 +94,7 @@
                                 </span>
                             @enderror
 
-                            <button type="submit" name="submit" value="submit">Submit</button>
+                            <button type="submit" name="submit" value="submit" id="push-notification-submit">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -104,4 +104,17 @@
 
     @section('scripts')
         <script type="text/javascript" src="{{ asset('js/deals.js') }}"></script>
+        <script type="text/javascript">
+            (function () {
+                var form = document.getElementById('push-notification-form');
+                var submitBtn = document.getElementById('push-notification-submit');
+                if (!form || !submitBtn) {
+                    return;
+                }
+                form.addEventListener('submit', function () {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Sending…';
+                });
+            })();
+        </script>
     @endsection
