@@ -620,7 +620,7 @@ class WebBrandController extends Controller
             $userId = (int) ($row->user_id ?? 0);
 
             return [
-                'userId' => $userId > 0 ? $userId : null,
+                'id' => $userId > 0 ? $userId : null,
                 'company_name' => $row->company_name,
                 'product' => $row->product,
                 'contactPerson' => $row->contactPerson,
