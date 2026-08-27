@@ -150,6 +150,8 @@ use Pusher\Pusher;
     Route::get('get/brand/list' , ['as' => 'get.brand.list' , 'uses' => 'ApiController@getBrandList']);
     Route::get('get/packing/by/{tradeType}' , ['as' => 'get.packing.tradeType' , 'uses' => 'ApiController@getPackingByTradeType']);
     Route::get('get/packing/type' , ['as' => 'get.packing.type' , 'uses' => 'ApiController@getBagPacking']);
+    Route::get('get/cartoon/types' , ['as' => 'get.cartoon.types' , 'uses' => 'ApiController@getCartoonTypes']);
+    Route::get('get/cylinder/types' , ['as' => 'get.cylinder.types' , 'uses' => 'ApiController@getCylinderTypes']);
     Route::get('get/packing/forms' , ['as' => 'get.packing.forms' , 'uses' => 'ApiController@getPackingForms']);
     Route::get('get/packing/size' , ['as' => 'get.packing.size' , 'uses' => 'ApiController@getPackingSize']);
     Route::get('web/get/farming-types', ['as' => 'web.get.farming.types', 'uses' => 'ApiController@getFarmingTypesWeb']);
@@ -262,7 +264,7 @@ use Pusher\Pusher;
 
     Route::get('web/vendor/type' , ['as' => 'web.vendor.type' , 'uses' => 'WebBrandController@vendorType', 'middleware' => 'portal.api.token' ]); 
     Route::get('web/vendor/list/{vendorType}' , ['as' => 'web.vendor.list' , 'uses' => 'WebBrandController@vendorList', 'middleware' => 'portal.api.token' ]); 
-    Route::get('web/vendor/products/{id}' , ['as' => 'web.vendor.products' , 'uses' => 'WebRiceBagProductController@listByVendorId', 'middleware' => 'portal.api.token' ]);
+    Route::get('web/vendor/products/{id}' , ['as' => 'web.vendor.products' , 'uses' => 'WebVendorProductController@listByVendorId', 'middleware' => 'portal.api.token' ]);
 
     
 

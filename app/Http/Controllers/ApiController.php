@@ -7886,6 +7886,34 @@ if (!file_exists('uploads')) {
         return response()->json(['status' => true, 'data' => $packingType], 200);
     }
 
+    public function getCartoonTypes()
+    {
+        $types = \App\CartoonType::query()
+            ->where('status', \App\CartoonType::STATUS_ACTIVE)
+            ->orderBy('type')
+            ->get(['id', 'type', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Cartoon types fetched successfully.',
+            'data' => $types,
+        ], 200);
+    }
+
+    public function getCylinderTypes()
+    {
+        $types = \App\CylinderType::query()
+            ->where('status', \App\CylinderType::STATUS_ACTIVE)
+            ->orderBy('type')
+            ->get(['id', 'type', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Cylinder types fetched successfully.',
+            'data' => $types,
+        ], 200);
+    }
+
     public function getPackingForms()
     {
         return response()->json([

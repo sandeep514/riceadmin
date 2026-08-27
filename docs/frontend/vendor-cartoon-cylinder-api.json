@@ -1,0 +1,340 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "generatedFor": "frontend",
+    "baseUrl": "/api",
+    "portalBaseUrl": "/api/portal",
+    "auth": {
+      "header": "Authorization",
+      "format": "Bearer <portal_api_token>",
+      "alternateHeader": "X-API-TOKEN"
+    },
+    "notes": [
+      "Cartoon and cylinder flows mirror rice bag but use cartoonTypeId/cylinderTypeId instead of bagTypeId.",
+      "No packingForm fields for cartoon or cylinder.",
+      "Variant arrays use key `variants` (aliases packingSizes/packing_sizes accepted on input).",
+      "New products are created with status 0 (pending). Public catalog shows status 1 only.",
+      "Vendor list id and vendor products id are web_business_details.id."
+    ]
+  },
+  "shared": {
+    "packingSizes": {
+      "method": "GET",
+      "path": "/api/get/packing/size",
+      "auth": false,
+      "description": "Packing size master for variant packingSizeId"
+    },
+    "vendorTypes": {
+      "method": "GET",
+      "path": "/api/web/vendor/type",
+      "auth": true,
+      "description": "Vendor category list (cartoon/cylinder categories)"
+    },
+    "vendorList": {
+      "method": "GET",
+      "path": "/api/web/vendor/list/{vendorType}",
+      "auth": true,
+      "pathParams": {
+        "vendorType": "Category id from vendorTypes"
+      },
+      "responseItem": {
+        "id": "number (web_business_details.id)",
+        "company_name": "string",
+        "product": "string",
+        "contactPerson": "string",
+        "contactMobile": "string",
+        "address": "string",
+        "recommended": "number (0|1)",
+        "has_products": "boolean"
+      }
+    },
+    "vendorProducts": {
+      "method": "GET",
+      "path": "/api/web/vendor/products/{id}",
+      "auth": true,
+      "pathParams": {
+        "id": "Vendor id from vendor list"
+      },
+      "description": "Returns verified products + variants. vendorKind is cartoon | cylinder | rice_bag"
+    }
+  },
+  "cartoon": {
+    "masters": {
+      "types": {
+        "method": "GET",
+        "path": "/api/get/cartoon/types",
+        "auth": false,
+        "response": {
+          "status": true,
+          "message": "Cartoon types fetched successfully.",
+          "data": [{ "id": 1, "type": "string", "description": "string|null" }]
+        }
+      }
+    },
+    "portal": {
+      "create": {
+        "method": "POST",
+        "path": "/api/portal/web/cartoon-product/create",
+        "auth": true,
+        "contentType": ["application/json", "multipart/form-data"],
+        "body": {
+          "user_id": { "type": "number", "required": true },
+          "cartoon_type_id": { "type": "number", "required": true },
+          "specification": { "type": "string", "required": false },
+          "description": { "type": "string", "required": false },
+          "additional_information": { "type": "string", "required": false },
+          "variants": {
+            "type": "array",
+            "required": true,
+            "minItems": 1,
+            "items": {
+              "packingSizeId": { "type": "number", "required": true },
+              "packingSize": { "type": "string", "required": false },
+              "rate": { "type": "number", "required": true },
+              "gst": { "type": "number", "required": false },
+              "totalPrice": { "type": "number", "required": false },
+              "bagSize": { "type": "string", "required": false },
+              "bagWeight": { "type": "string", "required": false },
+              "image": { "type": "file", "required": false, "multipartKey": "variants[{index}].image" }
+            }
+          }
+        },
+        "camelCaseAliases": {
+          "cartoonTypeId": "cartoon_type_id",
+          "userId": "user_id",
+          "additionalInformation": "additional_information",
+          "packingSizes": "variants",
+          "packing_sizes": "variants"
+        },
+        "example": {
+          "user_id": 42,
+          "cartoon_type_id": 2,
+          "specification": "Food grade cartoon",
+          "description": "Optional",
+          "additional_information": "Optional",
+          "variants": [
+            {
+              "packingSizeId": 5,
+              "packingSize": "25 kg",
+              "rate": 120,
+              "gst": 18,
+              "totalPrice": 141.6,
+              "bagSize": "14x20",
+              "bagWeight": "70 gsm"
+            }
+          ]
+        }
+      },
+      "update": {
+        "method": "POST",
+        "path": "/api/portal/web/cartoon-product/update",
+        "auth": true,
+        "body": {
+          "id": { "type": "number", "required": true, "note": "Omit or <=0 creates new product" },
+          "extends": "Same fields as create"
+        },
+        "variantUpdateNote": "Send full variants array. Use variant id or existingImage to keep images without re-upload."
+      },
+      "listByUser": {
+        "method": "GET",
+        "path": "/api/portal/web/cartoon-product/list/{userId}",
+        "auth": true
+      },
+      "show": {
+        "method": "GET",
+        "path": "/api/portal/web/cartoon-product/{id}",
+        "auth": true
+      },
+      "delete": {
+        "method": "DELETE",
+        "path": "/api/portal/web/cartoon-product/{id}",
+        "auth": true
+      },
+      "deleteVariantImage": {
+        "method": "DELETE",
+        "path": "/api/portal/web/cartoon-product/image/{imageId}",
+        "auth": true,
+        "pathParams": {
+          "imageId": "web_cartoon_product_variants.id"
+        }
+      }
+    },
+    "responseShapes": {
+      "product": {
+        "id": "number",
+        "userId": "number",
+        "cartoonTypeId": "number|null",
+        "specification": "string|null",
+        "description": "string|null",
+        "additionalInformation": "string|null",
+        "status": "number (0=pending, 1=verified)",
+        "variants": "Variant[]"
+      },
+      "variant": {
+        "id": "number",
+        "packingSizeId": "number|null",
+        "packingSize": "string|null",
+        "rate": "string|null",
+        "gst": "string|null",
+        "totalPrice": "string|null",
+        "bagSize": "string|null",
+        "bagWeight": "string|null",
+        "image": "string|null",
+        "imageUrl": "string|null",
+        "sortOrder": "number"
+      },
+      "vendorCatalogProduct": {
+        "id": "number",
+        "cartoonTypeId": "number|null",
+        "cartoonTypeName": "string|null",
+        "specification": "string|null",
+        "description": "string|null",
+        "additionalInformation": "string|null",
+        "variants": "Variant[]"
+      },
+      "imageBasePath": "uploads/cartoon-products/{userId}"
+    }
+  },
+  "cylinder": {
+    "masters": {
+      "types": {
+        "method": "GET",
+        "path": "/api/get/cylinder/types",
+        "auth": false,
+        "response": {
+          "status": true,
+          "message": "Cylinder types fetched successfully.",
+          "data": [{ "id": 1, "type": "string", "description": "string|null" }]
+        }
+      }
+    },
+    "portal": {
+      "create": {
+        "method": "POST",
+        "path": "/api/portal/web/cylinder-product/create",
+        "auth": true,
+        "contentType": ["application/json", "multipart/form-data"],
+        "body": {
+          "user_id": { "type": "number", "required": true },
+          "cylinder_type_id": { "type": "number", "required": true },
+          "specification": { "type": "string", "required": false },
+          "description": { "type": "string", "required": false },
+          "additional_information": { "type": "string", "required": false },
+          "variants": {
+            "type": "array",
+            "required": true,
+            "minItems": 1,
+            "items": {
+              "packingSizeId": { "type": "number", "required": true },
+              "packingSize": { "type": "string", "required": false },
+              "rate": { "type": "number", "required": true },
+              "gst": { "type": "number", "required": false },
+              "totalPrice": { "type": "number", "required": false },
+              "bagSize": { "type": "string", "required": false },
+              "bagWeight": { "type": "string", "required": false },
+              "image": { "type": "file", "required": false, "multipartKey": "variants[{index}].image" }
+            }
+          }
+        },
+        "camelCaseAliases": {
+          "cylinderTypeId": "cylinder_type_id",
+          "userId": "user_id",
+          "additionalInformation": "additional_information",
+          "packingSizes": "variants",
+          "packing_sizes": "variants"
+        },
+        "example": {
+          "user_id": 42,
+          "cylinder_type_id": 1,
+          "specification": "Food grade cylinder",
+          "description": "Optional",
+          "additional_information": "Optional",
+          "variants": [
+            {
+              "packingSizeId": 5,
+              "packingSize": "50 L",
+              "rate": 850,
+              "gst": 18,
+              "totalPrice": 1003,
+              "bagSize": "50L",
+              "bagWeight": "2.5 kg"
+            }
+          ]
+        }
+      },
+      "update": {
+        "method": "POST",
+        "path": "/api/portal/web/cylinder-product/update",
+        "auth": true,
+        "body": {
+          "id": { "type": "number", "required": true },
+          "extends": "Same fields as create"
+        }
+      },
+      "listByUser": {
+        "method": "GET",
+        "path": "/api/portal/web/cylinder-product/list/{userId}",
+        "auth": true
+      },
+      "show": {
+        "method": "GET",
+        "path": "/api/portal/web/cylinder-product/{id}",
+        "auth": true
+      },
+      "delete": {
+        "method": "DELETE",
+        "path": "/api/portal/web/cylinder-product/{id}",
+        "auth": true
+      },
+      "deleteVariantImage": {
+        "method": "DELETE",
+        "path": "/api/portal/web/cylinder-product/image/{imageId}",
+        "auth": true,
+        "pathParams": {
+          "imageId": "web_cylinder_product_variants.id"
+        }
+      }
+    },
+    "responseShapes": {
+      "product": {
+        "id": "number",
+        "userId": "number",
+        "cylinderTypeId": "number|null",
+        "specification": "string|null",
+        "description": "string|null",
+        "additionalInformation": "string|null",
+        "status": "number (0=pending, 1=verified)",
+        "variants": "Variant[]"
+      },
+      "variant": {
+        "id": "number",
+        "packingSizeId": "number|null",
+        "packingSize": "string|null",
+        "rate": "string|null",
+        "gst": "string|null",
+        "totalPrice": "string|null",
+        "bagSize": "string|null",
+        "bagWeight": "string|null",
+        "image": "string|null",
+        "imageUrl": "string|null",
+        "sortOrder": "number"
+      },
+      "vendorCatalogProduct": {
+        "id": "number",
+        "cylinderTypeId": "number|null",
+        "cylinderTypeName": "string|null",
+        "specification": "string|null",
+        "description": "string|null",
+        "additionalInformation": "string|null",
+        "variants": "Variant[]"
+      },
+      "imageBasePath": "uploads/cylinder-products/{userId}"
+    }
+  },
+  "errors": {
+    "401": { "status": false, "message": "Unauthorized: API token is required." },
+    "403": { "status": false, "message": "Forbidden: ..." },
+    "404": { "status": false, "message": "Product not found." },
+    "422": { "status": false, "message": "Validation failed.", "errors": {} }
+  }
+}

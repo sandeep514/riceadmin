@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\WebVendorPackagingProductService;
+use App\WebCylinderProduct;
+use Illuminate\Http\Request;
+use Session;
+
+class WebCylinderProductController extends Controller
+{
+    private WebVendorPackagingProductService $service;
+
+    public function __construct()
+    {
+        $this->service = WebVendorPackagingProductService::cylinder();
+    }
+
+    public function create(Request $request)
+    {
+        return $this->service->create($request);
+    }
+
+    public function update(Request $request)
+    {
+        return $this->service->update($request);
+    }
+
+    public function listByUser(Request $request, $userId)
+    {
+        return $this->service->listByUser($request, $userId);
+    }
+
+    public function show(Request $request, $id)
+    {
+        return $this->service->show($request, $id);
+    }
+
+    public function delete(Request $request, $id)
+    {
+        return $this->service->delete($request, $id);
+    }
+
+    public function deleteImage(Request $request, $imageId)
+    {
+        return $this->service->deleteImage($request, $imageId);
+    }
+
+    public function showProductsToAdmin()
+    {
+        $products = WebCylinderProduct::with(['user:id,name,email,mobile', 'variants'])
+            ->orderByDesc('id')
+            ->get();
+
+        $types = $this->service->typeOptions();
+
+        return view('webCylinderProducts.list', compact('products', 'types'));
+    }
+
+    public function showProductToAdmin($id)
+    {
+        $product = WebCylinderProduct::with([
+            'user:id,name,email,mobile',
+            'variants',
+        ])->findOrFail((int) $id);
+
+        $types = $this->service->typeOptions();
+        $imageBasePath = $this->service->imageBasePath((int) $product->user_id);
+
+        return view('webCylinderProducts.show', compact('product', 'types', 'imageBasePath'));
+    }
+
+    public function toggleStatus($id)
+    {
+        if (! $this->service->toggleStatus((int) $id)) {
+            Session::flash('error', 'Error|Cylinder product not found.');
+            return back();
+        }
+
+        Session::flash('success', 'Success|Status updated successfully.');
+        return back();
+    }
+}

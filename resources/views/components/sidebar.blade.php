@@ -516,7 +516,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-cubes"></i>
                     <span>Vendor Products</span>
@@ -527,6 +527,12 @@
                 <ul class="treeview-menu">
                     <li class="{{ in_array($currentRoute, ['get.web.rice.bag.products.list','get.web.rice.bag.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.rice.bag.products.list') }}"><i class="fa fa-circle-o"></i> Rice Bag Products</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.cartoon.products.list','get.web.cartoon.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.cartoon.products.list') }}"><i class="fa fa-circle-o"></i> Cartoon Products</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.cylinder.products.list','get.web.cylinder.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.cylinder.products.list') }}"><i class="fa fa-circle-o"></i> Cylinder Products</a>
                     </li>
                 </ul>
             </li>

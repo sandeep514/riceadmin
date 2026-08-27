@@ -831,6 +831,14 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/rice-bag-products/{id}', ['as' => 'get.web.rice.bag.products.show', 'uses' => 'WebRiceBagProductController@showProductToAdmin']);
     Route::get('toggle/web/rice-bag-products/status/{id}', ['as' => 'toggle.web.rice.bag.products.status', 'uses' => 'WebRiceBagProductController@toggleWebRiceBagProductStatus']);
 
+    Route::get('get/web/cartoon-products', ['as' => 'get.web.cartoon.products.list', 'uses' => 'WebCartoonProductController@showProductsToAdmin']);
+    Route::get('get/web/cartoon-products/{id}', ['as' => 'get.web.cartoon.products.show', 'uses' => 'WebCartoonProductController@showProductToAdmin']);
+    Route::get('toggle/web/cartoon-products/status/{id}', ['as' => 'toggle.web.cartoon.products.status', 'uses' => 'WebCartoonProductController@toggleStatus']);
+
+    Route::get('get/web/cylinder-products', ['as' => 'get.web.cylinder.products.list', 'uses' => 'WebCylinderProductController@showProductsToAdmin']);
+    Route::get('get/web/cylinder-products/{id}', ['as' => 'get.web.cylinder.products.show', 'uses' => 'WebCylinderProductController@showProductToAdmin']);
+    Route::get('toggle/web/cylinder-products/status/{id}', ['as' => 'toggle.web.cylinder.products.status', 'uses' => 'WebCylinderProductController@toggleStatus']);
+
 
 
     Route::get('web/users' , ['as' => 'web.user' , 'uses' => 'UsersController@webusers']);

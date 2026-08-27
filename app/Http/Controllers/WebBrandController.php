@@ -604,18 +604,7 @@ class WebBrandController extends Controller
             ->get();
 
         $userIds = $webBusinessDetails->pluck('user_id')->filter()->unique()->values()->all();
-        $usersWithProducts = [];
-        if ($userIds !== []) {
-            $usersWithProducts = WebRiceBagProduct::query()
-                ->whereIn('user_id', $userIds)
-                ->where('status', 1)
-                ->whereHas('packingSizes')
-                ->distinct()
-                ->pluck('user_id')
-                ->map(fn ($id) => (int) $id)
-                ->all();
-            $usersWithProducts = array_fill_keys($usersWithProducts, true);
-        }
+        $usersWithProducts = \App\Support\VendorProductCatalog::userIdsWithVerifiedProducts($userIds);
 
         $data = $webBusinessDetails->map(function ($row) use ($usersWithProducts) {
             $userId = (int) ($row->user_id ?? 0);

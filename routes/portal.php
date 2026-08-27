@@ -67,6 +67,20 @@
             Route::get('web/rice-bag-product/{id}', [\App\Http\Controllers\WebRiceBagProductController::class, 'show'])->where('id', '[0-9]+');
             Route::delete('web/rice-bag-product/{id}', [\App\Http\Controllers\WebRiceBagProductController::class, 'delete'])->where('id', '[0-9]+');
 
+            Route::post('web/cartoon-product/create', [\App\Http\Controllers\WebCartoonProductController::class, 'create']);
+            Route::post('web/cartoon-product/update', [\App\Http\Controllers\WebCartoonProductController::class, 'update']);
+            Route::get('web/cartoon-product/list/{userId}', [\App\Http\Controllers\WebCartoonProductController::class, 'listByUser']);
+            Route::delete('web/cartoon-product/image/{imageId}', [\App\Http\Controllers\WebCartoonProductController::class, 'deleteImage']);
+            Route::get('web/cartoon-product/{id}', [\App\Http\Controllers\WebCartoonProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/cartoon-product/{id}', [\App\Http\Controllers\WebCartoonProductController::class, 'delete'])->where('id', '[0-9]+');
+
+            Route::post('web/cylinder-product/create', [\App\Http\Controllers\WebCylinderProductController::class, 'create']);
+            Route::post('web/cylinder-product/update', [\App\Http\Controllers\WebCylinderProductController::class, 'update']);
+            Route::get('web/cylinder-product/list/{userId}', [\App\Http\Controllers\WebCylinderProductController::class, 'listByUser']);
+            Route::delete('web/cylinder-product/image/{imageId}', [\App\Http\Controllers\WebCylinderProductController::class, 'deleteImage']);
+            Route::get('web/cylinder-product/{id}', [\App\Http\Controllers\WebCylinderProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/cylinder-product/{id}', [\App\Http\Controllers\WebCylinderProductController::class, 'delete'])->where('id', '[0-9]+');
+
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
             
