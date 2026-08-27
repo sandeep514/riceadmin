@@ -609,6 +609,7 @@ class WebBrandController extends Controller
             $usersWithProducts = WebRiceBagProduct::query()
                 ->whereIn('user_id', $userIds)
                 ->where('status', 1)
+                ->whereHas('packingSizes')
                 ->distinct()
                 ->pluck('user_id')
                 ->map(fn ($id) => (int) $id)

@@ -138,16 +138,36 @@ class WebRiceBagProductController extends Controller
     }
 
     /**
-     * Public vendor products by web_business_details.id
+     * Public vendor products by web_business_details.id (same `id` as vendor list).
      * Returns verified products with packing size variants.
      */
     public function listByVendorId(Request $request, $id)
     {
-        $vendor = WebBusinessDetails::query()
-            ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
-            ->where('id', (int) $id)
+        $vendorId = (int) $id;
+        if ($vendorId <= 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Vendor id is required.',
+            ], 422);
+        }
+
+        $vendorQuery = WebBusinessDetails::query()
+            ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended', 'is_active_listing']);
+
+        // Primary: id from api/web/vendor/list/{vendorType}
+        $vendor = (clone $vendorQuery)
+            ->where('id', $vendorId)
             ->where('is_active_listing', 1)
             ->first();
+
+        // Fallback: older clients may still send user_id as {id}
+        if ($vendor === null) {
+            $vendor = (clone $vendorQuery)
+                ->where('user_id', $vendorId)
+                ->where('is_active_listing', 1)
+                ->orderByDesc('id')
+                ->first();
+        }
 
         if ($vendor === null) {
             return response()->json([
@@ -157,19 +177,22 @@ class WebRiceBagProductController extends Controller
         }
 
         $userId = (int) ($vendor->user_id ?? 0);
+        $vendorPayload = [
+            'id' => (int) $vendor->id,
+            'company_name' => $vendor->company_name,
+            'product' => $vendor->product,
+            'contactPerson' => $vendor->contactPerson,
+            'contactMobile' => $vendor->contactMobile,
+            'address' => $vendor->address,
+            'recommended' => (int) ($vendor->is_sntc_recommended ?? 0),
+            'has_products' => false,
+        ];
+
         if ($userId <= 0) {
             return response()->json([
                 'status' => true,
                 'message' => 'Vendor products fetched successfully.',
-                'vendor' => [
-                    'id' => (int) $vendor->id,
-                    'company_name' => $vendor->company_name,
-                    'product' => $vendor->product,
-                    'contactPerson' => $vendor->contactPerson,
-                    'contactMobile' => $vendor->contactMobile,
-                    'address' => $vendor->address,
-                    'recommended' => (int) ($vendor->is_sntc_recommended ?? 0),
-                ],
+                'vendor' => $vendorPayload,
                 'data' => [],
                 'imageBasePath' => null,
             ], 200);
@@ -178,30 +201,25 @@ class WebRiceBagProductController extends Controller
         $products = WebRiceBagProduct::with(['packingSizes'])
             ->where('user_id', $userId)
             ->where('status', 1)
+            ->whereHas('packingSizes')
             ->orderByDesc('id')
             ->get();
 
-        $bagTypes = PackingType::whereIn(
-            'id',
-            $products->pluck('bag_type_id')->filter()->unique()->values()->all()
-        )->pluck('name', 'id');
+        $bagTypeIds = $products->pluck('bag_type_id')->filter()->unique()->values()->all();
+        $bagTypes = $bagTypeIds === []
+            ? collect()
+            : PackingType::whereIn('id', $bagTypeIds)->pluck('name', 'id');
 
         $data = $products->map(function (WebRiceBagProduct $product) use ($bagTypes) {
             return $this->serializeVendorProduct($product, $bagTypes);
         })->values();
 
+        $vendorPayload['has_products'] = $data->isNotEmpty();
+
         return response()->json([
             'status' => true,
             'message' => 'Vendor products fetched successfully.',
-            'vendor' => [
-                'id' => (int) $vendor->id,
-                'company_name' => $vendor->company_name,
-                'product' => $vendor->product,
-                'contactPerson' => $vendor->contactPerson,
-                'contactMobile' => $vendor->contactMobile,
-                'address' => $vendor->address,
-                'recommended' => (int) ($vendor->is_sntc_recommended ?? 0),
-            ],
+            'vendor' => $vendorPayload,
             'data' => $data,
             'imageBasePath' => $this->imageBasePath($userId),
         ], 200);
