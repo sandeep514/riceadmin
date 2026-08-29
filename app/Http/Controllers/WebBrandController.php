@@ -597,22 +597,31 @@ class WebBrandController extends Controller
 
     public function vendorList($vendorType)
     {
+        $categoryId = (int) $vendorType;
+        $categoryName = trim((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''));
+        $kind = VendorProductCatalog::detectKindFromCategoryId($categoryId);
+        $productOwnerIds = VendorProductCatalog::productOwnerIdsForKind($kind);
+        $productOwnerIdList = array_keys($productOwnerIds);
+
         $webBusinessDetails = WebBusinessDetails::query()
             ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
-            ->where('selected_category', $vendorType)
-            ->where('is_active_listing', 1)
+            ->where(function ($query) use ($vendorType, $categoryId, $categoryName, $productOwnerIdList) {
+                $query->where(function ($inner) use ($vendorType, $categoryId, $categoryName) {
+                    $inner->where('selected_category', $vendorType)
+                        ->orWhere('selected_category', (string) $categoryId)
+                        ->orWhere('selected_category', $categoryId);
+                    if ($categoryName !== '') {
+                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [strtolower($categoryName)]);
+                    }
+                })->where('is_active_listing', 1);
+
+                if ($productOwnerIdList !== []) {
+                    $query->orWhereIn('user_id', $productOwnerIdList);
+                }
+            })
             ->get();
 
-        $ownerIds = $webBusinessDetails
-            ->flatMap(fn ($row) => [$row->user_id ?? null, $row->id])
-            ->filter()
-            ->map(fn ($id) => (int) $id)
-            ->unique()
-            ->values()
-            ->all();
-        $ownersWithProducts = VendorProductCatalog::userIdsWithVerifiedProducts($ownerIds);
-
-        $data = $webBusinessDetails->map(function ($row) use ($ownersWithProducts) {
+        $data = $webBusinessDetails->map(function ($row) use ($productOwnerIds) {
             $userId = (int) ($row->user_id ?? 0);
             $vendorId = (int) $row->id;
 
@@ -624,8 +633,8 @@ class WebBrandController extends Controller
                 'contactMobile' => $row->contactMobile,
                 'address' => $row->address,
                 'recommended' => (int) ($row->is_sntc_recommended ?? 0),
-                'has_products' => ($userId > 0 && isset($ownersWithProducts[$userId]))
-                    || isset($ownersWithProducts[$vendorId]),
+                'has_products' => ($userId > 0 && isset($productOwnerIds[$userId]))
+                    || isset($productOwnerIds[$vendorId]),
             ];
         })->values();
 

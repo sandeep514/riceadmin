@@ -77,6 +77,32 @@ final class VendorProductCatalog
     }
 
     /**
+     * All product owner ids for a vendor kind (cartoon, cylinder, rice_bag, ...).
+     * If kind is unknown, checks every catalog table.
+     *
+     * @return array<int, true>
+     */
+    public static function productOwnerIdsForKind(?string $kind): array
+    {
+        $models = self::productModels();
+        $toQuery = ($kind !== null && isset($models[$kind]))
+            ? [$models[$kind]]
+            : array_values($models);
+
+        $found = [];
+        foreach ($toQuery as $model) {
+            foreach ($model::query()->distinct()->pluck('user_id') as $id) {
+                $id = (int) $id;
+                if ($id > 0) {
+                    $found[$id] = true;
+                }
+            }
+        }
+
+        return $found;
+    }
+
+    /**
      * Owner ids that have at least one catalog product.
      * Checks rice bag, cartoon, cylinder, lab equipment and machinery equipment tables.
      * Matches products stored under users.id or web_business_details.id.
