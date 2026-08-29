@@ -7900,6 +7900,34 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getLabEquipments()
+    {
+        $equipments = \App\LabEquipment::query()
+            ->where('status', \App\LabEquipment::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Lab equipments fetched successfully.',
+            'data' => $equipments,
+        ], 200);
+    }
+
+    public function getMachineryEquipments()
+    {
+        $equipments = \App\MachineryEquipment::query()
+            ->where('status', \App\MachineryEquipment::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Machinery equipments fetched successfully.',
+            'data' => $equipments,
+        ], 200);
+    }
+
     public function getCylinderTypes()
     {
         $types = \App\CylinderType::query()

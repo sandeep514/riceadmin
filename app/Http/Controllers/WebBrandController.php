@@ -80,7 +80,7 @@ use Session;
 use App\RiceBrandForm;
 use App\WebBusinessDetails;
 use App\BrandAvailability;
-use App\WebRiceBagProduct;
+use App\Support\VendorProductCatalog;
 
 class WebBrandController extends Controller
 {
@@ -603,21 +603,29 @@ class WebBrandController extends Controller
             ->where('is_active_listing', 1)
             ->get();
 
-        $userIds = $webBusinessDetails->pluck('user_id')->filter()->unique()->values()->all();
-        $usersWithProducts = \App\Support\VendorProductCatalog::userIdsWithVerifiedProducts($userIds);
+        $ownerIds = $webBusinessDetails
+            ->flatMap(fn ($row) => [$row->user_id ?? null, $row->id])
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
+        $ownersWithProducts = VendorProductCatalog::userIdsWithVerifiedProducts($ownerIds);
 
-        $data = $webBusinessDetails->map(function ($row) use ($usersWithProducts) {
+        $data = $webBusinessDetails->map(function ($row) use ($ownersWithProducts) {
             $userId = (int) ($row->user_id ?? 0);
+            $vendorId = (int) $row->id;
 
             return [
-                'id' => (int) $row->id,
+                'id' => $vendorId,
                 'company_name' => $row->company_name,
                 'product' => $row->product,
                 'contactPerson' => $row->contactPerson,
                 'contactMobile' => $row->contactMobile,
                 'address' => $row->address,
                 'recommended' => (int) ($row->is_sntc_recommended ?? 0),
-                'has_products' => $userId > 0 && isset($usersWithProducts[$userId]),
+                'has_products' => ($userId > 0 && isset($ownersWithProducts[$userId]))
+                    || isset($ownersWithProducts[$vendorId]),
             ];
         })->values();
 

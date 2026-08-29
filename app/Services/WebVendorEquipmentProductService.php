@@ -2,15 +2,19 @@
 
 namespace App\Services;
 
-use App\CartoonType;
-use App\CylinderType;
+use App\LabEquipment;
+use App\MachineryEquipment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class WebVendorPackagingProductService
+/**
+ * Vendor products where each variant is one equipment row:
+ * equipment + rate + description + catalogue image.
+ */
+class WebVendorEquipmentProductService
 {
     /** @var class-string<Model> */
     private string $productModel;
@@ -19,73 +23,61 @@ class WebVendorPackagingProductService
     private string $variantModel;
 
     /** @var class-string<Model> */
-    private string $typeModel;
+    private string $equipmentModel;
 
     private string $productsTable;
 
-    private string $typeIdColumn;
-
-    private string $typeIdCamel;
-
-    private string $typeNameCamel;
+    private string $equipmentTable;
 
     private string $label;
 
     private string $uploadFolder;
 
-    public static function cartoon(): self
+    public static function lab(): self
     {
         return new self(
-            productModel: \App\WebCartoonProduct::class,
-            variantModel: \App\WebCartoonProductVariant::class,
-            typeModel: CartoonType::class,
-            productsTable: 'web_cartoon_products',
-            typeIdColumn: 'cartoon_type_id',
-            typeIdCamel: 'cartoonTypeId',
-            typeNameCamel: 'cartoonTypeName',
-            label: 'Cartoon',
-            uploadFolder: 'cartoon-products',
+            productModel: \App\WebLabEquipmentProduct::class,
+            variantModel: \App\WebLabEquipmentProductVariant::class,
+            equipmentModel: LabEquipment::class,
+            productsTable: 'web_lab_equipment_products',
+            equipmentTable: 'lab_equipments',
+            label: 'Lab equipment',
+            uploadFolder: 'lab-equipment-products',
         );
     }
 
-    public static function cylinder(): self
+    public static function machinery(): self
     {
         return new self(
-            productModel: \App\WebCylinderProduct::class,
-            variantModel: \App\WebCylinderProductVariant::class,
-            typeModel: CylinderType::class,
-            productsTable: 'web_cylinder_products',
-            typeIdColumn: 'cylinder_type_id',
-            typeIdCamel: 'cylinderTypeId',
-            typeNameCamel: 'cylinderTypeName',
-            label: 'Cylinder',
-            uploadFolder: 'cylinder-products',
+            productModel: \App\WebMachineryEquipmentProduct::class,
+            variantModel: \App\WebMachineryEquipmentProductVariant::class,
+            equipmentModel: MachineryEquipment::class,
+            productsTable: 'web_machinery_equipment_products',
+            equipmentTable: 'machinery_equipments',
+            label: 'Machinery equipment',
+            uploadFolder: 'machinery-equipment-products',
         );
     }
 
     /**
      * @param  class-string<Model>  $productModel
      * @param  class-string<Model>  $variantModel
-     * @param  class-string<Model>  $typeModel
+     * @param  class-string<Model>  $equipmentModel
      */
     private function __construct(
         string $productModel,
         string $variantModel,
-        string $typeModel,
+        string $equipmentModel,
         string $productsTable,
-        string $typeIdColumn,
-        string $typeIdCamel,
-        string $typeNameCamel,
+        string $equipmentTable,
         string $label,
         string $uploadFolder
     ) {
         $this->productModel = $productModel;
         $this->variantModel = $variantModel;
-        $this->typeModel = $typeModel;
+        $this->equipmentModel = $equipmentModel;
         $this->productsTable = $productsTable;
-        $this->typeIdColumn = $typeIdColumn;
-        $this->typeIdCamel = $typeIdCamel;
-        $this->typeNameCamel = $typeNameCamel;
+        $this->equipmentTable = $equipmentTable;
         $this->label = $label;
         $this->uploadFolder = $uploadFolder;
     }
@@ -104,18 +96,19 @@ class WebVendorPackagingProductService
                 'status' => false,
                 'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
-                'received_keys' => array_values(array_keys($request->except(['variants', 'packing_sizes', 'packingSizes']))),
+                'received_keys' => array_values(array_keys($request->except(['variants', 'products']))),
             ], 422);
         }
 
         $productModel = $this->productModel;
 
         $product = DB::transaction(function () use ($request, $productModel) {
-            $attrs = $this->payloadToAttributes($request);
-            $attrs['status'] = 0;
-
             /** @var Model $product */
-            $product = $productModel::create($attrs);
+            $product = $productModel::create([
+                'user_id' => (int) $request->input('user_id'),
+                'status' => 0,
+            ]);
+
             $this->syncVariants($product, $request->input('variants', []), $request, replace: true);
 
             return $product->load(['variants']);
@@ -148,12 +141,11 @@ class WebVendorPackagingProductService
                 'status' => false,
                 'message' => 'Validation failed.',
                 'errors' => $validator->errors(),
-                'received_keys' => array_values(array_keys($request->except(['variants', 'packing_sizes', 'packingSizes']))),
+                'received_keys' => array_values(array_keys($request->except(['variants', 'products']))),
             ], 422);
         }
 
-        $productModel = $this->productModel;
-        $product = $productModel::with(['variants'])->find((int) $request->input('id'));
+        $product = $this->productModel::with(['variants'])->find((int) $request->input('id'));
         if ($product === null) {
             return response()->json([
                 'status' => false,
@@ -173,12 +165,6 @@ class WebVendorPackagingProductService
         }
 
         $product = DB::transaction(function () use ($request, $product) {
-            $attrs = $this->payloadToAttributes($request, partial: true);
-            if ($attrs !== []) {
-                $product->fill($attrs);
-                $product->save();
-            }
-
             if ($request->exists('variants')) {
                 $this->syncVariants($product, $request->input('variants', []), $request, replace: true);
             }
@@ -249,8 +235,8 @@ class WebVendorPackagingProductService
 
         $basePath = public_path($this->imageBasePath((int) $product->user_id));
         foreach ($product->variants as $variant) {
-            if ($variant->image) {
-                $filePath = $basePath.'/'.$variant->image;
+            if ($variant->catalogue) {
+                $filePath = $basePath.'/'.$variant->catalogue;
                 if (is_file($filePath)) {
                     @unlink($filePath);
                 }
@@ -265,13 +251,14 @@ class WebVendorPackagingProductService
         ], 200);
     }
 
-    public function deleteImage(Request $request, $imageId)
+    /** Remove catalogue file for one variant row. */
+    public function deleteCatalogue(Request $request, $variantId)
     {
-        $variant = $this->variantModel::find((int) $imageId);
+        $variant = $this->variantModel::find((int) $variantId);
         if ($variant === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Variant image not found.',
+                'message' => 'Variant not found.',
             ], 404);
         }
 
@@ -283,23 +270,23 @@ class WebVendorPackagingProductService
             ], 404);
         }
 
-        if ($denied = $this->denyIfNotOwner($request, (int) $product->user_id, 'delete this image')) {
+        if ($denied = $this->denyIfNotOwner($request, (int) $product->user_id, 'delete this catalogue')) {
             return $denied;
         }
 
-        if ($variant->image) {
-            $filePath = public_path($this->imageBasePath((int) $product->user_id).'/'.$variant->image);
+        if ($variant->catalogue) {
+            $filePath = public_path($this->imageBasePath((int) $product->user_id).'/'.$variant->catalogue);
             if (is_file($filePath)) {
                 @unlink($filePath);
             }
-            $variant->update(['image' => null]);
+            $variant->update(['catalogue' => null]);
         }
 
         $product->load(['variants']);
 
         return response()->json([
             'status' => true,
-            'message' => 'Image deleted successfully.',
+            'message' => 'Catalogue deleted successfully.',
             'data' => $this->serializeProduct($product),
             'imageBasePath' => $this->imageBasePath((int) $product->user_id),
         ], 200);
@@ -328,32 +315,16 @@ class WebVendorPackagingProductService
             ->get();
     }
 
-    public function serializeVendorProduct(Model $product, $types = null): array
+    public function serializeVendorProduct(Model $product): array
     {
         $basePath = $this->imageBasePath((int) $product->user_id);
-        $typeId = $product->{$this->typeIdColumn};
-
-        $variants = $product->variants->map(function (Model $variant) use ($basePath) {
-            return $this->serializeVariantRow($variant, $basePath);
-        })->values()->all();
-
-        $typeName = null;
-        if ($typeId !== null) {
-            if ($types !== null) {
-                $typeName = $types[$typeId] ?? null;
-            } else {
-                $typeName = $this->typeModel::query()->where('id', $typeId)->value('type');
-            }
-        }
 
         return [
             'id' => (int) $product->id,
-            $this->typeIdCamel => $typeId !== null ? (int) $typeId : null,
-            $this->typeNameCamel => $typeName,
-            'specification' => $product->specification,
-            'description' => $product->description,
-            'additionalInformation' => $product->additional_information,
-            'variants' => $variants,
+            'variants' => $product->variants
+                ->map(fn (Model $variant) => $this->serializeVariantRow($variant, $basePath))
+                ->values()
+                ->all(),
         ];
     }
 
@@ -365,16 +336,6 @@ class WebVendorPackagingProductService
     public function label(): string
     {
         return $this->label;
-    }
-
-    public function typeIdColumn(): string
-    {
-        return $this->typeIdColumn;
-    }
-
-    public function productModel(): string
-    {
-        return $this->productModel;
     }
 
     public function toggleStatus(int $id): bool
@@ -389,50 +350,37 @@ class WebVendorPackagingProductService
         return true;
     }
 
-    public function typeOptions(): array
+    public function equipmentOptions(): array
     {
-        return $this->typeModel::query()
-            ->orderBy('type')
-            ->pluck('type', 'id')
+        return $this->equipmentModel::query()
+            ->orderBy('name')
+            ->pluck('name', 'id')
             ->all();
     }
 
     private function createRules(): array
     {
-        return [
+        return array_merge([
             'user_id' => ['required', 'integer', 'exists:users,id'],
-            $this->typeIdColumn => ['required', 'integer', 'exists:'.(new $this->typeModel)->getTable().',id'],
-            'specification' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'additional_information' => ['nullable', 'string'],
             'variants' => ['required', 'array', 'min:1'],
-            'variants.*.packingSizeId' => ['required', 'integer'],
-            'variants.*.packingSize' => ['nullable', 'string', 'max:255'],
-            'variants.*.rate' => ['required', 'numeric'],
-            'variants.*.gst' => ['nullable', 'numeric'],
-            'variants.*.totalPrice' => ['nullable', 'numeric'],
-            'variants.*.bagSize' => ['nullable', 'string', 'max:255'],
-            'variants.*.bagWeight' => ['nullable', 'string', 'max:64'],
-        ];
+        ], $this->variantRules());
     }
 
     private function updateRules(): array
     {
-        return [
+        return array_merge([
             'id' => ['required', 'integer', 'exists:'.$this->productsTable.',id'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
-            $this->typeIdColumn => ['sometimes', 'required', 'integer', 'exists:'.(new $this->typeModel)->getTable().',id'],
-            'specification' => ['nullable', 'string'],
-            'description' => ['nullable', 'string'],
-            'additional_information' => ['nullable', 'string'],
             'variants' => ['sometimes', 'array', 'min:1'],
-            'variants.*.packingSizeId' => ['required', 'integer'],
-            'variants.*.packingSize' => ['nullable', 'string', 'max:255'],
+        ], $this->variantRules());
+    }
+
+    private function variantRules(): array
+    {
+        return [
+            'variants.*.equipmentId' => ['required', 'integer', 'exists:'.$this->equipmentTable.',id'],
             'variants.*.rate' => ['required', 'numeric'],
-            'variants.*.gst' => ['nullable', 'numeric'],
-            'variants.*.totalPrice' => ['nullable', 'numeric'],
-            'variants.*.bagSize' => ['nullable', 'string', 'max:255'],
-            'variants.*.bagWeight' => ['nullable', 'string', 'max:64'],
+            'variants.*.description' => ['nullable', 'string'],
         ];
     }
 
@@ -453,7 +401,7 @@ class WebVendorPackagingProductService
             }
         }
 
-        if (! $request->filled($this->typeIdColumn) && ! $request->filled($this->typeIdCamel)) {
+        if (! $request->exists('variants') && ! $request->filled('user_id')) {
             $raw = $request->getContent();
             if (is_string($raw) && $raw !== '') {
                 $trimmed = ltrim($raw);
@@ -470,15 +418,9 @@ class WebVendorPackagingProductService
             }
         }
 
-        $aliases = [
-            $this->typeIdCamel => $this->typeIdColumn,
-            'additionalInformation' => 'additional_information',
-            'packing_sizes' => 'variants',
-            'packingSizes' => 'variants',
-        ];
-        foreach ($aliases as $from => $to) {
-            if ($request->exists($from) && ! $request->exists($to)) {
-                $request->merge([$to => $request->input($from)]);
+        foreach (['products', 'equipments', 'items'] as $from) {
+            if ($request->exists($from) && ! $request->exists('variants')) {
+                $request->merge(['variants' => $request->input($from)]);
             }
         }
 
@@ -505,30 +447,32 @@ class WebVendorPackagingProductService
                     continue;
                 }
 
-                $existingImage = $row['existingImage']
-                    ?? $row['existing_image']
-                    ?? $row['image']
-                    ?? $row['image_name']
+                $existingCatalogue = $row['existingCatalogue']
+                    ?? $row['existing_catalogue']
+                    ?? $row['catalogue']
+                    ?? $row['catalogue_name']
                     ?? null;
-                if (is_string($existingImage) && $existingImage !== '') {
-                    $existingImage = basename(parse_url($existingImage, PHP_URL_PATH) ?: $existingImage);
-                    if ($existingImage === '' || str_contains($existingImage, ' ')) {
-                        $existingImage = null;
+                if (is_string($existingCatalogue) && $existingCatalogue !== '') {
+                    $existingCatalogue = basename(parse_url($existingCatalogue, PHP_URL_PATH) ?: $existingCatalogue);
+                    if ($existingCatalogue === '' || str_contains($existingCatalogue, ' ')) {
+                        $existingCatalogue = null;
                     }
                 } else {
-                    $existingImage = null;
+                    $existingCatalogue = null;
                 }
 
                 $normalizedRows[] = [
                     'id' => $row['id'] ?? $row['variant_row_id'] ?? null,
-                    'packingSizeId' => $row['packingSizeId'] ?? $row['packing_size_id'] ?? null,
-                    'packingSize' => $row['packingSize'] ?? $row['packing_size'] ?? null,
+                    'equipmentId' => $row['equipmentId']
+                        ?? $row['equipment_id']
+                        ?? $row['labEquipmentId']
+                        ?? $row['lab_equipment_id']
+                        ?? $row['machineryEquipmentId']
+                        ?? $row['machinery_equipment_id']
+                        ?? null,
                     'rate' => $row['rate'] ?? null,
-                    'gst' => $row['gst'] ?? null,
-                    'totalPrice' => $row['totalPrice'] ?? $row['total_price'] ?? null,
-                    'bagSize' => $row['bagSize'] ?? $row['bag_size'] ?? null,
-                    'bagWeight' => $row['bagWeight'] ?? $row['bag_weight'] ?? null,
-                    'existingImage' => $existingImage,
+                    'description' => $row['description'] ?? null,
+                    'existingCatalogue' => $existingCatalogue,
                     '_index' => is_numeric($index) ? (int) $index : null,
                 ];
             }
@@ -557,7 +501,7 @@ class WebVendorPackagingProductService
     private function denyIfNotOwner(Request $request, int $ownerUserId, string $action)
     {
         $authUser = $request->user();
-        if ($authUser && (int) $ownerUserId !== (int) $authUser->id) {
+        if ($authUser && $ownerUserId !== (int) $authUser->id) {
             return response()->json([
                 'status' => false,
                 'message' => 'Forbidden: You are not allowed to '.$action.' this product.',
@@ -565,40 +509,6 @@ class WebVendorPackagingProductService
         }
 
         return null;
-    }
-
-    private function payloadToAttributes(Request $request, bool $partial = false): array
-    {
-        $map = [
-            $this->typeIdColumn => $this->typeIdColumn,
-            'specification' => 'specification',
-            'description' => 'description',
-            'additional_information' => 'additional_information',
-        ];
-
-        $attrs = [];
-
-        if ((! $partial || $request->filled('user_id')) && $request->filled('user_id')) {
-            $attrs['user_id'] = (int) $request->input('user_id');
-        }
-
-        foreach ($map as $inputKey => $column) {
-            if ($partial && ! $request->exists($inputKey)) {
-                continue;
-            }
-            if (! $request->exists($inputKey)) {
-                continue;
-            }
-
-            $value = $request->input($inputKey);
-            if ($column === $this->typeIdColumn) {
-                $attrs[$column] = $value === null || $value === '' ? null : (int) $value;
-            } else {
-                $attrs[$column] = $value;
-            }
-        }
-
-        return $attrs;
     }
 
     private function syncVariants(Model $product, $variants, Request $request, bool $replace = true): void
@@ -615,12 +525,14 @@ class WebVendorPackagingProductService
             ->get();
 
         $existingById = $existingRows->keyBy('id');
-        $existingByPackingSizeId = $existingRows
-            ->filter(fn ($row) => $row->packing_size_id !== null)
-            ->keyBy(fn ($row) => (string) $row->packing_size_id);
+        $existingByEquipmentId = $existingRows
+            ->filter(fn ($row) => $row->equipment_id !== null)
+            ->keyBy(fn ($row) => (string) $row->equipment_id);
         $existingByIndex = $existingRows->values();
 
-        $keptImageNames = [];
+        $equipmentNames = $this->equipmentModel::query()->pluck('name', 'id');
+
+        $keptFiles = [];
         $sortOrder = 0;
         $createdIds = [];
 
@@ -635,38 +547,37 @@ class WebVendorPackagingProductService
             $matched = null;
             if (! empty($row['id']) && $existingById->has((int) $row['id'])) {
                 $matched = $existingById->get((int) $row['id']);
-            } elseif (! empty($row['packingSizeId']) && $existingByPackingSizeId->has((string) $row['packingSizeId'])) {
-                $matched = $existingByPackingSizeId->get((string) $row['packingSizeId']);
+            } elseif (! empty($row['equipmentId']) && $existingByEquipmentId->has((string) $row['equipmentId'])) {
+                $matched = $existingByEquipmentId->get((string) $row['equipmentId']);
             } elseif ($existingByIndex->has($index)) {
                 $matched = $existingByIndex->get($index);
             }
 
-            $previousImage = $matched?->image;
-            $imageName = $this->resolveVariantImage($request, $product, $index, $row, $previousImage);
+            $previousFile = $matched?->catalogue;
+            $catalogue = $this->resolveCatalogueFile($request, $product, $index, $row, $previousFile);
 
-            if ($imageName) {
-                $keptImageNames[] = $imageName;
+            if ($catalogue) {
+                $keptFiles[] = $catalogue;
             }
 
-            if ($previousImage && $imageName && $previousImage !== $imageName) {
-                $oldPath = $basePath.'/'.$previousImage;
+            if ($previousFile && $catalogue && $previousFile !== $catalogue) {
+                $oldPath = $basePath.'/'.$previousFile;
                 if (is_file($oldPath)) {
                     @unlink($oldPath);
                 }
             }
 
+            $equipmentId = isset($row['equipmentId']) && $row['equipmentId'] !== ''
+                ? (int) $row['equipmentId']
+                : null;
+
             $created = $variantModel::create([
                 'product_id' => $product->id,
-                'packing_size_id' => isset($row['packingSizeId']) && $row['packingSizeId'] !== ''
-                    ? (int) $row['packingSizeId']
-                    : null,
-                'packing_size' => $row['packingSize'] ?? null,
+                'equipment_id' => $equipmentId,
+                'equipment_name' => $equipmentId !== null ? ($equipmentNames[$equipmentId] ?? null) : null,
                 'rate' => $row['rate'] ?? null,
-                'gst' => $row['gst'] ?? null,
-                'total_price' => $row['totalPrice'] ?? null,
-                'bag_size' => $row['bagSize'] ?? null,
-                'bag_weight' => $row['bagWeight'] ?? null,
-                'image' => $imageName,
+                'description' => $row['description'] ?? null,
+                'catalogue' => $catalogue,
                 'sort_order' => $sortOrder,
             ]);
             $createdIds[] = $created->id;
@@ -678,10 +589,10 @@ class WebVendorPackagingProductService
                 ->delete();
 
             foreach ($existingRows as $old) {
-                if (! $old->image || in_array($old->image, $keptImageNames, true)) {
+                if (! $old->catalogue || in_array($old->catalogue, $keptFiles, true)) {
                     continue;
                 }
-                $filePath = $basePath.'/'.$old->image;
+                $filePath = $basePath.'/'.$old->catalogue;
                 if (is_file($filePath)) {
                     @unlink($filePath);
                 }
@@ -689,40 +600,37 @@ class WebVendorPackagingProductService
         }
     }
 
-    private function resolveVariantImage(
+    private function resolveCatalogueFile(
         Request $request,
         Model $product,
         $index,
         array $row,
-        ?string $previousImage = null
+        ?string $previousFile = null
     ): ?string {
-        $file = $request->file("variants.{$index}.image")
-            ?? $request->file("packing_sizes.{$index}.image")
-            ?? $request->file("packingSizes.{$index}.image");
+        $file = $request->file("variants.{$index}.catalogue")
+            ?? $request->file("variants.{$index}.image")
+            ?? $request->file("products.{$index}.catalogue");
 
         if ($file instanceof UploadedFile && $file->isValid()) {
-            return $this->storeVariantImage($product, $file);
+            return $this->storeCatalogueFile($product, $file);
         }
 
-        $existing = $row['existingImage'] ?? null;
+        $existing = $row['existingCatalogue'] ?? null;
         if (is_string($existing) && $existing !== '') {
             $filename = basename(parse_url($existing, PHP_URL_PATH) ?: $existing);
-            if ($filename !== '' && is_file(public_path($this->imageBasePath((int) $product->user_id).'/'.$filename))) {
-                return $filename;
-            }
             if ($filename !== '' && ! str_contains($filename, '/')) {
                 return $filename;
             }
         }
 
-        if (is_string($previousImage) && $previousImage !== '') {
-            return $previousImage;
+        if (is_string($previousFile) && $previousFile !== '') {
+            return $previousFile;
         }
 
         return null;
     }
 
-    private function storeVariantImage(Model $product, UploadedFile $file): string
+    private function storeCatalogueFile(Model $product, UploadedFile $file): string
     {
         $dir = public_path($this->imageBasePath((int) $product->user_id));
         if (! is_dir($dir)) {
@@ -739,21 +647,15 @@ class WebVendorPackagingProductService
     private function serializeProduct(Model $product): array
     {
         $basePath = $this->imageBasePath((int) $product->user_id);
-        $typeId = $product->{$this->typeIdColumn};
-
-        $variants = $product->variants->map(function (Model $variant) use ($basePath) {
-            return $this->serializeVariantRow($variant, $basePath);
-        })->values()->all();
 
         return [
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
-            $this->typeIdCamel => $typeId !== null ? (int) $typeId : null,
-            'specification' => $product->specification,
-            'description' => $product->description,
-            'additionalInformation' => $product->additional_information,
             'status' => (int) $product->status,
-            'variants' => $variants,
+            'variants' => $product->variants
+                ->map(fn (Model $variant) => $this->serializeVariantRow($variant, $basePath))
+                ->values()
+                ->all(),
         ];
     }
 
@@ -761,15 +663,12 @@ class WebVendorPackagingProductService
     {
         return [
             'id' => (int) $variant->id,
-            'packingSizeId' => $variant->packing_size_id !== null ? (int) $variant->packing_size_id : null,
-            'packingSize' => $variant->packing_size,
+            'equipmentId' => $variant->equipment_id !== null ? (int) $variant->equipment_id : null,
+            'equipmentName' => $variant->equipment_name,
             'rate' => $variant->rate !== null ? (string) $variant->rate : null,
-            'gst' => $variant->gst !== null ? (string) $variant->gst : null,
-            'totalPrice' => $variant->total_price !== null ? (string) $variant->total_price : null,
-            'bagSize' => $variant->bag_size,
-            'bagWeight' => $variant->bag_weight,
-            'image' => $variant->image,
-            'imageUrl' => $variant->image ? asset($basePath.'/'.$variant->image) : null,
+            'description' => $variant->description,
+            'catalogue' => $variant->catalogue,
+            'catalogueUrl' => $variant->catalogue ? asset($basePath.'/'.$variant->catalogue) : null,
             'sortOrder' => (int) $variant->sort_order,
         ];
     }

@@ -249,6 +249,28 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/cylinder-types/change-status/{id}', ['as' => 'cylinder-type.change-status', 'uses' => 'CylinderTypeController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Lab Equipment master
+            Route::group(['module' => 'lab_equipment', 'icon' => 'fa-flask'], function () {
+                Route::get('vendor-flow/lab-equipments', ['as' => 'lab-equipments', 'uses' => 'LabEquipmentController@index', 'action' => 'view']);
+                Route::get('vendor-flow/lab-equipments/create', ['as' => 'create.lab-equipment', 'uses' => 'LabEquipmentController@create', 'action' => 'create']);
+                Route::post('vendor-flow/lab-equipments/save', ['as' => 'save.lab-equipment', 'uses' => 'LabEquipmentController@save', 'action' => 'create']);
+                Route::get('vendor-flow/lab-equipments/edit/{id}', ['as' => 'edit.lab-equipment', 'uses' => 'LabEquipmentController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/lab-equipments/update/{id}', ['as' => 'update.lab-equipment', 'uses' => 'LabEquipmentController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/lab-equipments/delete/{id}', ['as' => 'delete.lab-equipment', 'uses' => 'LabEquipmentController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/lab-equipments/change-status/{id}', ['as' => 'lab-equipment.change-status', 'uses' => 'LabEquipmentController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Machinery Equipment master
+            Route::group(['module' => 'machinery_equipment', 'icon' => 'fa-cogs'], function () {
+                Route::get('vendor-flow/machinery-equipments', ['as' => 'machinery-equipments', 'uses' => 'MachineryEquipmentController@index', 'action' => 'view']);
+                Route::get('vendor-flow/machinery-equipments/create', ['as' => 'create.machinery-equipment', 'uses' => 'MachineryEquipmentController@create', 'action' => 'create']);
+                Route::post('vendor-flow/machinery-equipments/save', ['as' => 'save.machinery-equipment', 'uses' => 'MachineryEquipmentController@save', 'action' => 'create']);
+                Route::get('vendor-flow/machinery-equipments/edit/{id}', ['as' => 'edit.machinery-equipment', 'uses' => 'MachineryEquipmentController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/machinery-equipments/update/{id}', ['as' => 'update.machinery-equipment', 'uses' => 'MachineryEquipmentController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/machinery-equipments/delete/{id}', ['as' => 'delete.machinery-equipment', 'uses' => 'MachineryEquipmentController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/machinery-equipments/change-status/{id}', ['as' => 'machinery-equipment.change-status', 'uses' => 'MachineryEquipmentController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Specification master
             Route::group(['module' => 'vendor_specification', 'icon' => 'fa-list-alt'], function () {
                 Route::get('vendor-flow/specifications', ['as' => 'vendor-specifications', 'uses' => 'VendorSpecificationController@index', 'action' => 'view']);
@@ -838,6 +860,14 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/cylinder-products', ['as' => 'get.web.cylinder.products.list', 'uses' => 'WebCylinderProductController@showProductsToAdmin']);
     Route::get('get/web/cylinder-products/{id}', ['as' => 'get.web.cylinder.products.show', 'uses' => 'WebCylinderProductController@showProductToAdmin']);
     Route::get('toggle/web/cylinder-products/status/{id}', ['as' => 'toggle.web.cylinder.products.status', 'uses' => 'WebCylinderProductController@toggleStatus']);
+
+    Route::get('get/web/lab-equipment-products', ['as' => 'get.web.lab.equipment.products.list', 'uses' => 'WebLabEquipmentProductController@showProductsToAdmin']);
+    Route::get('get/web/lab-equipment-products/{id}', ['as' => 'get.web.lab.equipment.products.show', 'uses' => 'WebLabEquipmentProductController@showProductToAdmin']);
+    Route::get('toggle/web/lab-equipment-products/status/{id}', ['as' => 'toggle.web.lab.equipment.products.status', 'uses' => 'WebLabEquipmentProductController@toggleStatus']);
+
+    Route::get('get/web/machinery-equipment-products', ['as' => 'get.web.machinery.equipment.products.list', 'uses' => 'WebMachineryEquipmentProductController@showProductsToAdmin']);
+    Route::get('get/web/machinery-equipment-products/{id}', ['as' => 'get.web.machinery.equipment.products.show', 'uses' => 'WebMachineryEquipmentProductController@showProductToAdmin']);
+    Route::get('toggle/web/machinery-equipment-products/status/{id}', ['as' => 'toggle.web.machinery.equipment.products.status', 'uses' => 'WebMachineryEquipmentProductController@toggleStatus']);
 
 
 

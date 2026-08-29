@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PackingType;
+use App\Services\WebVendorEquipmentProductService;
 use App\Services\WebVendorPackagingProductService;
 use App\Support\VendorProductCatalog;
 use App\WebBusinessDetails;
@@ -79,24 +80,33 @@ class WebVendorProductController extends Controller
         }
 
         $kind = VendorProductCatalog::detectKindForVendor($vendor);
+        $ownerIds = array_values(array_unique(array_filter([$userId, (int) $vendor->id])));
         $data = collect();
         $imageBasePath = null;
 
-        if ($kind === VendorProductCatalog::KIND_CARTOON) {
+        if ($kind === VendorProductCatalog::KIND_LAB_EQUIPMENT || $kind === VendorProductCatalog::KIND_MACHINERY_EQUIPMENT) {
+            $service = $kind === VendorProductCatalog::KIND_LAB_EQUIPMENT
+                ? WebVendorEquipmentProductService::lab()
+                : WebVendorEquipmentProductService::machinery();
+
+            $products = $service->verifiedProductsForOwners($ownerIds);
+            $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
+            $imageBasePath = $service->imageBasePath($userId);
+        } elseif ($kind === VendorProductCatalog::KIND_CARTOON) {
             $service = WebVendorPackagingProductService::cartoon();
-            $products = $service->verifiedProductsForUser($userId);
+            $products = $service->verifiedProductsForOwners($ownerIds);
             $types = $service->typeOptions();
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product, $types))->values();
             $imageBasePath = $service->imageBasePath($userId);
         } elseif ($kind === VendorProductCatalog::KIND_CYLINDER) {
             $service = WebVendorPackagingProductService::cylinder();
-            $products = $service->verifiedProductsForUser($userId);
+            $products = $service->verifiedProductsForOwners($ownerIds);
             $types = $service->typeOptions();
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product, $types))->values();
             $imageBasePath = $service->imageBasePath($userId);
         } else {
             $products = WebRiceBagProduct::with(['packingSizes'])
-                ->where('user_id', $userId)
+                ->whereIn('user_id', $ownerIds)
                 ->where('status', 1)
                 ->whereHas('packingSizes')
                 ->orderByDesc('id')

@@ -81,6 +81,20 @@
             Route::get('web/cylinder-product/{id}', [\App\Http\Controllers\WebCylinderProductController::class, 'show'])->where('id', '[0-9]+');
             Route::delete('web/cylinder-product/{id}', [\App\Http\Controllers\WebCylinderProductController::class, 'delete'])->where('id', '[0-9]+');
 
+            Route::post('web/lab-equipment-product/create', [\App\Http\Controllers\WebLabEquipmentProductController::class, 'create']);
+            Route::post('web/lab-equipment-product/update', [\App\Http\Controllers\WebLabEquipmentProductController::class, 'update']);
+            Route::get('web/lab-equipment-product/list/{userId}', [\App\Http\Controllers\WebLabEquipmentProductController::class, 'listByUser']);
+            Route::delete('web/lab-equipment-product/catalogue/{variantId}', [\App\Http\Controllers\WebLabEquipmentProductController::class, 'deleteCatalogue']);
+            Route::get('web/lab-equipment-product/{id}', [\App\Http\Controllers\WebLabEquipmentProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/lab-equipment-product/{id}', [\App\Http\Controllers\WebLabEquipmentProductController::class, 'delete'])->where('id', '[0-9]+');
+
+            Route::post('web/machinery-equipment-product/create', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'create']);
+            Route::post('web/machinery-equipment-product/update', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'update']);
+            Route::get('web/machinery-equipment-product/list/{userId}', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'listByUser']);
+            Route::delete('web/machinery-equipment-product/catalogue/{variantId}', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'deleteCatalogue']);
+            Route::get('web/machinery-equipment-product/{id}', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/machinery-equipment-product/{id}', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'delete'])->where('id', '[0-9]+');
+
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
             

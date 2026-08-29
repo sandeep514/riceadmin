@@ -6,6 +6,8 @@ use App\Category;
 use App\WebBusinessDetails;
 use App\WebCartoonProduct;
 use App\WebCylinderProduct;
+use App\WebLabEquipmentProduct;
+use App\WebMachineryEquipmentProduct;
 use App\WebRiceBagProduct;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +19,10 @@ final class VendorProductCatalog
 
     public const KIND_CYLINDER = 'cylinder';
 
+    public const KIND_LAB_EQUIPMENT = 'lab_equipment';
+
+    public const KIND_MACHINERY_EQUIPMENT = 'machinery_equipment';
+
     /**
      * @return array<string, class-string<Model>>
      */
@@ -26,6 +32,8 @@ final class VendorProductCatalog
             self::KIND_RICE_BAG => WebRiceBagProduct::class,
             self::KIND_CARTOON => WebCartoonProduct::class,
             self::KIND_CYLINDER => WebCylinderProduct::class,
+            self::KIND_LAB_EQUIPMENT => WebLabEquipmentProduct::class,
+            self::KIND_MACHINERY_EQUIPMENT => WebMachineryEquipmentProduct::class,
         ];
     }
 
@@ -38,6 +46,14 @@ final class VendorProductCatalog
         $name = strtolower((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''));
         if ($name === '') {
             return null;
+        }
+
+        if (str_contains($name, 'lab')) {
+            return self::KIND_LAB_EQUIPMENT;
+        }
+
+        if (str_contains($name, 'machinery') || str_contains($name, 'machine')) {
+            return self::KIND_MACHINERY_EQUIPMENT;
         }
 
         if (str_contains($name, 'cartoon') || str_contains($name, 'carton')) {
@@ -61,52 +77,40 @@ final class VendorProductCatalog
     }
 
     /**
-     * @param  array<int>  $userIds
+     * Owner ids that have at least one catalog product.
+     * Checks rice bag, cartoon, cylinder, lab equipment and machinery equipment tables.
+     * Matches products stored under users.id or web_business_details.id.
+     *
+     * @param  array<int>  $ownerIds
      * @return array<int, true>
      */
-    public static function userIdsWithVerifiedProducts(array $userIds): array
+    public static function userIdsWithVerifiedProducts(array $ownerIds): array
     {
-        $userIds = array_values(array_unique(array_filter(array_map('intval', $userIds))));
-        if ($userIds === []) {
+        return self::ownerIdsWithProducts($ownerIds, verifiedOnly: false);
+    }
+
+    /**
+     * @param  array<int>  $ownerIds
+     * @return array<int, true>
+     */
+    public static function ownerIdsWithProducts(array $ownerIds, bool $verifiedOnly = false): array
+    {
+        $ownerIds = array_values(array_unique(array_filter(array_map('intval', $ownerIds))));
+        if ($ownerIds === []) {
             return [];
         }
 
         $found = [];
 
-        $riceBagUserIds = WebRiceBagProduct::query()
-            ->whereIn('user_id', $userIds)
-            ->where('status', 1)
-            ->whereHas('packingSizes')
-            ->distinct()
-            ->pluck('user_id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
-        foreach ($riceBagUserIds as $id) {
-            $found[$id] = true;
-        }
+        foreach (self::productModels() as $model) {
+            $query = $model::query()->whereIn('user_id', $ownerIds);
+            if ($verifiedOnly) {
+                $query->where('status', 1);
+            }
 
-        $cartoonUserIds = WebCartoonProduct::query()
-            ->whereIn('user_id', $userIds)
-            ->where('status', 1)
-            ->whereHas('variants')
-            ->distinct()
-            ->pluck('user_id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
-        foreach ($cartoonUserIds as $id) {
-            $found[$id] = true;
-        }
-
-        $cylinderUserIds = WebCylinderProduct::query()
-            ->whereIn('user_id', $userIds)
-            ->where('status', 1)
-            ->whereHas('variants')
-            ->distinct()
-            ->pluck('user_id')
-            ->map(fn ($id) => (int) $id)
-            ->all();
-        foreach ($cylinderUserIds as $id) {
-            $found[$id] = true;
+            foreach ($query->distinct()->pluck('user_id') as $id) {
+                $found[(int) $id] = true;
+            }
         }
 
         return $found;

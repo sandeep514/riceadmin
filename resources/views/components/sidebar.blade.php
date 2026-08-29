@@ -514,9 +514,15 @@
                     <li class="{{ in_array($currentRoute, ['cylinder-types','create.cylinder-type','edit.cylinder-type']) ? 'active' : '' }}">
                         <a href="{{ route('cylinder-types') }}"><i class="fa fa-circle-o"></i> Cylinder Type</a>
                     </li>
+                    <li class="{{ in_array($currentRoute, ['lab-equipments','create.lab-equipment','edit.lab-equipment']) ? 'active' : '' }}">
+                        <a href="{{ route('lab-equipments') }}"><i class="fa fa-circle-o"></i> Lab Equipment</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['machinery-equipments','create.machinery-equipment','edit.machinery-equipment']) ? 'active' : '' }}">
+                        <a href="{{ route('machinery-equipments') }}"><i class="fa fa-circle-o"></i> Machinery Equipment</a>
+                    </li>
                 </ul>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-cubes"></i>
                     <span>Vendor Products</span>
@@ -533,6 +539,12 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.cylinder.products.list','get.web.cylinder.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.cylinder.products.list') }}"><i class="fa fa-circle-o"></i> Cylinder Products</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.lab.equipment.products.list','get.web.lab.equipment.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.lab.equipment.products.list') }}"><i class="fa fa-circle-o"></i> Lab Equipment Products</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.machinery.equipment.products.list') }}"><i class="fa fa-circle-o"></i> Machinery Equipment Products</a>
                     </li>
                 </ul>
             </li>

@@ -152,6 +152,8 @@ use Pusher\Pusher;
     Route::get('get/packing/type' , ['as' => 'get.packing.type' , 'uses' => 'ApiController@getBagPacking']);
     Route::get('get/cartoon/types' , ['as' => 'get.cartoon.types' , 'uses' => 'ApiController@getCartoonTypes']);
     Route::get('get/cylinder/types' , ['as' => 'get.cylinder.types' , 'uses' => 'ApiController@getCylinderTypes']);
+    Route::get('get/lab/equipments' , ['as' => 'get.lab.equipments' , 'uses' => 'ApiController@getLabEquipments']);
+    Route::get('get/machinery/equipments' , ['as' => 'get.machinery.equipments' , 'uses' => 'ApiController@getMachineryEquipments']);
     Route::get('get/packing/forms' , ['as' => 'get.packing.forms' , 'uses' => 'ApiController@getPackingForms']);
     Route::get('get/packing/size' , ['as' => 'get.packing.size' , 'uses' => 'ApiController@getPackingSize']);
     Route::get('web/get/farming-types', ['as' => 'web.get.farming.types', 'uses' => 'ApiController@getFarmingTypesWeb']);
