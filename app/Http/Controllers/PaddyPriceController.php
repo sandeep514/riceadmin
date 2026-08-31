@@ -13,10 +13,26 @@ use Carbon\Carbon;
 
 class PaddyPriceController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $paddyPrices = PaddyPrice::with(['getMandi_rel','getState_rel','quality_rel'])->orderBy('id' , 'DESC')->get();
-        
+        $from = $this->validFilterDate($request->input('from'));
+        $to = $this->validFilterDate($request->input('to'));
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
+        $query = PaddyPrice::with(['getMandi_rel', 'getState_rel', 'quality_rel'])
+            ->orderBy('id', 'DESC');
+
+        if ($from) {
+            $query->whereDate('created_at', '>=', $from);
+        }
+        if ($to) {
+            $query->whereDate('created_at', '<=', $to);
+        }
+
+        $paddyPrices = $query->get();
+
         $paddyStateModel = PaddyStateModel::where('status', 1)
             ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('id')
@@ -25,9 +41,23 @@ class PaddyPriceController extends Controller
             ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('id')
             ->get();
-        $quality = RiceName::where('status' , 1)->get();
+        $quality = RiceName::where('status', 1)->get();
 
-        return view('paddyPrices.index', compact('paddyPrices' , 'paddyStateModel' , 'paddyMandiModel','quality'));
+        return view('paddyPrices.index', compact('paddyPrices', 'paddyStateModel', 'paddyMandiModel', 'quality', 'from', 'to'));
+    }
+
+    private function validFilterDate($value): ?string
+    {
+        $value = is_string($value) ? trim($value) : '';
+        if ($value === '' || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+            return null;
+        }
+
+        try {
+            return Carbon::createFromFormat('Y-m-d', $value)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function create()

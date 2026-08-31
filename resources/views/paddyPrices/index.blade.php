@@ -135,6 +135,7 @@
                         </div>
                         <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-sm" style="float: right">
                     </div>
+                </form>
                     <div class="responsiveTabs basmatitabs">
                         <div id="myTabContent" class="tab-content" >
                             <div class="">
@@ -143,7 +144,18 @@
                                         <div class="row text-left" style="margin-top: 20px;">
                                             {{-- <a href="{{ route('paddy-prices.create') }}" class="btn btn-primary mb-3">Add New Price</a> --}}
                                             <div class="col-md-12 inputs">
-                                                
+                                                <form method="GET" action="{{ route('list.paddy.price') }}" class="form-inline" style="margin-bottom: 15px;">
+                                                    <div class="form-group" style="margin-right: 10px;">
+                                                        <label for="from" style="margin-right: 6px;">From</label>
+                                                        <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">
+                                                    </div>
+                                                    <div class="form-group" style="margin-right: 10px;">
+                                                        <label for="to" style="margin-right: 6px;">To</label>
+                                                        <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-info btn-sm">Filter</button>
+                                                    <a href="{{ route('list.paddy.price') }}" class="btn btn-default btn-sm">Clear</a>
+                                                </form>
                                                 <table class="table table-bordered table-striped paddy-datatable" width="100%">
                                                     <thead>
                                                         <tr>
@@ -199,7 +211,6 @@
                             </div>
                         </div>
                     </div>
-                </form>
             </div>
         </section>
     </div>
