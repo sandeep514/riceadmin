@@ -487,7 +487,7 @@
                     <span>Avg Length Map</span>
                 </a>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular','vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge','cartoon-types','create.cartoon-type','edit.cartoon-type','cylinder-types','create.cylinder-type','edit.cylinder-type']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular','vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge','cartoon-types','create.cartoon-type','edit.cartoon-type','cylinder-types','create.cylinder-type','edit.cylinder-type','lab-equipments','create.lab-equipment','edit.lab-equipment','machinery-equipments','create.machinery-equipment','edit.machinery-equipment','bag-sizes','create.bag-size','edit.bag-size','carton-sizes','create.carton-size','edit.carton-size','cylinder-sizes','create.cylinder-size','edit.cylinder-size']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-handshake-o"></i>
                     <span>Vendor Flow</span>
@@ -513,6 +513,15 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['cylinder-types','create.cylinder-type','edit.cylinder-type']) ? 'active' : '' }}">
                         <a href="{{ route('cylinder-types') }}"><i class="fa fa-circle-o"></i> Cylinder Type</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['bag-sizes','create.bag-size','edit.bag-size']) ? 'active' : '' }}">
+                        <a href="{{ route('bag-sizes') }}"><i class="fa fa-circle-o"></i> Bag Size</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['carton-sizes','create.carton-size','edit.carton-size']) ? 'active' : '' }}">
+                        <a href="{{ route('carton-sizes') }}"><i class="fa fa-circle-o"></i> Carton Size</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['cylinder-sizes','create.cylinder-size','edit.cylinder-size']) ? 'active' : '' }}">
+                        <a href="{{ route('cylinder-sizes') }}"><i class="fa fa-circle-o"></i> Cylinder Size</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['lab-equipments','create.lab-equipment','edit.lab-equipment']) ? 'active' : '' }}">
                         <a href="{{ route('lab-equipments') }}"><i class="fa fa-circle-o"></i> Lab Equipment</a>

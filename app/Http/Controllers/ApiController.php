@@ -7942,6 +7942,48 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getBagSizes()
+    {
+        $sizes = \App\BagSize::query()
+            ->where('status', \App\BagSize::STATUS_ACTIVE)
+            ->orderBy('size')
+            ->get(['id', 'size', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Bag sizes fetched successfully.',
+            'data' => $sizes,
+        ], 200);
+    }
+
+    public function getCartonSizes()
+    {
+        $sizes = \App\CartonSize::query()
+            ->where('status', \App\CartonSize::STATUS_ACTIVE)
+            ->orderBy('size')
+            ->get(['id', 'size', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Carton sizes fetched successfully.',
+            'data' => $sizes,
+        ], 200);
+    }
+
+    public function getCylinderSizes()
+    {
+        $sizes = \App\CylinderSize::query()
+            ->where('status', \App\CylinderSize::STATUS_ACTIVE)
+            ->orderBy('size')
+            ->get(['id', 'size', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Cylinder sizes fetched successfully.',
+            'data' => $sizes,
+        ], 200);
+    }
+
     public function getPackingForms()
     {
         return response()->json([

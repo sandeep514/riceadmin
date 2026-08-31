@@ -6,32 +6,34 @@ use App\PaddyStateModel;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
 use App\RiceName;
+use App\Export\PaddyPriceExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Carbon\Carbon;
 
 class PaddyPriceController extends Controller
 {
     public function index(Request $request)
     {
-        $from = $this->validFilterDate($request->input('from'));
-        $to = $this->validFilterDate($request->input('to'));
-        if ($from && $to && $from > $to) {
-            [$from, $to] = [$to, $from];
-        }
+        [$from, $to] = $this->resolvedFilterDates($request);
+        $paddyPrices = $this->filteredPaddyPrices($from, $to);
 
-        $query = PaddyPrice::with(['getMandi_rel', 'getState_rel', 'quality_rel'])
-            ->orderBy('id', 'DESC');
+        $export = strtolower((string) $request->input('export', ''));
+        if ($export === 'excel') {
+            $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.xlsx';
 
-        if ($from) {
-            $query->whereDate('created_at', '>=', $from);
+            return Excel::download(new PaddyPriceExport($paddyPrices), $filename);
         }
-        if ($to) {
-            $query->whereDate('created_at', '<=', $to);
-        }
+        if ($export === 'pdf') {
+            $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.pdf';
+            $pdf = Pdf::loadView('paddyPrices.pdf', compact('paddyPrices', 'from', 'to'))
+                ->setPaper('a4', 'landscape');
 
-        $paddyPrices = $query->get();
+            return $pdf->download($filename);
+        }
 
         $paddyStateModel = PaddyStateModel::where('status', 1)
             ->orderByRaw('order_no IS NULL, order_no ASC')
@@ -44,6 +46,32 @@ class PaddyPriceController extends Controller
         $quality = RiceName::where('status', 1)->get();
 
         return view('paddyPrices.index', compact('paddyPrices', 'paddyStateModel', 'paddyMandiModel', 'quality', 'from', 'to'));
+    }
+
+    private function resolvedFilterDates(Request $request): array
+    {
+        $from = $this->validFilterDate($request->input('from'));
+        $to = $this->validFilterDate($request->input('to'));
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
+        return [$from, $to];
+    }
+
+    private function filteredPaddyPrices(?string $from, ?string $to)
+    {
+        $query = PaddyPrice::with(['getMandi_rel', 'getState_rel', 'quality_rel'])
+            ->orderBy('id', 'DESC');
+
+        if ($from) {
+            $query->whereDate('created_at', '>=', $from);
+        }
+        if ($to) {
+            $query->whereDate('created_at', '<=', $to);
+        }
+
+        return $query->get();
     }
 
     private function validFilterDate($value): ?string

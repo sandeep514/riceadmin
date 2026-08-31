@@ -155,6 +155,12 @@
                                                     </div>
                                                     <button type="submit" class="btn btn-info btn-sm">Filter</button>
                                                     <a href="{{ route('list.paddy.price') }}" class="btn btn-default btn-sm">Clear</a>
+                                                    <a href="{{ route('list.paddy.price', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'export' => 'excel'])) }}" class="btn btn-success btn-sm">
+                                                        <i class="fa fa-file-excel-o"></i> Excel
+                                                    </a>
+                                                    <a href="{{ route('list.paddy.price', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'export' => 'pdf'])) }}" class="btn btn-danger btn-sm">
+                                                        <i class="fa fa-file-pdf-o"></i> PDF
+                                                    </a>
                                                 </form>
                                                 <table class="table table-bordered table-striped paddy-datatable" width="100%">
                                                     <thead>

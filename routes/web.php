@@ -249,6 +249,39 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/cylinder-types/change-status/{id}', ['as' => 'cylinder-type.change-status', 'uses' => 'CylinderTypeController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Bag Size master
+            Route::group(['module' => 'bag_size', 'icon' => 'fa-shopping-bag'], function () {
+                Route::get('vendor-flow/bag-sizes', ['as' => 'bag-sizes', 'uses' => 'BagSizeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/bag-sizes/create', ['as' => 'create.bag-size', 'uses' => 'BagSizeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/bag-sizes/save', ['as' => 'save.bag-size', 'uses' => 'BagSizeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/bag-sizes/edit/{id}', ['as' => 'edit.bag-size', 'uses' => 'BagSizeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/bag-sizes/update/{id}', ['as' => 'update.bag-size', 'uses' => 'BagSizeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/bag-sizes/delete/{id}', ['as' => 'delete.bag-size', 'uses' => 'BagSizeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/bag-sizes/change-status/{id}', ['as' => 'bag-size.change-status', 'uses' => 'BagSizeController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Carton Size master
+            Route::group(['module' => 'carton_size', 'icon' => 'fa-archive'], function () {
+                Route::get('vendor-flow/carton-sizes', ['as' => 'carton-sizes', 'uses' => 'CartonSizeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/carton-sizes/create', ['as' => 'create.carton-size', 'uses' => 'CartonSizeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/carton-sizes/save', ['as' => 'save.carton-size', 'uses' => 'CartonSizeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/carton-sizes/edit/{id}', ['as' => 'edit.carton-size', 'uses' => 'CartonSizeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/carton-sizes/update/{id}', ['as' => 'update.carton-size', 'uses' => 'CartonSizeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/carton-sizes/delete/{id}', ['as' => 'delete.carton-size', 'uses' => 'CartonSizeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/carton-sizes/change-status/{id}', ['as' => 'carton-size.change-status', 'uses' => 'CartonSizeController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Cylinder Size master
+            Route::group(['module' => 'cylinder_size', 'icon' => 'fa-database'], function () {
+                Route::get('vendor-flow/cylinder-sizes', ['as' => 'cylinder-sizes', 'uses' => 'CylinderSizeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/cylinder-sizes/create', ['as' => 'create.cylinder-size', 'uses' => 'CylinderSizeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/cylinder-sizes/save', ['as' => 'save.cylinder-size', 'uses' => 'CylinderSizeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/cylinder-sizes/edit/{id}', ['as' => 'edit.cylinder-size', 'uses' => 'CylinderSizeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/cylinder-sizes/update/{id}', ['as' => 'update.cylinder-size', 'uses' => 'CylinderSizeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/cylinder-sizes/delete/{id}', ['as' => 'delete.cylinder-size', 'uses' => 'CylinderSizeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/cylinder-sizes/change-status/{id}', ['as' => 'cylinder-size.change-status', 'uses' => 'CylinderSizeController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Lab Equipment master
             Route::group(['module' => 'lab_equipment', 'icon' => 'fa-flask'], function () {
                 Route::get('vendor-flow/lab-equipments', ['as' => 'lab-equipments', 'uses' => 'LabEquipmentController@index', 'action' => 'view']);
