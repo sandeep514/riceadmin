@@ -38,13 +38,14 @@ class WebVendorProductController extends Controller
 
         $vendor = (clone $vendorQuery)
             ->where('id', $vendorId)
-            ->where('is_active_listing', 1)
+            ->orderByDesc('is_active_listing')
+            ->orderByDesc('id')
             ->first();
 
         if ($vendor === null) {
             $vendor = (clone $vendorQuery)
                 ->where('user_id', $vendorId)
-                ->where('is_active_listing', 1)
+                ->orderByDesc('is_active_listing')
                 ->orderByDesc('id')
                 ->first();
         }
@@ -57,6 +58,10 @@ class WebVendorProductController extends Controller
         }
 
         $userId = (int) ($vendor->user_id ?? 0);
+        $ownerIds = array_values(array_unique(array_filter([$userId, (int) $vendor->id])));
+        $kind = VendorProductCatalog::detectKindForVendor($vendor)
+            ?? VendorProductCatalog::detectKindFromOwnerProducts($ownerIds);
+
         $vendorPayload = [
             'id' => (int) $vendor->id,
             'company_name' => $vendor->company_name,
@@ -66,10 +71,10 @@ class WebVendorProductController extends Controller
             'address' => $vendor->address,
             'recommended' => (int) ($vendor->is_sntc_recommended ?? 0),
             'has_products' => false,
-            'vendorKind' => VendorProductCatalog::detectKindForVendor($vendor),
+            'vendorKind' => $kind,
         ];
 
-        if ($userId <= 0) {
+        if ($ownerIds === []) {
             return response()->json([
                 'status' => true,
                 'message' => 'Vendor products fetched successfully.',
@@ -78,10 +83,8 @@ class WebVendorProductController extends Controller
                 'imageBasePath' => null,
             ], 200);
         }
-
-        $kind = VendorProductCatalog::detectKindForVendor($vendor);
-        $ownerIds = array_values(array_unique(array_filter([$userId, (int) $vendor->id])));
         $data = collect();
+        $imageUserId = $userId > 0 ? $userId : (int) $vendor->id;
         $imageBasePath = null;
 
         if ($kind === VendorProductCatalog::KIND_LAB_EQUIPMENT || $kind === VendorProductCatalog::KIND_MACHINERY_EQUIPMENT) {
@@ -91,19 +94,19 @@ class WebVendorProductController extends Controller
 
             $products = $service->verifiedProductsForOwners($ownerIds);
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
-            $imageBasePath = $service->imageBasePath($userId);
+            $imageBasePath = $service->imageBasePath($imageUserId);
         } elseif ($kind === VendorProductCatalog::KIND_CARTOON) {
             $service = WebVendorPackagingProductService::cartoon();
             $products = $service->verifiedProductsForOwners($ownerIds);
             $types = $service->typeOptions();
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product, $types))->values();
-            $imageBasePath = $service->imageBasePath($userId);
+            $imageBasePath = $service->imageBasePath($imageUserId);
         } elseif ($kind === VendorProductCatalog::KIND_CYLINDER) {
             $service = WebVendorPackagingProductService::cylinder();
             $products = $service->verifiedProductsForOwners($ownerIds);
             $types = $service->typeOptions();
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product, $types))->values();
-            $imageBasePath = $service->imageBasePath($userId);
+            $imageBasePath = $service->imageBasePath($imageUserId);
         } else {
             $products = WebRiceBagProduct::with(['packingSizes'])
                 ->whereIn('user_id', $ownerIds)
@@ -120,7 +123,7 @@ class WebVendorProductController extends Controller
             $data = $products->map(function (WebRiceBagProduct $product) use ($bagTypes) {
                 return $this->serializeRiceBagVendorProduct($product, $bagTypes);
             })->values();
-            $imageBasePath = 'uploads/rice-bag-products/'.$userId;
+            $imageBasePath = 'uploads/rice-bag-products/'.$imageUserId;
         }
 
         $vendorPayload['has_products'] = $data->isNotEmpty();

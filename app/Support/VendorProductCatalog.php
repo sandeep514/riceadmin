@@ -44,6 +44,13 @@ final class VendorProductCatalog
         }
 
         $name = strtolower((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''));
+
+        return self::detectKindFromCategoryName($name);
+    }
+
+    public static function detectKindFromCategoryName(?string $name): ?string
+    {
+        $name = strtolower(trim((string) $name));
         if ($name === '') {
             return null;
         }
@@ -73,7 +80,32 @@ final class VendorProductCatalog
 
     public static function detectKindForVendor(WebBusinessDetails $vendor): ?string
     {
-        return self::detectKindFromCategoryId((int) ($vendor->selected_category ?? 0));
+        $raw = $vendor->selected_category ?? null;
+        $fromId = self::detectKindFromCategoryId((int) $raw);
+        if ($fromId !== null) {
+            return $fromId;
+        }
+
+        return self::detectKindFromCategoryName(is_string($raw) ? $raw : null);
+    }
+
+    /**
+     * @param  array<int>  $ownerIds
+     */
+    public static function detectKindFromOwnerProducts(array $ownerIds): ?string
+    {
+        $ownerIds = array_values(array_unique(array_filter(array_map('intval', $ownerIds))));
+        if ($ownerIds === []) {
+            return null;
+        }
+
+        foreach (self::productModels() as $kind => $model) {
+            if ($model::query()->whereIn('user_id', $ownerIds)->exists()) {
+                return $kind;
+            }
+        }
+
+        return null;
     }
 
     /**

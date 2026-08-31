@@ -315,17 +315,34 @@ class WebVendorPackagingProductService
      */
     public function verifiedProductsForOwners(array $ownerIds)
     {
+        $products = $this->productsForOwners($ownerIds, verifiedOnly: true);
+        if ($products->isNotEmpty()) {
+            return $products;
+        }
+
+        return $this->productsForOwners($ownerIds, verifiedOnly: false);
+    }
+
+    /**
+     * @param  array<int>  $ownerIds
+     */
+    public function productsForOwners(array $ownerIds, bool $verifiedOnly = true)
+    {
         $ownerIds = array_values(array_unique(array_filter(array_map('intval', $ownerIds))));
         if ($ownerIds === []) {
             return $this->productModel::query()->whereRaw('1 = 0')->get();
         }
 
-        return $this->productModel::with(['variants'])
+        $query = $this->productModel::with(['variants'])
             ->whereIn('user_id', $ownerIds)
-            ->where('status', 1)
             ->whereHas('variants')
-            ->orderByDesc('id')
-            ->get();
+            ->orderByDesc('id');
+
+        if ($verifiedOnly) {
+            $query->where('status', 1);
+        }
+
+        return $query->get();
     }
 
     public function serializeVendorProduct(Model $product, $types = null): array
