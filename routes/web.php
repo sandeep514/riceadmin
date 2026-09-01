@@ -249,6 +249,17 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/cylinder-types/change-status/{id}', ['as' => 'cylinder-type.change-status', 'uses' => 'CylinderTypeController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Packing Type master
+            Route::group(['module' => 'vendor_packing_type', 'icon' => 'fa-tags'], function () {
+                Route::get('vendor-flow/packing-types', ['as' => 'vendor-packing-types', 'uses' => 'VendorPackingTypeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/packing-types/create', ['as' => 'create.vendor-packing-type', 'uses' => 'VendorPackingTypeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/packing-types/save', ['as' => 'save.vendor-packing-type', 'uses' => 'VendorPackingTypeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/packing-types/edit/{id}', ['as' => 'edit.vendor-packing-type', 'uses' => 'VendorPackingTypeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/packing-types/update/{id}', ['as' => 'update.vendor-packing-type', 'uses' => 'VendorPackingTypeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/packing-types/delete/{id}', ['as' => 'delete.vendor-packing-type', 'uses' => 'VendorPackingTypeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/packing-types/change-status/{id}', ['as' => 'vendor-packing-type.change-status', 'uses' => 'VendorPackingTypeController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Bag Size master
             Route::group(['module' => 'bag_size', 'icon' => 'fa-shopping-bag'], function () {
                 Route::get('vendor-flow/bag-sizes', ['as' => 'bag-sizes', 'uses' => 'BagSizeController@index', 'action' => 'view']);

@@ -7928,7 +7928,11 @@ if (!file_exists('uploads')) {
 
     public function getBagPacking()
     {
-        $packingType = PackingType::select(['id' , 'name'])->get();
+        $packingType = PackingType::query()
+            ->where('status', PackingType::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
         return response()->json(['status' => true, 'data' => $packingType], 200);
     }
 
