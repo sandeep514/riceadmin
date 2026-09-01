@@ -82,6 +82,11 @@ class WebVendorEquipmentProductService
         $this->uploadFolder = $uploadFolder;
     }
 
+    private function kindKey(): string
+    {
+        return $this->equipmentTable === 'machinery_equipments' ? 'machinery_equipment' : 'lab_equipment';
+    }
+
     public function create(Request $request)
     {
         $this->normalizeIncomingPayload($request);
@@ -113,6 +118,13 @@ class WebVendorEquipmentProductService
 
             return $product->load(['variants']);
         });
+
+        VendorProductAdminNotificationService::notify(
+            $this->kindKey(),
+            VendorProductAdminNotificationService::ACTION_CREATED,
+            $product,
+            $product->variants
+        );
 
         return response()->json([
             'status' => true,
@@ -164,6 +176,12 @@ class WebVendorEquipmentProductService
             ], 403);
         }
 
+        $previousVariants = $product->variants->map(function ($row) {
+            return [
+                'equipment_id' => $row->equipment_id,
+            ];
+        });
+
         $product = DB::transaction(function () use ($request, $product) {
             if ($request->exists('variants')) {
                 $this->syncVariants($product, $request->input('variants', []), $request, replace: true);
@@ -171,6 +189,17 @@ class WebVendorEquipmentProductService
 
             return $product->load(['variants']);
         });
+
+        if ($request->exists('variants')
+            && VendorProductAdminNotificationService::hasNewEquipmentVariants($previousVariants, $product->variants)
+        ) {
+            VendorProductAdminNotificationService::notify(
+                $this->kindKey(),
+                VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED,
+                $product,
+                $product->variants
+            );
+        }
 
         return response()->json([
             'status' => true,

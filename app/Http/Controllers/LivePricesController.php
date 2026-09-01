@@ -380,6 +380,7 @@ class LivePricesController extends Controller
         // }/
 
 
+        LivePrice::bumpLookupCache();
         Session::flash('success','Success|Price saved successfully!');
         return back();
     }
@@ -469,6 +470,8 @@ class LivePricesController extends Controller
                 ]
             );
         }
+
+        LivePrice::bumpLookupCache();
 
         return response()->json(['status' => true , 'message' => 'data uploaded successfully']);
     }
@@ -689,6 +692,7 @@ class LivePricesController extends Controller
 
     public function delete($id){
         LivePrice::find($id)->delete();
+        LivePrice::bumpLookupCache();
         Session::flash('success','Success|Record deleted successfully!');
         return back();
     }

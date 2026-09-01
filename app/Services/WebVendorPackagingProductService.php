@@ -90,6 +90,11 @@ class WebVendorPackagingProductService
         $this->uploadFolder = $uploadFolder;
     }
 
+    private function kindKey(): string
+    {
+        return $this->typeIdColumn === 'cylinder_type_id' ? 'cylinder' : 'cartoon';
+    }
+
     public function create(Request $request)
     {
         $this->normalizeIncomingPayload($request);
@@ -120,6 +125,13 @@ class WebVendorPackagingProductService
 
             return $product->load(['variants']);
         });
+
+        VendorProductAdminNotificationService::notify(
+            $this->kindKey(),
+            VendorProductAdminNotificationService::ACTION_CREATED,
+            $product,
+            $product->variants
+        );
 
         return response()->json([
             'status' => true,
@@ -172,6 +184,13 @@ class WebVendorPackagingProductService
             ], 403);
         }
 
+        $previousVariants = $product->variants->map(function ($row) {
+            return [
+                'packing_size_id' => $row->packing_size_id,
+                'packing_size' => $row->packing_size,
+            ];
+        });
+
         $product = DB::transaction(function () use ($request, $product) {
             $attrs = $this->payloadToAttributes($request, partial: true);
             if ($attrs !== []) {
@@ -185,6 +204,17 @@ class WebVendorPackagingProductService
 
             return $product->load(['variants']);
         });
+
+        if ($request->exists('variants')
+            && VendorProductAdminNotificationService::hasNewPackingVariants($previousVariants, $product->variants)
+        ) {
+            VendorProductAdminNotificationService::notify(
+                $this->kindKey(),
+                VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED,
+                $product,
+                $product->variants
+            );
+        }
 
         return response()->json([
             'status' => true,

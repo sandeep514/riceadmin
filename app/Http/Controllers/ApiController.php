@@ -1316,6 +1316,11 @@ class ApiController extends Controller
     public function getPrices($state, $ricetype)
     {
         $cropYear = request()->get('year');
+        $pricesCacheKey = $this->livePricesPayloadCacheKey('getPrices', $state, $ricetype, $cropYear);
+        $cachedPrices = Cache::get($pricesCacheKey);
+        if (is_array($cachedPrices)) {
+            return response()->json($cachedPrices);
+        }
         // $today = Carbon::now();  
         // $day = $today->day;
         // $month = $today->month;
@@ -1478,22 +1483,28 @@ class ApiController extends Controller
                     }
                 }
 
-            return response()->json([
+            $payload = [
                 'errors' => null,
                 'prices' => $myNewData,
                 'latest' => $latestDate,
                 'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
                 'oldDate' => $previousDate ? Carbon::parse($previousDate)->format('Y-m-d') : '',
-            ]);
+            ];
+            Cache::put($pricesCacheKey, $payload, 30);
+
+            return response()->json($payload);
         }
 
         // if no records found
-        return response()->json([
+        $emptyPayload = [
             'errors' => null,
             'prices' => [],
             'latest' => '',
             'oldDate' => ''
-        ]);
+        ];
+        Cache::put($pricesCacheKey, $emptyPayload, 30);
+
+        return response()->json($emptyPayload);
     }
 
    
@@ -2178,7 +2189,7 @@ class ApiController extends Controller
             ->where('state', $state)
             ->where('cropYear', $cropYear)
             ->whereBetween('created_at', [$priceDayStart, $priceDayEnd])
-            ->groupBy('name', 'form', 'state', 'cropYear');
+            ->groupBy('name', 'form', 'cropYear');
 
         $data = LivePrice::query()
             ->with([
@@ -2187,6 +2198,9 @@ class ApiController extends Controller
             ])
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
             ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
+            ->joinSub($latestPriceIdsForDate, 'latest_lp', function ($join) {
+                $join->on('latest_lp.id', '=', 'live_prices.id');
+            })
             ->select('live_prices.*')
             ->withCount([
                 'trades as tradeCount' => function ($q) {
@@ -2194,7 +2208,6 @@ class ApiController extends Controller
                       ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
                 }
             ])
-            ->whereIn('live_prices.id', $latestPriceIdsForDate)
             ->where('live_prices.state', $state)
             ->where('live_prices.cropYear' , $cropYear)
             ->where('rn.type', $ricetype)
@@ -2392,20 +2405,51 @@ class ApiController extends Controller
 
     private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
     {
-        $latestIds = LivePrice::query()
-            ->selectRaw('MAX(id) as id')
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
-            ->where('state', $state)
-            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
-            ->groupBy('name', 'form', 'state', 'cropYear');
+        $cacheKey = 'live_prices:invalid_latest:v'.$this->livePricesCacheVersion().':'.md5(json_encode([(string) $state, (string) ($cropYear ?? '')]));
 
-        return LivePrice::query()
-            ->whereIn('id', $latestIds)
-            ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
-            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
-            ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
-            ->all();
+        return $this->rememberLivePriceLookup($cacheKey, 45, function () use ($state, $cropYear) {
+            $latestIds = DB::table('live_prices')
+                ->selectRaw('MAX(id) as id')
+                ->where('name', '!=', '0')
+                ->where('form', '!=', '0')
+                ->where('state', $state)
+                ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
+                ->groupBy('name', 'form', 'cropYear');
+
+            return DB::table('live_prices as lp')
+                ->joinSub($latestIds, 't', function ($join) {
+                    $join->on('t.id', '=', 'lp.id');
+                })
+                ->get(['lp.name', 'lp.form', 'lp.state', 'lp.cropYear', 'lp.min_price', 'lp.max_price'])
+                ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
+                ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
+                ->all();
+        });
+    }
+
+    private function livePricesPayloadCacheKey(string $scope, $state, $ricetype, $cropYear): string
+    {
+        return 'live_prices:'.$scope.':v'.$this->livePricesCacheVersion().':'.md5(json_encode([
+            (string) $state,
+            (string) $ricetype,
+            (string) ($cropYear ?? ''),
+        ]));
+    }
+
+    private function livePricesCacheVersion(): string
+    {
+        return (string) Cache::get('live_prices:lookup_version', '1');
+    }
+
+    private function rememberLivePriceLookup(string $cacheKey, int $seconds, callable $callback)
+    {
+        try {
+            return Cache::lock($cacheKey.':lock', 15)->block(10, function () use ($cacheKey, $seconds, $callback) {
+                return Cache::remember($cacheKey, $seconds, $callback);
+            });
+        } catch (\Throwable $e) {
+            return Cache::remember($cacheKey, $seconds, $callback);
+        }
     }
 
     /**
@@ -2419,11 +2463,13 @@ class ApiController extends Controller
             ->selectRaw('MAX(id) as id')
             ->where('state', $state)
             ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
-            ->groupBy('name', 'form', 'state', 'cropYear');
+            ->groupBy('name', 'form', 'cropYear');
 
-        $rows = DB::table('live_price_closing')
-            ->whereIn('id', $latestIdsQuery)
-            ->get(['name', 'form', 'state', 'cropYear', 'closing']);
+        $rows = DB::table('live_price_closing as lpc')
+            ->joinSub($latestIdsQuery, 't', function ($join) {
+                $join->on('t.id', '=', 'lpc.id');
+            })
+            ->get(['lpc.name', 'lpc.form', 'lpc.state', 'lpc.cropYear', 'lpc.closing']);
 
         $map = [];
         foreach ($rows as $row) {
@@ -8166,7 +8212,7 @@ if (!file_exists('uploads')) {
         }
 
         $cropYear = $request->get('year');
-        $cacheKey = 'api:live_prices_today:'.md5(json_encode(['year' => $cropYear]));
+        $cacheKey = 'api:live_prices_today:v'.$this->livePricesCacheVersion().':'.md5(json_encode(['year' => $cropYear]));
 
         $payload = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($cropYear) {
             if ($cropYear !== null && $cropYear !== '') {

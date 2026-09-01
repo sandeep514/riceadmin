@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Packing;
 use App\PackingType;
+use App\Services\VendorProductAdminNotificationService;
 use App\WebBusinessDetails;
 use App\WebRiceBagProduct;
 use App\WebRiceBagProductPackingSize;
@@ -42,6 +43,13 @@ class WebRiceBagProductController extends Controller
 
             return $product->load(['packingSizes']);
         });
+
+        VendorProductAdminNotificationService::notify(
+            'rice_bag',
+            VendorProductAdminNotificationService::ACTION_CREATED,
+            $product,
+            $product->packingSizes
+        );
 
         return response()->json([
             'status' => true,
@@ -96,6 +104,13 @@ class WebRiceBagProductController extends Controller
             ], 403);
         }
 
+        $previousPackingSizes = $product->packingSizes->map(function ($row) {
+            return [
+                'packing_size_id' => $row->packing_size_id,
+                'packing_size' => $row->packing_size,
+            ];
+        });
+
         $product = DB::transaction(function () use ($request, $product) {
             $attrs = $this->payloadToAttributes($request, partial: true);
             if (! empty($attrs)) {
@@ -109,6 +124,17 @@ class WebRiceBagProductController extends Controller
 
             return $product->load(['packingSizes']);
         });
+
+        if ($request->exists('packingSizes')
+            && VendorProductAdminNotificationService::hasNewPackingVariants($previousPackingSizes, $product->packingSizes)
+        ) {
+            VendorProductAdminNotificationService::notify(
+                'rice_bag',
+                VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED,
+                $product,
+                $product->packingSizes
+            );
+        }
 
         return response()->json([
             'status' => true,
