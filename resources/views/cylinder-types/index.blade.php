@@ -30,7 +30,7 @@
                                 <table class="table table-bordered table-striped datatable" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
+                                            <th width="140">Order</th>
                                             <th>Type</th>
                                             <th>Description</th>
                                             <th>Status</th>
@@ -42,7 +42,9 @@
                                     <tbody>
                                         @foreach($records as $record)
                                             <tr>
-                                                <td>{{ $record->id }}</td>
+                                                <td data-order="{{ $record->order_no ?? 999999 }}">
+                                                    @include('components.master-order-input', ['model' => $record, 'route' => 'update.order.cylinder-type'])
+                                                </td>
                                                 <td>{{ $record->type }}</td>
                                                 <td>{{ $record->description ?: '—' }}</td>
                                                 <td>
@@ -75,7 +77,7 @@
     $(function(){
         $('.datatable').DataTable({
             pageLength: 25,
-            order: [[0, 'desc']],
+            order: [[0, 'asc']],
             columnDefs: [{ orderable: false, targets: [6] }]
         });
 

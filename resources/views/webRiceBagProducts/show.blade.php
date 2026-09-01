@@ -59,7 +59,12 @@
                             </tr>
                             <tr>
                                 <th>Bag type</th>
-                                <td>{{ $bagTypes[$product->bag_type_id] ?? ($product->bag_type_id ? '#'.$product->bag_type_id : '—') }}</td>
+                                <td>
+                                    {{ $bagTypes[$product->bag_type_id] ?? ($product->bag_type_id ? '#'.$product->bag_type_id : '—') }}
+                                    @if(!empty($product->other_type_value))
+                                        <br><small class="text-muted">Other: {{ $product->other_type_value }}</small>
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Packing form</th>
@@ -145,6 +150,9 @@
                                             {{ $size->packing_size ?? '—' }}
                                             @if($size->packing_size_id)
                                                 <br><small class="text-muted">ID: {{ $size->packing_size_id }}</small>
+                                            @endif
+                                            @if(!empty($size->other_size_value))
+                                                <br><small class="text-muted">Other: {{ $size->other_size_value }}</small>
                                             @endif
                                         </td>
                                         <td>{{ $size->rate ?? '—' }}</td>

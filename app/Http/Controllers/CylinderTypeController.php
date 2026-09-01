@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\CylinderType;
 use App\Http\Requests\CylinderTypeRequest;
+use App\Support\MasterOrderUpdater;
+use Illuminate\Http\Request;
 use Session;
 
 class CylinderTypeController extends Controller
 {
     public function index()
     {
-        $records = CylinderType::orderByDesc('id')->get();
+        $records = CylinderType::orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
 
         return view('cylinder-types.index', compact('records'));
     }
@@ -22,11 +26,12 @@ class CylinderTypeController extends Controller
 
     public function save(CylinderTypeRequest $request)
     {
-        CylinderType::create($request->only([
-            'type',
-            'description',
-            'status',
-        ]));
+        CylinderType::create([
+            'type' => $request->input('type'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status'),
+            'order_no' => MasterOrderUpdater::nextOrder(CylinderType::class),
+        ]);
 
         Session::flash('success', 'Success|Cylinder type saved successfully!');
 
@@ -99,6 +104,19 @@ class CylinderTypeController extends Controller
             : 'Success|Cylinder type marked as inactive.';
 
         Session::flash('success', $msg);
+
+        return back();
+    }
+
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:cylinder_types,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        MasterOrderUpdater::swap(CylinderType::class, (int) $request->id, (int) $request->order_no);
+        Session::flash('success', 'Success|Cylinder type order updated successfully.');
 
         return back();
     }

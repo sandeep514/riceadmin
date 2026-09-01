@@ -12,6 +12,7 @@ class WebRiceBagProductPackingSize extends Model
         'product_id',
         'packing_size_id',
         'packing_size',
+        'other_size_value',
         'rate',
         'gst',
         'total_price',

@@ -6,6 +6,7 @@ use App\PackingType;
 use App\Services\WebVendorEquipmentProductService;
 use App\Services\WebVendorPackagingProductService;
 use App\Support\VendorProductCatalog;
+use App\VendorPackingType;
 use App\WebBusinessDetails;
 use App\WebRiceBagProduct;
 use Illuminate\Http\Request;
@@ -116,9 +117,14 @@ class WebVendorProductController extends Controller
                 ->get();
 
             $bagTypeIds = $products->pluck('bag_type_id')->filter()->unique()->values()->all();
-            $bagTypes = $bagTypeIds === []
-                ? collect()
-                : PackingType::whereIn('id', $bagTypeIds)->pluck('name', 'id');
+            $bagTypes = collect();
+            if ($bagTypeIds !== []) {
+                $bagTypes = VendorPackingType::whereIn('id', $bagTypeIds)->pluck('name', 'id');
+                $missingIds = array_values(array_diff($bagTypeIds, $bagTypes->keys()->all()));
+                if ($missingIds !== []) {
+                    $bagTypes = $bagTypes->union(PackingType::whereIn('id', $missingIds)->pluck('name', 'id'));
+                }
+            }
 
             $data = $products->map(function (WebRiceBagProduct $product) use ($bagTypes) {
                 return $this->serializeRiceBagVendorProduct($product, $bagTypes);
@@ -146,6 +152,7 @@ class WebVendorProductController extends Controller
                 'id' => (int) $size->id,
                 'packingSizeId' => $size->packing_size_id !== null ? (int) $size->packing_size_id : null,
                 'packingSize' => $size->packing_size,
+                'otherSizeValue' => $size->other_size_value,
                 'rate' => $size->rate !== null ? (string) $size->rate : null,
                 'gst' => $size->gst !== null ? (string) $size->gst : null,
                 'totalPrice' => $size->total_price !== null ? (string) $size->total_price : null,
@@ -165,6 +172,7 @@ class WebVendorProductController extends Controller
         return [
             'id' => (int) $product->id,
             'bagTypeId' => $product->bag_type_id !== null ? (int) $product->bag_type_id : null,
+            'otherTypeValue' => $product->other_type_value,
             'bagTypeName' => $bagTypeName,
             'specification' => $product->specification,
             'description' => $product->description,

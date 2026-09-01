@@ -60,7 +60,12 @@
                                             <br><small>{{ $product->user->email }}</small>
                                         @endif
                                     </td>
-                                    <td>{{ $bagTypes[$product->bag_type_id] ?? ($product->bag_type_id ? '#'.$product->bag_type_id : '—') }}</td>
+                                    <td>
+                                        {{ $bagTypes[$product->bag_type_id] ?? ($product->bag_type_id ? '#'.$product->bag_type_id : '—') }}
+                                        @if(!empty($product->other_type_value))
+                                            <br><small class="text-muted">{{ $product->other_type_value }}</small>
+                                        @endif
+                                    </td>
                                     <td>{{ $product->packing_form ?? '—' }}</td>
                                     <td>{{ \Illuminate\Support\Str::limit($product->specification ?? '—', 60) }}</td>
                                     <td style="white-space:nowrap;">

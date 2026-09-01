@@ -96,12 +96,16 @@
                                 <div class="form-group col-md-3">
                                     <label>Quality</label>
                                     <select class="form-control" name="quality_id" required>
-                                        @foreach($quality as $k => $v)
+                                        <option value="">-- Select Quality --</option>
+                                        @foreach($quality as $v)
                                             <option value="{{ $v->id }}" {{ (int) old('quality_id') === (int) $v->id ? 'selected' : '' }}>
-                                                {{ $v->name }}
+                                                {{ $v->type_label }} - {{ $v->quality }}
                                             </option>
                                         @endforeach
                                     </select>
+                                    @error('quality_id')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label>Hand Cutting Price</label>
@@ -168,7 +172,7 @@
                                                             <th>ID</th>
                                                             <th>Mandi</th>
                                                             <th>State</th>
-                                                            <th>Quality ID</th>
+                                                            <th>Quality</th>
                                                             <th>Crop Year</th>
                                                             <th>Hand Cutting Price</th>
                                                             <th>Machine Cutting Price</th>
@@ -186,7 +190,7 @@
                                                                 <td>{{ $paddyPrice->id }}</td>
                                                                 <td>{{ $paddyPrice->getMandi_rel->mandi }}</td>
                                                                 <td>{{ $paddyPrice->getState_rel->state }}</td>
-                                                                <td>{{ $paddyPrice->quality_rel->name }}</td>
+                                                                <td>{{ optional($paddyPrice->quality_rel)->quality ? ($paddyPrice->quality_rel->type_label.' - '.$paddyPrice->quality_rel->quality) : '—' }}</td>
                                                                 <td>{{ $paddyPrice->crop_year }}</td>
                                                                 <td>{{ $paddyPrice->hand_cutting_price }}</td>
                                                                 <td>{{ $paddyPrice->machine_cutting_price }}</td>

@@ -236,6 +236,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/cartoon-types/update/{id}', ['as' => 'update.cartoon-type', 'uses' => 'CartoonTypeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/cartoon-types/delete/{id}', ['as' => 'delete.cartoon-type', 'uses' => 'CartoonTypeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/cartoon-types/change-status/{id}', ['as' => 'cartoon-type.change-status', 'uses' => 'CartoonTypeController@changeStatus', 'action' => 'edit']);
+                Route::post('vendor-flow/cartoon-types/update-order', ['as' => 'update.order.cartoon-type', 'uses' => 'CartoonTypeController@updateOrder', 'action' => 'edit']);
             });
 
             // Vendor Flow — Cylinder Type master
@@ -247,6 +248,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/cylinder-types/update/{id}', ['as' => 'update.cylinder-type', 'uses' => 'CylinderTypeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/cylinder-types/delete/{id}', ['as' => 'delete.cylinder-type', 'uses' => 'CylinderTypeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/cylinder-types/change-status/{id}', ['as' => 'cylinder-type.change-status', 'uses' => 'CylinderTypeController@changeStatus', 'action' => 'edit']);
+                Route::post('vendor-flow/cylinder-types/update-order', ['as' => 'update.order.cylinder-type', 'uses' => 'CylinderTypeController@updateOrder', 'action' => 'edit']);
             });
 
             // Vendor Flow — Packing Type master
@@ -258,6 +260,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/packing-types/update/{id}', ['as' => 'update.vendor-packing-type', 'uses' => 'VendorPackingTypeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/packing-types/delete/{id}', ['as' => 'delete.vendor-packing-type', 'uses' => 'VendorPackingTypeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/packing-types/change-status/{id}', ['as' => 'vendor-packing-type.change-status', 'uses' => 'VendorPackingTypeController@changeStatus', 'action' => 'edit']);
+                Route::post('vendor-flow/packing-types/update-order', ['as' => 'update.order.vendor-packing-type', 'uses' => 'VendorPackingTypeController@updateOrder', 'action' => 'edit']);
             });
 
             // Vendor Flow — Bag Size master
@@ -269,6 +272,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/bag-sizes/update/{id}', ['as' => 'update.bag-size', 'uses' => 'BagSizeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/bag-sizes/delete/{id}', ['as' => 'delete.bag-size', 'uses' => 'BagSizeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/bag-sizes/change-status/{id}', ['as' => 'bag-size.change-status', 'uses' => 'BagSizeController@changeStatus', 'action' => 'edit']);
+                Route::post('vendor-flow/bag-sizes/update-order', ['as' => 'update.order.bag-size', 'uses' => 'BagSizeController@updateOrder', 'action' => 'edit']);
             });
 
             // Vendor Flow — Carton Size master
@@ -280,6 +284,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/carton-sizes/update/{id}', ['as' => 'update.carton-size', 'uses' => 'CartonSizeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/carton-sizes/delete/{id}', ['as' => 'delete.carton-size', 'uses' => 'CartonSizeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/carton-sizes/change-status/{id}', ['as' => 'carton-size.change-status', 'uses' => 'CartonSizeController@changeStatus', 'action' => 'edit']);
+                Route::post('vendor-flow/carton-sizes/update-order', ['as' => 'update.order.carton-size', 'uses' => 'CartonSizeController@updateOrder', 'action' => 'edit']);
             });
 
             // Vendor Flow — Cylinder Size master
@@ -291,6 +296,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/cylinder-sizes/update/{id}', ['as' => 'update.cylinder-size', 'uses' => 'CylinderSizeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/cylinder-sizes/delete/{id}', ['as' => 'delete.cylinder-size', 'uses' => 'CylinderSizeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/cylinder-sizes/change-status/{id}', ['as' => 'cylinder-size.change-status', 'uses' => 'CylinderSizeController@changeStatus', 'action' => 'edit']);
+                Route::post('vendor-flow/cylinder-sizes/update-order', ['as' => 'update.order.cylinder-size', 'uses' => 'CylinderSizeController@updateOrder', 'action' => 'edit']);
             });
 
             // Vendor Flow — Lab Equipment master

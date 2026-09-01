@@ -16,6 +16,7 @@ class VendorPackingType extends Model
         'name',
         'description',
         'status',
+        'order_no',
     ];
 
     public static function options(?int $includeId = null): array
@@ -27,6 +28,7 @@ class VendorPackingType extends Model
                     $query->orWhere('id', $includeId);
                 }
             })
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('name')
             ->pluck('name', 'id')
             ->toArray();

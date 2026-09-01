@@ -13,6 +13,7 @@
       "Cartoon and cylinder flows mirror rice bag but use cartoonTypeId/cylinderTypeId instead of bagTypeId.",
       "No packingForm fields for cartoon or cylinder.",
       "Variant arrays use key `variants` (aliases packingSizes/packing_sizes accepted on input).",
+      "When type/size master row is named Other, send other_type_value / otherSizeValue; both are stored beside the selected ids.",
       "New products are created with status 0 (pending). Public catalog shows status 1 only.",
       "Vendor list id and vendor products id are web_business_details.id."
     ]
@@ -80,6 +81,7 @@
         "body": {
           "user_id": { "type": "number", "required": true },
           "cartoon_type_id": { "type": "number", "required": true },
+          "other_type_value": { "type": "string", "required": "when cartoon_type_id is master Other" },
           "specification": { "type": "string", "required": false },
           "description": { "type": "string", "required": false },
           "additional_information": { "type": "string", "required": false },
@@ -90,6 +92,7 @@
             "items": {
               "packingSizeId": { "type": "number", "required": true },
               "packingSize": { "type": "string", "required": false },
+              "otherSizeValue": { "type": "string", "required": "when packingSizeId is master Other" },
               "rate": { "type": "number", "required": true },
               "gst": { "type": "number", "required": false },
               "totalPrice": { "type": "number", "required": false },
@@ -101,6 +104,7 @@
         },
         "camelCaseAliases": {
           "cartoonTypeId": "cartoon_type_id",
+          "otherTypeValue": "other_type_value",
           "userId": "user_id",
           "additionalInformation": "additional_information",
           "packingSizes": "variants",
@@ -109,6 +113,7 @@
         "example": {
           "user_id": 42,
           "cartoon_type_id": 2,
+          "other_type_value": null,
           "specification": "Food grade cartoon",
           "description": "Optional",
           "additional_information": "Optional",
@@ -116,6 +121,7 @@
             {
               "packingSizeId": 5,
               "packingSize": "25 kg",
+              "otherSizeValue": null,
               "rate": 120,
               "gst": 18,
               "totalPrice": 141.6,
@@ -164,6 +170,7 @@
         "id": "number",
         "userId": "number",
         "cartoonTypeId": "number|null",
+        "otherTypeValue": "string|null",
         "specification": "string|null",
         "description": "string|null",
         "additionalInformation": "string|null",
@@ -174,6 +181,7 @@
         "id": "number",
         "packingSizeId": "number|null",
         "packingSize": "string|null",
+        "otherSizeValue": "string|null",
         "rate": "string|null",
         "gst": "string|null",
         "totalPrice": "string|null",
@@ -186,6 +194,7 @@
       "vendorCatalogProduct": {
         "id": "number",
         "cartoonTypeId": "number|null",
+        "otherTypeValue": "string|null",
         "cartoonTypeName": "string|null",
         "specification": "string|null",
         "description": "string|null",
@@ -217,6 +226,7 @@
         "body": {
           "user_id": { "type": "number", "required": true },
           "cylinder_type_id": { "type": "number", "required": true },
+          "other_type_value": { "type": "string", "required": "when cylinder_type_id is master Other" },
           "specification": { "type": "string", "required": false },
           "description": { "type": "string", "required": false },
           "additional_information": { "type": "string", "required": false },
@@ -227,6 +237,7 @@
             "items": {
               "packingSizeId": { "type": "number", "required": true },
               "packingSize": { "type": "string", "required": false },
+              "otherSizeValue": { "type": "string", "required": "when packingSizeId is master Other" },
               "rate": { "type": "number", "required": true },
               "gst": { "type": "number", "required": false },
               "totalPrice": { "type": "number", "required": false },
@@ -238,6 +249,7 @@
         },
         "camelCaseAliases": {
           "cylinderTypeId": "cylinder_type_id",
+          "otherTypeValue": "other_type_value",
           "userId": "user_id",
           "additionalInformation": "additional_information",
           "packingSizes": "variants",
@@ -246,6 +258,7 @@
         "example": {
           "user_id": 42,
           "cylinder_type_id": 1,
+          "other_type_value": null,
           "specification": "Food grade cylinder",
           "description": "Optional",
           "additional_information": "Optional",
@@ -253,6 +266,7 @@
             {
               "packingSizeId": 5,
               "packingSize": "50 L",
+              "otherSizeValue": null,
               "rate": 850,
               "gst": 18,
               "totalPrice": 1003,
@@ -300,6 +314,7 @@
         "id": "number",
         "userId": "number",
         "cylinderTypeId": "number|null",
+        "otherTypeValue": "string|null",
         "specification": "string|null",
         "description": "string|null",
         "additionalInformation": "string|null",
@@ -310,6 +325,7 @@
         "id": "number",
         "packingSizeId": "number|null",
         "packingSize": "string|null",
+        "otherSizeValue": "string|null",
         "rate": "string|null",
         "gst": "string|null",
         "totalPrice": "string|null",
@@ -322,6 +338,7 @@
       "vendorCatalogProduct": {
         "id": "number",
         "cylinderTypeId": "number|null",
+        "otherTypeValue": "string|null",
         "cylinderTypeName": "string|null",
         "specification": "string|null",
         "description": "string|null",

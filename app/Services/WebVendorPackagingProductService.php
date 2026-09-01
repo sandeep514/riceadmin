@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\CartoonType;
 use App\CylinderType;
+use App\Support\VendorOtherOption;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -104,6 +105,7 @@ class WebVendorPackagingProductService
         }
 
         $validator = Validator::make($request->all(), $this->createRules());
+        $this->validateOtherValues($validator, $request, requireType: true);
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -155,6 +157,12 @@ class WebVendorPackagingProductService
         }
 
         $validator = Validator::make($request->all(), $this->updateRules());
+        $this->validateOtherValues(
+            $validator,
+            $request,
+            requireType: $request->exists($this->typeIdColumn),
+            requireSizes: $request->exists('variants')
+        );
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -396,6 +404,7 @@ class WebVendorPackagingProductService
         return [
             'id' => (int) $product->id,
             $this->typeIdCamel => $typeId !== null ? (int) $typeId : null,
+            'otherTypeValue' => $product->other_type_value,
             $this->typeNameCamel => $typeName,
             'specification' => $product->specification,
             'description' => $product->description,
@@ -439,6 +448,7 @@ class WebVendorPackagingProductService
     public function typeOptions(): array
     {
         return $this->typeModel::query()
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('type')
             ->pluck('type', 'id')
             ->all();
@@ -449,12 +459,14 @@ class WebVendorPackagingProductService
         return [
             'user_id' => ['required', 'integer', 'exists:users,id'],
             $this->typeIdColumn => ['required', 'integer', 'exists:'.(new $this->typeModel)->getTable().',id'],
+            'other_type_value' => ['nullable', 'string', 'max:255'],
             'specification' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'additional_information' => ['nullable', 'string'],
             'variants' => ['required', 'array', 'min:1'],
             'variants.*.packingSizeId' => ['required', 'integer'],
             'variants.*.packingSize' => ['nullable', 'string', 'max:255'],
+            'variants.*.otherSizeValue' => ['nullable', 'string', 'max:255'],
             'variants.*.rate' => ['required', 'numeric'],
             'variants.*.gst' => ['nullable', 'numeric'],
             'variants.*.totalPrice' => ['nullable', 'numeric'],
@@ -469,18 +481,60 @@ class WebVendorPackagingProductService
             'id' => ['required', 'integer', 'exists:'.$this->productsTable.',id'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
             $this->typeIdColumn => ['sometimes', 'required', 'integer', 'exists:'.(new $this->typeModel)->getTable().',id'],
+            'other_type_value' => ['nullable', 'string', 'max:255'],
             'specification' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'additional_information' => ['nullable', 'string'],
             'variants' => ['sometimes', 'array', 'min:1'],
             'variants.*.packingSizeId' => ['required', 'integer'],
             'variants.*.packingSize' => ['nullable', 'string', 'max:255'],
+            'variants.*.otherSizeValue' => ['nullable', 'string', 'max:255'],
             'variants.*.rate' => ['required', 'numeric'],
             'variants.*.gst' => ['nullable', 'numeric'],
             'variants.*.totalPrice' => ['nullable', 'numeric'],
             'variants.*.bagSize' => ['nullable', 'string', 'max:255'],
             'variants.*.bagWeight' => ['nullable', 'string', 'max:64'],
         ];
+    }
+
+    private function validateOtherValues($validator, Request $request, bool $requireType = true, bool $requireSizes = true): void
+    {
+        $kind = $this->kindKey();
+
+        $validator->after(function ($validator) use ($request, $requireType, $requireSizes, $kind) {
+            if ($requireType && VendorOtherOption::isOtherTypeId($kind, $request->input($this->typeIdColumn))) {
+                if (VendorOtherOption::normalizeOtherValue($request->input('other_type_value')) === null) {
+                    $validator->errors()->add(
+                        'other_type_value',
+                        'The other type value field is required when '.$this->label.' type is Other.'
+                    );
+                }
+            }
+
+            if (! $requireSizes || ! $request->exists('variants')) {
+                return;
+            }
+
+            $rows = $request->input('variants', []);
+            if (! is_array($rows)) {
+                return;
+            }
+
+            foreach ($rows as $index => $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+
+                if (VendorOtherOption::isOtherSizeId($kind, $row['packingSizeId'] ?? null)
+                    && VendorOtherOption::normalizeOtherValue($row['otherSizeValue'] ?? null) === null
+                ) {
+                    $validator->errors()->add(
+                        'variants.'.$index.'.otherSizeValue',
+                        'The other size value field is required when packing size is Other.'
+                    );
+                }
+            }
+        });
     }
 
     private function normalizeIncomingPayload(Request $request): void
@@ -519,6 +573,7 @@ class WebVendorPackagingProductService
 
         $aliases = [
             $this->typeIdCamel => $this->typeIdColumn,
+            'otherTypeValue' => 'other_type_value',
             'additionalInformation' => 'additional_information',
             'packing_sizes' => 'variants',
             'packingSizes' => 'variants',
@@ -535,6 +590,18 @@ class WebVendorPackagingProductService
 
         if ($request->has('id') && ($request->input('id') === '' || $request->input('id') === null)) {
             $request->request->remove('id');
+        }
+
+        if ($request->filled($this->typeIdColumn)) {
+            $request->merge([
+                'other_type_value' => VendorOtherOption::isOtherTypeId($this->kindKey(), $request->input($this->typeIdColumn))
+                    ? VendorOtherOption::normalizeOtherValue($request->input('other_type_value'))
+                    : null,
+            ]);
+        } elseif ($request->exists('other_type_value')) {
+            $request->merge([
+                'other_type_value' => VendorOtherOption::normalizeOtherValue($request->input('other_type_value')),
+            ]);
         }
 
         $variants = $request->input('variants');
@@ -566,10 +633,19 @@ class WebVendorPackagingProductService
                     $existingImage = null;
                 }
 
+                $packingSizeId = $row['packingSizeId'] ?? $row['packing_size_id'] ?? null;
+                $otherSizeValue = VendorOtherOption::normalizeOtherValue(
+                    $row['otherSizeValue'] ?? $row['other_size_value'] ?? null
+                );
+                if (! VendorOtherOption::isOtherSizeId($this->kindKey(), $packingSizeId)) {
+                    $otherSizeValue = null;
+                }
+
                 $normalizedRows[] = [
                     'id' => $row['id'] ?? $row['variant_row_id'] ?? null,
-                    'packingSizeId' => $row['packingSizeId'] ?? $row['packing_size_id'] ?? null,
+                    'packingSizeId' => $packingSizeId,
                     'packingSize' => $row['packingSize'] ?? $row['packing_size'] ?? null,
+                    'otherSizeValue' => $otherSizeValue,
                     'rate' => $row['rate'] ?? null,
                     'gst' => $row['gst'] ?? null,
                     'totalPrice' => $row['totalPrice'] ?? $row['total_price'] ?? null,
@@ -618,6 +694,7 @@ class WebVendorPackagingProductService
     {
         $map = [
             $this->typeIdColumn => $this->typeIdColumn,
+            'other_type_value' => 'other_type_value',
             'specification' => 'specification',
             'description' => 'description',
             'additional_information' => 'additional_information',
@@ -630,16 +707,23 @@ class WebVendorPackagingProductService
         }
 
         foreach ($map as $inputKey => $column) {
-            if ($partial && ! $request->exists($inputKey)) {
+            if ($partial && ! $request->exists($inputKey) && $column !== 'other_type_value') {
                 continue;
             }
-            if (! $request->exists($inputKey)) {
+            if (! $request->exists($inputKey) && $column !== 'other_type_value') {
                 continue;
             }
 
             $value = $request->input($inputKey);
             if ($column === $this->typeIdColumn) {
                 $attrs[$column] = $value === null || $value === '' ? null : (int) $value;
+            } elseif ($column === 'other_type_value') {
+                // Resolve only when type id is present so partial updates don't wipe it.
+                if ($request->exists($this->typeIdColumn)) {
+                    $attrs[$column] = VendorOtherOption::isOtherTypeId($this->kindKey(), $request->input($this->typeIdColumn))
+                        ? VendorOtherOption::normalizeOtherValue($request->input('other_type_value'))
+                        : null;
+                }
             } else {
                 $attrs[$column] = $value;
             }
@@ -708,6 +792,7 @@ class WebVendorPackagingProductService
                     ? (int) $row['packingSizeId']
                     : null,
                 'packing_size' => $row['packingSize'] ?? null,
+                'other_size_value' => $row['otherSizeValue'] ?? null,
                 'rate' => $row['rate'] ?? null,
                 'gst' => $row['gst'] ?? null,
                 'total_price' => $row['totalPrice'] ?? null,
@@ -796,6 +881,7 @@ class WebVendorPackagingProductService
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
             $this->typeIdCamel => $typeId !== null ? (int) $typeId : null,
+            'otherTypeValue' => $product->other_type_value,
             'specification' => $product->specification,
             'description' => $product->description,
             'additionalInformation' => $product->additional_information,
@@ -810,6 +896,7 @@ class WebVendorPackagingProductService
             'id' => (int) $variant->id,
             'packingSizeId' => $variant->packing_size_id !== null ? (int) $variant->packing_size_id : null,
             'packingSize' => $variant->packing_size,
+            'otherSizeValue' => $variant->other_size_value,
             'rate' => $variant->rate !== null ? (string) $variant->rate : null,
             'gst' => $variant->gst !== null ? (string) $variant->gst : null,
             'totalPrice' => $variant->total_price !== null ? (string) $variant->total_price : null,

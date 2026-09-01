@@ -11,6 +11,7 @@ class WebCartoonProduct extends Model
     protected $fillable = [
         'user_id',
         'cartoon_type_id',
+        'other_type_value',
         'specification',
         'description',
         'additional_information',

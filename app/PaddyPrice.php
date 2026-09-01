@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\PaddyMandiModel;
 use App\PaddyStateModel;
-use App\RiceName;
+use App\PaddyQuality;
 
 
 class PaddyPrice extends Model
@@ -42,7 +42,7 @@ class PaddyPrice extends Model
     }
     public function quality_rel()
     {
-        return $this->belongsTo(RiceName::class , 'quality_id' , 'id');
+        return $this->belongsTo(PaddyQuality::class , 'quality_id' , 'id');
     }
 
 

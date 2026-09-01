@@ -51,6 +51,8 @@ export interface ProductVariant {
   id?: number;
   packingSizeId: number;
   packingSize?: string | null;
+  /** Required when packingSizeId points to master row named "Other". */
+  otherSizeValue?: string | null;
   rate: number | string;
   gst?: number | string | null;
   totalPrice?: number | string | null;
@@ -87,6 +89,8 @@ export interface PackingSize {
 export interface CartoonProductPayload {
   user_id: number;
   cartoon_type_id: number;
+  /** Required when cartoon_type_id points to master row named "Other". */
+  other_type_value?: string | null;
   specification?: string | null;
   description?: string | null;
   additional_information?: string | null;
@@ -98,6 +102,7 @@ export interface CartoonProduct {
   id: number;
   userId: number;
   cartoonTypeId: number | null;
+  otherTypeValue: string | null;
   specification: string | null;
   description: string | null;
   additionalInformation: string | null;
@@ -108,6 +113,7 @@ export interface CartoonProduct {
 export interface CartoonCatalogProduct {
   id: number;
   cartoonTypeId: number | null;
+  otherTypeValue: string | null;
   cartoonTypeName: string | null;
   specification: string | null;
   description: string | null;
@@ -120,6 +126,8 @@ export interface CartoonCatalogProduct {
 export interface CylinderProductPayload {
   user_id: number;
   cylinder_type_id: number;
+  /** Required when cylinder_type_id points to master row named "Other". */
+  other_type_value?: string | null;
   specification?: string | null;
   description?: string | null;
   additional_information?: string | null;
@@ -131,6 +139,7 @@ export interface CylinderProduct {
   id: number;
   userId: number;
   cylinderTypeId: number | null;
+  otherTypeValue: string | null;
   specification: string | null;
   description: string | null;
   additionalInformation: string | null;
@@ -141,6 +150,7 @@ export interface CylinderProduct {
 export interface CylinderCatalogProduct {
   id: number;
   cylinderTypeId: number | null;
+  otherTypeValue: string | null;
   cylinderTypeName: string | null;
   specification: string | null;
   description: string | null;
@@ -191,6 +201,7 @@ export function buildVendorProductFormData(
   if (payload.id != null) form.append('id', String(payload.id));
   form.append('user_id', String(payload.user_id));
   form.append(typeKey, String((payload as Record<string, unknown>)[typeKey]));
+  if (payload.other_type_value) form.append('other_type_value', payload.other_type_value);
 
   if (payload.specification) form.append('specification', payload.specification);
   if (payload.description) form.append('description', payload.description);
@@ -200,6 +211,7 @@ export function buildVendorProductFormData(
     if (variant.id != null) form.append(`variants[${index}][id]`, String(variant.id));
     form.append(`variants[${index}][packingSizeId]`, String(variant.packingSizeId));
     if (variant.packingSize) form.append(`variants[${index}][packingSize]`, variant.packingSize);
+    if (variant.otherSizeValue) form.append(`variants[${index}][otherSizeValue]`, variant.otherSizeValue);
     form.append(`variants[${index}][rate]`, String(variant.rate));
     if (variant.gst != null) form.append(`variants[${index}][gst]`, String(variant.gst));
     if (variant.totalPrice != null) form.append(`variants[${index}][totalPrice]`, String(variant.totalPrice));

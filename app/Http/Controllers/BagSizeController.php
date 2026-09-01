@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\BagSize;
 use App\Http\Requests\BagSizeRequest;
+use App\Support\MasterOrderUpdater;
+use Illuminate\Http\Request;
 use Session;
 
 class BagSizeController extends Controller
 {
     public function index()
     {
-        $records = BagSize::orderByDesc('id')->get();
+        $records = BagSize::orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
 
         return view('bag-sizes.index', compact('records'));
     }
@@ -22,11 +26,12 @@ class BagSizeController extends Controller
 
     public function save(BagSizeRequest $request)
     {
-        BagSize::create($request->only([
-            'size',
-            'description',
-            'status',
-        ]));
+        BagSize::create([
+            'size' => $request->input('size'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status'),
+            'order_no' => MasterOrderUpdater::nextOrder(BagSize::class),
+        ]);
 
         Session::flash('success', 'Success|Bag size saved successfully!');
 
@@ -99,6 +104,19 @@ class BagSizeController extends Controller
             : 'Success|Bag size marked as inactive.';
 
         Session::flash('success', $msg);
+
+        return back();
+    }
+
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:bag_sizes,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        MasterOrderUpdater::swap(BagSize::class, (int) $request->id, (int) $request->order_no);
+        Session::flash('success', 'Success|Bag size order updated successfully.');
 
         return back();
     }

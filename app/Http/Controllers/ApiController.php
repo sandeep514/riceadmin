@@ -7936,8 +7936,9 @@ if (!file_exists('uploads')) {
     {
         $types = \App\VendorPackingType::query()
             ->where('status', \App\VendorPackingType::STATUS_ACTIVE)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('name')
-            ->get(['id', 'name', 'description']);
+            ->get(['id', 'name', 'description', 'order_no']);
 
         return response()->json([
             'status' => true,
@@ -7950,8 +7951,9 @@ if (!file_exists('uploads')) {
     {
         $types = \App\CartoonType::query()
             ->where('status', \App\CartoonType::STATUS_ACTIVE)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('type')
-            ->get(['id', 'type', 'description']);
+            ->get(['id', 'type', 'description', 'order_no']);
 
         return response()->json([
             'status' => true,
@@ -7992,8 +7994,9 @@ if (!file_exists('uploads')) {
     {
         $types = \App\CylinderType::query()
             ->where('status', \App\CylinderType::STATUS_ACTIVE)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('type')
-            ->get(['id', 'type', 'description']);
+            ->get(['id', 'type', 'description', 'order_no']);
 
         return response()->json([
             'status' => true,
@@ -8006,8 +8009,9 @@ if (!file_exists('uploads')) {
     {
         $sizes = \App\BagSize::query()
             ->where('status', \App\BagSize::STATUS_ACTIVE)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('size')
-            ->get(['id', 'size', 'description']);
+            ->get(['id', 'size', 'description', 'order_no']);
 
         return response()->json([
             'status' => true,
@@ -8020,8 +8024,9 @@ if (!file_exists('uploads')) {
     {
         $sizes = \App\CartonSize::query()
             ->where('status', \App\CartonSize::STATUS_ACTIVE)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('size')
-            ->get(['id', 'size', 'description']);
+            ->get(['id', 'size', 'description', 'order_no']);
 
         return response()->json([
             'status' => true,
@@ -8034,8 +8039,9 @@ if (!file_exists('uploads')) {
     {
         $sizes = \App\CylinderSize::query()
             ->where('status', \App\CylinderSize::STATUS_ACTIVE)
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('size')
-            ->get(['id', 'size', 'description']);
+            ->get(['id', 'size', 'description', 'order_no']);
 
         return response()->json([
             'status' => true,

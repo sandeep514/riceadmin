@@ -16,6 +16,7 @@ class CartoonType extends Model
         'type',
         'description',
         'status',
+        'order_no',
     ];
 
     public static function options(?int $includeId = null): array
@@ -27,6 +28,7 @@ class CartoonType extends Model
                     $query->orWhere('id', $includeId);
                 }
             })
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('type')
             ->pluck('type', 'id')
             ->toArray();

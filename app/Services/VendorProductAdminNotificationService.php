@@ -149,19 +149,25 @@ class VendorProductAdminNotificationService
 
     private function resolveTypeLabel(string $kind, Model $product): string
     {
+        $label = '—';
+
         if ($kind === 'rice_bag' && ! empty($product->bag_type_id)) {
-            return PackingType::query()->where('id', $product->bag_type_id)->value('name') ?: '—';
+            $label = \App\VendorPackingType::query()->where('id', $product->bag_type_id)->value('name')
+                ?: PackingType::query()->where('id', $product->bag_type_id)->value('name')
+                ?: '—';
+        } elseif ($kind === 'cartoon' && ! empty($product->cartoon_type_id)) {
+            $label = \App\CartoonType::query()->where('id', $product->cartoon_type_id)->value('type') ?: '—';
+        } elseif ($kind === 'cylinder' && ! empty($product->cylinder_type_id)) {
+            $label = \App\CylinderType::query()->where('id', $product->cylinder_type_id)->value('type') ?: '—';
+        } else {
+            $label = $product->packing_form ?: '—';
         }
 
-        if ($kind === 'cartoon' && ! empty($product->cartoon_type_id)) {
-            return \App\CartoonType::query()->where('id', $product->cartoon_type_id)->value('type') ?: '—';
+        if (! empty($product->other_type_value)) {
+            $label .= ' ('.$product->other_type_value.')';
         }
 
-        if ($kind === 'cylinder' && ! empty($product->cylinder_type_id)) {
-            return \App\CylinderType::query()->where('id', $product->cylinder_type_id)->value('type') ?: '—';
-        }
-
-        return $product->packing_form ?: '—';
+        return $label;
     }
 
     /**
@@ -183,8 +189,13 @@ class VendorProductAdminNotificationService
         }
 
         return $variants->map(function (Model $variant) {
+            $sizeLabel = $variant->packing_size ?: ($variant->packing_size_id ? 'Size #'.$variant->packing_size_id : null);
+            if (! empty($variant->other_size_value)) {
+                $sizeLabel = trim(($sizeLabel ?: 'Other').' ('.$variant->other_size_value.')');
+            }
+
             $parts = array_filter([
-                $variant->packing_size ?: ($variant->packing_size_id ? 'Size #'.$variant->packing_size_id : null),
+                $sizeLabel,
                 $variant->bag_size ? 'Bag: '.$variant->bag_size : null,
                 $variant->bag_weight ? 'Weight: '.$variant->bag_weight : null,
                 $variant->rate !== null ? 'Rate: '.$variant->rate : null,

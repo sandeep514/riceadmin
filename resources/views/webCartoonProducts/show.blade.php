@@ -59,7 +59,12 @@
                             </tr>
                             <tr>
                                 <th>Cartoon type</th>
-                                <td>{{ $types[$product->cartoon_type_id] ?? ($product->cartoon_type_id ? '#'.$product->cartoon_type_id : '—') }}</td>
+                                <td>
+                                    {{ $types[$product->cartoon_type_id] ?? ($product->cartoon_type_id ? '#'.$product->cartoon_type_id : '—') }}
+                                    @if(!empty($product->other_type_value))
+                                        <br><small class="text-muted">Other: {{ $product->other_type_value }}</small>
+                                    @endif
+                                </td>
                             </tr>
                             <tr>
                                 <th>Specification</th>
@@ -126,7 +131,12 @@
                                 @forelse($product->variants as $variant)
                                     <tr>
                                         <td>{{ $variant->id }}</td>
-                                        <td>{{ $variant->packing_size ?? '—' }}</td>
+                                        <td>
+                                            {{ $variant->packing_size ?? '—' }}
+                                            @if(!empty($variant->other_size_value))
+                                                <br><small class="text-muted">Other: {{ $variant->other_size_value }}</small>
+                                            @endif
+                                        </td>
                                         <td>{{ $variant->rate ?? '—' }}</td>
                                         <td>{{ $variant->gst ?? '—' }}</td>
                                         <td>{{ $variant->total_price ?? '—' }}</td>

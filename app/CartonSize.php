@@ -16,6 +16,7 @@ class CartonSize extends Model
         'size',
         'description',
         'status',
+        'order_no',
     ];
 
     public static function options(?int $includeId = null): array
@@ -27,6 +28,7 @@ class CartonSize extends Model
                     $query->orWhere('id', $includeId);
                 }
             })
+            ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('size')
             ->pluck('size', 'id')
             ->toArray();

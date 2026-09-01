@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\CartoonType;
 use App\Http\Requests\CartoonTypeRequest;
+use App\Support\MasterOrderUpdater;
+use Illuminate\Http\Request;
 use Session;
 
 class CartoonTypeController extends Controller
 {
     public function index()
     {
-        $records = CartoonType::orderByDesc('id')->get();
+        $records = CartoonType::orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
 
         return view('cartoon-types.index', compact('records'));
     }
@@ -22,11 +26,12 @@ class CartoonTypeController extends Controller
 
     public function save(CartoonTypeRequest $request)
     {
-        CartoonType::create($request->only([
-            'type',
-            'description',
-            'status',
-        ]));
+        CartoonType::create([
+            'type' => $request->input('type'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status'),
+            'order_no' => MasterOrderUpdater::nextOrder(CartoonType::class),
+        ]);
 
         Session::flash('success', 'Success|Cartoon type saved successfully!');
 
@@ -99,6 +104,19 @@ class CartoonTypeController extends Controller
             : 'Success|Cartoon type marked as inactive.';
 
         Session::flash('success', $msg);
+
+        return back();
+    }
+
+    public function updateOrder(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:cartoon_types,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        MasterOrderUpdater::swap(CartoonType::class, (int) $request->id, (int) $request->order_no);
+        Session::flash('success', 'Success|Cartoon type order updated successfully.');
 
         return back();
     }

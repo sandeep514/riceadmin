@@ -11,6 +11,7 @@ class WebRiceBagProduct extends Model
     protected $fillable = [
         'user_id',
         'bag_type_id',
+        'other_type_value',
         'specification',
         'description',
         'additional_information',

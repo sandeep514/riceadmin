@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Packing;
 use App\PackingType;
 use App\Services\VendorProductAdminNotificationService;
+use App\Support\VendorOtherOption;
+use App\VendorPackingType;
 use App\WebBusinessDetails;
 use App\WebRiceBagProduct;
 use App\WebRiceBagProductPackingSize;
@@ -25,6 +27,7 @@ class WebRiceBagProductController extends Controller
         }
 
         $validator = Validator::make($request->all(), $this->createRules());
+        $this->validateOtherValues($validator, $request, requireType: true);
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -73,6 +76,12 @@ class WebRiceBagProductController extends Controller
         }
 
         $validator = Validator::make($request->all(), $this->updateRules());
+        $this->validateOtherValues(
+            $validator,
+            $request,
+            requireType: $request->exists('bag_type_id'),
+            requireSizes: $request->exists('packingSizes')
+        );
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -231,10 +240,7 @@ class WebRiceBagProductController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $bagTypeIds = $products->pluck('bag_type_id')->filter()->unique()->values()->all();
-        $bagTypes = $bagTypeIds === []
-            ? collect()
-            : PackingType::whereIn('id', $bagTypeIds)->pluck('name', 'id');
+        $bagTypes = $this->bagTypeMapForProducts($products);
 
         $data = $products->map(function (WebRiceBagProduct $product) use ($bagTypes) {
             return $this->serializeVendorProduct($product, $bagTypes);
@@ -364,7 +370,7 @@ class WebRiceBagProductController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $bagTypes = PackingType::pluck('name', 'id');
+        $bagTypes = $this->allBagTypeOptions();
 
         return view('webRiceBagProducts.list', compact('products', 'bagTypes'));
     }
@@ -376,10 +382,38 @@ class WebRiceBagProductController extends Controller
             'packingSizes',
         ])->findOrFail((int) $id);
 
-        $bagTypes = PackingType::pluck('name', 'id');
+        $bagTypes = $this->allBagTypeOptions();
         $imageBasePath = $this->imageBasePath((int) $product->user_id);
 
         return view('webRiceBagProducts.show', compact('product', 'bagTypes', 'imageBasePath'));
+    }
+
+    private function allBagTypeOptions()
+    {
+        return VendorPackingType::query()->pluck('name', 'id')
+            ->union(PackingType::query()->pluck('name', 'id'));
+    }
+
+    private function bagTypeMapForProducts($products)
+    {
+        $bagTypeIds = $products->pluck('bag_type_id')->filter()->unique()->values()->all();
+        if ($bagTypeIds === []) {
+            return collect();
+        }
+
+        $vendorTypes = VendorPackingType::whereIn('id', $bagTypeIds)->pluck('name', 'id');
+        $missingIds = array_values(array_diff($bagTypeIds, $vendorTypes->keys()->all()));
+        if ($missingIds === []) {
+            return $vendorTypes;
+        }
+
+        return $vendorTypes->union(PackingType::whereIn('id', $missingIds)->pluck('name', 'id'));
+    }
+
+    private function resolveBagTypeName(int $bagTypeId): ?string
+    {
+        return VendorPackingType::query()->where('id', $bagTypeId)->value('name')
+            ?: PackingType::query()->where('id', $bagTypeId)->value('name');
     }
 
     public function toggleWebRiceBagProductStatus($id)
@@ -404,6 +438,7 @@ class WebRiceBagProductController extends Controller
         return [
             'user_id' => ['required', 'integer', 'exists:users,id'],
             'bag_type_id' => ['required', 'integer'],
+            'other_type_value' => ['nullable', 'string', 'max:255'],
             'specification' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'additional_information' => ['nullable', 'string'],
@@ -412,6 +447,7 @@ class WebRiceBagProductController extends Controller
             'packingSizes' => ['required', 'array', 'min:1'],
             'packingSizes.*.packingSizeId' => ['required', 'integer'],
             'packingSizes.*.packingSize' => ['nullable', 'string', 'max:255'],
+            'packingSizes.*.otherSizeValue' => ['nullable', 'string', 'max:255'],
             'packingSizes.*.rate' => ['required', 'numeric'],
             'packingSizes.*.gst' => ['nullable', 'numeric'],
             'packingSizes.*.totalPrice' => ['nullable', 'numeric'],
@@ -428,6 +464,7 @@ class WebRiceBagProductController extends Controller
             'id' => ['required', 'integer', 'exists:web_rice_bag_products,id'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
             'bag_type_id' => ['sometimes', 'required', 'integer'],
+            'other_type_value' => ['nullable', 'string', 'max:255'],
             'specification' => ['nullable', 'string'],
             'description' => ['nullable', 'string'],
             'additional_information' => ['nullable', 'string'],
@@ -436,12 +473,48 @@ class WebRiceBagProductController extends Controller
             'packingSizes' => ['sometimes', 'array', 'min:1'],
             'packingSizes.*.packingSizeId' => ['required', 'integer'],
             'packingSizes.*.packingSize' => ['nullable', 'string', 'max:255'],
+            'packingSizes.*.otherSizeValue' => ['nullable', 'string', 'max:255'],
             'packingSizes.*.rate' => ['required', 'numeric'],
             'packingSizes.*.gst' => ['nullable', 'numeric'],
             'packingSizes.*.totalPrice' => ['nullable', 'numeric'],
             'packingSizes.*.bagSize' => ['nullable', 'string', 'max:255'],
             'packingSizes.*.bagWeight' => ['nullable', 'string', 'max:64'],
         ];
+    }
+
+    private function validateOtherValues($validator, Request $request, bool $requireType = true, bool $requireSizes = true): void
+    {
+        $validator->after(function ($validator) use ($request, $requireType, $requireSizes) {
+            if ($requireType && VendorOtherOption::isOtherTypeId('rice_bag', $request->input('bag_type_id'))) {
+                if (VendorOtherOption::normalizeOtherValue($request->input('other_type_value')) === null) {
+                    $validator->errors()->add('other_type_value', 'The other type value field is required when bag type is Other.');
+                }
+            }
+
+            if (! $requireSizes || ! $request->exists('packingSizes')) {
+                return;
+            }
+
+            $rows = $request->input('packingSizes', []);
+            if (! is_array($rows)) {
+                return;
+            }
+
+            foreach ($rows as $index => $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+
+                if (VendorOtherOption::isOtherSizeId('rice_bag', $row['packingSizeId'] ?? null)
+                    && VendorOtherOption::normalizeOtherValue($row['otherSizeValue'] ?? null) === null
+                ) {
+                    $validator->errors()->add(
+                        'packingSizes.'.$index.'.otherSizeValue',
+                        'The other size value field is required when packing size is Other.'
+                    );
+                }
+            }
+        });
     }
 
     private function normalizeIncomingPayload(Request $request): void
@@ -480,6 +553,7 @@ class WebRiceBagProductController extends Controller
 
         $aliases = [
             'bagTypeId' => 'bag_type_id',
+            'otherTypeValue' => 'other_type_value',
             'additionalInformation' => 'additional_information',
             'packing_sizes' => 'packingSizes',
         ];
@@ -487,6 +561,18 @@ class WebRiceBagProductController extends Controller
             if ($request->exists($from) && ! $request->exists($to)) {
                 $request->merge([$to => $request->input($from)]);
             }
+        }
+
+        if ($request->filled('bag_type_id')) {
+            $request->merge([
+                'other_type_value' => VendorOtherOption::isOtherTypeId('rice_bag', $request->input('bag_type_id'))
+                    ? VendorOtherOption::normalizeOtherValue($request->input('other_type_value'))
+                    : null,
+            ]);
+        } elseif ($request->exists('other_type_value')) {
+            $request->merge([
+                'other_type_value' => VendorOtherOption::normalizeOtherValue($request->input('other_type_value')),
+            ]);
         }
 
         if ($request->filled('userId') && ! $request->filled('user_id')) {
@@ -553,10 +639,19 @@ class WebRiceBagProductController extends Controller
                     $existingImage = null;
                 }
 
+                $packingSizeId = $row['packingSizeId'] ?? $row['packing_size_id'] ?? null;
+                $otherSizeValue = VendorOtherOption::normalizeOtherValue(
+                    $row['otherSizeValue'] ?? $row['other_size_value'] ?? null
+                );
+                if (! VendorOtherOption::isOtherSizeId('rice_bag', $packingSizeId)) {
+                    $otherSizeValue = null;
+                }
+
                 $normalizedRows[] = [
                     'id' => $row['id'] ?? $row['packing_size_row_id'] ?? null,
-                    'packingSizeId' => $row['packingSizeId'] ?? $row['packing_size_id'] ?? null,
+                    'packingSizeId' => $packingSizeId,
                     'packingSize' => $row['packingSize'] ?? $row['packing_size'] ?? null,
+                    'otherSizeValue' => $otherSizeValue,
                     'rate' => $row['rate'] ?? null,
                     'gst' => $row['gst'] ?? null,
                     'totalPrice' => $row['totalPrice'] ?? $row['total_price'] ?? null,
@@ -592,6 +687,7 @@ class WebRiceBagProductController extends Controller
     {
         $map = [
             'bag_type_id' => 'bag_type_id',
+            'other_type_value' => 'other_type_value',
             'specification' => 'specification',
             'description' => 'description',
             'additional_information' => 'additional_information',
@@ -606,16 +702,23 @@ class WebRiceBagProductController extends Controller
         }
 
         foreach ($map as $inputKey => $column) {
-            if ($partial && ! $request->exists($inputKey)) {
+            if ($partial && ! $request->exists($inputKey) && $column !== 'other_type_value') {
                 continue;
             }
-            if (! $request->exists($inputKey)) {
+            if (! $request->exists($inputKey) && $column !== 'other_type_value') {
                 continue;
             }
 
             $value = $request->input($inputKey);
             if (in_array($column, ['bag_type_id', 'packing_form_id'], true)) {
                 $attrs[$column] = $value === null || $value === '' ? null : (int) $value;
+            } elseif ($column === 'other_type_value') {
+                // Resolve only when bag_type_id is present so partial updates don't wipe it.
+                if ($request->exists('bag_type_id')) {
+                    $attrs[$column] = VendorOtherOption::isOtherTypeId('rice_bag', $request->input('bag_type_id'))
+                        ? VendorOtherOption::normalizeOtherValue($request->input('other_type_value'))
+                        : null;
+                }
             } else {
                 $attrs[$column] = $value;
             }
@@ -693,6 +796,7 @@ class WebRiceBagProductController extends Controller
                     ? (int) $row['packingSizeId']
                     : null,
                 'packing_size' => $row['packingSize'] ?? null,
+                'other_size_value' => $row['otherSizeValue'] ?? null,
                 'rate' => $row['rate'] ?? null,
                 'gst' => $row['gst'] ?? null,
                 'total_price' => $row['totalPrice'] ?? null,
@@ -785,6 +889,7 @@ class WebRiceBagProductController extends Controller
                 'id' => (int) $size->id,
                 'packingSizeId' => $size->packing_size_id !== null ? (int) $size->packing_size_id : null,
                 'packingSize' => $size->packing_size,
+                'otherSizeValue' => $size->other_size_value,
                 'rate' => $size->rate !== null ? (string) $size->rate : null,
                 'gst' => $size->gst !== null ? (string) $size->gst : null,
                 'totalPrice' => $size->total_price !== null ? (string) $size->total_price : null,
@@ -800,6 +905,7 @@ class WebRiceBagProductController extends Controller
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
             'bagTypeId' => $product->bag_type_id !== null ? (int) $product->bag_type_id : null,
+            'otherTypeValue' => $product->other_type_value,
             'specification' => $product->specification,
             'description' => $product->description,
             'additionalInformation' => $product->additional_information,
@@ -820,6 +926,7 @@ class WebRiceBagProductController extends Controller
                 'id' => (int) $size->id,
                 'packingSizeId' => $size->packing_size_id !== null ? (int) $size->packing_size_id : null,
                 'packingSize' => $size->packing_size,
+                'otherSizeValue' => $size->other_size_value,
                 'rate' => $size->rate !== null ? (string) $size->rate : null,
                 'gst' => $size->gst !== null ? (string) $size->gst : null,
                 'totalPrice' => $size->total_price !== null ? (string) $size->total_price : null,
@@ -836,13 +943,14 @@ class WebRiceBagProductController extends Controller
             if ($bagTypes !== null) {
                 $bagTypeName = $bagTypes[$product->bag_type_id] ?? null;
             } else {
-                $bagTypeName = optional(PackingType::find($product->bag_type_id))->name;
+                $bagTypeName = $this->resolveBagTypeName((int) $product->bag_type_id);
             }
         }
 
         return [
             'id' => (int) $product->id,
             'bagTypeId' => $product->bag_type_id !== null ? (int) $product->bag_type_id : null,
+            'otherTypeValue' => $product->other_type_value,
             'bagTypeName' => $bagTypeName,
             'specification' => $product->specification,
             'description' => $product->description,
