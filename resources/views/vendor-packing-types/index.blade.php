@@ -4,13 +4,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Packing Type
+                Vendor Packing Type
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li>Vendor Flow</li>
-                <li class="active">Packing Type</li>
+                <li class="active">Vendor Packing Type</li>
             </ol>
         </section>
         <section class="content">
@@ -18,7 +18,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Packing type master</h3>
+                            <h3 class="box-title">Vendor packing type master</h3>
                             <div class="pull-right">
                                 <a href="{{ route('create.vendor-packing-type') }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-plus"></i> Create New
@@ -46,7 +46,7 @@
                                                 <td>{{ $record->name }}</td>
                                                 <td>{{ $record->description ?: '—' }}</td>
                                                 <td>
-                                                    @if((int) $record->status === \App\PackingType::STATUS_ACTIVE)
+                                                    @if((int) $record->status === \App\VendorPackingType::STATUS_ACTIVE)
                                                         <span class="label label-success">Active</span>
                                                     @else
                                                         <span class="label label-default">Inactive</span>
@@ -81,7 +81,7 @@
 
         $(document).on('click', '.delete-row', function(e){
             e.preventDefault();
-            if(confirm('Are you sure you want to delete this packing type?')){
+            if(confirm('Are you sure you want to delete this vendor packing type?')){
                 $(this).closest('form').submit();
             }
         });

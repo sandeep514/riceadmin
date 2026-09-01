@@ -150,6 +150,7 @@ use Pusher\Pusher;
     Route::get('get/brand/list' , ['as' => 'get.brand.list' , 'uses' => 'ApiController@getBrandList']);
     Route::get('get/packing/by/{tradeType}' , ['as' => 'get.packing.tradeType' , 'uses' => 'ApiController@getPackingByTradeType']);
     Route::get('get/packing/type' , ['as' => 'get.packing.type' , 'uses' => 'ApiController@getBagPacking']);
+    Route::get('get/vendor/packing/types' , ['as' => 'get.vendor.packing.types' , 'uses' => 'ApiController@getVendorPackingTypes']);
     Route::get('get/cartoon/types' , ['as' => 'get.cartoon.types' , 'uses' => 'ApiController@getCartoonTypes']);
     Route::get('get/cylinder/types' , ['as' => 'get.cylinder.types' , 'uses' => 'ApiController@getCylinderTypes']);
     Route::get('get/bag/sizes' , ['as' => 'get.bag.sizes' , 'uses' => 'ApiController@getBagSizes']);

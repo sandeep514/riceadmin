@@ -20,8 +20,8 @@ class VendorPackingTypeRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:191',
-                Rule::unique('packing_types', 'name')->ignore($id),
+                'max:255',
+                Rule::unique('vendor_packing_types', 'name')->ignore($id),
             ],
             'description' => 'nullable|string',
             'status' => 'required|integer|in:0,1',

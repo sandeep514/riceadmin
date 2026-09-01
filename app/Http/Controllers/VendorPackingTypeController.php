@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\VendorPackingTypeRequest;
-use App\PackingType;
+use App\VendorPackingType;
 use Session;
 
 class VendorPackingTypeController extends Controller
 {
     public function index()
     {
-        $records = PackingType::orderByDesc('id')->get();
+        $records = VendorPackingType::orderByDesc('id')->get();
 
         return view('vendor-packing-types.index', compact('records'));
     }
@@ -22,20 +22,20 @@ class VendorPackingTypeController extends Controller
 
     public function save(VendorPackingTypeRequest $request)
     {
-        PackingType::create($request->only([
+        VendorPackingType::create($request->only([
             'name',
             'description',
             'status',
         ]));
 
-        Session::flash('success', 'Success|Packing type saved successfully!');
+        Session::flash('success', 'Success|Vendor packing type saved successfully!');
 
         return redirect()->route('vendor-packing-types');
     }
 
     public function edit($id)
     {
-        $model = PackingType::find($id);
+        $model = VendorPackingType::find($id);
         if ($model === null) {
             Session::flash('error', 'Error|No record found!');
 
@@ -47,7 +47,7 @@ class VendorPackingTypeController extends Controller
 
     public function update(VendorPackingTypeRequest $request, $id)
     {
-        $model = PackingType::find($id);
+        $model = VendorPackingType::find($id);
         if ($model === null) {
             Session::flash('error', 'Error|No record found!');
 
@@ -60,14 +60,14 @@ class VendorPackingTypeController extends Controller
             'status',
         ]));
 
-        Session::flash('success', 'Success|Packing type updated successfully!');
+        Session::flash('success', 'Success|Vendor packing type updated successfully!');
 
         return redirect()->route('vendor-packing-types');
     }
 
     public function delete($id)
     {
-        $model = PackingType::find($id);
+        $model = VendorPackingType::find($id);
         if ($model === null) {
             Session::flash('error', 'Error|No record found!');
 
@@ -75,28 +75,28 @@ class VendorPackingTypeController extends Controller
         }
 
         $model->delete();
-        Session::flash('success', 'Success|Packing type deleted successfully!');
+        Session::flash('success', 'Success|Vendor packing type deleted successfully!');
 
         return back();
     }
 
     public function changeStatus($id)
     {
-        $model = PackingType::find($id);
+        $model = VendorPackingType::find($id);
         if ($model === null) {
             Session::flash('error', 'Error|No record found!');
 
             return back();
         }
 
-        $model->status = (int) $model->status === PackingType::STATUS_ACTIVE
-            ? PackingType::STATUS_INACTIVE
-            : PackingType::STATUS_ACTIVE;
+        $model->status = (int) $model->status === VendorPackingType::STATUS_ACTIVE
+            ? VendorPackingType::STATUS_INACTIVE
+            : VendorPackingType::STATUS_ACTIVE;
         $model->save();
 
-        $msg = (int) $model->status === PackingType::STATUS_ACTIVE
-            ? 'Success|Packing type marked as active.'
-            : 'Success|Packing type marked as inactive.';
+        $msg = (int) $model->status === VendorPackingType::STATUS_ACTIVE
+            ? 'Success|Vendor packing type marked as active.'
+            : 'Success|Vendor packing type marked as inactive.';
 
         Session::flash('success', $msg);
 

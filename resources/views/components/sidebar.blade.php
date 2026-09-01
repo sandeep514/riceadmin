@@ -515,7 +515,7 @@
                         <a href="{{ route('cylinder-types') }}"><i class="fa fa-circle-o"></i> Cylinder Type</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['vendor-packing-types','create.vendor-packing-type','edit.vendor-packing-type']) ? 'active' : '' }}">
-                        <a href="{{ route('vendor-packing-types') }}"><i class="fa fa-circle-o"></i> Packing Type</a>
+                        <a href="{{ route('vendor-packing-types') }}"><i class="fa fa-circle-o"></i> Vendor Packing Type</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['bag-sizes','create.bag-size','edit.bag-size']) ? 'active' : '' }}">
                         <a href="{{ route('bag-sizes') }}"><i class="fa fa-circle-o"></i> Bag Size</a>

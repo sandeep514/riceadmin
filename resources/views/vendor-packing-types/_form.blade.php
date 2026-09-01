@@ -2,7 +2,7 @@
     <div class="row">
         <div class="form-group col-md-6 @error('name') has-error @enderror">
             {!! Form::label('name', 'Name*') !!}
-            {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'maxlength' => 191, 'placeholder' => 'Enter packing type']) !!}
+            {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'maxlength' => 255, 'placeholder' => 'Enter vendor packing type']) !!}
             @error('name')
                 <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror

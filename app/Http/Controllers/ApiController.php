@@ -7928,12 +7928,22 @@ if (!file_exists('uploads')) {
 
     public function getBagPacking()
     {
-        $packingType = PackingType::query()
-            ->where('status', PackingType::STATUS_ACTIVE)
+        $packingType = PackingType::select(['id' , 'name'])->get();
+        return response()->json(['status' => true, 'data' => $packingType], 200);
+    }
+
+    public function getVendorPackingTypes()
+    {
+        $types = \App\VendorPackingType::query()
+            ->where('status', \App\VendorPackingType::STATUS_ACTIVE)
             ->orderBy('name')
             ->get(['id', 'name', 'description']);
 
-        return response()->json(['status' => true, 'data' => $packingType], 200);
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendor packing types fetched successfully.',
+            'data' => $types,
+        ], 200);
     }
 
     public function getCartoonTypes()
