@@ -97,4 +97,35 @@ class VendorOtherOption
 
         return $trimmed === '' ? null : $trimmed;
     }
+
+    /**
+     * Resolve otherSizeValue for a variant row.
+     * Frontend may send the custom Other text as packingSize / packing_size
+     * instead of otherSizeValue / other_size_value.
+     *
+     * @param  array<string, mixed>  $row
+     * @return array{0: ?string, 1: ?string} [packingSizeLabel, otherSizeValue]
+     */
+    public static function resolvePackingSizeOther(string $kind, $sizeId, array $row): array
+    {
+        $incomingPackingSize = $row['packingSize'] ?? $row['packing_size'] ?? null;
+
+        if (! self::isOtherSizeId($kind, $sizeId)) {
+            return [$incomingPackingSize, null];
+        }
+
+        $otherSizeValue = self::normalizeOtherValue(
+            $row['otherSizeValue'] ?? $row['other_size_value'] ?? null
+        );
+
+        if ($otherSizeValue === null) {
+            $fallback = self::normalizeOtherValue($incomingPackingSize);
+            if ($fallback !== null && ! self::isOtherLabel($fallback)) {
+                $otherSizeValue = $fallback;
+            }
+        }
+
+        // Keep master label in packing_size; custom text lives in other_size_value.
+        return ['Other', $otherSizeValue];
+    }
 }

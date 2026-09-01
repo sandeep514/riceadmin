@@ -634,17 +634,16 @@ class WebVendorPackagingProductService
                 }
 
                 $packingSizeId = $row['packingSizeId'] ?? $row['packing_size_id'] ?? null;
-                $otherSizeValue = VendorOtherOption::normalizeOtherValue(
-                    $row['otherSizeValue'] ?? $row['other_size_value'] ?? null
+                [$packingSize, $otherSizeValue] = VendorOtherOption::resolvePackingSizeOther(
+                    $this->kindKey(),
+                    $packingSizeId,
+                    $row
                 );
-                if (! VendorOtherOption::isOtherSizeId($this->kindKey(), $packingSizeId)) {
-                    $otherSizeValue = null;
-                }
 
                 $normalizedRows[] = [
                     'id' => $row['id'] ?? $row['variant_row_id'] ?? null,
                     'packingSizeId' => $packingSizeId,
-                    'packingSize' => $row['packingSize'] ?? $row['packing_size'] ?? null,
+                    'packingSize' => $packingSize,
                     'otherSizeValue' => $otherSizeValue,
                     'rate' => $row['rate'] ?? null,
                     'gst' => $row['gst'] ?? null,

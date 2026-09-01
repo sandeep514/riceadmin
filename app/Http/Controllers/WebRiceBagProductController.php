@@ -640,17 +640,16 @@ class WebRiceBagProductController extends Controller
                 }
 
                 $packingSizeId = $row['packingSizeId'] ?? $row['packing_size_id'] ?? null;
-                $otherSizeValue = VendorOtherOption::normalizeOtherValue(
-                    $row['otherSizeValue'] ?? $row['other_size_value'] ?? null
+                [$packingSize, $otherSizeValue] = VendorOtherOption::resolvePackingSizeOther(
+                    'rice_bag',
+                    $packingSizeId,
+                    $row
                 );
-                if (! VendorOtherOption::isOtherSizeId('rice_bag', $packingSizeId)) {
-                    $otherSizeValue = null;
-                }
 
                 $normalizedRows[] = [
                     'id' => $row['id'] ?? $row['packing_size_row_id'] ?? null,
                     'packingSizeId' => $packingSizeId,
-                    'packingSize' => $row['packingSize'] ?? $row['packing_size'] ?? null,
+                    'packingSize' => $packingSize,
                     'otherSizeValue' => $otherSizeValue,
                     'rate' => $row['rate'] ?? null,
                     'gst' => $row['gst'] ?? null,
