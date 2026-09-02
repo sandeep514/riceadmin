@@ -17,6 +17,8 @@ class VendorProductAdminNotificationService
 
     public const ACTION_VARIANTS_ADDED = 'variants_added';
 
+    public const ACTION_ACCEPTED = 'accepted';
+
     private const ADMIN_MAIL = 'enquiry@sntcgroup.com';
 
     /**
@@ -33,6 +35,18 @@ class VendorProductAdminNotificationService
             (new self())->send($kind, $action, $product, $variants, $typeLabel);
         } catch (\Throwable $e) {
             Log::warning('Vendor product admin mail failed: '.$e->getMessage());
+        }
+    }
+
+    /**
+     * Email the vendor when admin verifies/accepts their product (status 0 → 1).
+     */
+    public static function notifyAccepted(string $kind, Model $product, ?string $typeLabel = null): void
+    {
+        try {
+            (new self())->sendAccepted($kind, $product, $typeLabel);
+        } catch (\Throwable $e) {
+            Log::warning('Vendor product accepted mail failed: '.$e->getMessage());
         }
     }
 
@@ -110,6 +124,48 @@ class VendorProductAdminNotificationService
 
         MailController::sendVendorProductVariantsMail(
             self::ADMIN_MAIL,
+            self::ADMIN_MAIL,
+            'SNTC',
+            $subject,
+            $mailData
+        );
+    }
+
+    private function sendAccepted(string $kind, Model $product, ?string $typeLabel): void
+    {
+        $meta = $this->kindMeta($kind);
+        $userId = (int) ($product->user_id ?? 0);
+        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname']) : null;
+        $business = $userId > 0
+            ? WebBusinessDetails::query()->where('user_id', $userId)->first(['company_name', 'registered_email', 'contactMobile', 'phone'])
+            : null;
+
+        $mailTo = $user->email ?? ($business->registered_email ?? null);
+        if (! is_string($mailTo) || trim($mailTo) === '') {
+            Log::warning('Vendor product accepted mail skipped: no recipient email for product #'.(int) $product->id);
+
+            return;
+        }
+
+        $productLabel = $meta['label'];
+        $mailData = [
+            'productKind' => $productLabel,
+            'productId' => (int) $product->id,
+            'typeLabel' => $typeLabel ?: $this->resolveTypeLabel($kind, $product),
+            'specification' => $product->specification ?? null,
+            'description' => $product->description ?? null,
+            'statusLabel' => 'Active',
+            'userId' => $userId > 0 ? $userId : '—',
+            'userName' => $user->name ?? ($business->company_name ?? 'Vendor'),
+            'userEmail' => $mailTo,
+            'companyName' => $business->company_name ?? ($user->companyname ?? null),
+            'acceptedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
+        ];
+
+        $subject = 'Your '.$productLabel.' product has been accepted – #'.$product->id;
+
+        MailController::sendVendorProductAcceptedMail(
+            $mailTo,
             self::ADMIN_MAIL,
             'SNTC',
             $subject,

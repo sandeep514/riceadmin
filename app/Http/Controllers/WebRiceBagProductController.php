@@ -425,7 +425,14 @@ class WebRiceBagProductController extends Controller
             return back();
         }
 
-        $product->update(['status' => (int) $product->status === 1 ? 0 : 1]);
+        $wasPending = (int) $product->status !== 1;
+        $newStatus = $wasPending ? 1 : 0;
+        $product->update(['status' => $newStatus]);
+
+        if ($wasPending && $newStatus === 1) {
+            VendorProductAdminNotificationService::notifyAccepted('rice_bag', $product->fresh());
+        }
+
         Session::flash('success', 'Success|Status updated successfully.');
 
         return back();

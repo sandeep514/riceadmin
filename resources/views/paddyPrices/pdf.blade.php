@@ -48,13 +48,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ optional($paddyPrice->getMandi_rel)->mandi }}</td>
                     <td>{{ optional($paddyPrice->getState_rel)->state }}</td>
-                    <td>
-                        @if(optional($paddyPrice->quality_rel)->quality)
-                            {{ $paddyPrice->quality_rel->type_label }} - {{ $paddyPrice->quality_rel->quality }}
-                        @else
-                            —
-                        @endif
-                    </td>
+                    <td>{{ optional($paddyPrice->quality_rel)->name }}</td>
                     <td>{{ $paddyPrice->crop_year }}</td>
                     <td>{{ $paddyPrice->hand_cutting_price }}</td>
                     <td>{{ $paddyPrice->machine_cutting_price }}</td>

@@ -10,6 +10,7 @@ use App\PaddyStateModel;
 use App\PaddyTrade;
 use App\PaddyTradeCurrentStatus;
 use App\PaddyTradeInterested;
+use App\RiceName;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -125,7 +126,7 @@ class PaddyApiController extends Controller
                 ->where('mandi', $mandi_id)
                 ->where('state', $state_id)
                 ->whereDate('created_at', $lastEnterDate)
-                ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,type,quality'])
+                ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,name'])
                 ->orderByDesc('id')
                 ->get()
                 ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
@@ -165,7 +166,7 @@ class PaddyApiController extends Controller
                 ->where('quality_id', $paddyId)
                 ->where('state', $stateId)
                 ->whereDate('created_at', $lastEnterDate)
-                ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,type,quality'])
+                ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,name'])
                 ->orderByDesc('id')
                 ->get()
                 ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
@@ -200,22 +201,10 @@ class PaddyApiController extends Controller
             $paddyQualityArrayIds = array_values(array_unique(array_filter($paddyQualityIds)));
 
             if ($paddyQualityArrayIds !== []) {
-                $qualities = PaddyQuality::query()
-                    ->select('id', 'type', 'quality')
-                    ->where('status', 1)
+                $qualities = RiceName::query()
+                    ->select('id', 'name')
                     ->whereIn('id', $paddyQualityArrayIds)
-                    ->orderByRaw('`order` IS NULL, `order` ASC')
-                    ->orderBy('id')
-                    ->get()
-                    ->map(function ($row) {
-                        return [
-                            'id' => $row->id,
-                            'name' => $row->quality,
-                            'type' => $row->type,
-                            'type_label' => $row->type_label,
-                            'quality' => $row->quality,
-                        ];
-                    });
+                    ->get();
             }
         }
 

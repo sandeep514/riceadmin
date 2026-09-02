@@ -440,7 +440,13 @@ class WebVendorPackagingProductService
             return false;
         }
 
-        $product->update(['status' => (int) $product->status === 1 ? 0 : 1]);
+        $wasPending = (int) $product->status !== 1;
+        $newStatus = $wasPending ? 1 : 0;
+        $product->update(['status' => $newStatus]);
+
+        if ($wasPending && $newStatus === 1) {
+            VendorProductAdminNotificationService::notifyAccepted($this->kindKey(), $product->fresh());
+        }
 
         return true;
     }

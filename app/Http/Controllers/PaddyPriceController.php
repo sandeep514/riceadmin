@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\PaddyStateModel;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
-use App\PaddyQuality;
+use App\RiceName;
 use App\Export\PaddyPriceExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -43,18 +43,9 @@ class PaddyPriceController extends Controller
             ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('id')
             ->get();
-        $quality = $this->activePaddyQualities();
+        $quality = RiceName::where('status', 1)->get();
 
         return view('paddyPrices.index', compact('paddyPrices', 'paddyStateModel', 'paddyMandiModel', 'quality', 'from', 'to'));
-    }
-
-    private function activePaddyQualities()
-    {
-        return PaddyQuality::query()
-            ->where('status', 1)
-            ->orderByRaw('`order` IS NULL, `order` ASC')
-            ->orderBy('id')
-            ->get();
     }
 
     private function resolvedFilterDates(Request $request): array
@@ -115,7 +106,7 @@ class PaddyPriceController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'date' => 'required|date_format:Y-m-d|before_or_equal:today',
-            'quality_id' => 'required|integer|exists:paddy_qualities,id',
+            'quality_id' => 'required|integer|exists:rice_names,id',
             'state' => 'required|integer|exists:paddyStates,id',
             'mandi' => [
                 'required',
@@ -175,7 +166,7 @@ class PaddyPriceController extends Controller
     public function update(Request $request, PaddyPrice $paddyPrice)
     {
         $validator = Validator::make($request->all(), [
-            'quality_id' => 'required|integer|exists:paddy_qualities,id',
+            'quality_id' => 'required|integer|exists:rice_names,id',
             'crop_year' => 'required|integer|digits:4|min:1900|max:'.now()->year,
             'hand_cutting_price' => 'required|string|max:256',
             'machine_cutting_price' => 'required|string|max:256',
