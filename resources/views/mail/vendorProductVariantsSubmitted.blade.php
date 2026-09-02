@@ -8,8 +8,10 @@
         <p>
             @if(!empty($data['isCreate']))
                 A vendor has submitted a new <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product with variants.
-            @else
+            @elseif(!empty($data['isVariantsAdded']))
                 A vendor has added new variants to an existing <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product.
+            @else
+                A vendor has updated an existing <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product.
             @endif
             Please review it from the admin panel.
         </p>

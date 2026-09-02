@@ -213,16 +213,17 @@ class WebVendorPackagingProductService
             return $product->load(['variants']);
         });
 
-        if ($request->exists('variants')
-            && VendorProductAdminNotificationService::hasNewPackingVariants($previousVariants, $product->variants)
-        ) {
-            VendorProductAdminNotificationService::notify(
-                $this->kindKey(),
-                VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED,
-                $product,
-                $product->variants
-            );
-        }
+        $action = ($request->exists('variants')
+            && VendorProductAdminNotificationService::hasNewPackingVariants($previousVariants, $product->variants))
+            ? VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED
+            : VendorProductAdminNotificationService::ACTION_UPDATED;
+
+        VendorProductAdminNotificationService::notify(
+            $this->kindKey(),
+            $action,
+            $product,
+            $product->variants
+        );
 
         return response()->json([
             'status' => true,

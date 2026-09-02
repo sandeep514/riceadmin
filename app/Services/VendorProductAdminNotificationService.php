@@ -15,6 +15,8 @@ class VendorProductAdminNotificationService
 {
     public const ACTION_CREATED = 'created';
 
+    public const ACTION_UPDATED = 'updated';
+
     public const ACTION_VARIANTS_ADDED = 'variants_added';
 
     public const ACTION_ACCEPTED = 'accepted';
@@ -85,7 +87,8 @@ class VendorProductAdminNotificationService
         ?string $typeLabel
     ): void {
         $variantRows = collect($variants)->values();
-        if ($variantRows->isEmpty()) {
+        // Create / new-variants mails need at least one variant; updates may be product-only.
+        if ($variantRows->isEmpty() && $action !== self::ACTION_UPDATED) {
             return;
         }
 
@@ -97,10 +100,14 @@ class VendorProductAdminNotificationService
             : null;
 
         $isCreate = $action === self::ACTION_CREATED;
+        $isUpdate = $action === self::ACTION_UPDATED;
+        $isVariantsAdded = $action === self::ACTION_VARIANTS_ADDED;
         $productLabel = $meta['label'];
 
         $mailData = [
             'isCreate' => $isCreate,
+            'isUpdate' => $isUpdate,
+            'isVariantsAdded' => $isVariantsAdded,
             'productKind' => $productLabel,
             'productId' => (int) $product->id,
             'typeLabel' => $typeLabel ?: $this->resolveTypeLabel($kind, $product),
@@ -118,9 +125,13 @@ class VendorProductAdminNotificationService
             'submittedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
         ];
 
-        $subject = $isCreate
-            ? 'New '.$productLabel.' product submitted – #'.$product->id
-            : 'New '.$productLabel.' variants added – #'.$product->id;
+        if ($isCreate) {
+            $subject = 'New '.$productLabel.' product submitted – #'.$product->id;
+        } elseif ($isVariantsAdded) {
+            $subject = 'New '.$productLabel.' variants added – #'.$product->id;
+        } else {
+            $subject = $productLabel.' product updated – #'.$product->id;
+        }
 
         MailController::sendVendorProductVariantsMail(
             self::ADMIN_MAIL,

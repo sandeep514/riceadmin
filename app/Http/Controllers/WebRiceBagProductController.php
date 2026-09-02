@@ -134,16 +134,17 @@ class WebRiceBagProductController extends Controller
             return $product->load(['packingSizes']);
         });
 
-        if ($request->exists('packingSizes')
-            && VendorProductAdminNotificationService::hasNewPackingVariants($previousPackingSizes, $product->packingSizes)
-        ) {
-            VendorProductAdminNotificationService::notify(
-                'rice_bag',
-                VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED,
-                $product,
-                $product->packingSizes
-            );
-        }
+        $action = ($request->exists('packingSizes')
+            && VendorProductAdminNotificationService::hasNewPackingVariants($previousPackingSizes, $product->packingSizes))
+            ? VendorProductAdminNotificationService::ACTION_VARIANTS_ADDED
+            : VendorProductAdminNotificationService::ACTION_UPDATED;
+
+        VendorProductAdminNotificationService::notify(
+            'rice_bag',
+            $action,
+            $product,
+            $product->packingSizes
+        );
 
         return response()->json([
             'status' => true,
