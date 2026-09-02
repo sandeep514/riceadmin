@@ -40,7 +40,9 @@ class PaddyPriceExport implements FromCollection, WithHeadings, WithStyles, Shou
                 $index + 1,
                 optional($item->getMandi_rel)->mandi ?? '',
                 optional($item->getState_rel)->state ?? '',
-                optional($item->quality_rel)->name ?? '',
+                optional($item->quality_rel)->quality
+                    ? ($item->quality_rel->type_label.' - '.$item->quality_rel->quality)
+                    : '',
                 $item->crop_year,
                 $item->hand_cutting_price,
                 $item->machine_cutting_price,
