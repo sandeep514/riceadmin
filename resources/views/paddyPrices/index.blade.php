@@ -166,11 +166,6 @@
                                                         <i class="fa fa-file-pdf-o"></i> PDF
                                                     </a>
                                                 </form>
-                                                @if(!empty($showingPreviousDay))
-                                                    <div class="alert alert-info" style="margin-bottom: 12px;">
-                                                        No prices found for today. Showing previous day: <strong>{{ $from }}</strong>
-                                                    </div>
-                                                @endif
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered table-striped" width="100%">
                                                         <thead>

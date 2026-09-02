@@ -18,7 +18,7 @@ class PaddyPriceController extends Controller
 {
     public function index(Request $request)
     {
-        [$from, $to, $usedDefaultSnapshot] = $this->resolvedFilterDates($request);
+        [$from, $to] = $this->resolvedFilterDates($request);
 
         $export = strtolower((string) $request->input('export', ''));
         if ($export === 'excel') {
@@ -47,10 +47,6 @@ class PaddyPriceController extends Controller
             ->orderBy('id')
             ->get();
         $quality = $this->activePaddyQualities();
-        $showingPreviousDay = $usedDefaultSnapshot
-            && $from
-            && $from === $to
-            && $from !== Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d');
 
         return view('paddyPrices.index', compact(
             'paddyPrices',
@@ -58,9 +54,7 @@ class PaddyPriceController extends Controller
             'paddyMandiModel',
             'quality',
             'from',
-            'to',
-            'usedDefaultSnapshot',
-            'showingPreviousDay'
+            'to'
         ));
     }
 
@@ -73,41 +67,15 @@ class PaddyPriceController extends Controller
             ->get();
     }
 
-    /**
-     * @return array{0:?string,1:?string,2:bool} [from, to, usedDefaultSnapshot]
-     */
     private function resolvedFilterDates(Request $request): array
     {
         $from = $this->validFilterDate($request->input('from'));
         $to = $this->validFilterDate($request->input('to'));
-
-        // No explicit date filter → today if available, otherwise yesterday once.
-        if ($from === null && $to === null) {
-            [$snapshotFrom, $snapshotTo] = $this->defaultSnapshotDates();
-
-            return [$snapshotFrom, $snapshotTo, true];
-        }
-
         if ($from && $to && $from > $to) {
             [$from, $to] = [$to, $from];
         }
 
-        return [$from, $to, false];
-    }
-
-    /**
-     * @return array{0:string,1:string}
-     */
-    private function defaultSnapshotDates(): array
-    {
-        $tz = config('app.timezone', 'Asia/Kolkata');
-        $today = Carbon::now($tz)->format('Y-m-d');
-        $yesterday = Carbon::now($tz)->subDay()->format('Y-m-d');
-
-        $hasToday = PaddyPrice::query()->whereDate('created_at', $today)->exists();
-        $date = $hasToday ? $today : $yesterday;
-
-        return [$date, $date];
+        return [$from, $to];
     }
 
     private function filteredPaddyPrices(?string $from, ?string $to, bool $paginate = false)
