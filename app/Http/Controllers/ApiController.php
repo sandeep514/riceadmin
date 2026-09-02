@@ -5394,7 +5394,7 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, '{"amount": ' . $amount . ',"currency": "INR","receipt": "receipt#1"}');
-        curl_setopt($ch, CURLOPT_USERPWD, $key_id . ':' . $secret);
+        curl_setopt($ch, CURLOPT_USERPWD, 'rzp_live_TX4Gx4CXleMmog' . ':' . 'otCOsbSWnTkNQcCXtGezQXJs');
 
         $headers = array();
         $headers[] = 'Content-Type: application/json';
