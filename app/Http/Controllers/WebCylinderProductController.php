@@ -70,14 +70,25 @@ class WebCylinderProductController extends Controller
         return view('webCylinderProducts.show', compact('product', 'types', 'imageBasePath'));
     }
 
-    public function toggleStatus($id)
+    public function toggleStatus(Request $request, $id)
     {
-        if (! $this->service->toggleStatus((int) $id)) {
+        $result = $this->service->toggleStatus((int) $id, $request->input('reason'));
+        if ($result === false) {
             Session::flash('error', 'Error|Cylinder product not found.');
             return back();
         }
+        if (! empty($result['missing_reason'])) {
+            Session::flash('error', 'Error|Please provide a reason to de-activate this product.');
+            return back();
+        }
 
-        Session::flash('success', 'Success|Status updated successfully.');
+        Session::flash(
+            'success',
+            ! empty($result['deactivated'])
+                ? 'Success|Product de-activated and vendor notified.'
+                : 'Success|Product verified successfully.'
+        );
+
         return back();
     }
 }

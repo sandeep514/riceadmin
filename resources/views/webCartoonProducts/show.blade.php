@@ -37,11 +37,10 @@
                 <a href="{{ route('get.web.cartoon.products.list') }}" class="btn btn-default btn-sm">
                     <i class="fa fa-arrow-left"></i> Back to list
                 </a>
-                <a class="btn btn-sm btn-{{ (int) $product->status === 0 ? 'success' : 'danger' }}"
-                   href="{{ route('toggle.web.cartoon.products.status', $product->id) }}"
-                   onclick="return confirm('{{ (int) $product->status === 0 ? 'Verify and show this product on front?' : 'Hide this product from front?' }}');">
-                    {{ (int) $product->status === 0 ? 'Verify' : 'De-activate' }}
-                </a>
+                @include('components.vendor-product-status-actions', [
+                    'product' => $product,
+                    'route' => 'toggle.web.cartoon.products.status',
+                ])
             </div>
         </div>
 
@@ -166,4 +165,8 @@
         </div>
     </section>
 </div>
+@endsection
+
+@section('javascript')
+@include('components.vendor-product-deactivate-modal')
 @endsection

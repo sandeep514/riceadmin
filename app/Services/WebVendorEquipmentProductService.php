@@ -368,22 +368,37 @@ class WebVendorEquipmentProductService
         return $this->label;
     }
 
-    public function toggleStatus(int $id): bool
+    /**
+     * @return array{ok:bool, activated?:bool, deactivated?:bool}|false
+     */
+    public function toggleStatus(int $id, ?string $reason = null)
     {
         $product = $this->productModel::find($id);
         if ($product === null) {
             return false;
         }
 
-        $wasPending = (int) $product->status !== 1;
-        $newStatus = $wasPending ? 1 : 0;
-        $product->update(['status' => $newStatus]);
+        $wasActive = (int) $product->status === 1;
+        if ($wasActive) {
+            $reason = is_string($reason) ? trim($reason) : '';
+            if ($reason === '') {
+                return ['ok' => false, 'deactivated' => false, 'missing_reason' => true];
+            }
 
-        if ($wasPending && $newStatus === 1) {
-            VendorProductAdminNotificationService::notifyAccepted($this->kindKey(), $product->fresh());
+            $product->update(['status' => 0]);
+            VendorProductAdminNotificationService::notifyDeactivated(
+                $this->kindKey(),
+                $product->fresh(),
+                $reason
+            );
+
+            return ['ok' => true, 'deactivated' => true];
         }
 
-        return true;
+        $product->update(['status' => 1]);
+        VendorProductAdminNotificationService::notifyAccepted($this->kindKey(), $product->fresh());
+
+        return ['ok' => true, 'activated' => true];
     }
 
     public function equipmentOptions(): array

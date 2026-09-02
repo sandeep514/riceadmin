@@ -53,6 +53,18 @@ class VendorProductAdminNotificationService
     }
 
     /**
+     * Email the vendor when admin de-activates their product (status 1 → 0).
+     */
+    public static function notifyDeactivated(string $kind, Model $product, string $reason, ?string $typeLabel = null): void
+    {
+        try {
+            (new self())->sendDeactivated($kind, $product, $reason, $typeLabel);
+        } catch (\Throwable $e) {
+            Log::warning('Vendor product deactivated mail failed: '.$e->getMessage());
+        }
+    }
+
+    /**
      * @param  Collection<int, mixed>|iterable<int, mixed>  $previous
      * @param  Collection<int, mixed>|iterable<int, mixed>  $current
      */
@@ -176,6 +188,46 @@ class VendorProductAdminNotificationService
         $subject = 'Your '.$productLabel.' product has been accepted – #'.$product->id;
 
         MailController::sendVendorProductAcceptedMail(
+            $mailTo,
+            self::ADMIN_MAIL,
+            'SNTC',
+            $subject,
+            $mailData
+        );
+    }
+
+    private function sendDeactivated(string $kind, Model $product, string $reason, ?string $typeLabel): void
+    {
+        $meta = $this->kindMeta($kind);
+        $userId = (int) ($product->user_id ?? 0);
+        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname']) : null;
+        $business = $userId > 0
+            ? WebBusinessDetails::query()->where('user_id', $userId)->first(['company_name', 'registered_email', 'contactMobile', 'phone'])
+            : null;
+
+        $mailTo = $user->email ?? ($business->registered_email ?? null);
+        if (! is_string($mailTo) || trim($mailTo) === '') {
+            Log::warning('Vendor product deactivated mail skipped: no recipient email for product #'.(int) $product->id);
+
+            return;
+        }
+
+        $productLabel = $meta['label'];
+        $mailData = [
+            'productKind' => $productLabel,
+            'productId' => (int) $product->id,
+            'typeLabel' => $typeLabel ?: $this->resolveTypeLabel($kind, $product),
+            'reason' => trim($reason),
+            'userId' => $userId > 0 ? $userId : '—',
+            'userName' => $user->name ?? ($business->company_name ?? 'Vendor'),
+            'userEmail' => $mailTo,
+            'companyName' => $business->company_name ?? ($user->companyname ?? null),
+            'deactivatedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
+        ];
+
+        $subject = 'Your '.$productLabel.' product has been de-activated – #'.$product->id;
+
+        MailController::sendVendorProductDeactivatedMail(
             $mailTo,
             self::ADMIN_MAIL,
             'SNTC',

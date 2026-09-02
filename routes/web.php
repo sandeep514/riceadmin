@@ -901,23 +901,23 @@ Route::group(['prefix'=>'administrator'], function(){
 
     Route::get('get/web/rice-bag-products', ['as' => 'get.web.rice.bag.products.list', 'uses' => 'WebRiceBagProductController@showProductsToAdmin']);
     Route::get('get/web/rice-bag-products/{id}', ['as' => 'get.web.rice.bag.products.show', 'uses' => 'WebRiceBagProductController@showProductToAdmin']);
-    Route::get('toggle/web/rice-bag-products/status/{id}', ['as' => 'toggle.web.rice.bag.products.status', 'uses' => 'WebRiceBagProductController@toggleWebRiceBagProductStatus']);
+    Route::post('toggle/web/rice-bag-products/status/{id}', ['as' => 'toggle.web.rice.bag.products.status', 'uses' => 'WebRiceBagProductController@toggleWebRiceBagProductStatus']);
 
     Route::get('get/web/cartoon-products', ['as' => 'get.web.cartoon.products.list', 'uses' => 'WebCartoonProductController@showProductsToAdmin']);
     Route::get('get/web/cartoon-products/{id}', ['as' => 'get.web.cartoon.products.show', 'uses' => 'WebCartoonProductController@showProductToAdmin']);
-    Route::get('toggle/web/cartoon-products/status/{id}', ['as' => 'toggle.web.cartoon.products.status', 'uses' => 'WebCartoonProductController@toggleStatus']);
+    Route::post('toggle/web/cartoon-products/status/{id}', ['as' => 'toggle.web.cartoon.products.status', 'uses' => 'WebCartoonProductController@toggleStatus']);
 
     Route::get('get/web/cylinder-products', ['as' => 'get.web.cylinder.products.list', 'uses' => 'WebCylinderProductController@showProductsToAdmin']);
     Route::get('get/web/cylinder-products/{id}', ['as' => 'get.web.cylinder.products.show', 'uses' => 'WebCylinderProductController@showProductToAdmin']);
-    Route::get('toggle/web/cylinder-products/status/{id}', ['as' => 'toggle.web.cylinder.products.status', 'uses' => 'WebCylinderProductController@toggleStatus']);
+    Route::post('toggle/web/cylinder-products/status/{id}', ['as' => 'toggle.web.cylinder.products.status', 'uses' => 'WebCylinderProductController@toggleStatus']);
 
     Route::get('get/web/lab-equipment-products', ['as' => 'get.web.lab.equipment.products.list', 'uses' => 'WebLabEquipmentProductController@showProductsToAdmin']);
     Route::get('get/web/lab-equipment-products/{id}', ['as' => 'get.web.lab.equipment.products.show', 'uses' => 'WebLabEquipmentProductController@showProductToAdmin']);
-    Route::get('toggle/web/lab-equipment-products/status/{id}', ['as' => 'toggle.web.lab.equipment.products.status', 'uses' => 'WebLabEquipmentProductController@toggleStatus']);
+    Route::post('toggle/web/lab-equipment-products/status/{id}', ['as' => 'toggle.web.lab.equipment.products.status', 'uses' => 'WebLabEquipmentProductController@toggleStatus']);
 
     Route::get('get/web/machinery-equipment-products', ['as' => 'get.web.machinery.equipment.products.list', 'uses' => 'WebMachineryEquipmentProductController@showProductsToAdmin']);
     Route::get('get/web/machinery-equipment-products/{id}', ['as' => 'get.web.machinery.equipment.products.show', 'uses' => 'WebMachineryEquipmentProductController@showProductToAdmin']);
-    Route::get('toggle/web/machinery-equipment-products/status/{id}', ['as' => 'toggle.web.machinery.equipment.products.status', 'uses' => 'WebMachineryEquipmentProductController@toggleStatus']);
+    Route::post('toggle/web/machinery-equipment-products/status/{id}', ['as' => 'toggle.web.machinery.equipment.products.status', 'uses' => 'WebMachineryEquipmentProductController@toggleStatus']);
 
 
 

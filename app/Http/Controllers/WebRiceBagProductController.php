@@ -417,7 +417,7 @@ class WebRiceBagProductController extends Controller
             ?: PackingType::query()->where('id', $bagTypeId)->value('name');
     }
 
-    public function toggleWebRiceBagProductStatus($id)
+    public function toggleWebRiceBagProductStatus(Request $request, $id)
     {
         $product = WebRiceBagProduct::find((int) $id);
 
@@ -426,15 +426,30 @@ class WebRiceBagProductController extends Controller
             return back();
         }
 
-        $wasPending = (int) $product->status !== 1;
-        $newStatus = $wasPending ? 1 : 0;
-        $product->update(['status' => $newStatus]);
+        $wasActive = (int) $product->status === 1;
+        if ($wasActive) {
+            $validator = Validator::make($request->all(), [
+                'reason' => ['required', 'string', 'min:3', 'max:1000'],
+            ]);
+            if ($validator->fails()) {
+                Session::flash('error', 'Error|Please provide a reason to de-activate this product.');
+                return back()->withErrors($validator);
+            }
 
-        if ($wasPending && $newStatus === 1) {
-            VendorProductAdminNotificationService::notifyAccepted('rice_bag', $product->fresh());
+            $product->update(['status' => 0]);
+            VendorProductAdminNotificationService::notifyDeactivated(
+                'rice_bag',
+                $product->fresh(),
+                (string) $request->input('reason')
+            );
+            Session::flash('success', 'Success|Product de-activated and vendor notified.');
+
+            return back();
         }
 
-        Session::flash('success', 'Success|Status updated successfully.');
+        $product->update(['status' => 1]);
+        VendorProductAdminNotificationService::notifyAccepted('rice_bag', $product->fresh());
+        Session::flash('success', 'Success|Product verified successfully.');
 
         return back();
     }
