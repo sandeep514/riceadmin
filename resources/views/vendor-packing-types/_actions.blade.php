@@ -1,5 +1,5 @@
 @if((int) $model->status === \App\VendorPackingType::STATUS_ACTIVE)
-    <a href="{{ route('vendor-packing-type.change-status', $model->id) }}" class="btn btn-warning btn-xs" onclick="return confirm('Mark this vendor packing type as inactive?');">Inactive</a>
+    <a href="{{ route('vendor-packing-type.change-status', $model->id) }}" class="btn btn-warning btn-xs" onclick="return confirm('Mark this bag type as inactive?');">Inactive</a>
 @else
     <a href="{{ route('vendor-packing-type.change-status', $model->id) }}" class="btn btn-success btn-xs">Active</a>
 @endif

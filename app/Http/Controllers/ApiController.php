@@ -7942,7 +7942,7 @@ if (!file_exists('uploads')) {
 
         return response()->json([
             'status' => true,
-            'message' => 'Vendor packing types fetched successfully.',
+            'message' => 'Bag types fetched successfully.',
             'data' => $types,
         ], 200);
     }

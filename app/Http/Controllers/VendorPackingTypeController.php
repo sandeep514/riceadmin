@@ -33,7 +33,7 @@ class VendorPackingTypeController extends Controller
             'order_no' => MasterOrderUpdater::nextOrder(VendorPackingType::class),
         ]);
 
-        Session::flash('success', 'Success|Vendor packing type saved successfully!');
+        Session::flash('success', 'Success|Bag type saved successfully!');
 
         return redirect()->route('vendor-packing-types');
     }
@@ -65,7 +65,7 @@ class VendorPackingTypeController extends Controller
             'status',
         ]));
 
-        Session::flash('success', 'Success|Vendor packing type updated successfully!');
+        Session::flash('success', 'Success|Bag type updated successfully!');
 
         return redirect()->route('vendor-packing-types');
     }
@@ -80,7 +80,7 @@ class VendorPackingTypeController extends Controller
         }
 
         $model->delete();
-        Session::flash('success', 'Success|Vendor packing type deleted successfully!');
+        Session::flash('success', 'Success|Bag type deleted successfully!');
 
         return back();
     }
@@ -100,8 +100,8 @@ class VendorPackingTypeController extends Controller
         $model->save();
 
         $msg = (int) $model->status === VendorPackingType::STATUS_ACTIVE
-            ? 'Success|Vendor packing type marked as active.'
-            : 'Success|Vendor packing type marked as inactive.';
+            ? 'Success|Bag type marked as active.'
+            : 'Success|Bag type marked as inactive.';
 
         Session::flash('success', $msg);
 
@@ -116,7 +116,7 @@ class VendorPackingTypeController extends Controller
         ]);
 
         MasterOrderUpdater::swap(VendorPackingType::class, (int) $request->id, (int) $request->order_no);
-        Session::flash('success', 'Success|Vendor packing type order updated successfully.');
+        Session::flash('success', 'Success|Bag type order updated successfully.');
 
         return back();
     }
