@@ -18,22 +18,25 @@ class PaddyPriceController extends Controller
 {
     public function index(Request $request)
     {
-        [$from, $to] = $this->resolvedFilterDates($request);
-        $paddyPrices = $this->filteredPaddyPrices($from, $to);
+        [$from, $to, $usedDefaultSnapshot] = $this->resolvedFilterDates($request);
 
         $export = strtolower((string) $request->input('export', ''));
         if ($export === 'excel') {
+            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false);
             $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.xlsx';
 
             return Excel::download(new PaddyPriceExport($paddyPrices), $filename);
         }
         if ($export === 'pdf') {
+            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false);
             $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.pdf';
             $pdf = Pdf::loadView('paddyPrices.pdf', compact('paddyPrices', 'from', 'to'))
                 ->setPaper('a4', 'landscape');
 
             return $pdf->download($filename);
         }
+
+        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: true);
 
         $paddyStateModel = PaddyStateModel::where('status', 1)
             ->orderByRaw('order_no IS NULL, order_no ASC')
@@ -44,8 +47,21 @@ class PaddyPriceController extends Controller
             ->orderBy('id')
             ->get();
         $quality = $this->activePaddyQualities();
+        $showingPreviousDay = $usedDefaultSnapshot
+            && $from
+            && $from === $to
+            && $from !== Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d');
 
-        return view('paddyPrices.index', compact('paddyPrices', 'paddyStateModel', 'paddyMandiModel', 'quality', 'from', 'to'));
+        return view('paddyPrices.index', compact(
+            'paddyPrices',
+            'paddyStateModel',
+            'paddyMandiModel',
+            'quality',
+            'from',
+            'to',
+            'usedDefaultSnapshot',
+            'showingPreviousDay'
+        ));
     }
 
     private function activePaddyQualities()
@@ -57,18 +73,44 @@ class PaddyPriceController extends Controller
             ->get();
     }
 
+    /**
+     * @return array{0:?string,1:?string,2:bool} [from, to, usedDefaultSnapshot]
+     */
     private function resolvedFilterDates(Request $request): array
     {
         $from = $this->validFilterDate($request->input('from'));
         $to = $this->validFilterDate($request->input('to'));
+
+        // No explicit date filter → today if available, otherwise yesterday once.
+        if ($from === null && $to === null) {
+            [$snapshotFrom, $snapshotTo] = $this->defaultSnapshotDates();
+
+            return [$snapshotFrom, $snapshotTo, true];
+        }
+
         if ($from && $to && $from > $to) {
             [$from, $to] = [$to, $from];
         }
 
-        return [$from, $to];
+        return [$from, $to, false];
     }
 
-    private function filteredPaddyPrices(?string $from, ?string $to)
+    /**
+     * @return array{0:string,1:string}
+     */
+    private function defaultSnapshotDates(): array
+    {
+        $tz = config('app.timezone', 'Asia/Kolkata');
+        $today = Carbon::now($tz)->format('Y-m-d');
+        $yesterday = Carbon::now($tz)->subDay()->format('Y-m-d');
+
+        $hasToday = PaddyPrice::query()->whereDate('created_at', $today)->exists();
+        $date = $hasToday ? $today : $yesterday;
+
+        return [$date, $date];
+    }
+
+    private function filteredPaddyPrices(?string $from, ?string $to, bool $paginate = false)
     {
         $query = PaddyPrice::with(['getMandi_rel', 'getState_rel', 'quality_rel'])
             ->orderBy('id', 'DESC');
@@ -78,6 +120,10 @@ class PaddyPriceController extends Controller
         }
         if ($to) {
             $query->whereDate('created_at', '<=', $to);
+        }
+
+        if ($paginate) {
+            return $query->paginate(25)->appends(request()->except(['page', 'export']));
         }
 
         return $query->get();

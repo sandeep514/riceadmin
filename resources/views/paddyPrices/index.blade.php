@@ -166,54 +166,60 @@
                                                         <i class="fa fa-file-pdf-o"></i> PDF
                                                     </a>
                                                 </form>
-                                                <table class="table table-bordered table-striped paddy-datatable" width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>ID</th>
-                                                            <th>Mandi</th>
-                                                            <th>State</th>
-                                                            <th>Quality</th>
-                                                            <th>Crop Year</th>
-                                                            <th>Hand Cutting Price</th>
-                                                            <th>Machine Cutting Price</th>
-                                                            <th>Moisture</th>
-                                                            <th>Total Arrivals</th>
-                                                            <th>Change</th>
-                                                            <th>Created At</th>
-                                                            <th>Status</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach ($paddyPrices as $paddyPrice)
+                                                @if(!empty($showingPreviousDay))
+                                                    <div class="alert alert-info" style="margin-bottom: 12px;">
+                                                        No prices found for today. Showing previous day: <strong>{{ $from }}</strong>
+                                                    </div>
+                                                @endif
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered table-striped" width="100%">
+                                                        <thead>
                                                             <tr>
-                                                                <td>{{ $paddyPrice->id }}</td>
-                                                                <td>{{ $paddyPrice->getMandi_rel->mandi }}</td>
-                                                                <td>{{ $paddyPrice->getState_rel->state }}</td>
-                                                                <td>{{ optional($paddyPrice->quality_rel)->quality ? ($paddyPrice->quality_rel->type_label.' - '.$paddyPrice->quality_rel->quality) : '—' }}</td>
-                                                                <td>{{ $paddyPrice->crop_year }}</td>
-                                                                <td>{{ $paddyPrice->hand_cutting_price }}</td>
-                                                                <td>{{ $paddyPrice->machine_cutting_price }}</td>
-                                                                <td>{{ $paddyPrice->moisture }}</td>
-                                                                <td>{{ $paddyPrice->total_arrivals }}</td>
-                                                                <td>{{ $paddyPrice->change }}</td>
-                                                                <td data-order="{{ optional($paddyPrice->created_at)->timestamp }}">
-                                                                    {{ $paddyPrice->created_at ? $paddyPrice->created_at->format('Y-m-d') : '' }}
-                                                                </td>
-                                                                <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
-                                                                <td>
-                                                                    {{-- <a href="{{ route('paddy-prices.show', $paddyPrice) }}" class="btn btn-info btn-sm">View</a>
-                                                                    <a href="{{ route('paddy-prices.edit', $paddyPrice) }}" class="btn btn-warning btn-sm">Edit</a>
-                                                                    <form action="{{ route('paddy-prices.destroy', $paddyPrice) }}" method="POST" style="display:inline;">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                                                                    </form> --}}
-                                                                </td>
+                                                                <th>ID</th>
+                                                                <th>Mandi</th>
+                                                                <th>State</th>
+                                                                <th>Quality</th>
+                                                                <th>Crop Year</th>
+                                                                <th>Hand Cutting Price</th>
+                                                                <th>Machine Cutting Price</th>
+                                                                <th>Moisture</th>
+                                                                <th>Total Arrivals</th>
+                                                                <th>Change</th>
+                                                                <th>Created At</th>
+                                                                <th>Status</th>
+                                                                <th>Actions</th>
                                                             </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
+                                                        </thead>
+                                                        <tbody>
+                                                            @forelse ($paddyPrices as $paddyPrice)
+                                                                <tr>
+                                                                    <td>{{ $paddyPrice->id }}</td>
+                                                                    <td>{{ optional($paddyPrice->getMandi_rel)->mandi }}</td>
+                                                                    <td>{{ optional($paddyPrice->getState_rel)->state }}</td>
+                                                                    <td>{{ optional($paddyPrice->quality_rel)->quality ? ($paddyPrice->quality_rel->type_label.' - '.$paddyPrice->quality_rel->quality) : '—' }}</td>
+                                                                    <td>{{ $paddyPrice->crop_year }}</td>
+                                                                    <td>{{ $paddyPrice->hand_cutting_price }}</td>
+                                                                    <td>{{ $paddyPrice->machine_cutting_price }}</td>
+                                                                    <td>{{ $paddyPrice->moisture }}</td>
+                                                                    <td>{{ $paddyPrice->total_arrivals }}</td>
+                                                                    <td>{{ $paddyPrice->change }}</td>
+                                                                    <td>
+                                                                        {{ $paddyPrice->created_at ? $paddyPrice->created_at->format('Y-m-d') : '' }}
+                                                                    </td>
+                                                                    <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
+                                                                    <td></td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td colspan="13" class="text-center text-muted">No paddy prices found for the selected date range.</td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="text-center" style="margin-top: 10px;">
+                                                    {{ $paddyPrices->onEachSide(1)->links() }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -262,13 +268,6 @@
         });
 
         loadMandis($state.val(), oldMandi);
-
-        $('.paddy-datatable').DataTable({
-            pageLength: 25,
-            order: [[10, 'desc']],
-            scrollX: true,
-            columnDefs: [{ orderable: false, targets: [12] }]
-        });
     });
 </script>
 @endsection
