@@ -5381,12 +5381,8 @@ class ApiController extends Controller
     {
         $amount = $request->amount;
 
-        // $key_id = 'rzp_live_NY1vm28wpcuCKf';
-        // $secret = 'eTqutKKKWKjyq28vTsahFIcl';
-
-
-        $key_id = 'rzp_live_TX4Gx4CXleMmog';
-        $secret = 'otCOsbSWnTkNQcCXtGezQXJs';
+        $key_id = config('services.razorpay.key');
+        $secret = config('services.razorpay.secret');
 
         $ch = curl_init();
 
@@ -5394,7 +5390,7 @@ class ApiController extends Controller
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, '{"amount": ' . $amount . ',"currency": "INR","receipt": "receipt#1"}');
-        curl_setopt($ch, CURLOPT_USERPWD, 'rzp_live_TX4Gx4CXleMmog' . ':' . 'otCOsbSWnTkNQcCXtGezQXJs');
+        curl_setopt($ch, CURLOPT_USERPWD, $key_id . ':' . $secret);
 
         $headers = array();
         $headers[] = 'Content-Type: application/json';
