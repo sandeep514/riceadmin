@@ -47,6 +47,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -1326,19 +1327,13 @@ class ApiController extends Controller
 
         $processedData = [];
 
-        $livePriceBaseQuery = function () use ($state, $cropYear) {
-            $q = LivePrice::query()
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->whereNotNull('min_price')
-                ->whereNotNull('max_price')
-                ->where('state', $state);
-            if ($cropYear !== null && $cropYear !== '') {
-                $this->applyLivePriceCropYearMatch($q, $cropYear);
-            }
-
-            return $q;
-        };
+        $livePriceBaseQuery = fn () => LivePrice::query()
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->whereNotNull('min_price')
+            ->whereNotNull('max_price')
+            ->where('state', $state)
+            ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear));
 
         $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
 
@@ -1369,9 +1364,7 @@ class ApiController extends Controller
                     ->whereNotNull('live_prices.min_price')
                     ->whereNotNull('live_prices.max_price')
                     ->where('live_prices.state', $state)
-                    ->when($cropYear !== null && $cropYear !== '', function ($q) use ($cropYear) {
-                        $this->applyLivePriceCropYearMatch($q, $cropYear, 'live_prices.cropYear');
-                    })
+                    ->when($cropYear, fn ($q) => $q->where('live_prices.cropYear', $cropYear))
                     ->where('rn.type', $ricetype)
                     ->where('rf.type', $ricetype)
                     ->where('rf.status', 1)
@@ -1485,26 +1478,22 @@ class ApiController extends Controller
                     }
                 }
 
-            $payload = [
+            return response()->json([
                 'errors' => null,
                 'prices' => $myNewData,
                 'latest' => $latestDate,
                 'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
                 'oldDate' => $previousDate ? Carbon::parse($previousDate)->format('Y-m-d') : '',
-            ];
-
-            return response()->json($payload);
+            ]);
         }
 
         // if no records found
-        $emptyPayload = [
+        return response()->json([
             'errors' => null,
             'prices' => [],
             'latest' => '',
             'oldDate' => ''
-        ];
-
-        return response()->json($emptyPayload);
+        ]);
     }
 
    
@@ -2100,14 +2089,17 @@ class ApiController extends Controller
         $todayDate = Carbon::now();
         $latestCropYear = (int) (LivePrice::max('cropYear') ?: $todayDate->year);
 
-        $requestedYear = request()->has('year') ? trim((string) request()->get('year')) : '';
-        $cropYear = $requestedYear !== '' ? $requestedYear : $latestCropYear;
+        $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
 
-        // As-of window is always today's calendar date; crop year is filtered separately.
-        $lastEnteredStart = $todayDate->copy()->startOfDay();
-        $lastEnteredEnd = $todayDate->copy()->endOfDay();
+        $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
+        $date = $todayDate->day;
+        $month = $todayDate->month;
 
-        $lastRecordQuery = LivePrice::query()
+        $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
+        $lastEnteredStart = Carbon::parse($lastEnteredRecord)->startOfDay();
+        $lastEnteredEnd = Carbon::parse($lastEnteredRecord)->endOfDay();
+
+        $lastRecord = LivePrice::query()
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
             ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
             ->where('live_prices.name', '!=', '0')
@@ -2118,17 +2110,16 @@ class ApiController extends Controller
             ->where('live_prices.max_price', '>', 0)
             ->where('live_prices.state', $state)
             ->whereBetween('live_prices.created_at', [$lastEnteredStart, $lastEnteredEnd])
+            ->where('live_prices.cropYear', $cropYear)
             ->where('rn.type', $ricetype)
             ->where('rf.type', $ricetype)
             ->where('rf.status', 1)
-            ->select('live_prices.*');
-        $this->applyLivePriceCropYearMatch($lastRecordQuery, $cropYear, 'live_prices.cropYear');
-        $lastRecord = $lastRecordQuery
+            ->select('live_prices.*')
             ->latest('live_prices.id')
             ->first();
 
         if (!$lastRecord) {
-            $fallbackQuery = LivePrice::query()
+            $lastRecord = LivePrice::query()
                 ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
                 ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
                 ->where('live_prices.name', '!=', '0')
@@ -2138,13 +2129,12 @@ class ApiController extends Controller
                 ->where('live_prices.min_price', '>', 0)
                 ->where('live_prices.max_price', '>', 0)
                 ->where('live_prices.state', $state)
+                ->where('live_prices.cropYear', $cropYear)
                 ->where('live_prices.created_at', '<', $lastEnteredStart)
                 ->where('rn.type', $ricetype)
                 ->where('rf.type', $ricetype)
                 ->where('rf.status', 1)
-                ->select('live_prices.*');
-            $this->applyLivePriceCropYearMatch($fallbackQuery, $cropYear, 'live_prices.cropYear');
-            $lastRecord = $fallbackQuery
+                ->select('live_prices.*')
                 ->latest('live_prices.id')
                 ->first();
         }
@@ -2152,10 +2142,9 @@ class ApiController extends Controller
         $lastEnteredRecord = $lastRecord;
 
         if (!$lastEnteredRecord) {
-            $latestForMetaQuery = LivePrice::query()
-                ->where('state', $state);
-            $this->applyLivePriceCropYearMatch($latestForMetaQuery, $cropYear);
-            $latestForMeta = $latestForMetaQuery
+            $latestForMeta = LivePrice::query()
+                ->where('state', $state)
+                ->where('cropYear', $cropYear)
                 ->orderBy('updated_at', 'desc')
                 ->first()
                 ?: LivePrice::orderBy('updated_at', 'desc')->first();
@@ -2187,9 +2176,9 @@ class ApiController extends Controller
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->where('state', $state)
-            ->whereBetween('created_at', [$priceDayStart, $priceDayEnd]);
-        $this->applyLivePriceCropYearMatch($latestPriceIdsForDate, $cropYear);
-        $latestPriceIdsForDate->groupBy('name', 'form', 'cropYear');
+            ->where('cropYear', $cropYear)
+            ->whereBetween('created_at', [$priceDayStart, $priceDayEnd])
+            ->groupBy('name', 'form', 'state', 'cropYear');
 
         $data = LivePrice::query()
             ->with([
@@ -2198,9 +2187,6 @@ class ApiController extends Controller
             ])
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
             ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
-            ->joinSub($latestPriceIdsForDate, 'latest_lp', function ($join) {
-                $join->on('latest_lp.id', '=', 'live_prices.id');
-            })
             ->select('live_prices.*')
             ->withCount([
                 'trades as tradeCount' => function ($q) {
@@ -2208,10 +2194,9 @@ class ApiController extends Controller
                       ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
                 }
             ])
+            ->whereIn('live_prices.id', $latestPriceIdsForDate)
             ->where('live_prices.state', $state)
-            ->when($cropYear !== null && $cropYear !== '', function ($q) use ($cropYear) {
-                $this->applyLivePriceCropYearMatch($q, $cropYear, 'live_prices.cropYear');
-            })
+            ->where('live_prices.cropYear' , $cropYear)
             ->where('rn.type', $ricetype)
             ->where('rf.type', $ricetype)
             ->where('rf.status', 1)
@@ -2244,11 +2229,11 @@ class ApiController extends Controller
         */
 
         $latestIds = LivePricesOpeningClosing::selectRaw('MAX(id) as id')
+            ->where('cropYear', $cropYear)
             ->where('state', $state)
             ->whereNotNull('closing')
-            ->where('closing', '!=', '');
-        $this->applyLivePriceCropYearMatch($latestIds, $cropYear);
-        $latestIds->groupBy('name', 'form', 'cropYear', 'state');
+            ->where('closing', '!=', '')
+            ->groupBy('name', 'form', 'cropYear', 'state');
 
             $livePricesClosingOpening = LivePricesOpeningClosing::query()
                 ->select('live_price_closing.*')
@@ -2407,21 +2392,17 @@ class ApiController extends Controller
 
     private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
     {
-        $latestIds = DB::table('live_prices')
+        $latestIds = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
-            ->where('state', $state);
-        if ($cropYear !== null && $cropYear !== '') {
-            $this->applyLivePriceCropYearMatch($latestIds, $cropYear);
-        }
-        $latestIds->groupBy('name', 'form', 'cropYear');
+            ->where('state', $state)
+            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
+            ->groupBy('name', 'form', 'state', 'cropYear');
 
-        return DB::table('live_prices as lp')
-            ->joinSub($latestIds, 't', function ($join) {
-                $join->on('t.id', '=', 'lp.id');
-            })
-            ->get(['lp.name', 'lp.form', 'lp.state', 'lp.cropYear', 'lp.min_price', 'lp.max_price'])
+        return LivePrice::query()
+            ->whereIn('id', $latestIds)
+            ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
             ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
             ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
             ->all();
@@ -2436,17 +2417,13 @@ class ApiController extends Controller
     {
         $latestIdsQuery = DB::table('live_price_closing')
             ->selectRaw('MAX(id) as id')
-            ->where('state', $state);
-        if ($cropYear !== null && $cropYear !== '') {
-            $this->applyLivePriceCropYearMatch($latestIdsQuery, $cropYear);
-        }
-        $latestIdsQuery->groupBy('name', 'form', 'cropYear');
+            ->where('state', $state)
+            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
+            ->groupBy('name', 'form', 'state', 'cropYear');
 
-        $rows = DB::table('live_price_closing as lpc')
-            ->joinSub($latestIdsQuery, 't', function ($join) {
-                $join->on('t.id', '=', 'lpc.id');
-            })
-            ->get(['lpc.name', 'lpc.form', 'lpc.state', 'lpc.cropYear', 'lpc.closing']);
+        $rows = DB::table('live_price_closing')
+            ->whereIn('id', $latestIdsQuery)
+            ->get(['name', 'form', 'state', 'cropYear', 'closing']);
 
         $map = [];
         foreach ($rows as $row) {
@@ -3304,7 +3281,11 @@ class ApiController extends Controller
      */
     private function resolveWebRiceTypeStates(string $ricetype, $yearParam = null): array
     {
-        return $this->computeWebRiceTypeStates($ricetype, $yearParam);
+        $cacheKey = 'web_rice_states:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
+
+        return Cache::remember($cacheKey, 60, function () use ($ricetype, $yearParam) {
+            return $this->computeWebRiceTypeStates($ricetype, $yearParam);
+        });
     }
 
     /**
@@ -3317,12 +3298,11 @@ class ApiController extends Controller
             return [];
         }
 
-        $normalizedYear = trim((string) ($yearParam ?? ''));
-        $cropYear = $normalizedYear !== '' ? $normalizedYear : $latestCropYear;
+        $cropYear = ($yearParam !== null && $yearParam !== '') ? $yearParam : $latestCropYear;
         $asOfDate = Carbon::now()->toDateString();
 
         // Latest day with usable (non-null, > 0) prices for this rice type + crop year.
-        $lastPriceAtQuery = DB::table('live_prices as lp')
+        $lastPriceAt = DB::table('live_prices as lp')
             ->join('rice_forms as rf', function ($join) use ($ricetype) {
                 $join->on('rf.id', '=', 'lp.form')
                     ->where('rf.type', '=', $ricetype)
@@ -3338,9 +3318,8 @@ class ApiController extends Controller
             ->whereNotNull('lp.max_price')
             ->where('lp.min_price', '>', 0)
             ->where('lp.max_price', '>', 0)
-            ->whereDate('lp.created_at', '<=', $asOfDate);
-        $this->applyLivePriceCropYearMatch($lastPriceAtQuery, $cropYear, 'lp.cropYear');
-        $lastPriceAt = $lastPriceAtQuery
+            ->where('lp.cropYear', $cropYear)
+            ->whereDate('lp.created_at', '<=', $asOfDate)
             ->orderByDesc('lp.created_at')
             ->value('lp.created_at');
 
@@ -3352,7 +3331,7 @@ class ApiController extends Controller
         $priceDayStart = Carbon::parse($lastDate)->startOfDay();
         $priceDayEnd = Carbon::parse($lastDate)->endOfDay();
 
-        $closingRowsQuery = DB::table('live_price_closing as lpc')
+        $closingRows = DB::table('live_price_closing as lpc')
             ->join('rice_forms as rf', function ($join) use ($ricetype) {
                 $join->on('rf.id', '=', 'lpc.form')
                     ->where('rf.type', '=', $ricetype)
@@ -3362,10 +3341,9 @@ class ApiController extends Controller
                 $join->on('rn.id', '=', 'lpc.name')
                     ->where('rn.type', '=', $ricetype);
             })
+            ->where('lpc.cropYear', $cropYear)
             ->whereNotNull('lpc.closing')
-            ->where('lpc.closing', '!=', '');
-        $this->applyLivePriceCropYearMatch($closingRowsQuery, $cropYear, 'lpc.cropYear');
-        $closingRows = $closingRowsQuery
+            ->where('lpc.closing', '!=', '')
             ->select('lpc.name', 'lpc.form', 'lpc.state')
             ->get();
 
@@ -3375,7 +3353,7 @@ class ApiController extends Controller
         }
 
         // Latest row per name+form+state on that day (null/0 latest wins — no older fallback).
-        $latestIdsQuery = DB::table('live_prices as lp')
+        $latestIds = DB::table('live_prices as lp')
             ->join('rice_forms as rf', function ($join) use ($ricetype) {
                 $join->on('rf.id', '=', 'lp.form')
                     ->where('rf.type', '=', $ricetype)
@@ -3387,13 +3365,12 @@ class ApiController extends Controller
             })
             ->where('lp.name', '!=', '0')
             ->where('lp.form', '!=', '0')
+            ->where('lp.cropYear', $cropYear)
             ->whereBetween('lp.created_at', [$priceDayStart, $priceDayEnd])
             ->when(
                 (string) $cropYear === '2023' || (int) $cropYear === 2023,
                 fn ($q) => $q->whereRaw('LOWER(rf.form_name) NOT LIKE ?', ['%new crop%'])
-            );
-        $this->applyLivePriceCropYearMatch($latestIdsQuery, $cropYear, 'lp.cropYear');
-        $latestIds = $latestIdsQuery
+            )
             ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear')
             ->selectRaw('MAX(lp.id) as id');
 
@@ -8301,11 +8278,15 @@ if (!file_exists('uploads')) {
         }
 
         $cropYear = $request->get('year');
-        if ($cropYear !== null && $cropYear !== '') {
-            request()->merge(['year' => $cropYear]);
-        }
+        $cacheKey = 'api:live_prices_today:'.md5(json_encode(['year' => $cropYear]));
 
-        $payload = $this->getPrices('PUNJAB-HARYANA', 'basmati')->getData(true);
+        $payload = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($cropYear) {
+            if ($cropYear !== null && $cropYear !== '') {
+                request()->merge(['year' => $cropYear]);
+            }
+
+            return $this->getPrices('PUNJAB-HARYANA', 'basmati')->getData(true);
+        });
 
         return response()->json($payload);
     }
@@ -8406,18 +8387,18 @@ if (!file_exists('uploads')) {
      *
      * @param  string  $column  Column or alias, e.g. cropYear, lp.cropYear, lpc.cropYear
      */
-    private function applyLivePriceCropYearMatch($query, $yearParam, string $column = 'cropYear'): void
+    private function applyLivePriceCropYearMatch($query, $yearParam): void
     {
         $y = trim((string) $yearParam);
         if ($y === '') {
             return;
         }
 
-        $query->where(function ($q) use ($y, $column) {
-            $q->where($column, $y);
+        $query->where(function ($q) use ($y) {
+            $q->where('cropYear', $y);
             if (preg_match('/^\d{4}$/', $y)) {
-                $q->orWhere($column, 'like', $y.'-%')
-                    ->orWhere($column, 'like', $y.'/%');
+                $q->orWhere('cropYear', 'like', $y.'-%')
+                    ->orWhere('cropYear', 'like', $y.'/%');
             }
         });
     }
