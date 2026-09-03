@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="row" style="margin-top:10px;">
-                            <div class="col-md-12" style="display:flex; gap:10px; flex-wrap: wrap;">
+                            <div class="col-md-12" style="display:flex; gap:10px; flex-wrap: wrap; align-items:center;">
                                 <a href="javascript:void(0)" class="btn btn-default js-trade-note" data-type="closing">
                                     Closing <span class="badge">{{ $closingCount ?? 0 }}</span>
                                 </a>
@@ -58,6 +58,33 @@
                                 <span class="btn btn-default" style="cursor: default;">
                                     Active Sell Trades <span class="badge">{{ $activeSellCount ?? 0 }}</span>
                                 </span>
+                                <button type="button" class="btn btn-warning btn-sm" id="js-bulk-valid-days-btn" disabled>
+                                    Update Valid Date (<span id="js-bulk-valid-days-count">0</span>)
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="bulkValidDaysModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title">Update Valid Date</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Set a new valid date/time for <strong id="js-bulk-valid-days-selected">0</strong> selected trade(s).</p>
+                                        <div class="form-group">
+                                            <label for="bulkValidityInput">Valid Till</label>
+                                            <input type="datetime-local" id="bulkValidityInput" class="form-control" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                        <button type="button" class="btn btn-primary" id="js-bulk-valid-days-submit">Update</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
@@ -93,7 +120,9 @@
                                     <table id="example2" class="display" style="width: 100%;">
                                         <thead>
                                             <tr>
-                                                <!-- <th style="text-align: center">sno</th> -->
+                                                <th style="text-align: center; width: 36px;">
+                                                    <input type="checkbox" id="js-trade-select-all" title="Select all">
+                                                </th>
                                                 <th style="text-align: center">SNTC Lot No</th>
                                                 <th style="text-align: center">Trade ID</th>
                                                 <th style="text-align: center">Trade Type</th>
@@ -118,8 +147,10 @@
 
                                         <tbody>
                                             @foreach($sellQueries as $k => $v)
-                                                <tr>
-                                                    <!-- <td>{{ $v->id }}</td> -->
+                                                <tr data-trade-id="{{ $v->id }}">
+                                                    <td style="text-align:center;">
+                                                        <input type="checkbox" class="js-trade-select" value="{{ $v->id }}">
+                                                    </td>
                                                     <td>{{ $v->sntcLotNo }}</td>
                                                     <td>Trade_{{ $v->id }}</td>
                                                     <td>{{ ($v->tradeType == 1)? 'Buy' : 'Sell' }}</td>
@@ -159,7 +190,7 @@
                                                     </td>
                                                     <td>{{ ($v->quantity )?? '--'}}</td>
                                                     <td>{{ ($v->offerPrice )?? '--'}}</td>
-                                                    <td>{{ ($v->validDays )?? '--'}}</td>
+                                                    <td class="js-trade-valid-days">{{ ($v->validDays )?? '--'}}</td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->packing_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->uncooked_file) }}" style="width: 70px" /></div></td>
                                                     <td><div style="width: 100px;height: 100px"><img src="{{ asset('uploads/'.$v->cooked_file) }}" style="width: 70px" /></div></td>
@@ -196,6 +227,8 @@
                                         
                                         <tfoot>
                                             <tr>
+                                                <th></th>
+                                                <th style="text-align: center">SNTC Lot No</th>
                                                 <th style="text-align: center">Trade ID</th>
                                                 <th style="text-align: center">Trade Type</th>
                                                 <th style="text-align: center">Quality Type</th>
@@ -229,6 +262,96 @@
 @endsection
 @section('scripts')
 <script>
+    function syncTradeBulkValidDaysUi() {
+        var count = $('.js-trade-select:checked').length;
+        $('#js-bulk-valid-days-count').text(count);
+        $('#js-bulk-valid-days-selected').text(count);
+        $('#js-bulk-valid-days-btn').prop('disabled', count < 1);
+        var total = $('.js-trade-select').length;
+        var allChecked = total > 0 && count === total;
+        $('#js-trade-select-all').prop('checked', allChecked);
+    }
+
+    $(document).on('change', '.js-trade-select', function () {
+        syncTradeBulkValidDaysUi();
+    });
+
+    $(document).on('change', '#js-trade-select-all', function () {
+        var checked = $(this).is(':checked');
+        $('.js-trade-select').prop('checked', checked);
+        syncTradeBulkValidDaysUi();
+    });
+
+    $(document).on('click', '#js-bulk-valid-days-btn', function () {
+        if ($('.js-trade-select:checked').length < 1) {
+            return;
+        }
+        $('#bulkValidDaysModal').modal('show');
+    });
+
+    $(document).on('click', '#js-bulk-valid-days-submit', function () {
+        var $btn = $(this);
+        var ids = $('.js-trade-select:checked').map(function () {
+            return parseInt($(this).val(), 10);
+        }).get().filter(function (id) {
+            return id > 0;
+        });
+        var validity = $('#bulkValidityInput').val();
+
+        if (!ids.length) {
+            alert('Please select at least one trade.');
+            return;
+        }
+        if (!validity) {
+            alert('Please choose a valid date.');
+            return;
+        }
+
+        $btn.prop('disabled', true);
+        $.ajax({
+            url: window.route + '/trade/bulk-update-valid-days',
+            method: 'POST',
+            data: {
+                _token: $('meta[name="csrf-token"]').attr('content'),
+                trade_ids: ids,
+                validity: validity
+            },
+            success: function (res) {
+                var validDays = (res && res.validDays) ? res.validDays : validity;
+                ids.forEach(function (id) {
+                    $('tr[data-trade-id="' + id + '"]').find('.js-trade-valid-days').text(validDays);
+                });
+                $('.js-trade-select, #js-trade-select-all').prop('checked', false);
+                syncTradeBulkValidDaysUi();
+                $('#bulkValidDaysModal').modal('hide');
+                if (typeof toastr !== 'undefined') {
+                    toastr.success((res && res.message) ? res.message : 'Valid date updated.', 'Success');
+                } else {
+                    alert((res && res.message) ? res.message : 'Valid date updated.');
+                }
+            },
+            error: function (xhr) {
+                var msg = (xhr.responseJSON && xhr.responseJSON.message)
+                    ? xhr.responseJSON.message
+                    : 'Could not update valid date.';
+                if (xhr.responseJSON && xhr.responseJSON.errors) {
+                    var first = Object.values(xhr.responseJSON.errors)[0];
+                    if (first && first[0]) {
+                        msg = first[0];
+                    }
+                }
+                if (typeof toastr !== 'undefined') {
+                    toastr.error(msg, 'Error');
+                } else {
+                    alert(msg);
+                }
+            },
+            complete: function () {
+                $btn.prop('disabled', false);
+            }
+        });
+    });
+
     $(document).on('click','.js-trade-note',function(){
         var type = $(this).data('type');
         var label = type.charAt(0).toUpperCase() + type.slice(1);

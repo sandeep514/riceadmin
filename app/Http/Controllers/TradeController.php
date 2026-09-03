@@ -97,7 +97,48 @@ class TradeController extends Controller
         Session::flash('success','Success|Records deleted for '.$updated.' records of '.$type.' older than 30 days.');
         return back();
     }
-    
+
+    /**
+     * Bulk-update validDays (validity) for selected live-sourcing trades.
+     */
+    public function bulkUpdateValidDays(Request $request)
+    {
+        $request->validate([
+            'trade_ids' => ['required', 'array', 'min:1'],
+            'trade_ids.*' => ['integer', 'exists:trade_query_milestone3,id'],
+            'validity' => ['required', 'date'],
+        ]);
+
+        $tradeIds = collect($request->input('trade_ids', []))
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
+
+        if ($tradeIds === []) {
+            return response()->json(['status' => false, 'message' => 'Please select at least one trade.'], 422);
+        }
+
+        try {
+            $validDays = Carbon::parse($request->input('validity'))
+                ->timezone(config('app.timezone', 'Asia/Kolkata'))
+                ->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return response()->json(['status' => false, 'message' => 'Invalid valid date.'], 422);
+        }
+
+        $updated = TradeQueriesINR::query()
+            ->whereIn('id', $tradeIds)
+            ->update(['validDays' => $validDays]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Valid date updated for ' . $updated . ' trade(s).',
+            'validDays' => $validDays,
+            'updated' => $updated,
+        ]);
+    }
 
     public function create(){
         $qualityMaster = RiceName::pluck('type_status' , 'type');
