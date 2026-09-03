@@ -7708,9 +7708,23 @@ if (!file_exists('uploads')) {
 
     public function getTradeDetail($tradeId)
     {
-        $trade = TradeQueriesINR::where('id', $tradeId)->with(['RiceFormMilestone3', 'RiceQualityMaster', 'riceGrade' => function ($query) {
-            return $query->with('getWandType')->get();
-        }, 'RicePacking'])->first();
+        $trade = TradeQueriesINR::where('id', $tradeId)->with([
+            'RiceFormMilestone3',
+            'RiceQualityMaster',
+            'RiceNameData',
+            'riceGrade' => function ($query) {
+                $query->with('getWandType');
+            },
+            'RicePackingBuyer',
+            'RicePackingSeller',
+            'RicePackingPublic',
+        ])->first();
+
+        if (! $trade) {
+            return response()->json(['status' => false, 'message' => 'Trade not found', 'data' => null], 404);
+        }
+
+        $trade = $this->formatTradeCollectionValidDays(collect([$trade]))->first();
 
         return response()->json(['status' => true, 'data' => $trade]);
     }
