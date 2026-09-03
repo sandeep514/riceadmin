@@ -7349,20 +7349,21 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Format validDays for trade APIs (IST).
-     * Mobile default: 03/09/2026 (19:00) — matches app Valid Till parsing.
+     * Format validDays for trade APIs (IST wall-clock as stored).
+     * Mobile default: 03/09/2026 19:00 — matches app Valid Till parsing.
      * Web: pass d-m-Y, g:i A (e.g. 12-04-2026, 7:00 PM).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
      */
-    private function formatTradeCollectionValidDays($trades, string $dateFormat = 'd/m/Y (H:i)')
+    private function formatTradeCollectionValidDays($trades, string $dateFormat = 'd/m/Y H:i')
     {
         return $trades->map(function ($trade) use ($dateFormat) {
-            if (! empty($trade->validDays)) {
+            $raw = $trade->getAttributes()['validDays'] ?? $trade->validDays ?? null;
+            if (! empty($raw)) {
                 try {
-                    $formatted = Carbon::parse($trade->validDays)
-                        ->timezone('Asia/Kolkata')
+                    // Treat DB value as Asia/Kolkata wall-clock; do not shift timezone (avoids 00:00).
+                    $formatted = Carbon::parse((string) $raw, 'Asia/Kolkata')
                         ->format($dateFormat);
                     $trade->setAttribute('validDays', $formatted);
                 } catch (\Throwable $e) {
