@@ -58,9 +58,16 @@ class TradeController extends Controller
         ->orderBy('id', 'DESC')
         ->get();
 
-        $tradeStatus = [1=> 'open' , 11=> 'close', 12 => 'hold'];
-        $tradeCurrentStatus = TradeCurrentStatus::first();
-        $currentTrade = $tradeStatus[$tradeCurrentStatus->id];
+        $tradeStatusLabels = [
+            1 => 'open',
+            11 => 'closed',
+            12 => 'hold',
+        ];
+        $tradeCurrentStatus = TradeCurrentStatus::query()->first();
+        $currentMarketStatus = (int) ($tradeCurrentStatus->currentStatus ?? 1);
+        $currentMarketLabel = $tradeStatusLabels[$currentMarketStatus]
+            ?? (string) ($tradeCurrentStatus->message ?? 'open');
+        $currentTrade = $currentMarketLabel;
 
         $cutoff = Carbon::now()->subDays(30)->startOfDay();
 
@@ -74,7 +81,20 @@ class TradeController extends Controller
         $buyerPackings = TradeQueriesINR::packingOptionsForTradeType(2);
         $publicPackings = TradeQueriesINR::publicPackingOptions();
 
-        return View('trade.index' , compact('sellQueries' , 'currentTrade','closingCount','soldCount','expiredCount','activeBuyCount','activeSellCount','sellerPackings','buyerPackings','publicPackings'));
+        return View('trade.index' , compact(
+            'sellQueries',
+            'currentTrade',
+            'currentMarketStatus',
+            'currentMarketLabel',
+            'closingCount',
+            'soldCount',
+            'expiredCount',
+            'activeBuyCount',
+            'activeSellCount',
+            'sellerPackings',
+            'buyerPackings',
+            'publicPackings'
+        ));
     }
 
     public function purgeOldByStatus(Request $request)

@@ -32,6 +32,7 @@ class PaddyTrade extends Model
         'crop_year',
         'status',
         'is_new',
+        'valid_datetime_for_is_new',
         'sold_at_amount',
         'sold_at',
         'created_by',
@@ -39,6 +40,7 @@ class PaddyTrade extends Model
 
     protected $casts = [
         'sold_at' => 'datetime',
+        'valid_datetime_for_is_new' => 'datetime',
         'is_new' => 'integer',
     ];
 
@@ -157,7 +159,32 @@ class PaddyTrade extends Model
 
     public function getIsNewLabelAttribute(): string
     {
-        return ((int) $this->is_new === 1) ? 'Yes' : 'No';
+        return $this->resolveEffectiveIsNew() ? 'Yes' : 'No';
+    }
+
+    /**
+     * Effective "is new" for API/UI: false when flag is off or expiry datetime has passed.
+     */
+    public function resolveEffectiveIsNew(): bool
+    {
+        if ((int) $this->is_new !== 1) {
+            return false;
+        }
+
+        $expiry = $this->valid_datetime_for_is_new;
+        if ($expiry === null || $expiry === '') {
+            return true;
+        }
+
+        try {
+            $expiresAt = $expiry instanceof Carbon
+                ? $expiry
+                : Carbon::parse((string) $expiry, config('app.timezone', 'Asia/Kolkata'));
+
+            return $expiresAt->gt(Carbon::now(config('app.timezone', 'Asia/Kolkata')));
+        } catch (\Throwable $e) {
+            return true;
+        }
     }
 
     public function getImageUrlAttribute(): ?string

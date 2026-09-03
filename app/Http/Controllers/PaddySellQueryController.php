@@ -8,6 +8,7 @@ use App\PaddyTrade;
 use App\PaddyTradeCurrentStatus;
 use App\SellerPackingINR;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -251,6 +252,7 @@ class PaddySellQueryController extends Controller
             'lot_number' => 'nullable|string|max:100',
             'crop_year' => 'nullable|string|max:50',
             'is_new' => 'nullable|in:0,1',
+            'valid_datetime_for_is_new' => 'nullable|date',
         ];
 
         if ($adminCreate) {
@@ -313,8 +315,29 @@ class PaddySellQueryController extends Controller
             'crop_year' => $request->filled('crop_year') ? trim((string) $request->input('crop_year')) : null,
             'status' => 1,
             'is_new' => (int) $request->input('is_new', 0) === 1 ? 1 : 0,
+            'valid_datetime_for_is_new' => $this->normalizeValidDatetimeForIsNew($request),
             'created_by' => Auth::id(),
         ];
+    }
+
+    private function normalizeValidDatetimeForIsNew(Request $request): ?string
+    {
+        if ((int) $request->input('is_new', 0) !== 1) {
+            return null;
+        }
+
+        $raw = $request->input('valid_datetime_for_is_new');
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($raw)
+                ->timezone(config('app.timezone', 'Asia/Kolkata'))
+                ->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     public function listTrades()
@@ -399,7 +422,11 @@ class PaddySellQueryController extends Controller
         }
 
         $isNew = (int) $request->is_new === 1 ? 1 : 0;
-        $trade->update(['is_new' => $isNew]);
+        $payload = ['is_new' => $isNew];
+        if ($isNew === 0) {
+            $payload['valid_datetime_for_is_new'] = null;
+        }
+        $trade->update($payload);
 
         Session::flash('success', 'Success|Paddy trade Is New set to ' . ($isNew ? 'Yes' : 'No') . '.');
 

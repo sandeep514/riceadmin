@@ -20,19 +20,28 @@
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">Trade</h3>
+                            <div class="pull-right">
+                                <span class="label label-{{ (int)($currentMarketStatus ?? 1) === 1 ? 'success' : ((int)($currentMarketStatus ?? 1) === 12 ? 'warning' : 'danger') }}"
+                                      style="font-size: 13px; padding: 6px 10px;">
+                                    Market: {{ ucfirst($currentMarketLabel ?? 'open') }}
+                                </span>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-11" style="display: inline-flex;">
+                            <div class="col-md-11" style="display: inline-flex; gap: 8px; flex-wrap: wrap; align-items: center;">
                                 <div>
-                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 1 ]) }}" class="btn btn-info btn-sm">Open Market</a>
+                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 1 ]) }}"
+                                       class="btn btn-success btn-sm {{ (int)($currentMarketStatus ?? 1) === 1 ? 'active' : '' }}">Open Market</a>
                                 </div>
 
                                 <div>
-                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 11 ]) }}" class="btn btn-info btn-sm">Close Market</a>
+                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 11 ]) }}"
+                                       class="btn btn-danger btn-sm {{ (int)($currentMarketStatus ?? 1) === 11 ? 'active' : '' }}">Close Market</a>
                                 </div>
 
                                 <div>
-                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 12 ]) }}" class="btn btn-info btn-sm">Hold Market</a>
+                                    <a href="{{ route('master.update.trade.create' , ['tradeStatus'=> 12 ]) }}"
+                                       class="btn btn-warning btn-sm {{ (int)($currentMarketStatus ?? 1) === 12 ? 'active' : '' }}">Hold Market</a>
                                 </div>
                             </div>
 

@@ -144,6 +144,13 @@
                             </select>
                         </div>
 
+                        <div class="form-group col-md-4">
+                            <label>Valid Datetime for Is New <small class="text-muted">(optional)</small></label>
+                            <input type="datetime-local" name="valid_datetime_for_is_new" class="form-control"
+                                   value="{{ old('valid_datetime_for_is_new') }}">
+                            <p class="help-block">After this datetime, API returns is_new as No.</p>
+                        </div>
+
                         <div class="form-group col-md-8">
                             <label>Remarks <small class="text-muted">(optional)</small></label>
                             <textarea name="remarks" class="form-control" rows="2">{{ old('remarks') }}</textarea>

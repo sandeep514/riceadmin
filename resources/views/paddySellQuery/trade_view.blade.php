@@ -82,12 +82,25 @@
                                                 <option value="0" {{ (int) $trade->is_new === 0 ? 'selected' : '' }}>No</option>
                                                 <option value="1" {{ (int) $trade->is_new === 1 ? 'selected' : '' }}>Yes</option>
                                             </select>
-                                            @if((int) $trade->is_new === 1)
+                                            @if($trade->resolveEffectiveIsNew())
                                                 <span class="label label-success" style="margin-left: 8px;">Yes</span>
                                             @else
                                                 <span class="label label-default" style="margin-left: 8px;">No</span>
                                             @endif
                                         </form>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Is New expiry</th>
+                                    <td>
+                                        @if($trade->valid_datetime_for_is_new)
+                                            {{ \Carbon\Carbon::parse($trade->valid_datetime_for_is_new)->format('d-m-Y H:i') }}
+                                            @if((int) $trade->is_new === 1 && ! $trade->resolveEffectiveIsNew())
+                                                <span class="label label-warning" style="margin-left: 8px;">Expired</span>
+                                            @endif
+                                        @else
+                                            —
+                                        @endif
                                     </td>
                                 </tr>
                                 @if((int) $trade->status === 3)

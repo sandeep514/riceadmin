@@ -869,6 +869,7 @@ class PaddyApiController extends Controller
     private function formatPaddyTradeResponse(PaddyTrade $row, bool $isInterested = false, ?int $interestUserId = null): array
     {
         $packingLabel = $row->packing_label;
+        $effectiveIsNew = $row->resolveEffectiveIsNew();
 
         return [
             'id' => $row->id,
@@ -905,8 +906,11 @@ class PaddyApiController extends Controller
             'crop_year' => $row->crop_year,
             'status' => $row->status,
             'status_label' => $row->status_label,
-            'is_new' => ((int) $row->is_new === 1) ? 1 : 0,
-            'is_new_label' => ((int) $row->is_new === 1) ? 'yes' : 'no',
+            'is_new' => $effectiveIsNew ? 1 : 0,
+            'is_new_label' => $effectiveIsNew ? 'yes' : 'no',
+            'valid_datetime_for_is_new' => $row->valid_datetime_for_is_new
+                ? optional($row->valid_datetime_for_is_new)->format('Y-m-d H:i:s')
+                : null,
             'sold_at_amount' => $row->sold_at_amount,
             'sold_at' => $row->sold_at,
             'created_at' => $row->created_at,
