@@ -2717,7 +2717,8 @@ class PortalApiController extends Controller
             $planTitle = \App\WebPlanModel::where('id', $planId)->value('title');
         }
 
-        // Paddy trades shown on portal/app (Active, In-Process, Hold, Sold — not Deactivated)
+        // Paddy trades shown on portal/app (Active, In-Process, Hold, Sold — not Deactivated/Expired)
+        PaddyTrade::expirePastValidDayTrades();
         $paddyTradeCount = PaddyTrade::query()
             ->whereIn('status', PaddyTrade::$listableStatuses)
             ->count();

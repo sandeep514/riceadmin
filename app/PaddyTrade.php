@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class PaddyTrade extends Model
@@ -43,7 +44,7 @@ class PaddyTrade extends Model
 
     /**
      * Individual trade status (admin).
-     * 1 Active, 4 In-Process, 12 Hold, 3 Sold, 5 Deactivated
+     * 1 Active, 4 In-Process, 12 Hold, 3 Sold, 5 Deactivated, 2 Expired
      */
     public static $statusLabels = [
         1 => 'Active',
@@ -51,6 +52,7 @@ class PaddyTrade extends Model
         12 => 'Hold',
         3 => 'Sold',
         5 => 'Deactivated',
+        2 => 'Expired',
         0 => 'Closed', // legacy
     ];
 
@@ -60,11 +62,52 @@ class PaddyTrade extends Model
         12 => 'warning',
         3 => 'primary',
         5 => 'default',
+        2 => 'danger',
         0 => 'default',
     ];
 
-    /** Statuses shown on app/web portal list by default */
+    /** Statuses shown on app/web portal list by default (excludes Expired / Deactivated) */
     public static $listableStatuses = [1, 4, 12, 3];
+
+    /**
+     * Statuses that can still auto-expire when valid_days has passed.
+     */
+    public static $expirableStatuses = [1, 4, 12];
+
+    /**
+     * Mark paddy trades past valid_days as expired (status = 2).
+     * Same pattern as rice TradeQueriesINR expirePastValidDayTrades().
+     * Parses valid_days with Carbon so free-text / display formats still expire correctly.
+     */
+    public static function expirePastValidDayTrades(): Carbon
+    {
+        $now = Carbon::now(config('app.timezone', 'Asia/Kolkata'));
+
+        $candidates = static::query()
+            ->whereIn('status', self::$expirableStatuses)
+            ->whereNotNull('valid_days')
+            ->where('valid_days', '!=', '')
+            ->get(['id', 'valid_days']);
+
+        $expireIds = [];
+        foreach ($candidates as $row) {
+            try {
+                if (Carbon::parse((string) $row->valid_days)->lte($now)) {
+                    $expireIds[] = (int) $row->id;
+                }
+            } catch (\Throwable $e) {
+                // Unparseable valid_days — leave status unchanged
+            }
+        }
+
+        if ($expireIds !== []) {
+            static::query()
+                ->whereIn('id', $expireIds)
+                ->update(['status' => 2]);
+        }
+
+        return $now;
+    }
 
     public function getStatusBadgeClassAttribute(): string
     {

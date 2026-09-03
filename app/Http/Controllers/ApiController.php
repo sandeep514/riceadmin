@@ -3281,7 +3281,7 @@ class ApiController extends Controller
      */
     private function resolveWebRiceTypeStates(string $ricetype, $yearParam = null): array
     {
-        $cacheKey = 'web_rice_states:v2:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
+        $cacheKey = 'web_rice_states:v3:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
 
         return Cache::remember($cacheKey, 60, function () use ($ricetype, $yearParam) {
             return $this->computeWebRiceTypeStates($ricetype, $yearParam);
@@ -3289,155 +3289,147 @@ class ApiController extends Controller
     }
 
     /**
+     * Ordered unique states for web live-price state pickers (basmati / non-basmati).
+     * Single SQL: open states on latest usable day ∪ closing states for the crop year.
+     *
      * @return array<int, string>
      */
     private function computeWebRiceTypeStates(string $ricetype, $yearParam = null): array
     {
-        $latestCropYear = LivePrice::query()->max('cropYear');
-        if ($latestCropYear === null) {
-            return [];
+        $cropYear = trim((string) ($yearParam ?? ''));
+        if ($cropYear === '') {
+            $cropYear = LivePrice::query()->max('cropYear');
+            if ($cropYear === null || $cropYear === '') {
+                return [];
+            }
+            $cropYear = (string) $cropYear;
         }
 
-        $cropYear = ($yearParam !== null && $yearParam !== '') ? $yearParam : $latestCropYear;
-        $asOfDate = Carbon::now()->toDateString();
+        $asOfExclusive = Carbon::now(config('app.timezone', 'Asia/Kolkata'))
+            ->addDay()
+            ->startOfDay()
+            ->format('Y-m-d H:i:s');
 
-        // Latest day with usable (non-null, > 0) prices for this rice type + crop year.
-        $lastPriceAt = DB::table('live_prices as lp')
-            ->join('rice_forms as rf', function ($join) use ($ricetype) {
-                $join->on('rf.id', '=', 'lp.form')
-                    ->where('rf.type', '=', $ricetype)
-                    ->where('rf.status', '=', 1);
-            })
-            ->join('rice_names as rn', function ($join) use ($ricetype) {
-                $join->on('rn.id', '=', 'lp.name')
-                    ->where('rn.type', '=', $ricetype);
-            })
-            ->where('lp.name', '!=', '0')
-            ->where('lp.form', '!=', '0')
-            ->whereNotNull('lp.min_price')
-            ->whereNotNull('lp.max_price')
-            ->where('lp.min_price', '>', 0)
-            ->where('lp.max_price', '>', 0)
-            ->where('lp.cropYear', $cropYear)
-            ->whereDate('lp.created_at', '<=', $asOfDate)
-            ->orderByDesc('lp.created_at')
-            ->value('lp.created_at');
+        $excludeNewCrop = ((string) $cropYear === '2023' || (int) $cropYear === 2023);
+        $newCropSql = $excludeNewCrop ? ' AND LOWER(rf.form_name) NOT LIKE ? ' : '';
 
-        if (! $lastPriceAt) {
-            return [];
+        $sql = "
+            SELECT u.state
+            FROM (
+                SELECT
+                    lp.state AS state,
+                    MIN(COALESCE(lp.state_order, so.min_order)) AS state_order
+                FROM live_prices lp
+                INNER JOIN (
+                    SELECT MAX(lp2.id) AS id
+                    FROM live_prices lp2
+                    INNER JOIN rice_forms rf
+                        ON rf.id = lp2.form AND rf.type = ? AND rf.status = 1
+                    INNER JOIN rice_names rn
+                        ON rn.id = lp2.name AND rn.type = ?
+                    INNER JOIN (
+                        SELECT DATE(MAX(lp3.created_at)) AS last_day
+                        FROM live_prices lp3
+                        INNER JOIN rice_forms rf3
+                            ON rf3.id = lp3.form AND rf3.type = ? AND rf3.status = 1
+                        INNER JOIN rice_names rn3
+                            ON rn3.id = lp3.name AND rn3.type = ?
+                        WHERE lp3.name != '0'
+                          AND lp3.form != '0'
+                          AND lp3.min_price IS NOT NULL
+                          AND lp3.max_price IS NOT NULL
+                          AND lp3.min_price > 0
+                          AND lp3.max_price > 0
+                          AND lp3.cropYear = ?
+                          AND lp3.created_at < ?
+                    ) ld ON ld.last_day IS NOT NULL
+                        AND lp2.created_at >= ld.last_day
+                        AND lp2.created_at < DATE_ADD(ld.last_day, INTERVAL 1 DAY)
+                    WHERE lp2.name != '0'
+                      AND lp2.form != '0'
+                      AND lp2.cropYear = ?
+                      {$newCropSql}
+                    GROUP BY lp2.name, lp2.form, lp2.state, lp2.cropYear
+                ) latest ON latest.id = lp.id
+                LEFT JOIN (
+                    SELECT state, MIN(state_order) AS min_order
+                    FROM live_prices
+                    WHERE state_order IS NOT NULL
+                    GROUP BY state
+                ) so ON so.state = lp.state
+                WHERE lp.min_price IS NOT NULL
+                  AND lp.max_price IS NOT NULL
+                  AND lp.min_price > 0
+                  AND lp.max_price > 0
+                  AND lp.state IS NOT NULL
+                  AND lp.state != ''
+                  AND NOT EXISTS (
+                      SELECT 1
+                      FROM live_price_closing lpc
+                      INNER JOIN rice_forms rf
+                          ON rf.id = lpc.form AND rf.type = ? AND rf.status = 1
+                      INNER JOIN rice_names rn
+                          ON rn.id = lpc.name AND rn.type = ?
+                      WHERE lpc.name = lp.name
+                        AND lpc.form = lp.form
+                        AND lpc.cropYear = ?
+                        AND lpc.closing IS NOT NULL
+                        AND lpc.closing != ''
+                  )
+                GROUP BY lp.state
+
+                UNION ALL
+
+                SELECT
+                    lpc.state AS state,
+                    MIN(so.min_order) AS state_order
+                FROM live_price_closing lpc
+                INNER JOIN rice_forms rf
+                    ON rf.id = lpc.form AND rf.type = ? AND rf.status = 1
+                INNER JOIN rice_names rn
+                    ON rn.id = lpc.name AND rn.type = ?
+                LEFT JOIN (
+                    SELECT state, MIN(state_order) AS min_order
+                    FROM live_prices
+                    WHERE state_order IS NOT NULL
+                    GROUP BY state
+                ) so ON so.state = lpc.state
+                WHERE lpc.cropYear = ?
+                  AND lpc.closing IS NOT NULL
+                  AND lpc.closing != ''
+                  AND lpc.state IS NOT NULL
+                  AND lpc.state != ''
+                GROUP BY lpc.state
+            ) u
+            WHERE u.state_order IS NOT NULL
+            GROUP BY u.state
+            ORDER BY MIN(u.state_order) ASC, u.state ASC
+        ";
+
+        $bindings = [
+            $ricetype,
+            $ricetype,
+            $ricetype,
+            $ricetype,
+            $cropYear,
+            $asOfExclusive,
+            $cropYear,
+        ];
+        if ($excludeNewCrop) {
+            $bindings[] = '%new crop%';
         }
+        $bindings = array_merge($bindings, [
+            $ricetype,
+            $ricetype,
+            $cropYear,
+            $ricetype,
+            $ricetype,
+            $cropYear,
+        ]);
 
-        $lastDate = Carbon::parse($lastPriceAt)->toDateString();
-        $priceDayStart = Carbon::parse($lastDate)->startOfDay();
-        $priceDayEnd = Carbon::parse($lastDate)->endOfDay();
+        $rows = DB::select($sql, $bindings);
 
-        $closingRows = DB::table('live_price_closing as lpc')
-            ->join('rice_forms as rf', function ($join) use ($ricetype) {
-                $join->on('rf.id', '=', 'lpc.form')
-                    ->where('rf.type', '=', $ricetype)
-                    ->where('rf.status', '=', 1);
-            })
-            ->join('rice_names as rn', function ($join) use ($ricetype) {
-                $join->on('rn.id', '=', 'lpc.name')
-                    ->where('rn.type', '=', $ricetype);
-            })
-            ->where('lpc.cropYear', $cropYear)
-            ->whereNotNull('lpc.closing')
-            ->where('lpc.closing', '!=', '')
-            ->select('lpc.name', 'lpc.form', 'lpc.state')
-            ->get();
-
-        $closedNameForms = [];
-        foreach ($closingRows as $row) {
-            $closedNameForms[strtolower($row->name . '_' . $row->form)] = true;
-        }
-
-        // Latest row per name+form+state on that day (null/0 latest wins — no older fallback).
-        $latestIds = DB::table('live_prices as lp')
-            ->join('rice_forms as rf', function ($join) use ($ricetype) {
-                $join->on('rf.id', '=', 'lp.form')
-                    ->where('rf.type', '=', $ricetype)
-                    ->where('rf.status', '=', 1);
-            })
-            ->join('rice_names as rn', function ($join) use ($ricetype) {
-                $join->on('rn.id', '=', 'lp.name')
-                    ->where('rn.type', '=', $ricetype);
-            })
-            ->where('lp.name', '!=', '0')
-            ->where('lp.form', '!=', '0')
-            ->where('lp.cropYear', $cropYear)
-            ->whereBetween('lp.created_at', [$priceDayStart, $priceDayEnd])
-            ->when(
-                (string) $cropYear === '2023' || (int) $cropYear === 2023,
-                fn ($q) => $q->whereRaw('LOWER(rf.form_name) NOT LIKE ?', ['%new crop%'])
-            )
-            ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear')
-            ->selectRaw('MAX(lp.id) as id');
-
-        $liveRows = DB::table('live_prices as lp')
-            ->whereIn('lp.id', $latestIds)
-            ->whereNotNull('lp.min_price')
-            ->whereNotNull('lp.max_price')
-            ->where('lp.min_price', '>', 0)
-            ->where('lp.max_price', '>', 0)
-            ->select('lp.state', 'lp.name', 'lp.form', 'lp.state_order')
-            ->get();
-
-        // Only states with at least one latest usable live price for this type/year.
-        $stateOrders = [];
-        foreach ($liveRows as $row) {
-            if ($closedNameForms !== [] && isset($closedNameForms[strtolower($row->name . '_' . $row->form)])) {
-                continue;
-            }
-            if ($row->state === null || $row->state === '') {
-                continue;
-            }
-            $order = $row->state_order !== null ? (int) $row->state_order : PHP_INT_MAX;
-            if (! isset($stateOrders[$row->state]) || $order < $stateOrders[$row->state]) {
-                $stateOrders[$row->state] = $order;
-            }
-        }
-
-        // Previous web state API also returned states present in closing
-        // (array_merge open states + closingCropStates). Without this, a year
-        // whose only usable rows are closed (e.g. 2024) returns [].
-        foreach ($closingRows as $row) {
-            if ($row->state === null || $row->state === '') {
-                continue;
-            }
-            if (! isset($stateOrders[$row->state])) {
-                $stateOrders[$row->state] = PHP_INT_MAX;
-            }
-        }
-
-        $needOrder = [];
-        foreach ($stateOrders as $state => $order) {
-            if ($order === PHP_INT_MAX) {
-                $needOrder[] = $state;
-            }
-        }
-        if ($needOrder !== []) {
-            $orderMap = DB::table('live_prices')
-                ->whereIn('state', $needOrder)
-                ->whereNotNull('state_order')
-                ->groupBy('state')
-                ->select('state', DB::raw('MIN(state_order) as state_order'))
-                ->pluck('state_order', 'state');
-            foreach ($needOrder as $state) {
-                if (isset($orderMap[$state])) {
-                    $stateOrders[$state] = (int) $orderMap[$state];
-                }
-            }
-        }
-
-        // Only keep states that have a known state_order.
-        $stateOrders = array_filter(
-            $stateOrders,
-            static fn ($order) => $order !== PHP_INT_MAX
-        );
-        asort($stateOrders, SORT_NUMERIC);
-
-        return array_values(array_keys($stateOrders));
+        return array_values(array_map(static fn ($row) => (string) $row->state, $rows));
     }
 
     

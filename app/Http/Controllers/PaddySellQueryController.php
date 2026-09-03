@@ -319,6 +319,8 @@ class PaddySellQueryController extends Controller
 
     public function listTrades()
     {
+        PaddyTrade::expirePastValidDayTrades();
+
         $trades = PaddyTrade::with(['paddyQuality', 'user', 'paddySellQuery', 'packingRel'])
             ->orderByDesc('id')
             ->get();
@@ -363,6 +365,8 @@ class PaddySellQueryController extends Controller
 
     public function viewTrade($id)
     {
+        PaddyTrade::expirePastValidDayTrades();
+
         $trade = PaddyTrade::with(['paddyQuality', 'user', 'paddySellQuery', 'creator', 'packingRel'])->findOrFail($id);
 
         return view('paddySellQuery.trade_view', compact('trade'));

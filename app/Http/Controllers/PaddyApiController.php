@@ -487,7 +487,8 @@ class PaddyApiController extends Controller
      *
      * Default statuses (UI shows badge per trade):
      * - 1 Active, 4 In-Process, 12 Hold, 3 Sold
-     * Deactivated (5) is excluded from default list; use status=5 or status=all.
+     * Deactivated (5) and Expired (2) are excluded from default list; use status=5|2 or status=all.
+     * Past valid_days trades are auto-marked Expired (2) before listing.
      *
      * Optional query params:
      * - category: basmati | non-basmati
@@ -501,6 +502,8 @@ class PaddyApiController extends Controller
      */
     public function listPaddyTrades(Request $request)
     {
+        PaddyTrade::expirePastValidDayTrades();
+
         $validator = Validator::make($request->all(), [
             'category' => 'nullable|in:basmati,non-basmati',
             'quality' => 'nullable|integer|exists:paddy_qualities,id',
@@ -634,6 +637,8 @@ class PaddyApiController extends Controller
      */
     public function getPaddyTradeDetail(Request $request, $id)
     {
+        PaddyTrade::expirePastValidDayTrades();
+
         $trade = PaddyTrade::query()
             ->with([
                 'paddyQuality:id,quality,type',
@@ -727,6 +732,8 @@ class PaddyApiController extends Controller
         $tradeId = (int) $request->paddy_trade_id;
         $userId = (int) $request->user_id;
 
+        PaddyTrade::expirePastValidDayTrades();
+
         $trade = PaddyTrade::query()
             ->with(['paddyQuality:id,quality,type', 'packingRel:id,packing'])
             ->find($tradeId);
@@ -740,11 +747,15 @@ class PaddyApiController extends Controller
 
         if ((int) $trade->status !== 1) {
             $statusLabel = $trade->status_label;
+            $message = match ((int) $trade->status) {
+                5 => 'This paddy trade is deactivated and not available for interest',
+                2 => 'This paddy trade has expired and is not available for interest',
+                default => 'This paddy trade is not available for interest (status: ' . $statusLabel . ')',
+            };
+
             return response()->json([
                 'status' => false,
-                'message' => (int) $trade->status === 5
-                    ? 'This paddy trade is deactivated and not available for interest'
-                    : 'This paddy trade is not available for interest (status: ' . $statusLabel . ')',
+                'message' => $message,
             ], 422);
         }
 
