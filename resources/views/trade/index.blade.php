@@ -262,28 +262,69 @@
 @endsection
 @section('scripts')
 <script>
+    function tradeSelectIsChecked($input) {
+        if (!$input || !$input.length) {
+            return false;
+        }
+        if ($input.data('iCheck')) {
+            return $input.prop('checked') === true;
+        }
+        return $input.is(':checked');
+    }
+
+    function setTradeSelectChecked($input, checked) {
+        if (!$input || !$input.length) {
+            return;
+        }
+        if ($.fn.iCheck && $input.data('iCheck')) {
+            $input.iCheck(checked ? 'check' : 'uncheck');
+        } else {
+            $input.prop('checked', !!checked);
+        }
+    }
+
     function syncTradeBulkValidDaysUi() {
-        var count = $('.js-trade-select:checked').length;
+        var count = 0;
+        $('.js-trade-select').each(function () {
+            if (tradeSelectIsChecked($(this))) {
+                count++;
+            }
+        });
         $('#js-bulk-valid-days-count').text(count);
         $('#js-bulk-valid-days-selected').text(count);
         $('#js-bulk-valid-days-btn').prop('disabled', count < 1);
+
         var total = $('.js-trade-select').length;
         var allChecked = total > 0 && count === total;
-        $('#js-trade-select-all').prop('checked', allChecked);
+        var $master = $('#js-trade-select-all');
+        if ($.fn.iCheck && $master.data('iCheck')) {
+            $master.prop('checked', allChecked);
+            $master.iCheck('update');
+        } else {
+            $master.prop('checked', allChecked);
+        }
     }
 
-    $(document).on('change', '.js-trade-select', function () {
+    $(document).on('change ifChanged ifChecked ifUnchecked', '.js-trade-select', function () {
         syncTradeBulkValidDaysUi();
     });
 
-    $(document).on('change', '#js-trade-select-all', function () {
-        var checked = $(this).is(':checked');
-        $('.js-trade-select').prop('checked', checked);
+    $(document).on('change ifChanged ifChecked ifUnchecked', '#js-trade-select-all', function () {
+        var checked = tradeSelectIsChecked($(this));
+        $('.js-trade-select').each(function () {
+            setTradeSelectChecked($(this), checked);
+        });
         syncTradeBulkValidDaysUi();
     });
 
     $(document).on('click', '#js-bulk-valid-days-btn', function () {
-        if ($('.js-trade-select:checked').length < 1) {
+        var count = 0;
+        $('.js-trade-select').each(function () {
+            if (tradeSelectIsChecked($(this))) {
+                count++;
+            }
+        });
+        if (count < 1) {
             return;
         }
         $('#bulkValidDaysModal').modal('show');
@@ -291,10 +332,14 @@
 
     $(document).on('click', '#js-bulk-valid-days-submit', function () {
         var $btn = $(this);
-        var ids = $('.js-trade-select:checked').map(function () {
-            return parseInt($(this).val(), 10);
-        }).get().filter(function (id) {
-            return id > 0;
+        var ids = [];
+        $('.js-trade-select').each(function () {
+            if (tradeSelectIsChecked($(this))) {
+                var id = parseInt($(this).val(), 10);
+                if (id > 0) {
+                    ids.push(id);
+                }
+            }
         });
         var validity = $('#bulkValidityInput').val();
 
@@ -321,7 +366,10 @@
                 ids.forEach(function (id) {
                     $('tr[data-trade-id="' + id + '"]').find('.js-trade-valid-days').text(validDays);
                 });
-                $('.js-trade-select, #js-trade-select-all').prop('checked', false);
+                setTradeSelectChecked($('#js-trade-select-all'), false);
+                $('.js-trade-select').each(function () {
+                    setTradeSelectChecked($(this), false);
+                });
                 syncTradeBulkValidDaysUi();
                 $('#bulkValidDaysModal').modal('hide');
                 if (typeof toastr !== 'undefined') {
