@@ -6013,11 +6013,12 @@ if (!file_exists('uploads')) {
 
         $allTrade = $this->orderMobileTradesListing($openTrades->concat($soldTrades));
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+        $allTrade = collect($this->tradeCollectionToMobileArray($allTrade));
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
 
-        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade->values(), 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
     /**
@@ -6355,11 +6356,12 @@ if (!file_exists('uploads')) {
 
         $allTrade = $this->orderMobileTradesListing($openTrades->concat($soldTrades));
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+        $allTrade = collect($this->tradeCollectionToMobileArray($allTrade));
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
 
-        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade, 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade->values(), 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
     }
 
     /**
@@ -7389,15 +7391,69 @@ if (!file_exists('uploads')) {
             // Single packing object for frontend (avoids rice_packing_buyer + rice_packing_seller confusion)
             $packingPayload = $this->resolveTradeRicePackingPayload($trade);
             $trade->setAttribute('rice_packing', $packingPayload);
-            // Legacy relation key used by mobile Trade Detail (packing + description).
+            $trade->unsetRelation('RicePacking');
             $trade->unsetRelation('RicePackingBuyer');
             $trade->unsetRelation('RicePackingSeller');
             $trade->unsetRelation('RicePackingPublic');
-            $trade->setRelation('RicePacking', $packingPayload ? (object) $packingPayload : null);
             $trade->makeHidden(['RicePackingBuyer', 'RicePackingSeller', 'rice_packing_buyer', 'rice_packing_seller', 'RicePackingPublic', 'rice_packing_public']);
 
             return $trade;
         });
+    }
+
+    /**
+     * Eloquent snake-cases RicePacking → rice_packing; mobile still reads PascalCase RicePacking.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    private function withMobileTradePackingKeys(array $data, ?array $packingPayload = null): array
+    {
+        $packing = $packingPayload
+            ?? (isset($data['rice_packing']) && is_array($data['rice_packing']) ? $data['rice_packing'] : null);
+
+        if ($packing === null && isset($data['RicePacking']) && is_array($data['RicePacking'])) {
+            $packing = $data['RicePacking'];
+        }
+
+        if ($packing === null) {
+            $packing = [
+                'id' => null,
+                'packing' => '',
+                'description' => '',
+                'label' => '',
+                'packing_stream_type' => isset($data['packingStreamType']) ? (int) $data['packingStreamType'] : 1,
+            ];
+        }
+
+        $packing['packing'] = (string) ($packing['packing'] ?? '');
+        $packing['description'] = (string) ($packing['description'] ?? '');
+        $packing['label'] = (string) ($packing['label'] ?? trim($packing['packing'].' '.$packing['description']));
+
+        $data['rice_packing'] = $packing;
+        // Mobile Trade Detail: `${RicePacking.packing} ${RicePacking.description}`
+        $data['RicePacking'] = $packing;
+        $data['rice_packing_buyer'] = $packing;
+        $data['rice_packing_seller'] = $packing;
+        $data['RicePackingBuyer'] = $packing;
+        $data['RicePackingSeller'] = $packing;
+
+        return $data;
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
+     * @return array<int, array<string, mixed>>
+     */
+    private function tradeCollectionToMobileArray($trades): array
+    {
+        return $trades->map(function ($trade) {
+            $data = $trade instanceof \Illuminate\Database\Eloquent\Model
+                ? $trade->toArray()
+                : (array) $trade;
+
+            return $this->withMobileTradePackingKeys($data);
+        })->values()->all();
     }
 
     /**
@@ -7742,8 +7798,9 @@ if (!file_exists('uploads')) {
         }
 
         $trade = $this->formatTradeCollectionValidDays(collect([$trade]))->first();
+        $data = $this->withMobileTradePackingKeys($trade->toArray());
 
-        return response()->json(['status' => true, 'data' => $trade]);
+        return response()->json(['status' => true, 'data' => $data]);
     }
 
     public function getBuyerPackingINR()
@@ -8144,6 +8201,7 @@ if (!file_exists('uploads')) {
     {
         $trade = TradeQueriesINR::where('queryId' , $request->userId)->get();
         $trade = $this->formatTradeCollectionValidDays($trade);
+        $trade = $this->tradeCollectionToMobileArray($trade);
         return response()->json(['status' => true , 'message' => 'Trade get successfully' , 'data' => $trade]);
     }
 
