@@ -3281,7 +3281,7 @@ class ApiController extends Controller
      */
     private function resolveWebRiceTypeStates(string $ricetype, $yearParam = null): array
     {
-        $cacheKey = 'web_rice_states:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
+        $cacheKey = 'web_rice_states:v2:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
 
         return Cache::remember($cacheKey, 60, function () use ($ricetype, $yearParam) {
             return $this->computeWebRiceTypeStates($ricetype, $yearParam);
@@ -3395,6 +3395,18 @@ class ApiController extends Controller
             $order = $row->state_order !== null ? (int) $row->state_order : PHP_INT_MAX;
             if (! isset($stateOrders[$row->state]) || $order < $stateOrders[$row->state]) {
                 $stateOrders[$row->state] = $order;
+            }
+        }
+
+        // Previous web state API also returned states present in closing
+        // (array_merge open states + closingCropStates). Without this, a year
+        // whose only usable rows are closed (e.g. 2024) returns [].
+        foreach ($closingRows as $row) {
+            if ($row->state === null || $row->state === '') {
+                continue;
+            }
+            if (! isset($stateOrders[$row->state])) {
+                $stateOrders[$row->state] = PHP_INT_MAX;
             }
         }
 
