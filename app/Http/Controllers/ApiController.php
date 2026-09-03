@@ -47,7 +47,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -1316,11 +1315,6 @@ class ApiController extends Controller
     public function getPrices($state, $ricetype)
     {
         $cropYear = request()->get('year');
-        $pricesCacheKey = $this->livePricesPayloadCacheKey('getPrices', $state, $ricetype, $cropYear);
-        $cachedPrices = Cache::get($pricesCacheKey);
-        if (is_array($cachedPrices)) {
-            return response()->json($cachedPrices);
-        }
         // $today = Carbon::now();  
         // $day = $today->day;
         // $month = $today->month;
@@ -1498,7 +1492,6 @@ class ApiController extends Controller
                 'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
                 'oldDate' => $previousDate ? Carbon::parse($previousDate)->format('Y-m-d') : '',
             ];
-            Cache::put($pricesCacheKey, $payload, 30);
 
             return response()->json($payload);
         }
@@ -1510,7 +1503,6 @@ class ApiController extends Controller
             'latest' => '',
             'oldDate' => ''
         ];
-        Cache::put($pricesCacheKey, $emptyPayload, 30);
 
         return response()->json($emptyPayload);
     }
@@ -2415,53 +2407,24 @@ class ApiController extends Controller
 
     private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
     {
-        $cacheKey = 'live_prices:invalid_latest:v'.$this->livePricesCacheVersion().':'.md5(json_encode([(string) $state, (string) ($cropYear ?? '')]));
-
-        return $this->rememberLivePriceLookup($cacheKey, 45, function () use ($state, $cropYear) {
-            $latestIds = DB::table('live_prices')
-                ->selectRaw('MAX(id) as id')
-                ->where('name', '!=', '0')
-                ->where('form', '!=', '0')
-                ->where('state', $state);
-            if ($cropYear !== null && $cropYear !== '') {
-                $this->applyLivePriceCropYearMatch($latestIds, $cropYear);
-            }
-            $latestIds->groupBy('name', 'form', 'cropYear');
-
-            return DB::table('live_prices as lp')
-                ->joinSub($latestIds, 't', function ($join) {
-                    $join->on('t.id', '=', 'lp.id');
-                })
-                ->get(['lp.name', 'lp.form', 'lp.state', 'lp.cropYear', 'lp.min_price', 'lp.max_price'])
-                ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
-                ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
-                ->all();
-        });
-    }
-
-    private function livePricesPayloadCacheKey(string $scope, $state, $ricetype, $cropYear): string
-    {
-        return 'live_prices:'.$scope.':v'.$this->livePricesCacheVersion().':'.md5(json_encode([
-            (string) $state,
-            (string) $ricetype,
-            (string) ($cropYear ?? ''),
-        ]));
-    }
-
-    private function livePricesCacheVersion(): string
-    {
-        return (string) Cache::get('live_prices:lookup_version', '1');
-    }
-
-    private function rememberLivePriceLookup(string $cacheKey, int $seconds, callable $callback)
-    {
-        try {
-            return Cache::lock($cacheKey.':lock', 15)->block(10, function () use ($cacheKey, $seconds, $callback) {
-                return Cache::remember($cacheKey, $seconds, $callback);
-            });
-        } catch (\Throwable $e) {
-            return Cache::remember($cacheKey, $seconds, $callback);
+        $latestIds = DB::table('live_prices')
+            ->selectRaw('MAX(id) as id')
+            ->where('name', '!=', '0')
+            ->where('form', '!=', '0')
+            ->where('state', $state);
+        if ($cropYear !== null && $cropYear !== '') {
+            $this->applyLivePriceCropYearMatch($latestIds, $cropYear);
         }
+        $latestIds->groupBy('name', 'form', 'cropYear');
+
+        return DB::table('live_prices as lp')
+            ->joinSub($latestIds, 't', function ($join) {
+                $join->on('t.id', '=', 'lp.id');
+            })
+            ->get(['lp.name', 'lp.form', 'lp.state', 'lp.cropYear', 'lp.min_price', 'lp.max_price'])
+            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
+            ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
+            ->all();
     }
 
     /**
@@ -3341,16 +3304,7 @@ class ApiController extends Controller
      */
     private function resolveWebRiceTypeStates(string $ricetype, $yearParam = null): array
     {
-        $normalizedYear = trim((string) ($yearParam ?? ''));
-        if ($normalizedYear === '') {
-            $normalizedYear = 'latest';
-        }
-
-        $cacheKey = 'web_rice_states:v'.$this->livePricesCacheVersion().':'.$ricetype.':'.$normalizedYear;
-
-        return Cache::remember($cacheKey, 60, function () use ($ricetype, $yearParam) {
-            return $this->computeWebRiceTypeStates($ricetype, $yearParam);
-        });
+        return $this->computeWebRiceTypeStates($ricetype, $yearParam);
     }
 
     /**
@@ -8255,15 +8209,11 @@ if (!file_exists('uploads')) {
         }
 
         $cropYear = $request->get('year');
-        $cacheKey = 'api:live_prices_today:v'.$this->livePricesCacheVersion().':'.md5(json_encode(['year' => $cropYear]));
+        if ($cropYear !== null && $cropYear !== '') {
+            request()->merge(['year' => $cropYear]);
+        }
 
-        $payload = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($cropYear) {
-            if ($cropYear !== null && $cropYear !== '') {
-                request()->merge(['year' => $cropYear]);
-            }
-
-            return $this->getPrices('PUNJAB-HARYANA', 'basmati')->getData(true);
-        });
+        $payload = $this->getPrices('PUNJAB-HARYANA', 'basmati')->getData(true);
 
         return response()->json($payload);
     }

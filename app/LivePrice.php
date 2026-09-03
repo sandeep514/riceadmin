@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
 use Carbon\Carbon;
 
 class LivePrice extends Model
@@ -14,12 +13,6 @@ class LivePrice extends Model
     public function freshTimestamp()
     {
         return Carbon::now(config('app.timezone', 'Asia/Kolkata'));
-    }
-
-    public static function bumpLookupCache(): void
-    {
-        $current = (int) Cache::get('live_prices:lookup_version', 1);
-        Cache::forever('live_prices:lookup_version', (string) ($current + 1));
     }
 
     public function name_rel()
