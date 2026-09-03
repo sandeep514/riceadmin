@@ -6056,7 +6056,7 @@ if (!file_exists('uploads')) {
 
         $interestTuples = UserInterestService::getActiveInterestTuplesForUser($interestUserId);
         $allTrade = $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
-        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade, 'd-m-Y, g:i A');
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
         $paginated = $this->paginateOrderedTrades($allTrade, $request);
@@ -6403,7 +6403,7 @@ if (!file_exists('uploads')) {
         $allTrade = $hasTradeTypeFilter
             ? $this->orderWebTradesForUserListing($allTrade, $interestUserId)
             : $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
-        $allTrade = $this->formatTradeCollectionValidDays($allTrade);
+        $allTrade = $this->formatTradeCollectionValidDays($allTrade, 'd-m-Y, g:i A');
         $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
 
         $paginated = $this->paginateOrderedTrades($allTrade, $request);
@@ -7349,19 +7349,21 @@ if (!file_exists('uploads')) {
     }
 
     /**
-     * Format validDays for web trade APIs (IST, e.g. 12-04-2026, 7:00 PM).
+     * Format validDays for trade APIs (IST).
+     * Mobile default: 03/09/2026 (19:00) — matches app Valid Till parsing.
+     * Web: pass d-m-Y, g:i A (e.g. 12-04-2026, 7:00 PM).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
      */
-    private function formatTradeCollectionValidDays($trades)
+    private function formatTradeCollectionValidDays($trades, string $dateFormat = 'd/m/Y (H:i)')
     {
-        return $trades->map(function ($trade) {
+        return $trades->map(function ($trade) use ($dateFormat) {
             if (! empty($trade->validDays)) {
                 try {
                     $formatted = Carbon::parse($trade->validDays)
                         ->timezone('Asia/Kolkata')
-                        ->format('d-m-Y, g:i A');
+                        ->format($dateFormat);
                     $trade->setAttribute('validDays', $formatted);
                 } catch (\Throwable $e) {
                     // leave original if unparsable
