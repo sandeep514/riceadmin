@@ -7387,10 +7387,13 @@ if (!file_exists('uploads')) {
             );
 
             // Single packing object for frontend (avoids rice_packing_buyer + rice_packing_seller confusion)
-            $trade->setAttribute('rice_packing', $this->resolveTradeRicePackingPayload($trade));
+            $packingPayload = $this->resolveTradeRicePackingPayload($trade);
+            $trade->setAttribute('rice_packing', $packingPayload);
+            // Legacy relation key used by mobile Trade Detail (packing + description).
             $trade->unsetRelation('RicePackingBuyer');
             $trade->unsetRelation('RicePackingSeller');
             $trade->unsetRelation('RicePackingPublic');
+            $trade->setRelation('RicePacking', $packingPayload ? (object) $packingPayload : null);
             $trade->makeHidden(['RicePackingBuyer', 'RicePackingSeller', 'rice_packing_buyer', 'rice_packing_seller', 'RicePackingPublic', 'rice_packing_public']);
 
             return $trade;
@@ -7409,11 +7412,23 @@ if (!file_exists('uploads')) {
     {
         $tradeType = (int) ($trade->tradeType ?? 0);
         $streamType = (int) ($trade->packingStreamType ?? 1);
+        $packingId = $trade->packing ?? null;
+
         $buyer = $trade->relationLoaded('RicePackingBuyer') ? $trade->RicePackingBuyer : null;
         $seller = $trade->relationLoaded('RicePackingSeller') ? $trade->RicePackingSeller : null;
-        $public = $trade->relationLoaded('RicePackingPublic')
-            ? $trade->RicePackingPublic
-            : (! empty($trade->packing) ? PublicPacking::query()->find($trade->packing) : null);
+        $public = $trade->relationLoaded('RicePackingPublic') ? $trade->RicePackingPublic : null;
+
+        if (! empty($packingId)) {
+            if (! $buyer) {
+                $buyer = Buyerpackinginr::query()->find($packingId);
+            }
+            if (! $seller) {
+                $seller = SellerPackingINR::query()->find($packingId);
+            }
+            if (! $public) {
+                $public = PublicPacking::query()->find($packingId);
+            }
+        }
 
         if ($streamType === 2) {
             $model = $public ?: ($tradeType === 2 ? ($buyer ?: $seller) : ($seller ?: $buyer));
@@ -7426,26 +7441,28 @@ if (!file_exists('uploads')) {
             }
         }
 
-        if (! $model && ! empty($trade->packing)) {
-            $model = PublicPacking::query()->find($trade->packing);
-        }
-
         if (! $model) {
             return null;
         }
 
-        $label = TradeQueriesINR::packingLabel($model);
-        $packing = $model->packing ?? null;
-        $description = $model->description ?? ($model->size ?? null);
-        if ($label === '') {
-            $label = null;
+        $label = trim((string) TradeQueriesINR::packingLabel($model));
+        $packing = trim((string) ($model->packing ?? ''));
+        $description = trim((string) ($model->description ?? ($model->size ?? '')));
+
+        // Apps often render `${packing} ${description}` — avoid literal "null null".
+        if ($packing === '' && $description !== '') {
+            $packing = $description;
+            $description = '';
+        }
+        if ($packing === '' && $label !== '') {
+            $packing = $label;
         }
 
         return [
             'id' => $model->id ?? null,
             'packing' => $packing,
             'description' => $description,
-            'label' => $label,
+            'label' => $label !== '' ? $label : ($packing !== '' ? $packing : null),
             'packing_stream_type' => $streamType,
         ];
     }
