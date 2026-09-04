@@ -24,6 +24,7 @@
         Route::get('get/web/plans', [PortalApiController::class, 'getWebPlans']);
         Route::get('live/price/events', [PortalApiController::class, 'getLivePriceEvents']);
         Route::get('paddy/trades', [\App\Http\Controllers\PaddyApiController::class, 'listPaddyTrades']);
+        Route::get('paddy/crop-years', [\App\Http\Controllers\PaddyApiController::class, 'listPaddyTradeCropYears']);
         Route::get('paddy/trade/{id}', [\App\Http\Controllers\PaddyApiController::class, 'getPaddyTradeDetail']);
         Route::post('interested/paddy/trade', [\App\Http\Controllers\PaddyApiController::class, 'showPaddyTradeInterest']);
 

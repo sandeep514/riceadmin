@@ -483,6 +483,26 @@ class PaddyApiController extends Controller
     }
 
     /**
+     * Distinct crop years present on paddy trades (for app / portal filter dropdowns).
+     */
+    public function listPaddyTradeCropYears()
+    {
+        $cropYears = PaddyTrade::query()
+            ->whereNotNull('crop_year')
+            ->where('crop_year', '!=', '')
+            ->distinct()
+            ->orderByDesc('crop_year')
+            ->pluck('crop_year')
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy trade crop years list',
+            'data' => $cropYears,
+        ], 200);
+    }
+
+    /**
      * List paddy trades for app & web portal (paginated).
      *
      * Default statuses (UI shows badge per trade):
@@ -494,6 +514,7 @@ class PaddyApiController extends Controller
      * - category: basmati | non-basmati
      * - quality: paddy_qualities id
      * - packing_id: seller packing id
+     * - crop_year: exact crop year string on the trade
      * - userId | user_id: logged-in user (for per-trade is_interested / already_interested)
      * - seller_user_id: filter trades by original seller user id
      * - status: single status code, or comma list (e.g. 1,4,12,3), or "all"
@@ -508,6 +529,7 @@ class PaddyApiController extends Controller
             'category' => 'nullable|in:basmati,non-basmati',
             'quality' => 'nullable|integer|exists:paddy_qualities,id',
             'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
+            'crop_year' => 'nullable|string|max:50',
             'userId' => 'nullable|integer|exists:users,id',
             'user_id' => 'nullable|integer|exists:users,id',
             'seller_user_id' => 'nullable|integer|exists:users,id',
@@ -575,6 +597,9 @@ class PaddyApiController extends Controller
         }
         if ($request->filled('packing_id')) {
             $query->where('packing_id', (int) $request->packing_id);
+        }
+        if ($request->filled('crop_year')) {
+            $query->where('crop_year', trim((string) $request->crop_year));
         }
         if ($request->filled('seller_user_id')) {
             $query->where('user_id', (int) $request->seller_user_id);
