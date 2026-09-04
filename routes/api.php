@@ -29,6 +29,10 @@ use Pusher\Pusher;
 
     Route::get('prices/{state}/{type}','ApiController@getPrices');
     Route::get('live/prices/today', ['as' => 'live.prices.today', 'uses' => 'ApiController@getLivePricesToday']);
+    // Public (no auth) — last added date's live prices for 3rd-party consumers.
+    // Nested: state → riceType → date → riceName → form → price fields
+    // Optional: ?state=&riceType=basmati|non-basmati&year=
+    Route::get('public/live-prices/latest', ['as' => 'public.live.prices.latest', 'uses' => 'PublicLivePriceController@latest']);
     Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb')->middleware('portal.api.token');
     Route::get('get/price/by/year/{state}/{type}','ApiController@getPricesByYear');
 
