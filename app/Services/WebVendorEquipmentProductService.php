@@ -267,8 +267,12 @@ class WebVendorEquipmentProductService
 
         $basePath = public_path($this->imageBasePath((int) $product->user_id));
         foreach ($product->variants as $variant) {
-            if ($variant->catalogue) {
-                $filePath = $basePath.'/'.$variant->catalogue;
+            foreach (['catalogue', 'image'] as $fileField) {
+                $filename = $variant->{$fileField} ?? null;
+                if (! $filename) {
+                    continue;
+                }
+                $filePath = $basePath.'/'.$filename;
                 if (is_file($filePath)) {
                     @unlink($filePath);
                 }
@@ -350,13 +354,17 @@ class WebVendorEquipmentProductService
     public function serializeVendorProduct(Model $product): array
     {
         $basePath = $this->imageBasePath((int) $product->user_id);
+        $variants = $product->variants
+            ->map(fn (Model $variant) => $this->serializeVariantRow($variant, $basePath))
+            ->values()
+            ->all();
+        $first = $variants[0] ?? null;
 
         return [
             'id' => (int) $product->id,
-            'variants' => $product->variants
-                ->map(fn (Model $variant) => $this->serializeVariantRow($variant, $basePath))
-                ->values()
-                ->all(),
+            'image' => $first['image'] ?? null,
+            'imageUrl' => $first['imageUrl'] ?? null,
+            'variants' => $variants,
         ];
     }
 
@@ -553,6 +561,19 @@ class WebVendorEquipmentProductService
                     $existingCatalogue = null;
                 }
 
+                $existingImage = $row['existingImage']
+                    ?? $row['existing_image']
+                    ?? $row['image']
+                    ?? null;
+                if (is_string($existingImage) && $existingImage !== '') {
+                    $existingImage = basename(parse_url($existingImage, PHP_URL_PATH) ?: $existingImage);
+                    if ($existingImage === '' || str_contains($existingImage, ' ')) {
+                        $existingImage = null;
+                    }
+                } else {
+                    $existingImage = null;
+                }
+
                 $equipmentName = $row['equipmentName']
                     ?? $row['equipment_name']
                     ?? $row['machineryName']
@@ -585,6 +606,7 @@ class WebVendorEquipmentProductService
                     'rate' => $row['rate'] ?? $row['price'] ?? null,
                     'description' => $row['description'] ?? null,
                     'existingCatalogue' => $existingCatalogue,
+                    'existingImage' => $existingImage,
                     '_index' => is_numeric($index) ? (int) $index : null,
                 ];
             }
@@ -629,18 +651,34 @@ class WebVendorEquipmentProductService
 
     private function buildFlatVariantRow(Request $request): array
     {
+        $hasCatalogueUpload = $request->file('catalogue') || $request->file('catalogue_pdf');
+        $hasImageUpload = $request->file('image')
+            || $request->file('productImage')
+            || $request->file('product_image')
+            || $request->file('upload');
+
         $existingCatalogue = $request->input('existingCatalogue')
             ?? $request->input('existing_catalogue')
-            ?? $request->input('catalogue')
             ?? null;
-        if (is_string($existingCatalogue) && $existingCatalogue !== ''
-            && ! ($request->file('catalogue') || $request->file('catalogue_pdf') || $request->file('image'))) {
+        if (is_string($existingCatalogue) && $existingCatalogue !== '' && ! $hasCatalogueUpload) {
             $existingCatalogue = basename(parse_url($existingCatalogue, PHP_URL_PATH) ?: $existingCatalogue);
             if ($existingCatalogue === '' || str_contains($existingCatalogue, ' ')) {
                 $existingCatalogue = null;
             }
         } else {
             $existingCatalogue = null;
+        }
+
+        $existingImage = $request->input('existingImage')
+            ?? $request->input('existing_image')
+            ?? null;
+        if (is_string($existingImage) && $existingImage !== '' && ! $hasImageUpload) {
+            $existingImage = basename(parse_url($existingImage, PHP_URL_PATH) ?: $existingImage);
+            if ($existingImage === '' || str_contains($existingImage, ' ')) {
+                $existingImage = null;
+            }
+        } else {
+            $existingImage = null;
         }
 
         $equipmentName = $request->input('machineryName')
@@ -674,6 +712,7 @@ class WebVendorEquipmentProductService
             'rate' => $request->input('rate') ?? $request->input('price'),
             'description' => $request->input('description'),
             'existingCatalogue' => $existingCatalogue,
+            'existingImage' => $existingImage,
             '_index' => 0,
         ];
     }
@@ -765,15 +804,27 @@ class WebVendorEquipmentProductService
                 $matched = $existingByIndex->get($index);
             }
 
-            $previousFile = $matched?->catalogue;
-            $catalogue = $this->resolveCatalogueFile($request, $product, $index, $row, $previousFile);
+            $previousCatalogue = $matched?->catalogue;
+            $previousImage = $matched?->image;
+
+            $catalogue = $this->resolveCatalogueFile($request, $product, $index, $row, $previousCatalogue);
+            $image = $this->resolveImageFile($request, $product, $index, $row, $previousImage);
 
             if ($catalogue) {
                 $keptFiles[] = $catalogue;
             }
+            if ($image) {
+                $keptFiles[] = $image;
+            }
 
-            if ($previousFile && $catalogue && $previousFile !== $catalogue) {
-                $oldPath = $basePath.'/'.$previousFile;
+            if ($previousCatalogue && $catalogue && $previousCatalogue !== $catalogue) {
+                $oldPath = $basePath.'/'.$previousCatalogue;
+                if (is_file($oldPath)) {
+                    @unlink($oldPath);
+                }
+            }
+            if ($previousImage && $image && $previousImage !== $image) {
+                $oldPath = $basePath.'/'.$previousImage;
                 if (is_file($oldPath)) {
                     @unlink($oldPath);
                 }
@@ -798,6 +849,7 @@ class WebVendorEquipmentProductService
                 'equipment_name' => $equipmentName,
                 'rate' => $row['rate'] ?? null,
                 'description' => $row['description'] ?? null,
+                'image' => $image,
                 'catalogue' => $catalogue,
                 'sort_order' => $sortOrder,
             ]);
@@ -810,12 +862,15 @@ class WebVendorEquipmentProductService
                 ->delete();
 
             foreach ($existingRows as $old) {
-                if (! $old->catalogue || in_array($old->catalogue, $keptFiles, true)) {
-                    continue;
-                }
-                $filePath = $basePath.'/'.$old->catalogue;
-                if (is_file($filePath)) {
-                    @unlink($filePath);
+                foreach (['catalogue', 'image'] as $fileField) {
+                    $filename = $old->{$fileField} ?? null;
+                    if (! $filename || in_array($filename, $keptFiles, true)) {
+                        continue;
+                    }
+                    $filePath = $basePath.'/'.$filename;
+                    if (is_file($filePath)) {
+                        @unlink($filePath);
+                    }
                 }
             }
         }
@@ -829,17 +884,13 @@ class WebVendorEquipmentProductService
         ?string $previousFile = null
     ): ?string {
         $file = $request->file("variants.{$index}.catalogue")
-            ?? $request->file("variants.{$index}.image")
+            ?? $request->file("variants.{$index}.catalogue_pdf")
             ?? $request->file("products.{$index}.catalogue");
 
-        // Flat single-product form uploads catalogue/image at the root (not under variants[0]).
+        // Flat form: catalogue / catalogue_pdf only (product photo is separate → image).
         if ((! $file || ! $file->isValid()) && ((int) $index === 0 || $index === '0' || $index === null)) {
             $file = $request->file('catalogue')
-                ?? $request->file('catalogue_pdf')
-                ?? $request->file('image')
-                ?? $request->file('upload')
-                ?? $request->file('productImage')
-                ?? $request->file('product_image');
+                ?? $request->file('catalogue_pdf');
         }
 
         if ($file instanceof UploadedFile && $file->isValid()) {
@@ -847,6 +898,46 @@ class WebVendorEquipmentProductService
         }
 
         $existing = $row['existingCatalogue'] ?? null;
+        if (is_string($existing) && $existing !== '') {
+            $filename = basename(parse_url($existing, PHP_URL_PATH) ?: $existing);
+            if ($filename !== '' && ! str_contains($filename, '/')) {
+                return $filename;
+            }
+        }
+
+        if (is_string($previousFile) && $previousFile !== '') {
+            return $previousFile;
+        }
+
+        return null;
+    }
+
+    private function resolveImageFile(
+        Request $request,
+        Model $product,
+        $index,
+        array $row,
+        ?string $previousFile = null
+    ): ?string {
+        $file = $request->file("variants.{$index}.image")
+            ?? $request->file("variants.{$index}.productImage")
+            ?? $request->file("variants.{$index}.product_image")
+            ?? $request->file("products.{$index}.image");
+
+        if ((! $file || ! $file->isValid()) && ((int) $index === 0 || $index === '0' || $index === null)) {
+            $file = $request->file('image')
+                ?? $request->file('productImage')
+                ?? $request->file('product_image')
+                ?? $request->file('upload');
+        }
+
+        if ($file instanceof UploadedFile && $file->isValid()) {
+            return $this->storeCatalogueFile($product, $file);
+        }
+
+        $existing = $row['existingImage']
+            ?? $row['existing_image']
+            ?? null;
         if (is_string($existing) && $existing !== '') {
             $filename = basename(parse_url($existing, PHP_URL_PATH) ?: $existing);
             if ($filename !== '' && ! str_contains($filename, '/')) {
@@ -878,29 +969,50 @@ class WebVendorEquipmentProductService
     private function serializeProduct(Model $product): array
     {
         $basePath = $this->imageBasePath((int) $product->user_id);
+        $variants = $product->variants
+            ->map(fn (Model $variant) => $this->serializeVariantRow($variant, $basePath))
+            ->values()
+            ->all();
+
+        $first = $variants[0] ?? null;
 
         return [
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
             'status' => (int) $product->status,
-            'variants' => $product->variants
-                ->map(fn (Model $variant) => $this->serializeVariantRow($variant, $basePath))
-                ->values()
-                ->all(),
+            // Convenience for list UIs that expect a top-level product image.
+            'image' => $first['image'] ?? null,
+            'imageUrl' => $first['imageUrl'] ?? null,
+            'variants' => $variants,
         ];
     }
 
     private function serializeVariantRow(Model $variant, string $basePath): array
     {
+        $image = $variant->image ?: null;
+        // Legacy rows stored product photo in catalogue — use it for list display when image-like.
+        if (! $image && $variant->catalogue && $this->isDisplayableImageFilename((string) $variant->catalogue)) {
+            $image = $variant->catalogue;
+        }
+
         return [
             'id' => (int) $variant->id,
             'equipmentId' => $variant->equipment_id !== null ? (int) $variant->equipment_id : null,
             'equipmentName' => $variant->equipment_name,
             'rate' => $variant->rate !== null ? (string) $variant->rate : null,
             'description' => $variant->description,
+            'image' => $variant->image,
+            'imageUrl' => $image ? asset($basePath.'/'.$image) : null,
             'catalogue' => $variant->catalogue,
             'catalogueUrl' => $variant->catalogue ? asset($basePath.'/'.$variant->catalogue) : null,
             'sortOrder' => (int) $variant->sort_order,
         ];
+    }
+
+    private function isDisplayableImageFilename(string $filename): bool
+    {
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        return in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'], true);
     }
 }

@@ -45,9 +45,14 @@
                         <tbody>
                             @foreach($products as $product)
                                 @php
-                                    $firstCatalogue = optional($product->variants->first())->catalogue;
-                                    $catalogueUrl = $firstCatalogue
-                                        ? asset('uploads/machinery-equipment-products/'.$product->user_id.'/'.$firstCatalogue)
+                                    $firstVariant = $product->variants->first();
+                                    $thumb = optional($firstVariant)->image
+                                        ?: ((optional($firstVariant)->catalogue
+                                            && in_array(strtolower(pathinfo((string) $firstVariant->catalogue, PATHINFO_EXTENSION)), ['jpg','jpeg','png','gif','webp','bmp'], true))
+                                            ? $firstVariant->catalogue
+                                            : null);
+                                    $catalogueUrl = $thumb
+                                        ? asset('uploads/machinery-equipment-products/'.$product->user_id.'/'.$thumb)
                                         : null;
                                 @endphp
                                 <tr>

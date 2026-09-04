@@ -14,6 +14,7 @@ class WebLabEquipmentProductVariant extends Model
         'equipment_name',
         'rate',
         'description',
+        'image',
         'catalogue',
         'sort_order',
     ];

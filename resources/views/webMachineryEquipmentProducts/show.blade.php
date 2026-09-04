@@ -102,6 +102,7 @@
                                 <th>Machinery equipment</th>
                                 <th>Rate</th>
                                 <th>Description</th>
+                                <th>Image</th>
                                 <th>Catalogue</th>
                             </tr>
                             </thead>
@@ -118,10 +119,19 @@
                                         <td>{{ $variant->rate ?? '—' }}</td>
                                         <td>{{ $variant->description ?? '—' }}</td>
                                         <td>
+                                            @if(!empty($variant->image))
+                                                @php $imgUrl = asset($imageBasePath.'/'.$variant->image); @endphp
+                                                <img src="{{ $imgUrl }}" alt="product" class="vendor-catalogue-img">
+                                            @else
+                                                —
+                                            @endif
+                                        </td>
+                                        <td>
                                             @if(!empty($variant->catalogue))
                                                 @php $fileUrl = asset($imageBasePath.'/'.$variant->catalogue); @endphp
                                                 <a href="{{ $fileUrl }}" target="_blank" rel="noopener">
                                                     <img src="{{ $fileUrl }}" alt="catalogue" class="vendor-catalogue-img" onerror="this.style.display='none';">
+                                                    View file
                                                 </a>
                                                 <div style="font-size:10px;color:#999;word-break:break-all;">{{ $variant->catalogue }}</div>
                                             @else
@@ -131,7 +141,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="5" class="text-center text-muted">No variants</td>
+                                        <td colspan="6" class="text-center text-muted">No variants</td>
                                     </tr>
                                 @endforelse
                             </tbody>
