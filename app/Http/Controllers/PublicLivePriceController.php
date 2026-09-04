@@ -145,22 +145,13 @@ class PublicLivePriceController extends Controller
             }
 
             $nested[$state][$riceType][$latestDate][$riceName][$formName] = [
-                'id' => (int) $row->id,
-                'rice_id' => (int) $row->name,
-                'form_id' => (int) $row->form,
                 'rice_name' => $riceName,
                 'form' => $formName,
-                'rice_type' => $riceType,
-                'state' => $state,
                 'crop_year' => $row->cropYear,
-                'crop_grade' => $row->cropGrade,
                 'min_price' => $row->min_price,
                 'max_price' => $row->max_price,
                 'up_down' => $row->up_down,
                 'opening' => $row->opening,
-                'closing' => $row->closing,
-                'created_at' => optional($row->created_at)->timezone(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s'),
-                'updated_at' => optional($row->updated_at)->timezone(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s'),
             ];
         }
 
