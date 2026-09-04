@@ -118,8 +118,18 @@
 
                         <div class="form-group col-md-4">
                             <label>Valid Days <span class="text-danger">*</span></label>
-                            <input type="text" name="valid_days" class="form-control"
-                                   value="{{ old('valid_days', $trade->valid_days) }}" required>
+                            @php
+                                $validDaysValue = old('valid_days');
+                                if ($validDaysValue === null && ! empty($trade->valid_days)) {
+                                    try {
+                                        $validDaysValue = \Carbon\Carbon::parse($trade->valid_days)->format('Y-m-d\TH:i');
+                                    } catch (\Throwable $e) {
+                                        $validDaysValue = '';
+                                    }
+                                }
+                            @endphp
+                            <input type="datetime-local" name="valid_days" id="valid_days" class="form-control"
+                                   value="{{ $validDaysValue }}" required>
                         </div>
 
                         <div class="form-group col-md-4">

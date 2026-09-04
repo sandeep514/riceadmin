@@ -102,9 +102,8 @@
 
                         <div class="form-group col-md-4">
                             <label>Valid Days <span class="text-danger">*</span></label>
-                            <input type="text" name="valid_days" class="form-control"
-                                   value="{{ old('valid_days') }}"
-                                   placeholder="e.g. 13-08-2026, 2:58 PM" required>
+                            <input type="datetime-local" name="valid_days" id="valid_days" class="form-control"
+                                   value="{{ old('valid_days') }}" required>
                         </div>
 
                         <div class="form-group col-md-4">

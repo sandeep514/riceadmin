@@ -245,7 +245,7 @@ class PaddySellQueryController extends Controller
             'location' => 'required|string|max:255',
             'quantity' => 'required|string|max:100',
             'rate' => 'required|string|max:100',
-            'valid_days' => 'required|string|max:255',
+            'valid_days' => 'required|date',
             'type' => 'nullable|string|max:50',
             'remarks' => 'nullable|string',
             'additional_information' => 'nullable|string',
@@ -306,7 +306,7 @@ class PaddySellQueryController extends Controller
             'location' => $request->location,
             'quantity' => $request->quantity,
             'rate' => $request->rate,
-            'valid_days' => $request->valid_days,
+            'valid_days' => $this->normalizeValidDays($request->input('valid_days')),
             'type' => $options['type'] ?? $request->input('type', 'admin'),
             'user_id' => $options['user_id'] ?? null,
             'remarks' => $request->input('remarks'),
@@ -318,6 +318,21 @@ class PaddySellQueryController extends Controller
             'valid_datetime_for_is_new' => $this->normalizeValidDatetimeForIsNew($request),
             'created_by' => Auth::id(),
         ];
+    }
+
+    private function normalizeValidDays($raw): ?string
+    {
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse($raw)
+                ->timezone(config('app.timezone', 'Asia/Kolkata'))
+                ->format('Y-m-d H:i:s');
+        } catch (\Throwable $e) {
+            return is_string($raw) ? trim($raw) : null;
+        }
     }
 
     private function normalizeValidDatetimeForIsNew(Request $request): ?string
