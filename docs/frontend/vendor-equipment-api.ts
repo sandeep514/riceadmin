@@ -3,8 +3,9 @@
  * Base: /api  |  Portal: /api/portal
  * Auth: Authorization: Bearer <token>  OR  X-API-TOKEN: <token>
  *
- * Each variant row = one equipment card in the UI:
- * equipment + rate + description + catalogue image.
+ * Preferred: variants[] rows (equipmentId + rate + description + catalogue).
+ * Also accepted (single product UI): flat fields user_id, equipmentId|machineryName|name,
+ * rate, description, catalogue|image — API wraps them into one variants[0] row.
  */
 
 export const API_BASE = '/api';
