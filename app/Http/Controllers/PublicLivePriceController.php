@@ -13,7 +13,7 @@ class PublicLivePriceController extends Controller
 {
     /**
      * Latest calendar day's live prices, nested as:
-     * state → riceType (basmati / non-basmati) → date → riceName → form → price fields
+     * state → riceType (basmati / non-basmati) → riceName → form → price fields
      *
      * Optional query params:
      * - state (exact match, e.g. PUNJAB-HARYANA)
@@ -138,14 +138,11 @@ class PublicLivePriceController extends Controller
             if (! isset($nested[$state][$riceType])) {
                 $nested[$state][$riceType] = [];
             }
-            if (! isset($nested[$state][$riceType][$latestDateTime])) {
-                $nested[$state][$riceType][$latestDateTime] = [];
-            }
-            if (! isset($nested[$state][$riceType][$latestDateTime][$riceName])) {
-                $nested[$state][$riceType][$latestDateTime][$riceName] = [];
+            if (! isset($nested[$state][$riceType][$riceName])) {
+                $nested[$state][$riceType][$riceName] = [];
             }
 
-            $nested[$state][$riceType][$latestDateTime][$riceName][$formName] = [
+            $nested[$state][$riceType][$riceName][$formName] = [
                 'rice_name' => $riceName,
                 'form' => $formName,
                 'crop_year' => $row->cropYear,
