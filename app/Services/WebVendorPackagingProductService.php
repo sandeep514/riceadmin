@@ -354,12 +354,7 @@ class WebVendorPackagingProductService
      */
     public function verifiedProductsForOwners(array $ownerIds)
     {
-        $products = $this->productsForOwners($ownerIds, verifiedOnly: true);
-        if ($products->isNotEmpty()) {
-            return $products;
-        }
-
-        return $this->productsForOwners($ownerIds, verifiedOnly: false);
+        return $this->productsForOwners($ownerIds, verifiedOnly: true);
     }
 
     /**

@@ -109,7 +109,7 @@ final class VendorProductCatalog
     }
 
     /**
-     * All product owner ids for a vendor kind (cartoon, cylinder, rice_bag, ...).
+     * Owner ids that have at least one admin-verified (status=1) product for a vendor kind.
      * If kind is unknown, checks every catalog table.
      *
      * @return array<int, true>
@@ -118,12 +118,21 @@ final class VendorProductCatalog
     {
         $models = self::productModels();
         $toQuery = ($kind !== null && isset($models[$kind]))
-            ? [$models[$kind]]
-            : array_values($models);
+            ? [$kind => $models[$kind]]
+            : $models;
 
         $found = [];
-        foreach ($toQuery as $model) {
-            foreach ($model::query()->distinct()->pluck('user_id') as $id) {
+        foreach ($toQuery as $kindKey => $model) {
+            $query = $model::query()->where('status', 1);
+
+            // Match public listing rules: verified product must have sellable rows.
+            if (in_array($kindKey, [self::KIND_CARTOON, self::KIND_CYLINDER, self::KIND_LAB_EQUIPMENT, self::KIND_MACHINERY_EQUIPMENT], true)) {
+                $query->whereHas('variants');
+            } elseif ($kindKey === self::KIND_RICE_BAG) {
+                $query->whereHas('packingSizes');
+            }
+
+            foreach ($query->distinct()->pluck('user_id') as $id) {
                 $id = (int) $id;
                 if ($id > 0) {
                     $found[$id] = true;
@@ -135,16 +144,14 @@ final class VendorProductCatalog
     }
 
     /**
-     * Owner ids that have at least one catalog product.
-     * Checks rice bag, cartoon, cylinder, lab equipment and machinery equipment tables.
-     * Matches products stored under users.id or web_business_details.id.
+     * Owner ids that have at least one admin-verified catalog product.
      *
      * @param  array<int>  $ownerIds
      * @return array<int, true>
      */
     public static function userIdsWithVerifiedProducts(array $ownerIds): array
     {
-        return self::ownerIdsWithProducts($ownerIds, verifiedOnly: false);
+        return self::ownerIdsWithProducts($ownerIds, verifiedOnly: true);
     }
 
     /**
@@ -160,10 +167,15 @@ final class VendorProductCatalog
 
         $found = [];
 
-        foreach (self::productModels() as $model) {
+        foreach (self::productModels() as $kindKey => $model) {
             $query = $model::query()->whereIn('user_id', $ownerIds);
             if ($verifiedOnly) {
                 $query->where('status', 1);
+                if (in_array($kindKey, [self::KIND_CARTOON, self::KIND_CYLINDER, self::KIND_LAB_EQUIPMENT, self::KIND_MACHINERY_EQUIPMENT], true)) {
+                    $query->whereHas('variants');
+                } elseif ($kindKey === self::KIND_RICE_BAG) {
+                    $query->whereHas('packingSizes');
+                }
             }
 
             foreach ($query->distinct()->pluck('user_id') as $id) {
