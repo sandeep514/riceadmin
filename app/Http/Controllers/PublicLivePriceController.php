@@ -66,9 +66,10 @@ class PublicLivePriceController extends Controller
             ]);
         }
 
-        $latestDate = Carbon::parse($lastRecord->created_at)
-            ->timezone(config('app.timezone', 'Asia/Kolkata'))
-            ->format('Y-m-d');
+        $latestAt = Carbon::parse($lastRecord->created_at)
+            ->timezone(config('app.timezone', 'Asia/Kolkata'));
+        $latestDate = $latestAt->format('Y-m-d');
+        $latestDateTime = $latestAt->format('Y-m-d H:i:s');
 
         $rows = LivePrice::query()
             ->with([
@@ -137,14 +138,14 @@ class PublicLivePriceController extends Controller
             if (! isset($nested[$state][$riceType])) {
                 $nested[$state][$riceType] = [];
             }
-            if (! isset($nested[$state][$riceType][$latestDate])) {
-                $nested[$state][$riceType][$latestDate] = [];
+            if (! isset($nested[$state][$riceType][$latestDateTime])) {
+                $nested[$state][$riceType][$latestDateTime] = [];
             }
-            if (! isset($nested[$state][$riceType][$latestDate][$riceName])) {
-                $nested[$state][$riceType][$latestDate][$riceName] = [];
+            if (! isset($nested[$state][$riceType][$latestDateTime][$riceName])) {
+                $nested[$state][$riceType][$latestDateTime][$riceName] = [];
             }
 
-            $nested[$state][$riceType][$latestDate][$riceName][$formName] = [
+            $nested[$state][$riceType][$latestDateTime][$riceName][$formName] = [
                 'rice_name' => $riceName,
                 'form' => $formName,
                 'crop_year' => $row->cropYear,
@@ -168,7 +169,7 @@ class PublicLivePriceController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Latest live rice prices.',
-            'date' => $latestDate,
+            'date' => $latestDateTime,
             'filters' => [
                 'state' => $stateFilter,
                 'riceType' => $riceTypeFilter,
