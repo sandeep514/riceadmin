@@ -96,6 +96,7 @@ class WebVendorEquipmentProductService
         }
 
         $validator = Validator::make($request->all(), $this->createRules());
+        $validator->after(fn ($v) => $this->assertVariantEquipmentIdentity($v));
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -148,6 +149,7 @@ class WebVendorEquipmentProductService
         }
 
         $validator = Validator::make($request->all(), $this->updateRules());
+        $validator->after(fn ($v) => $this->assertVariantEquipmentIdentity($v));
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -429,10 +431,37 @@ class WebVendorEquipmentProductService
     private function variantRules(): array
     {
         return [
-            'variants.*.equipmentId' => ['required', 'integer', 'exists:'.$this->equipmentTable.',id'],
+            // Flat vendor UI often sends machinery/lab name only (no master id).
+            'variants.*.equipmentId' => ['nullable', 'integer', 'exists:'.$this->equipmentTable.',id'],
+            'variants.*.equipmentName' => ['nullable', 'string', 'max:255'],
             'variants.*.rate' => ['required', 'numeric'],
             'variants.*.description' => ['nullable', 'string'],
         ];
+    }
+
+    /**
+     * Ensure each variant has either a master equipment id or a free-text name.
+     */
+    private function assertVariantEquipmentIdentity($validator): void
+    {
+        $variants = $validator->getData()['variants'] ?? null;
+        if (! is_array($variants)) {
+            return;
+        }
+
+        foreach ($variants as $index => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            $hasId = isset($row['equipmentId']) && $row['equipmentId'] !== '' && $row['equipmentId'] !== null;
+            $hasName = isset($row['equipmentName']) && is_string($row['equipmentName']) && trim($row['equipmentName']) !== '';
+            if (! $hasId && ! $hasName) {
+                $validator->errors()->add(
+                    "variants.{$index}.equipmentName",
+                    'Machinery / equipment name is required.'
+                );
+            }
+        }
     }
 
     private function normalizeIncomingPayload(Request $request): void
@@ -479,6 +508,11 @@ class WebVendorEquipmentProductService
             $request->merge(['user_id' => $request->input('userId')]);
         }
 
+        // Flat UI may send price instead of / in addition to rate.
+        if ($request->filled('price') && ! $request->filled('rate')) {
+            $request->merge(['rate' => $request->input('price')]);
+        }
+
         if ($request->has('id') && ($request->input('id') === '' || $request->input('id') === null)) {
             $request->request->remove('id');
         }
@@ -519,6 +553,19 @@ class WebVendorEquipmentProductService
                     $existingCatalogue = null;
                 }
 
+                $equipmentName = $row['equipmentName']
+                    ?? $row['equipment_name']
+                    ?? $row['machineryName']
+                    ?? $row['machinery_name']
+                    ?? $row['labEquipmentName']
+                    ?? $row['lab_equipment_name']
+                    ?? $row['name']
+                    ?? null;
+                $equipmentName = is_string($equipmentName) ? trim($equipmentName) : null;
+                if ($equipmentName === '') {
+                    $equipmentName = null;
+                }
+
                 $equipmentId = $row['equipmentId']
                     ?? $row['equipment_id']
                     ?? $row['labEquipmentId']
@@ -527,16 +574,15 @@ class WebVendorEquipmentProductService
                     ?? $row['machinery_equipment_id']
                     ?? null;
 
-                if (($equipmentId === null || $equipmentId === '') && ! empty($row['equipmentName'] ?? $row['equipment_name'] ?? $row['name'] ?? null)) {
-                    $equipmentId = $this->resolveEquipmentIdByName(
-                        (string) ($row['equipmentName'] ?? $row['equipment_name'] ?? $row['name'])
-                    );
+                if (($equipmentId === null || $equipmentId === '') && $equipmentName !== null) {
+                    $equipmentId = $this->resolveEquipmentIdByName($equipmentName);
                 }
 
                 $normalizedRows[] = [
                     'id' => $row['id'] ?? $row['variant_row_id'] ?? null,
                     'equipmentId' => $equipmentId,
-                    'rate' => $row['rate'] ?? null,
+                    'equipmentName' => $equipmentName,
+                    'rate' => $row['rate'] ?? $row['price'] ?? null,
                     'description' => $row['description'] ?? null,
                     'existingCatalogue' => $existingCatalogue,
                     '_index' => is_numeric($index) ? (int) $index : null,
@@ -560,6 +606,7 @@ class WebVendorEquipmentProductService
         }
 
         return $request->filled('rate')
+            || $request->filled('price')
             || $request->filled('description')
             || $request->filled('equipmentId')
             || $request->filled('equipment_id')
@@ -573,6 +620,7 @@ class WebVendorEquipmentProductService
             || $request->filled('equipment_name')
             || $request->filled('name')
             || $request->hasFile('catalogue')
+            || $request->hasFile('catalogue_pdf')
             || $request->hasFile('image')
             || $request->hasFile('upload')
             || $request->hasFile('productImage')
@@ -585,13 +633,26 @@ class WebVendorEquipmentProductService
             ?? $request->input('existing_catalogue')
             ?? $request->input('catalogue')
             ?? null;
-        if (is_string($existingCatalogue) && $existingCatalogue !== '' && ! ($request->file('catalogue') || $request->file('image'))) {
+        if (is_string($existingCatalogue) && $existingCatalogue !== ''
+            && ! ($request->file('catalogue') || $request->file('catalogue_pdf') || $request->file('image'))) {
             $existingCatalogue = basename(parse_url($existingCatalogue, PHP_URL_PATH) ?: $existingCatalogue);
             if ($existingCatalogue === '' || str_contains($existingCatalogue, ' ')) {
                 $existingCatalogue = null;
             }
         } else {
             $existingCatalogue = null;
+        }
+
+        $equipmentName = $request->input('machineryName')
+            ?? $request->input('machinery_name')
+            ?? $request->input('labEquipmentName')
+            ?? $request->input('lab_equipment_name')
+            ?? $request->input('equipmentName')
+            ?? $request->input('equipment_name')
+            ?? $request->input('name');
+        $equipmentName = is_string($equipmentName) ? trim($equipmentName) : null;
+        if ($equipmentName === '') {
+            $equipmentName = null;
         }
 
         $equipmentId = $request->input('equipmentId')
@@ -602,23 +663,15 @@ class WebVendorEquipmentProductService
             ?? $request->input('machinery_equipment_id')
             ?? null;
 
-        if ($equipmentId === null || $equipmentId === '') {
-            $name = $request->input('machineryName')
-                ?? $request->input('machinery_name')
-                ?? $request->input('labEquipmentName')
-                ?? $request->input('lab_equipment_name')
-                ?? $request->input('equipmentName')
-                ?? $request->input('equipment_name')
-                ?? $request->input('name');
-            if (is_string($name) && trim($name) !== '') {
-                $equipmentId = $this->resolveEquipmentIdByName($name);
-            }
+        if (($equipmentId === null || $equipmentId === '') && $equipmentName !== null) {
+            $equipmentId = $this->resolveEquipmentIdByName($equipmentName);
         }
 
         return [
             'id' => $request->input('variantId') ?? $request->input('variant_id') ?? null,
             'equipmentId' => $equipmentId,
-            'rate' => $request->input('rate'),
+            'equipmentName' => $equipmentName,
+            'rate' => $request->input('rate') ?? $request->input('price'),
             'description' => $request->input('description'),
             'existingCatalogue' => $existingCatalogue,
             '_index' => 0,
@@ -730,10 +783,19 @@ class WebVendorEquipmentProductService
                 ? (int) $row['equipmentId']
                 : null;
 
+            $equipmentName = null;
+            if ($equipmentId !== null) {
+                $equipmentName = $equipmentNames[$equipmentId] ?? null;
+            }
+            if ($equipmentName === null || $equipmentName === '') {
+                $rawName = $row['equipmentName'] ?? null;
+                $equipmentName = is_string($rawName) && trim($rawName) !== '' ? trim($rawName) : null;
+            }
+
             $created = $variantModel::create([
                 'product_id' => $product->id,
                 'equipment_id' => $equipmentId,
-                'equipment_name' => $equipmentId !== null ? ($equipmentNames[$equipmentId] ?? null) : null,
+                'equipment_name' => $equipmentName,
                 'rate' => $row['rate'] ?? null,
                 'description' => $row['description'] ?? null,
                 'catalogue' => $catalogue,
@@ -773,6 +835,7 @@ class WebVendorEquipmentProductService
         // Flat single-product form uploads catalogue/image at the root (not under variants[0]).
         if ((! $file || ! $file->isValid()) && ((int) $index === 0 || $index === '0' || $index === null)) {
             $file = $request->file('catalogue')
+                ?? $request->file('catalogue_pdf')
                 ?? $request->file('image')
                 ?? $request->file('upload')
                 ?? $request->file('productImage')
