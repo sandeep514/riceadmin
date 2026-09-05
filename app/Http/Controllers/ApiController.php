@@ -1336,6 +1336,7 @@ class ApiController extends Controller
             ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear));
 
         $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
+        $closedTupleKeys = $this->closedLivePriceTupleKeys($state, $cropYear);
 
         // Latest activity for this state/crop year (admin saves touch updated_at).
         $lastRecord = $livePriceBaseQuery()
@@ -1387,8 +1388,11 @@ class ApiController extends Controller
                 $data = $data
                     ->groupBy(fn ($row) => (string) $row->name.'_'.(string) $row->form)
                     ->map(fn ($rows) => $rows->sortByDesc('id')->first())
-                    ->filter(function ($row) use ($invalidLatestTupleKeys) {
-                        return ! isset($invalidLatestTupleKeys[$this->livePriceTupleKey($row)])
+                    ->filter(function ($row) use ($invalidLatestTupleKeys, $closedTupleKeys) {
+                        $key = $this->livePriceTupleKey($row);
+
+                        return ! isset($invalidLatestTupleKeys[$key])
+                            && ! isset($closedTupleKeys[$key])
                             && $this->hasUsableLivePrice($row);
                     })
                     ->values();
@@ -2405,6 +2409,36 @@ class ApiController extends Controller
             ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
             ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
             ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
+            ->all();
+    }
+
+    /**
+     * Latest live_price_closing rows with a non-empty closing value, keyed like livePriceTupleKey.
+     * Used to hide admin-closed tuples from mobile live price lists.
+     *
+     * @return array<string, true>
+     */
+    private function closedLivePriceTupleKeys(string $state, $cropYear = null): array
+    {
+        $latestIdsQuery = DB::table('live_price_closing')
+            ->selectRaw('MAX(id) as id')
+            ->where('state', $state)
+            ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
+            ->groupBy('name', 'form', 'state', 'cropYear');
+
+        return DB::table('live_price_closing')
+            ->whereIn('id', $latestIdsQuery)
+            ->whereNotNull('closing')
+            ->where('closing', '!=', '')
+            ->get(['name', 'form', 'state', 'cropYear'])
+            ->mapWithKeys(fn ($row) => [
+                implode('|', [
+                    (string) $row->name,
+                    (string) $row->form,
+                    (string) $row->state,
+                    (string) $row->cropYear,
+                ]) => true,
+            ])
             ->all();
     }
 
