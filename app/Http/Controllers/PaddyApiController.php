@@ -483,21 +483,35 @@ class PaddyApiController extends Controller
     }
 
     /**
-     * Distinct crop years present on paddy trades (for app / portal filter dropdowns).
+     * Distinct crop years from paddy trades and paddy prices (for app / portal filter dropdowns).
      */
     public function listPaddyTradeCropYears()
     {
-        $cropYears = PaddyTrade::query()
+        $fromTrades = PaddyTrade::query()
             ->whereNotNull('crop_year')
             ->where('crop_year', '!=', '')
             ->distinct()
-            ->orderByDesc('crop_year')
-            ->pluck('crop_year')
+            ->pluck('crop_year');
+
+        $fromPrices = PaddyPrice::query()
+            ->whereNotNull('crop_year')
+            ->where('crop_year', '!=', '')
+            ->distinct()
+            ->pluck('crop_year');
+
+        $cropYears = $fromTrades
+            ->merge($fromPrices)
+            ->map(fn ($year) => trim((string) $year))
+            ->filter(fn ($year) => $year !== '')
+            ->unique()
+            ->sort(function ($a, $b) {
+                return ((int) $b) <=> ((int) $a);
+            })
             ->values();
 
         return response()->json([
             'status' => true,
-            'message' => 'Paddy trade crop years list',
+            'message' => 'Paddy crop years list',
             'data' => $cropYears,
         ], 200);
     }
