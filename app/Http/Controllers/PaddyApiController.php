@@ -22,11 +22,12 @@ class PaddyApiController extends Controller
 {
     /**
      * Calendar date (Y-m-d) of the most recently inserted/updated paddy row.
-     * Uses raw latest row — not filtered by price, so rows with "----" or 0 still anchor the snapshot.
+     * Optional filters scope the snapshot so crop-year / state / mandi selections
+     * do not accidentally use another year's latest date.
      */
-    private function latestPaddyPricesDate(): ?string
+    private function latestPaddyPricesDate($stateId = null, $mandiId = null, $cropYear = null): ?string
     {
-        $row = PaddyPrice::query()
+        $row = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
             ->orderByDesc('created_at')
             ->orderByDesc('id')
             ->first();
@@ -34,15 +35,66 @@ class PaddyApiController extends Controller
         return $row ? Carbon::parse($row->created_at)->format('Y-m-d') : null;
     }
 
+    /**
+     * @param  mixed  $stateId
+     * @param  mixed  $mandiId
+     * @param  mixed  $cropYear
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function paddyPriceBaseQuery($stateId = null, $mandiId = null, $cropYear = null)
+    {
+        return PaddyPrice::query()
+            ->when($stateId !== null && $stateId !== '', fn ($q) => $q->where('state', (int) $stateId))
+            ->when($mandiId !== null && $mandiId !== '', fn ($q) => $q->where('mandi', (int) $mandiId))
+            ->when($this->normalizedCropYear($cropYear) !== null, function ($q) use ($cropYear) {
+                $year = $this->normalizedCropYear($cropYear);
+                $q->where(function ($inner) use ($year) {
+                    $inner->where('crop_year', $year)
+                        ->orWhere('crop_year', (string) $year);
+                });
+            });
+    }
+
+    private function normalizedCropYear($cropYear): ?string
+    {
+        if ($cropYear === null || $cropYear === '') {
+            return null;
+        }
+
+        $year = trim((string) $cropYear);
+
+        return $year === '' ? null : $year;
+    }
+
+    private function requestCropYear(Request $request): ?string
+    {
+        return $this->normalizedCropYear(
+            $request->input('crop_year', $request->input('cropYear'))
+        );
+    }
+
     public function listPaddy(Request $request)
     {
-        $lastAddedDate = $this->latestPaddyPricesDate();
+        $cropYear = $this->requestCropYear($request);
+        $lastAddedDate = $this->latestPaddyPricesDate(null, null, $cropYear);
 
         $selectedStatesIds = [];
         if ($lastAddedDate !== null) {
             $selectedStatesIds = array_unique(
-                PaddyPrice::query()
+                $this->paddyPriceBaseQuery(null, null, $cropYear)
                     ->whereDate('created_at', $lastAddedDate)
+                    ->pluck('state')
+                    ->filter()
+                    ->values()
+                    ->toArray()
+            );
+        }
+
+        // If crop year is set but no rows on the latest day for that year, still list
+        // any states that have that crop year at all.
+        if ($cropYear !== null && $selectedStatesIds === []) {
+            $selectedStatesIds = array_unique(
+                $this->paddyPriceBaseQuery(null, null, $cropYear)
                     ->pluck('state')
                     ->filter()
                     ->values()
@@ -64,20 +116,31 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy state successfully',
             'lastSnapshotDate' => $lastAddedDate,
+            'crop_year' => $cropYear,
             'data' => $paddyState,
         ]);
     }
 
-    public function listPaddyMandi($stateId)
+    public function listPaddyMandi(Request $request, $stateId)
     {
-        $lastAddedDate = $this->latestPaddyPricesDate();
+        $cropYear = $this->requestCropYear($request);
+        $lastAddedDate = $this->latestPaddyPricesDate($stateId, null, $cropYear);
 
         $selectedMandiIds = [];
         if ($lastAddedDate !== null) {
             $selectedMandiIds = array_unique(
-                PaddyPrice::query()
-                    ->where('state', $stateId)
+                $this->paddyPriceBaseQuery($stateId, null, $cropYear)
                     ->whereDate('created_at', $lastAddedDate)
+                    ->pluck('mandi')
+                    ->filter()
+                    ->values()
+                    ->toArray()
+            );
+        }
+
+        if ($cropYear !== null && $selectedMandiIds === []) {
+            $selectedMandiIds = array_unique(
+                $this->paddyPriceBaseQuery($stateId, null, $cropYear)
                     ->pluck('mandi')
                     ->filter()
                     ->values()
@@ -100,19 +163,21 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy mandi successfully',
             'lastSnapshotDate' => $lastAddedDate,
+            'crop_year' => $cropYear,
             'data' => $paddyMandi,
         ]);
     }
 
-    public function getPaddyPrices($mandi_id, $state_id)
+    public function getPaddyPrices(Request $request, $mandi_id, $state_id)
     {
-        $lastEnterDate = $this->latestPaddyPricesDate();
+        $cropYear = $this->requestCropYear($request);
+        $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, $cropYear);
         $lastCreated_at = '';
 
         $paddyPrices = collect();
 
         if ($lastEnterDate !== null) {
-            $anchorRow = PaddyPrice::query()
+            $anchorRow = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
                 ->whereDate('created_at', $lastEnterDate)
                 ->orderByDesc('created_at')
                 ->orderByDesc('id')
@@ -121,9 +186,7 @@ class PaddyApiController extends Controller
                 $lastCreated_at = $anchorRow->created_at->format('Y-m-d H:i');
             }
 
-            $paddyPrices = PaddyPrice::query()
-                ->where('mandi', $mandi_id)
-                ->where('state', $state_id)
+            $paddyPrices = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
                 ->whereDate('created_at', $lastEnterDate)
                 ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,type,quality'])
                 ->orderByDesc('id')
@@ -139,20 +202,23 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy get successfully',
             'data' => $paddyPrices,
+            'crop_year' => $cropYear,
             'lastUpdatedDate' => $lastCreated_at,
             'lastSnapshotDate' => $lastEnterDate,
         ]);
     }
 
-    public function getPaddyPricesByPaddy($stateId, $paddyId)
+    public function getPaddyPricesByPaddy(Request $request, $stateId, $paddyId)
     {
-        $lastEnterDate = $this->latestPaddyPricesDate();
+        $cropYear = $this->requestCropYear($request);
+        $mandiId = $request->input('mandi_id', $request->input('mandi'));
+        $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, $cropYear);
         $lastCreated_at = '';
 
         $paddyPrices = collect();
 
         if ($lastEnterDate !== null) {
-            $anchorRow = PaddyPrice::query()
+            $anchorRow = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
                 ->whereDate('created_at', $lastEnterDate)
                 ->orderByDesc('created_at')
                 ->orderByDesc('id')
@@ -161,9 +227,8 @@ class PaddyApiController extends Controller
                 $lastCreated_at = $anchorRow->created_at->format('Y-m-d H:i');
             }
 
-            $paddyPrices = PaddyPrice::query()
+            $paddyPrices = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
                 ->where('quality_id', $paddyId)
-                ->where('state', $stateId)
                 ->whereDate('created_at', $lastEnterDate)
                 ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,type,quality'])
                 ->orderByDesc('id')
@@ -179,19 +244,21 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy get successfully',
             'data' => $paddyPrices,
+            'crop_year' => $cropYear,
             'lastUpdatedDate' => $lastCreated_at,
             'lastSnapshotDate' => $lastEnterDate,
         ]);
     }
 
-    public function getPaddyQualities($stateId)
+    public function getPaddyQualities(Request $request, $stateId)
     {
-        $lastEnterDate = $this->latestPaddyPricesDate();
+        $cropYear = $this->requestCropYear($request);
+        $mandiId = $request->input('mandi_id', $request->input('mandi'));
+        $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, $cropYear);
         $qualities = collect();
 
         if ($lastEnterDate !== null) {
-            $paddyQualityIds = PaddyPrice::query()
-                ->where('state', $stateId)
+            $paddyQualityIds = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
                 ->whereDate('created_at', $lastEnterDate)
                 ->orderByDesc('id')
                 ->pluck('quality_id')
@@ -223,17 +290,17 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy mandi get successfully',
             'lastSnapshotDate' => $lastEnterDate,
+            'crop_year' => $cropYear,
             'data' => $qualities,
         ]);
     }
 
-    public function GetPaddyMapData($mandi_id, $state_id, $quality_id)
+    public function GetPaddyMapData(Request $request, $mandi_id, $state_id, $quality_id)
     {
-        $lastEnterDate = $this->latestPaddyPricesDate();
+        $cropYear = $this->requestCropYear($request);
+        $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, $cropYear);
 
-        $paddyPricePre = PaddyPrice::query()
-            ->where('mandi', $mandi_id)
-            ->where('state', $state_id)
+        $paddyPricePre = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
             ->where('quality_id', $quality_id)
             ->orderBy('created_at');
 
@@ -255,6 +322,7 @@ class PaddyApiController extends Controller
             'status' => true,
             'message' => 'Paddy get successfully',
             'lastSnapshotDate' => $lastEnterDate,
+            'crop_year' => $cropYear,
             'data' => [
                 'hand_cutting_price' => $hand_cutting_price,
                 'machine_cutting_price' => $machine_cutting_price,
@@ -483,24 +551,34 @@ class PaddyApiController extends Controller
     }
 
     /**
-     * Distinct crop years from paddy trades and paddy prices (for app / portal filter dropdowns).
+     * Distinct crop years from paddy prices (and trades when unfiltered).
+     * Optional query: state|state_id, mandi|mandi_id — scopes years to pricing rows.
      */
-    public function listPaddyTradeCropYears()
+    public function listPaddyTradeCropYears(Request $request)
     {
-        $fromTrades = PaddyTrade::query()
+        $stateId = $request->input('state', $request->input('state_id'));
+        $mandiId = $request->input('mandi', $request->input('mandi_id'));
+
+        $fromPrices = $this->paddyPriceBaseQuery($stateId, $mandiId, null)
             ->whereNotNull('crop_year')
             ->where('crop_year', '!=', '')
             ->distinct()
             ->pluck('crop_year');
 
-        $fromPrices = PaddyPrice::query()
-            ->whereNotNull('crop_year')
-            ->where('crop_year', '!=', '')
-            ->distinct()
-            ->pluck('crop_year');
+        $cropYears = $fromPrices;
 
-        $cropYears = $fromTrades
-            ->merge($fromPrices)
+        // Unfiltered list also includes trade crop years for trade screens.
+        if (($stateId === null || $stateId === '') && ($mandiId === null || $mandiId === '')) {
+            $fromTrades = PaddyTrade::query()
+                ->whereNotNull('crop_year')
+                ->where('crop_year', '!=', '')
+                ->distinct()
+                ->pluck('crop_year');
+
+            $cropYears = $fromTrades->merge($fromPrices);
+        }
+
+        $cropYears = $cropYears
             ->map(fn ($year) => trim((string) $year))
             ->filter(fn ($year) => $year !== '')
             ->unique()
