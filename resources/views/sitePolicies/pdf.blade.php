@@ -25,16 +25,8 @@
     <div class="meta">
         SNTC &nbsp;|&nbsp; Generated {{ $generatedAt ?? now()->format('d-m-Y H:i') }}
     </div>
-    @php
-        $rawContent = (string) ($policy->content ?? '');
-        $hasHtml = $rawContent !== strip_tags($rawContent);
-    @endphp
     <div class="content">
-        @if($hasHtml)
-            {!! $rawContent !!}
-        @else
-            {!! nl2br(e($rawContent)) !!}
-        @endif
+        {!! $contentHtml !!}
     </div>
 </body>
 </html>

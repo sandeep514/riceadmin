@@ -65,9 +65,12 @@ class SitePolicyController extends Controller
             'order_no' => MasterOrderUpdater::nextOrder(SitePolicy::class),
         ]);
 
-        app(SitePolicyPdfService::class)->generateAndStore($policy);
-
-        Session::flash('success', 'Success|Policy saved and PDF generated.');
+        $pdfPath = app(SitePolicyPdfService::class)->generateAndStore($policy);
+        if ($pdfPath) {
+            Session::flash('success', 'Success|Policy saved and PDF generated.');
+        } else {
+            Session::flash('error', 'Error|Policy saved but PDF generation failed. Use Regenerate PDF or check logs.');
+        }
 
         return redirect()->route('site.policies');
     }
@@ -111,9 +114,12 @@ class SitePolicyController extends Controller
             'status' => (int) $request->input('status'),
         ]);
 
-        app(SitePolicyPdfService::class)->generateAndStore($model->fresh());
-
-        Session::flash('success', 'Success|Policy updated and PDF regenerated.');
+        $pdfPath = app(SitePolicyPdfService::class)->generateAndStore($model->fresh());
+        if ($pdfPath) {
+            Session::flash('success', 'Success|Policy updated and PDF regenerated.');
+        } else {
+            Session::flash('error', 'Error|Policy updated but PDF generation failed. Use Regenerate PDF or check logs.');
+        }
 
         return redirect()->route('site.policies');
     }

@@ -158,41 +158,59 @@ class VendorProductAdminNotificationService
     {
         $meta = $this->kindMeta($kind);
         $userId = (int) ($product->user_id ?? 0);
-        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname']) : null;
+        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname', 'role']) : null;
         $business = $userId > 0
             ? WebBusinessDetails::query()->where('user_id', $userId)->first(['company_name', 'registered_email', 'contactMobile', 'phone'])
             : null;
 
-        $mailTo = $user->email ?? ($business->registered_email ?? null);
-        if (! is_string($mailTo) || trim($mailTo) === '') {
-            Log::warning('Vendor product accepted mail skipped: no recipient email for product #'.(int) $product->id);
-
-            return;
-        }
-
         $productLabel = $meta['label'];
+        $typeResolved = $typeLabel ?: $this->resolveTypeLabel($kind, $product);
+        $userName = $user->name ?? ($business->company_name ?? 'Vendor');
+        $mailTo = $user->email ?? ($business->registered_email ?? null);
+
         $mailData = [
             'productKind' => $productLabel,
             'productId' => (int) $product->id,
-            'typeLabel' => $typeLabel ?: $this->resolveTypeLabel($kind, $product),
+            'typeLabel' => $typeResolved,
             'specification' => $product->specification ?? null,
             'description' => $product->description ?? null,
             'statusLabel' => 'Active',
             'userId' => $userId > 0 ? $userId : '—',
-            'userName' => $user->name ?? ($business->company_name ?? 'Vendor'),
+            'userName' => $userName,
             'userEmail' => $mailTo,
             'companyName' => $business->company_name ?? ($user->companyname ?? null),
             'acceptedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
         ];
 
         $subject = 'Your '.$productLabel.' product has been accepted – #'.$product->id;
+        $socketTitle = $productLabel.' product accepted';
+        $socketMessage = 'Your '.$productLabel.' product #'.$product->id
+            .($typeResolved !== '—' ? ' ('.$typeResolved.')' : '')
+            .' has been approved by SNTC.';
 
-        MailController::sendVendorProductAcceptedMail(
-            $mailTo,
-            self::ADMIN_MAIL,
-            'SNTC',
-            $subject,
-            $mailData
+        if (is_string($mailTo) && trim($mailTo) !== '') {
+            MailController::sendVendorProductAcceptedMail(
+                $mailTo,
+                self::ADMIN_MAIL,
+                'SNTC',
+                $subject,
+                $mailData
+            );
+        } else {
+            Log::warning('Vendor product accepted mail skipped: no recipient email for product #'.(int) $product->id);
+        }
+
+        $this->notifyVendorSocket(
+            $userId,
+            $socketTitle,
+            $socketMessage,
+            [
+                'type' => 'vendor_product_accepted',
+                'kind' => $kind,
+                'product_id' => (string) (int) $product->id,
+                'product_kind' => $productLabel,
+                'status' => 'accepted',
+            ]
         );
     }
 
@@ -200,24 +218,21 @@ class VendorProductAdminNotificationService
     {
         $meta = $this->kindMeta($kind);
         $userId = (int) ($product->user_id ?? 0);
-        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname']) : null;
+        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname', 'role']) : null;
         $business = $userId > 0
             ? WebBusinessDetails::query()->where('user_id', $userId)->first(['company_name', 'registered_email', 'contactMobile', 'phone'])
             : null;
 
         $mailTo = $user->email ?? ($business->registered_email ?? null);
-        if (! is_string($mailTo) || trim($mailTo) === '') {
-            Log::warning('Vendor product deactivated mail skipped: no recipient email for product #'.(int) $product->id);
-
-            return;
-        }
-
         $productLabel = $meta['label'];
+        $typeResolved = $typeLabel ?: $this->resolveTypeLabel($kind, $product);
+        $reason = trim($reason);
+
         $mailData = [
             'productKind' => $productLabel,
             'productId' => (int) $product->id,
-            'typeLabel' => $typeLabel ?: $this->resolveTypeLabel($kind, $product),
-            'reason' => trim($reason),
+            'typeLabel' => $typeResolved,
+            'reason' => $reason,
             'userId' => $userId > 0 ? $userId : '—',
             'userName' => $user->name ?? ($business->company_name ?? 'Vendor'),
             'userEmail' => $mailTo,
@@ -226,14 +241,67 @@ class VendorProductAdminNotificationService
         ];
 
         $subject = 'Your '.$productLabel.' product has been de-activated – #'.$product->id;
+        $socketTitle = $productLabel.' product de-activated';
+        $socketMessage = 'Your '.$productLabel.' product #'.$product->id.' has been de-activated.'
+            .($reason !== '' ? ' Reason: '.$reason : '');
 
-        MailController::sendVendorProductDeactivatedMail(
-            $mailTo,
-            self::ADMIN_MAIL,
-            'SNTC',
-            $subject,
-            $mailData
+        if (is_string($mailTo) && trim($mailTo) !== '') {
+            MailController::sendVendorProductDeactivatedMail(
+                $mailTo,
+                self::ADMIN_MAIL,
+                'SNTC',
+                $subject,
+                $mailData
+            );
+        } else {
+            Log::warning('Vendor product deactivated mail skipped: no recipient email for product #'.(int) $product->id);
+        }
+
+        $this->notifyVendorSocket(
+            $userId,
+            $socketTitle,
+            $socketMessage,
+            [
+                'type' => 'vendor_product_deactivated',
+                'kind' => $kind,
+                'product_id' => (string) (int) $product->id,
+                'product_kind' => $productLabel,
+                'status' => 'deactivated',
+                'reason' => $reason,
+            ]
         );
+    }
+
+    /**
+     * Push portal socket (+ FCM when token exists) to the product owner only.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    private function notifyVendorSocket(int $userId, string $title, string $message, array $payload = []): void
+    {
+        if ($userId < 1) {
+            return;
+        }
+
+        try {
+            app(WebPortalNotificationDelivery::class)->deliverToUsers(
+                [$userId],
+                $title,
+                $message,
+                [
+                    'audience_mode' => 'individual',
+                    'push_type' => 'vendor_product',
+                    'fill_role_from_user' => true,
+                    'fill_category_from_business' => true,
+                    'payload' => $payload,
+                ]
+            );
+        } catch (\Throwable $e) {
+            Log::warning('Vendor product socket notification failed: '.$e->getMessage(), [
+                'user_id' => $userId,
+                'title' => $title,
+            ]);
+        }
     }
 
     private function kindMeta(string $kind): array

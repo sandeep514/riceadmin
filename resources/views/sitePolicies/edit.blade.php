@@ -45,6 +45,14 @@
                 'blockquote': true
             }
         });
+
+        $('form').on('submit', function () {
+            var $ta = $('#content');
+            var editor = $ta.next('.wysihtml5-sandbox').contents().find('body');
+            if (editor.length) {
+                $ta.val(editor.html());
+            }
+        });
     }
 })();
 </script>

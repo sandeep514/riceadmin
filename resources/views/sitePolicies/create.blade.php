@@ -58,6 +58,20 @@
                 'blockquote': true
             }
         });
+
+        // Ensure editor HTML is copied into the textarea before submit.
+        $('form').on('submit', function () {
+            var $ta = $('#content');
+            if ($ta.length && $ta.data('wysihtml5')) {
+                try {
+                    $ta.data('wysihtml5').editor.setValue($ta.val());
+                } catch (e) {}
+            }
+            var editor = $ta.next('.wysihtml5-sandbox').contents().find('body');
+            if (editor.length) {
+                $ta.val(editor.html());
+            }
+        });
     }
 })();
 </script>

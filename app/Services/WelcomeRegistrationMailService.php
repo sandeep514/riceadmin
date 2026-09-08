@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 class WelcomeRegistrationMailService
 {
     /**
-     * Send SNTC welcome email with Terms & Conditions PDF (if available).
+     * Send SNTC welcome email with Terms & Conditions PDF attached when available.
      */
     public static function send(User $user): bool
     {
@@ -20,12 +20,27 @@ class WelcomeRegistrationMailService
         }
 
         try {
-            $termsPdfPath = app(SitePolicyPdfService::class)->absolutePathForTerms();
+            $pdfService = app(SitePolicyPdfService::class);
+            $termsPdfPath = $pdfService->absolutePathForTerms();
+            $termsPdfBinary = null;
+
+            if (! $termsPdfPath || ! is_file($termsPdfPath)) {
+                $termsPdfBinary = $pdfService->termsPdfBinary();
+                $termsPdfPath = null;
+            }
+
+            if (! $termsPdfPath && (! is_string($termsPdfBinary) || $termsPdfBinary === '')) {
+                Log::warning('Welcome registration mail sending without Terms PDF attachment.', [
+                    'user_id' => $user->id,
+                    'email' => $email,
+                ]);
+            }
 
             Mail::to($email)->send(new WelcomeRegistrationMail(
-                userName: (string) ($user->name ?: 'User'),
-                userEmail: $email,
-                termsPdfAbsolutePath: $termsPdfPath
+                (string) ($user->name ?: 'User'),
+                $email,
+                $termsPdfPath,
+                $termsPdfBinary
             ));
 
             return true;
@@ -33,6 +48,7 @@ class WelcomeRegistrationMailService
             Log::error('Welcome registration mail failed: '.$e->getMessage(), [
                 'user_id' => $user->id,
                 'email' => $email,
+                'trace' => $e->getTraceAsString(),
             ]);
 
             return false;
