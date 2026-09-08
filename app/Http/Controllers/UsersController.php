@@ -127,10 +127,14 @@ class UsersController extends Controller
             return back();
         }
 
-        $user->delete();
-        Session::flash('success', 'Success|Web user deleted successfully.');
+        // Deactivate vendor catalog products before removing the account.
+        VendorProductCatalog::deactivateVerifiedProductsForUser((int) $user->id);
 
-        return redirect()->route('users', $user->role);
+        $role = $user->role;
+        $user->delete();
+        Session::flash('success', 'Success|Web user deleted successfully. Active products were deactivated.');
+
+        return redirect()->route('users', $role);
     }
     
     public function changeChatStatus(Request $request){
