@@ -88,6 +88,19 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('designations/delete/{id}', ['as' => 'delete.designation', 'uses' => 'DesignationsController@delete','action'=>'delete']);
             //});
 
+            // Site policies (terms, privacy, disclaimer, return policy, etc.)
+            Route::group(['module' => 'site_policy', 'icon' => 'fa-file-text-o'], function () {
+                Route::get('site-policies', ['as' => 'site.policies', 'uses' => 'SitePolicyController@index', 'action' => 'view']);
+                Route::get('site-policies/create', ['as' => 'create.site.policy', 'uses' => 'SitePolicyController@create', 'action' => 'create']);
+                Route::post('site-policies/save', ['as' => 'save.site.policy', 'uses' => 'SitePolicyController@save', 'action' => 'create']);
+                Route::get('site-policies/edit/{id}', ['as' => 'edit.site.policy', 'uses' => 'SitePolicyController@edit', 'action' => 'edit']);
+                Route::put('site-policies/update/{id}', ['as' => 'update.site.policy', 'uses' => 'SitePolicyController@update', 'action' => 'edit']);
+                Route::delete('site-policies/delete/{id}', ['as' => 'delete.site.policy', 'uses' => 'SitePolicyController@delete', 'action' => 'delete']);
+                Route::get('site-policies/change-status/{id}', ['as' => 'site.policy.change-status', 'uses' => 'SitePolicyController@changeStatus', 'action' => 'edit']);
+                Route::get('site-policies/regenerate-pdf/{id}', ['as' => 'regenerate.site.policy.pdf', 'uses' => 'SitePolicyController@regeneratePdf', 'action' => 'edit']);
+                Route::post('site-policies/update-order', ['as' => 'update.order.site.policy', 'uses' => 'SitePolicyController@updateOrder', 'action' => 'edit']);
+            });
+
             //Modules
             Route::get('modules/{role_id?}',['as'=>'modules','uses'=>'ModulesController@index']);
             Route::post('modules/save',['as'=>'modules.save','uses'=>'ModulesController@saveModule']);

@@ -94,6 +94,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Support\ClientPlatform;
 use App\Services\PaymentInvoiceService;
+use App\Services\WelcomeRegistrationMailService;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
@@ -924,6 +925,7 @@ class PortalApiController extends Controller
         $personalDetails = [];
         $businessDetails = [];
         $userEmailForMail = '';
+        $previousUserEmail = '';
 
         $rawPersonal = $request->input('personal_details', []);
         if (! is_array($rawPersonal)) {
@@ -946,6 +948,7 @@ class PortalApiController extends Controller
             $lastname = trim((string) ($personalDetails['lastname'] ?? ''));
             $email = trim((string) ($personalDetails['email'] ?? ''));
             $userEmailForMail = $email;
+            $previousUserEmail = trim((string) (User::query()->where('id', $user_id)->value('email') ?? ''));
 
             // Prevent duplicate web-user email during basic details save.
             if ($email !== '') {
@@ -1094,6 +1097,13 @@ class PortalApiController extends Controller
             });
         }
 
+        // First time the portal user gets an email: SNTC welcome + Terms PDF.
+        if ($mailUserEmail !== '' && ($previousUserEmail ?? '') === '') {
+            $welcomeUser = User::query()->where('id', $user_id)->first();
+            if ($welcomeUser) {
+                WelcomeRegistrationMailService::send($welcomeUser);
+            }
+        }
 
         return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => ['personalDetails' => $personalDetails, 'businessDetails' => $businessDetails]], 200);
     }

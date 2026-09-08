@@ -185,4 +185,43 @@ final class VendorProductCatalog
 
         return $found;
     }
+
+    /**
+     * Set all verified (status=1) catalog products for a vendor user back to pending/deactivated (0).
+     * Also covers products stored under web_business_details.id for that user.
+     * Does not auto-reactivate — admin must re-verify each product.
+     *
+     * @return int Number of product rows updated
+     */
+    public static function deactivateVerifiedProductsForUser(int $userId): int
+    {
+        if ($userId <= 0) {
+            return 0;
+        }
+
+        $ownerIds = [$userId];
+        $businessIds = WebBusinessDetails::query()
+            ->where('user_id', $userId)
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->all();
+        $ownerIds = array_values(array_unique(array_merge($ownerIds, $businessIds)));
+
+        $updated = 0;
+        foreach (self::productModels() as $model) {
+            $updated += (int) $model::query()
+                ->whereIn('user_id', $ownerIds)
+                ->where('status', 1)
+                ->update(['status' => 0]);
+        }
+
+        // Hide vendor listing until products are reviewed again.
+        WebBusinessDetails::query()
+            ->where('user_id', $userId)
+            ->where('is_active_listing', 1)
+            ->update(['is_active_listing' => 0]);
+
+        return $updated;
+    }
 }

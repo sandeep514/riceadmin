@@ -14,6 +14,7 @@ use App\WebBusinessDetails;
 use App\ChatStatus;
 use App\Services\UserInterestService;
 use App\Services\WebPortalNotificationDelivery;
+use App\Support\VendorProductCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -476,6 +477,10 @@ class UsersController extends Controller
             'is_active_by_admin' => 0,
             'user_token' => null,
         ]);
+
+        // Products go back to pending so admin must re-verify after account reactivation.
+        VendorProductCatalog::deactivateVerifiedProductsForUser($userId);
+
         $userDetail = User::where( ['id' => $userId  ])->first();
 
         $data = [ 'userName' => $userDetail['name'] , 'mailmessage' => $mailmessage ] ; 
@@ -545,6 +550,9 @@ class UsersController extends Controller
                 'is_deactivated' => 1,
                 'user_token' => null,
             ]);
+
+            // Products go back to pending so admin must re-verify after account reactivation.
+            VendorProductCatalog::deactivateVerifiedProductsForUser((int) $userId);
 
             $mailTo = $userDetail->email;
             if (! empty($mailTo)) {

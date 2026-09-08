@@ -272,6 +272,11 @@
                     <i class="fa fa-address-card-o"></i> <span>Designations</span>
                 </a>
             </li>
+            <li class="{{ (in_array($currentRoute,['site.policies','create.site.policy','edit.site.policy']))?'active':'' }}">
+                <a href="{{ route('site.policies') }}">
+                    <i class="fa fa-file-text-o"></i> <span>Site Policies</span>
+                </a>
+            </li>
 
         </ul>
 

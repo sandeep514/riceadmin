@@ -91,6 +91,8 @@ use App\JobApplication;
 use App\TradeCategoryMap;
 use App\WebBusinessDetails;
 use App\Services\UserInterestService;
+use App\Services\WelcomeRegistrationMailService;
+use App\Support\VendorProductCatalog;
 use App\AvgLengthMap;
 use App\WebRiceFormMap;
 
@@ -3093,6 +3095,7 @@ class ApiController extends Controller
         if ($user) {
             if ($user->email != null) {
                 $response = MailController::generateMailForOTPThanks($user->email, 'no@replay.in', 'SNTC GROUP', 'Thank you for registering on SNTC Rice Live Pricing App.', 'Thank you for registering on SNTC Rice Live Pricing App.', $otp);
+                WelcomeRegistrationMailService::send($user);
             }
             return response()->json(['error' => null, 'data' => User::where('id', $user->id)->first()], 200);
         } else {
@@ -5400,6 +5403,8 @@ class ApiController extends Controller
     {
         // Keep api_token / mobile_api_token so open sessions get the blocked-account message.
         User::where('id', $userId)->update(['is_deactivated' => 1, 'user_token' => null]);
+        VendorProductCatalog::deactivateVerifiedProductsForUser((int) $userId);
+
         return response()->json(['status' => true, 'data' => []], 200);
     }
 
