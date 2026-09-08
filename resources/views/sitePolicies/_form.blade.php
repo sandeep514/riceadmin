@@ -61,9 +61,10 @@
                 'class' => 'form-control',
                 'id' => 'content',
                 'rows' => 18,
-                'placeholder' => 'Enter full policy text. Plain text or simple HTML is supported.',
+                'placeholder' => 'Enter policy content. Use the toolbar to style text.',
                 'required' => true,
             ]) !!}
+            <p class="help-block">Use the toolbar for bold, lists, links, headings, and more. Styling is kept in the generated PDF.</p>
             @error('content')
                 <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror

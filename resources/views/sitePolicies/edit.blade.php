@@ -28,3 +28,24 @@
     </section>
 </div>
 @endsection
+
+@section('javascript')
+<script>
+(function () {
+    if (window.jQuery && $.fn.wysihtml5) {
+        $('#content').wysihtml5({
+            toolbar: {
+                'font-styles': true,
+                'emphasis': true,
+                'lists': true,
+                'html': false,
+                'link': true,
+                'image': false,
+                'color': false,
+                'blockquote': true
+            }
+        });
+    }
+})();
+</script>
+@endsection

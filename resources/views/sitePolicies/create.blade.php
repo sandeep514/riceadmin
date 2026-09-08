@@ -31,18 +31,34 @@
     var slug = document.getElementById('slug');
     var title = document.getElementById('title');
     var labels = @json($predefined);
-    if (!preset || !slug) return;
-    preset.addEventListener('change', function () {
-        var v = preset.value;
-        if (!v || v === '__custom__') {
-            if (v === '__custom__') slug.focus();
-            return;
-        }
-        slug.value = v;
-        if (title && (!title.value || Object.values(labels).indexOf(title.value) !== -1)) {
-            title.value = labels[v] || title.value;
-        }
-    });
+    if (preset && slug) {
+        preset.addEventListener('change', function () {
+            var v = preset.value;
+            if (!v || v === '__custom__') {
+                if (v === '__custom__') slug.focus();
+                return;
+            }
+            slug.value = v;
+            if (title && (!title.value || Object.values(labels).indexOf(title.value) !== -1)) {
+                title.value = labels[v] || title.value;
+            }
+        });
+    }
+
+    if (window.jQuery && $.fn.wysihtml5) {
+        $('#content').wysihtml5({
+            toolbar: {
+                'font-styles': true,
+                'emphasis': true,
+                'lists': true,
+                'html': false,
+                'link': true,
+                'image': false,
+                'color': false,
+                'blockquote': true
+            }
+        });
+    }
 })();
 </script>
 @endsection
