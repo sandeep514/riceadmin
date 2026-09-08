@@ -33,6 +33,8 @@ use Pusher\Pusher;
     // Nested: state → riceType → riceName → form → price fields
     // Optional: ?state=&riceType=basmati|non-basmati&year=
     Route::get('public/live-prices/latest', ['as' => 'public.live.prices.latest', 'uses' => 'PublicLivePriceController@latest']);
+    // Public (no auth) — site policies (terms, privacy, etc.). Optional: ?slug=terms_and_conditions
+    Route::get('public/site-policies', ['as' => 'public.site.policies', 'uses' => 'SitePolicyApiController@index']);
     Route::get('web/prices/{state}/{type}','ApiController@getPricesWeb')->middleware('portal.api.token');
     Route::get('get/price/by/year/{state}/{type}','ApiController@getPricesByYear');
 
