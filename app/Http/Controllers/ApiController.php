@@ -8078,6 +8078,20 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getContainerParticulars()
+    {
+        $particulars = \App\VendorContainerParticular::query()
+            ->where('status', \App\VendorContainerParticular::STATUS_ACTIVE)
+            ->orderBy('particular')
+            ->get(['id', 'particular', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Container particulars fetched successfully.',
+            'data' => $particulars,
+        ], 200);
+    }
+
     public function getCylinderTypes()
     {
         $types = \App\CylinderType::query()

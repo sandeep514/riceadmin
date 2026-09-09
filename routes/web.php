@@ -933,6 +933,10 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/machinery-equipment-products/{id}', ['as' => 'get.web.machinery.equipment.products.show', 'uses' => 'WebMachineryEquipmentProductController@showProductToAdmin']);
     Route::post('toggle/web/machinery-equipment-products/status/{id}', ['as' => 'toggle.web.machinery.equipment.products.status', 'uses' => 'WebMachineryEquipmentProductController@toggleStatus']);
 
+    Route::get('get/web/cleaning-agent-products', ['as' => 'get.web.cleaning.agent.products.list', 'uses' => 'WebCleaningAgentProductController@showProductsToAdmin']);
+    Route::get('get/web/cleaning-agent-products/{id}', ['as' => 'get.web.cleaning.agent.products.show', 'uses' => 'WebCleaningAgentProductController@showProductToAdmin']);
+    Route::post('toggle/web/cleaning-agent-products/status/{id}', ['as' => 'toggle.web.cleaning.agent.products.status', 'uses' => 'WebCleaningAgentProductController@toggleStatus']);
+
 
 
     Route::get('web/users' , ['as' => 'web.user' , 'uses' => 'UsersController@webusers']);

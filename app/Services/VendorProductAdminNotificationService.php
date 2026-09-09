@@ -327,6 +327,10 @@ class VendorProductAdminNotificationService
                 'label' => 'Machinery equipment',
                 'showRoute' => 'get.web.machinery.equipment.products.show',
             ],
+            'cleaning_agent' => [
+                'label' => 'Cleaning agent',
+                'showRoute' => 'get.web.cleaning.agent.products.show',
+            ],
             default => [
                 'label' => 'Vendor',
                 'showRoute' => null,
@@ -346,6 +350,13 @@ class VendorProductAdminNotificationService
             $label = \App\CartoonType::query()->where('id', $product->cartoon_type_id)->value('type') ?: '—';
         } elseif ($kind === 'cylinder' && ! empty($product->cylinder_type_id)) {
             $label = \App\CylinderType::query()->where('id', $product->cylinder_type_id)->value('type') ?: '—';
+        } elseif ($kind === 'cleaning_agent') {
+            $parts = array_filter([
+                ! empty($product->port_type) ? (string) $product->port_type : null,
+                ! empty($product->port_location) ? (string) $product->port_location : null,
+                ! empty($product->destination) ? (string) $product->destination : null,
+            ]);
+            $label = $parts !== [] ? implode(' / ', $parts) : '—';
         } else {
             $label = $product->packing_form ?: '—';
         }
@@ -363,6 +374,21 @@ class VendorProductAdminNotificationService
      */
     private function formatVariants(string $kind, Collection $variants): array
     {
+        if ($kind === 'cleaning_agent') {
+            return $variants->map(function (Model $variant) {
+                $name = $variant->particular_name
+                    ?: (optional($variant->particular)->particular ?? null)
+                    ?: ($variant->particular_id ? 'Particular #'.$variant->particular_id : 'Other');
+                $parts = array_filter([
+                    $name,
+                    $variant->rate !== null ? 'Rate: '.$variant->rate : null,
+                    (int) ($variant->is_other ?? 0) === 1 ? 'Other' : null,
+                ]);
+
+                return implode(' | ', $parts);
+            })->all();
+        }
+
         if (in_array($kind, ['lab_equipment', 'machinery_equipment'], true)) {
             return $variants->map(function (Model $variant) {
                 $parts = array_filter([

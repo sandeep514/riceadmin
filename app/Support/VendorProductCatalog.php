@@ -5,6 +5,7 @@ namespace App\Support;
 use App\Category;
 use App\WebBusinessDetails;
 use App\WebCartoonProduct;
+use App\WebCleaningAgentProduct;
 use App\WebCylinderProduct;
 use App\WebLabEquipmentProduct;
 use App\WebMachineryEquipmentProduct;
@@ -23,6 +24,8 @@ final class VendorProductCatalog
 
     public const KIND_MACHINERY_EQUIPMENT = 'machinery_equipment';
 
+    public const KIND_CLEANING_AGENT = 'cleaning_agent';
+
     /**
      * @return array<string, class-string<Model>>
      */
@@ -34,6 +37,7 @@ final class VendorProductCatalog
             self::KIND_CYLINDER => WebCylinderProduct::class,
             self::KIND_LAB_EQUIPMENT => WebLabEquipmentProduct::class,
             self::KIND_MACHINERY_EQUIPMENT => WebMachineryEquipmentProduct::class,
+            self::KIND_CLEANING_AGENT => WebCleaningAgentProduct::class,
         ];
     }
 
@@ -53,6 +57,10 @@ final class VendorProductCatalog
         $name = strtolower(trim((string) $name));
         if ($name === '') {
             return null;
+        }
+
+        if (str_contains($name, 'cleaning') || str_contains($name, 'clearing')) {
+            return self::KIND_CLEANING_AGENT;
         }
 
         if (str_contains($name, 'lab')) {
@@ -128,6 +136,8 @@ final class VendorProductCatalog
             // Match public listing rules: verified product must have sellable rows.
             if (in_array($kindKey, [self::KIND_CARTOON, self::KIND_CYLINDER, self::KIND_LAB_EQUIPMENT, self::KIND_MACHINERY_EQUIPMENT], true)) {
                 $query->whereHas('variants');
+            } elseif ($kindKey === self::KIND_CLEANING_AGENT) {
+                $query->whereHas('particulars');
             } elseif ($kindKey === self::KIND_RICE_BAG) {
                 $query->whereHas('packingSizes');
             }

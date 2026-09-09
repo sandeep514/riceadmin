@@ -76,11 +76,14 @@ class PaddyApiController extends Controller
     }
 
     /**
-     * Resolve state filter from state|state_id (numeric id preferred).
+     * Resolve state filter from state|state_id|stateId (numeric id preferred).
      */
     private function requestStateId(Request $request): ?int
     {
-        $raw = $request->input('state', $request->input('state_id'));
+        $raw = $request->input(
+            'state',
+            $request->input('state_id', $request->input('stateId'))
+        );
         if ($raw === null || $raw === '') {
             return null;
         }

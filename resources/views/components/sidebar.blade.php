@@ -539,7 +539,7 @@
                     </li>
                 </ul>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show','get.web.cleaning.agent.products.list','get.web.cleaning.agent.products.show']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-cubes"></i>
                     <span>Vendor Products</span>
@@ -562,6 +562,9 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.machinery.equipment.products.list') }}"><i class="fa fa-circle-o"></i> Machinery Equipment Products</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.cleaning.agent.products.list','get.web.cleaning.agent.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.cleaning.agent.products.list') }}"><i class="fa fa-circle-o"></i> Cleaning Agent Products</a>
                     </li>
                 </ul>
             </li>
