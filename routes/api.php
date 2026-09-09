@@ -252,6 +252,7 @@ use Pusher\Pusher;
     Route::post('submit/paddy/sell/query', ['as' => 'submit.paddy.sell.query', 'uses' => 'PaddyApiController@submitPaddySellQuery', 'middleware' => 'portal.api.token']);
 
     // Paddy trades — app
+    Route::get('list/paddy/state', ['as' => 'list.paddy.state.api', 'uses' => 'PaddyApiController@listPaddy', 'middleware' => 'app.api.token']);
     Route::get('list/paddy/trades', ['as' => 'list.paddy.trades.api', 'uses' => 'PaddyApiController@listPaddyTrades', 'middleware' => 'app.api.token']);
     Route::get('list/paddy/crop-years', ['as' => 'list.paddy.crop.years.api', 'uses' => 'PaddyApiController@listPaddyTradeCropYears', 'middleware' => 'app.api.token']);
     Route::get('get/paddy/trade/{id}', ['as' => 'get.paddy.trade.api', 'uses' => 'PaddyApiController@getPaddyTradeDetail', 'middleware' => 'app.api.token']);

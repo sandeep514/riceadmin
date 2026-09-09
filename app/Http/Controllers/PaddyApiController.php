@@ -49,8 +49,10 @@ class PaddyApiController extends Controller
             ->when($this->normalizedCropYear($cropYear) !== null, function ($q) use ($cropYear) {
                 $year = $this->normalizedCropYear($cropYear);
                 $q->where(function ($inner) use ($year) {
+                    // crop_year may be stored as int or string depending on insert path.
                     $inner->where('crop_year', $year)
-                        ->orWhere('crop_year', (string) $year);
+                        ->orWhere('crop_year', (string) $year)
+                        ->orWhere('crop_year', (int) $year);
                 });
             });
     }
@@ -73,26 +75,49 @@ class PaddyApiController extends Controller
         );
     }
 
+    /**
+     * Resolve state filter from state|state_id (numeric id preferred).
+     */
+    private function requestStateId(Request $request): ?int
+    {
+        $raw = $request->input('state', $request->input('state_id'));
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        if (is_numeric($raw)) {
+            $id = (int) $raw;
+
+            return $id > 0 ? $id : null;
+        }
+
+        $name = trim((string) $raw);
+        if ($name === '') {
+            return null;
+        }
+
+        $id = PaddyStateModel::query()
+            ->where('status', 1)
+            ->whereRaw('LOWER(state) = ?', [strtolower($name)])
+            ->value('id');
+
+        return $id ? (int) $id : null;
+    }
+
+    /**
+     * List active paddy states.
+     *
+     * Optional: ?cropYear=2025 | ?crop_year=2025
+     * When crop year is set, returns only states that have paddy prices for that year
+     * (linked with list/paddy/crop-years?state=...).
+     */
     public function listPaddy(Request $request)
     {
         $cropYear = $this->requestCropYear($request);
         $lastAddedDate = $this->latestPaddyPricesDate(null, null, $cropYear);
 
-        $selectedStatesIds = [];
-        if ($lastAddedDate !== null) {
-            $selectedStatesIds = array_unique(
-                $this->paddyPriceBaseQuery(null, null, $cropYear)
-                    ->whereDate('created_at', $lastAddedDate)
-                    ->pluck('state')
-                    ->filter()
-                    ->values()
-                    ->toArray()
-            );
-        }
-
-        // If crop year is set but no rows on the latest day for that year, still list
-        // any states that have that crop year at all.
-        if ($cropYear !== null && $selectedStatesIds === []) {
+        if ($cropYear !== null) {
+            // Dependent filter: all states that have prices for this crop year.
             $selectedStatesIds = array_unique(
                 $this->paddyPriceBaseQuery(null, null, $cropYear)
                     ->pluck('state')
@@ -100,6 +125,18 @@ class PaddyApiController extends Controller
                     ->values()
                     ->toArray()
             );
+        } else {
+            $selectedStatesIds = [];
+            if ($lastAddedDate !== null) {
+                $selectedStatesIds = array_unique(
+                    $this->paddyPriceBaseQuery(null, null, null)
+                        ->whereDate('created_at', $lastAddedDate)
+                        ->pluck('state')
+                        ->filter()
+                        ->values()
+                        ->toArray()
+                );
+            }
         }
 
         $paddyState = $selectedStatesIds === []
@@ -551,13 +588,25 @@ class PaddyApiController extends Controller
     }
 
     /**
-     * Distinct crop years from paddy prices (and trades when unfiltered).
-     * Optional query: state|state_id, mandi|mandi_id — scopes years to pricing rows.
+     * Distinct crop years for filters.
+     *
+     * Optional query:
+     * - state|state_id — scopes years to paddy prices for that state
+     *   (linked with list/web/paddy/state?cropYear=... / list/paddy/state?cropYear=...)
+     * - mandi|mandi_id — further scopes to a mandi
+     *
+     * Without state/mandi: union of price + trade crop years.
+     * With state/mandi: price crop years only for that scope.
      */
     public function listPaddyTradeCropYears(Request $request)
     {
-        $stateId = $request->input('state', $request->input('state_id'));
-        $mandiId = $request->input('mandi', $request->input('mandi_id'));
+        $stateId = $this->requestStateId($request);
+        $mandiRaw = $request->input('mandi', $request->input('mandi_id'));
+        $mandiId = ($mandiRaw !== null && $mandiRaw !== '' && is_numeric($mandiRaw))
+            ? (int) $mandiRaw
+            : null;
+
+        $hasLocationFilter = $stateId !== null || $mandiId !== null;
 
         $fromPrices = $this->paddyPriceBaseQuery($stateId, $mandiId, null)
             ->whereNotNull('crop_year')
@@ -568,7 +617,7 @@ class PaddyApiController extends Controller
         $cropYears = $fromPrices;
 
         // Unfiltered list also includes trade crop years for trade screens.
-        if (($stateId === null || $stateId === '') && ($mandiId === null || $mandiId === '')) {
+        if (! $hasLocationFilter) {
             $fromTrades = PaddyTrade::query()
                 ->whereNotNull('crop_year')
                 ->where('crop_year', '!=', '')
@@ -590,6 +639,8 @@ class PaddyApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Paddy crop years list',
+            'state' => $stateId,
+            'mandi' => $mandiId,
             'data' => $cropYears,
         ], 200);
     }
