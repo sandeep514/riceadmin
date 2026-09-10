@@ -492,7 +492,7 @@
                     <span>Avg Length Map</span>
                 </a>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular','vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge','cartoon-types','create.cartoon-type','edit.cartoon-type','cylinder-types','create.cylinder-type','edit.cylinder-type','lab-equipments','create.lab-equipment','edit.lab-equipment','machinery-equipments','create.machinery-equipment','edit.machinery-equipment','bag-sizes','create.bag-size','edit.bag-size','carton-sizes','create.carton-size','edit.carton-size','cylinder-sizes','create.cylinder-size','edit.cylinder-size','vendor-packing-types','create.vendor-packing-type','edit.vendor-packing-type']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','cartoon-types','create.cartoon-type','edit.cartoon-type','cylinder-types','create.cylinder-type','edit.cylinder-type','lab-equipments','create.lab-equipment','edit.lab-equipment','machinery-equipments','create.machinery-equipment','edit.machinery-equipment','bag-sizes','create.bag-size','edit.bag-size','carton-sizes','create.carton-size','edit.carton-size','cylinder-sizes','create.cylinder-size','edit.cylinder-size','vendor-packing-types','create.vendor-packing-type','edit.vendor-packing-type']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-handshake-o"></i>
                     <span>Vendor Flow</span>
@@ -506,12 +506,6 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['vendor-specifications','create.vendor-specification','edit.vendor-specification']) ? 'active' : '' }}">
                         <a href="{{ route('vendor-specifications') }}"><i class="fa fa-circle-o"></i> Specification</a>
-                    </li>
-                    <li class="{{ in_array($currentRoute, ['vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular']) ? 'active' : '' }}">
-                        <a href="{{ route('vendor-container-particulars') }}"><i class="fa fa-circle-o"></i> Container Particulars</a>
-                    </li>
-                    <li class="{{ in_array($currentRoute, ['vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge']) ? 'active' : '' }}">
-                        <a href="{{ route('vendor-port-charges') }}"><i class="fa fa-circle-o"></i> Port Charges</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['cartoon-types','create.cartoon-type','edit.cartoon-type']) ? 'active' : '' }}">
                         <a href="{{ route('cartoon-types') }}"><i class="fa fa-circle-o"></i> Cartoon Type</a>
@@ -539,7 +533,67 @@
                     </li>
                 </ul>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show','get.web.cleaning.agent.products.list','get.web.cleaning.agent.products.show']))?'active':'' }}">
+            @php
+                $serviceProviderMasterRoutes = [
+                    'vendor-port-types','create.vendor-port-type','edit.vendor-port-type',
+                    'vendor-container-sizes','create.vendor-container-size','edit.vendor-container-size',
+                    'vendor-icd-locations','create.vendor-icd-location','edit.vendor-icd-location',
+                    'vendor-indian-ports','create.vendor-indian-port','edit.vendor-indian-port',
+                    'vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port',
+                    'vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular',
+                    'vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge',
+                ];
+                $serviceProviderProductRoutes = [
+                    'get.web.cleaning.agent.products.list','get.web.cleaning.agent.products.show',
+                ];
+                $serviceProviderRoutes = array_merge($serviceProviderMasterRoutes, $serviceProviderProductRoutes);
+            @endphp
+            <li class="treeview {{ in_array($currentRoute, $serviceProviderRoutes) ? 'active' : '' }}">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-truck"></i>
+                    <span>Service Providers</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="treeview {{ in_array($currentRoute, $serviceProviderMasterRoutes) ? 'active' : '' }}">
+                        <a href="javascript:void(0)">
+                            <i class="fa fa-circle-o"></i> Masters
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{ in_array($currentRoute, ['vendor-port-types','create.vendor-port-type','edit.vendor-port-type']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-port-types') }}"><i class="fa fa-circle-o"></i> Port Type</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-container-sizes','create.vendor-container-size','edit.vendor-container-size']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-container-sizes') }}"><i class="fa fa-circle-o"></i> Container Size</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-icd-locations','create.vendor-icd-location','edit.vendor-icd-location']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-icd-locations') }}"><i class="fa fa-circle-o"></i> ICD Locations</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-indian-ports','create.vendor-indian-port','edit.vendor-indian-port']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-indian-ports') }}"><i class="fa fa-circle-o"></i> Indian Ports</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-destination-ports') }}"><i class="fa fa-circle-o"></i> Destination Ports</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-container-particulars') }}"><i class="fa fa-circle-o"></i> Container Particulars</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-port-charges') }}"><i class="fa fa-circle-o"></i> Port Charges</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="{{ in_array($currentRoute, $serviceProviderProductRoutes) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.cleaning.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-cubes"></i>
                     <span>Vendor Products</span>
@@ -562,9 +616,6 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.machinery.equipment.products.list') }}"><i class="fa fa-circle-o"></i> Machinery Equipment Products</a>
-                    </li>
-                    <li class="{{ in_array($currentRoute, ['get.web.cleaning.agent.products.list','get.web.cleaning.agent.products.show']) ? 'active' : '' }}">
-                        <a href="{{ route('get.web.cleaning.agent.products.list') }}"><i class="fa fa-circle-o"></i> Cleaning Agent Products</a>
                     </li>
                 </ul>
             </li>

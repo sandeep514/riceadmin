@@ -4,6 +4,11 @@ namespace App\Services;
 
 use App\CleaningAgentParticularMap;
 use App\VendorContainerParticular;
+use App\VendorContainerSize;
+use App\VendorDestinationPort;
+use App\VendorIcdLocation;
+use App\VendorIndianPort;
+use App\VendorPortType;
 use App\WebCleaningAgentProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,7 +42,14 @@ class WebCleaningAgentProductService
 
             $this->syncParticulars($product, $request);
 
-            return $product->load(['particulars.particular']);
+            return $product->load([
+                'particulars.particular',
+                'containerSizeRel',
+                'portTypeRel',
+                'icdLocationRel',
+                'indianPortRel',
+                'destinationPortRel',
+            ]);
         });
 
         VendorProductAdminNotificationService::notify(
@@ -94,7 +106,14 @@ class WebCleaningAgentProductService
             $this->syncParticulars($product, $request);
         });
 
-        $product->load(['particulars.particular']);
+        $product->load([
+            'particulars.particular',
+            'containerSizeRel',
+            'portTypeRel',
+            'icdLocationRel',
+            'indianPortRel',
+            'destinationPortRel',
+        ]);
 
         VendorProductAdminNotificationService::notify(
             'cleaning_agent',
@@ -112,7 +131,14 @@ class WebCleaningAgentProductService
 
     public function listByUser(Request $request, $userId)
     {
-        $products = WebCleaningAgentProduct::with(['particulars.particular'])
+        $products = WebCleaningAgentProduct::with([
+            'particulars.particular',
+            'containerSizeRel',
+            'portTypeRel',
+            'icdLocationRel',
+            'indianPortRel',
+            'destinationPortRel',
+        ])
             ->where('user_id', (int) $userId)
             ->orderByDesc('id')
             ->get()
@@ -128,7 +154,14 @@ class WebCleaningAgentProductService
 
     public function show(Request $request, $id)
     {
-        $product = WebCleaningAgentProduct::with(['particulars.particular'])->find((int) $id);
+        $product = WebCleaningAgentProduct::with([
+            'particulars.particular',
+            'containerSizeRel',
+            'portTypeRel',
+            'icdLocationRel',
+            'indianPortRel',
+            'destinationPortRel',
+        ])->find((int) $id);
         if ($product === null) {
             return response()->json([
                 'status' => false,
@@ -179,7 +212,12 @@ class WebCleaningAgentProductService
             return WebCleaningAgentProduct::query()->whereRaw('1 = 0')->get();
         }
 
-        return WebCleaningAgentProduct::with(['particulars.particular'])
+        return WebCleaningAgentProduct::with([
+            'particulars.particular',
+            'icdLocationRel',
+            'indianPortRel',
+            'destinationPortRel',
+        ])
             ->whereIn('user_id', $ownerIds)
             ->where('status', 1)
             ->whereHas('particulars')
@@ -244,12 +282,21 @@ class WebCleaningAgentProductService
         return [
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
-            'container20Ft' => (int) $product->container_20_ft === 1,
-            'container40Ft' => (int) $product->container_40_ft === 1,
-            'portType' => $product->port_type,
-            'icdLocation' => $product->icd_location,
-            'portLocation' => $product->port_location,
-            'destination' => $product->destination,
+            'containerSizeId' => $product->container_size_id !== null ? (int) $product->container_size_id : null,
+            'containerSize' => $product->container_size !== null
+                ? (int) $product->container_size
+                : (optional($product->containerSizeRel)->size !== null ? (int) $product->containerSizeRel->size : null),
+            'containerSizeLabel' => optional($product->containerSizeRel)->label
+                ?: ($product->container_size ? $product->container_size.' FT' : null),
+            'portTypeId' => $product->port_type_id !== null ? (int) $product->port_type_id : null,
+            'portType' => optional($product->portTypeRel)->name ?: $product->port_type,
+            'icdLocationId' => $product->icd_location_id !== null ? (int) $product->icd_location_id : null,
+            'icdLocation' => optional($product->icdLocationRel)->name ?: $product->icd_location,
+            'indianPortId' => $product->indian_port_id !== null ? (int) $product->indian_port_id : null,
+            'indianPort' => optional($product->indianPortRel)->name ?: $product->port_location,
+            'portLocation' => optional($product->indianPortRel)->name ?: $product->port_location,
+            'destinationPortId' => $product->destination_port_id !== null ? (int) $product->destination_port_id : null,
+            'destination' => optional($product->destinationPortRel)->name ?: $product->destination,
             'additionalInformation' => $product->additional_information,
             'status' => (int) $product->status,
             'particulars' => $particulars,
@@ -276,13 +323,72 @@ class WebCleaningAgentProductService
 
     private function parentAttributes(Request $request): array
     {
+        $containerSizeId = $this->nullableInt($request->input('container_size_id', $request->input('containerSizeId')));
+        $portTypeId = $this->nullableInt($request->input('port_type_id', $request->input('portTypeId')));
+        $icdLocationId = $this->nullableInt($request->input('icd_location_id', $request->input('icdLocationId')));
+        $indianPortId = $this->nullableInt($request->input(
+            'indian_port_id',
+            $request->input('indianPortId', $request->input('port_location_id', $request->input('portLocationId')))
+        ));
+        $destinationPortId = $this->nullableInt($request->input(
+            'destination_port_id',
+            $request->input('destinationPortId', $request->input('destination_id', $request->input('destinationId')))
+        ));
+
+        $resolvedSize = $this->resolveContainerSize($request);
+        if ($containerSizeId) {
+            $sizeRow = VendorContainerSize::query()->find($containerSizeId);
+            if ($sizeRow) {
+                $resolvedSize = (int) $sizeRow->size;
+            }
+        } elseif ($resolvedSize !== null) {
+            $matchedId = VendorContainerSize::query()
+                ->where('size', $resolvedSize)
+                ->where('status', VendorContainerSize::STATUS_ACTIVE)
+                ->value('id');
+            if ($matchedId) {
+                $containerSizeId = (int) $matchedId;
+            }
+        }
+
+        $portTypeName = null;
+        if ($portTypeId) {
+            $portTypeName = VendorPortType::query()->where('id', $portTypeId)->value('name');
+        } else {
+            $portTypeName = $this->nullableString($request->input('port_type', $request->input('portType')));
+            if ($portTypeName) {
+                $matchedPortTypeId = VendorPortType::query()
+                    ->whereRaw('LOWER(name) = ?', [strtolower($portTypeName)])
+                    ->where('status', VendorPortType::STATUS_ACTIVE)
+                    ->value('id');
+                if ($matchedPortTypeId) {
+                    $portTypeId = (int) $matchedPortTypeId;
+                    $portTypeName = VendorPortType::query()->where('id', $portTypeId)->value('name');
+                }
+            }
+        }
+
+        $icdName = $icdLocationId
+            ? VendorIcdLocation::query()->where('id', $icdLocationId)->value('name')
+            : null;
+        $indianPortName = $indianPortId
+            ? VendorIndianPort::query()->where('id', $indianPortId)->value('name')
+            : null;
+        $destinationName = $destinationPortId
+            ? VendorDestinationPort::query()->where('id', $destinationPortId)->value('name')
+            : null;
+
         return [
-            'container_20_ft' => $this->boolFlag($request, ['container_20_ft', 'container20Ft', '20_ft', '20ft']) ? 1 : 0,
-            'container_40_ft' => $this->boolFlag($request, ['container_40_ft', 'container40Ft', '40_ft', '40ft']) ? 1 : 0,
-            'port_type' => $this->nullableString($request->input('port_type', $request->input('portType'))),
-            'icd_location' => $this->nullableString($request->input('icd_location', $request->input('icdLocation'))),
-            'port_location' => $this->nullableString($request->input('port_location', $request->input('portLocation'))),
-            'destination' => $this->nullableString($request->input('destination')),
+            'container_size_id' => $containerSizeId,
+            'container_size' => $resolvedSize,
+            'port_type_id' => $portTypeId,
+            'port_type' => $portTypeName,
+            'icd_location_id' => $icdLocationId,
+            'icd_location' => $icdName,
+            'indian_port_id' => $indianPortId,
+            'port_location' => $indianPortName,
+            'destination_port_id' => $destinationPortId,
+            'destination' => $destinationName,
             'additional_information' => $this->nullableString(
                 $request->input('additional_information', $request->input('additionalInformation'))
             ),
@@ -362,13 +468,24 @@ class WebCleaningAgentProductService
     {
         return [
             'user_id' => ['required', 'integer', 'exists:users,id'],
+            'container_size_id' => ['nullable', 'integer', 'exists:vendor_container_sizes,id'],
+            'containerSizeId' => ['nullable', 'integer', 'exists:vendor_container_sizes,id'],
+            'container_size' => ['nullable', 'integer'],
+            'containerSize' => ['nullable', 'integer'],
+            'port_type_id' => ['nullable', 'integer', 'exists:vendor_port_types,id'],
+            'portTypeId' => ['nullable', 'integer', 'exists:vendor_port_types,id'],
             'port_type' => ['nullable', 'string', 'max:255'],
             'portType' => ['nullable', 'string', 'max:255'],
-            'icd_location' => ['nullable', 'string', 'max:255'],
-            'icdLocation' => ['nullable', 'string', 'max:255'],
-            'port_location' => ['nullable', 'string', 'max:255'],
-            'portLocation' => ['nullable', 'string', 'max:255'],
-            'destination' => ['nullable', 'string', 'max:255'],
+            'icd_location_id' => ['nullable', 'integer', 'exists:vendor_icd_locations,id'],
+            'icdLocationId' => ['nullable', 'integer', 'exists:vendor_icd_locations,id'],
+            'indian_port_id' => ['nullable', 'integer', 'exists:vendor_indian_ports,id'],
+            'indianPortId' => ['nullable', 'integer', 'exists:vendor_indian_ports,id'],
+            'port_location_id' => ['nullable', 'integer', 'exists:vendor_indian_ports,id'],
+            'portLocationId' => ['nullable', 'integer', 'exists:vendor_indian_ports,id'],
+            'destination_port_id' => ['nullable', 'integer', 'exists:vendor_destination_ports,id'],
+            'destinationPortId' => ['nullable', 'integer', 'exists:vendor_destination_ports,id'],
+            'destination_id' => ['nullable', 'integer', 'exists:vendor_destination_ports,id'],
+            'destinationId' => ['nullable', 'integer', 'exists:vendor_destination_ports,id'],
             'additional_information' => ['nullable', 'string'],
             'additionalInformation' => ['nullable', 'string'],
             'particulars' => ['nullable', 'array'],
@@ -428,10 +545,21 @@ class WebCleaningAgentProductService
             }
         }
 
-        $container20 = $this->boolFlagFromArray($data, ['container_20_ft', 'container20Ft', '20_ft', '20ft']);
-        $container40 = $this->boolFlagFromArray($data, ['container_40_ft', 'container40Ft', '40_ft', '40ft']);
-        if (! $container20 && ! $container40) {
-            $validator->errors()->add('container', 'Select at least one container size (20 FT or 40 FT).');
+        $containerSizeId = $data['container_size_id'] ?? $data['containerSizeId'] ?? null;
+        $containerSize = null;
+        if ($containerSizeId !== null && $containerSizeId !== '') {
+            $containerSize = VendorContainerSize::query()
+                ->where('id', (int) $containerSizeId)
+                ->where('status', VendorContainerSize::STATUS_ACTIVE)
+                ->value('size');
+        }
+        if ($containerSize === null) {
+            $containerSize = $this->normalizeContainerSizeValue(
+                $data['container_size'] ?? $data['containerSize'] ?? $data['container_40_ft'] ?? $data['container40Ft'] ?? null
+            );
+        }
+        if ($containerSize === null) {
+            $validator->errors()->add('container_size', 'Select a valid container size.');
         }
 
         if (! $hasParticular && ! $hasOther) {
@@ -452,15 +580,22 @@ class WebCleaningAgentProductService
             $request->merge(['user_id' => $request->input('userId')]);
         }
 
-        // Allow FE to send containerSizes: ["20_ft","40_ft"]
-        $sizes = $request->input('container_sizes', $request->input('containerSizes'));
-        if (is_array($sizes)) {
-            $normalized = array_map(fn ($s) => strtolower(str_replace([' ', '-'], '_', (string) $s)), $sizes);
-            if (in_array('20_ft', $normalized, true) || in_array('20ft', $normalized, true)) {
-                $request->merge(['container_20_ft' => 1]);
-            }
-            if (in_array('40_ft', $normalized, true) || in_array('40ft', $normalized, true)) {
-                $request->merge(['container_40_ft' => 1]);
+        $size = $this->resolveContainerSize($request);
+        if ($size !== null) {
+            $request->merge([
+                'container_size' => $size,
+                'containerSize' => $size,
+            ]);
+        }
+
+        $containerSizeId = $this->nullableInt($request->input('container_size_id', $request->input('containerSizeId')));
+        if ($containerSizeId && ! $request->filled('container_size')) {
+            $sizeFromId = VendorContainerSize::query()->where('id', $containerSizeId)->value('size');
+            if ($sizeFromId !== null) {
+                $request->merge([
+                    'container_size' => (int) $sizeFromId,
+                    'containerSize' => (int) $sizeFromId,
+                ]);
             }
         }
     }
@@ -496,34 +631,73 @@ class WebCleaningAgentProductService
         return null;
     }
 
-    private function boolFlag(Request $request, array $keys): bool
+    private function resolveContainerSize(Request $request): ?int
     {
-        foreach ($keys as $key) {
-            if (! $request->exists($key) && $request->input($key) === null) {
-                continue;
-            }
-            $value = $request->input($key);
-            if ($value === true || $value === 1 || $value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
-                return true;
+        $sizeId = $this->nullableInt($request->input('container_size_id', $request->input('containerSizeId')));
+        if ($sizeId) {
+            $size = VendorContainerSize::query()->where('id', $sizeId)->value('size');
+            if ($size !== null) {
+                return (int) $size;
             }
         }
 
-        return false;
+        $raw = $request->input(
+            'container_size',
+            $request->input(
+                'containerSize',
+                $request->input('container_40_ft', $request->input('container40Ft'))
+            )
+        );
+
+        // Legacy boolean container_40_ft=true → 40
+        if ($raw === true || $raw === 1 || $raw === '1' || $raw === 'true' || $raw === 'on' || $raw === 'yes') {
+            if ($request->exists('container_40_ft') || $request->exists('container40Ft')) {
+                return 40;
+            }
+        }
+
+        return $this->normalizeContainerSizeValue($raw);
     }
 
-    private function boolFlagFromArray(array $data, array $keys): bool
+    private function normalizeContainerSizeValue($value): ?int
     {
-        foreach ($keys as $key) {
-            if (! array_key_exists($key, $data)) {
-                continue;
-            }
-            $value = $data[$key];
-            if ($value === true || $value === 1 || $value === '1' || $value === 'true' || $value === 'on' || $value === 'yes') {
-                return true;
-            }
+        if ($value === null || $value === '') {
+            return null;
         }
 
-        return false;
+        if (is_numeric($value)) {
+            $size = (int) $value;
+            $exists = VendorContainerSize::query()
+                ->where('size', $size)
+                ->where('status', VendorContainerSize::STATUS_ACTIVE)
+                ->exists();
+
+            if ($exists) {
+                return $size;
+            }
+
+            // Fallback for pre-migration hard-coded sizes
+            return in_array($size, [40, 50], true) ? $size : null;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+        $normalized = str_replace([' ', '-'], '_', $normalized);
+
+        $legacy = match ($normalized) {
+            '40', '40ft', '40_ft', '40feet', '40_feet' => 40,
+            '50', '50ft', '50_ft', '50feet', '50_feet' => 50,
+            default => null,
+        };
+        if ($legacy !== null) {
+            return $legacy;
+        }
+
+        $byLabel = VendorContainerSize::query()
+            ->where('status', VendorContainerSize::STATUS_ACTIVE)
+            ->whereRaw('LOWER(label) = ?', [strtolower(trim((string) $value))])
+            ->value('size');
+
+        return $byLabel !== null ? (int) $byLabel : null;
     }
 
     private function nullableString($value): ?string
@@ -534,5 +708,20 @@ class WebCleaningAgentProductService
         $value = trim((string) $value);
 
         return $value === '' ? null : $value;
+    }
+
+    private function nullableInt($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (! is_numeric($value)) {
+            return null;
+        }
+
+        $id = (int) $value;
+
+        return $id > 0 ? $id : null;
     }
 }

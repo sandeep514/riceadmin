@@ -13,8 +13,7 @@ class CreateCleaningAgentVendorProductsTables extends Migration
             Schema::create('web_cleaning_agent_products', function (Blueprint $table) {
                 $table->id();
                 $table->unsignedBigInteger('user_id')->index();
-                $table->unsignedTinyInteger('container_20_ft')->default(0);
-                $table->unsignedTinyInteger('container_40_ft')->default(0);
+                $table->unsignedSmallInteger('container_size')->nullable()->index();
                 $table->string('port_type', 255)->nullable();
                 $table->string('icd_location', 255)->nullable();
                 $table->string('port_location', 255)->nullable();

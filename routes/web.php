@@ -240,6 +240,61 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/port-charges/change-status/{id}', ['as' => 'vendor-port-charge.change-status', 'uses' => 'VendorPortChargeController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — ICD Locations (clearing agent)
+            Route::group(['module' => 'vendor_icd_location', 'icon' => 'fa-map-marker'], function () {
+                Route::get('vendor-flow/icd-locations', ['as' => 'vendor-icd-locations', 'uses' => 'VendorIcdLocationController@index', 'action' => 'view']);
+                Route::get('vendor-flow/icd-locations/create', ['as' => 'create.vendor-icd-location', 'uses' => 'VendorIcdLocationController@create', 'action' => 'create']);
+                Route::post('vendor-flow/icd-locations/save', ['as' => 'save.vendor-icd-location', 'uses' => 'VendorIcdLocationController@save', 'action' => 'create']);
+                Route::get('vendor-flow/icd-locations/edit/{id}', ['as' => 'edit.vendor-icd-location', 'uses' => 'VendorIcdLocationController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/icd-locations/update/{id}', ['as' => 'update.vendor-icd-location', 'uses' => 'VendorIcdLocationController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/icd-locations/delete/{id}', ['as' => 'delete.vendor-icd-location', 'uses' => 'VendorIcdLocationController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/icd-locations/change-status/{id}', ['as' => 'vendor-icd-location.change-status', 'uses' => 'VendorIcdLocationController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Indian Ports (clearing agent)
+            Route::group(['module' => 'vendor_indian_port', 'icon' => 'fa-ship'], function () {
+                Route::get('vendor-flow/indian-ports', ['as' => 'vendor-indian-ports', 'uses' => 'VendorIndianPortController@index', 'action' => 'view']);
+                Route::get('vendor-flow/indian-ports/create', ['as' => 'create.vendor-indian-port', 'uses' => 'VendorIndianPortController@create', 'action' => 'create']);
+                Route::post('vendor-flow/indian-ports/save', ['as' => 'save.vendor-indian-port', 'uses' => 'VendorIndianPortController@save', 'action' => 'create']);
+                Route::get('vendor-flow/indian-ports/edit/{id}', ['as' => 'edit.vendor-indian-port', 'uses' => 'VendorIndianPortController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/indian-ports/update/{id}', ['as' => 'update.vendor-indian-port', 'uses' => 'VendorIndianPortController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/indian-ports/delete/{id}', ['as' => 'delete.vendor-indian-port', 'uses' => 'VendorIndianPortController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/indian-ports/change-status/{id}', ['as' => 'vendor-indian-port.change-status', 'uses' => 'VendorIndianPortController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Destination Ports (clearing agent)
+            Route::group(['module' => 'vendor_destination_port', 'icon' => 'fa-globe'], function () {
+                Route::get('vendor-flow/destination-ports', ['as' => 'vendor-destination-ports', 'uses' => 'VendorDestinationPortController@index', 'action' => 'view']);
+                Route::get('vendor-flow/destination-ports/create', ['as' => 'create.vendor-destination-port', 'uses' => 'VendorDestinationPortController@create', 'action' => 'create']);
+                Route::post('vendor-flow/destination-ports/save', ['as' => 'save.vendor-destination-port', 'uses' => 'VendorDestinationPortController@save', 'action' => 'create']);
+                Route::get('vendor-flow/destination-ports/edit/{id}', ['as' => 'edit.vendor-destination-port', 'uses' => 'VendorDestinationPortController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/destination-ports/update/{id}', ['as' => 'update.vendor-destination-port', 'uses' => 'VendorDestinationPortController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/destination-ports/delete/{id}', ['as' => 'delete.vendor-destination-port', 'uses' => 'VendorDestinationPortController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/destination-ports/change-status/{id}', ['as' => 'vendor-destination-port.change-status', 'uses' => 'VendorDestinationPortController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Service Providers / Clearing Agent — Port Type master (ICD / Sea Port)
+            Route::group(['module' => 'vendor_port_type', 'icon' => 'fa-anchor'], function () {
+                Route::get('vendor-flow/port-types', ['as' => 'vendor-port-types', 'uses' => 'VendorPortTypeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/port-types/create', ['as' => 'create.vendor-port-type', 'uses' => 'VendorPortTypeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/port-types/save', ['as' => 'save.vendor-port-type', 'uses' => 'VendorPortTypeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/port-types/edit/{id}', ['as' => 'edit.vendor-port-type', 'uses' => 'VendorPortTypeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/port-types/update/{id}', ['as' => 'update.vendor-port-type', 'uses' => 'VendorPortTypeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/port-types/delete/{id}', ['as' => 'delete.vendor-port-type', 'uses' => 'VendorPortTypeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/port-types/change-status/{id}', ['as' => 'vendor-port-type.change-status', 'uses' => 'VendorPortTypeController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Service Providers / Clearing Agent — Container Size master
+            Route::group(['module' => 'vendor_container_size', 'icon' => 'fa-arrows-h'], function () {
+                Route::get('vendor-flow/container-sizes', ['as' => 'vendor-container-sizes', 'uses' => 'VendorContainerSizeController@index', 'action' => 'view']);
+                Route::get('vendor-flow/container-sizes/create', ['as' => 'create.vendor-container-size', 'uses' => 'VendorContainerSizeController@create', 'action' => 'create']);
+                Route::post('vendor-flow/container-sizes/save', ['as' => 'save.vendor-container-size', 'uses' => 'VendorContainerSizeController@save', 'action' => 'create']);
+                Route::get('vendor-flow/container-sizes/edit/{id}', ['as' => 'edit.vendor-container-size', 'uses' => 'VendorContainerSizeController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/container-sizes/update/{id}', ['as' => 'update.vendor-container-size', 'uses' => 'VendorContainerSizeController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/container-sizes/delete/{id}', ['as' => 'delete.vendor-container-size', 'uses' => 'VendorContainerSizeController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/container-sizes/change-status/{id}', ['as' => 'vendor-container-size.change-status', 'uses' => 'VendorContainerSizeController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Cartoon Type master
             Route::group(['module' => 'cartoon_type', 'icon' => 'fa-square-o'], function () {
                 Route::get('vendor-flow/cartoon-types', ['as' => 'cartoon-types', 'uses' => 'CartoonTypeController@index', 'action' => 'view']);

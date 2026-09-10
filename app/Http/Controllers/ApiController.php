@@ -8092,6 +8092,85 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getIcdLocations()
+    {
+        $rows = \App\VendorIcdLocation::query()
+            ->where('status', \App\VendorIcdLocation::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'ICD locations fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getIndianPorts()
+    {
+        $rows = \App\VendorIndianPort::query()
+            ->where('status', \App\VendorIndianPort::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Indian ports fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getDestinationPorts()
+    {
+        $rows = \App\VendorDestinationPort::query()
+            ->where('status', \App\VendorDestinationPort::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Destination ports fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getPortTypes()
+    {
+        $rows = \App\VendorPortType::query()
+            ->where('status', \App\VendorPortType::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Port types fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getContainerSizes()
+    {
+        $rows = \App\VendorContainerSize::query()
+            ->where('status', \App\VendorContainerSize::STATUS_ACTIVE)
+            ->orderBy('size')
+            ->get(['id', 'size', 'label', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'size' => (int) $row->size,
+                    'label' => $row->label ?: ($row->size.' FT'),
+                    'description' => $row->description,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Container sizes fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
     public function getCylinderTypes()
     {
         $types = \App\CylinderType::query()

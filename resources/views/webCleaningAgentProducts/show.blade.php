@@ -9,8 +9,8 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li>Vendor Products</li>
-            <li><a href="{{ route('get.web.cleaning.agent.products.list') }}">Cleaning Agent</a></li>
+            <li>Service Providers</li>
+            <li><a href="{{ route('get.web.cleaning.agent.products.list') }}">Clearing Agent</a></li>
             <li class="active">View</li>
         </ol>
     </section>
@@ -58,30 +58,53 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Container Type (Dry)</th>
+                        <th>Container Size</th>
                         <td>
-                            @if((int) $product->container_20_ft === 1) 20 FT @endif
-                            @if((int) $product->container_40_ft === 1) 40 FT @endif
-                            @if((int) $product->container_20_ft !== 1 && (int) $product->container_40_ft !== 1)
-                                —
+                            @php
+                                $sizeLabel = optional($product->containerSizeRel)->label
+                                    ?: ($product->container_size ? $product->container_size.' FT' : null);
+                            @endphp
+                            {{ $sizeLabel ?: '—' }}
+                            @if($product->container_size_id)
+                                <small class="text-muted">(ID {{ $product->container_size_id }})</small>
                             @endif
                         </td>
                     </tr>
                     <tr>
                         <th>Port Type</th>
-                        <td>{{ $product->port_type ?: '—' }}</td>
+                        <td>
+                            {{ optional($product->portTypeRel)->name ?: ($product->port_type ?: '—') }}
+                            @if($product->port_type_id)
+                                <small class="text-muted">(ID {{ $product->port_type_id }})</small>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>ICD Location</th>
-                        <td>{{ $product->icd_location ?: '—' }}</td>
+                        <td>
+                            {{ optional($product->icdLocationRel)->name ?: ($product->icd_location ?: '—') }}
+                            @if($product->icd_location_id)
+                                <small class="text-muted">(ID {{ $product->icd_location_id }})</small>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <th>Port Location</th>
-                        <td>{{ $product->port_location ?: '—' }}</td>
+                        <th>Indian Port / Port Location</th>
+                        <td>
+                            {{ optional($product->indianPortRel)->name ?: ($product->port_location ?: '—') }}
+                            @if($product->indian_port_id)
+                                <small class="text-muted">(ID {{ $product->indian_port_id }})</small>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
-                        <th>Destination</th>
-                        <td>{{ $product->destination ?: '—' }}</td>
+                        <th>Destination Port</th>
+                        <td>
+                            {{ optional($product->destinationPortRel)->name ?: ($product->destination ?: '—') }}
+                            @if($product->destination_port_id)
+                                <small class="text-muted">(ID {{ $product->destination_port_id }})</small>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>Additional Information</th>

@@ -9,7 +9,8 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li>Vendor Flow</li>
+                <li>Service Providers</li>
+                <li>Masters</li>
                 <li class="active">Port Charges</li>
             </ol>
         </section>

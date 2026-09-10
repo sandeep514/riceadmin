@@ -9,7 +9,8 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li>Vendor Flow</li>
+                <li>Service Providers</li>
+                <li>Masters</li>
                 <li><a href="{{ route('vendor-port-charges') }}">Port Charges</a></li>
                 <li class="active">Create</li>
             </ol>

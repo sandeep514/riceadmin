@@ -4,14 +4,14 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Container Particulars
+                ICD Locations
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li>Service Providers</li>
                 <li>Masters</li>
-                <li class="active">Container Particulars</li>
+                <li class="active">ICD Locations</li>
             </ol>
         </section>
         <section class="content">
@@ -19,9 +19,9 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Container particulars master</h3>
+                            <h3 class="box-title">ICD Locations master</h3>
                             <div class="pull-right">
-                                <a href="{{ route('create.vendor-container-particular') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('create.vendor-icd-location') }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-plus"></i> Create New
                                 </a>
                             </div>
@@ -32,7 +32,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Particular</th>
+                                            <th>Name</th>
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th>Created</th>
@@ -44,10 +44,10 @@
                                         @foreach($records as $record)
                                             <tr>
                                                 <td>{{ $record->id }}</td>
-                                                <td>{{ $record->particular }}</td>
+                                                <td>{{ $record->name }}</td>
                                                 <td>{{ $record->description ?: '—' }}</td>
                                                 <td>
-                                                    @if((int) $record->status === \App\VendorContainerParticular::STATUS_ACTIVE)
+                                                    @if((int) $record->status === \App\VendorIcdLocation::STATUS_ACTIVE)
                                                         <span class="label label-success">Active</span>
                                                     @else
                                                         <span class="label label-default">Inactive</span>
@@ -56,7 +56,7 @@
                                                 <td>{{ $record->created_at ? $record->created_at->format('d M Y H:i') : '—' }}</td>
                                                 <td>{{ $record->updated_at ? $record->updated_at->format('d M Y H:i') : '—' }}</td>
                                                 <td>
-                                                    @include('vendor-container-particulars._actions', ['model' => $record])
+                                                    @include('vendor-icd-locations._actions', ['model' => $record])
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -82,7 +82,7 @@
 
         $(document).on('click', '.delete-row', function(e){
             e.preventDefault();
-            if(confirm('Are you sure you want to delete this container particular?')){
+            if(confirm('Are you sure you want to delete this ICD location?')){
                 $(this).closest('form').submit();
             }
         });

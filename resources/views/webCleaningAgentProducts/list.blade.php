@@ -9,8 +9,8 @@
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-            <li>Vendor Products</li>
-            <li class="active">Cleaning Agent</li>
+            <li>Service Providers</li>
+            <li class="active">Clearing Agent Products</li>
         </ol>
     </section>
 
@@ -41,11 +41,14 @@
                                 @endif
                             </td>
                             <td>
-                                @if((int) $product->container_20_ft === 1) 20 FT @endif
-                                @if((int) $product->container_40_ft === 1) 40 FT @endif
+                                @php
+                                    $sizeLabel = optional($product->containerSizeRel)->label
+                                        ?: ($product->container_size ? $product->container_size.' FT' : null);
+                                @endphp
+                                {{ $sizeLabel ?: '—' }}
                             </td>
                             <td>
-                                {{ $product->port_type ?: '—' }}
+                                {{ optional($product->portTypeRel)->name ?: ($product->port_type ?: '—') }}
                                 @if($product->port_location)
                                     <br><small>{{ $product->port_location }}</small>
                                 @endif

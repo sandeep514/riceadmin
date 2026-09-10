@@ -43,7 +43,12 @@ class WebCleaningAgentProductController extends Controller
 
     public function showProductsToAdmin()
     {
-        $products = WebCleaningAgentProduct::with(['user:id,name,email,mobile', 'particulars.particular'])
+        $products = WebCleaningAgentProduct::with([
+            'user:id,name,email,mobile',
+            'particulars.particular',
+            'containerSizeRel',
+            'portTypeRel',
+        ])
             ->orderByDesc('id')
             ->get();
 
@@ -55,6 +60,11 @@ class WebCleaningAgentProductController extends Controller
         $product = WebCleaningAgentProduct::with([
             'user:id,name,email,mobile',
             'particulars.particular',
+            'containerSizeRel',
+            'portTypeRel',
+            'icdLocationRel',
+            'indianPortRel',
+            'destinationPortRel',
         ])->findOrFail((int) $id);
 
         return view('webCleaningAgentProducts.show', compact('product'));
