@@ -508,7 +508,7 @@
                         <a href="{{ route('vendor-specifications') }}"><i class="fa fa-circle-o"></i> Specification</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['cartoon-types','create.cartoon-type','edit.cartoon-type']) ? 'active' : '' }}">
-                        <a href="{{ route('cartoon-types') }}"><i class="fa fa-circle-o"></i> Cartoon Type</a>
+                        <a href="{{ route('cartoon-types') }}"><i class="fa fa-circle-o"></i> Carton Type</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['cylinder-types','create.cylinder-type','edit.cylinder-type']) ? 'active' : '' }}">
                         <a href="{{ route('cylinder-types') }}"><i class="fa fa-circle-o"></i> Cylinder Type</a>
@@ -606,7 +606,7 @@
                         <a href="{{ route('get.web.rice.bag.products.list') }}"><i class="fa fa-circle-o"></i> Rice Bag Products</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.cartoon.products.list','get.web.cartoon.products.show']) ? 'active' : '' }}">
-                        <a href="{{ route('get.web.cartoon.products.list') }}"><i class="fa fa-circle-o"></i> Cartoon Products</a>
+                        <a href="{{ route('get.web.cartoon.products.list') }}"><i class="fa fa-circle-o"></i> Carton Products</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.cylinder.products.list','get.web.cylinder.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.cylinder.products.list') }}"><i class="fa fa-circle-o"></i> Cylinder Products</a>

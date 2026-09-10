@@ -33,7 +33,7 @@ class CartoonTypeController extends Controller
             'order_no' => MasterOrderUpdater::nextOrder(CartoonType::class),
         ]);
 
-        Session::flash('success', 'Success|Cartoon type saved successfully!');
+        Session::flash('success', 'Success|Carton type saved successfully!');
 
         return redirect()->route('cartoon-types');
     }
@@ -65,7 +65,7 @@ class CartoonTypeController extends Controller
             'status',
         ]));
 
-        Session::flash('success', 'Success|Cartoon type updated successfully!');
+        Session::flash('success', 'Success|Carton type updated successfully!');
 
         return redirect()->route('cartoon-types');
     }
@@ -80,7 +80,7 @@ class CartoonTypeController extends Controller
         }
 
         $model->delete();
-        Session::flash('success', 'Success|Cartoon type deleted successfully!');
+        Session::flash('success', 'Success|Carton type deleted successfully!');
 
         return back();
     }
@@ -100,8 +100,8 @@ class CartoonTypeController extends Controller
         $model->save();
 
         $msg = (int) $model->status === CartoonType::STATUS_ACTIVE
-            ? 'Success|Cartoon type marked as active.'
-            : 'Success|Cartoon type marked as inactive.';
+            ? 'Success|Carton type marked as active.'
+            : 'Success|Carton type marked as inactive.';
 
         Session::flash('success', $msg);
 
@@ -116,7 +116,7 @@ class CartoonTypeController extends Controller
         ]);
 
         MasterOrderUpdater::swap(CartoonType::class, (int) $request->id, (int) $request->order_no);
-        Session::flash('success', 'Success|Cartoon type order updated successfully.');
+        Session::flash('success', 'Success|Carton type order updated successfully.');
 
         return back();
     }

@@ -15,13 +15,13 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Cartoon Products
+            Carton Products
             <small>Review &amp; verify</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li>Vendor Products</li>
-            <li><a href="{{ route('get.web.cartoon.products.list') }}">Cartoon Products</a></li>
+            <li><a href="{{ route('get.web.cartoon.products.list') }}">Carton Products</a></li>
             <li class="active">List</li>
         </ol>
     </section>
@@ -35,7 +35,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Owner</th>
-                            <th>Cartoon type</th>
+                            <th>Carton type</th>
                             <th>Specification</th>
                             <th>Variants</th>
                             <th>Status</th>

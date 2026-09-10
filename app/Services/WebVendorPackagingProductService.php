@@ -44,7 +44,7 @@ class WebVendorPackagingProductService
             typeIdColumn: 'cartoon_type_id',
             typeIdCamel: 'cartoonTypeId',
             typeNameCamel: 'cartoonTypeName',
-            label: 'Cartoon',
+            label: 'Carton',
             uploadFolder: 'cartoon-products',
         );
     }

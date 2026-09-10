@@ -8045,7 +8045,7 @@ if (!file_exists('uploads')) {
 
         return response()->json([
             'status' => true,
-            'message' => 'Cartoon types fetched successfully.',
+            'message' => 'Carton types fetched successfully.',
             'data' => $types,
         ], 200);
     }

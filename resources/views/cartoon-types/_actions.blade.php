@@ -1,5 +1,5 @@
 @if((int) $model->status === \App\CartoonType::STATUS_ACTIVE)
-    <a href="{{ route('cartoon-type.change-status', $model->id) }}" class="btn btn-warning btn-xs" onclick="return confirm('Mark this cartoon type as inactive?');">Inactive</a>
+    <a href="{{ route('cartoon-type.change-status', $model->id) }}" class="btn btn-warning btn-xs" onclick="return confirm('Mark this carton type as inactive?');">Inactive</a>
 @else
     <a href="{{ route('cartoon-type.change-status', $model->id) }}" class="btn btn-success btn-xs">Active</a>
 @endif

@@ -4,13 +4,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Cartoon Type
+                Carton Type
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li>Vendor Flow</li>
-                <li class="active">Cartoon Type</li>
+                <li class="active">Carton Type</li>
             </ol>
         </section>
         <section class="content">
@@ -18,7 +18,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Cartoon type master</h3>
+                            <h3 class="box-title">Carton type master</h3>
                             <div class="pull-right">
                                 <a href="{{ route('create.cartoon-type') }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-plus"></i> Create New
@@ -83,7 +83,7 @@
 
         $(document).on('click', '.delete-row', function(e){
             e.preventDefault();
-            if(confirm('Are you sure you want to delete this cartoon type?')){
+            if(confirm('Are you sure you want to delete this carton type?')){
                 $(this).closest('form').submit();
             }
         });

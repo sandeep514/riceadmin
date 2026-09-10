@@ -74,7 +74,7 @@ class WebCartoonProductController extends Controller
     {
         $result = $this->service->toggleStatus((int) $id, $request->input('reason'));
         if ($result === false) {
-            Session::flash('error', 'Error|Cartoon product not found.');
+            Session::flash('error', 'Error|Carton product not found.');
             return back();
         }
         if (! empty($result['missing_reason'])) {

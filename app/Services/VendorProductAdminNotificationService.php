@@ -312,7 +312,7 @@ class VendorProductAdminNotificationService
                 'showRoute' => 'get.web.rice.bag.products.show',
             ],
             'cartoon' => [
-                'label' => 'Cartoon',
+                'label' => 'Carton',
                 'showRoute' => 'get.web.cartoon.products.show',
             ],
             'cylinder' => [

@@ -20,13 +20,13 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Cartoon Product
+            Carton Product
             <small>Review</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li>Vendor Products</li>
-            <li><a href="{{ route('get.web.cartoon.products.list') }}">Cartoon Products</a></li>
+            <li><a href="{{ route('get.web.cartoon.products.list') }}">Carton Products</a></li>
             <li class="active">View</li>
         </ol>
     </section>
@@ -57,7 +57,7 @@
                                 <td>{{ $product->id }}</td>
                             </tr>
                             <tr>
-                                <th>Cartoon type</th>
+                                <th>Carton type</th>
                                 <td>
                                     {{ $types[$product->cartoon_type_id] ?? ($product->cartoon_type_id ? '#'.$product->cartoon_type_id : '—') }}
                                     @if(!empty($product->other_type_value))

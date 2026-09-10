@@ -295,7 +295,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/container-sizes/change-status/{id}', ['as' => 'vendor-container-size.change-status', 'uses' => 'VendorContainerSizeController@changeStatus', 'action' => 'edit']);
             });
 
-            // Vendor Flow — Cartoon Type master
+            // Vendor Flow — Carton Type master
             Route::group(['module' => 'cartoon_type', 'icon' => 'fa-square-o'], function () {
                 Route::get('vendor-flow/cartoon-types', ['as' => 'cartoon-types', 'uses' => 'CartoonTypeController@index', 'action' => 'view']);
                 Route::get('vendor-flow/cartoon-types/create', ['as' => 'create.cartoon-type', 'uses' => 'CartoonTypeController@create', 'action' => 'create']);

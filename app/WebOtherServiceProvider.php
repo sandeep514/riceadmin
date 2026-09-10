@@ -12,7 +12,7 @@ class WebOtherServiceProvider extends Model
     public static function vendorType (){
         return [
             1 => 'Rice Bag Suppliers',
-            2 => 'Cartoon Suppliers ',
+            2 => 'Carton Suppliers ',
             3 => 'Cylinder Suppliers',
             4 => 'Domestic Transporters',
             5 => 'Clearing agents',
