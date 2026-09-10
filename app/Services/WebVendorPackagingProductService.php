@@ -40,12 +40,12 @@ class WebVendorPackagingProductService
             productModel: \App\WebCartoonProduct::class,
             variantModel: \App\WebCartoonProductVariant::class,
             typeModel: CartoonType::class,
-            productsTable: 'web_cartoon_products',
-            typeIdColumn: 'cartoon_type_id',
-            typeIdCamel: 'cartoonTypeId',
-            typeNameCamel: 'cartoonTypeName',
+            productsTable: 'web_carton_products',
+            typeIdColumn: 'carton_type_id',
+            typeIdCamel: 'cartonTypeId',
+            typeNameCamel: 'cartonTypeName',
             label: 'Carton',
-            uploadFolder: 'cartoon-products',
+            uploadFolder: 'carton-products',
         );
     }
 
@@ -397,7 +397,7 @@ class WebVendorPackagingProductService
             }
         }
 
-        return [
+        $payload = [
             'id' => (int) $product->id,
             $this->typeIdCamel => $typeId !== null ? (int) $typeId : null,
             'otherTypeValue' => $product->other_type_value,
@@ -407,6 +407,13 @@ class WebVendorPackagingProductService
             'additionalInformation' => $product->additional_information,
             'variants' => $variants,
         ];
+
+        if ($this->typeIdColumn === 'carton_type_id') {
+            $payload['cartoonTypeId'] = $payload['cartonTypeId'];
+            $payload['cartoonTypeName'] = $payload['cartonTypeName'];
+        }
+
+        return $payload;
     }
 
     public function imageBasePath(int $userId): string
@@ -595,6 +602,14 @@ class WebVendorPackagingProductService
             'packing_sizes' => 'variants',
             'packingSizes' => 'variants',
         ];
+
+        // Legacy "cartoon" payload keys → carton columns
+        if ($this->typeIdColumn === 'carton_type_id') {
+            $aliases['cartoonTypeId'] = 'carton_type_id';
+            $aliases['cartoon_type_id'] = 'carton_type_id';
+            $aliases['cartoonTypeName'] = 'cartonTypeName';
+        }
+
         foreach ($aliases as $from => $to) {
             if ($request->exists($from) && ! $request->exists($to)) {
                 $request->merge([$to => $request->input($from)]);
@@ -893,7 +908,7 @@ class WebVendorPackagingProductService
             return $this->serializeVariantRow($variant, $basePath);
         })->values()->all();
 
-        return [
+        $payload = [
             'id' => (int) $product->id,
             'userId' => (int) $product->user_id,
             $this->typeIdCamel => $typeId !== null ? (int) $typeId : null,
@@ -904,6 +919,14 @@ class WebVendorPackagingProductService
             'status' => (int) $product->status,
             'variants' => $variants,
         ];
+
+        // Keep legacy cartoon* keys for older portal clients.
+        if ($this->typeIdColumn === 'carton_type_id') {
+            $payload['cartoonTypeId'] = $payload['cartonTypeId'];
+            $payload['cartoonTypeName'] = $payload['cartonTypeName'] ?? null;
+        }
+
+        return $payload;
     }
 
     private function serializeVariantRow(Model $variant, string $basePath): array

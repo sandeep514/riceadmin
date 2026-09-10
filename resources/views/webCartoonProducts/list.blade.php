@@ -48,7 +48,7 @@
                                 @php
                                     $firstImage = optional($product->variants->first())->image;
                                     $imageUrl = $firstImage
-                                        ? asset('uploads/cartoon-products/'.$product->user_id.'/'.$firstImage)
+                                        ? asset('uploads/carton-products/'.$product->user_id.'/'.$firstImage)
                                         : null;
                                 @endphp
                                 <tr>
@@ -59,7 +59,7 @@
                                             <br><small>{{ $product->user->email }}</small>
                                         @endif
                                     </td>
-                                    <td>{{ $types[$product->cartoon_type_id] ?? ($product->cartoon_type_id ? '#'.$product->cartoon_type_id : '—') }}</td>
+                                    <td>{{ $types[$product->carton_type_id] ?? ($product->carton_type_id ? '#'.$product->carton_type_id : '—') }}</td>
                                     <td>{{ \Illuminate\Support\Str::limit($product->specification ?? '—', 60) }}</td>
                                     <td style="white-space:nowrap;">
                                         @if($imageUrl)

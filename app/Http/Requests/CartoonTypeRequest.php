@@ -21,7 +21,7 @@ class CartoonTypeRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('cartoon_types', 'type')->ignore($id),
+                Rule::unique('carton_types', 'type')->ignore($id),
             ],
             'description' => 'nullable|string',
             'status' => 'required|integer|in:0,1',

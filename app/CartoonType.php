@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CartoonType extends Model
 {
-    protected $table = 'cartoon_types';
+    protected $table = 'carton_types';
 
     public const STATUS_ACTIVE = 1;
 

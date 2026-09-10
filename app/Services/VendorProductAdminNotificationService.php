@@ -346,8 +346,8 @@ class VendorProductAdminNotificationService
             $label = \App\VendorPackingType::query()->where('id', $product->bag_type_id)->value('name')
                 ?: PackingType::query()->where('id', $product->bag_type_id)->value('name')
                 ?: '—';
-        } elseif ($kind === 'cartoon' && ! empty($product->cartoon_type_id)) {
-            $label = \App\CartoonType::query()->where('id', $product->cartoon_type_id)->value('type') ?: '—';
+        } elseif ($kind === 'cartoon' && ! empty($product->carton_type_id)) {
+            $label = \App\CartoonType::query()->where('id', $product->carton_type_id)->value('type') ?: '—';
         } elseif ($kind === 'cylinder' && ! empty($product->cylinder_type_id)) {
             $label = \App\CylinderType::query()->where('id', $product->cylinder_type_id)->value('type') ?: '—';
         } elseif ($kind === 'cleaning_agent') {

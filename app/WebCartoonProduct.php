@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class WebCartoonProduct extends Model
 {
-    protected $table = 'web_cartoon_products';
+    protected $table = 'web_carton_products';
 
     protected $fillable = [
         'user_id',
-        'cartoon_type_id',
+        'carton_type_id',
         'other_type_value',
         'specification',
         'description',

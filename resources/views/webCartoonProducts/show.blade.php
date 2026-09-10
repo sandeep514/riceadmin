@@ -59,7 +59,7 @@
                             <tr>
                                 <th>Carton type</th>
                                 <td>
-                                    {{ $types[$product->cartoon_type_id] ?? ($product->cartoon_type_id ? '#'.$product->cartoon_type_id : '—') }}
+                                    {{ $types[$product->carton_type_id] ?? ($product->carton_type_id ? '#'.$product->carton_type_id : '—') }}
                                     @if(!empty($product->other_type_value))
                                         <br><small class="text-muted">Other: {{ $product->other_type_value }}</small>
                                     @endif

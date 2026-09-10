@@ -111,7 +111,7 @@ class CartoonTypeController extends Controller
     public function updateOrder(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer|exists:cartoon_types,id',
+            'id' => 'required|integer|exists:carton_types,id',
             'order_no' => 'required|integer|min:1',
         ]);
 

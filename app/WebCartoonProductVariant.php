@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WebCartoonProductVariant extends Model
 {
-    protected $table = 'web_cartoon_product_variants';
+    protected $table = 'web_carton_product_variants';
 
     protected $fillable = [
         'product_id',
