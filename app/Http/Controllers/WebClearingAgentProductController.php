@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\WebCleaningAgentProductService;
-use App\WebCleaningAgentProduct;
+use App\Services\WebClearingAgentProductService;
+use App\WebClearingAgentProduct;
 use Illuminate\Http\Request;
 use Session;
 
-class WebCleaningAgentProductController extends Controller
+class WebClearingAgentProductController extends Controller
 {
-    private WebCleaningAgentProductService $service;
+    private WebClearingAgentProductService $service;
 
     public function __construct()
     {
-        $this->service = new WebCleaningAgentProductService();
+        $this->service = new WebClearingAgentProductService();
     }
 
     public function create(Request $request)
@@ -43,7 +43,7 @@ class WebCleaningAgentProductController extends Controller
 
     public function showProductsToAdmin()
     {
-        $products = WebCleaningAgentProduct::with([
+        $products = WebClearingAgentProduct::with([
             'user:id,name,email,mobile',
             'particulars.particular',
             'containerSizeRel',
@@ -52,12 +52,12 @@ class WebCleaningAgentProductController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        return view('webCleaningAgentProducts.list', compact('products'));
+        return view('webClearingAgentProducts.list', compact('products'));
     }
 
     public function showProductToAdmin($id)
     {
-        $product = WebCleaningAgentProduct::with([
+        $product = WebClearingAgentProduct::with([
             'user:id,name,email,mobile',
             'particulars.particular',
             'containerSizeRel',
@@ -67,14 +67,14 @@ class WebCleaningAgentProductController extends Controller
             'destinationPortRel',
         ])->findOrFail((int) $id);
 
-        return view('webCleaningAgentProducts.show', compact('product'));
+        return view('webClearingAgentProducts.show', compact('product'));
     }
 
     public function toggleStatus(Request $request, $id)
     {
         $result = $this->service->toggleStatus((int) $id, $request->input('reason'));
         if ($result === false) {
-            Session::flash('error', 'Error|Cleaning agent product not found.');
+            Session::flash('error', 'Error|Clearing agent product not found.');
 
             return back();
         }

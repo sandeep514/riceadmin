@@ -4,7 +4,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Cleaning Agent Products
+            Clearing Agent Products
             <small>Review &amp; verify</small>
         </h1>
         <ol class="breadcrumb">
@@ -63,14 +63,14 @@
                             </td>
                             <td>{{ optional($product->updated_at)->format('d-m-Y H:i') }}</td>
                             <td>
-                                <a href="{{ route('get.web.cleaning.agent.products.show', $product->id) }}" class="btn btn-primary btn-xs">
+                                <a href="{{ route('get.web.clearing.agent.products.show', $product->id) }}" class="btn btn-primary btn-xs">
                                     <i class="fa fa-eye"></i> View
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted">No cleaning agent products yet.</td>
+                            <td colspan="8" class="text-center text-muted">No clearing agent products yet.</td>
                         </tr>
                     @endforelse
                     </tbody>

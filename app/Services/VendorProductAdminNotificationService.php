@@ -327,9 +327,9 @@ class VendorProductAdminNotificationService
                 'label' => 'Machinery equipment',
                 'showRoute' => 'get.web.machinery.equipment.products.show',
             ],
-            'cleaning_agent' => [
-                'label' => 'Cleaning agent',
-                'showRoute' => 'get.web.cleaning.agent.products.show',
+            'clearing_agent', 'cleaning_agent' => [
+                'label' => 'Clearing agent',
+                'showRoute' => 'get.web.clearing.agent.products.show',
             ],
             default => [
                 'label' => 'Vendor',
@@ -350,7 +350,7 @@ class VendorProductAdminNotificationService
             $label = \App\CartoonType::query()->where('id', $product->carton_type_id)->value('type') ?: '—';
         } elseif ($kind === 'cylinder' && ! empty($product->cylinder_type_id)) {
             $label = \App\CylinderType::query()->where('id', $product->cylinder_type_id)->value('type') ?: '—';
-        } elseif ($kind === 'cleaning_agent') {
+        } elseif ($kind === 'clearing_agent' || $kind === 'cleaning_agent') {
             $parts = array_filter([
                 ! empty($product->port_type) ? (string) $product->port_type : null,
                 ! empty($product->port_location) ? (string) $product->port_location : null,
@@ -374,7 +374,7 @@ class VendorProductAdminNotificationService
      */
     private function formatVariants(string $kind, Collection $variants): array
     {
-        if ($kind === 'cleaning_agent') {
+        if ($kind === 'clearing_agent' || $kind === 'cleaning_agent') {
             return $variants->map(function (Model $variant) {
                 $name = $variant->particular_name
                     ?: (optional($variant->particular)->particular ?? null)

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PackingType;
-use App\Services\WebCleaningAgentProductService;
+use App\Services\WebClearingAgentProductService;
 use App\Services\WebVendorEquipmentProductService;
 use App\Services\WebVendorPackagingProductService;
 use App\Support\VendorProductCatalog;
@@ -97,8 +97,8 @@ class WebVendorProductController extends Controller
             $products = $service->verifiedProductsForOwners($ownerIds);
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
             $imageBasePath = $service->imageBasePath($imageUserId);
-        } elseif ($kind === VendorProductCatalog::KIND_CLEANING_AGENT) {
-            $service = new WebCleaningAgentProductService();
+        } elseif ($kind === VendorProductCatalog::KIND_CLEARING_AGENT) {
+            $service = new WebClearingAgentProductService();
             $products = $service->verifiedProductsForOwners($ownerIds);
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
             $imageBasePath = null;

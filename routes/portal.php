@@ -96,11 +96,18 @@
             Route::get('web/machinery-equipment-product/{id}', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'show'])->where('id', '[0-9]+');
             Route::delete('web/machinery-equipment-product/{id}', [\App\Http\Controllers\WebMachineryEquipmentProductController::class, 'delete'])->where('id', '[0-9]+');
 
-            Route::post('web/cleaning-agent-product/create', [\App\Http\Controllers\WebCleaningAgentProductController::class, 'create']);
-            Route::post('web/cleaning-agent-product/update', [\App\Http\Controllers\WebCleaningAgentProductController::class, 'update']);
-            Route::get('web/cleaning-agent-product/list/{userId}', [\App\Http\Controllers\WebCleaningAgentProductController::class, 'listByUser']);
-            Route::get('web/cleaning-agent-product/{id}', [\App\Http\Controllers\WebCleaningAgentProductController::class, 'show'])->where('id', '[0-9]+');
-            Route::delete('web/cleaning-agent-product/{id}', [\App\Http\Controllers\WebCleaningAgentProductController::class, 'delete'])->where('id', '[0-9]+');
+            Route::post('web/clearing-agent-product/create', [\App\Http\Controllers\WebClearingAgentProductController::class, 'create']);
+            Route::post('web/clearing-agent-product/update', [\App\Http\Controllers\WebClearingAgentProductController::class, 'update']);
+            Route::get('web/clearing-agent-product/list/{userId}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'listByUser']);
+            Route::get('web/clearing-agent-product/{id}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/clearing-agent-product/{id}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'delete'])->where('id', '[0-9]+');
+
+            // Legacy misspelled "cleaning" paths (same handlers)
+            Route::post('web/cleaning-agent-product/create', [\App\Http\Controllers\WebClearingAgentProductController::class, 'create']);
+            Route::post('web/cleaning-agent-product/update', [\App\Http\Controllers\WebClearingAgentProductController::class, 'update']);
+            Route::get('web/cleaning-agent-product/list/{userId}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'listByUser']);
+            Route::get('web/cleaning-agent-product/{id}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/cleaning-agent-product/{id}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'delete'])->where('id', '[0-9]+');
 
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);

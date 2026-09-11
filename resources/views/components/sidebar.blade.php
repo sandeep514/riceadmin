@@ -544,7 +544,7 @@
                     'vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge',
                 ];
                 $serviceProviderProductRoutes = [
-                    'get.web.cleaning.agent.products.list','get.web.cleaning.agent.products.show',
+                    'get.web.clearing.agent.products.list','get.web.clearing.agent.products.show',
                 ];
                 $serviceProviderRoutes = array_merge($serviceProviderMasterRoutes, $serviceProviderProductRoutes);
             @endphp
@@ -589,7 +589,7 @@
                         </ul>
                     </li>
                     <li class="{{ in_array($currentRoute, $serviceProviderProductRoutes) ? 'active' : '' }}">
-                        <a href="{{ route('get.web.cleaning.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
+                        <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
                     </li>
                 </ul>
             </li>

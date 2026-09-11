@@ -4,13 +4,13 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Cleaning Agent Product
+            Clearing Agent Product
             <small>Review</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li>Service Providers</li>
-            <li><a href="{{ route('get.web.cleaning.agent.products.list') }}">Clearing Agent</a></li>
+            <li><a href="{{ route('get.web.clearing.agent.products.list') }}">Clearing Agent</a></li>
             <li class="active">View</li>
         </ol>
     </section>
@@ -18,12 +18,12 @@
     <section class="content">
         <div class="row" style="margin-bottom:10px;">
             <div class="col-md-12">
-                <a href="{{ route('get.web.cleaning.agent.products.list') }}" class="btn btn-default btn-sm">
+                <a href="{{ route('get.web.clearing.agent.products.list') }}" class="btn btn-default btn-sm">
                     <i class="fa fa-arrow-left"></i> Back to list
                 </a>
                 @include('components.vendor-product-status-actions', [
                     'product' => $product,
-                    'route' => 'toggle.web.cleaning.agent.products.status',
+                    'route' => 'toggle.web.clearing.agent.products.status',
                 ])
             </div>
         </div>

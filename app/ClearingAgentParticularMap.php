@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class CleaningAgentParticularMap extends Model
+class ClearingAgentParticularMap extends Model
 {
-    protected $table = 'cleaning_agent_particulars_map';
+    protected $table = 'clearing_agent_particulars_map';
 
     protected $fillable = [
         'product_id',
@@ -25,7 +25,7 @@ class CleaningAgentParticularMap extends Model
 
     public function product()
     {
-        return $this->belongsTo(WebCleaningAgentProduct::class, 'product_id', 'id');
+        return $this->belongsTo(WebClearingAgentProduct::class, 'product_id', 'id');
     }
 
     public function particular()

@@ -2,19 +2,19 @@
 
 namespace App\Services;
 
-use App\CleaningAgentParticularMap;
+use App\ClearingAgentParticularMap;
 use App\VendorContainerParticular;
 use App\VendorContainerSize;
 use App\VendorDestinationPort;
 use App\VendorIcdLocation;
 use App\VendorIndianPort;
 use App\VendorPortType;
-use App\WebCleaningAgentProduct;
+use App\WebClearingAgentProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class WebCleaningAgentProductService
+class WebClearingAgentProductService
 {
     public function create(Request $request)
     {
@@ -35,7 +35,7 @@ class WebCleaningAgentProductService
         }
 
         $product = DB::transaction(function () use ($request) {
-            $product = WebCleaningAgentProduct::create($this->parentAttributes($request) + [
+            $product = WebClearingAgentProduct::create($this->parentAttributes($request) + [
                 'user_id' => (int) $request->input('user_id'),
                 'status' => 0,
             ]);
@@ -53,7 +53,7 @@ class WebCleaningAgentProductService
         });
 
         VendorProductAdminNotificationService::notify(
-            'cleaning_agent',
+            'clearing_agent',
             VendorProductAdminNotificationService::ACTION_CREATED,
             $product,
             $product->particulars
@@ -61,7 +61,7 @@ class WebCleaningAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Cleaning agent product saved successfully.',
+            'message' => 'Clearing agent product saved successfully.',
             'data' => $this->serializeProduct($product),
         ], 200);
     }
@@ -89,11 +89,11 @@ class WebCleaningAgentProductService
             ], 422);
         }
 
-        $product = WebCleaningAgentProduct::with(['particulars'])->find($productId);
+        $product = WebClearingAgentProduct::with(['particulars'])->find($productId);
         if ($product === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Cleaning agent product not found.',
+                'message' => 'Clearing agent product not found.',
             ], 404);
         }
 
@@ -116,7 +116,7 @@ class WebCleaningAgentProductService
         ]);
 
         VendorProductAdminNotificationService::notify(
-            'cleaning_agent',
+            'clearing_agent',
             VendorProductAdminNotificationService::ACTION_UPDATED,
             $product,
             $product->particulars
@@ -124,14 +124,14 @@ class WebCleaningAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Cleaning agent product updated successfully.',
+            'message' => 'Clearing agent product updated successfully.',
             'data' => $this->serializeProduct($product),
         ], 200);
     }
 
     public function listByUser(Request $request, $userId)
     {
-        $products = WebCleaningAgentProduct::with([
+        $products = WebClearingAgentProduct::with([
             'particulars.particular',
             'containerSizeRel',
             'portTypeRel',
@@ -142,19 +142,19 @@ class WebCleaningAgentProductService
             ->where('user_id', (int) $userId)
             ->orderByDesc('id')
             ->get()
-            ->map(fn (WebCleaningAgentProduct $product) => $this->serializeProduct($product))
+            ->map(fn (WebClearingAgentProduct $product) => $this->serializeProduct($product))
             ->values();
 
         return response()->json([
             'status' => true,
-            'message' => 'Cleaning agent products fetched successfully.',
+            'message' => 'Clearing agent products fetched successfully.',
             'data' => $products,
         ], 200);
     }
 
     public function show(Request $request, $id)
     {
-        $product = WebCleaningAgentProduct::with([
+        $product = WebClearingAgentProduct::with([
             'particulars.particular',
             'containerSizeRel',
             'portTypeRel',
@@ -165,7 +165,7 @@ class WebCleaningAgentProductService
         if ($product === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Cleaning agent product not found.',
+                'message' => 'Clearing agent product not found.',
             ], 404);
         }
 
@@ -175,18 +175,18 @@ class WebCleaningAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Cleaning agent product fetched successfully.',
+            'message' => 'Clearing agent product fetched successfully.',
             'data' => $this->serializeProduct($product),
         ], 200);
     }
 
     public function delete(Request $request, $id)
     {
-        $product = WebCleaningAgentProduct::find((int) $id);
+        $product = WebClearingAgentProduct::find((int) $id);
         if ($product === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Cleaning agent product not found.',
+                'message' => 'Clearing agent product not found.',
             ], 404);
         }
 
@@ -198,7 +198,7 @@ class WebCleaningAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Cleaning agent product deleted successfully.',
+            'message' => 'Clearing agent product deleted successfully.',
         ], 200);
     }
 
@@ -209,10 +209,10 @@ class WebCleaningAgentProductService
     {
         $ownerIds = array_values(array_unique(array_filter(array_map('intval', $ownerIds))));
         if ($ownerIds === []) {
-            return WebCleaningAgentProduct::query()->whereRaw('1 = 0')->get();
+            return WebClearingAgentProduct::query()->whereRaw('1 = 0')->get();
         }
 
-        return WebCleaningAgentProduct::with([
+        return WebClearingAgentProduct::with([
             'particulars.particular',
             'icdLocationRel',
             'indianPortRel',
@@ -225,7 +225,7 @@ class WebCleaningAgentProductService
             ->get();
     }
 
-    public function serializeVendorProduct(WebCleaningAgentProduct $product): array
+    public function serializeVendorProduct(WebClearingAgentProduct $product): array
     {
         return $this->serializeProduct($product);
     }
@@ -235,7 +235,7 @@ class WebCleaningAgentProductService
      */
     public function toggleStatus(int $id, ?string $reason = null)
     {
-        $product = WebCleaningAgentProduct::find($id);
+        $product = WebClearingAgentProduct::find($id);
         if ($product === null) {
             return false;
         }
@@ -249,7 +249,7 @@ class WebCleaningAgentProductService
 
             $product->update(['status' => 0]);
             VendorProductAdminNotificationService::notifyDeactivated(
-                'cleaning_agent',
+                'clearing_agent',
                 $product->fresh(),
                 $reason
             );
@@ -258,24 +258,24 @@ class WebCleaningAgentProductService
         }
 
         $product->update(['status' => 1]);
-        VendorProductAdminNotificationService::notifyAccepted('cleaning_agent', $product->fresh());
+        VendorProductAdminNotificationService::notifyAccepted('clearing_agent', $product->fresh());
 
         return ['ok' => true, 'activated' => true];
     }
 
-    public function serializeProduct(WebCleaningAgentProduct $product): array
+    public function serializeProduct(WebClearingAgentProduct $product): array
     {
         $rows = $product->particulars ?? collect();
 
         $particulars = $rows
-            ->filter(fn (CleaningAgentParticularMap $row) => (int) $row->is_other !== 1 && $row->particular_id)
-            ->map(fn (CleaningAgentParticularMap $row) => $this->serializeMapRow($row))
+            ->filter(fn (ClearingAgentParticularMap $row) => (int) $row->is_other !== 1 && $row->particular_id)
+            ->map(fn (ClearingAgentParticularMap $row) => $this->serializeMapRow($row))
             ->values()
             ->all();
 
         $others = $rows
-            ->filter(fn (CleaningAgentParticularMap $row) => (int) $row->is_other === 1 || (! $row->particular_id && $row->particular_name))
-            ->map(fn (CleaningAgentParticularMap $row) => $this->serializeMapRow($row))
+            ->filter(fn (ClearingAgentParticularMap $row) => (int) $row->is_other === 1 || (! $row->particular_id && $row->particular_name))
+            ->map(fn (ClearingAgentParticularMap $row) => $this->serializeMapRow($row))
             ->values()
             ->all();
 
@@ -307,7 +307,7 @@ class WebCleaningAgentProductService
         ];
     }
 
-    private function serializeMapRow(CleaningAgentParticularMap $row): array
+    private function serializeMapRow(ClearingAgentParticularMap $row): array
     {
         $masterName = optional($row->particular)->particular;
 
@@ -395,9 +395,9 @@ class WebCleaningAgentProductService
         ];
     }
 
-    private function syncParticulars(WebCleaningAgentProduct $product, Request $request): void
+    private function syncParticulars(WebClearingAgentProduct $product, Request $request): void
     {
-        CleaningAgentParticularMap::query()->where('product_id', $product->id)->delete();
+        ClearingAgentParticularMap::query()->where('product_id', $product->id)->delete();
 
         $sort = 0;
         $particulars = $request->input('particulars', []);
@@ -420,7 +420,7 @@ class WebCleaningAgentProductService
                 ->where('id', (int) $particularId)
                 ->value('particular');
 
-            CleaningAgentParticularMap::create([
+            ClearingAgentParticularMap::create([
                 'product_id' => $product->id,
                 'particular_id' => (int) $particularId,
                 'particular_name' => $masterName,
@@ -453,7 +453,7 @@ class WebCleaningAgentProductService
                 continue;
             }
 
-            CleaningAgentParticularMap::create([
+            ClearingAgentParticularMap::create([
                 'product_id' => $product->id,
                 'particular_id' => null,
                 'particular_name' => $name,
@@ -504,7 +504,7 @@ class WebCleaningAgentProductService
     private function updateRules(): array
     {
         return array_merge($this->createRules(), [
-            'id' => ['required', 'integer', 'exists:web_cleaning_agent_products,id'],
+            'id' => ['required', 'integer', 'exists:web_clearing_agent_products,id'],
             'user_id' => ['nullable', 'integer', 'exists:users,id'],
         ]);
     }

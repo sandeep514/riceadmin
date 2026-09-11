@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class WebCleaningAgentProduct extends Model
+class WebClearingAgentProduct extends Model
 {
-    protected $table = 'web_cleaning_agent_products';
+    protected $table = 'web_clearing_agent_products';
 
     protected $fillable = [
         'user_id',
@@ -66,7 +66,7 @@ class WebCleaningAgentProduct extends Model
 
     public function particulars()
     {
-        return $this->hasMany(CleaningAgentParticularMap::class, 'product_id', 'id')
+        return $this->hasMany(ClearingAgentParticularMap::class, 'product_id', 'id')
             ->orderBy('sort_order')
             ->orderBy('id');
     }
