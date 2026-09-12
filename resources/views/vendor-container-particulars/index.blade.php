@@ -33,6 +33,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Particular</th>
+                                            <th>Input type</th>
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th>Created</th>
@@ -45,6 +46,12 @@
                                             <tr>
                                                 <td>{{ $record->id }}</td>
                                                 <td>{{ $record->particular }}</td>
+                                                <td>
+                                                    @php
+                                                        $inputTypes = \App\VendorContainerParticular::inputTypeOptions();
+                                                    @endphp
+                                                    {{ $inputTypes[$record->input_type] ?? ($record->input_type ?: '—') }}
+                                                </td>
                                                 <td>{{ $record->description ?: '—' }}</td>
                                                 <td>
                                                     @if((int) $record->status === \App\VendorContainerParticular::STATUS_ACTIVE)
@@ -77,7 +84,7 @@
         $('.datatable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [6] }]
+            columnDefs: [{ orderable: false, targets: [7] }]
         });
 
         $(document).on('click', '.delete-row', function(e){

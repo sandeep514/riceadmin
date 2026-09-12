@@ -24,6 +24,7 @@ class VendorContainerParticularController extends Controller
     {
         VendorContainerParticular::create($request->only([
             'particular',
+            'input_type',
             'description',
             'status',
         ]));
@@ -56,6 +57,7 @@ class VendorContainerParticularController extends Controller
 
         $model->update($request->only([
             'particular',
+            'input_type',
             'description',
             'status',
         ]));

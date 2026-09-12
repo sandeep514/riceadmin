@@ -1,9 +1,21 @@
 <div class="box-body">
     <div class="row">
-        <div class="form-group col-md-6 @error('particular') has-error @enderror">
+        <div class="form-group col-md-5 @error('particular') has-error @enderror">
             {!! Form::label('particular', 'Particular*') !!}
             {!! Form::text('particular', null, ['class' => 'form-control', 'id' => 'particular', 'maxlength' => 255, 'placeholder' => 'Enter particular']) !!}
             @error('particular')
+                <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-3 @error('input_type') has-error @enderror">
+            {!! Form::label('input_type', 'Input type*') !!}
+            {!! Form::select(
+                'input_type',
+                \App\VendorContainerParticular::inputTypeOptions(),
+                isset($model) ? $model->input_type : old('input_type', \App\VendorContainerParticular::INPUT_TYPE_NUMBER),
+                ['class' => 'form-control', 'id' => 'input_type']
+            ) !!}
+            @error('input_type')
                 <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>

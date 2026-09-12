@@ -8083,7 +8083,17 @@ if (!file_exists('uploads')) {
         $particulars = \App\VendorContainerParticular::query()
             ->where('status', \App\VendorContainerParticular::STATUS_ACTIVE)
             ->orderBy('particular')
-            ->get(['id', 'particular', 'description']);
+            ->get(['id', 'particular', 'input_type', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'particular' => $row->particular,
+                    'inputType' => $row->input_type ?: \App\VendorContainerParticular::INPUT_TYPE_NUMBER,
+                    'input_type' => $row->input_type ?: \App\VendorContainerParticular::INPUT_TYPE_NUMBER,
+                    'description' => $row->description,
+                ];
+            })
+            ->values();
 
         return response()->json([
             'status' => true,
