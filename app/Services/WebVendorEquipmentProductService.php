@@ -405,7 +405,7 @@ class WebVendorEquipmentProductService
             return ['ok' => true, 'deactivated' => true];
         }
 
-        $product->update(['status' => 1]);
+        $product->update(['status' => 1, 'admin_message' => null]);
         VendorProductAdminNotificationService::notifyAccepted($this->kindKey(), $product->fresh());
 
         return ['ok' => true, 'activated' => true];

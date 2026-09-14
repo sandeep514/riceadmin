@@ -22,9 +22,10 @@
                     <i class="fa fa-arrow-left"></i> Back to list
                 </a>
                 @include('components.vendor-product-status-actions', [
-                    'product' => $product,
-                    'route' => 'toggle.web.clearing.agent.products.status',
-                ])
+                                            'product' => $product,
+                                            'route' => 'toggle.web.clearing.agent.products.status',
+                                            'kind' => 'clearing_agent',
+                                        ])
             </div>
         </div>
 
@@ -41,11 +42,7 @@
                     <tr>
                         <th>Status</th>
                         <td>
-                            @if((int) $product->status === 1)
-                                <span class="label label-success">Verified / Active</span>
-                            @else
-                                <span class="label label-warning">Pending review</span>
-                            @endif
+                            @include('components.vendor-product-status-label', ['product' => $product])
                         </td>
                     </tr>
                     <tr>
@@ -156,4 +153,9 @@
         </div>
     </section>
 </div>
+@endsection
+
+@section('javascript')
+@include('components.vendor-product-deactivate-modal')
+@include('components.vendor-product-ask-vendor-modal')
 @endsection

@@ -144,6 +144,22 @@ class MailController extends Controller
         }
     }
 
+    public static function sendVendorProductNeedsUpdateMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
+    {
+        try {
+            $toName = $data['userName'] ?? 'Vendor';
+
+            return Mail::send('mail.vendorProductNeedsUpdate', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject, $toName) {
+                $message->to($mailTo, $toName)->subject($subject);
+                $message->from($mailFrom, $mailFromName);
+            });
+        } catch (\Throwable $th) {
+            \Log::warning('Vendor product update-needed mail failed: '.$th->getMessage());
+
+            return false;
+        }
+    }
+
     public static function html_email($file, $from , $to , $data = []) {
         try {
             $respose = Mail::send($file, ['data' => $data], function($message) use ($from , $to) {

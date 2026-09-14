@@ -75,11 +75,7 @@
                                         {{ $product->packingSizes->count() }} size(s)
                                     </td>
                                     <td>
-                                        @if((int) $product->status === 1)
-                                            <span class="label label-success">Verified / Active</span>
-                                        @else
-                                            <span class="label label-warning">Pending review</span>
-                                        @endif
+                                        @include('components.vendor-product-status-label', ['product' => $product])
                                     </td>
                                     <td>{{ $product->created_at ? \Carbon\Carbon::parse($product->created_at)->format('d-m-Y H:i') : '—' }}</td>
                                     <td style="white-space:nowrap;">
@@ -89,6 +85,7 @@
                                         @include('components.vendor-product-status-actions', [
                                             'product' => $product,
                                             'route' => 'toggle.web.rice.bag.products.status',
+                                            'kind' => 'rice_bag',
                                         ])
                                     </td>
                                 </tr>
@@ -104,6 +101,7 @@
 
 @section('javascript')
 @include('components.vendor-product-deactivate-modal')
+@include('components.vendor-product-ask-vendor-modal')
 <script>
     $(function () {
         $('#riceBagProductsTable').DataTable({

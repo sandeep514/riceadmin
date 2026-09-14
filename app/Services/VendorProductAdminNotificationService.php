@@ -65,6 +65,18 @@ class VendorProductAdminNotificationService
     }
 
     /**
+     * Email the vendor when admin asks them to update a product.
+     */
+    public static function notifyVendorMessage(string $kind, Model $product, string $message, ?string $typeLabel = null): void
+    {
+        try {
+            (new self())->sendVendorMessage($kind, $product, $message, $typeLabel);
+        } catch (\Throwable $e) {
+            Log::warning('Vendor product update-needed mail failed: '.$e->getMessage());
+        }
+    }
+
+    /**
      * @param  Collection<int, mixed>|iterable<int, mixed>  $previous
      * @param  Collection<int, mixed>|iterable<int, mixed>  $current
      */
@@ -268,6 +280,64 @@ class VendorProductAdminNotificationService
                 'product_kind' => $productLabel,
                 'status' => 'deactivated',
                 'reason' => $reason,
+            ]
+        );
+    }
+
+    private function sendVendorMessage(string $kind, Model $product, string $message, ?string $typeLabel): void
+    {
+        $meta = $this->kindMeta($kind);
+        $userId = (int) ($product->user_id ?? 0);
+        $user = $userId > 0 ? User::query()->find($userId, ['id', 'name', 'email', 'mobile', 'phone', 'companyname', 'role']) : null;
+        $business = $userId > 0
+            ? WebBusinessDetails::query()->where('user_id', $userId)->first(['company_name', 'registered_email', 'contactMobile', 'phone'])
+            : null;
+
+        $mailTo = $user->email ?? ($business->registered_email ?? null);
+        $productLabel = $meta['label'];
+        $typeResolved = $typeLabel ?: $this->resolveTypeLabel($kind, $product);
+        $message = trim($message);
+
+        $mailData = [
+            'productKind' => $productLabel,
+            'productId' => (int) $product->id,
+            'typeLabel' => $typeResolved,
+            'message' => $message,
+            'userId' => $userId > 0 ? $userId : '—',
+            'userName' => $user->name ?? ($business->company_name ?? 'Vendor'),
+            'userEmail' => $mailTo,
+            'companyName' => $business->company_name ?? ($user->companyname ?? null),
+            'sentAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
+        ];
+
+        $subject = 'Update needed on your '.$productLabel.' product – #'.$product->id;
+        $socketTitle = 'Update needed on your '.$productLabel.' product';
+        $socketMessage = 'SNTC needs an update on your '.$productLabel.' product #'.$product->id.'.'
+            .($message !== '' ? ' Message: '.$message : '');
+
+        if (is_string($mailTo) && trim($mailTo) !== '') {
+            MailController::sendVendorProductNeedsUpdateMail(
+                $mailTo,
+                self::ADMIN_MAIL,
+                'SNTC',
+                $subject,
+                $mailData
+            );
+        } else {
+            Log::warning('Vendor product update-needed mail skipped: no recipient email for product #'.(int) $product->id);
+        }
+
+        $this->notifyVendorSocket(
+            $userId,
+            $socketTitle,
+            $socketMessage,
+            [
+                'type' => 'vendor_product_needs_update',
+                'kind' => $kind,
+                'product_id' => (string) (int) $product->id,
+                'product_kind' => $productLabel,
+                'status' => 'awaiting_vendor',
+                'message' => $message,
             ]
         );
     }

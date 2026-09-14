@@ -991,6 +991,8 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/clearing-agent-products', ['as' => 'get.web.clearing.agent.products.list', 'uses' => 'WebClearingAgentProductController@showProductsToAdmin']);
     Route::get('get/web/clearing-agent-products/{id}', ['as' => 'get.web.clearing.agent.products.show', 'uses' => 'WebClearingAgentProductController@showProductToAdmin']);
     Route::post('toggle/web/clearing-agent-products/status/{id}', ['as' => 'toggle.web.clearing.agent.products.status', 'uses' => 'WebClearingAgentProductController@toggleStatus']);
+    Route::post('ask-vendor/web/{kind}-products/{id}', ['as' => 'ask.vendor.product', 'uses' => 'VendorProductReviewController@askVendor'])
+        ->where('kind', 'rice_bag|cartoon|cylinder|lab_equipment|machinery_equipment|clearing_agent');
 
 
 

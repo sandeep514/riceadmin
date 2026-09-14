@@ -11,6 +11,7 @@ class WebMachineryEquipmentProduct extends Model
     protected $fillable = [
         'user_id',
         'status',
+        'admin_message',
     ];
 
     public function user()

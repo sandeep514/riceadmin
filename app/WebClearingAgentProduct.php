@@ -22,6 +22,7 @@ class WebClearingAgentProduct extends Model
         'destination',
         'additional_information',
         'status',
+        'admin_message',
     ];
 
     protected $casts = [

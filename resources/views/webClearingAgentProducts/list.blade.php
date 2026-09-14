@@ -55,17 +55,18 @@
                             </td>
                             <td>{{ $product->particulars->count() }}</td>
                             <td>
-                                @if((int) $product->status === 1)
-                                    <span class="label label-success">Verified</span>
-                                @else
-                                    <span class="label label-warning">Pending</span>
-                                @endif
+                                @include('components.vendor-product-status-label', ['product' => $product])
                             </td>
                             <td>{{ optional($product->updated_at)->format('d-m-Y H:i') }}</td>
-                            <td>
+                            <td style="white-space:nowrap;">
                                 <a href="{{ route('get.web.clearing.agent.products.show', $product->id) }}" class="btn btn-primary btn-xs">
                                     <i class="fa fa-eye"></i> View
                                 </a>
+                                @include('components.vendor-product-status-actions', [
+                                    'product' => $product,
+                                    'route' => 'toggle.web.clearing.agent.products.status',
+                                    'kind' => 'clearing_agent',
+                                ])
                             </td>
                         </tr>
                     @empty
@@ -79,4 +80,9 @@
         </div>
     </section>
 </div>
+@endsection
+
+@section('javascript')
+@include('components.vendor-product-deactivate-modal')
+@include('components.vendor-product-ask-vendor-modal')
 @endsection

@@ -18,6 +18,7 @@ class WebRiceBagProduct extends Model
         'packing_form_id',
         'packing_form',
         'status',
+        'admin_message',
     ];
 
     public function user()

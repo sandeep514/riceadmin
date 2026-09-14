@@ -257,7 +257,7 @@ class WebClearingAgentProductService
             return ['ok' => true, 'deactivated' => true];
         }
 
-        $product->update(['status' => 1]);
+        $product->update(['status' => 1, 'admin_message' => null]);
         VendorProductAdminNotificationService::notifyAccepted('clearing_agent', $product->fresh());
 
         return ['ok' => true, 'activated' => true];

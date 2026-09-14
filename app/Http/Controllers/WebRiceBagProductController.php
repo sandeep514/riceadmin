@@ -447,7 +447,7 @@ class WebRiceBagProductController extends Controller
             return back();
         }
 
-        $product->update(['status' => 1]);
+        $product->update(['status' => 1, 'admin_message' => null]);
         VendorProductAdminNotificationService::notifyAccepted('rice_bag', $product->fresh());
         Session::flash('success', 'Success|Product verified successfully.');
 

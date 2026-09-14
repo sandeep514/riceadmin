@@ -16,6 +16,7 @@ class WebCylinderProduct extends Model
         'description',
         'additional_information',
         'status',
+        'admin_message',
     ];
 
     public function user()
