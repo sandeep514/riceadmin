@@ -665,6 +665,7 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('close/paddy/trade/{id}', ['as' => 'close.paddy.trade', 'uses' => 'PaddySellQueryController@closeTrade']);
             Route::post('update/paddy/trade/status/{id}', ['as' => 'update.paddy.trade.status', 'uses' => 'PaddySellQueryController@updateTradeStatus']);
             Route::post('update/paddy/trade/is-new/{id}', ['as' => 'update.paddy.trade.is_new', 'uses' => 'PaddySellQueryController@updateTradeIsNew']);
+            Route::post('update/paddy/trade/hotdeal/{id}', ['as' => 'update.paddy.trade.hotdeal', 'uses' => 'PaddySellQueryController@updateTradeHotdeal']);
             Route::get('update/paddy/market/status/{tradeStatus}', ['as' => 'update.paddy.market.status', 'uses' => 'PaddySellQueryController@updateMarketStatus']);
 
 

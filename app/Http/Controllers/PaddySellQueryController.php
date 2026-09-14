@@ -253,6 +253,7 @@ class PaddySellQueryController extends Controller
             'lot_number' => 'nullable|string|max:100',
             'crop_year' => 'nullable|string|max:50',
             'is_new' => 'nullable|in:0,1',
+            'hotdeal' => 'nullable|in:0,1',
             'valid_datetime_for_is_new' => 'nullable|date',
         ];
 
@@ -317,6 +318,7 @@ class PaddySellQueryController extends Controller
             'crop_year' => $request->filled('crop_year') ? trim((string) $request->input('crop_year')) : null,
             'status' => 1,
             'is_new' => (int) $request->input('is_new', 0) === 1 ? 1 : 0,
+            'hotdeal' => (int) $request->input('hotdeal', 0) === 1 ? 1 : 0,
             'valid_datetime_for_is_new' => $this->normalizeValidDatetimeForIsNew($request),
             'created_by' => Auth::id(),
         ];
@@ -446,6 +448,29 @@ class PaddySellQueryController extends Controller
         $trade->update($payload);
 
         Session::flash('success', 'Success|Paddy trade Is New set to ' . ($isNew ? 'Yes' : 'No') . '.');
+
+        return back();
+    }
+
+    /**
+     * Toggle hotdeal Yes/No on a paddy trade.
+     */
+    public function updateTradeHotdeal(Request $request, $id)
+    {
+        $trade = PaddyTrade::findOrFail($id);
+
+        $validator = Validator::make($request->all(), [
+            'hotdeal' => 'required|in:0,1',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        $isHotdeal = (int) $request->hotdeal === 1 ? 1 : 0;
+        $trade->update(['hotdeal' => $isHotdeal]);
+
+        Session::flash('success', 'Success|Paddy trade Hot Deal set to ' . ($isHotdeal ? 'Yes' : 'No') . '.');
 
         return back();
     }

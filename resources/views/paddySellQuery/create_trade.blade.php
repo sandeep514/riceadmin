@@ -139,6 +139,14 @@
                         </div>
 
                         <div class="form-group col-md-4">
+                            <label>Hot Deal</label>
+                            <select name="hotdeal" class="form-control">
+                                <option value="0" {{ (string) old('hotdeal', '0') === '0' ? 'selected' : '' }}>No</option>
+                                <option value="1" {{ (string) old('hotdeal', '0') === '1' ? 'selected' : '' }}>Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4">
                             <label>Valid Datetime for Is New <small class="text-muted">(optional)</small></label>
                             <input type="datetime-local" name="valid_datetime_for_is_new" class="form-control"
                                    value="{{ old('valid_datetime_for_is_new') }}">

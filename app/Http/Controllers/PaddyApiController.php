@@ -658,6 +658,7 @@ class PaddyApiController extends Controller
      * - quality: paddy_qualities id
      * - packing_id: seller packing id
      * - crop_year: exact crop year string on the trade
+     * - hotdeal: 0 | 1
      * - userId | user_id: logged-in user (for per-trade is_interested / already_interested)
      * - seller_user_id: filter trades by original seller user id
      * - status: single status code, or comma list (e.g. 1,4,12,3), or "all"
@@ -673,6 +674,7 @@ class PaddyApiController extends Controller
             'quality' => 'nullable|integer|exists:paddy_qualities,id',
             'packing_id' => 'nullable|integer|exists:sellerPackingINR,id',
             'crop_year' => 'nullable|string|max:50',
+            'hotdeal' => 'nullable|in:0,1',
             'userId' => 'nullable|integer|exists:users,id',
             'user_id' => 'nullable|integer|exists:users,id',
             'seller_user_id' => 'nullable|integer|exists:users,id',
@@ -743,6 +745,9 @@ class PaddyApiController extends Controller
         }
         if ($request->filled('crop_year')) {
             $query->where('crop_year', trim((string) $request->crop_year));
+        }
+        if ($request->has('hotdeal') && $request->input('hotdeal') !== '' && $request->input('hotdeal') !== null) {
+            $query->where('hotdeal', (int) $request->hotdeal === 1 ? 1 : 0);
         }
         if ($request->filled('seller_user_id')) {
             $query->where('user_id', (int) $request->seller_user_id);
@@ -1073,6 +1078,8 @@ class PaddyApiController extends Controller
             'status_label' => $row->status_label,
             'is_new' => $effectiveIsNew ? 1 : 0,
             'is_new_label' => $effectiveIsNew ? 'yes' : 'no',
+            'hotdeal' => (int) $row->hotdeal === 1 ? 1 : 0,
+            'hotdeal_label' => (int) $row->hotdeal === 1 ? 'yes' : 'no',
             'valid_datetime_for_is_new' => $row->valid_datetime_for_is_new
                 ? optional($row->valid_datetime_for_is_new)->format('Y-m-d H:i:s')
                 : null,

@@ -32,6 +32,7 @@ class PaddyTrade extends Model
         'crop_year',
         'status',
         'is_new',
+        'hotdeal',
         'valid_datetime_for_is_new',
         'sold_at_amount',
         'sold_at',
@@ -42,6 +43,7 @@ class PaddyTrade extends Model
         'sold_at' => 'datetime',
         'valid_datetime_for_is_new' => 'datetime',
         'is_new' => 'integer',
+        'hotdeal' => 'integer',
     ];
 
     /**
@@ -160,6 +162,11 @@ class PaddyTrade extends Model
     public function getIsNewLabelAttribute(): string
     {
         return $this->resolveEffectiveIsNew() ? 'Yes' : 'No';
+    }
+
+    public function getHotdealLabelAttribute(): string
+    {
+        return (int) $this->hotdeal === 1 ? 'Yes' : 'No';
     }
 
     /**

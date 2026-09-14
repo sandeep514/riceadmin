@@ -91,6 +91,23 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th>Hot Deal</th>
+                                    <td>
+                                        <form method="POST" action="{{ route('update.paddy.trade.hotdeal', $trade->id) }}" class="form-inline">
+                                            @csrf
+                                            <select name="hotdeal" class="form-control input-sm" onchange="this.form.submit()" style="width: 120px;">
+                                                <option value="0" {{ (int) $trade->hotdeal === 0 ? 'selected' : '' }}>No</option>
+                                                <option value="1" {{ (int) $trade->hotdeal === 1 ? 'selected' : '' }}>Yes</option>
+                                            </select>
+                                            @if((int) $trade->hotdeal === 1)
+                                                <span class="label label-danger" style="margin-left: 8px;">Yes</span>
+                                            @else
+                                                <span class="label label-default" style="margin-left: 8px;">No</span>
+                                            @endif
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th>Is New expiry</th>
                                     <td>
                                         @if($trade->valid_datetime_for_is_new)
