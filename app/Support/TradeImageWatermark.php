@@ -42,10 +42,6 @@ class TradeImageWatermark
             return false;
         }
 
-        // About 6 marks: 2x3 on landscape, 3x2 on portrait.
-        $cols = $srcW >= $srcH ? 3 : 2;
-        $rows = $srcW >= $srcH ? 2 : 3;
-
         $targetW = (int) max(40, min(180, round($srcW * 0.18)));
         $targetH = (int) max(1, round($wmH * ($targetW / $wmW)));
         if ($targetH > (int) ($srcH * 0.18)) {
@@ -60,17 +56,36 @@ class TradeImageWatermark
         imagefilledrectangle($scaled, 0, 0, $targetW, $targetH, $transparent);
         imagecopyresampled($scaled, $watermark, 0, 0, 0, 0, $targetW, $targetH, $wmW, $wmH);
 
-        $padX = (int) max(16, round($srcW * 0.08));
-        $padY = (int) max(16, round($srcH * 0.08));
-        $usableW = max(1, $srcW - (2 * $padX) - $targetW);
-        $usableH = max(1, $srcH - (2 * $padY) - $targetH);
+        $count = random_int(5, 6);
+        $padX = (int) max(8, round($srcW * 0.04));
+        $padY = (int) max(8, round($srcH * 0.04));
+        $maxX = max($padX, $srcW - $targetW - $padX);
+        $maxY = max($padY, $srcH - $targetH - $padY);
+        $minGap = (int) max($targetW * 0.85, $targetH * 0.85);
 
-        for ($row = 0; $row < $rows; $row++) {
-            for ($col = 0; $col < $cols; $col++) {
-                $x = $padX + (int) round($usableW * ($cols === 1 ? 0.5 : $col / ($cols - 1)));
-                $y = $padY + (int) round($usableH * ($rows === 1 ? 0.5 : $row / ($rows - 1)));
-                imagecopy($source, $scaled, $x, $y, 0, 0, $targetW, $targetH);
+        $placed = [];
+        $attempts = 0;
+        while (count($placed) < $count && $attempts < 80) {
+            $attempts++;
+            $x = random_int($padX, $maxX);
+            $y = random_int($padY, $maxY);
+
+            $tooClose = false;
+            foreach ($placed as $spot) {
+                $dx = $x - $spot[0];
+                $dy = $y - $spot[1];
+                if (($dx * $dx + $dy * $dy) < ($minGap * $minGap)) {
+                    $tooClose = true;
+                    break;
+                }
             }
+
+            if ($tooClose) {
+                continue;
+            }
+
+            $placed[] = [$x, $y];
+            imagecopy($source, $scaled, $x, $y, 0, 0, $targetW, $targetH);
         }
 
         $saved = self::saveImage($source, $imagePath);
