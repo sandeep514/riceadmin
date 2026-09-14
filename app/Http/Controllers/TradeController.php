@@ -30,6 +30,7 @@ use App\Role;
 use App\TradeCategoryMap;
 use App\Services\TradeWebNotificationService;
 use App\Services\UserInterestService;
+use App\Support\TradeImageWatermark;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -212,8 +213,10 @@ class TradeController extends Controller
             $file_name = $_FILES['packingImage']['name'];
             $file_tmp = $_FILES['packingImage']['tmp_name'];
             if (is_string($file_tmp) && $file_tmp !== '' && is_uploaded_file($file_tmp) && $file_name !== '') {
-                move_uploaded_file($file_tmp, "uploads/".$file_name);
-                $data['packing_file'] = $file_name;
+                $stored = $this->storeWatermarkedTradeImage($file_tmp, $file_name);
+                if ($stored !== null) {
+                    $data['packing_file'] = $stored;
+                }
             }
         }
 
@@ -227,11 +230,14 @@ class TradeController extends Controller
                 if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
                     continue;
                 }
-                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                $stored = $this->storeWatermarkedTradeImage($tmp_name, $file_name);
+                if ($stored === null) {
+                    continue;
+                }
                 if ((int) $key === 0) {
-                    $data['cooked_file'] = $file_name;
+                    $data['cooked_file'] = $stored;
                 } else {
-                    $data['cooked_file'.$key] = $file_name;
+                    $data['cooked_file'.$key] = $stored;
                 }
             }
         }
@@ -242,11 +248,14 @@ class TradeController extends Controller
                 if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
                     continue;
                 }
-                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                $stored = $this->storeWatermarkedTradeImage($tmp_name, $file_name);
+                if ($stored === null) {
+                    continue;
+                }
                 if ((int) $key === 0) {
-                    $data['uncooked_file'] = $file_name;
+                    $data['uncooked_file'] = $stored;
                 } else {
-                    $data['uncooked_file'.$key] = $file_name;
+                    $data['uncooked_file'.$key] = $stored;
                 }
             }
         }
@@ -379,8 +388,10 @@ class TradeController extends Controller
             $file_name = $_FILES['packingImage']['name'];
             $file_tmp = $_FILES['packingImage']['tmp_name'];
             if (is_string($file_tmp) && $file_tmp !== '' && is_uploaded_file($file_tmp)) {
-                move_uploaded_file($file_tmp, "uploads/".$file_name);
-                $data['packing_file'] = $file_name;
+                $stored = $this->storeWatermarkedTradeImage($file_tmp, $file_name);
+                if ($stored !== null) {
+                    $data['packing_file'] = $stored;
+                }
             }
         }
 
@@ -394,11 +405,14 @@ class TradeController extends Controller
                 if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
                     continue;
                 }
-                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                $stored = $this->storeWatermarkedTradeImage($tmp_name, $file_name);
+                if ($stored === null) {
+                    continue;
+                }
                 if ((int) $key === 0) {
-                    $data['cooked_file'] = $file_name;
+                    $data['cooked_file'] = $stored;
                 } else {
-                    $data['cooked_file'.$key] = $file_name;
+                    $data['cooked_file'.$key] = $stored;
                 }
             }
         }
@@ -409,11 +423,14 @@ class TradeController extends Controller
                 if (! is_string($tmp_name) || $tmp_name === '' || $file_name === '' || ! is_uploaded_file($tmp_name)) {
                     continue;
                 }
-                move_uploaded_file($tmp_name, "uploads/".$file_name);
+                $stored = $this->storeWatermarkedTradeImage($tmp_name, $file_name);
+                if ($stored === null) {
+                    continue;
+                }
                 if ((int) $key === 0) {
-                    $data['uncooked_file'] = $file_name;
+                    $data['uncooked_file'] = $stored;
                 } else {
-                    $data['uncooked_file'.$key] = $file_name;
+                    $data['uncooked_file'.$key] = $stored;
                 }
             }
         }
@@ -518,6 +535,28 @@ class TradeController extends Controller
 
         return back();
         return View('trade.index');
+    }
+
+    private function storeWatermarkedTradeImage(string $tmpName, string $fileName): ?string
+    {
+        $fileName = basename($fileName);
+        if ($fileName === '') {
+            return null;
+        }
+
+        $uploadDir = public_path('uploads');
+        if (! is_dir($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $dest = $uploadDir.DIRECTORY_SEPARATOR.$fileName;
+        if (! move_uploaded_file($tmpName, $dest) && ! @copy($tmpName, $dest)) {
+            return null;
+        }
+
+        TradeImageWatermark::apply($dest);
+
+        return $fileName;
     }
 
     protected function storeTradeVideoUpload(Request $request): ?string

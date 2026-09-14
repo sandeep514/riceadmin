@@ -7,6 +7,7 @@ use App\PaddySellQuery;
 use App\PaddyTrade;
 use App\PaddyTradeCurrentStatus;
 use App\SellerPackingINR;
+use App\Support\TradeImageWatermark;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -276,6 +277,7 @@ class PaddySellQueryController extends Controller
             }
             $imageName = 'paddy_trade_' . time() . '_' . Str::random(6) . '.' . $file->getClientOriginalExtension();
             $file->move($uploadDir, $imageName);
+            TradeImageWatermark::apply($uploadDir.DIRECTORY_SEPARATOR.$imageName);
         }
 
         $qualityName = optional(PaddyQuality::find($request->quality))->quality;
