@@ -310,12 +310,18 @@ class WebClearingAgentProductService
     private function serializeMapRow(ClearingAgentParticularMap $row): array
     {
         $masterName = optional($row->particular)->particular;
+        $inputType = (int) $row->is_other === 1
+            ? VendorContainerParticular::INPUT_TYPE_NUMBER
+            : (optional($row->particular)->input_type ?: VendorContainerParticular::INPUT_TYPE_NUMBER);
+        $value = $row->rate !== null ? (string) $row->rate : null;
 
         return [
             'id' => (int) $row->id,
             'particularId' => $row->particular_id !== null ? (int) $row->particular_id : null,
             'particularName' => $row->particular_name ?: $masterName,
-            'rate' => $row->rate !== null ? (string) $row->rate : null,
+            'inputType' => $inputType,
+            'rate' => $value,
+            'value' => $value,
             'isOther' => (int) $row->is_other === 1,
             'sortOrder' => (int) $row->sort_order,
         ];
@@ -405,26 +411,43 @@ class WebClearingAgentProductService
             $particulars = [];
         }
 
+        $particularIds = [];
+        foreach ($particulars as $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            $particularId = $row['particular_id'] ?? $row['particularId'] ?? null;
+            if ($particularId !== null && $particularId !== '') {
+                $particularIds[] = (int) $particularId;
+            }
+        }
+
+        $masters = $particularIds === []
+            ? collect()
+            : VendorContainerParticular::query()
+                ->whereIn('id', array_values(array_unique($particularIds)))
+                ->get(['id', 'particular', 'input_type'])
+                ->keyBy('id');
+
         foreach ($particulars as $row) {
             if (! is_array($row)) {
                 continue;
             }
 
             $particularId = $row['particular_id'] ?? $row['particularId'] ?? null;
-            $rate = $row['rate'] ?? $row['price'] ?? null;
-            if ($particularId === null || $particularId === '' || $rate === null || $rate === '') {
+            $value = $this->particularRowValue($row);
+            if ($particularId === null || $particularId === '' || $this->isEmptyParticularValue($value)) {
                 continue;
             }
 
-            $masterName = VendorContainerParticular::query()
-                ->where('id', (int) $particularId)
-                ->value('particular');
+            $master = $masters->get((int) $particularId);
+            $inputType = optional($master)->input_type ?: VendorContainerParticular::INPUT_TYPE_NUMBER;
 
             ClearingAgentParticularMap::create([
                 'product_id' => $product->id,
                 'particular_id' => (int) $particularId,
-                'particular_name' => $masterName,
-                'rate' => $rate,
+                'particular_name' => optional($master)->particular,
+                'rate' => $this->normalizeValueForStorage($value, $inputType),
                 'is_other' => 0,
                 'sort_order' => $sort++,
             ]);
@@ -448,8 +471,8 @@ class WebClearingAgentProductService
                 ?? $row['name']
                 ?? ''
             ));
-            $rate = $row['rate'] ?? $row['price'] ?? null;
-            if ($name === '' || $rate === null || $rate === '') {
+            $rate = $this->particularRowValue($row);
+            if ($name === '' || $this->isEmptyParticularValue($rate)) {
                 continue;
             }
 
@@ -457,7 +480,7 @@ class WebClearingAgentProductService
                 'product_id' => $product->id,
                 'particular_id' => null,
                 'particular_name' => $name,
-                'rate' => $rate,
+                'rate' => $this->normalizeValueForStorage($rate, VendorContainerParticular::INPUT_TYPE_NUMBER),
                 'is_other' => 1,
                 'sort_order' => $sort++,
             ]);
@@ -491,13 +514,16 @@ class WebClearingAgentProductService
             'particulars' => ['nullable', 'array'],
             'particulars.*.particular_id' => ['nullable', 'integer', 'exists:vendor_container_particulars,id'],
             'particulars.*.particularId' => ['nullable', 'integer', 'exists:vendor_container_particulars,id'],
-            'particulars.*.rate' => ['nullable', 'numeric'],
-            'particulars.*.price' => ['nullable', 'numeric'],
+            'particulars.*.rate' => ['nullable'],
+            'particulars.*.price' => ['nullable'],
+            'particulars.*.value' => ['nullable'],
             'others' => ['nullable', 'array'],
             'others.*.particular_name' => ['nullable', 'string', 'max:255'],
+            'others.*.particularName' => ['nullable', 'string', 'max:255'],
             'others.*.charge_name' => ['nullable', 'string', 'max:255'],
             'others.*.rate' => ['nullable', 'numeric'],
             'others.*.price' => ['nullable', 'numeric'],
+            'others.*.value' => ['nullable', 'numeric'],
         ];
     }
 
@@ -517,17 +543,46 @@ class WebClearingAgentProductService
             ? $data['others']
             : (is_array($data['other_particulars'] ?? null) ? $data['other_particulars'] : []);
 
-        $hasParticular = false;
+        $particularIds = [];
         foreach ($particulars as $row) {
             if (! is_array($row)) {
                 continue;
             }
             $id = $row['particular_id'] ?? $row['particularId'] ?? null;
-            $rate = $row['rate'] ?? $row['price'] ?? null;
-            if ($id !== null && $id !== '' && $rate !== null && $rate !== '') {
-                $hasParticular = true;
-                break;
+            if ($id !== null && $id !== '') {
+                $particularIds[] = (int) $id;
             }
+        }
+
+        $masters = $particularIds === []
+            ? collect()
+            : VendorContainerParticular::query()
+                ->whereIn('id', array_values(array_unique($particularIds)))
+                ->get(['id', 'particular', 'input_type'])
+                ->keyBy('id');
+
+        $hasParticular = false;
+        foreach ($particulars as $index => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            $id = $row['particular_id'] ?? $row['particularId'] ?? null;
+            $value = $this->particularRowValue($row);
+            if ($id === null || $id === '' || $this->isEmptyParticularValue($value)) {
+                continue;
+            }
+
+            $hasParticular = true;
+            $master = $masters->get((int) $id);
+            $inputType = optional($master)->input_type ?: VendorContainerParticular::INPUT_TYPE_NUMBER;
+            $label = optional($master)->particular ?: 'Particular';
+            $this->assertValueMatchesInputType(
+                $validator,
+                "particulars.{$index}.rate",
+                $value,
+                $inputType,
+                $label
+            );
         }
 
         $hasOther = false;
@@ -538,8 +593,8 @@ class WebClearingAgentProductService
             $name = trim((string) (
                 $row['particular_name'] ?? $row['particularName'] ?? $row['charge_name'] ?? $row['chargeName'] ?? $row['name'] ?? ''
             ));
-            $rate = $row['rate'] ?? $row['price'] ?? null;
-            if ($name !== '' && $rate !== null && $rate !== '') {
+            $rate = $this->particularRowValue($row);
+            if ($name !== '' && ! $this->isEmptyParticularValue($rate)) {
                 $hasOther = true;
                 break;
             }
@@ -698,6 +753,141 @@ class WebClearingAgentProductService
             ->value('size');
 
         return $byLabel !== null ? (int) $byLabel : null;
+    }
+
+    private function particularRowValue(array $row)
+    {
+        foreach (['rate', 'price', 'value'] as $key) {
+            if (! array_key_exists($key, $row)) {
+                continue;
+            }
+            if (! $this->isEmptyParticularValue($row[$key])) {
+                return $row[$key];
+            }
+        }
+
+        foreach (['rate', 'price', 'value'] as $key) {
+            if (array_key_exists($key, $row)) {
+                return $row[$key];
+            }
+        }
+
+        return null;
+    }
+
+    private function isEmptyParticularValue($value): bool
+    {
+        if ($value === null) {
+            return true;
+        }
+
+        if (is_string($value) && trim($value) === '') {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function assertValueMatchesInputType($validator, string $field, $value, string $inputType, string $label): void
+    {
+        $inputType = strtolower(trim($inputType));
+
+        if ($inputType === VendorContainerParticular::INPUT_TYPE_NUMBER) {
+            if (! is_numeric($value)) {
+                $validator->errors()->add($field, $label.' must be a number.');
+            }
+
+            return;
+        }
+
+        if ($inputType === VendorContainerParticular::INPUT_TYPE_DATE) {
+            if (! $this->isValidDateValue($value)) {
+                $validator->errors()->add($field, $label.' must be a valid date.');
+            }
+
+            return;
+        }
+
+        if ($inputType === VendorContainerParticular::INPUT_TYPE_CHECKBOX) {
+            if ($this->normalizeCheckboxValue($value) === null) {
+                $validator->errors()->add($field, $label.' must be true or false.');
+            }
+
+            return;
+        }
+
+        if (! is_scalar($value)) {
+            $validator->errors()->add($field, $label.' must be text.');
+
+            return;
+        }
+
+        $max = $inputType === VendorContainerParticular::INPUT_TYPE_TEXTAREA ? 2000 : 255;
+        if (mb_strlen(trim((string) $value)) > $max) {
+            $validator->errors()->add($field, $label.' may not be greater than '.$max.' characters.');
+        }
+    }
+
+    private function normalizeValueForStorage($value, string $inputType): string
+    {
+        $inputType = strtolower(trim($inputType));
+
+        if ($inputType === VendorContainerParticular::INPUT_TYPE_CHECKBOX) {
+            return $this->normalizeCheckboxValue($value) ?? '0';
+        }
+
+        if ($inputType === VendorContainerParticular::INPUT_TYPE_DATE && $this->isValidDateValue($value)) {
+            try {
+                return \Carbon\Carbon::parse($value)->toDateString();
+            } catch (\Throwable $e) {
+                return trim((string) $value);
+            }
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        return trim((string) $value);
+    }
+
+    private function normalizeCheckboxValue($value): ?string
+    {
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        if (in_array($normalized, ['1', 'true', 'yes', 'on', 'y'], true)) {
+            return '1';
+        }
+
+        if (in_array($normalized, ['0', 'false', 'no', 'off', 'n'], true)) {
+            return '0';
+        }
+
+        return null;
+    }
+
+    private function isValidDateValue($value): bool
+    {
+        if ($value instanceof \DateTimeInterface) {
+            return true;
+        }
+
+        $string = trim((string) $value);
+        if ($string === '') {
+            return false;
+        }
+
+        try {
+            \Carbon\Carbon::parse($string);
+
+            return true;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     private function nullableString($value): ?string

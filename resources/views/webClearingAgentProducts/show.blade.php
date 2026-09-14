@@ -121,11 +121,15 @@
                     <tr>
                         <th>Type</th>
                         <th>Name</th>
-                        <th>Rate</th>
+                        <th>Value</th>
                     </tr>
                     </thead>
                     <tbody>
                     @forelse($product->particulars as $row)
+                        @php
+                            $inputType = optional($row->particular)->input_type ?: \App\VendorContainerParticular::INPUT_TYPE_NUMBER;
+                            $isMoney = (int) $row->is_other === 1 || $inputType === \App\VendorContainerParticular::INPUT_TYPE_NUMBER;
+                        @endphp
                         <tr>
                             <td>
                                 @if((int) $row->is_other === 1)
@@ -140,7 +144,15 @@
                                     <small class="text-muted">(ID {{ $row->particular_id }})</small>
                                 @endif
                             </td>
-                            <td>{{ $row->rate !== null ? '₹ '.$row->rate : '—' }}</td>
+                            <td>
+                                @if($row->rate === null || $row->rate === '')
+                                    —
+                                @elseif($isMoney)
+                                    ₹ {{ $row->rate }}
+                                @else
+                                    {{ $row->rate }}
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>

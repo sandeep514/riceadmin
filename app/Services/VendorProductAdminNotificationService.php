@@ -451,7 +451,7 @@ class VendorProductAdminNotificationService
                     ?: ($variant->particular_id ? 'Particular #'.$variant->particular_id : 'Other');
                 $parts = array_filter([
                     $name,
-                    $variant->rate !== null ? 'Rate: '.$variant->rate : null,
+                    $variant->rate !== null ? 'Value: '.$variant->rate : null,
                     (int) ($variant->is_other ?? 0) === 1 ? 'Other' : null,
                 ]);
 

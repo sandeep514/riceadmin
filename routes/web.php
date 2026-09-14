@@ -988,6 +988,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/machinery-equipment-products/{id}', ['as' => 'get.web.machinery.equipment.products.show', 'uses' => 'WebMachineryEquipmentProductController@showProductToAdmin']);
     Route::post('toggle/web/machinery-equipment-products/status/{id}', ['as' => 'toggle.web.machinery.equipment.products.status', 'uses' => 'WebMachineryEquipmentProductController@toggleStatus']);
 
+    Route::get('get/web/clearing-agent-vendors', ['as' => 'get.web.clearing.agent.vendors.list', 'uses' => 'WebClearingAgentProductController@showVendorsToAdmin']);
     Route::get('get/web/clearing-agent-products', ['as' => 'get.web.clearing.agent.products.list', 'uses' => 'WebClearingAgentProductController@showProductsToAdmin']);
     Route::get('get/web/clearing-agent-products/{id}', ['as' => 'get.web.clearing.agent.products.show', 'uses' => 'WebClearingAgentProductController@showProductToAdmin']);
     Route::post('toggle/web/clearing-agent-products/status/{id}', ['as' => 'toggle.web.clearing.agent.products.status', 'uses' => 'WebClearingAgentProductController@toggleStatus']);

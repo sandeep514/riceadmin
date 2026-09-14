@@ -544,6 +544,7 @@
                     'vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge',
                 ];
                 $serviceProviderProductRoutes = [
+                    'get.web.clearing.agent.vendors.list',
                     'get.web.clearing.agent.products.list','get.web.clearing.agent.products.show',
                 ];
                 $serviceProviderRoutes = array_merge($serviceProviderMasterRoutes, $serviceProviderProductRoutes);
@@ -588,12 +589,15 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ in_array($currentRoute, $serviceProviderProductRoutes) ? 'active' : '' }}">
+                    <li class="{{ $currentRoute === 'get.web.clearing.agent.vendors.list' ? 'active' : '' }}">
+                        <a href="{{ route('get.web.clearing.agent.vendors.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Vendors</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
                     </li>
                 </ul>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show','get.web.clearing.agent.vendors.list','get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-cubes"></i>
                     <span>Vendor Products</span>
@@ -616,6 +620,12 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.machinery.equipment.products.list') }}"><i class="fa fa-circle-o"></i> Machinery Equipment Products</a>
+                    </li>
+                    <li class="{{ $currentRoute === 'get.web.clearing.agent.vendors.list' ? 'active' : '' }}">
+                        <a href="{{ route('get.web.clearing.agent.vendors.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Vendors</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
                     </li>
                 </ul>
             </li>
