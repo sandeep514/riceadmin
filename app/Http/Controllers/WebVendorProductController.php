@@ -9,6 +9,7 @@ use App\Services\WebVendorPackagingProductService;
 use App\Support\VendorProductCatalog;
 use App\VendorPackingType;
 use App\WebBusinessDetails;
+use App\WebClearingAgentProduct;
 use App\WebRiceBagProduct;
 use Illuminate\Http\Request;
 
@@ -146,6 +147,61 @@ class WebVendorProductController extends Controller
             'vendor' => $vendorPayload,
             'data' => $data,
             'imageBasePath' => $imageBasePath,
+        ], 200);
+    }
+
+    /**
+     * Public catalog alias for clearing-agent vendors.
+     * {id} is a vendor/business id; if that misses, fall back to a charge-sheet product id.
+     */
+    public function listClearingAgentCharges(Request $request, $id)
+    {
+        $response = $this->listByVendorId($request, $id);
+        if ((int) $response->getStatusCode() !== 404) {
+            return $response;
+        }
+
+        $product = WebClearingAgentProduct::with([
+            'particulars.particular',
+            'icdLocationRel',
+            'indianPortRel',
+            'destinationPortRel',
+        ])->find((int) $id);
+
+        if ($product === null) {
+            return $response;
+        }
+
+        $ownerId = (int) $product->user_id;
+        if ($ownerId > 0 && $ownerId !== (int) $id) {
+            $ownerResponse = $this->listByVendorId($request, $ownerId);
+            if ((int) $ownerResponse->getStatusCode() !== 404) {
+                return $ownerResponse;
+            }
+        }
+
+        if ((int) $product->status !== 1) {
+            return $response;
+        }
+
+        $service = new WebClearingAgentProductService();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendor products fetched successfully.',
+            'vendor' => [
+                'id' => $ownerId > 0 ? $ownerId : (int) $product->id,
+                'company_name' => null,
+                'product' => null,
+                'contactPerson' => null,
+                'contactMobile' => null,
+                'address' => null,
+                'recommended' => 0,
+                'has_products' => true,
+                'vendorKind' => VendorProductCatalog::KIND_CLEARING_AGENT,
+            ],
+            'data' => [$service->serializeVendorProduct($product)],
+            'imageBasePath' => null,
         ], 200);
     }
 
