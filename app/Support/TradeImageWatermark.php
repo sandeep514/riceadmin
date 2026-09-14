@@ -42,11 +42,14 @@ class TradeImageWatermark
             return false;
         }
 
-        // Tile several small marks across the photo (staggered rows).
-        $targetW = (int) max(48, min(160, round($srcW * 0.16)));
+        // About 6 marks: 2x3 on landscape, 3x2 on portrait.
+        $cols = $srcW >= $srcH ? 3 : 2;
+        $rows = $srcW >= $srcH ? 2 : 3;
+
+        $targetW = (int) max(40, min(180, round($srcW * 0.18)));
         $targetH = (int) max(1, round($wmH * ($targetW / $wmW)));
-        if ($targetH > (int) ($srcH * 0.16)) {
-            $targetH = (int) max(32, min(120, round($srcH * 0.16)));
+        if ($targetH > (int) ($srcH * 0.18)) {
+            $targetH = (int) max(28, min(140, round($srcH * 0.18)));
             $targetW = (int) max(1, round($wmW * ($targetH / $wmH)));
         }
 
@@ -57,14 +60,15 @@ class TradeImageWatermark
         imagefilledrectangle($scaled, 0, 0, $targetW, $targetH, $transparent);
         imagecopyresampled($scaled, $watermark, 0, 0, 0, 0, $targetW, $targetH, $wmW, $wmH);
 
-        $gapX = (int) max(24, round($targetW * 0.55));
-        $gapY = (int) max(24, round($targetH * 0.70));
-        $stepX = $targetW + $gapX;
-        $stepY = $targetH + $gapY;
+        $padX = (int) max(16, round($srcW * 0.08));
+        $padY = (int) max(16, round($srcH * 0.08));
+        $usableW = max(1, $srcW - (2 * $padX) - $targetW);
+        $usableH = max(1, $srcH - (2 * $padY) - $targetH);
 
-        for ($row = 0, $y = (int) round($gapY / 2); $y < $srcH; $y += $stepY, $row++) {
-            $rowOffset = ($row % 2 === 1) ? (int) round($stepX / 2) : 0;
-            for ($x = (int) round($gapX / 2) - $rowOffset; $x < $srcW; $x += $stepX) {
+        for ($row = 0; $row < $rows; $row++) {
+            for ($col = 0; $col < $cols; $col++) {
+                $x = $padX + (int) round($usableW * ($cols === 1 ? 0.5 : $col / ($cols - 1)));
+                $y = $padY + (int) round($usableH * ($rows === 1 ? 0.5 : $row / ($rows - 1)));
                 imagecopy($source, $scaled, $x, $y, 0, 0, $targetW, $targetH);
             }
         }
