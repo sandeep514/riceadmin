@@ -7972,9 +7972,13 @@ if (!file_exists('uploads')) {
 
     public function getWebNewsRunner()
     {
-        $news = WebNewsRunner::where('status', 1)->orderBy('id', 'desc')->get()->groupBy('newsType')->map(function ($query) {
-            return $query->take(1);
-        });
+        $news = WebNewsRunner::where('status', 1)
+            ->orderBy('id', 'desc')
+            ->get(['id', 'title', 'description', 'type', 'newsType', 'status', 'created_at', 'updated_at'])
+            ->groupBy('newsType')
+            ->map(function ($query) {
+                return $query->take(1);
+            });
         return response()->json(['status' => true, 'data' => $news], 200);
     }
 

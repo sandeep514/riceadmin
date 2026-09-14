@@ -47,9 +47,25 @@ class NewsRunnerController extends Controller
 
     public function webCreate(Request $request)
     {   
+        $request->validate([
+            'type' => 'required|array',
+            'type.*' => 'in:usd,inr',
+            'newsType' => 'required|in:recent,sntc',
+            'title' => 'nullable|string|max:255',
+            'description' => 'required|string',
+        ]);
+
+        $title = trim((string) $request->input('title', ''));
+        $title = $title === '' ? null : $title;
+
         $data = [];
         foreach ($request->type as $key => $value) {
-            $data[] = [ 'type' => $value , 'title' => $request->title , 'newsType' => $request->newsType ];
+            $data[] = [
+                'type' => $value,
+                'title' => $title,
+                'description' => $request->description,
+                'newsType' => $request->newsType,
+            ];
         }
         Session::flash('message' , 'News updated successfully');
         WebNewsRunner::insert($data);

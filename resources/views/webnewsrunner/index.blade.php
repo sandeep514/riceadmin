@@ -106,10 +106,25 @@
                             @enderror --}}
 
                             <div class="form-group">
-                                <label for="comment">Runner:</label>
-                                <input type="text" class="form-control" name="title">
+                                <label for="title">Title <small class="text-muted">(optional)</small></label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
                             </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control" id="description" name="description" value="{{ old('description') }}">
+                            </div>
+                            @error('description')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
                             @error('title')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                            @error('type')
                                 <span class="" style="color: red">
                                     Please select all required fields.
                                 </span>
@@ -128,6 +143,7 @@
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center ">Title</th>
+                                                <th style="text-align: center ">Description</th>
                                                 <th style="text-align: center ">Type</th>
                                                 <th style="text-align: center ">News Type</th>
                                                 <th style="text-align: center ">Status</th>
@@ -139,7 +155,8 @@
                                         <tbody>
                                             @foreach($news as $k => $v)
                                                 <tr>
-                                                    <td>{{ $v->title }}</td>
+                                                    <td>{{ $v->title ?: '-' }}</td>
+                                                    <td>{{ $v->description }}</td>
                                                     <td>{{ $v->type }}</td>
                                                     <td>{{ $v->newsType }}</td>
                                                     <td>{{ ($v->status==1)?'Active' : 'De-active' }}</td>
@@ -149,11 +166,11 @@
                                                     <td style="text-align: center;">
 
                                                         @if($v->status == 2)
-                                                            <a class="btn btn-info btn-sm" href="{{ route('master.news.change.status' ,[ 'newsId' => $v->id , 'status'=> 1]) }}">Activate</a>
+                                                            <a class="btn btn-info btn-sm" href="{{ route('web.master.news.change.status' ,[ 'newsId' => $v->id , 'status'=> 1]) }}">Activate</a>
                                                         @endif
                                                         
                                                         @if($v->status == 1)
-                                                            <a class="btn btn-danger btn-sm" href="{{ route('master.news.change.status' ,[ 'newsId' => $v->id , 'status'=> 2]) }}">De-Active</a>
+                                                            <a class="btn btn-danger btn-sm" href="{{ route('web.master.news.change.status' ,[ 'newsId' => $v->id , 'status'=> 2]) }}">De-Active</a>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -164,6 +181,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th style="text-align: center ">Title</th>
+                                                <th style="text-align: center ">Description</th>
                                                 <th style="text-align: center ">Type</th>
                                                 <th style="text-align: center ">News Type</th>
                                                 <th style="text-align: center ">Status</th>
