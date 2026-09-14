@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Excel;
 use App\Export\LivePricesExport;
 use Mail;
+use App\Support\QueuedMail;
 
 class Controller extends BaseController
 {
@@ -123,13 +124,16 @@ class Controller extends BaseController
         $emails = ['rbajaj@snjtradelink.com','enquiry@sntcgroup.com','sandy.singh51480@gmail.com'];
         // $emails = ['sandy.singh51480@gmail.com','rbajaj@sntcgroup.com','enquiry@sntcgroup.com'];
 
-        Mail::send('mail.mailToVendor', ['date' => $date], function($message) use ($emails,$fileName)
-        {
-            $message->from('info@sntcgroup.com');
-            $message->to($emails)->subject('SNTC : Indian Rice Live Pricing');
-            $message->attach(public_path('/excel/'.$fileName));
-           
-        });
+        QueuedMail::send(
+            'mail.mailToVendor',
+            ['date' => $date],
+            $emails,
+            'SNTC : Indian Rice Live Pricing',
+            'info@sntcgroup.com',
+            null,
+            null,
+            public_path('/excel/'.$fileName)
+        );
     }
    
 }

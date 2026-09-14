@@ -26,6 +26,7 @@ use App\BuyQueriesINR;
 use App\FutureBuyQueriesINR;
 use App\RiceFormMilestone3;
 use Mail;
+use App\Support\QueuedMail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Export\MasterRiceFormExport;
 use App\Export\MasterRiceNameExport;
@@ -1128,10 +1129,7 @@ class MasterController extends Controller
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-		$respose = Mail::send('mail.TradeSellQueryToUser', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom,$mailFromName);
-        });
+		QueuedMail::send('mail.TradeSellQueryToUser', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
 
 		Session::flash('message' , 'Sell query moved to trade successfully.');
 		return back();
@@ -1258,10 +1256,7 @@ class MasterController extends Controller
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-		$respose = Mail::send('mail.TradeQueryToUser', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom,$mailFromName);
-        });
+		QueuedMail::send('mail.TradeQueryToUser', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
 		Session::flash('message' , 'Buy query moved to trade successfully.');
 
 		return back();

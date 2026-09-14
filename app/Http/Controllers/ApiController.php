@@ -82,6 +82,7 @@ use App\BuyQueriesINR;
 use App\TradeLike;
 use App\TradeIntrested;
 use Mail;
+use App\Support\QueuedMail;
 use Auth;
 use App\NewsRunner;
 use App\WebNewsRunner;
@@ -5668,10 +5669,7 @@ class ApiController extends Controller
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.FutureSellQueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.FutureSellQueryReceivedMilestone3', $mailPayload, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
         return response()->json(['status' => true, 'data' => $sellCreate]);
 
 
@@ -5759,10 +5757,7 @@ class ApiController extends Controller
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.FutureBuyqueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.FutureBuyqueryReceivedMilestone3', $mailPayload, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
         return response()->json(['status' => true, 'data' => $buyerQuery]);
     }
 
@@ -5879,10 +5874,7 @@ if (!file_exists('uploads')) {
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.SellQueryReceivedMilestone3', $mailPayload, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
         return response()->json(['status' => true, 'data' => $sellCreate]);
     }
 
@@ -6000,10 +5992,7 @@ if (!file_exists('uploads')) {
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.SellQueryReceivedMilestone3', $mailPayload, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.SellQueryReceivedMilestone3', $mailPayload, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
         return response()->json(['status' => true, 'data' => $sellCreate]);
     }
 
@@ -7900,10 +7889,7 @@ if (!file_exists('uploads')) {
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.BuyqueryReceivedMilestone3', $viewData, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.BuyqueryReceivedMilestone3', $viewData, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
 
         return response()->json(['status' => true, 'data' => $buyerQuery]);
     }
@@ -7939,10 +7925,7 @@ if (!file_exists('uploads')) {
 
         $data = ['username' => $userDetails->name, 'email' => $userDetails->email, 'mobile' => $userDetails->mobile, 'tradeId' => $tradeId, 'companyName' => $userDetails->companyname];
 
-        $respose = Mail::send('mail.TradeRequest', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.TradeRequest', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
 
         $tradeLike = TradeIntrested::create(['tradeId' => $tradeId, 'userId' => $userId]);
         if ($tradeLike) {
@@ -7969,10 +7952,7 @@ if (!file_exists('uploads')) {
 
         $data = ['username' => $userDetails->name, 'email' => $userDetails->email, 'mobile' => $userDetails->mobile, 'tradeId' => $tradeId, 'companyName' => $userDetails->companyname];
 
-        $respose = Mail::send('mail.TradeRequest', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailMessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.TradeRequest', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
 
         $tradeLike = TradeIntrested::create(['tradeId' => $tradeId, 'userId' => $userId]);
         if ($tradeLike) {

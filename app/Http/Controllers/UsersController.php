@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Session;
 use Mail;
+use App\Support\QueuedMail;
 
 
 class UsersController extends Controller
@@ -494,10 +495,7 @@ class UsersController extends Controller
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        $respose = Mail::send('mail.rejectedUserMail', $data, function ($message) use ($mailTo, $mailmessage, $subject, $mailFrom, $mailFromName) {
-            $message->to($mailTo, $mailmessage)->subject($subject);
-            $message->from($mailFrom, $mailFromName);
-        });
+        QueuedMail::send('mail.rejectedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailmessage);
 
         Session::flash('success','Success|User rejected successfully!');
         return back();
@@ -566,10 +564,7 @@ class UsersController extends Controller
                 $mailFromName = 'SNTC Team - India';
                 $mailMessage = '';
 
-                Mail::send('mail.deactivatedUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                    $message->to($mailTo, $mailMessage)->subject($subject);
-                    $message->from($mailFrom, $mailFromName);
-                });
+                QueuedMail::send('mail.deactivatedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
             }
         }
 
@@ -583,10 +578,7 @@ class UsersController extends Controller
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
 
-            Mail::send('mail.activeUserMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
+            QueuedMail::send('mail.activeUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
 
             $this->sendWebUserNotification(
                 (int) $userId,

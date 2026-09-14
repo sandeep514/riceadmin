@@ -67,7 +67,6 @@ use App\TradeLike;
 use App\TradeIntrested;
 use App\Mail\NewUserRegistrationAdminMail;
 use App\Mail\WebTrialActivatedUserMail;
-use Illuminate\Support\Facades\Mail;
 use Auth;
 use App\NewsRunner;
 use App\TradeCurrentStatus;
@@ -95,6 +94,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Support\ClientPlatform;
 use App\Services\PaymentInvoiceService;
 use App\Services\WelcomeRegistrationMailService;
+use App\Support\QueuedMail;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\Cookie as SymfonyCookie;
 
@@ -1091,10 +1091,7 @@ class PortalApiController extends Controller
         if ($mailUserEmail !== '' && $accountType !== 'new') {
             $subject = 'User update the profile';
             $data = ['userEmail' => $mailUserEmail];
-            Mail::send('mail.userUpdateProfile', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
+            QueuedMail::send('mail.userUpdateProfile', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
         }
 
         // First time the portal user gets an email: SNTC welcome + Terms PDF.
@@ -2083,10 +2080,10 @@ class PortalApiController extends Controller
             $userEmail = (string) ($userDetails->email ?? '');
 
             if ($userEmail !== '') {
-                Mail::to($userEmail)->queue(new WebTrialActivatedUserMail($userName, $userEmail));
+                QueuedMail::mailable($userEmail, new WebTrialActivatedUserMail($userName, $userEmail));
             }
 
-            Mail::to('info@sntcgroup.com')->queue(new NewUserRegistrationAdminMail($userName, $userEmail));
+            QueuedMail::mailable('info@sntcgroup.com', new NewUserRegistrationAdminMail($userName, $userEmail));
         }
 
         return $subscription;
@@ -2211,20 +2208,22 @@ class PortalApiController extends Controller
 
             $data = ['userName' => $userDetails->name , 'userEmail' => $userDetails->email];
             if ($mailTo !== '') {
-                try {
-                    Mail::send('mail.AccrountActiveWebMail', $data, function ($message) use ($mailTo, $mailMessage, $subject, $mailFrom, $mailFromName, $invoiceAttach) {
-                        $message->to($mailTo, $mailMessage)->subject($subject);
-                        $message->from($mailFrom, $mailFromName);
-                        if (is_array($invoiceAttach) && ! empty($invoiceAttach['path']) && is_file($invoiceAttach['path'])) {
-                            $message->attach($invoiceAttach['path'], [
-                                'as' => ($invoiceAttach['filename'] ?? 'SNTC-Invoice.pdf'),
-                                'mime' => 'application/pdf',
-                            ]);
-                        }
-                    });
-                } catch (\Throwable $e) {
-                    report($e);
-                }
+                $invoicePath = is_array($invoiceAttach) && ! empty($invoiceAttach['path']) && is_file($invoiceAttach['path'])
+                    ? $invoiceAttach['path']
+                    : null;
+
+                QueuedMail::send(
+                    'mail.AccrountActiveWebMail',
+                    $data,
+                    $mailTo,
+                    $subject,
+                    $mailFrom,
+                    $mailFromName,
+                    $mailMessage,
+                    $invoicePath,
+                    $invoicePath ? ($invoiceAttach['filename'] ?? 'SNTC-Invoice.pdf') : null,
+                    $invoicePath ? 'application/pdf' : null
+                );
             }
 
             return response()->json([

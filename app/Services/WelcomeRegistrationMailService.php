@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Jobs\SendWelcomeRegistrationMailJob;
 use App\Mail\WelcomeRegistrationMail;
+use App\Support\QueuedMail;
 use App\User;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -10,9 +12,22 @@ use Illuminate\Support\Facades\Mail;
 class WelcomeRegistrationMailService
 {
     /**
-     * Send SNTC welcome email with Terms & Conditions PDF attached when available.
+     * Queue SNTC welcome email with Terms & Conditions PDF attached when available.
      */
     public static function send(User $user): bool
+    {
+        $email = trim((string) ($user->email ?? ''));
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return false;
+        }
+
+        return QueuedMail::dispatchJob(new SendWelcomeRegistrationMailJob((int) $user->id));
+    }
+
+    /**
+     * Send the welcome mail immediately (used by the queue worker).
+     */
+    public static function sendNow(User $user): bool
     {
         $email = trim((string) ($user->email ?? ''));
         if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {

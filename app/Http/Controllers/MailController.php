@@ -1,174 +1,164 @@
 <?php
 
 namespace App\Http\Controllers;
-use Mail;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-
+use App\Support\QueuedMail;
+use Illuminate\Support\Facades\Log;
 
 class MailController extends Controller
+{
+    public static function generateMail($mailTo, $mailFrom, $mailFromName, $mailMessage, $subject, $otp = null)
     {
-
-
-    public static function generateMail($mailTo,$mailFrom,$mailFromName,$mailMessage,$subject,$otp = null) {
-        try {               
-            $data = array('name'=>$otp);
-            $respose = Mail::send('mail', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom,$mailFromName);
-            });
-            return $respose;
-        } catch (\Throwable $th) {
-            //throw $th;
-            dd($th);
-        }
+        return QueuedMail::send(
+            'mail',
+            ['name' => $otp],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $mailMessage
+        );
     }
 
-    public static function generateMailForOTP($mailTo,$mailFrom,$mailFromName,$mailMessage,$subject,$otp) {
-        try {               
-            $data = array('name'=>$otp);
-            $respose = Mail::send('otp', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom,$mailFromName);
-            });
-            return $respose;
-
-        } catch (\Throwable $th) {
-            //throw $th;
-            dd($th);
-        }
+    public static function generateMailForOTP($mailTo, $mailFrom, $mailFromName, $mailMessage, $subject, $otp)
+    {
+        return QueuedMail::send(
+            'otp',
+            ['name' => $otp],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $mailMessage
+        );
     }
 
-    public static function generateMailForOTPThanks($mailTo,$mailFrom,$mailFromName,$mailMessage,$subject,$otp) {
-        try {               
-            $data = array('name'=>$otp);
-            $respose = Mail::send('otpThanks', $data, function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom,$mailFromName);
-            });
-            return $respose;
-
-        } catch (\Throwable $th) {
-            //throw $th;
-            dd($th);
-        }
+    public static function generateMailForOTPThanks($mailTo, $mailFrom, $mailFromName, $mailMessage, $subject, $otp)
+    {
+        return QueuedMail::send(
+            'otpThanks',
+            ['name' => $otp],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $mailMessage
+        );
     }
 
-    public static function sendContactUsMail($mailTo,$mailFrom,$mailFromName,$mailMessage,$subject,$data) {
-        try {
-            $respose = Mail::send('mail.contactUsMail', ['data' => $data], function($message) use ($mailTo, $mailMessage, $subject,$mailFrom,$mailFromName) {
-                $message->to($mailTo, $mailMessage)->subject($subject);
-                $message->from($mailFrom,$mailFromName);
-            });
-            return $respose;
-
-        } catch (\Throwable $th) {
-            //throw $th;
-            dd($th);
-        }
+    public static function sendContactUsMail($mailTo, $mailFrom, $mailFromName, $mailMessage, $subject, $data)
+    {
+        return QueuedMail::send(
+            'mail.contactUsMail',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $mailMessage
+        );
     }
 
     public static function sendBrandInterestMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
     {
-        try {
-            return Mail::send('mail.brandInterestReceived', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject) {
-                $message->to($mailTo, 'SNTC Enquiry')->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
-        } catch (\Throwable $th) {
-            \Log::warning('Brand interest mail failed: '.$th->getMessage());
-
-            return false;
-        }
+        return QueuedMail::send(
+            'mail.brandInterestReceived',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            'SNTC Enquiry'
+        );
     }
 
     public static function sendWebBrandCreatedMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
     {
-        try {
-            return Mail::send('mail.webBrandCreated', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject) {
-                $message->to($mailTo, 'SNTC Enquiry')->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
-        } catch (\Throwable $th) {
-            \Log::warning('Web brand created mail failed: '.$th->getMessage());
-
-            return false;
-        }
+        return QueuedMail::send(
+            'mail.webBrandCreated',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            'SNTC Enquiry'
+        );
     }
 
     public static function sendVendorProductVariantsMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
     {
-        try {
-            return Mail::send('mail.vendorProductVariantsSubmitted', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject) {
-                $message->to($mailTo, 'SNTC Enquiry')->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
-        } catch (\Throwable $th) {
-            \Log::warning('Vendor product variants mail failed: '.$th->getMessage());
-
-            return false;
-        }
+        return QueuedMail::send(
+            'mail.vendorProductVariantsSubmitted',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            'SNTC Enquiry'
+        );
     }
 
     public static function sendVendorProductAcceptedMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
     {
-        try {
-            $toName = $data['userName'] ?? 'Vendor';
+        $toName = $data['userName'] ?? 'Vendor';
 
-            return Mail::send('mail.vendorProductAccepted', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject, $toName) {
-                $message->to($mailTo, $toName)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
-        } catch (\Throwable $th) {
-            \Log::warning('Vendor product accepted mail failed: '.$th->getMessage());
-
-            return false;
-        }
+        return QueuedMail::send(
+            'mail.vendorProductAccepted',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $toName
+        );
     }
 
     public static function sendVendorProductDeactivatedMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
     {
-        try {
-            $toName = $data['userName'] ?? 'Vendor';
+        $toName = $data['userName'] ?? 'Vendor';
 
-            return Mail::send('mail.vendorProductDeactivated', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject, $toName) {
-                $message->to($mailTo, $toName)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
-        } catch (\Throwable $th) {
-            \Log::warning('Vendor product deactivated mail failed: '.$th->getMessage());
-
-            return false;
-        }
+        return QueuedMail::send(
+            'mail.vendorProductDeactivated',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $toName
+        );
     }
 
     public static function sendVendorProductNeedsUpdateMail($mailTo, $mailFrom, $mailFromName, $subject, $data)
     {
-        try {
-            $toName = $data['userName'] ?? 'Vendor';
+        $toName = $data['userName'] ?? 'Vendor';
 
-            return Mail::send('mail.vendorProductNeedsUpdate', ['data' => $data], function ($message) use ($mailTo, $mailFrom, $mailFromName, $subject, $toName) {
-                $message->to($mailTo, $toName)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
-        } catch (\Throwable $th) {
-            \Log::warning('Vendor product update-needed mail failed: '.$th->getMessage());
-
-            return false;
-        }
+        return QueuedMail::send(
+            'mail.vendorProductNeedsUpdate',
+            ['data' => $data],
+            $mailTo,
+            $subject,
+            $mailFrom,
+            $mailFromName,
+            $toName
+        );
     }
 
-    public static function html_email($file, $from , $to , $data = []) {
+    public static function html_email($file, $from, $to, $data = [])
+    {
         try {
-            $respose = Mail::send($file, ['data' => $data], function($message) use ($from , $to) {
-                $message->to($to, 'SNTC')->subject('notifications');
-                $message->from($from,'SNTC');
-            });
+            return QueuedMail::send(
+                $file,
+                ['data' => $data],
+                $to,
+                'notifications',
+                $from,
+                'SNTC',
+                'SNTC'
+            );
         } catch (\Throwable $th) {
-            //throw $th;
-            dd($th);
+            Log::warning('Queued html email failed: '.$th->getMessage());
+
+            return false;
         }
     }
 }

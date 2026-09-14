@@ -14,7 +14,7 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
+use App\Support\QueuedMail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -578,10 +578,7 @@ class PaddyApiController extends Controller
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
 
-            Mail::send('mail.PaddySellQueryReceived', $mailPayload, function ($message) use ($mailTo, $subject, $mailFrom, $mailFromName) {
-                $message->to($mailTo)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
+            QueuedMail::send('mail.PaddySellQueryReceived', $mailPayload, $mailTo, $subject, $mailFrom, $mailFromName);
         } catch (\Throwable $e) {
             // Do not fail the API if mail fails
             Log::error('Paddy sell query enquiry mail failed: ' . $e->getMessage(), [
@@ -1022,10 +1019,7 @@ class PaddyApiController extends Controller
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
 
-            Mail::send('mail.PaddyTradeInterest', $mailPayload, function ($message) use ($mailTo, $subject, $mailFrom, $mailFromName) {
-                $message->to($mailTo)->subject($subject);
-                $message->from($mailFrom, $mailFromName);
-            });
+            QueuedMail::send('mail.PaddyTradeInterest', $mailPayload, $mailTo, $subject, $mailFrom, $mailFromName);
         } catch (\Throwable $e) {
             Log::error('Paddy trade interest enquiry mail failed: ' . $e->getMessage(), [
                 'paddy_trade_id' => $trade->id ?? null,
