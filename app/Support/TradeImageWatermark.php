@@ -42,10 +42,10 @@ class TradeImageWatermark
             return false;
         }
 
-        $targetW = (int) max(40, min(180, round($srcW * 0.18)));
+        $targetW = (int) max(80, min(360, round($srcW * 0.32)));
         $targetH = (int) max(1, round($wmH * ($targetW / $wmW)));
-        if ($targetH > (int) ($srcH * 0.18)) {
-            $targetH = (int) max(28, min(140, round($srcH * 0.18)));
+        if ($targetH > (int) ($srcH * 0.32)) {
+            $targetH = (int) max(56, min(280, round($srcH * 0.32)));
             $targetW = (int) max(1, round($wmW * ($targetH / $wmH)));
         }
 
