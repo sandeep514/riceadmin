@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\VendorDestinationMasterImportService;
 use App\VendorDestinationCountry;
 use App\VendorDestinationPort;
 use App\VendorDestinationRegion;
@@ -48,6 +49,40 @@ class VendorDestinationPortController extends AbstractVendorNameMasterController
     public function create()
     {
         return view($this->viewFolder().'.create', $this->formOptions());
+    }
+
+    public function import()
+    {
+        return view($this->viewFolder().'.import');
+    }
+
+    public function importSave(Request $request, VendorDestinationMasterImportService $service)
+    {
+        $request->validate([
+            'file' => 'required|file|max:10240',
+        ]);
+
+        $extension = strtolower((string) $request->file('file')->getClientOriginalExtension());
+        if (! in_array($extension, ['xlsx', 'xls', 'csv'], true)) {
+            return back()
+                ->withErrors(['file' => 'Please upload an Excel file (.xlsx, .xls) or CSV.'])
+                ->withInput();
+        }
+
+        try {
+            $result = $service->import($request->file('file'));
+        } catch (\Throwable $e) {
+            Session::flash('error', 'Error|'.$e->getMessage());
+
+            return back();
+        }
+
+        Session::flash(
+            'success',
+            'Success|Imported '.$result['regions_created'].' regions, '.$result['countries_created'].' countries, and '.$result['ports_created'].' ports. Skipped '.$result['ports_skipped'].' existing ports.'
+        );
+
+        return redirect()->route($this->indexRoute());
     }
 
     public function edit($id)

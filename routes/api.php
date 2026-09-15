@@ -165,6 +165,7 @@ use Pusher\Pusher;
     Route::get('get/lab/equipments' , ['as' => 'get.lab.equipments' , 'uses' => 'ApiController@getLabEquipments']);
     Route::get('get/machinery/equipments' , ['as' => 'get.machinery.equipments' , 'uses' => 'ApiController@getMachineryEquipments']);
     Route::get('get/container/particulars' , ['as' => 'get.container.particulars' , 'uses' => 'ApiController@getContainerParticulars']);
+    Route::get('get/forwarder/charge-titles' , ['as' => 'get.forwarder.charge.titles' , 'uses' => 'ApiController@getForwarderChargeTitles']);
     Route::get('get/icd/locations' , ['as' => 'get.icd.locations' , 'uses' => 'ApiController@getIcdLocations']);
     Route::get('get/indian/ports' , ['as' => 'get.indian.ports' , 'uses' => 'ApiController@getIndianPorts']);
     Route::get('get/destination/regions' , ['as' => 'get.destination.regions' , 'uses' => 'ApiController@getDestinationRegions']);
@@ -291,6 +292,8 @@ use Pusher\Pusher;
     Route::get('web/vendor/clearing-agent-charges/{id}' , ['as' => 'web.vendor.clearing.agent.charges' , 'uses' => 'WebVendorProductController@listClearingAgentCharges', 'middleware' => 'portal.api.token' ]);
     Route::get('web/vendor/clearing-agent/{id}' , ['as' => 'web.vendor.clearing.agent' , 'uses' => 'WebVendorProductController@listClearingAgentCharges', 'middleware' => 'portal.api.token' ]);
     Route::get('web/vendor/cleaning-agent-charges/{id}' , ['as' => 'web.vendor.cleaning.agent.charges' , 'uses' => 'WebVendorProductController@listClearingAgentCharges', 'middleware' => 'portal.api.token' ]);
+    Route::get('web/vendor/forwarder-charges/{id}' , ['as' => 'web.vendor.forwarder.charges' , 'uses' => 'WebVendorProductController@listForwarderCharges', 'middleware' => 'portal.api.token' ]);
+    Route::get('web/vendor/forwarder/{id}' , ['as' => 'web.vendor.forwarder' , 'uses' => 'WebVendorProductController@listForwarderCharges', 'middleware' => 'portal.api.token' ]);
 
     
 

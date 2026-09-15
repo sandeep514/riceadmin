@@ -109,6 +109,12 @@
             Route::get('web/cleaning-agent-product/{id}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'show'])->where('id', '[0-9]+');
             Route::delete('web/cleaning-agent-product/{id}', [\App\Http\Controllers\WebClearingAgentProductController::class, 'delete'])->where('id', '[0-9]+');
 
+            Route::post('web/forwarder-product/create', [\App\Http\Controllers\WebForwarderProductController::class, 'create']);
+            Route::post('web/forwarder-product/update', [\App\Http\Controllers\WebForwarderProductController::class, 'update']);
+            Route::get('web/forwarder-product/list/{userId}', [\App\Http\Controllers\WebForwarderProductController::class, 'listByUser']);
+            Route::get('web/forwarder-product/{id}', [\App\Http\Controllers\WebForwarderProductController::class, 'show'])->where('id', '[0-9]+');
+            Route::delete('web/forwarder-product/{id}', [\App\Http\Controllers\WebForwarderProductController::class, 'delete'])->where('id', '[0-9]+');
+
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
             

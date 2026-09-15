@@ -8086,6 +8086,29 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getForwarderChargeTitles()
+    {
+        $rows = \App\VendorForwarderChargeTitle::query()
+            ->where('status', \App\VendorForwarderChargeTitle::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'title' => $row->name,
+                    'description' => $row->description,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Forwarder charge titles fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
     public function getIcdLocations()
     {
         $rows = \App\VendorIcdLocation::query()

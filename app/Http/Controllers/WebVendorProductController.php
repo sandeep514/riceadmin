@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\PackingType;
 use App\Services\WebClearingAgentProductService;
+use App\Services\WebForwarderProductService;
 use App\Services\WebVendorEquipmentProductService;
 use App\Services\WebVendorPackagingProductService;
 use App\Support\VendorProductCatalog;
 use App\VendorPackingType;
 use App\WebBusinessDetails;
 use App\WebClearingAgentProduct;
+use App\WebForwarderProduct;
 use App\WebRiceBagProduct;
 use Illuminate\Http\Request;
 
@@ -98,6 +100,11 @@ class WebVendorProductController extends Controller
             $products = $service->verifiedProductsForOwners($ownerIds);
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
             $imageBasePath = $service->imageBasePath($imageUserId);
+        } elseif ($kind === VendorProductCatalog::KIND_FORWARDER) {
+            $service = new WebForwarderProductService();
+            $products = $service->verifiedProductsForOwners($ownerIds);
+            $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
+            $imageBasePath = null;
         } elseif ($kind === VendorProductCatalog::KIND_CLEARING_AGENT) {
             $service = new WebClearingAgentProductService();
             $products = $service->verifiedProductsForOwners($ownerIds);
@@ -199,6 +206,65 @@ class WebVendorProductController extends Controller
                 'recommended' => 0,
                 'has_products' => true,
                 'vendorKind' => VendorProductCatalog::KIND_CLEARING_AGENT,
+            ],
+            'data' => [$service->serializeVendorProduct($product)],
+            'imageBasePath' => null,
+        ], 200);
+    }
+
+    /**
+     * Public catalog alias for forwarder vendors.
+     * {id} is a vendor/business id; if that misses, fall back to a charge-sheet product id.
+     */
+    public function listForwarderCharges(Request $request, $id)
+    {
+        $response = $this->listByVendorId($request, $id);
+        if ((int) $response->getStatusCode() !== 404) {
+            return $response;
+        }
+
+        $product = WebForwarderProduct::with([
+            'charges.titleRel',
+            'containerSizes.containerSizeRel',
+            'icdLocationRel',
+            'indianPortRel',
+            'regionRel',
+            'countryRel',
+            'destinationPortRel.region',
+            'destinationPortRel.country',
+        ])->find((int) $id);
+
+        if ($product === null) {
+            return $response;
+        }
+
+        $ownerId = (int) $product->user_id;
+        if ($ownerId > 0 && $ownerId !== (int) $id) {
+            $ownerResponse = $this->listByVendorId($request, $ownerId);
+            if ((int) $ownerResponse->getStatusCode() !== 404) {
+                return $ownerResponse;
+            }
+        }
+
+        if ((int) $product->status !== 1) {
+            return $response;
+        }
+
+        $service = new WebForwarderProductService();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendor products fetched successfully.',
+            'vendor' => [
+                'id' => $ownerId > 0 ? $ownerId : (int) $product->id,
+                'company_name' => null,
+                'product' => null,
+                'contactPerson' => null,
+                'contactMobile' => null,
+                'address' => null,
+                'recommended' => 0,
+                'has_products' => true,
+                'vendorKind' => VendorProductCatalog::KIND_FORWARDER,
             ],
             'data' => [$service->serializeVendorProduct($product)],
             'imageBasePath' => null,

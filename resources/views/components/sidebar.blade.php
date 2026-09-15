@@ -541,13 +541,16 @@
                     'vendor-indian-ports','create.vendor-indian-port','edit.vendor-indian-port',
                     'vendor-destination-regions','create.vendor-destination-region','edit.vendor-destination-region',
                     'vendor-destination-countries','create.vendor-destination-country','edit.vendor-destination-country',
-                    'vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port',
+                    'vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port','import.vendor-destination-ports',
                     'vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular',
                     'vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge',
+                    'vendor-forwarder-charge-titles','create.vendor-forwarder-charge-title','edit.vendor-forwarder-charge-title',
                 ];
                 $serviceProviderProductRoutes = [
                     'get.web.clearing.agent.vendors.list',
                     'get.web.clearing.agent.products.list','get.web.clearing.agent.products.show',
+                    'get.web.forwarder.vendors.list',
+                    'get.web.forwarder.products.list','get.web.forwarder.products.show',
                 ];
                 $serviceProviderRoutes = array_merge($serviceProviderMasterRoutes, $serviceProviderProductRoutes);
             @endphp
@@ -586,7 +589,7 @@
                             <li class="{{ in_array($currentRoute, ['vendor-destination-countries','create.vendor-destination-country','edit.vendor-destination-country']) ? 'active' : '' }}">
                                 <a href="{{ route('vendor-destination-countries') }}"><i class="fa fa-circle-o"></i> Destination Countries</a>
                             </li>
-                            <li class="{{ in_array($currentRoute, ['vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port']) ? 'active' : '' }}">
+                            <li class="{{ in_array($currentRoute, ['vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port','import.vendor-destination-ports']) ? 'active' : '' }}">
                                 <a href="{{ route('vendor-destination-ports') }}"><i class="fa fa-circle-o"></i> Destination Ports</a>
                             </li>
                             <li class="{{ in_array($currentRoute, ['vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular']) ? 'active' : '' }}">
@@ -594,6 +597,9 @@
                             </li>
                             <li class="{{ in_array($currentRoute, ['vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge']) ? 'active' : '' }}">
                                 <a href="{{ route('vendor-port-charges') }}"><i class="fa fa-circle-o"></i> Port Charges</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-forwarder-charge-titles','create.vendor-forwarder-charge-title','edit.vendor-forwarder-charge-title']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-forwarder-charge-titles') }}"><i class="fa fa-circle-o"></i> Forwarder Charge Titles</a>
                             </li>
                         </ul>
                     </li>
@@ -603,9 +609,15 @@
                     <li class="{{ in_array($currentRoute, ['get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
                     </li>
+                    <li class="{{ $currentRoute === 'get.web.forwarder.vendors.list' ? 'active' : '' }}">
+                        <a href="{{ route('get.web.forwarder.vendors.list') }}"><i class="fa fa-circle-o"></i> Forwarder Vendors</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.forwarder.products.list','get.web.forwarder.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.forwarder.products.list') }}"><i class="fa fa-circle-o"></i> Forwarder Products</a>
+                    </li>
                 </ul>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show','get.web.clearing.agent.vendors.list','get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['get.web.rice.bag.products.list','get.web.rice.bag.products.show','get.web.cartoon.products.list','get.web.cartoon.products.show','get.web.cylinder.products.list','get.web.cylinder.products.show','get.web.lab.equipment.products.list','get.web.lab.equipment.products.show','get.web.machinery.equipment.products.list','get.web.machinery.equipment.products.show','get.web.clearing.agent.vendors.list','get.web.clearing.agent.products.list','get.web.clearing.agent.products.show','get.web.forwarder.vendors.list','get.web.forwarder.products.list','get.web.forwarder.products.show']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-cubes"></i>
                     <span>Vendor Products</span>
@@ -634,6 +646,12 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
+                    </li>
+                    <li class="{{ $currentRoute === 'get.web.forwarder.vendors.list' ? 'active' : '' }}">
+                        <a href="{{ route('get.web.forwarder.vendors.list') }}"><i class="fa fa-circle-o"></i> Forwarder Vendors</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['get.web.forwarder.products.list','get.web.forwarder.products.show']) ? 'active' : '' }}">
+                        <a href="{{ route('get.web.forwarder.products.list') }}"><i class="fa fa-circle-o"></i> Forwarder Products</a>
                     </li>
                 </ul>
             </li>

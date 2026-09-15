@@ -401,6 +401,10 @@ class VendorProductAdminNotificationService
                 'label' => 'Clearing agent',
                 'showRoute' => 'get.web.clearing.agent.products.show',
             ],
+            'forwarder' => [
+                'label' => 'Forwarder',
+                'showRoute' => 'get.web.forwarder.products.show',
+            ],
             default => [
                 'label' => 'Vendor',
                 'showRoute' => null,
@@ -420,7 +424,7 @@ class VendorProductAdminNotificationService
             $label = \App\CartoonType::query()->where('id', $product->carton_type_id)->value('type') ?: '—';
         } elseif ($kind === 'cylinder' && ! empty($product->cylinder_type_id)) {
             $label = \App\CylinderType::query()->where('id', $product->cylinder_type_id)->value('type') ?: '—';
-        } elseif ($kind === 'clearing_agent' || $kind === 'cleaning_agent') {
+        } elseif ($kind === 'clearing_agent' || $kind === 'cleaning_agent' || $kind === 'forwarder') {
             $parts = array_filter([
                 ! empty($product->port_type) ? (string) $product->port_type : null,
                 ! empty($product->port_location) ? (string) $product->port_location : null,
@@ -444,6 +448,23 @@ class VendorProductAdminNotificationService
      */
     private function formatVariants(string $kind, Collection $variants): array
     {
+        if ($kind === 'forwarder') {
+            return $variants->map(function (Model $variant) {
+                $name = $variant->title
+                    ?: (optional($variant->titleRel)->name ?? null)
+                    ?: ($variant->title_id ? 'Charge #'.$variant->title_id : 'Other');
+                $parts = array_filter([
+                    $name,
+                    $variant->currency ? strtoupper((string) $variant->currency) : null,
+                    $variant->charges !== null ? 'Charges: '.$variant->charges : null,
+                    $variant->inr_amount !== null ? 'INR: '.$variant->inr_amount : null,
+                    (int) ($variant->is_other ?? 0) === 1 ? 'Other' : null,
+                ]);
+
+                return implode(' | ', $parts);
+            })->all();
+        }
+
         if ($kind === 'clearing_agent' || $kind === 'cleaning_agent') {
             return $variants->map(function (Model $variant) {
                 $name = $variant->particular_name

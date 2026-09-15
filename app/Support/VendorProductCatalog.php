@@ -7,6 +7,7 @@ use App\WebBusinessDetails;
 use App\WebCartoonProduct;
 use App\WebClearingAgentProduct;
 use App\WebCylinderProduct;
+use App\WebForwarderProduct;
 use App\WebLabEquipmentProduct;
 use App\WebMachineryEquipmentProduct;
 use App\WebRiceBagProduct;
@@ -26,6 +27,8 @@ final class VendorProductCatalog
 
     public const KIND_CLEARING_AGENT = 'clearing_agent';
 
+    public const KIND_FORWARDER = 'forwarder';
+
     /** @deprecated Use KIND_CLEARING_AGENT */
     public const KIND_CLEANING_AGENT = self::KIND_CLEARING_AGENT;
 
@@ -40,6 +43,7 @@ final class VendorProductCatalog
             self::KIND_CYLINDER => WebCylinderProduct::class,
             self::KIND_LAB_EQUIPMENT => WebLabEquipmentProduct::class,
             self::KIND_MACHINERY_EQUIPMENT => WebMachineryEquipmentProduct::class,
+            self::KIND_FORWARDER => WebForwarderProduct::class,
             self::KIND_CLEARING_AGENT => WebClearingAgentProduct::class,
         ];
     }
@@ -60,6 +64,10 @@ final class VendorProductCatalog
         $name = strtolower(trim((string) $name));
         if ($name === '') {
             return null;
+        }
+
+        if (str_contains($name, 'forwarder') || str_contains($name, 'forwarding')) {
+            return self::KIND_FORWARDER;
         }
 
         if (str_contains($name, 'cleaning') || str_contains($name, 'clearing')) {
@@ -141,6 +149,8 @@ final class VendorProductCatalog
                 $query->whereHas('variants');
             } elseif ($kindKey === self::KIND_CLEARING_AGENT) {
                 $query->whereHas('particulars');
+            } elseif ($kindKey === self::KIND_FORWARDER) {
+                $query->whereHas('charges');
             } elseif ($kindKey === self::KIND_RICE_BAG) {
                 $query->whereHas('packingSizes');
             }
@@ -186,6 +196,10 @@ final class VendorProductCatalog
                 $query->where('status', 1);
                 if (in_array($kindKey, [self::KIND_CARTOON, self::KIND_CYLINDER, self::KIND_LAB_EQUIPMENT, self::KIND_MACHINERY_EQUIPMENT], true)) {
                     $query->whereHas('variants');
+                } elseif ($kindKey === self::KIND_CLEARING_AGENT) {
+                    $query->whereHas('particulars');
+                } elseif ($kindKey === self::KIND_FORWARDER) {
+                    $query->whereHas('charges');
                 } elseif ($kindKey === self::KIND_RICE_BAG) {
                     $query->whereHas('packingSizes');
                 }

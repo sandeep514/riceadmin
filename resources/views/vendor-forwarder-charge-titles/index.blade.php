@@ -4,14 +4,14 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Destination Ports
+                Forwarder Charge Titles
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li>Service Providers</li>
                 <li>Masters</li>
-                <li class="active">Destination Ports</li>
+                <li class="active">Forwarder Charge Titles</li>
             </ol>
         </section>
         <section class="content">
@@ -19,12 +19,9 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Destination Ports master</h3>
+                            <h3 class="box-title">Forwarder charge titles master</h3>
                             <div class="pull-right">
-                                <a href="{{ route('import.vendor-destination-ports') }}" class="btn btn-success btn-sm">
-                                    <i class="fa fa-upload"></i> Import Excel
-                                </a>
-                                <a href="{{ route('create.vendor-destination-port') }}" class="btn btn-primary btn-sm">
+                                <a href="{{ route('create.vendor-forwarder-charge-title') }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-plus"></i> Create New
                                 </a>
                             </div>
@@ -35,8 +32,6 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Region</th>
-                                            <th>Country</th>
                                             <th>Name</th>
                                             <th>Description</th>
                                             <th>Status</th>
@@ -49,12 +44,10 @@
                                         @foreach($records as $record)
                                             <tr>
                                                 <td>{{ $record->id }}</td>
-                                                <td>{{ optional($record->region)->name ?: '—' }}</td>
-                                                <td>{{ optional($record->country)->name ?: '—' }}</td>
                                                 <td>{{ $record->name }}</td>
                                                 <td>{{ $record->description ?: '—' }}</td>
                                                 <td>
-                                                    @if((int) $record->status === \App\VendorDestinationPort::STATUS_ACTIVE)
+                                                    @if((int) $record->status === \App\VendorForwarderChargeTitle::STATUS_ACTIVE)
                                                         <span class="label label-success">Active</span>
                                                     @else
                                                         <span class="label label-default">Inactive</span>
@@ -63,7 +56,7 @@
                                                 <td>{{ $record->created_at ? $record->created_at->format('d M Y H:i') : '—' }}</td>
                                                 <td>{{ $record->updated_at ? $record->updated_at->format('d M Y H:i') : '—' }}</td>
                                                 <td>
-                                                    @include('vendor-destination-ports._actions', ['model' => $record])
+                                                    @include('vendor-forwarder-charge-titles._actions', ['model' => $record])
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -84,12 +77,12 @@
         $('.datatable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [8] }]
+            columnDefs: [{ orderable: false, targets: [6] }]
         });
 
         $(document).on('click', '.delete-row', function(e){
             e.preventDefault();
-            if(confirm('Are you sure you want to delete this Destination port?')){
+            if(confirm('Are you sure you want to delete this Forwarder charge title?')){
                 $(this).closest('form').submit();
             }
         });

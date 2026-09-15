@@ -21,6 +21,9 @@
                         <div class="box-header">
                             <h3 class="box-title">Destination Regions master</h3>
                             <div class="pull-right">
+                                <a href="{{ route('import.vendor-destination-ports') }}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-upload"></i> Import Excel
+                                </a>
                                 <a href="{{ route('create.vendor-destination-region') }}" class="btn btn-primary btn-sm">
                                     <i class="fa fa-plus"></i> Create New
                                 </a>

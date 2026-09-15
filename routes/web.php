@@ -287,6 +287,8 @@ Route::group(['prefix'=>'administrator'], function(){
             // Vendor Flow — Destination Ports (clearing agent)
             Route::group(['module' => 'vendor_destination_port', 'icon' => 'fa-globe'], function () {
                 Route::get('vendor-flow/destination-ports', ['as' => 'vendor-destination-ports', 'uses' => 'VendorDestinationPortController@index', 'action' => 'view']);
+                Route::get('vendor-flow/destination-ports/import', ['as' => 'import.vendor-destination-ports', 'uses' => 'VendorDestinationPortController@import', 'action' => 'create']);
+                Route::post('vendor-flow/destination-ports/import', ['as' => 'import.save.vendor-destination-ports', 'uses' => 'VendorDestinationPortController@importSave', 'action' => 'create']);
                 Route::get('vendor-flow/destination-ports/create', ['as' => 'create.vendor-destination-port', 'uses' => 'VendorDestinationPortController@create', 'action' => 'create']);
                 Route::post('vendor-flow/destination-ports/save', ['as' => 'save.vendor-destination-port', 'uses' => 'VendorDestinationPortController@save', 'action' => 'create']);
                 Route::get('vendor-flow/destination-ports/edit/{id}', ['as' => 'edit.vendor-destination-port', 'uses' => 'VendorDestinationPortController@edit', 'action' => 'edit']);
@@ -315,6 +317,17 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('vendor-flow/container-sizes/update/{id}', ['as' => 'update.vendor-container-size', 'uses' => 'VendorContainerSizeController@update', 'action' => 'edit']);
                 Route::delete('vendor-flow/container-sizes/delete/{id}', ['as' => 'delete.vendor-container-size', 'uses' => 'VendorContainerSizeController@delete', 'action' => 'delete']);
                 Route::get('vendor-flow/container-sizes/change-status/{id}', ['as' => 'vendor-container-size.change-status', 'uses' => 'VendorContainerSizeController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Forwarder Charge Titles
+            Route::group(['module' => 'vendor_forwarder_charge_title', 'icon' => 'fa-list'], function () {
+                Route::get('vendor-flow/forwarder-charge-titles', ['as' => 'vendor-forwarder-charge-titles', 'uses' => 'VendorForwarderChargeTitleController@index', 'action' => 'view']);
+                Route::get('vendor-flow/forwarder-charge-titles/create', ['as' => 'create.vendor-forwarder-charge-title', 'uses' => 'VendorForwarderChargeTitleController@create', 'action' => 'create']);
+                Route::post('vendor-flow/forwarder-charge-titles/save', ['as' => 'save.vendor-forwarder-charge-title', 'uses' => 'VendorForwarderChargeTitleController@save', 'action' => 'create']);
+                Route::get('vendor-flow/forwarder-charge-titles/edit/{id}', ['as' => 'edit.vendor-forwarder-charge-title', 'uses' => 'VendorForwarderChargeTitleController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/forwarder-charge-titles/update/{id}', ['as' => 'update.vendor-forwarder-charge-title', 'uses' => 'VendorForwarderChargeTitleController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/forwarder-charge-titles/delete/{id}', ['as' => 'delete.vendor-forwarder-charge-title', 'uses' => 'VendorForwarderChargeTitleController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/forwarder-charge-titles/change-status/{id}', ['as' => 'vendor-forwarder-charge-title.change-status', 'uses' => 'VendorForwarderChargeTitleController@changeStatus', 'action' => 'edit']);
             });
 
             // Vendor Flow — Carton Type master
@@ -1015,8 +1028,13 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/clearing-agent-products', ['as' => 'get.web.clearing.agent.products.list', 'uses' => 'WebClearingAgentProductController@showProductsToAdmin']);
     Route::get('get/web/clearing-agent-products/{id}', ['as' => 'get.web.clearing.agent.products.show', 'uses' => 'WebClearingAgentProductController@showProductToAdmin']);
     Route::post('toggle/web/clearing-agent-products/status/{id}', ['as' => 'toggle.web.clearing.agent.products.status', 'uses' => 'WebClearingAgentProductController@toggleStatus']);
+
+    Route::get('get/web/forwarder-vendors', ['as' => 'get.web.forwarder.vendors.list', 'uses' => 'WebForwarderProductController@showVendorsToAdmin']);
+    Route::get('get/web/forwarder-products', ['as' => 'get.web.forwarder.products.list', 'uses' => 'WebForwarderProductController@showProductsToAdmin']);
+    Route::get('get/web/forwarder-products/{id}', ['as' => 'get.web.forwarder.products.show', 'uses' => 'WebForwarderProductController@showProductToAdmin']);
+    Route::post('toggle/web/forwarder-products/status/{id}', ['as' => 'toggle.web.forwarder.products.status', 'uses' => 'WebForwarderProductController@toggleStatus']);
     Route::post('ask-vendor/web/{kind}-products/{id}', ['as' => 'ask.vendor.product', 'uses' => 'VendorProductReviewController@askVendor'])
-        ->where('kind', 'rice_bag|cartoon|cylinder|lab_equipment|machinery_equipment|clearing_agent');
+        ->where('kind', 'rice_bag|cartoon|cylinder|lab_equipment|machinery_equipment|clearing_agent|forwarder');
 
 
 
