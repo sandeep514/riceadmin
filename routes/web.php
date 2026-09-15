@@ -319,6 +319,14 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/container-sizes/change-status/{id}', ['as' => 'vendor-container-size.change-status', 'uses' => 'VendorContainerSizeController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Currency master (create + active/inactive only)
+            Route::group(['module' => 'vendor_currency', 'icon' => 'fa-money'], function () {
+                Route::get('vendor-flow/currencies', ['as' => 'vendor-currencies', 'uses' => 'VendorCurrencyController@index', 'action' => 'view']);
+                Route::get('vendor-flow/currencies/create', ['as' => 'create.vendor-currency', 'uses' => 'VendorCurrencyController@create', 'action' => 'create']);
+                Route::post('vendor-flow/currencies/save', ['as' => 'save.vendor-currency', 'uses' => 'VendorCurrencyController@save', 'action' => 'create']);
+                Route::get('vendor-flow/currencies/change-status/{id}', ['as' => 'vendor-currency.change-status', 'uses' => 'VendorCurrencyController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Forwarder Charge Titles
             Route::group(['module' => 'vendor_forwarder_charge_title', 'icon' => 'fa-list'], function () {
                 Route::get('vendor-flow/forwarder-charge-titles', ['as' => 'vendor-forwarder-charge-titles', 'uses' => 'VendorForwarderChargeTitleController@index', 'action' => 'view']);

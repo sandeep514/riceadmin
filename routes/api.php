@@ -166,6 +166,7 @@ use Pusher\Pusher;
     Route::get('get/machinery/equipments' , ['as' => 'get.machinery.equipments' , 'uses' => 'ApiController@getMachineryEquipments']);
     Route::get('get/container/particulars' , ['as' => 'get.container.particulars' , 'uses' => 'ApiController@getContainerParticulars']);
     Route::get('get/forwarder/charge-titles' , ['as' => 'get.forwarder.charge.titles' , 'uses' => 'ApiController@getForwarderChargeTitles']);
+    Route::get('get/currencies' , ['as' => 'get.currencies' , 'uses' => 'ApiController@getCurrencies']);
     Route::get('get/icd/locations' , ['as' => 'get.icd.locations' , 'uses' => 'ApiController@getIcdLocations']);
     Route::get('get/indian/ports' , ['as' => 'get.indian.ports' , 'uses' => 'ApiController@getIndianPorts']);
     Route::get('get/destination/regions' , ['as' => 'get.destination.regions' , 'uses' => 'ApiController@getDestinationRegions']);

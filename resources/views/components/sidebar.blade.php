@@ -492,7 +492,7 @@
                     <span>Avg Length Map</span>
                 </a>
             </li>
-            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','cartoon-types','create.cartoon-type','edit.cartoon-type','cylinder-types','create.cylinder-type','edit.cylinder-type','lab-equipments','create.lab-equipment','edit.lab-equipment','machinery-equipments','create.machinery-equipment','edit.machinery-equipment','bag-sizes','create.bag-size','edit.bag-size','carton-sizes','create.carton-size','edit.carton-size','cylinder-sizes','create.cylinder-size','edit.cylinder-size','vendor-packing-types','create.vendor-packing-type','edit.vendor-packing-type']))?'active':'' }}">
+            <li class="treeview {{ (in_array($currentRoute,['vendor-specifications','create.vendor-specification','edit.vendor-specification','vendor-spec-fors','create.vendor-spec-for','edit.vendor-spec-for','cartoon-types','create.cartoon-type','edit.cartoon-type','cylinder-types','create.cylinder-type','edit.cylinder-type','lab-equipments','create.lab-equipment','edit.lab-equipment','machinery-equipments','create.machinery-equipment','edit.machinery-equipment','bag-sizes','create.bag-size','edit.bag-size','carton-sizes','create.carton-size','edit.carton-size','cylinder-sizes','create.cylinder-size','edit.cylinder-size','vendor-packing-types','create.vendor-packing-type','edit.vendor-packing-type','vendor-currencies','create.vendor-currency']))?'active':'' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-handshake-o"></i>
                     <span>Vendor Flow</span>
@@ -530,6 +530,9 @@
                     </li>
                     <li class="{{ in_array($currentRoute, ['machinery-equipments','create.machinery-equipment','edit.machinery-equipment']) ? 'active' : '' }}">
                         <a href="{{ route('machinery-equipments') }}"><i class="fa fa-circle-o"></i> Machinery Equipment</a>
+                    </li>
+                    <li class="{{ in_array($currentRoute, ['vendor-currencies','create.vendor-currency']) ? 'active' : '' }}">
+                        <a href="{{ route('vendor-currencies') }}"><i class="fa fa-circle-o"></i> Currency</a>
                     </li>
                 </ul>
             </li>

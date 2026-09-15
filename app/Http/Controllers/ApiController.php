@@ -8086,6 +8086,29 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getCurrencies()
+    {
+        $rows = \App\VendorCurrency::query()
+            ->where('status', \App\VendorCurrency::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'code' => $row->name,
+                    'description' => $row->description,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Currencies fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
     public function getForwarderChargeTitles()
     {
         $rows = \App\VendorForwarderChargeTitle::query()
