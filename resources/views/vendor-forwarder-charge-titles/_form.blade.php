@@ -14,6 +14,14 @@
                 <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
+        <div class="form-group col-md-12">
+            {!! Form::hidden('is_required', 0) !!}
+            <label style="font-weight: normal;">
+                {!! Form::checkbox('is_required', 1, isset($model) ? (int) $model->is_required === 1 : true, ['id' => 'is_required']) !!}
+                Required on vendor form (default amount 0)
+            </label>
+            <p class="help-block">Required charges are prefilled for the vendor at 0. Vendor extra charges are not added to this master.</p>
+        </div>
     </div>
     <div class="row">
         <div class="form-group col-md-12 @error('description') has-error @enderror">

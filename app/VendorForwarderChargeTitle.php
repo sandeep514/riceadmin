@@ -16,6 +16,12 @@ class VendorForwarderChargeTitle extends Model
         'name',
         'description',
         'status',
+        'is_required',
+    ];
+
+    protected $casts = [
+        'status' => 'integer',
+        'is_required' => 'integer',
     ];
 
     public static function options(?int $includeId = null): array

@@ -334,6 +334,7 @@ class WebForwarderProductService
             'inrAmount' => $row->inr_amount !== null ? (string) $row->inr_amount : null,
             'remarks' => $row->remarks,
             'isOther' => (int) $row->is_other === 1,
+            'isRequired' => (int) $row->is_other !== 1 && (int) optional($row->titleRel)->is_required === 1,
             'sortOrder' => (int) $row->sort_order,
         ];
     }
@@ -427,12 +428,7 @@ class WebForwarderProductService
         WebForwarderCharge::query()->where('product_id', $product->id)->delete();
 
         $sort = 0;
-        foreach ($this->chargeRowsFromRequest($request) as $row) {
-            $normalized = $this->normalizeChargeRow($row);
-            if ($normalized === null) {
-                continue;
-            }
-
+        foreach ($this->resolvedChargeRows($request) as $normalized) {
             WebForwarderCharge::create([
                 'product_id' => $product->id,
                 'title_id' => $normalized['title_id'],
@@ -550,6 +546,63 @@ class WebForwarderProductService
     }
 
     /**
+     * @return list<array{title_id:?int, title:?string, currency:string, charges:?string, exchange_rate:?string, inr_amount:?string, remarks:?string, is_other:int}>
+     */
+    private function resolvedChargeRows(Request $request): array
+    {
+        $rows = [];
+        foreach ($this->chargeRowsFromRequest($request) as $row) {
+            $normalized = $this->normalizeChargeRow($row);
+            if ($normalized === null) {
+                continue;
+            }
+            $rows[] = $normalized;
+        }
+
+        return $this->ensureRequiredCharges($rows);
+    }
+
+    /**
+     * @param  list<array{title_id:?int, title:?string, currency:string, charges:?string, exchange_rate:?string, inr_amount:?string, remarks:?string, is_other:int}>  $rows
+     * @return list<array{title_id:?int, title:?string, currency:string, charges:?string, exchange_rate:?string, inr_amount:?string, remarks:?string, is_other:int}>
+     */
+    private function ensureRequiredCharges(array $rows): array
+    {
+        $requiredTitles = VendorForwarderChargeTitle::query()
+            ->where('status', VendorForwarderChargeTitle::STATUS_ACTIVE)
+            ->where('is_required', 1)
+            ->orderBy('id')
+            ->get(['id', 'name']);
+
+        $haveIds = [];
+        foreach ($rows as $row) {
+            if (! empty($row['title_id']) && (int) $row['is_other'] !== 1) {
+                $haveIds[(int) $row['title_id']] = true;
+            }
+        }
+
+        foreach ($requiredTitles as $title) {
+            $titleId = (int) $title->id;
+            if (isset($haveIds[$titleId])) {
+                continue;
+            }
+
+            $rows[] = [
+                'title_id' => $titleId,
+                'title' => $title->name,
+                'currency' => WebForwarderCharge::CURRENCY_INR,
+                'charges' => '0',
+                'exchange_rate' => '-',
+                'inr_amount' => '0',
+                'remarks' => null,
+                'is_other' => 0,
+            ];
+        }
+
+        return array_values($rows);
+    }
+
+    /**
      * @param  array<string, mixed>  $row
      * @return array{title_id:?int, title:?string, currency:string, charges:?string, exchange_rate:?string, inr_amount:?string, remarks:?string, is_other:int}|null
      */
@@ -567,12 +620,15 @@ class WebForwarderProductService
         );
         $isOther = $this->isTruthy($row['is_other'] ?? $row['isOther'] ?? 0) ? 1 : 0;
 
-        if ($titleId) {
+        if ($isOther) {
+            $titleId = null;
+        } elseif ($titleId) {
             $master = VendorForwarderChargeTitle::query()->find($titleId);
             if ($master) {
                 $title = $master->name;
             } else {
                 $titleId = null;
+                $isOther = $title ? 1 : 0;
             }
         } elseif ($title) {
             $matchedId = VendorForwarderChargeTitle::query()
@@ -590,6 +646,12 @@ class WebForwarderProductService
         $charges = $this->nullableString(
             $row['charges'] ?? $row['rate'] ?? $row['price'] ?? $row['value'] ?? $row['amount'] ?? null
         );
+        if ($charges === null && $titleId) {
+            $charges = '0';
+        }
+        if ($isOther && ($title === null || $charges === null || $charges === '')) {
+            return null;
+        }
         if ($title === null && $titleId === null && $charges === null) {
             return null;
         }
@@ -677,24 +739,8 @@ class WebForwarderProductService
             $validator->errors()->add('containerSizeIds', 'Select at least one container type (20 FT or 40 FT).');
         }
 
-        $hasCharge = false;
-        foreach ($this->chargeRowsFromRequest($request) as $row) {
-            $normalized = $this->normalizeChargeRow($row);
-            if ($normalized === null) {
-                continue;
-            }
-            if ($normalized['title'] === null && $normalized['title_id'] === null) {
-                continue;
-            }
-            if ($normalized['charges'] === null || $normalized['charges'] === '') {
-                continue;
-            }
-            $hasCharge = true;
-            break;
-        }
-
-        if (! $hasCharge) {
-            $validator->errors()->add('charges', 'Add at least one charge with a title and amount.');
+        if ($this->resolvedChargeRows($request) === []) {
+            $validator->errors()->add('charges', 'Add at least one charge, or keep the required charge types from master.');
         }
     }
 

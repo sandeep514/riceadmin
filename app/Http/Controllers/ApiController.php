@@ -8111,24 +8111,45 @@ if (!file_exists('uploads')) {
 
     public function getForwarderChargeTitles()
     {
+        return $this->forwarderChargeTypeResponse('Forwarder charge titles fetched successfully.');
+    }
+
+    public function getForwarderChargeTypes()
+    {
+        return $this->forwarderChargeTypeResponse('Forwarder charge types fetched successfully.');
+    }
+
+    private function forwarderChargeTypeResponse(string $message)
+    {
         $rows = \App\VendorForwarderChargeTitle::query()
             ->where('status', \App\VendorForwarderChargeTitle::STATUS_ACTIVE)
-            ->orderBy('name')
-            ->get(['id', 'name', 'description'])
+            ->orderByDesc('is_required')
+            ->orderBy('id')
+            ->get(['id', 'name', 'description', 'is_required'])
             ->map(function ($row) {
+                $required = (int) $row->is_required === 1;
+
                 return [
                     'id' => (int) $row->id,
                     'name' => $row->name,
                     'title' => $row->name,
                     'description' => $row->description,
+                    'isRequired' => $required,
+                    'required' => $required,
+                    'defaultCharges' => $required ? '0' : null,
+                    'isOther' => false,
                 ];
             })
             ->values();
 
+        $required = $rows->filter(fn ($row) => $row['isRequired'])->values();
+
         return response()->json([
             'status' => true,
-            'message' => 'Forwarder charge titles fetched successfully.',
+            'message' => $message,
             'data' => $rows,
+            'required' => $required,
+            'note' => 'Prefill required rows at 0. Vendor additional charges (isOther=true) are stored only on the product and are not added to this master.',
         ], 200);
     }
 

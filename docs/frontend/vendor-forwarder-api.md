@@ -1,6 +1,6 @@
 # Forwarder vendor API (frontend)
 
-Forwarder vendor flow is ready for the web portal. Use these APIs to load masters, create/edit charge sheets, and show verified products in the public vendor catalog.
+Use this spec to build the forwarder vendor form, dashboard, and buyer catalog.
 
 - Base: `/api`
 - Portal: `/api/portal`
@@ -13,7 +13,7 @@ Forwarder vendor flow is ready for the web portal. Use these APIs to load master
 
 | Area | Auth |
 |------|------|
-| Master dropdowns (`/api/get/...`) | None |
+| Master dropdowns (`GET /api/get/...`) | None |
 | Portal CRUD (`/api/portal/web/forwarder-product/...`) | Required |
 | Public catalog (`/api/web/vendor/...`) | Required |
 
@@ -21,9 +21,23 @@ Forwarder vendor flow is ready for the web portal. Use these APIs to load master
 
 ---
 
+## How charges work
+
+There are two kinds of charge rows:
+
+| Kind | Source | How frontend sends it | Saved to master? |
+|------|--------|------------------------|------------------|
+| **Required (admin)** | `GET /api/get/forwarder/charge-types` | `titleId` + amount (default `"0"`) | Already in master |
+| **Additional (vendor)** | Vendor types a custom title | `title` + `isOther: true`, **no** `titleId` | **No** — product only |
+
+Admin manages required types in **Service Providers → Masters → Forwarder Charge Titles**.  
+If a required row is omitted on save, the API still stores it with amount `"0"`.
+
+---
+
 ## 1. Master dropdowns
 
-Use these to fill the create/edit form.
+Load these to fill the create/edit form.
 
 | Method | URL | Use for |
 |--------|-----|---------|
@@ -32,41 +46,81 @@ Use these to fill the create/edit form.
 | `GET` | `/api/get/indian/ports` | Indian / origin port |
 | `GET` | `/api/get/container/sizes` | Container type (20 FT / 40 FT) |
 | `GET` | `/api/get/currencies` | Charge currency (INR, USD, …) |
-| `GET` | `/api/get/forwarder/charge-titles` | Charge row titles |
+| `GET` | `/api/get/forwarder/charge-types` | Required charge types (default amount `0`) |
+| `GET` | `/api/get/forwarder/charge-titles` | Same payload as charge-types (legacy path) |
 | `GET` | `/api/get/destination/regions` | Destination region |
 | `GET` | `/api/get/destination/countries/{regionId}` | Countries for a region |
 | `GET` | `/api/get/destination/ports` | Sea ports |
 
 ### Destination cascade
 
-1. Load regions: `GET /api/get/destination/regions`
-2. On region change: `GET /api/get/destination/countries/{regionId}`
-3. On country change: `GET /api/get/destination/ports?region_id={id}&country_id={id}`
+1. `GET /api/get/destination/regions`
+2. `GET /api/get/destination/countries/{regionId}`
+3. `GET /api/get/destination/ports?region_id={id}&country_id={id}`
 
-Query aliases: `regionId`, `countryId`.
+Query aliases: `regionId`, `countryId`.  
+Empty lists mean destination masters have not been imported yet. Invalid `regionId` → `404`.
 
-If region/country/port lists are empty, admin has not imported destination masters yet.
+### Charge types
 
-### Charge titles (seeded)
+`GET /api/get/forwarder/charge-types`
 
-Ori THC, IHC, BL, Seal + Maintenance Fee, AMS, OWS, O/F, Seaway BL, Surrender BL.
+Prefill every `isRequired: true` row with `charges: "0"`. Vendor can change the amount. Extra vendor rows use `isOther: true` and are not added to this master.
 
 ```json
 {
   "status": true,
-  "message": "Forwarder charge titles fetched successfully.",
+  "message": "Forwarder charge types fetched successfully.",
   "data": [
     {
       "id": 1,
       "name": "Ori THC",
       "title": "Ori THC",
-      "description": null
+      "description": null,
+      "isRequired": true,
+      "required": true,
+      "defaultCharges": "0",
+      "isOther": false
     }
+  ],
+  "required": [
+    {
+      "id": 1,
+      "name": "Ori THC",
+      "title": "Ori THC",
+      "description": null,
+      "isRequired": true,
+      "required": true,
+      "defaultCharges": "0",
+      "isOther": false
+    }
+  ],
+  "note": "Prefill required rows at 0. Vendor additional charges (isOther=true) are stored only on the product and are not added to this master."
+}
+```
+
+Use `data` (all active types) or `required` (required only). `isRequired` and `required` are the same flag.
+
+### Currencies
+
+`GET /api/get/currencies`
+
+```json
+{
+  "status": true,
+  "message": "Currencies fetched successfully.",
+  "data": [
+    { "id": 1, "name": "INR", "code": "INR", "description": null },
+    { "id": 2, "name": "USD", "code": "USD", "description": null }
   ]
 }
 ```
 
+Send `currency` as the code (`INR` / `USD`). Only active currencies are returned.
+
 ### Container sizes
+
+`GET /api/get/container/sizes`
 
 ```json
 {
@@ -79,6 +133,8 @@ Ori THC, IHC, BL, Seal + Maintenance Fee, AMS, OWS, O/F, Seaway BL, Surrender BL
 ```
 
 ### Destination ports
+
+`GET /api/get/destination/ports?region_id=1&country_id=10`
 
 ```json
 {
@@ -97,8 +153,6 @@ Ori THC, IHC, BL, Seal + Maintenance Fee, AMS, OWS, O/F, Seaway BL, Surrender BL
 }
 ```
 
-Invalid region id on countries API → `404`.
-
 ---
 
 ## 2. Vendor product CRUD (logged-in forwarder)
@@ -107,13 +161,13 @@ All under `/api/portal`. Send the portal token.
 
 | Method | URL | Purpose |
 |--------|-----|---------|
-| `POST` | `/api/portal/web/forwarder-product/create` | Create product (`status` starts at `0`) |
-| `POST` | `/api/portal/web/forwarder-product/update` | Update product (`id` required) |
+| `POST` | `/api/portal/web/forwarder-product/create` | Create (`status` starts at `0`) |
+| `POST` | `/api/portal/web/forwarder-product/update` | Update (`id` required) |
 | `GET` | `/api/portal/web/forwarder-product/list/{userId}` | List that vendor’s products |
 | `GET` | `/api/portal/web/forwarder-product/{id}` | Fetch one product |
 | `DELETE` | `/api/portal/web/forwarder-product/{id}` | Delete product |
 
-Content-Type: `application/json` (multipart is not required; no images).
+Content-Type: `application/json` (no images / multipart).
 
 ### Create / update body
 
@@ -147,9 +201,17 @@ Content-Type: `application/json` (multipart is not required; no images).
 }
 ```
 
-Update: same body plus `"id": 99`. If `id` is missing, the update endpoint creates a new product.
+Update: same body plus `"id": 99`. Missing `id` on update creates a new product.
 
-Accepted aliases:
+Charge rules:
+
+- Required master rows: send `titleId`. Amount may be `"0"`.
+- Additional vendor rows: send `title` + `isOther: true`, **do not** send `titleId`. These are not written to the master.
+- Extra additional rows can also go in `others` / `other_charges` (same shape; API marks them `isOther`).
+- If a required `titleId` is omitted, the API still saves that type at `"0"`.
+- A custom `title` that does not match a master name is stored as Other.
+
+### Field aliases
 
 | Field | Also accepted |
 |-------|----------------|
@@ -161,23 +223,26 @@ Accepted aliases:
 | `countryId` | `country_id` |
 | `destinationPortId` | `destination_port_id`, `destinationId`, `destination_id` |
 | `containerSizeIds` | `container_size_ids`, `containerSizes`, `container_20_ft`, `container_40_ft` |
-| `charges` | `particulars`; extra rows in `others` / `other_charges` |
+| `charges` | `particulars`; extras in `others` / `other_charges` |
 | `additionalInformation` | `additional_information` |
 
-Charge row aliases: `titleId` / `title_id`, `charges` / `rate` / `amount`, `exchangeRate` / `exc`, `inrAmount` / `inr`, `isOther` / `is_other`.
-
-If `title` does not match a master title, it is stored as **Other**.
+Charge row aliases: `titleId` / `title_id`, `charges` / `rate` / `amount`, `exchangeRate` / `exc` / `exchange`, `inrAmount` / `inr`, `isOther` / `is_other`.
 
 ### Validation
 
-Required:
+Must send:
 
 - At least one container size (20 FT and/or 40 FT)
-- At least one charge with a title and amount
 
-Optional: port type, ICD, Indian port, region, country, destination port, additional information.
+Always saved:
+
+- Every required master charge type (amount `0` if omitted)
+
+Optional: port type, ICD, Indian port, region, country, destination port, additional charges, additional information.
 
 ### Product response (`data`)
+
+List, show, create, and update all return this shape (list wraps it in an array).
 
 ```json
 {
@@ -217,21 +282,36 @@ Optional: port type, ICD, Indian port, region, country, destination port, additi
       "inrAmount": "10020",
       "remarks": null,
       "isOther": false,
+      "isRequired": true,
       "sortOrder": 0
+    },
+    {
+      "id": 2,
+      "titleId": null,
+      "title": "Custom fee",
+      "currency": "INR",
+      "charges": "500",
+      "exchangeRate": "-",
+      "exc": "-",
+      "inr": "500",
+      "inrAmount": "500",
+      "remarks": null,
+      "isOther": true,
+      "isRequired": false,
+      "sortOrder": 1
     }
   ],
-  "particulars": [],
   "totalUsd": "120",
   "totalInr": "10520",
   "updatedAt": "15 September 2026"
 }
 ```
 
-`particulars` is the same array as `charges` (alias for clearing-agent-style UI).
+`particulars` is the same array as `charges`. On edit, keep required rows (`isRequired: true`) and allow add/remove only for `isOther: true` rows.
 
 | `status` | Meaning |
 |----------|---------|
-| `0` | Pending admin verify (not shown in public catalog) |
+| `0` | Pending admin verify (hidden from public catalog) |
 | `1` | Verified / live |
 
 New products are always `status: 0`.
@@ -260,9 +340,9 @@ Same portal token as other vendor catalog APIs.
 | `GET` | `/api/web/vendor/forwarder-charges/{id}` | Forwarder-only alias |
 | `GET` | `/api/web/vendor/forwarder/{id}` | Same as above |
 
-`{id}` on catalog routes: business id, user id, or (on the forwarder aliases) a product id.
+`{id}`: business id, user id, or (on the forwarder aliases) a product id.
 
-Only **verified** products (`status = 1`) that have charges are returned.
+Only **verified** products (`status = 1`) that have charges are returned. `vendorKind` is `"forwarder"`. No product images (`imageBasePath` is `null`).
 
 ```json
 {
@@ -279,21 +359,21 @@ Only **verified** products (`status = 1`) that have charges are returned.
     "has_products": true,
     "vendorKind": "forwarder"
   },
-  "data": [ { "id": 99, "userId": 123, "status": 1 } ],
+  "data": [{ "id": 99, "userId": 123, "status": 1 }],
   "imageBasePath": null
 }
 ```
 
-`vendorKind` is `"forwarder"`. There are no product images (`imageBasePath` is `null`).
+`data[]` items use the same product shape as section 2.
 
 ---
 
 ## Suggested UI flow
 
-1. Load masters in parallel: port types, Indian ports, container sizes, charge titles, destination regions.
-2. If port type is ICD, also load ICD locations.
+1. Load in parallel: port types, Indian ports, container sizes, currencies, charge types, destination regions.
+2. If port type is ICD, load ICD locations.
 3. Region → countries → destination ports.
-4. Vendor selects container sizes and fills charge rows (master titles + optional Other).
+4. Prefill required charge types at `0`. Let the vendor add extra `isOther` rows.
 5. `POST` create. Show as pending until admin verifies.
 6. Vendor dashboard: list / edit / delete via portal CRUD.
 7. Buyer catalog: `GET /api/web/vendor/products/{businessId}` or the forwarder alias.
@@ -308,15 +388,16 @@ GET  /api/get/icd/locations
 GET  /api/get/indian/ports
 GET  /api/get/container/sizes
 GET  /api/get/currencies
+GET  /api/get/forwarder/charge-types
 GET  /api/get/forwarder/charge-titles
 GET  /api/get/destination/regions
 GET  /api/get/destination/countries/{regionId}
 GET  /api/get/destination/ports?region_id=&country_id=
 
-POST /api/portal/web/forwarder-product/create
-POST /api/portal/web/forwarder-product/update
-GET  /api/portal/web/forwarder-product/list/{userId}
-GET  /api/portal/web/forwarder-product/{id}
+POST   /api/portal/web/forwarder-product/create
+POST   /api/portal/web/forwarder-product/update
+GET    /api/portal/web/forwarder-product/list/{userId}
+GET    /api/portal/web/forwarder-product/{id}
 DELETE /api/portal/web/forwarder-product/{id}
 
 GET  /api/web/vendor/products/{id}

@@ -33,6 +33,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Name</th>
+                                            <th>Required</th>
                                             <th>Description</th>
                                             <th>Status</th>
                                             <th>Created</th>
@@ -45,6 +46,13 @@
                                             <tr>
                                                 <td>{{ $record->id }}</td>
                                                 <td>{{ $record->name }}</td>
+                                                <td>
+                                                    @if((int) $record->is_required === 1)
+                                                        <span class="label label-primary">Required (0)</span>
+                                                    @else
+                                                        <span class="label label-default">Optional</span>
+                                                    @endif
+                                                </td>
                                                 <td>{{ $record->description ?: '—' }}</td>
                                                 <td>
                                                     @if((int) $record->status === \App\VendorForwarderChargeTitle::STATUS_ACTIVE)
@@ -77,7 +85,7 @@
         $('.datatable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [6] }]
+            columnDefs: [{ orderable: false, targets: [7] }]
         });
 
         $(document).on('click', '.delete-row', function(e){

@@ -30,4 +30,15 @@ class VendorForwarderChargeTitleController extends AbstractVendorNameMasterContr
     {
         return 'name';
     }
+
+    /**
+     * @return array{name:string, description:?string, status:int, is_required:int}
+     */
+    protected function validatePayload(\Illuminate\Http\Request $request, ?int $ignoreId = null): array
+    {
+        $payload = parent::validatePayload($request, $ignoreId);
+        $payload['is_required'] = (int) $request->input('is_required', 1) === 1 ? 1 : 0;
+
+        return $payload;
+    }
 }
