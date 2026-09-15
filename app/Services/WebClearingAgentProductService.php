@@ -297,6 +297,14 @@ class WebClearingAgentProductService
             'portLocation' => optional($product->indianPortRel)->name ?: $product->port_location,
             'destinationPortId' => $product->destination_port_id !== null ? (int) $product->destination_port_id : null,
             'destination' => optional($product->destinationPortRel)->name ?: $product->destination,
+            'destinationRegionId' => optional($product->destinationPortRel)->region_id !== null
+                ? (int) $product->destinationPortRel->region_id
+                : null,
+            'destinationRegion' => optional(optional($product->destinationPortRel)->region)->name,
+            'destinationCountryId' => optional($product->destinationPortRel)->country_id !== null
+                ? (int) $product->destinationPortRel->country_id
+                : null,
+            'destinationCountry' => optional(optional($product->destinationPortRel)->country)->name,
             'additionalInformation' => $product->additional_information,
             'status' => (int) $product->status,
             'particulars' => $particulars,

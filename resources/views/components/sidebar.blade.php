@@ -539,6 +539,8 @@
                     'vendor-container-sizes','create.vendor-container-size','edit.vendor-container-size',
                     'vendor-icd-locations','create.vendor-icd-location','edit.vendor-icd-location',
                     'vendor-indian-ports','create.vendor-indian-port','edit.vendor-indian-port',
+                    'vendor-destination-regions','create.vendor-destination-region','edit.vendor-destination-region',
+                    'vendor-destination-countries','create.vendor-destination-country','edit.vendor-destination-country',
                     'vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port',
                     'vendor-container-particulars','create.vendor-container-particular','edit.vendor-container-particular',
                     'vendor-port-charges','create.vendor-port-charge','edit.vendor-port-charge',
@@ -577,6 +579,12 @@
                             </li>
                             <li class="{{ in_array($currentRoute, ['vendor-indian-ports','create.vendor-indian-port','edit.vendor-indian-port']) ? 'active' : '' }}">
                                 <a href="{{ route('vendor-indian-ports') }}"><i class="fa fa-circle-o"></i> Indian Ports</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-destination-regions','create.vendor-destination-region','edit.vendor-destination-region']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-destination-regions') }}"><i class="fa fa-circle-o"></i> Destination Regions</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['vendor-destination-countries','create.vendor-destination-country','edit.vendor-destination-country']) ? 'active' : '' }}">
+                                <a href="{{ route('vendor-destination-countries') }}"><i class="fa fa-circle-o"></i> Destination Countries</a>
                             </li>
                             <li class="{{ in_array($currentRoute, ['vendor-destination-ports','create.vendor-destination-port','edit.vendor-destination-port']) ? 'active' : '' }}">
                                 <a href="{{ route('vendor-destination-ports') }}"><i class="fa fa-circle-o"></i> Destination Ports</a>

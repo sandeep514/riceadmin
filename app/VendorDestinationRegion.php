@@ -4,36 +4,28 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VendorDestinationPort extends Model
+class VendorDestinationRegion extends Model
 {
-    protected $table = 'vendor_destination_ports';
+    protected $table = 'vendor_destination_regions';
 
     public const STATUS_ACTIVE = 1;
 
     public const STATUS_INACTIVE = 0;
 
     protected $fillable = [
-        'region_id',
-        'country_id',
         'name',
         'description',
         'status',
     ];
 
-    protected $casts = [
-        'region_id' => 'integer',
-        'country_id' => 'integer',
-        'status' => 'integer',
-    ];
-
-    public function region()
+    public function countries()
     {
-        return $this->belongsTo(VendorDestinationRegion::class, 'region_id', 'id');
+        return $this->hasMany(VendorDestinationCountry::class, 'region_id', 'id');
     }
 
-    public function country()
+    public function destinationPorts()
     {
-        return $this->belongsTo(VendorDestinationCountry::class, 'country_id', 'id');
+        return $this->hasMany(VendorDestinationPort::class, 'region_id', 'id');
     }
 
     public static function options(?int $includeId = null): array

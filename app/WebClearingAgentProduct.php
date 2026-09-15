@@ -62,7 +62,8 @@ class WebClearingAgentProduct extends Model
 
     public function destinationPortRel()
     {
-        return $this->belongsTo(VendorDestinationPort::class, 'destination_port_id', 'id');
+        return $this->belongsTo(VendorDestinationPort::class, 'destination_port_id', 'id')
+            ->with(['region', 'country']);
     }
 
     public function particulars()

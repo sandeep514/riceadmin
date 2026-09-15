@@ -8114,12 +8114,82 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
-    public function getDestinationPorts()
+    public function getDestinationRegions()
     {
-        $rows = \App\VendorDestinationPort::query()
-            ->where('status', \App\VendorDestinationPort::STATUS_ACTIVE)
+        $rows = \App\VendorDestinationRegion::query()
+            ->where('status', \App\VendorDestinationRegion::STATUS_ACTIVE)
             ->orderBy('name')
             ->get(['id', 'name', 'description']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Destination regions fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getDestinationCountries($regionId)
+    {
+        $region = \App\VendorDestinationRegion::query()
+            ->where('status', \App\VendorDestinationRegion::STATUS_ACTIVE)
+            ->find((int) $regionId);
+
+        if ($region === null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Destination region not found.',
+                'data' => [],
+            ], 404);
+        }
+
+        $rows = \App\VendorDestinationCountry::query()
+            ->where('status', \App\VendorDestinationCountry::STATUS_ACTIVE)
+            ->where('region_id', (int) $regionId)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description', 'region_id']);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Destination countries fetched successfully.',
+            'region' => [
+                'id' => (int) $region->id,
+                'name' => $region->name,
+            ],
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getDestinationPorts(Request $request)
+    {
+        $query = \App\VendorDestinationPort::query()
+            ->with(['region:id,name', 'country:id,name,region_id'])
+            ->where('status', \App\VendorDestinationPort::STATUS_ACTIVE);
+
+        $regionId = $request->input('region_id', $request->input('regionId'));
+        $countryId = $request->input('country_id', $request->input('countryId'));
+
+        if ($regionId !== null && $regionId !== '') {
+            $query->where('region_id', (int) $regionId);
+        }
+        if ($countryId !== null && $countryId !== '') {
+            $query->where('country_id', (int) $countryId);
+        }
+
+        $rows = $query
+            ->orderBy('name')
+            ->get()
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'description' => $row->description,
+                    'region_id' => $row->region_id !== null ? (int) $row->region_id : null,
+                    'region' => optional($row->region)->name,
+                    'country_id' => $row->country_id !== null ? (int) $row->country_id : null,
+                    'country' => optional($row->country)->name,
+                ];
+            })
+            ->values();
 
         return response()->json([
             'status' => true,

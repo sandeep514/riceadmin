@@ -167,6 +167,8 @@ use Pusher\Pusher;
     Route::get('get/container/particulars' , ['as' => 'get.container.particulars' , 'uses' => 'ApiController@getContainerParticulars']);
     Route::get('get/icd/locations' , ['as' => 'get.icd.locations' , 'uses' => 'ApiController@getIcdLocations']);
     Route::get('get/indian/ports' , ['as' => 'get.indian.ports' , 'uses' => 'ApiController@getIndianPorts']);
+    Route::get('get/destination/regions' , ['as' => 'get.destination.regions' , 'uses' => 'ApiController@getDestinationRegions']);
+    Route::get('get/destination/countries/{regionId}' , ['as' => 'get.destination.countries' , 'uses' => 'ApiController@getDestinationCountries']);
     Route::get('get/destination/ports' , ['as' => 'get.destination.ports' , 'uses' => 'ApiController@getDestinationPorts']);
     Route::get('get/port/types' , ['as' => 'get.port.types' , 'uses' => 'ApiController@getPortTypes']);
     Route::get('get/container/sizes' , ['as' => 'get.container.sizes' , 'uses' => 'ApiController@getContainerSizes']);

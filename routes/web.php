@@ -262,6 +262,28 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/indian-ports/change-status/{id}', ['as' => 'vendor-indian-port.change-status', 'uses' => 'VendorIndianPortController@changeStatus', 'action' => 'edit']);
             });
 
+            // Vendor Flow — Destination Regions
+            Route::group(['module' => 'vendor_destination_region', 'icon' => 'fa-globe'], function () {
+                Route::get('vendor-flow/destination-regions', ['as' => 'vendor-destination-regions', 'uses' => 'VendorDestinationRegionController@index', 'action' => 'view']);
+                Route::get('vendor-flow/destination-regions/create', ['as' => 'create.vendor-destination-region', 'uses' => 'VendorDestinationRegionController@create', 'action' => 'create']);
+                Route::post('vendor-flow/destination-regions/save', ['as' => 'save.vendor-destination-region', 'uses' => 'VendorDestinationRegionController@save', 'action' => 'create']);
+                Route::get('vendor-flow/destination-regions/edit/{id}', ['as' => 'edit.vendor-destination-region', 'uses' => 'VendorDestinationRegionController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/destination-regions/update/{id}', ['as' => 'update.vendor-destination-region', 'uses' => 'VendorDestinationRegionController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/destination-regions/delete/{id}', ['as' => 'delete.vendor-destination-region', 'uses' => 'VendorDestinationRegionController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/destination-regions/change-status/{id}', ['as' => 'vendor-destination-region.change-status', 'uses' => 'VendorDestinationRegionController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Vendor Flow — Destination Countries
+            Route::group(['module' => 'vendor_destination_country', 'icon' => 'fa-flag'], function () {
+                Route::get('vendor-flow/destination-countries', ['as' => 'vendor-destination-countries', 'uses' => 'VendorDestinationCountryController@index', 'action' => 'view']);
+                Route::get('vendor-flow/destination-countries/create', ['as' => 'create.vendor-destination-country', 'uses' => 'VendorDestinationCountryController@create', 'action' => 'create']);
+                Route::post('vendor-flow/destination-countries/save', ['as' => 'save.vendor-destination-country', 'uses' => 'VendorDestinationCountryController@save', 'action' => 'create']);
+                Route::get('vendor-flow/destination-countries/edit/{id}', ['as' => 'edit.vendor-destination-country', 'uses' => 'VendorDestinationCountryController@edit', 'action' => 'edit']);
+                Route::put('vendor-flow/destination-countries/update/{id}', ['as' => 'update.vendor-destination-country', 'uses' => 'VendorDestinationCountryController@update', 'action' => 'edit']);
+                Route::delete('vendor-flow/destination-countries/delete/{id}', ['as' => 'delete.vendor-destination-country', 'uses' => 'VendorDestinationCountryController@delete', 'action' => 'delete']);
+                Route::get('vendor-flow/destination-countries/change-status/{id}', ['as' => 'vendor-destination-country.change-status', 'uses' => 'VendorDestinationCountryController@changeStatus', 'action' => 'edit']);
+            });
+
             // Vendor Flow — Destination Ports (clearing agent)
             Route::group(['module' => 'vendor_destination_port', 'icon' => 'fa-globe'], function () {
                 Route::get('vendor-flow/destination-ports', ['as' => 'vendor-destination-ports', 'uses' => 'VendorDestinationPortController@index', 'action' => 'view']);

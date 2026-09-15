@@ -4,14 +4,14 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Destination Ports
+                Destination Countries
                 <small>Create</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li>Service Providers</li>
                 <li>Masters</li>
-                <li><a href="{{ route('vendor-destination-ports') }}">Destination Ports</a></li>
+                <li><a href="{{ route('vendor-destination-countries') }}">Destination Countries</a></li>
                 <li class="active">Create</li>
             </ol>
         </section>
@@ -20,13 +20,13 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Destination port details</h3>
+                            <h3 class="box-title">Destination country details</h3>
                         </div>
-                        {!! Form::open(['route' => 'save.vendor-destination-port']) !!}
-                            @include('vendor-destination-ports._form')
+                        {!! Form::open(['route' => 'save.vendor-destination-country']) !!}
+                            @include('vendor-destination-countries._form')
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
-                                <a href="{{ route('vendor-destination-ports') }}" class="btn btn-danger">Cancel</a>
+                                <a href="{{ route('vendor-destination-countries') }}" class="btn btn-danger">Cancel</a>
                             </div>
                         {!! Form::close() !!}
                     </div>
@@ -34,8 +34,4 @@
             </div>
         </section>
     </div>
-@endsection
-
-@section('javascript')
-    @include('vendor-destination-ports._form_script')
 @endsection

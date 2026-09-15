@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class VendorDestinationPort extends Model
+class VendorDestinationCountry extends Model
 {
-    protected $table = 'vendor_destination_ports';
+    protected $table = 'vendor_destination_countries';
 
     public const STATUS_ACTIVE = 1;
 
@@ -14,7 +14,6 @@ class VendorDestinationPort extends Model
 
     protected $fillable = [
         'region_id',
-        'country_id',
         'name',
         'description',
         'status',
@@ -22,7 +21,6 @@ class VendorDestinationPort extends Model
 
     protected $casts = [
         'region_id' => 'integer',
-        'country_id' => 'integer',
         'status' => 'integer',
     ];
 
@@ -31,14 +29,15 @@ class VendorDestinationPort extends Model
         return $this->belongsTo(VendorDestinationRegion::class, 'region_id', 'id');
     }
 
-    public function country()
+    public function destinationPorts()
     {
-        return $this->belongsTo(VendorDestinationCountry::class, 'country_id', 'id');
+        return $this->hasMany(VendorDestinationPort::class, 'country_id', 'id');
     }
 
-    public static function options(?int $includeId = null): array
+    public static function options(?int $regionId = null, ?int $includeId = null): array
     {
         return self::query()
+            ->when($regionId, fn ($query) => $query->where('region_id', $regionId))
             ->where(function ($query) use ($includeId) {
                 $query->where('status', self::STATUS_ACTIVE);
                 if ($includeId) {
