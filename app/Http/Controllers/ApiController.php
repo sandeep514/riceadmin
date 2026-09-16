@@ -7972,13 +7972,27 @@ if (!file_exists('uploads')) {
 
     public function getWebNewsRunner()
     {
+        $sntcSince = Carbon::now()->subDays(30);
+
         $news = WebNewsRunner::where('status', 1)
+            ->where(function ($query) use ($sntcSince) {
+                $query->where('newsType', 'recent')
+                    ->orWhere(function ($sntcQuery) use ($sntcSince) {
+                        $sntcQuery->where('newsType', 'sntc')
+                            ->where('created_at', '>=', $sntcSince);
+                    });
+            })
             ->orderBy('id', 'desc')
             ->get(['id', 'title', 'description', 'type', 'newsType', 'status', 'created_at', 'updated_at'])
             ->groupBy('newsType')
-            ->map(function ($query) {
-                return $query->take(1);
+            ->map(function ($items, $newsType) {
+                if ($newsType === 'sntc') {
+                    return $items->values();
+                }
+
+                return $items->take(1)->values();
             });
+
         return response()->json(['status' => true, 'data' => $news], 200);
     }
 
