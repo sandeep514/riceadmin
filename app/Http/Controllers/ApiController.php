@@ -7986,21 +7986,15 @@ if (!file_exists('uploads')) {
             ->orderByDesc('id')
             ->get(['id', 'title', 'description', 'type', 'newsType', 'news_date', 'status', 'created_at', 'updated_at'])
             ->groupBy('newsType')
-            ->map(function ($items, $newsType) {
-                $formatted = $items->map(function ($item) {
+            ->map(function ($items) {
+                return $items->map(function ($item) {
                     $row = $item->toArray();
                     $row['news_date'] = $item->news_date
                         ? Carbon::parse($item->news_date)->format('Y-m-d')
                         : null;
 
                     return $row;
-                });
-
-                if ($newsType === 'sntc') {
-                    return $formatted->values();
-                }
-
-                return $formatted->take(1)->values();
+                })->values();
             });
 
         return response()->json(['status' => true, 'data' => $news], 200);
