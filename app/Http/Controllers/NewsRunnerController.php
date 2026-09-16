@@ -41,7 +41,11 @@ class NewsRunnerController extends Controller
 
     public function webIndex()
     {
-        $news = WebNewsRunner::limit(10)->orderBy('id', 'desc')->get();
+        $news = WebNewsRunner::orderByDesc('news_date')
+            ->orderByDesc('id')
+            ->paginate(25)
+            ->withQueryString();
+
         return View('webnewsrunner.index' , compact('news'));
     }
 
