@@ -149,7 +149,7 @@
                 <div class="box-body">
                             <div class="table-responsive">
                                 <div class="col-md-12">
-                                    <table id="web-news-runner-table" class="display" style="width: 100%;">
+                                    <table id="example2" class="display" style="width: 100%;">
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center ">Title</th>
@@ -164,7 +164,7 @@
                                         </thead>
 
                                         <tbody>
-                                            @forelse($news as $v)
+                                            @foreach($news as $k => $v)
                                                 <tr>
                                                     <td>{{ $v->title ?: '-' }}</td>
                                                     <td>{{ $v->description }}</td>
@@ -186,11 +186,8 @@
                                                         @endif
                                                     </td>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="8" class="text-center text-muted">No news found.</td>
-                                                </tr>
-                                            @endforelse
+                                                
+                                            @endforeach
                                         </tbody>
                                         
                                         <tfoot>
@@ -206,10 +203,6 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-                                    <div class="text-center" style="margin-top: 10px;">
-                                        <p>Page {{ $news->currentPage() }} of {{ $news->lastPage() }} — Total {{ $news->total() }}</p>
-                                        {{ $news->onEachSide(1)->links() }}
-                                    </div>
                                 </div>
                             </div>
                         </div>

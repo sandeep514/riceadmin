@@ -43,8 +43,7 @@ class NewsRunnerController extends Controller
     {
         $news = WebNewsRunner::orderByDesc('news_date')
             ->orderByDesc('id')
-            ->paginate(25)
-            ->withQueryString();
+            ->get();
 
         return View('webnewsrunner.index' , compact('news'));
     }
