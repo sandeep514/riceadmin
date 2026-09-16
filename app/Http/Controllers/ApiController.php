@@ -7979,18 +7979,28 @@ if (!file_exists('uploads')) {
                 $query->where('newsType', 'recent')
                     ->orWhere(function ($sntcQuery) use ($sntcSince) {
                         $sntcQuery->where('newsType', 'sntc')
-                            ->where('created_at', '>=', $sntcSince);
+                            ->where('news_date', '>=', $sntcSince->toDateString());
                     });
             })
-            ->orderBy('id', 'desc')
-            ->get(['id', 'title', 'description', 'type', 'newsType', 'status', 'created_at', 'updated_at'])
+            ->orderByDesc('news_date')
+            ->orderByDesc('id')
+            ->get(['id', 'title', 'description', 'type', 'newsType', 'news_date', 'status', 'created_at', 'updated_at'])
             ->groupBy('newsType')
             ->map(function ($items, $newsType) {
+                $formatted = $items->map(function ($item) {
+                    $row = $item->toArray();
+                    $row['news_date'] = $item->news_date
+                        ? Carbon::parse($item->news_date)->format('Y-m-d')
+                        : null;
+
+                    return $row;
+                });
+
                 if ($newsType === 'sntc') {
-                    return $items->values();
+                    return $formatted->values();
                 }
 
-                return $items->take(1)->values();
+                return $formatted->take(1)->values();
             });
 
         return response()->json(['status' => true, 'data' => $news], 200);

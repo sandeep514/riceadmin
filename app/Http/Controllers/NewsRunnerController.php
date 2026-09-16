@@ -51,12 +51,14 @@ class NewsRunnerController extends Controller
             'type' => 'required|array',
             'type.*' => 'in:usd,inr',
             'newsType' => 'required|in:recent,sntc',
+            'news_date' => 'required|date',
             'title' => 'nullable|string|max:255',
             'description' => 'required|string',
         ]);
 
         $title = trim((string) $request->input('title', ''));
         $title = $title === '' ? null : $title;
+        $newsDate = Carbon::parse($request->news_date)->format('Y-m-d');
 
         $data = [];
         foreach ($request->type as $key => $value) {
@@ -65,6 +67,7 @@ class NewsRunnerController extends Controller
                 'title' => $title,
                 'description' => $request->description,
                 'newsType' => $request->newsType,
+                'news_date' => $newsDate,
             ];
         }
         Session::flash('message' , 'News updated successfully');

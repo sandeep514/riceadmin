@@ -106,6 +106,16 @@
                             @enderror --}}
 
                             <div class="form-group">
+                                <label for="news_date">News Date</label>
+                                <input type="date" class="form-control" id="news_date" name="news_date" value="{{ old('news_date', date('Y-m-d')) }}" autocomplete="off" required>
+                            </div>
+                            @error('news_date')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+
+                            <div class="form-group">
                                 <label for="title">Title <small class="text-muted">(optional)</small></label>
                                 <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
                             </div>
@@ -146,6 +156,7 @@
                                                 <th style="text-align: center ">Description</th>
                                                 <th style="text-align: center ">Type</th>
                                                 <th style="text-align: center ">News Type</th>
+                                                <th style="text-align: center ">News Date</th>
                                                 <th style="text-align: center ">Status</th>
                                                 <th style="text-align: center ">created at</th>
                                                 <th style="text-align: center ">Action</th>
@@ -159,6 +170,7 @@
                                                     <td>{{ $v->description }}</td>
                                                     <td>{{ $v->type }}</td>
                                                     <td>{{ $v->newsType }}</td>
+                                                    <td>{{ $v->news_date ? \Carbon\Carbon::parse($v->news_date)->format('d-m-Y') : '-' }}</td>
                                                     <td>{{ ($v->status==1)?'Active' : 'De-active' }}</td>
                                                     <td>{{ $v->created_at }}</td>
 
@@ -184,6 +196,7 @@
                                                 <th style="text-align: center ">Description</th>
                                                 <th style="text-align: center ">Type</th>
                                                 <th style="text-align: center ">News Type</th>
+                                                <th style="text-align: center ">News Date</th>
                                                 <th style="text-align: center ">Status</th>
                                                 <th style="text-align: center ">created at</th>
                                                 <th style="text-align: center ">Action</th>

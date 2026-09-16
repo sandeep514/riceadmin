@@ -9,5 +9,9 @@ use Illuminate\Database\Eloquent\Model;
 class WebNewsRunner extends Model
 {
     public $table = "web_news_runner";
-    protected $fillable = [ 'title','description','type','newsType','status' ];
+    protected $fillable = [ 'title','description','type','newsType','news_date','status' ];
+
+    protected $casts = [
+        'news_date' => 'date',
+    ];
 }
