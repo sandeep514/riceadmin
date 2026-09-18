@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\LivePrice;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Public (no-auth) live rice price APIs for 3rd-party consumers.
@@ -39,6 +40,25 @@ class PublicLivePriceController extends Controller
             }
         }
 
+        $payload = Cache::remember(
+            'public:live_prices:latest:'.md5(json_encode([$stateFilter, $riceTypeFilter, $cropYear])),
+            30,
+            function () use ($stateFilter, $riceTypeFilter, $cropYear) {
+                return $this->latestPayload($stateFilter, $riceTypeFilter, $cropYear);
+            }
+        );
+
+        $status = (int) ($payload['http_status'] ?? 200);
+        unset($payload['http_status']);
+
+        return response()->json($payload, $status);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function latestPayload(?string $stateFilter, ?string $riceTypeFilter, ?string $cropYear): array
+    {
         $baseQuery = LivePrice::query()
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
@@ -58,17 +78,17 @@ class PublicLivePriceController extends Controller
         $lastRecord = (clone $baseQuery)->orderByDesc('id')->first();
 
         if (! $lastRecord || ! $lastRecord->created_at) {
-            return response()->json([
+            return [
+                'http_status' => 200,
                 'status' => true,
                 'message' => 'No live prices found.',
                 'date' => null,
                 'data' => (object) [],
-            ]);
+            ];
         }
 
         $latestAt = Carbon::parse($lastRecord->created_at)
             ->timezone(config('app.timezone', 'Asia/Kolkata'));
-        $latestDate = $latestAt->format('Y-m-d');
         $latestDateTime = $latestAt->format('Y-m-d H:i:s');
 
         $rows = LivePrice::query()
@@ -83,7 +103,10 @@ class PublicLivePriceController extends Controller
             ->where('live_prices.form', '!=', '0')
             ->whereNotNull('live_prices.min_price')
             ->whereNotNull('live_prices.max_price')
-            ->whereDate('live_prices.created_at', $latestDate)
+            ->whereBetween('live_prices.created_at', [
+                $latestAt->copy()->startOfDay(),
+                $latestAt->copy()->endOfDay(),
+            ])
             ->when($stateFilter, fn ($q) => $q->where('live_prices.state', $stateFilter))
             ->when($cropYear !== null && $cropYear !== '', function ($q) use ($cropYear) {
                 $q->where(function ($inner) use ($cropYear) {
@@ -163,7 +186,8 @@ class PublicLivePriceController extends Controller
             $nested[$state] = $byType;
         }
 
-        return response()->json([
+        return [
+            'http_status' => 200,
             'status' => true,
             'message' => 'Latest live rice prices.',
             'date' => $latestDateTime,
@@ -173,6 +197,6 @@ class PublicLivePriceController extends Controller
                 'year' => $cropYear,
             ],
             'data' => empty($nested) ? (object) [] : $nested,
-        ]);
+        ];
     }
 }

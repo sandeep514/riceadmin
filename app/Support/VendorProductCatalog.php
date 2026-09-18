@@ -12,6 +12,7 @@ use App\WebLabEquipmentProduct;
 use App\WebMachineryEquipmentProduct;
 use App\WebRiceBagProduct;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 final class VendorProductCatalog
 {
@@ -134,6 +135,21 @@ final class VendorProductCatalog
      * @return array<int, true>
      */
     public static function productOwnerIdsForKind(?string $kind): array
+    {
+        $cacheKey = 'vendor_product_owner_ids:'.($kind ?: 'all');
+
+        return Cache::remember($cacheKey, 60, function () use ($kind) {
+            return self::uncachedProductOwnerIdsForKind($kind);
+        });
+    }
+
+    /**
+     * Owner ids that have at least one admin-verified (status=1) product for a vendor kind.
+     * If kind is unknown, checks every catalog table.
+     *
+     * @return array<int, true>
+     */
+    private static function uncachedProductOwnerIdsForKind(?string $kind): array
     {
         $models = self::productModels();
         $toQuery = ($kind !== null && isset($models[$kind]))

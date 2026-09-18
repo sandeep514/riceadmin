@@ -84,10 +84,10 @@ class PaddyPriceController extends Controller
             ->orderBy('id', 'DESC');
 
         if ($from) {
-            $query->whereDate('created_at', '>=', $from);
+            $query->where('created_at', '>=', Carbon::parse($from, config('app.timezone', 'Asia/Kolkata'))->startOfDay());
         }
         if ($to) {
-            $query->whereDate('created_at', '<=', $to);
+            $query->where('created_at', '<=', Carbon::parse($to, config('app.timezone', 'Asia/Kolkata'))->endOfDay());
         }
 
         if ($paginate) {

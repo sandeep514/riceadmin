@@ -79,7 +79,8 @@ class LivePricesController extends Controller
 
 
          // today's prices for this rice
-        $today_price = LivePrice::whereDate('created_at', Carbon::now()->format('Y-m-d'))
+        $today_price = LivePrice::query()
+            ->whereBetween('created_at', $this->livePriceDayBounds(Carbon::now()->format('Y-m-d')))
             ->first();
 
 
@@ -118,7 +119,7 @@ class LivePricesController extends Controller
 
                 $lastPrices = LivePrice::where('name', $riceName)
                     ->with(['form_rel','name_rel'])
-                    ->whereDate('created_at', $lastAvailableDate)
+                    ->whereBetween('created_at', $this->livePriceDayBounds($lastAvailableDate))
                     ->orderBy('updated_at', 'DESC')
                     ->orderBy('id', 'DESC')
                     ->get();
@@ -166,26 +167,23 @@ class LivePricesController extends Controller
         $currentTimestamp = $now->format('Y-m-d H:i:s');
         $lastAvailableDate ='';
         $lastAvaibleRecord = LivePrice::where('min_price' ,'!=' ,0  )->orderBy('created_at' , "DESC")->first();
-        $sortedStateData = [];
-        $sortedNameData = [];
-        $data_state_order = LivePrice::get()->sortBy('state_order');
-        $data_name_order = LivePrice::with(['name_rel' , 'form_rel'])->get()->sortBy('name_order');
+        $sortedStateData = LivePrice::query()
+            ->select('state', 'state_order')
+            ->whereNotNull('state_order')
+            ->groupBy('state_order', 'state')
+            ->orderBy('state_order')
+            ->pluck('state', 'state_order')
+            ->all();
+        $sortedNameData = LivePrice::query()
+            ->select('name', 'name_order')
+            ->whereNotNull('name_order')
+            ->groupBy('name_order', 'name')
+            ->orderBy('name_order')
+            ->pluck('name', 'name_order')
+            ->all();
         
         $cropYear  = (int)$request->cropYear;
         $cropGrade = (int)$request->cropGrade;
-
-
-        foreach($data_state_order as $k => $v){
-            if( $v->state_order != null ){
-                $sortedStateData[$v->state_order] = $v->state; 
-            }
-        }
-        
-        foreach($data_name_order as $k => $v){
-            if( $v->name_order != null  ){
-                $sortedNameData[$v->name_order] = $v->name; 
-            }
-        }
 
         
         if( $lastAvaibleRecord != null ){
@@ -193,9 +191,10 @@ class LivePricesController extends Controller
         }
         $openingOrClosing = [];
         if( $todayDate == $lastAvailableDate ){
+            $todayMap = $this->latestLivePriceMapForDay($request->name, $todayDate);
             foreach($request->min as $state => $values){
                 foreach($values as $form => $price){
-                    $userDetails = LivePrice::where(['state' => $state , 'form' => $form , 'name' => $request->name])->whereDate( 'created_at' , $todayDate )->first();
+                    $userDetails = $todayMap[$state.'|'.$form] ?? null;
 
                     $this->createAdminLivePriceEntry(
                         $request,
@@ -220,59 +219,21 @@ class LivePricesController extends Controller
                 }
             }
         }else{
-            $lastUpdatedPrice = LivePrice::whereDate( 'created_at' , $lastAvailableDate )->get();
+            $lastUpdatedPrice = $lastAvailableDate === ''
+                ? collect()
+                : LivePrice::query()
+                    ->whereBetween('created_at', $this->livePriceDayBounds($lastAvailableDate))
+                    ->get();
 
             if( $lastUpdatedPrice->count() > 0 ){
-                foreach( $lastUpdatedPrice as $k => $v ){
-
-                    LivePrice::create([
-                        'name'      => $v->name, 
-                        'form'      => $v->form,
-                        'is_updated_by_admin' => 1,
-                        'min_price' => $v->min_price,
-                        'max_price' => $v->max_price,
-                        'cropYear'  => $v->cropYear,
-                        'cropGrade' => $v->cropGrade,
-                        'state'     => $v->state,
-                        'opening'   => $v->opening??'',
-                        'closing'   => $v->closing??'',
-                        'monthStart'   => $v->monthStart??'',
-                        'monthEnd'   => $v->monthEnd??'',
-                        'up_down'   => $v->up_down,
-                        'created_at' => $currentTimestamp,
-                        'updated_at' => $currentTimestamp
-                    ]);
-
-                    if( isset($v->opening) || isset($v->closing) ){
-                        $openingOrClosing[] = [
-                            'name'      => $v->name,
-                            'form'      => $v->form ,
-                            'state'     => $v->state ,
-                            'cropYear'  => $v->cropYear,
-                            'opening'   => $v->opening??'',
-                            'closing'   => $v->closing??'' 
-                        ];
-                    }
-                }     
+                $openingOrClosing = array_merge(
+                    $openingOrClosing,
+                    $this->cloneLivePricesForNewDay($lastUpdatedPrice, $currentTimestamp)
+                );
+                $todayMap = $this->latestLivePriceMapForDay($request->name, $todayDate);
                 foreach($request->min as $state => $values){
                     foreach($values as $form => $price){
-                        // $priceModel = LivePrice::where(DB::raw('date(+)'),Carbon::now()->format('Y-m-d'))->firstOrNew(['state'=>$state,'name'=>$request->name,'form'=>$form]);
-                        // $priceModel->name = $request->name;
-                        // $priceModel->form = $form;
-                        // $priceModel->min_price = $price;
-                        // $priceModel->max_price = $request->max[$state][$form];
-                        // $priceModel->state = $state;
-                        // $priceModel->up_down = $request->up_down[$state][$form];
-                        // $priceModel->save();
-                        
-                        $previousRow = LivePrice::where([
-                            'state' => $state,
-                            'form' => $form,
-                            'name' => $request->name,
-                        ])->whereDate('created_at', $todayDate)
-                            ->orderBy('updated_at', 'desc')
-                            ->orderBy('id', 'desc')
-                            ->first();
+                        $previousRow = $todayMap[$state.'|'.$form] ?? null;
 
                         $this->createAdminLivePriceEntry(
                             $request,
@@ -352,11 +313,12 @@ class LivePricesController extends Controller
         //     }
         // }
         
+        $todayBounds = $this->livePriceDayBounds($todayDate);
         foreach($sortedStateData as $k => $v){
-            LivePrice::where('state' , $v)->whereDate('created_at' , $todayDate)->update(['state_order' => $k]);
+            LivePrice::where('state' , $v)->whereBetween('created_at', $todayBounds)->update(['state_order' => $k]);
         }
         foreach($sortedNameData as $k => $v){
-            LivePrice::where('name' , $v)->whereDate('created_at' , $todayDate)->update(['name_order' => $k]);    
+            LivePrice::where('name' , $v)->whereBetween('created_at', $todayBounds)->update(['name_order' => $k]);
         }
 
         
@@ -648,6 +610,87 @@ class LivePricesController extends Controller
     //     Session::flash('success','Success|Price saved successfully!');
     //     return back();
     // }
+
+    /**
+     * Inclusive IST calendar-day bounds for live_prices.created_at (index-friendly).
+     *
+     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
+     */
+    private function livePriceDayBounds(string $date): array
+    {
+        $day = Carbon::parse($date, config('app.timezone', 'Asia/Kolkata'));
+
+        return [$day->copy()->startOfDay(), $day->copy()->endOfDay()];
+    }
+
+    /**
+     * Latest row per state|form for one rice name on a calendar day.
+     *
+     * @return array<string, LivePrice>
+     */
+    private function latestLivePriceMapForDay($name, string $date): array
+    {
+        $rows = LivePrice::query()
+            ->where('name', $name)
+            ->whereBetween('created_at', $this->livePriceDayBounds($date))
+            ->orderBy('id')
+            ->get();
+
+        $map = [];
+        foreach ($rows as $row) {
+            $map[$row->state.'|'.$row->form] = $row;
+        }
+
+        return $map;
+    }
+
+    /**
+     * Clone last day's live prices onto today in bulk (same columns as the previous create() loop).
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $lastUpdatedPrice
+     * @return array<int, array<string, mixed>>
+     */
+    private function cloneLivePricesForNewDay($lastUpdatedPrice, string $currentTimestamp): array
+    {
+        $openingOrClosing = [];
+        $rows = [];
+        foreach ($lastUpdatedPrice as $v) {
+            $rows[] = [
+                'name' => $v->name,
+                'form' => $v->form,
+                'is_updated_by_admin' => 1,
+                'min_price' => $v->min_price,
+                'max_price' => $v->max_price,
+                'cropYear' => $v->cropYear,
+                'cropGrade' => $v->cropGrade,
+                'state' => $v->state,
+                'opening' => $v->opening ?? '',
+                'closing' => $v->closing ?? '',
+                'monthStart' => $v->monthStart ?? '',
+                'monthEnd' => $v->monthEnd ?? '',
+                'up_down' => $v->up_down,
+                'created_at' => $currentTimestamp,
+                'updated_at' => $currentTimestamp,
+            ];
+
+            if (isset($v->opening) || isset($v->closing)) {
+                $openingOrClosing[] = [
+                    'name' => $v->name,
+                    'form' => $v->form,
+                    'state' => $v->state,
+                    'cropYear' => $v->cropYear,
+                    'opening' => $v->opening ?? '',
+                    'closing' => $v->closing ?? '',
+                ];
+            }
+        }
+
+        foreach (array_chunk($rows, 250) as $chunk) {
+            LivePrice::insert($chunk);
+        }
+
+        return $openingOrClosing;
+    }
 
     /**
      * Always insert a new live_prices row on admin save (preserve history).

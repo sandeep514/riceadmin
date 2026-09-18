@@ -12,13 +12,15 @@ class ServerInsightsService
 
     public function collect(): array
     {
-        $host = $this->hostMetrics();
+        return Cache::remember('server_insights.collect', 30, function () {
+            $host = $this->hostMetrics();
 
-        return [
-            'collected_at' => now()->format('Y-m-d H:i:s'),
-            'host' => $host,
-            'mysql' => $this->mysqlMetrics($host['cpu_percent'] ?? null),
-        ];
+            return [
+                'collected_at' => now()->format('Y-m-d H:i:s'),
+                'host' => $host,
+                'mysql' => $this->mysqlMetrics($host['cpu_percent'] ?? null),
+            ];
+        });
     }
 
     private function hostMetrics(): array

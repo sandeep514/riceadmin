@@ -1103,18 +1103,12 @@ class ApiController extends Controller
                             'name_rel',
                             'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
                         ])
-                        ->withCount([
-                            'trades as tradeCount' => function ($q) {
-                                $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                                // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                            }
-                        ])
-                        // ->withCount(['trades as tradeCount'])
                         ->whereNotNull('min_price')
                         ->whereNotNull('max_price')
                         ->where(['state' => $state])
-                        ->where(DB::raw('date(created_at)'),  $recordDate)
+                        ->whereBetween('created_at', $this->livePriceCreatedAtDayBounds($recordDate))
                         ->get();
+                    $data = $this->attachLivePriceTradeCounts($data);
 
                     // $data = DB::table('live_prices as lp')
                     //     ->join('rice_forms as f', 'lp.form', '=', 'f.id')
@@ -1136,18 +1130,15 @@ class ApiController extends Controller
                             'name_rel',
                             'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', "ASC")
                         ])
-                        ->withCount([
-                            'trades as tradeCount' => function ($q) {
-                                $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                                // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                            }
-                        ])
-                        // ->withCount(['trades as tradeCount'])
                         ->whereNotNull('min_price')
                         ->whereNotNull('max_price')
                         ->where(['state' => $state])
-                        ->whereIn(DB::raw('date(created_at)'), [$lastRecord->created_at->format('Y-m-d'), $lastToLastDate->created_at->format('Y-m-d')])
-                        ->get();     
+                        ->where(function ($q) use ($lastRecord, $lastToLastDate) {
+                            $q->whereBetween('created_at', $this->livePriceCreatedAtDayBounds($lastRecord->created_at->format('Y-m-d')))
+                                ->orWhereBetween('created_at', $this->livePriceCreatedAtDayBounds($lastToLastDate->created_at->format('Y-m-d')));
+                        })
+                        ->get();
+                    $data = $this->attachLivePriceTradeCounts($data);     
                 }
 
                 foreach ($data->sortBy('name_rel.order') as $k => $v) {
@@ -1255,10 +1246,6 @@ class ApiController extends Controller
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->withCount(['trades as tradeCount'  => function ($q) {
-                        $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                        // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                    }])
                 ->whereHas('name_rel', fn($q) => $q->where('type', $ricetype))
                 ->whereHas('form_rel', fn($q) => $q->where('type', $ricetype))
                 ->with([
@@ -1267,6 +1254,7 @@ class ApiController extends Controller
                 ])
                 ->where('state', $state)
                 ->get();
+            $prices = $this->attachLivePriceTradeCounts($prices);
 
             foreach ($prices as $k => $v) {
 
@@ -1291,13 +1279,10 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => fn($q) => $q->orderBy('id', "ASC")->where('type', $ricetype)
                 ])
-                ->withCount(['trades as tradeCount'  => function ($q) {
-                        $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form');
-                        // $q->whereColumn('trade_query_milestone3.qualityForm', 'live_prices.form');
-                    }])
                 ->where(['state' => $state])
-                ->where(DB::raw('date(created_at)'), now()->format('Y-m-d'))
+                ->whereBetween('created_at', $this->livePriceCreatedAtDayBounds(now()->format('Y-m-d')))
                 ->get();
+            $data = $this->attachLivePriceTradeCounts($data);
 
             foreach ($data as $k => $v) {
                 if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
@@ -2195,12 +2180,6 @@ class ApiController extends Controller
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
             ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
             ->select('live_prices.*')
-            ->withCount([
-                'trades as tradeCount' => function ($q) {
-                    $q->whereColumn('trade_query_milestone3.qualityFormLinkWithLivePrice', 'live_prices.form')
-                      ->whereColumn('trade_query_milestone3.stateLinkWithLivePrice' , 'live_prices.state');
-                }
-            ])
             ->whereIn('live_prices.id', $latestPriceIdsForDate)
             ->where('live_prices.state', $state)
             ->where('live_prices.cropYear' , $cropYear)
@@ -2210,6 +2189,8 @@ class ApiController extends Controller
             ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
             ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
             ->get();
+
+        $data = $this->attachLivePriceTradeCounts($data);
 
         $data = $data
             ->filter(function ($row) use ($invalidLatestTupleKeys) {
@@ -2607,7 +2588,7 @@ class ApiController extends Controller
                 ->where(function ($q) use ($year) {
                     $this->applyLivePriceCropYearMatch($q, $year);
                 })
-                ->whereDate('created_at', '<=', $periodEnd)
+                ->where('created_at', '<=', Carbon::parse($periodEnd, config('app.timezone', 'Asia/Kolkata'))->endOfDay())
                 ->get();
         } else {
              if( count($explodeTime) > 1 ){
@@ -2617,8 +2598,7 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])
-                    ->whereDate('created_at', '>=', $periodStart)
-                    ->whereDate('created_at', '<=', $periodEnd)
+                    ->whereBetween('created_at', $this->livePriceCreatedAtRangeBounds($periodStart, $periodEnd))
                     ->get();
 
             } else {
@@ -2628,8 +2608,7 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])
-                    ->whereDate('created_at', '>=', $periodStart)
-                    ->whereDate('created_at', '<=', $periodEnd)
+                    ->whereBetween('created_at', $this->livePriceCreatedAtRangeBounds($periodStart, $periodEnd))
                     ->get();
             }
         }
@@ -2881,8 +2860,7 @@ class ApiController extends Controller
                 }
             ])
             ->where(['state' => $state])
-            ->whereDate('created_at', '>=', $periodStart)
-            ->whereDate('created_at', '<=', $periodEnd)
+            ->whereBetween('created_at', $this->livePriceCreatedAtRangeBounds($periodStart, $periodEnd))
             ->get();
 
         $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices);
@@ -4675,6 +4653,7 @@ class ApiController extends Controller
         })
             ->mergeBindings($latestRecords->getQuery())
             ->select('USD_prices.*')
+            ->with(['getUSDDefaultMaster', 'getRiceQuality'])
             ->orderBy('USD_prices.rice', 'ASC')
             ->orderBy('USD_prices.id', 'DESC')
             ->get();
@@ -6041,35 +6020,9 @@ if (!file_exists('uploads')) {
 
         $interestUserId = $this->resolveWebTradeInterestUserId($request, $userId);
 
-        $allTrade = TradeQueriesINR::query()
-            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, false, null))
-            ->with([
-                'TradeInterest' => function ($query) use ($interestUserId) {
-                    $query->where('userId', $interestUserId);
-                },
-                'RiceNameData',
-                'TradeLikeAll' => function ($query) use ($interestUserId) {
-                    $query->where('userId', $interestUserId);
-                },
-                'RiceFormMilestone3',
-                'RiceFormData',
-                'riceGrade' => function ($query) {
-                    $query->with('getWandType');
-                },
-                'RicePackingBuyer',
-                'RicePackingSeller',
-                'RicePackingPublic',
-            ])
-            ->orderBy('id', 'DESC')
-            ->withCount('TradeLikeAll')
-            ->get();
-
+        $allTrade = $this->loadOrderedWebTradesLean($request, $interestUserId, false, null);
         $interestTuples = UserInterestService::getActiveInterestTuplesForUser($interestUserId);
-        $allTrade = $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
-        $allTrade = $this->formatTradeCollectionValidDays($allTrade, 'd-m-Y, g:i A');
-        $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
-
-        $paginated = $this->paginateOrderedTrades($allTrade, $request);
+        $paginated = $this->hydrateWebTradesPage($allTrade, $request, $interestUserId);
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
@@ -6387,37 +6340,9 @@ if (!file_exists('uploads')) {
         $hasTradeTypeFilter = $this->hasWebTradeFilterTradeType($request);
         $appliedTradeType = $this->resolveAppliedWebTradeFilterTradeType($request);
 
-        $allTrade = TradeQueriesINR::query()
-            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, $hasTradeTypeFilter, $appliedTradeType))
-            ->with([
-                'TradeInterest' => function ($query) use ($interestUserId) {
-                    $query->where('userId', $interestUserId);
-                },
-                'RiceNameData',
-                'TradeLikeAll' => function ($query) use ($interestUserId) {
-                    $query->where('userId', $interestUserId);
-                },
-                'RiceFormMilestone3',
-                'RiceFormData',
-                'riceGrade' => function ($query) {
-                    $query->with('getWandType');
-                },
-                'RicePackingBuyer',
-                'RicePackingSeller',
-                'RicePackingPublic'
-            ])
-            ->orderBy('id', 'DESC')
-            ->withCount('TradeLikeAll')
-            ->get();
-
+        $allTrade = $this->loadOrderedWebTradesLean($request, $interestUserId, $hasTradeTypeFilter, $appliedTradeType);
         $interestTuples = UserInterestService::getActiveInterestTuplesForUser($interestUserId);
-        $allTrade = $hasTradeTypeFilter
-            ? $this->orderWebTradesForUserListing($allTrade, $interestUserId)
-            : $this->orderWebTradesAllTypesListing($allTrade, $interestUserId);
-        $allTrade = $this->formatTradeCollectionValidDays($allTrade, 'd-m-Y, g:i A');
-        $allTrade = $this->stripTradeCollectionRelationTimestamps($allTrade);
-
-        $paginated = $this->paginateOrderedTrades($allTrade, $request);
+        $paginated = $this->hydrateWebTradesPage($allTrade, $request, $interestUserId);
         $trade = $paginated['items'];
 
         $tradeStatus = TradeCurrentStatus::first();
@@ -6437,6 +6362,108 @@ if (!file_exists('uploads')) {
             'preferred_interest_user_id' => $interestUserId,
             'preferred_interest_count' => count($interestTuples),
         ]);
+    }
+
+    /**
+     * Lean web trade rows for interest ordering + list meta (no relations).
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    private function loadOrderedWebTradesLean(Request $request, ?int $interestUserId, bool $hasTradeTypeFilter, ?int $appliedTradeType)
+    {
+        $lean = TradeQueriesINR::query()
+            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, $hasTradeTypeFilter, $appliedTradeType))
+            ->select([
+                'id',
+                'status',
+                'tradeType',
+                'quality',
+                'qualityForm',
+                'qualityFormLinkWithLivePrice',
+                'grade',
+            ])
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        return $hasTradeTypeFilter
+            ? $this->orderWebTradesForUserListing($lean, $interestUserId)
+            : $this->orderWebTradesAllTypesListing($lean, $interestUserId);
+    }
+
+    /**
+     * Eager loads for one page of web trade list JSON.
+     *
+     * @return array<string, mixed>
+     */
+    private function webTradeListEagerLoads(int $interestUserId): array
+    {
+        return [
+            'TradeInterest' => function ($query) use ($interestUserId) {
+                $query->where('userId', $interestUserId);
+            },
+            'RiceNameData',
+            'TradeLikeAll' => function ($query) use ($interestUserId) {
+                $query->where('userId', $interestUserId);
+            },
+            'RiceFormMilestone3',
+            'RiceFormData',
+            'riceGrade' => function ($query) {
+                $query->with('getWandType');
+            },
+            'RicePackingBuyer',
+            'RicePackingSeller',
+            'RicePackingPublic',
+        ];
+    }
+
+    /**
+     * Hydrate only the current page after PHP interest sort. Same JSON as full eager-load + paginate.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $ordered
+     * @return array{items: \Illuminate\Support\Collection, pagination: array<string, int|null>}
+     */
+    private function hydrateWebTradesPage($ordered, Request $request, int $interestUserId): array
+    {
+        $paginated = $this->paginateOrderedTrades($ordered, $request);
+        $pageIds = $paginated['items']->pluck('id')->map(fn ($id) => (int) $id)->all();
+        if ($pageIds === []) {
+            $paginated['items'] = collect();
+
+            return $paginated;
+        }
+
+        $full = TradeQueriesINR::query()
+            ->with($this->webTradeListEagerLoads($interestUserId))
+            ->withCount('TradeLikeAll')
+            ->whereIn('id', $pageIds)
+            ->get()
+            ->keyBy(fn ($row) => (int) $row->id);
+
+        $leanById = $paginated['items']->keyBy(fn ($row) => (int) $row->id);
+
+        $items = collect($pageIds)
+            ->map(function ($id) use ($full, $leanById) {
+                $model = $full->get($id);
+                if (! $model) {
+                    return null;
+                }
+                $lean = $leanById->get($id);
+                if ($lean) {
+                    $model->setAttribute('matches_user_category', $lean->matches_user_category ?? false);
+                    $model->setAttribute('matches_user_interest', $lean->matches_user_interest ?? false);
+                    $model->setAttribute('interest_match_score', $lean->interest_match_score ?? 0);
+                }
+
+                return $model;
+            })
+            ->filter()
+            ->values();
+
+        $items = $this->formatTradeCollectionValidDays($items, 'd-m-Y, g:i A');
+        $items = $this->stripTradeCollectionRelationTimestamps($items);
+        $paginated['items'] = $items;
+
+        return $paginated;
     }
 
     /**
@@ -8649,6 +8676,71 @@ if (!file_exists('uploads')) {
         }
 
         return null;
+    }
+
+    /**
+     * Inclusive IST calendar-day bounds for live_prices.created_at (index-friendly).
+     *
+     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
+     */
+    private function livePriceCreatedAtDayBounds($date): array
+    {
+        $day = Carbon::parse($date, config('app.timezone', 'Asia/Kolkata'));
+
+        return [$day->copy()->startOfDay(), $day->copy()->endOfDay()];
+    }
+
+    /**
+     * Inclusive IST range from start date through end date.
+     *
+     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
+     */
+    private function livePriceCreatedAtRangeBounds($startDate, $endDate): array
+    {
+        $tz = config('app.timezone', 'Asia/Kolkata');
+
+        return [
+            Carbon::parse($startDate, $tz)->startOfDay(),
+            Carbon::parse($endDate, $tz)->endOfDay(),
+        ];
+    }
+
+    /**
+     * Same tradeCount as LivePrice::trades() withCount, without a correlated subquery per row.
+     *
+     * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $prices
+     * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
+     */
+    private function attachLivePriceTradeCounts($prices)
+    {
+        $collection = $prices instanceof \Illuminate\Support\Collection ? $prices : collect($prices);
+        if ($collection->isEmpty()) {
+            return $prices;
+        }
+
+        $names = $collection->pluck('name')->unique()->filter(function ($name) {
+            return $name !== null && $name !== '' && $name !== '0';
+        })->values();
+
+        $counts = [];
+        if ($names->isNotEmpty()) {
+            $rows = TradeQueriesINR::query()
+                ->selectRaw('quality, qualityFormLinkWithLivePrice, stateLinkWithLivePrice, COUNT(*) as aggregate')
+                ->whereIn('quality', $names)
+                ->whereIn('status', [1, 6, 4])
+                ->groupBy('quality', 'qualityFormLinkWithLivePrice', 'stateLinkWithLivePrice')
+                ->get();
+            foreach ($rows as $row) {
+                $counts[(int) $row->quality.'|'.(int) $row->qualityFormLinkWithLivePrice.'|'.(string) $row->stateLinkWithLivePrice] = (int) $row->aggregate;
+            }
+        }
+
+        foreach ($collection as $price) {
+            $key = ((int) $price->name).'|'.((int) $price->form).'|'.(string) $price->state;
+            $price->setAttribute('tradeCount', $counts[$key] ?? 0);
+        }
+
+        return $prices;
     }
 
     /**
