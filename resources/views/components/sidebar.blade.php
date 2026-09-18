@@ -610,7 +610,7 @@
                         <a href="{{ route('get.web.clearing.agent.vendors.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Vendors</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']) ? 'active' : '' }}">
-                        <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
+                        <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Charges</a>
                     </li>
                     <li class="{{ $currentRoute === 'get.web.forwarder.vendors.list' ? 'active' : '' }}">
                         <a href="{{ route('get.web.forwarder.vendors.list') }}"><i class="fa fa-circle-o"></i> Forwarder Vendors</a>
@@ -648,7 +648,7 @@
                         <a href="{{ route('get.web.clearing.agent.vendors.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Vendors</a>
                     </li>
                     <li class="{{ in_array($currentRoute, ['get.web.clearing.agent.products.list','get.web.clearing.agent.products.show']) ? 'active' : '' }}">
-                        <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Products</a>
+                        <a href="{{ route('get.web.clearing.agent.products.list') }}"><i class="fa fa-circle-o"></i> Clearing Agent Charges</a>
                     </li>
                     <li class="{{ $currentRoute === 'get.web.forwarder.vendors.list' ? 'active' : '' }}">
                         <a href="{{ route('get.web.forwarder.vendors.list') }}"><i class="fa fa-circle-o"></i> Forwarder Vendors</a>

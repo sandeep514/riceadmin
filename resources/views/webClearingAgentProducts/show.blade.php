@@ -4,13 +4,13 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Clearing Agent Product
+            Clearing Agent Charges
             <small>Review</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li>Service Providers</li>
-            <li><a href="{{ route('get.web.clearing.agent.products.list') }}">Clearing Agent</a></li>
+            <li><a href="{{ route('get.web.clearing.agent.products.list') }}">Clearing Agent Charges</a></li>
             <li class="active">View</li>
         </ol>
     </section>

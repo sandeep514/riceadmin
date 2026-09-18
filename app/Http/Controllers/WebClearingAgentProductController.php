@@ -144,12 +144,12 @@ class WebClearingAgentProductController extends Controller
     {
         $result = $this->service->toggleStatus((int) $id, $request->input('reason'));
         if ($result === false) {
-            Session::flash('error', 'Error|Clearing agent product not found.');
+            Session::flash('error', 'Error|Clearing agent charges not found.');
 
             return back();
         }
         if (! empty($result['missing_reason'])) {
-            Session::flash('error', 'Error|Please provide a reason to de-activate this product.');
+            Session::flash('error', 'Error|Please provide a reason to de-activate these charges.');
 
             return back();
         }
@@ -157,8 +157,8 @@ class WebClearingAgentProductController extends Controller
         Session::flash(
             'success',
             ! empty($result['deactivated'])
-                ? 'Success|Product de-activated and vendor notified.'
-                : 'Success|Product verified successfully.'
+                ? 'Success|Charges de-activated and vendor notified.'
+                : 'Success|Charges verified successfully.'
         );
 
         return back();

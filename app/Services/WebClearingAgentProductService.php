@@ -61,7 +61,7 @@ class WebClearingAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Clearing agent product saved successfully.',
+            'message' => 'Clearing agent charges saved successfully.',
             'data' => $this->serializeProduct($product),
         ], 200);
     }
@@ -93,7 +93,7 @@ class WebClearingAgentProductService
         if ($product === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Clearing agent product not found.',
+                'message' => 'Clearing agent charges not found.',
             ], 404);
         }
 
@@ -124,7 +124,7 @@ class WebClearingAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Clearing agent product updated successfully.',
+            'message' => 'Clearing agent charges updated successfully.',
             'data' => $this->serializeProduct($product),
         ], 200);
     }
@@ -147,7 +147,7 @@ class WebClearingAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Clearing agent products fetched successfully.',
+            'message' => 'Clearing agent charges fetched successfully.',
             'data' => $products,
         ], 200);
     }
@@ -165,7 +165,7 @@ class WebClearingAgentProductService
         if ($product === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Clearing agent product not found.',
+                'message' => 'Clearing agent charges not found.',
             ], 404);
         }
 
@@ -175,7 +175,7 @@ class WebClearingAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Clearing agent product fetched successfully.',
+            'message' => 'Clearing agent charges fetched successfully.',
             'data' => $this->serializeProduct($product),
         ], 200);
     }
@@ -186,7 +186,7 @@ class WebClearingAgentProductService
         if ($product === null) {
             return response()->json([
                 'status' => false,
-                'message' => 'Clearing agent product not found.',
+                'message' => 'Clearing agent charges not found.',
             ], 404);
         }
 
@@ -198,7 +198,7 @@ class WebClearingAgentProductService
 
         return response()->json([
             'status' => true,
-            'message' => 'Clearing agent product deleted successfully.',
+            'message' => 'Clearing agent charges deleted successfully.',
         ], 200);
     }
 

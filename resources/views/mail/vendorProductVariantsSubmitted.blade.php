@@ -7,17 +7,17 @@
         <p style="font-size:1.1em">Hi,</p>
         <p>
             @if(!empty($data['isCreate']))
-                A vendor has submitted a new <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product with variants.
+                A vendor has submitted a new <strong>{{ $data['itemPhrase'] ?? (($data['productKind'] ?? 'vendor').' product') }}</strong> with variants.
             @elseif(!empty($data['isVariantsAdded']))
-                A vendor has added new variants to an existing <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product.
+                A vendor has added new variants to an existing <strong>{{ $data['itemPhrase'] ?? (($data['productKind'] ?? 'vendor').' product') }}</strong>.
             @else
-                A vendor has updated an existing <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product.
+                A vendor has updated an existing <strong>{{ $data['itemPhrase'] ?? (($data['productKind'] ?? 'vendor').' product') }}</strong>.
             @endif
             Please review it from the admin panel.
         </p>
 
         <p><strong>Product details</strong><br>
-            Product: {{ $data['productKind'] ?? '—' }}<br>
+            Product: {{ $data['itemPhrase'] ?? ($data['productKind'] ?? '—') }}<br>
             Product ID: {{ $data['productId'] ?? '—' }}<br>
             Type: {{ $data['typeLabel'] ?? '—' }}<br>
             Status: {{ $data['statusLabel'] ?? 'Pending' }}<br>

@@ -127,12 +127,14 @@ class VendorProductAdminNotificationService
         $isUpdate = $action === self::ACTION_UPDATED;
         $isVariantsAdded = $action === self::ACTION_VARIANTS_ADDED;
         $productLabel = $meta['label'];
+        $itemPhrase = $this->itemPhrase($meta);
 
         $mailData = [
             'isCreate' => $isCreate,
             'isUpdate' => $isUpdate,
             'isVariantsAdded' => $isVariantsAdded,
             'productKind' => $productLabel,
+            'itemPhrase' => $itemPhrase,
             'productId' => (int) $product->id,
             'typeLabel' => $typeLabel ?: $this->resolveTypeLabel($kind, $product),
             'specification' => $product->specification ?? null,
@@ -150,11 +152,11 @@ class VendorProductAdminNotificationService
         ];
 
         if ($isCreate) {
-            $subject = 'New '.$productLabel.' product submitted – #'.$product->id;
+            $subject = 'New '.$itemPhrase.' submitted – #'.$product->id;
         } elseif ($isVariantsAdded) {
             $subject = 'New '.$productLabel.' variants added – #'.$product->id;
         } else {
-            $subject = $productLabel.' product updated – #'.$product->id;
+            $subject = $itemPhrase.' updated – #'.$product->id;
         }
 
         MailController::sendVendorProductVariantsMail(
@@ -176,12 +178,14 @@ class VendorProductAdminNotificationService
             : null;
 
         $productLabel = $meta['label'];
+        $itemPhrase = $this->itemPhrase($meta);
         $typeResolved = $typeLabel ?: $this->resolveTypeLabel($kind, $product);
         $userName = $user->name ?? ($business->company_name ?? 'Vendor');
         $mailTo = $user->email ?? ($business->registered_email ?? null);
 
         $mailData = [
             'productKind' => $productLabel,
+            'itemPhrase' => $itemPhrase,
             'productId' => (int) $product->id,
             'typeLabel' => $typeResolved,
             'specification' => $product->specification ?? null,
@@ -194,9 +198,9 @@ class VendorProductAdminNotificationService
             'acceptedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
         ];
 
-        $subject = 'Your '.$productLabel.' product has been accepted – #'.$product->id;
-        $socketTitle = $productLabel.' product accepted';
-        $socketMessage = 'Your '.$productLabel.' product #'.$product->id
+        $subject = 'Your '.$itemPhrase.' has been accepted – #'.$product->id;
+        $socketTitle = $itemPhrase.' accepted';
+        $socketMessage = 'Your '.$itemPhrase.' #'.$product->id
             .($typeResolved !== '—' ? ' ('.$typeResolved.')' : '')
             .' has been approved by SNTC.';
 
@@ -237,11 +241,13 @@ class VendorProductAdminNotificationService
 
         $mailTo = $user->email ?? ($business->registered_email ?? null);
         $productLabel = $meta['label'];
+        $itemPhrase = $this->itemPhrase($meta);
         $typeResolved = $typeLabel ?: $this->resolveTypeLabel($kind, $product);
         $reason = trim($reason);
 
         $mailData = [
             'productKind' => $productLabel,
+            'itemPhrase' => $itemPhrase,
             'productId' => (int) $product->id,
             'typeLabel' => $typeResolved,
             'reason' => $reason,
@@ -252,9 +258,9 @@ class VendorProductAdminNotificationService
             'deactivatedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
         ];
 
-        $subject = 'Your '.$productLabel.' product has been de-activated – #'.$product->id;
-        $socketTitle = $productLabel.' product de-activated';
-        $socketMessage = 'Your '.$productLabel.' product #'.$product->id.' has been de-activated.'
+        $subject = 'Your '.$itemPhrase.' has been de-activated – #'.$product->id;
+        $socketTitle = $itemPhrase.' de-activated';
+        $socketMessage = 'Your '.$itemPhrase.' #'.$product->id.' has been de-activated.'
             .($reason !== '' ? ' Reason: '.$reason : '');
 
         if (is_string($mailTo) && trim($mailTo) !== '') {
@@ -295,11 +301,13 @@ class VendorProductAdminNotificationService
 
         $mailTo = $user->email ?? ($business->registered_email ?? null);
         $productLabel = $meta['label'];
+        $itemPhrase = $this->itemPhrase($meta);
         $typeResolved = $typeLabel ?: $this->resolveTypeLabel($kind, $product);
         $message = trim($message);
 
         $mailData = [
             'productKind' => $productLabel,
+            'itemPhrase' => $itemPhrase,
             'productId' => (int) $product->id,
             'typeLabel' => $typeResolved,
             'message' => $message,
@@ -310,9 +318,9 @@ class VendorProductAdminNotificationService
             'sentAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
         ];
 
-        $subject = 'Update needed on your '.$productLabel.' product – #'.$product->id;
-        $socketTitle = 'Update needed on your '.$productLabel.' product';
-        $socketMessage = 'SNTC needs an update on your '.$productLabel.' product #'.$product->id.'.'
+        $subject = 'Update needed on your '.$itemPhrase.' – #'.$product->id;
+        $socketTitle = 'Update needed on your '.$itemPhrase;
+        $socketMessage = 'SNTC needs an update on your '.$itemPhrase.' #'.$product->id.'.'
             .($message !== '' ? ' Message: '.$message : '');
 
         if (is_string($mailTo) && trim($mailTo) !== '') {
@@ -399,6 +407,7 @@ class VendorProductAdminNotificationService
             ],
             'clearing_agent', 'cleaning_agent' => [
                 'label' => 'Clearing agent',
+                'noun' => 'charges',
                 'showRoute' => 'get.web.clearing.agent.products.show',
             ],
             'forwarder' => [
@@ -410,6 +419,14 @@ class VendorProductAdminNotificationService
                 'showRoute' => null,
             ],
         };
+    }
+
+    /**
+     * @param  array{label: string, noun?: string, showRoute?: string|null}  $meta
+     */
+    private function itemPhrase(array $meta): string
+    {
+        return trim(($meta['label'] ?? 'Vendor').' '.($meta['noun'] ?? 'product'));
     }
 
     private function resolveTypeLabel(string $kind, Model $product): string

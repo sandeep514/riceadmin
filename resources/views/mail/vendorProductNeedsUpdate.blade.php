@@ -7,11 +7,11 @@
         <p style="font-size:1.1em">Dear {{ $data['userName'] ?? 'Vendor' }},</p>
         <p>
             The SNTC team needs an update on your
-            <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product before it can stay visible on the platform.
+            <strong>{{ $data['itemPhrase'] ?? (($data['productKind'] ?? 'vendor').' product') }}</strong> before it can stay visible on the platform.
         </p>
 
         <p><strong>Product details</strong><br>
-            Product: {{ $data['productKind'] ?? '—' }}<br>
+            Product: {{ $data['itemPhrase'] ?? ($data['productKind'] ?? '—') }}<br>
             Product ID: {{ $data['productId'] ?? '—' }}<br>
             Type: {{ $data['typeLabel'] ?? '—' }}<br>
             @if(!empty($data['companyName']))

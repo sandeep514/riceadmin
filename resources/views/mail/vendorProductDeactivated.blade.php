@@ -6,12 +6,12 @@
 
         <p style="font-size:1.1em">Dear {{ $data['userName'] ?? 'Vendor' }},</p>
         <p>
-            Your <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product has been
+            Your <strong>{{ $data['itemPhrase'] ?? (($data['productKind'] ?? 'vendor').' product') }}</strong> has been
             <strong>de-activated</strong> by the SNTC team and is no longer visible on the platform.
         </p>
 
         <p><strong>Product details</strong><br>
-            Product: {{ $data['productKind'] ?? '—' }}<br>
+            Product: {{ $data['itemPhrase'] ?? ($data['productKind'] ?? '—') }}<br>
             Product ID: {{ $data['productId'] ?? '—' }}<br>
             Type: {{ $data['typeLabel'] ?? '—' }}<br>
             Status: De-activated<br>

@@ -15,6 +15,10 @@ return [
 
     'default' => env('QUEUE_CONNECTION', 'sync'),
 
+    // Admin push + portal FCM jobs. Must not be sync in production or PHP-FPM sends FCM inline.
+    // Worker: php artisan queue:work --queue=notifications,default
+    'push_notification_queue' => env('PUSH_NOTIFICATION_QUEUE', 'notifications'),
+
     // Notification fan-out batch size for web trade notifications.
     'trade_web_notification_chunk_size' => env('TRADE_WEB_NOTIFICATION_CHUNK_SIZE', 500),
 

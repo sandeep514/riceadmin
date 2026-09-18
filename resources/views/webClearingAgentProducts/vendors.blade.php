@@ -20,7 +20,7 @@
                 <h3 class="box-title">Vendors registered as clearing agents</h3>
                 <div class="pull-right">
                     <a href="{{ route('get.web.clearing.agent.products.list') }}" class="btn btn-primary btn-sm">
-                        Clearing Agent Products
+                        Clearing Agent Charges
                     </a>
                 </div>
             </div>
@@ -33,7 +33,7 @@
                         <th>Company</th>
                         <th>Category</th>
                         <th>Contact</th>
-                        <th>Products</th>
+                        <th>Charges</th>
                         <th>Listing</th>
                         <th>SNTC Recommended</th>
                         <th>Status</th>
@@ -99,7 +99,7 @@
                             </td>
                             <td style="white-space:nowrap;">
                                 <a href="{{ route('view.user', $vendor->id) }}" class="btn btn-info btn-xs">View user</a>
-                                <a href="{{ route('get.web.clearing.agent.products.list') }}" class="btn btn-primary btn-xs">Products</a>
+                                <a href="{{ route('get.web.clearing.agent.products.list') }}" class="btn btn-primary btn-xs">Charges</a>
                             </td>
                         </tr>
                     @empty

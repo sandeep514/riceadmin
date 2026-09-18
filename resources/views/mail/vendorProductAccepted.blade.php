@@ -6,12 +6,12 @@
 
         <p style="font-size:1.1em">Dear {{ $data['userName'] ?? 'Vendor' }},</p>
         <p>
-            Your <strong>{{ $data['productKind'] ?? 'vendor' }}</strong> product has been reviewed and
+            Your <strong>{{ $data['itemPhrase'] ?? (($data['productKind'] ?? 'vendor').' product') }}</strong> has been reviewed and
             <strong>accepted</strong> by the SNTC team. It is now live on the platform.
         </p>
 
         <p><strong>Product details</strong><br>
-            Product: {{ $data['productKind'] ?? '—' }}<br>
+            Product: {{ $data['itemPhrase'] ?? ($data['productKind'] ?? '—') }}<br>
             Product ID: {{ $data['productId'] ?? '—' }}<br>
             Type: {{ $data['typeLabel'] ?? '—' }}<br>
             Status: {{ $data['statusLabel'] ?? 'Active' }}<br>

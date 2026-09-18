@@ -54,6 +54,11 @@ class SendPushNotificationJob implements ShouldQueue
                 $this->title.'|'.$this->body.'|'.$this->userAppType.'|'.implode(',', $userIds)
             );
         }
+
+        $queue = (string) config('queue.push_notification_queue', 'notifications');
+        if ($queue !== '') {
+            $this->onQueue($queue);
+        }
     }
 
     /**

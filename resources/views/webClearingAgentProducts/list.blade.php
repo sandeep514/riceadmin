@@ -4,13 +4,13 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Clearing Agent Products
+            Clearing Agent Charges
             <small>Review &amp; verify</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
             <li>Service Providers</li>
-            <li class="active">Clearing Agent Products</li>
+            <li class="active">Clearing Agent Charges</li>
         </ol>
     </section>
 
@@ -71,7 +71,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center text-muted">No clearing agent products yet.</td>
+                            <td colspan="8" class="text-center text-muted">No clearing agent charges yet.</td>
                         </tr>
                     @endforelse
                     </tbody>

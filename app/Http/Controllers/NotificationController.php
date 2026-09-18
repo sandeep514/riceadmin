@@ -45,38 +45,37 @@ class NotificationController extends Controller
         $chunkSize = 500;
 
         foreach ($appTypes as $userAppType) {
-            if ($userAppType === 'usd') {
-                $users = User::query()
-                    ->whereIn('usd_role', $request->userType)
-                    ->where('id', '!=', 301)
-                    ->whereNotNull('user_token')
-                    ->select('user_token', 'id')
-                    ->get();
-            } else {
-                $users = User::query()
-                    ->whereIn('role', $request->userType)
-                    ->where('id', '!=', 301)
-                    ->whereNotNull('user_token')
-                    ->select('user_token', 'id')
-                    ->get();
-            }
+            $this->pushRecipientQuery($userAppType, $request->userType)
+                ->orderBy('id')
+                ->chunkById($chunkSize, function ($users) use (
+                    $request,
+                    $userAppType,
+                    &$totalUsers,
+                    &$chunkCount
+                ) {
+                    $chunk = $users
+                        ->map(static fn ($user) => [
+                            'id' => (int) $user->id,
+                            'user_token' => (string) $user->user_token,
+                        ])
+                        ->filter(static fn ($row) => $row['id'] > 0 && $row['user_token'] !== '')
+                        ->values()
+                        ->all();
 
-            if ($users->isEmpty()) {
-                continue;
-            }
+                    if ($chunk === []) {
+                        return;
+                    }
 
-            $totalUsers += $users->count();
-            $chunked = array_chunk($users->toArray(), $chunkSize);
+                    SendPushNotificationJob::dispatch(
+                        $request->title,
+                        $request->message,
+                        $chunk,
+                        $userAppType
+                    )->delay(now()->addSeconds($chunkCount * 2));
 
-            foreach ($chunked as $chunk) {
-                SendPushNotificationJob::dispatch(
-                    $request->title,
-                    $request->message,
-                    $chunk,
-                    $userAppType
-                );
-                $chunkCount++;
-            }
+                    $totalUsers += count($chunk);
+                    $chunkCount++;
+                });
         }
 
         if ($totalUsers === 0) {
@@ -86,6 +85,28 @@ class NotificationController extends Controller
         $message = "Notification queued for {$totalUsers} users in {$chunkCount} batch(es).";
 
         return back()->with('message', $message);
+    }
+
+    /**
+     * Recipients for the old admin Push Notification screen (id + FCM token only).
+     *
+     * @param  array<int|string>  $userTypes
+     */
+    private function pushRecipientQuery(string $userAppType, array $userTypes)
+    {
+        $query = User::query()
+            ->select('id', 'user_token')
+            ->where('id', '!=', 301)
+            ->whereNotNull('user_token')
+            ->where('user_token', '!=', '');
+
+        if ($userAppType === 'usd') {
+            $query->whereIn('usd_role', $userTypes);
+        } else {
+            $query->whereIn('role', $userTypes);
+        }
+
+        return $query;
     }
 
     // public function sendNotif($title, $message, $token, $payload = null)
