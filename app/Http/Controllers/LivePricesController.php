@@ -80,7 +80,7 @@ class LivePricesController extends Controller
 
          // today's prices for this rice
         $today_price = LivePrice::query()
-            ->whereBetween('created_at', $this->livePriceDayBounds(Carbon::now()->format('Y-m-d')))
+            ->onCreatedDay(Carbon::now())
             ->first();
 
 
@@ -119,7 +119,7 @@ class LivePricesController extends Controller
 
                 $lastPrices = LivePrice::where('name', $riceName)
                     ->with(['form_rel','name_rel'])
-                    ->whereBetween('created_at', $this->livePriceDayBounds($lastAvailableDate))
+                    ->onCreatedDay($lastAvailableDate)
                     ->orderBy('updated_at', 'DESC')
                     ->orderBy('id', 'DESC')
                     ->get();
@@ -222,7 +222,7 @@ class LivePricesController extends Controller
             $lastUpdatedPrice = $lastAvailableDate === ''
                 ? collect()
                 : LivePrice::query()
-                    ->whereBetween('created_at', $this->livePriceDayBounds($lastAvailableDate))
+                    ->onCreatedDay($lastAvailableDate)
                     ->get();
 
             if( $lastUpdatedPrice->count() > 0 ){
@@ -313,12 +313,11 @@ class LivePricesController extends Controller
         //     }
         // }
         
-        $todayBounds = $this->livePriceDayBounds($todayDate);
         foreach($sortedStateData as $k => $v){
-            LivePrice::where('state' , $v)->whereBetween('created_at', $todayBounds)->update(['state_order' => $k]);
+            LivePrice::where('state' , $v)->onCreatedDay($todayDate)->update(['state_order' => $k]);
         }
         foreach($sortedNameData as $k => $v){
-            LivePrice::where('name' , $v)->whereBetween('created_at', $todayBounds)->update(['name_order' => $k]);
+            LivePrice::where('name' , $v)->onCreatedDay($todayDate)->update(['name_order' => $k]);
         }
 
         
@@ -372,7 +371,7 @@ class LivePricesController extends Controller
                 'name'      => $name,
                 'form'      => $form,
                 'state'     => $state
-            ])->whereDate('created_at' , $todayDate);
+            ])->onCreatedDay($todayDate);
 
         $previousRow = $livePrices
             ->orderBy('updated_at', 'desc')
@@ -612,18 +611,6 @@ class LivePricesController extends Controller
     // }
 
     /**
-     * Inclusive IST calendar-day bounds for live_prices.created_at (index-friendly).
-     *
-     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
-     */
-    private function livePriceDayBounds(string $date): array
-    {
-        $day = Carbon::parse($date, config('app.timezone', 'Asia/Kolkata'));
-
-        return [$day->copy()->startOfDay(), $day->copy()->endOfDay()];
-    }
-
-    /**
      * Latest row per state|form for one rice name on a calendar day.
      *
      * @return array<string, LivePrice>
@@ -632,7 +619,7 @@ class LivePricesController extends Controller
     {
         $rows = LivePrice::query()
             ->where('name', $name)
-            ->whereBetween('created_at', $this->livePriceDayBounds($date))
+            ->onCreatedDay($date)
             ->orderBy('id')
             ->get();
 

@@ -60,7 +60,7 @@ class LivePricesExport implements FromCollection, WithHeadings, WithStyles
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->whereDate('created_at', '<', $lastRecord->created_at->format('Y-m-d'))
+                ->createdBeforeDay($lastRecord->created_at)
                 ->latest()
                 ->first();
 
@@ -93,11 +93,8 @@ class LivePricesExport implements FromCollection, WithHeadings, WithStyles
                             ->whereRaw('DATEDIFF(live_prices.created_at,lm.created_at)=30')
                             ->limit(1);
                     }, 'last_month_price_change')
-                    ->whereIn(
-                        DB::raw('date(created_at)'),
-                        [$lastRecord->created_at->format('Y-m-d')]
-                        // [$lastRecord->created_at->format('Y-m-d'), $lastToLastDate->created_at->format('Y-m-d')]
-                    )->where('status' , 1)
+                    ->onCreatedDay($lastRecord->created_at)
+                    ->where('status' , 1)
                     ->get();
 
 

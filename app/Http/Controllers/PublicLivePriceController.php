@@ -87,9 +87,10 @@ class PublicLivePriceController extends Controller
             ];
         }
 
-        $latestAt = Carbon::parse($lastRecord->created_at)
-            ->timezone(config('app.timezone', 'Asia/Kolkata'));
+        $latestAt = Carbon::parse($lastRecord->created_at, LivePrice::TIMEZONE)
+            ->timezone(LivePrice::TIMEZONE);
         $latestDateTime = $latestAt->format('Y-m-d H:i:s');
+        [$dayStart, $dayNext] = LivePrice::createdAtDayRange($latestAt);
 
         $rows = LivePrice::query()
             ->with([
@@ -103,10 +104,8 @@ class PublicLivePriceController extends Controller
             ->where('live_prices.form', '!=', '0')
             ->whereNotNull('live_prices.min_price')
             ->whereNotNull('live_prices.max_price')
-            ->whereBetween('live_prices.created_at', [
-                $latestAt->copy()->startOfDay(),
-                $latestAt->copy()->endOfDay(),
-            ])
+            ->where('live_prices.created_at', '>=', $dayStart)
+            ->where('live_prices.created_at', '<', $dayNext)
             ->when($stateFilter, fn ($q) => $q->where('live_prices.state', $stateFilter))
             ->when($cropYear !== null && $cropYear !== '', function ($q) use ($cropYear) {
                 $q->where(function ($inner) use ($cropYear) {

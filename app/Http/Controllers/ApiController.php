@@ -826,7 +826,7 @@ class ApiController extends Controller
                 }
             ])->where('state', $state)->get();
 
-            $lastToLastDate = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->whereDate('created_at', '<', $lastRecord->created_at->format('Y-m-d'))->get();
+            $lastToLastDate = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->createdBeforeDay($lastRecord->created_at)->get();
 
             if (!$lastToLastDate->isEmpty()) {
                 $pricesprevious = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
@@ -836,10 +836,7 @@ class ApiController extends Controller
                     'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
-                ])->where(['state' => $state])->where(
-                    DB::raw('date(created_at)'),
-                    $lastToLastDate[0]->created_at->format('Y-m-d')
-                )->get();
+                ])->where(['state' => $state])->onCreatedDay($lastToLastDate[0]->created_at)->get();
 
                 $data = LivePrice::where('min_price', '!=', null)->where('max_price', '!=', null)->with([
                     'name_rel' => function ($query) {
@@ -849,13 +846,12 @@ class ApiController extends Controller
                     'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
-                ])->where(['state' => $state])->where(
-                    DB::raw('date(created_at)'),
-                    $lastRecord->created_at->format('Y-m-d')
-                )->orWhere(
-                    DB::raw('date(created_at)'),
-                    $lastToLastDate[0]->created_at->format('Y-m-d')
-                )->get();
+                ])->where(['state' => $state])->where(function ($q) use ($lastRecord, $lastToLastDate) {
+                    LivePrice::applyCreatedAtDay($q, $lastRecord->created_at);
+                    $q->orWhere(function ($inner) use ($lastToLastDate) {
+                        LivePrice::applyCreatedAtDay($inner, $lastToLastDate[0]->created_at);
+                    });
+                })->get();
 
                 foreach ($data->sortBy('name_rel.order') as $k => $v) {
                     if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
@@ -1011,10 +1007,7 @@ class ApiController extends Controller
                 'form_rel' => function ($query) use ($ricetype) {
                     return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                 }
-            ])->where(['state' => $state])->where(
-                DB::raw('date(created_at)'),
-                Carbon::now()->format('Y-m-d')
-            )->get();
+            ])->where(['state' => $state])->onCreatedDay(Carbon::now())->get();
 
             foreach ($data as $k => $v) {
                 if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
@@ -1063,7 +1056,7 @@ class ApiController extends Controller
                 ->where('form', '!=', '0')
                 ->whereNotNull('min_price')
                 ->whereNotNull('max_price')
-                ->whereDate('created_at', '<', $lastRecord->created_at->format('Y-m-d'))
+                ->createdBeforeDay($lastRecord->created_at)
                 ->latest()
                 ->first();
 
@@ -1080,12 +1073,15 @@ class ApiController extends Controller
                         }
                     }   
                     // dd($customDate);
-                    $lastEnteredRecordOfDate = LivePrice::select(DB::raw('DATE(created_at) as created_date'))
-                            ->whereDate('created_at','<=', $customDate)
-                            ->distinct()
-                            ->orderBy('created_date', 'desc')
-                            ->limit(3)
-                            ->pluck('created_date');
+                    $lastEnteredRecordOfDate = LivePrice::query()
+                            ->createdOnOrBeforeDay($customDate)
+                            ->orderByDesc('created_at')
+                            ->limit(200)
+                            ->pluck('created_at')
+                            ->map(fn ($at) => LivePrice::dayStart($at)->format('Y-m-d'))
+                            ->unique()
+                            ->take(3)
+                            ->values();
 
                     // dd($lastEnteredRecordOfDate);
                     $recordDate = $customDate;
@@ -1106,7 +1102,7 @@ class ApiController extends Controller
                         ->whereNotNull('min_price')
                         ->whereNotNull('max_price')
                         ->where(['state' => $state])
-                        ->whereBetween('created_at', $this->livePriceCreatedAtDayBounds($recordDate))
+                        ->onCreatedDay($recordDate)
                         ->get();
                     $data = $this->attachLivePriceTradeCounts($data);
 
@@ -1134,8 +1130,10 @@ class ApiController extends Controller
                         ->whereNotNull('max_price')
                         ->where(['state' => $state])
                         ->where(function ($q) use ($lastRecord, $lastToLastDate) {
-                            $q->whereBetween('created_at', $this->livePriceCreatedAtDayBounds($lastRecord->created_at->format('Y-m-d')))
-                                ->orWhereBetween('created_at', $this->livePriceCreatedAtDayBounds($lastToLastDate->created_at->format('Y-m-d')));
+                            LivePrice::applyCreatedAtDay($q, $lastRecord->created_at);
+                            $q->orWhere(function ($inner) use ($lastToLastDate) {
+                                LivePrice::applyCreatedAtDay($inner, $lastToLastDate->created_at);
+                            });
                         })
                         ->get();
                     $data = $this->attachLivePriceTradeCounts($data);     
@@ -1280,7 +1278,7 @@ class ApiController extends Controller
                     'form_rel' => fn($q) => $q->orderBy('id', "ASC")->where('type', $ricetype)
                 ])
                 ->where(['state' => $state])
-                ->whereBetween('created_at', $this->livePriceCreatedAtDayBounds(now()->format('Y-m-d')))
+                ->onCreatedDay(now())
                 ->get();
             $data = $this->attachLivePriceTradeCounts($data);
 
@@ -1332,20 +1330,20 @@ class ApiController extends Controller
             ->first(['id', 'updated_at']);
 
         if ($lastRecord) {
-            $latestDate = Carbon::parse($lastRecord->updated_at)->format('Y-m-d');
-            $latestStart = Carbon::parse($latestDate)->startOfDay();
-            $latestEnd = Carbon::parse($latestDate)->endOfDay();
+            $latestDate = LivePrice::dayStart($lastRecord->updated_at)->format('Y-m-d');
+            $latestStart = LivePrice::istDateTime(LivePrice::dayStart($latestDate));
 
             $previousUpdatedAt = $livePriceBaseQuery()
                 ->where('updated_at', '<', $latestStart)
                 ->max('updated_at');
             $previousDate = $previousUpdatedAt
-                ? Carbon::parse($previousUpdatedAt)->format('Y-m-d')
+                ? LivePrice::dayStart($previousUpdatedAt)->format('Y-m-d')
                 : null;
 
             $rangeStart = $previousDate
-                ? Carbon::parse($previousDate)->startOfDay()
+                ? LivePrice::istDateTime(LivePrice::dayStart($previousDate))
                 : $latestStart;
+            $latestNext = LivePrice::istDateTime(LivePrice::dayStart($latestDate)->addDay());
 
             $nameIds = RiceName::query()->where('type', $ricetype)->pluck('id');
             $formIds = RiceForm::query()->where('type', $ricetype)->where('status', 1)->pluck('id');
@@ -1362,7 +1360,8 @@ class ApiController extends Controller
                     ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear))
                     ->whereIn('name', $nameIds)
                     ->whereIn('form', $formIds)
-                    ->whereBetween('updated_at', [$rangeStart, $latestEnd])
+                    ->where('updated_at', '>=', $rangeStart)
+                    ->where('updated_at', '<', $latestNext)
                     ->groupBy('name', 'form');
 
                 $data = LivePrice::query()
@@ -2095,8 +2094,7 @@ class ApiController extends Controller
         $month = $todayDate->month;
 
         $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
-        $lastEnteredStart = Carbon::parse($lastEnteredRecord)->startOfDay();
-        $lastEnteredEnd = Carbon::parse($lastEnteredRecord)->endOfDay();
+        [$lastEnteredStart, $lastEnteredNext] = LivePrice::createdAtDayRange($lastEnteredRecord);
 
         $lastRecord = LivePrice::query()
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
@@ -2108,7 +2106,8 @@ class ApiController extends Controller
             ->where('live_prices.min_price', '>', 0)
             ->where('live_prices.max_price', '>', 0)
             ->where('live_prices.state', $state)
-            ->whereBetween('live_prices.created_at', [$lastEnteredStart, $lastEnteredEnd])
+            ->where('live_prices.created_at', '>=', $lastEnteredStart)
+            ->where('live_prices.created_at', '<', $lastEnteredNext)
             ->where('live_prices.cropYear', $cropYear)
             ->where('rn.type', $ricetype)
             ->where('rf.type', $ricetype)
@@ -2168,15 +2167,15 @@ class ApiController extends Controller
 
         $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
 
-        $priceDayStart = Carbon::parse($lastEnteredRecord->created_at)->startOfDay();
-        $priceDayEnd = Carbon::parse($lastEnteredRecord->created_at)->endOfDay();
+        [$priceDayStart, $priceDayNext] = LivePrice::createdAtDayRange($lastEnteredRecord->created_at);
         $latestPriceIdsForDate = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->where('state', $state)
             ->where('cropYear', $cropYear)
-            ->whereBetween('created_at', [$priceDayStart, $priceDayEnd])
+            ->where('created_at', '>=', $priceDayStart)
+            ->where('created_at', '<', $priceDayNext)
             ->groupBy('name', 'form', 'state', 'cropYear');
 
         $data = LivePrice::query()
@@ -2595,7 +2594,7 @@ class ApiController extends Controller
                 ->where(function ($q) use ($year) {
                     $this->applyLivePriceCropYearMatch($q, $year);
                 })
-                ->where('created_at', '<=', Carbon::parse($periodEnd, config('app.timezone', 'Asia/Kolkata'))->endOfDay())
+                ->createdOnOrBeforeDay($periodEnd)
                 ->get();
         } else {
              if( count($explodeTime) > 1 ){
@@ -2605,7 +2604,7 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])
-                    ->whereBetween('created_at', $this->livePriceCreatedAtRangeBounds($periodStart, $periodEnd))
+                    ->createdBetweenDays($periodStart, $periodEnd)
                     ->get();
 
             } else {
@@ -2615,7 +2614,7 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])
-                    ->whereBetween('created_at', $this->livePriceCreatedAtRangeBounds($periodStart, $periodEnd))
+                    ->createdBetweenDays($periodStart, $periodEnd)
                     ->get();
             }
         }
@@ -2798,7 +2797,7 @@ class ApiController extends Controller
             'form_rel' => function ($query) use ($riceType) {
                 return $query->where('type', $riceType)->get();
             }
-        ])->where(['state' => $state])->where(DB::raw('date(created_at)'), '>', $fromDate)->get();
+        ])->where(['state' => $state])->createdAfterDay($fromDate)->get();
 
         foreach ($prices as $k => $v) {
             $created_at[] = $v->created_at->format('y-m-d');
@@ -2867,7 +2866,7 @@ class ApiController extends Controller
                 }
             ])
             ->where(['state' => $state])
-            ->whereBetween('created_at', $this->livePriceCreatedAtRangeBounds($periodStart, $periodEnd))
+            ->createdBetweenDays($periodStart, $periodEnd)
             ->get();
 
         $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices);
@@ -3271,18 +3270,18 @@ class ApiController extends Controller
                     'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC')
                 ])
                 // ->orderBy('id' , 'desc')
-                ->orderBy('state_order' , 'ASC')->whereDate('created_at' , $lastEnteredRecord);
+                ->orderBy('state_order' , 'ASC')->onCreatedDay($lastEnteredRecord);
 
             if (!$livePrice->exists()) {
 
-                $lastToLastDateData = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->whereDate('created_at', '<', $lastEnteredRecord)->first();
+                $lastToLastDateData = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->createdBeforeDay($lastEnteredRecord)->first();
 
                 $livePrice = LivePrice::whereNotNull('min_price')
                     ->whereNotNull('max_price')->orderBy('state_order' , 'ASC')
-                    ->whereDate('created_at' , $lastToLastDateData->created_at->format('Y-m-d'));
+                    ->onCreatedDay($lastToLastDateData->created_at);
             }
         } else {
-            $livePrice = $livePrice->whereDate('created_at', $lastEnteredRecord);
+            $livePrice = $livePrice->onCreatedDay($lastEnteredRecord);
         }
 
         $states = $livePrice->distinct()->pluck('state');
@@ -3351,7 +3350,7 @@ class ApiController extends Controller
                     INNER JOIN rice_names rn
                         ON rn.id = lp2.name AND rn.type = ?
                     INNER JOIN (
-                        SELECT DATE(MAX(lp3.created_at)) AS last_day
+                        SELECT MAX(lp3.created_at) AS last_at
                         FROM live_prices lp3
                         INNER JOIN rice_forms rf3
                             ON rf3.id = lp3.form AND rf3.type = ? AND rf3.status = 1
@@ -3365,9 +3364,9 @@ class ApiController extends Controller
                           AND lp3.max_price > 0
                           AND lp3.cropYear = ?
                           AND lp3.created_at < ?
-                    ) ld ON ld.last_day IS NOT NULL
-                        AND lp2.created_at >= ld.last_day
-                        AND lp2.created_at < DATE_ADD(ld.last_day, INTERVAL 1 DAY)
+                    ) ld ON ld.last_at IS NOT NULL
+                        AND lp2.created_at >= DATE(ld.last_at)
+                        AND lp2.created_at < DATE(ld.last_at) + INTERVAL 1 DAY
                     WHERE lp2.name != '0'
                       AND lp2.form != '0'
                       AND lp2.cropYear = ?
@@ -3609,16 +3608,16 @@ class ApiController extends Controller
                     'form_rel' => fn($q) => $q->where('type', $ricetype)->orderBy('id', 'ASC')
                 ])
                 // ->orderBy('id' , 'desc')
-                ->orderBy('state_order' , 'ASC')->whereDate('created_at' , $lastEnteredRecord);
+                ->orderBy('state_order' , 'ASC')->onCreatedDay($lastEnteredRecord);
 
 
             if (!$livePrice->exists()) {
-                $lastToLastDateData = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->whereDate('created_at', '<', $lastEnteredRecord)->first();
+                $lastToLastDateData = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')->createdBeforeDay($lastEnteredRecord)->first();
 
-                $livePrice = LivePrice::whereNotNull('min_price')->whereNotNull('max_price')->orderBy('state_order' , 'ASC')->whereDate('created_at' , $lastToLastDateData->created_at->format('Y-m-d'));
+                $livePrice = LivePrice::whereNotNull('min_price')->whereNotNull('max_price')->orderBy('state_order' , 'ASC')->onCreatedDay($lastToLastDateData->created_at);
             }
         } else {
-            $livePrice = $livePrice->whereDate('created_at', $lastEnteredRecord);
+            $livePrice = $livePrice->onCreatedDay($lastEnteredRecord);
         }
 
             $states = $livePrice->distinct()->pluck('state')->values()->all();
@@ -4088,7 +4087,7 @@ class ApiController extends Controller
         if ($lastRecord != null) {
             $lastDate = Carbon::parse($lastRecord->created_at)->format('Y-m-d');
 
-            $prices = LivePrice::whereDate('created_at', $lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+            $prices = LivePrice::onCreatedDay($lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
                 'name_rel' => function ($query) {
                     return $query->get();
                 },
@@ -4154,9 +4153,9 @@ class ApiController extends Controller
                 'form_rel' => function ($query) use ($ricetype) {
                     return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                 }
-            ])->where('state', $state)->whereDate('created_at', $lastRecord->created_at->format('Y-m-d'))->get();
+            ])->where('state', $state)->onCreatedDay($lastRecord->created_at)->get();
             $lastToLastDate = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
-                ->whereDate('created_at', '<', $lastRecord->created_at->format('Y-m-d'))->get();
+                ->createdBeforeDay($lastRecord->created_at)->get();
 
             if (!$lastToLastDate->isEmpty()) {
 
@@ -4168,10 +4167,7 @@ class ApiController extends Controller
                     'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
-                ])->where(['state' => $state])->where(
-                    DB::raw('date(created_at)'),
-                    $lastRecord->created_at->format('Y-m-d')
-                )->get();
+                ])->where(['state' => $state])->onCreatedDay($lastRecord->created_at)->get();
 
                 foreach ($data->sortBy('name_rel.order') as $k => $v) {
                     if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
@@ -4314,9 +4310,9 @@ class ApiController extends Controller
                 'form_rel' => function ($query) use ($ricetype) {
                     return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                 }
-            ])->where('state', $state)->whereDate('created_at', $lastRecord->created_at->format('Y-m-d'))->get();
+            ])->where('state', $state)->onCreatedDay($lastRecord->created_at)->get();
             $lastToLastDate = LivePrice::where('name', '!=', '0')->where('form', '!=', '0')->where('min_price', '!=', null)->where('max_price', '!=', null)->orderBy('created_at', 'DESC')
-                ->whereDate('created_at', '<', $lastRecord->created_at->format('Y-m-d'))->get();
+                ->createdBeforeDay($lastRecord->created_at)->get();
 
             if (!$lastToLastDate->isEmpty()) {
 
@@ -4328,10 +4324,7 @@ class ApiController extends Controller
                     'form_rel' => function ($query) use ($ricetype) {
                         return $query->orderBy('id', "ASC")->where('type', $ricetype)->get();
                     }
-                ])->where(['state' => $state])->where(
-                    DB::raw('date(created_at)'),
-                    $lastRecord->created_at->format('Y-m-d')
-                )->get();
+                ])->where(['state' => $state])->onCreatedDay($lastRecord->created_at)->get();
 
                 foreach ($data->sortBy('name_rel.order') as $k => $v) {
                     if ($v->name_rel != null && $v->state != null && $v->form_rel != null) {
@@ -4449,7 +4442,7 @@ class ApiController extends Controller
         if ($lastRecord != null) {
             $lastDate = Carbon::parse($lastRecord->created_at)->format('Y-m-d');
 
-            $prices = LivePrice::whereDate('created_at', $lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
+            $prices = LivePrice::onCreatedDay($lastDate)->where('min_price', '!=', null)->where('max_price', '!=', null)->with([
                 'name_rel' => function ($query) {
                     return $query->get();
                 },
@@ -8683,33 +8676,6 @@ if (!file_exists('uploads')) {
         }
 
         return null;
-    }
-
-    /**
-     * Inclusive IST calendar-day bounds for live_prices.created_at (index-friendly).
-     *
-     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
-     */
-    private function livePriceCreatedAtDayBounds($date): array
-    {
-        $day = Carbon::parse($date, config('app.timezone', 'Asia/Kolkata'));
-
-        return [$day->copy()->startOfDay(), $day->copy()->endOfDay()];
-    }
-
-    /**
-     * Inclusive IST range from start date through end date.
-     *
-     * @return array{0: \Carbon\Carbon, 1: \Carbon\Carbon}
-     */
-    private function livePriceCreatedAtRangeBounds($startDate, $endDate): array
-    {
-        $tz = config('app.timezone', 'Asia/Kolkata');
-
-        return [
-            Carbon::parse($startDate, $tz)->startOfDay(),
-            Carbon::parse($endDate, $tz)->endOfDay(),
-        ];
     }
 
     /**

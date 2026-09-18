@@ -7,12 +7,14 @@ use Carbon\Carbon;
 
 class LivePrice extends Model
 {
+    public const TIMEZONE = 'Asia/Kolkata';
+
     protected $table = 'live_prices';
     protected $fillable = ['name', 'form', 'cropGrade', 'cropYear', 'min_price', 'max_price', 'state', 'up_down', 'state_order','opening','closing','monthStart','monthEnd','is_updated_by_admin', 'status', 'created_at', 'updated_at'];
 
     public function freshTimestamp()
     {
-        return Carbon::now(config('app.timezone', 'Asia/Kolkata'));
+        return Carbon::now(self::TIMEZONE);
     }
 
     public function name_rel()
@@ -66,5 +68,75 @@ class LivePrice extends Model
             ->select('id', 'name', 'form', 'state', 'cropYear', 'opening', 'created_at');
     }
 
-    
+    public static function dayStart($date): Carbon
+    {
+        if ($date instanceof \DateTimeInterface) {
+            return Carbon::instance($date)->timezone(self::TIMEZONE)->startOfDay();
+        }
+
+        return Carbon::parse((string) $date, self::TIMEZONE)->timezone(self::TIMEZONE)->startOfDay();
+    }
+
+    /**
+     * IST wall-clock for MySQL DATETIME compares (no UTC shift).
+     */
+    public static function istDateTime($date): string
+    {
+        if ($date instanceof \DateTimeInterface) {
+            return Carbon::instance($date)->timezone(self::TIMEZONE)->format('Y-m-d H:i:s');
+        }
+
+        return Carbon::parse((string) $date, self::TIMEZONE)->timezone(self::TIMEZONE)->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * Half-open IST day: created_at >= 'Y-m-d 00:00:00' AND created_at < next day.
+     *
+     * @return array{0: string, 1: string}
+     */
+    public static function createdAtDayRange($date): array
+    {
+        $start = self::dayStart($date);
+
+        return [self::istDateTime($start), self::istDateTime($start->copy()->addDay())];
+    }
+
+    public static function applyCreatedAtDay($query, $date, string $column = 'created_at')
+    {
+        [$start, $next] = self::createdAtDayRange($date);
+
+        return $query->where($column, '>=', $start)->where($column, '<', $next);
+    }
+
+    public function scopeOnCreatedDay($query, $date)
+    {
+        return self::applyCreatedAtDay($query, $date);
+    }
+
+    public function scopeCreatedBeforeDay($query, $date)
+    {
+        return $query->where('created_at', '<', self::istDateTime(self::dayStart($date)));
+    }
+
+    public function scopeCreatedOnOrBeforeDay($query, $date)
+    {
+        return $query->where('created_at', '<', self::istDateTime(self::dayStart($date)->addDay()));
+    }
+
+    public function scopeCreatedAfterDay($query, $date)
+    {
+        return $query->where('created_at', '>=', self::istDateTime(self::dayStart($date)->addDay()));
+    }
+
+    public function scopeCreatedFromDay($query, $date)
+    {
+        return $query->where('created_at', '>=', self::istDateTime(self::dayStart($date)));
+    }
+
+    public function scopeCreatedBetweenDays($query, $startDate, $endDate)
+    {
+        return $query
+            ->where('created_at', '>=', self::istDateTime(self::dayStart($startDate)))
+            ->where('created_at', '<', self::istDateTime(self::dayStart($endDate)->addDay()));
+    }
 }

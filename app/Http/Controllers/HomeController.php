@@ -49,12 +49,12 @@ class HomeController extends Controller
     {
         $today = Carbon::today();
 
-        if (LivePrice::whereDate('created_at', $today)->exists()) {
+        if (LivePrice::onCreatedDay($today)->exists()) {
             Session::flash('error', 'Error|Today already has live prices. Clone skipped to avoid duplicates.');
             return back();
         }
 
-        $sourceDate = LivePrice::whereDate('created_at', '<', $today)
+        $sourceDate = LivePrice::createdBeforeDay($today)
             ->orderBy('created_at', 'desc')
             ->value('created_at');
 
@@ -90,7 +90,7 @@ class HomeController extends Controller
 
         LivePrice::query()
             ->select(array_merge(['id'], $columns))
-            ->whereDate('created_at', $sourceDay)
+            ->onCreatedDay($sourceDay)
             ->orderBy('id')
             ->chunkById(500, function ($rows) use ($columns, $now, &$cloned) {
                 $payload = $rows->map(function ($row) use ($columns, $now) {

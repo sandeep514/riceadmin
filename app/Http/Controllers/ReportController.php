@@ -156,10 +156,10 @@ class ReportController extends Controller
         $prefix = $table !== '' ? $table.'.' : '';
 
         if (!empty($from)) {
-            $query->where($prefix.'created_at', '>=', Carbon::parse($from)->startOfDay());
+            $query->where($prefix.'created_at', '>=', LivePrice::istDateTime(LivePrice::dayStart($from)));
         }
         if (!empty($to)) {
-            $query->where($prefix.'created_at', '<=', Carbon::parse($to)->endOfDay());
+            $query->where($prefix.'created_at', '<', LivePrice::istDateTime(LivePrice::dayStart($to)->addDay()));
         }
         if (!empty($cropYear)) {
             $query->where($prefix.'cropYear', (int) $cropYear);
@@ -212,9 +212,8 @@ class ReportController extends Controller
                     ->on('lp.form', '=', 'latest.form')
                     ->on('lp.state', '=', 'latest.state')
                     ->on('lp.created_at', '=', 'latest.max_created')
-                    ->whereRaw('lp.cropYear <=> latest.cropYear')
-                    ->whereRaw('DATE(lp.created_at) = latest.price_date');
+                    ->whereRaw('lp.cropYear <=> latest.cropYear');
             })
-            ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear', DB::raw('DATE(lp.created_at)'));
+            ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear', 'latest.price_date');
     }
 }
