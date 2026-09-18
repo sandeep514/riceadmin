@@ -1329,44 +1329,51 @@ class ApiController extends Controller
         // Latest activity for this state/crop year (admin saves touch updated_at).
         $lastRecord = $livePriceBaseQuery()
             ->orderBy('updated_at', 'desc')
-            ->first();
+            ->first(['id', 'updated_at']);
 
         if ($lastRecord) {
             $latestDate = Carbon::parse($lastRecord->updated_at)->format('Y-m-d');
             $latestStart = Carbon::parse($latestDate)->startOfDay();
             $latestEnd = Carbon::parse($latestDate)->endOfDay();
 
-            $previousDate = $livePriceBaseQuery()
+            $previousUpdatedAt = $livePriceBaseQuery()
                 ->where('updated_at', '<', $latestStart)
-                ->max(DB::raw('DATE(updated_at)'));
+                ->max('updated_at');
+            $previousDate = $previousUpdatedAt
+                ? Carbon::parse($previousUpdatedAt)->format('Y-m-d')
+                : null;
+
+            $rangeStart = $previousDate
+                ? Carbon::parse($previousDate)->startOfDay()
+                : $latestStart;
+
+            $nameIds = RiceName::query()->where('type', $ricetype)->pluck('id');
+            $formIds = RiceForm::query()->where('type', $ricetype)->where('status', 1)->pluck('id');
 
             $closingMap = $this->latestLivePriceClosingMap($state, $cropYear);
 
-            $data = LivePrice::query()
+            $data = collect();
+            if ($nameIds->isNotEmpty() && $formIds->isNotEmpty()) {
+                $latestIdsForWindow = LivePrice::query()
+                    ->selectRaw('MAX(id) as id')
+                    ->whereNotNull('min_price')
+                    ->whereNotNull('max_price')
+                    ->where('state', $state)
+                    ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear))
+                    ->whereIn('name', $nameIds)
+                    ->whereIn('form', $formIds)
+                    ->whereBetween('updated_at', [$rangeStart, $latestEnd])
+                    ->groupBy('name', 'form');
+
+                $data = LivePrice::query()
                     ->with([
                         'name_rel:id,name,type,order',
                         'form_rel:id,form_name,type,order,status',
                     ])
-                    ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
-                    ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
-                    ->select('live_prices.*')
-                    ->whereNotNull('live_prices.min_price')
-                    ->whereNotNull('live_prices.max_price')
-                    ->where('live_prices.state', $state)
-                    ->when($cropYear, fn ($q) => $q->where('live_prices.cropYear', $cropYear))
-                    ->where('rn.type', $ricetype)
-                    ->where('rf.type', $ricetype)
-                    ->where('rf.status', 1)
-                    ->where(function ($q) use ($latestStart, $latestEnd, $previousDate) {
-                        $q->whereBetween('live_prices.updated_at', [$latestStart, $latestEnd]);
-                        if ($previousDate) {
-                            $prevStart = Carbon::parse($previousDate)->startOfDay();
-                            $prevEnd = Carbon::parse($previousDate)->endOfDay();
-                            $q->orWhereBetween('live_prices.updated_at', [$prevStart, $prevEnd]);
-                        }
-                    })
-                    ->orderBy('live_prices.updated_at', 'desc')
+                    ->whereIn('id', $latestIdsForWindow)
+                    ->orderByDesc('updated_at')
                     ->get();
+            }
 
             $data->each(function ($row) use ($closingMap) {
                 $row->closing_data = $closingMap[$this->livePriceTupleKey($row)] ?? null;
