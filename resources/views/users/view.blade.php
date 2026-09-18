@@ -285,16 +285,24 @@
 							<form method="POST" action="{{ route('update.user.business.details.recommended', $user['id']) }}">
 								@csrf
 								<input type="hidden" name="update_field" value="is_sntc_recommended">
-								<input type="hidden" name="is_sntc_recommended" value="0">
-								<div class="checkbox" style="margin-top:0;">
-									<label>
+								<div class="form-group" style="margin-bottom:10px;">
+									<label style="font-weight:normal; margin-right:16px;">
 										<input
-											type="checkbox"
+											type="radio"
 											name="is_sntc_recommended"
 											value="1"
 											{{ ((int) ($businessDetails['is_sntc_recommended'] ?? 0) === 1) ? 'checked' : '' }}
 										>
-										Mark this business as SNTC Recommended
+										Yes
+									</label>
+									<label style="font-weight:normal;">
+										<input
+											type="radio"
+											name="is_sntc_recommended"
+											value="0"
+											{{ ((int) ($businessDetails['is_sntc_recommended'] ?? 0) === 1) ? '' : 'checked' }}
+										>
+										No
 									</label>
 								</div>
 								<button type="submit" class="btn btn-primary btn-sm">Save</button>

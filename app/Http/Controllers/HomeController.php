@@ -12,6 +12,7 @@ use App\QualityMaster;
 use App\Defaultvalue;
 use App\Events\AdminEvent;
 use App\Services\WebPortalNotificationDelivery;
+use App\Services\ServerInsightsService;
 use App\User;
 use Session;
 use Carbon\Carbon;
@@ -28,7 +29,20 @@ class HomeController extends Controller
         $defaultvalue = Defaultvalue::first();
         $chatstatus = ChatStatus::first();
         $defaultMaster = USD_defaultmaster::orderBy('applied_for' , 'DESC')->get();
-        return view('home' , compact('chatstatus' , 'defaultMaster','defaultvalue'));
+        $serverInsights = null;
+        if ((int) (auth()->user()->role ?? 0) === 2) {
+            $serverInsights = app(ServerInsightsService::class)->collect();
+        }
+
+        return view('home' , compact('chatstatus' , 'defaultMaster','defaultvalue', 'serverInsights'));
+    }
+
+    public function serverInsights()
+    {
+        return response()->json([
+            'status' => true,
+            'data' => app(ServerInsightsService::class)->collect(),
+        ]);
     }
 
     public function clonePreviousDayRecord()

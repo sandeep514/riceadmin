@@ -22,6 +22,7 @@ Route::group(['prefix'=>'administrator'], function(){
 
         Route::group(['middleware'=>'admin'], function(){
             Route::get('database/backup/download', ['as' => 'database.backup.download', 'uses' => 'DatabaseBackupController@download']);
+            Route::get('server-insights', ['as' => 'server.insights', 'uses' => 'HomeController@serverInsights']);
 
             Route::get('call/is/active' , ['as' => 'is.active.call' , 'uses' => 'PlanController@isActiveCall']);
             

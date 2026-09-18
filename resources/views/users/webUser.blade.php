@@ -31,6 +31,7 @@
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
                                             <th style="text-align: center">Category </th>
+                                            <th style="text-align: center">SNTC Recommended</th>
                                             <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
                                             <!-- <th style="text-align: center">country</th> -->
@@ -51,6 +52,16 @@
                                                 <td style="text-align: center">{{ ($v->phone)? $v->phone : $v->mobile  }}</td>
 
                                                 <td style="text-align: center">{{ ($v->getWebBusinessDetails != null)?  ( $v->getWebBusinessDetails->getCategoryDetails )? ($v->getWebBusinessDetails->getCategoryDetails->category) : '--' : '--' }}</td>
+                                                <td style="text-align: center">
+                                                    @if($v->getWebBusinessDetails)
+                                                        <x-sntc-recommended-yes-no
+                                                            :user-id="$v->id"
+                                                            :value="$v->getWebBusinessDetails->is_sntc_recommended"
+                                                        />
+                                                    @else
+                                                        —
+                                                    @endif
+                                                </td>
                                                 <td style="text-align: center">
                                                     @if((int) ($v->is_deactivated ?? 0) === 1)
                                                         <span class="label label-danger">Deactivated</span>
@@ -82,6 +93,7 @@
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
                                             <th style="text-align: center">Category </th>
+                                            <th style="text-align: center">SNTC Recommended</th>
                                             <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
                                             <!-- <th style="text-align: center">country</th> -->

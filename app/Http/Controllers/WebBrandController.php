@@ -619,6 +619,9 @@ class WebBrandController extends Controller
                     $query->orWhereIn('user_id', $productOwnerIdList);
                 }
             })
+            ->orderByDesc('is_sntc_recommended')
+            ->orderBy('company_name')
+            ->orderByDesc('id')
             ->get();
 
         $data = $webBusinessDetails->map(function ($row) use ($productOwnerIds) {
@@ -637,6 +640,13 @@ class WebBrandController extends Controller
                     || isset($productOwnerIds[$vendorId]),
             ];
         })->values();
+
+        $data = $data
+            ->sortBy([
+                ['recommended', 'desc'],
+                ['company_name', 'asc'],
+            ])
+            ->values();
 
         return response()->json([
             'status' => true,

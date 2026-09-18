@@ -35,6 +35,7 @@
                         <th>Contact</th>
                         <th>Products</th>
                         <th>Listing</th>
+                        <th>SNTC Recommended</th>
                         <th>Status</th>
                         <th width="180">Action</th>
                     </tr>
@@ -78,6 +79,16 @@
                                 @endif
                             </td>
                             <td>
+                                @if($business)
+                                    <x-sntc-recommended-yes-no
+                                        :user-id="$vendor->id"
+                                        :value="$business->is_sntc_recommended"
+                                    />
+                                @else
+                                    —
+                                @endif
+                            </td>
+                            <td>
                                 @if((int) ($vendor->is_deactivated ?? 0) === 1)
                                     <span class="label label-danger">Deactivated</span>
                                 @elseif((int) ($vendor->is_active_by_admin ?? 0) === 1)
@@ -93,7 +104,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="text-center text-muted">No forwarder vendors found.</td>
+                            <td colspan="10" class="text-center text-muted">No forwarder vendors found.</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -110,7 +121,7 @@
         $('#forwarderVendorsTable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [8] }]
+            columnDefs: [{ orderable: false, targets: [7, 9] }]
         });
     });
 </script>

@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use App\DatabaseBackupLog;
+use App\Services\SqlQueryLogService;
+use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
@@ -39,6 +42,14 @@ class AppServiceProvider extends ServiceProvider
             }
         }
         Schema::defaultStringLength(191);
+
+        DB::listen(function (QueryExecuted $query) {
+            try {
+                app(SqlQueryLogService::class)->logFromAppQuery($query);
+            } catch (\Throwable $e) {
+                // Logging must never break the original request.
+            }
+        });
 
         View::composer('components.header', function ($view) {
             $last = null;

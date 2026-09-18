@@ -43,6 +43,9 @@
 
         <!-- Main content -->
         <section class="content">
+            @if(!empty($serverInsights))
+                @include('home._server_insights')
+            @endif
             <!-- Small boxes (Stat box) -->
             <div class="row">
                 <div class="col-lg-3 col-xs-6">
@@ -266,6 +269,44 @@
                 </div>
             </div>
             <!-- /.row -->
+            @if(!empty($serverInsights))
+                <div class="box box-warning" id="si-log-box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Logged heavy SQL (CPU / slow queries)</h3>
+                        <div class="box-tools pull-right">
+                            <small class="text-muted">App queries ≥ 500ms and MySQL processlist ≥ 2s. Newest first.</small>
+                        </div>
+                    </div>
+                    <div class="box-body table-responsive no-padding">
+                        <table class="table table-striped table-hover" style="margin-bottom:0;">
+                            <thead>
+                                <tr>
+                                    <th>Logged at</th>
+                                    <th>Duration</th>
+                                    <th>CPU %</th>
+                                    <th>Source</th>
+                                    <th>Path</th>
+                                    <th>Query</th>
+                                </tr>
+                            </thead>
+                            <tbody id="si-log-body">
+                                @forelse(($serverInsights['mysql']['query_logs'] ?? []) as $log)
+                                    <tr class="{{ ((int) $log['duration_ms'] >= 2000) ? 'danger' : 'warning' }}">
+                                        <td>{{ $log['created_at'] }}</td>
+                                        <td>{{ $log['duration_sec'] }}s ({{ number_format($log['duration_ms']) }} ms)</td>
+                                        <td>{{ $log['cpu_percent'] !== null ? $log['cpu_percent'].'%' : '—' }}</td>
+                                        <td>{{ $log['source'] }}</td>
+                                        <td>{{ $log['request_path'] ?: ($log['connection'] ?: '—') }}</td>
+                                        <td style="white-space:pre-wrap; max-width:720px; font-family:monospace; font-size:12px;">{{ $log['sql'] }}</td>
+                                    </tr>
+                                @empty
+                                    <tr><td colspan="6" class="text-center text-muted">No heavy SQL logged yet. Slow queries will appear here automatically.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
         </section>
         <!-- /.content -->
     </div>
