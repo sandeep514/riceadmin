@@ -3303,7 +3303,7 @@ class ApiController extends Controller
      */
     private function resolveWebRiceTypeStates(string $ricetype, $yearParam = null): array
     {
-        $cacheKey = 'web_rice_states:v3:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
+        $cacheKey = 'web_rice_states:v4:' . $ricetype . ':' . (string) ($yearParam ?? 'latest');
 
         return Cache::remember($cacheKey, 60, function () use ($ricetype, $yearParam) {
             return $this->computeWebRiceTypeStates($ricetype, $yearParam);
@@ -3312,7 +3312,7 @@ class ApiController extends Controller
 
     /**
      * Ordered unique states for web live-price state pickers (basmati / non-basmati).
-     * Single SQL: open states on latest usable day ∪ closing states for the crop year.
+     * Latest usable IST day (bound range) ∪ closing states for the crop year.
      *
      * @return array<int, string>
      */
@@ -3327,115 +3327,117 @@ class ApiController extends Controller
             $cropYear = (string) $cropYear;
         }
 
-        $asOfExclusive = Carbon::now(config('app.timezone', 'Asia/Kolkata'))
-            ->addDay()
-            ->startOfDay()
-            ->format('Y-m-d H:i:s');
+        $asOfExclusive = LivePrice::istDateTime(
+            Carbon::now(LivePrice::TIMEZONE)->addDay()->startOfDay()
+        );
+
+        $lastAtRow = DB::selectOne(
+            "SELECT MAX(lp3.created_at) AS last_at
+             FROM live_prices lp3
+             INNER JOIN rice_forms rf3
+                 ON rf3.id = lp3.form AND rf3.type = ? AND rf3.status = 1
+             INNER JOIN rice_names rn3
+                 ON rn3.id = lp3.name AND rn3.type = ?
+             WHERE lp3.name != '0'
+               AND lp3.form != '0'
+               AND lp3.min_price IS NOT NULL
+               AND lp3.max_price IS NOT NULL
+               AND lp3.min_price > 0
+               AND lp3.max_price > 0
+               AND lp3.cropYear = ?
+               AND lp3.created_at < ?",
+            [$ricetype, $ricetype, $cropYear, $asOfExclusive]
+        );
+
+        $lastAt = $lastAtRow->last_at ?? null;
+        if ($lastAt) {
+            [$dayStart, $dayNext] = LivePrice::createdAtDayRange($lastAt);
+        } else {
+            $dayStart = '1970-01-01 00:00:00';
+            $dayNext = '1970-01-01 00:00:00';
+        }
 
         $excludeNewCrop = ((string) $cropYear === '2023' || (int) $cropYear === 2023);
         $newCropSql = $excludeNewCrop ? ' AND LOWER(rf.form_name) NOT LIKE ? ' : '';
 
         $sql = "
-            SELECT u.state
+            SELECT s.state
             FROM (
                 SELECT
-                    lp.state AS state,
-                    MIN(COALESCE(lp.state_order, so.min_order)) AS state_order
-                FROM live_prices lp
-                INNER JOIN (
-                    SELECT MAX(lp2.id) AS id
-                    FROM live_prices lp2
-                    INNER JOIN rice_forms rf
-                        ON rf.id = lp2.form AND rf.type = ? AND rf.status = 1
-                    INNER JOIN rice_names rn
-                        ON rn.id = lp2.name AND rn.type = ?
+                    u.state,
+                    MIN(COALESCE(
+                        u.state_order,
+                        (
+                            SELECT MIN(lpso.state_order)
+                            FROM live_prices lpso
+                            WHERE lpso.state = u.state
+                              AND lpso.state_order IS NOT NULL
+                        )
+                    )) AS state_order
+                FROM (
+                    SELECT lp.state AS state, lp.state_order AS state_order
+                    FROM live_prices lp
                     INNER JOIN (
-                        SELECT MAX(lp3.created_at) AS last_at
-                        FROM live_prices lp3
-                        INNER JOIN rice_forms rf3
-                            ON rf3.id = lp3.form AND rf3.type = ? AND rf3.status = 1
-                        INNER JOIN rice_names rn3
-                            ON rn3.id = lp3.name AND rn3.type = ?
-                        WHERE lp3.name != '0'
-                          AND lp3.form != '0'
-                          AND lp3.min_price IS NOT NULL
-                          AND lp3.max_price IS NOT NULL
-                          AND lp3.min_price > 0
-                          AND lp3.max_price > 0
-                          AND lp3.cropYear = ?
-                          AND lp3.created_at < ?
-                    ) ld ON ld.last_at IS NOT NULL
-                        AND lp2.created_at >= DATE(ld.last_at)
-                        AND lp2.created_at < DATE(ld.last_at) + INTERVAL 1 DAY
-                    WHERE lp2.name != '0'
-                      AND lp2.form != '0'
-                      AND lp2.cropYear = ?
-                      {$newCropSql}
-                    GROUP BY lp2.name, lp2.form, lp2.state, lp2.cropYear
-                ) latest ON latest.id = lp.id
-                LEFT JOIN (
-                    SELECT state, MIN(state_order) AS min_order
-                    FROM live_prices
-                    WHERE state_order IS NOT NULL
-                    GROUP BY state
-                ) so ON so.state = lp.state
-                WHERE lp.min_price IS NOT NULL
-                  AND lp.max_price IS NOT NULL
-                  AND lp.min_price > 0
-                  AND lp.max_price > 0
-                  AND lp.state IS NOT NULL
-                  AND lp.state != ''
-                  AND NOT EXISTS (
-                      SELECT 1
-                      FROM live_price_closing lpc
-                      INNER JOIN rice_forms rf
-                          ON rf.id = lpc.form AND rf.type = ? AND rf.status = 1
-                      INNER JOIN rice_names rn
-                          ON rn.id = lpc.name AND rn.type = ?
-                      WHERE lpc.name = lp.name
-                        AND lpc.form = lp.form
-                        AND lpc.cropYear = ?
-                        AND lpc.closing IS NOT NULL
-                        AND lpc.closing != ''
-                  )
-                GROUP BY lp.state
+                        SELECT MAX(lp2.id) AS id
+                        FROM live_prices lp2
+                        INNER JOIN rice_forms rf
+                            ON rf.id = lp2.form AND rf.type = ? AND rf.status = 1
+                        INNER JOIN rice_names rn
+                            ON rn.id = lp2.name AND rn.type = ?
+                        WHERE lp2.name != '0'
+                          AND lp2.form != '0'
+                          AND lp2.cropYear = ?
+                          AND lp2.created_at >= ?
+                          AND lp2.created_at < ?
+                          {$newCropSql}
+                        GROUP BY lp2.name, lp2.form, lp2.state, lp2.cropYear
+                    ) latest ON latest.id = lp.id
+                    WHERE lp.min_price IS NOT NULL
+                      AND lp.max_price IS NOT NULL
+                      AND lp.min_price > 0
+                      AND lp.max_price > 0
+                      AND lp.state IS NOT NULL
+                      AND lp.state != ''
+                      AND NOT EXISTS (
+                          SELECT 1
+                          FROM live_price_closing lpc
+                          INNER JOIN rice_forms rf
+                              ON rf.id = lpc.form AND rf.type = ? AND rf.status = 1
+                          INNER JOIN rice_names rn
+                              ON rn.id = lpc.name AND rn.type = ?
+                          WHERE lpc.name = lp.name
+                            AND lpc.form = lp.form
+                            AND lpc.cropYear = ?
+                            AND lpc.closing IS NOT NULL
+                            AND lpc.closing != ''
+                      )
 
-                UNION ALL
+                    UNION ALL
 
-                SELECT
-                    lpc.state AS state,
-                    MIN(so.min_order) AS state_order
-                FROM live_price_closing lpc
-                INNER JOIN rice_forms rf
-                    ON rf.id = lpc.form AND rf.type = ? AND rf.status = 1
-                INNER JOIN rice_names rn
-                    ON rn.id = lpc.name AND rn.type = ?
-                LEFT JOIN (
-                    SELECT state, MIN(state_order) AS min_order
-                    FROM live_prices
-                    WHERE state_order IS NOT NULL
-                    GROUP BY state
-                ) so ON so.state = lpc.state
-                WHERE lpc.cropYear = ?
-                  AND lpc.closing IS NOT NULL
-                  AND lpc.closing != ''
-                  AND lpc.state IS NOT NULL
-                  AND lpc.state != ''
-                GROUP BY lpc.state
-            ) u
-            WHERE u.state_order IS NOT NULL
-            GROUP BY u.state
-            ORDER BY MIN(u.state_order) ASC, u.state ASC
+                    SELECT lpc.state AS state, NULL AS state_order
+                    FROM live_price_closing lpc
+                    INNER JOIN rice_forms rf
+                        ON rf.id = lpc.form AND rf.type = ? AND rf.status = 1
+                    INNER JOIN rice_names rn
+                        ON rn.id = lpc.name AND rn.type = ?
+                    WHERE lpc.cropYear = ?
+                      AND lpc.closing IS NOT NULL
+                      AND lpc.closing != ''
+                      AND lpc.state IS NOT NULL
+                      AND lpc.state != ''
+                ) u
+                GROUP BY u.state
+            ) s
+            WHERE s.state_order IS NOT NULL
+            ORDER BY s.state_order ASC, s.state ASC
         ";
 
         $bindings = [
             $ricetype,
             $ricetype,
-            $ricetype,
-            $ricetype,
             $cropYear,
-            $asOfExclusive,
-            $cropYear,
+            $dayStart,
+            $dayNext,
         ];
         if ($excludeNewCrop) {
             $bindings[] = '%new crop%';
