@@ -444,6 +444,61 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('vendor-flow/specifications/change-status/{id}', ['as' => 'vendor-specification.change-status', 'uses' => 'VendorSpecificationController@changeStatus', 'action' => 'edit']);
             });
 
+            // Domestic Vendor — Country master
+            Route::group(['module' => 'domestic_vendor_country', 'icon' => 'fa-flag'], function () {
+                Route::get('domestic-vendor/countries', ['as' => 'domestic-vendor-countries', 'uses' => 'DomesticVendorCountryController@index', 'action' => 'view']);
+                Route::get('domestic-vendor/countries/create', ['as' => 'create.domestic-vendor-country', 'uses' => 'DomesticVendorCountryController@create', 'action' => 'create']);
+                Route::post('domestic-vendor/countries/save', ['as' => 'save.domestic-vendor-country', 'uses' => 'DomesticVendorCountryController@save', 'action' => 'create']);
+                Route::get('domestic-vendor/countries/edit/{id}', ['as' => 'edit.domestic-vendor-country', 'uses' => 'DomesticVendorCountryController@edit', 'action' => 'edit']);
+                Route::put('domestic-vendor/countries/update/{id}', ['as' => 'update.domestic-vendor-country', 'uses' => 'DomesticVendorCountryController@update', 'action' => 'edit']);
+                Route::delete('domestic-vendor/countries/delete/{id}', ['as' => 'delete.domestic-vendor-country', 'uses' => 'DomesticVendorCountryController@delete', 'action' => 'delete']);
+                Route::get('domestic-vendor/countries/change-status/{id}', ['as' => 'domestic-vendor-country.change-status', 'uses' => 'DomesticVendorCountryController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Domestic Vendor — State master
+            Route::group(['module' => 'domestic_vendor_state', 'icon' => 'fa-map'], function () {
+                Route::get('domestic-vendor/states', ['as' => 'domestic-vendor-states', 'uses' => 'DomesticVendorStateController@index', 'action' => 'view']);
+                Route::get('domestic-vendor/states/create', ['as' => 'create.domestic-vendor-state', 'uses' => 'DomesticVendorStateController@create', 'action' => 'create']);
+                Route::post('domestic-vendor/states/save', ['as' => 'save.domestic-vendor-state', 'uses' => 'DomesticVendorStateController@save', 'action' => 'create']);
+                Route::get('domestic-vendor/states/edit/{id}', ['as' => 'edit.domestic-vendor-state', 'uses' => 'DomesticVendorStateController@edit', 'action' => 'edit']);
+                Route::put('domestic-vendor/states/update/{id}', ['as' => 'update.domestic-vendor-state', 'uses' => 'DomesticVendorStateController@update', 'action' => 'edit']);
+                Route::delete('domestic-vendor/states/delete/{id}', ['as' => 'delete.domestic-vendor-state', 'uses' => 'DomesticVendorStateController@delete', 'action' => 'delete']);
+                Route::get('domestic-vendor/states/change-status/{id}', ['as' => 'domestic-vendor-state.change-status', 'uses' => 'DomesticVendorStateController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Domestic Vendor — City master
+            Route::group(['module' => 'domestic_vendor_city', 'icon' => 'fa-building'], function () {
+                Route::get('domestic-vendor/cities', ['as' => 'domestic-vendor-cities', 'uses' => 'DomesticVendorCityController@index', 'action' => 'view']);
+                Route::get('domestic-vendor/cities/create', ['as' => 'create.domestic-vendor-city', 'uses' => 'DomesticVendorCityController@create', 'action' => 'create']);
+                Route::post('domestic-vendor/cities/save', ['as' => 'save.domestic-vendor-city', 'uses' => 'DomesticVendorCityController@save', 'action' => 'create']);
+                Route::get('domestic-vendor/cities/edit/{id}', ['as' => 'edit.domestic-vendor-city', 'uses' => 'DomesticVendorCityController@edit', 'action' => 'edit']);
+                Route::put('domestic-vendor/cities/update/{id}', ['as' => 'update.domestic-vendor-city', 'uses' => 'DomesticVendorCityController@update', 'action' => 'edit']);
+                Route::delete('domestic-vendor/cities/delete/{id}', ['as' => 'delete.domestic-vendor-city', 'uses' => 'DomesticVendorCityController@delete', 'action' => 'delete']);
+                Route::get('domestic-vendor/cities/change-status/{id}', ['as' => 'domestic-vendor-city.change-status', 'uses' => 'DomesticVendorCityController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Domestic Vendor — Destination master
+            Route::group(['module' => 'domestic_vendor_destination', 'icon' => 'fa-map-marker'], function () {
+                Route::get('domestic-vendor/destinations', ['as' => 'domestic-vendor-destinations', 'uses' => 'DomesticVendorDestinationController@index', 'action' => 'view']);
+                Route::get('domestic-vendor/destinations/create', ['as' => 'create.domestic-vendor-destination', 'uses' => 'DomesticVendorDestinationController@create', 'action' => 'create']);
+                Route::post('domestic-vendor/destinations/save', ['as' => 'save.domestic-vendor-destination', 'uses' => 'DomesticVendorDestinationController@save', 'action' => 'create']);
+                Route::get('domestic-vendor/destinations/edit/{id}', ['as' => 'edit.domestic-vendor-destination', 'uses' => 'DomesticVendorDestinationController@edit', 'action' => 'edit']);
+                Route::put('domestic-vendor/destinations/update/{id}', ['as' => 'update.domestic-vendor-destination', 'uses' => 'DomesticVendorDestinationController@update', 'action' => 'edit']);
+                Route::delete('domestic-vendor/destinations/delete/{id}', ['as' => 'delete.domestic-vendor-destination', 'uses' => 'DomesticVendorDestinationController@delete', 'action' => 'delete']);
+                Route::get('domestic-vendor/destinations/change-status/{id}', ['as' => 'domestic-vendor-destination.change-status', 'uses' => 'DomesticVendorDestinationController@changeStatus', 'action' => 'edit']);
+            });
+
+            // Domestic Vendor — Truck Size (per MT)
+            Route::group(['module' => 'domestic_vendor_truck_size', 'icon' => 'fa-truck'], function () {
+                Route::get('domestic-vendor/truck-sizes', ['as' => 'domestic-vendor-truck-sizes', 'uses' => 'DomesticVendorTruckSizeController@index', 'action' => 'view']);
+                Route::get('domestic-vendor/truck-sizes/create', ['as' => 'create.domestic-vendor-truck-size', 'uses' => 'DomesticVendorTruckSizeController@create', 'action' => 'create']);
+                Route::post('domestic-vendor/truck-sizes/save', ['as' => 'save.domestic-vendor-truck-size', 'uses' => 'DomesticVendorTruckSizeController@save', 'action' => 'create']);
+                Route::get('domestic-vendor/truck-sizes/edit/{id}', ['as' => 'edit.domestic-vendor-truck-size', 'uses' => 'DomesticVendorTruckSizeController@edit', 'action' => 'edit']);
+                Route::put('domestic-vendor/truck-sizes/update/{id}', ['as' => 'update.domestic-vendor-truck-size', 'uses' => 'DomesticVendorTruckSizeController@update', 'action' => 'edit']);
+                Route::delete('domestic-vendor/truck-sizes/delete/{id}', ['as' => 'delete.domestic-vendor-truck-size', 'uses' => 'DomesticVendorTruckSizeController@delete', 'action' => 'delete']);
+                Route::get('domestic-vendor/truck-sizes/change-status/{id}', ['as' => 'domestic-vendor-truck-size.change-status', 'uses' => 'DomesticVendorTruckSizeController@changeStatus', 'action' => 'edit']);
+            });
+
             // Rice Form Parent–Child Map (for interested module)
             Route::group(['module'=>'rice_form_parent_map','icon'=>'fa-code-fork'], function() {
                 Route::get('rice-form-parent-map', ['as' => 'rice-form-parent-map', 'uses' => 'RiceFormParentMapController@index', 'action' => 'view']);

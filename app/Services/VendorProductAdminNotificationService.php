@@ -202,7 +202,7 @@ class VendorProductAdminNotificationService
         $socketTitle = $itemPhrase.' accepted';
         $socketMessage = 'Your '.$itemPhrase.' #'.$product->id
             .($typeResolved !== '—' ? ' ('.$typeResolved.')' : '')
-            .' has been approved by SNTC.';
+            .' has been approved.';
 
         if (is_string($mailTo) && trim($mailTo) !== '') {
             MailController::sendVendorProductAcceptedMail(

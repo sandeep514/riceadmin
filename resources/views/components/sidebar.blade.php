@@ -537,6 +537,51 @@
                 </ul>
             </li>
             @php
+                $domesticVendorMasterRoutes = [
+                    'domestic-vendor-countries','create.domestic-vendor-country','edit.domestic-vendor-country',
+                    'domestic-vendor-states','create.domestic-vendor-state','edit.domestic-vendor-state',
+                    'domestic-vendor-cities','create.domestic-vendor-city','edit.domestic-vendor-city',
+                    'domestic-vendor-destinations','create.domestic-vendor-destination','edit.domestic-vendor-destination',
+                    'domestic-vendor-truck-sizes','create.domestic-vendor-truck-size','edit.domestic-vendor-truck-size',
+                ];
+            @endphp
+            <li class="treeview {{ in_array($currentRoute, $domesticVendorMasterRoutes) ? 'active' : '' }}">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-industry"></i>
+                    <span>Domestic Vendor</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="treeview {{ in_array($currentRoute, $domesticVendorMasterRoutes) ? 'active' : '' }}">
+                        <a href="javascript:void(0)">
+                            <i class="fa fa-circle-o"></i> Masters
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{ in_array($currentRoute, ['domestic-vendor-countries','create.domestic-vendor-country','edit.domestic-vendor-country']) ? 'active' : '' }}">
+                                <a href="{{ route('domestic-vendor-countries') }}"><i class="fa fa-circle-o"></i> Country</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['domestic-vendor-states','create.domestic-vendor-state','edit.domestic-vendor-state']) ? 'active' : '' }}">
+                                <a href="{{ route('domestic-vendor-states') }}"><i class="fa fa-circle-o"></i> State</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['domestic-vendor-cities','create.domestic-vendor-city','edit.domestic-vendor-city']) ? 'active' : '' }}">
+                                <a href="{{ route('domestic-vendor-cities') }}"><i class="fa fa-circle-o"></i> City</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['domestic-vendor-destinations','create.domestic-vendor-destination','edit.domestic-vendor-destination']) ? 'active' : '' }}">
+                                <a href="{{ route('domestic-vendor-destinations') }}"><i class="fa fa-circle-o"></i> Destination</a>
+                            </li>
+                            <li class="{{ in_array($currentRoute, ['domestic-vendor-truck-sizes','create.domestic-vendor-truck-size','edit.domestic-vendor-truck-size']) ? 'active' : '' }}">
+                                <a href="{{ route('domestic-vendor-truck-sizes') }}"><i class="fa fa-circle-o"></i> Truck Size (per MT)</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            @php
                 $serviceProviderMasterRoutes = [
                     'vendor-port-types','create.vendor-port-type','edit.vendor-port-type',
                     'vendor-container-sizes','create.vendor-container-size','edit.vendor-container-size',

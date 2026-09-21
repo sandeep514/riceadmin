@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\VendorContainerSize;
+use App\VendorCurrency;
 use App\VendorDestinationPort;
 use App\VendorForwarderChargeTitle;
 use App\VendorIcdLocation;
@@ -17,6 +18,9 @@ use Illuminate\Support\Facades\Validator;
 
 class WebForwarderProductService
 {
+    /** @var array<string, VendorCurrency|null> */
+    private array $vendorCurrencyCache = [];
+
     public function create(Request $request)
     {
         $this->normalizeIncomingPayload($request);
@@ -303,6 +307,7 @@ class WebForwarderProductService
     {
         return [
             'charges.titleRel',
+            'charges.currencyRel',
             'containerSizes.containerSizeRel',
             'portTypeRel',
             'icdLocationRel',
@@ -317,8 +322,9 @@ class WebForwarderProductService
     private function serializeCharge(WebForwarderCharge $row): array
     {
         $title = $row->title ?: optional($row->titleRel)->name;
-        $currency = strtoupper(trim((string) ($row->currency ?: WebForwarderCharge::CURRENCY_INR)));
-        $exchange = $currency === WebForwarderCharge::CURRENCY_INR
+        $resolved = $this->resolveVendorCurrency($row->currency_id, $row->currency);
+        $currency = $resolved['code'];
+        $exchange = strtoupper($currency) === WebForwarderCharge::CURRENCY_INR
             ? ($row->exchange_rate ?: '-')
             : $row->exchange_rate;
 
@@ -327,6 +333,8 @@ class WebForwarderProductService
             'titleId' => $row->title_id !== null ? (int) $row->title_id : null,
             'title' => $title,
             'currency' => $currency,
+            'currencyId' => $resolved['id'],
+            'currencyName' => $resolved['name'],
             'charges' => $row->charges !== null ? (string) $row->charges : null,
             'exchangeRate' => $exchange,
             'exc' => $exchange,
@@ -434,6 +442,7 @@ class WebForwarderProductService
                 'title_id' => $normalized['title_id'],
                 'title' => $normalized['title'],
                 'currency' => $normalized['currency'],
+                'currency_id' => $normalized['currency_id'],
                 'charges' => $normalized['charges'],
                 'exchange_rate' => $normalized['exchange_rate'],
                 'inr_amount' => $normalized['inr_amount'],
@@ -590,7 +599,8 @@ class WebForwarderProductService
             $rows[] = [
                 'title_id' => $titleId,
                 'title' => $title->name,
-                'currency' => WebForwarderCharge::CURRENCY_INR,
+                'currency' => $this->defaultCurrency()['code'],
+                'currency_id' => $this->defaultCurrency()['id'],
                 'charges' => '0',
                 'exchange_rate' => '-',
                 'inr_amount' => '0',
@@ -656,7 +666,8 @@ class WebForwarderProductService
             return null;
         }
 
-        $currency = $this->normalizeCurrency($row['currency'] ?? $row['curr'] ?? WebForwarderCharge::CURRENCY_INR);
+        $resolvedCurrency = $this->currencyFromChargePayload($row);
+        $currency = $resolvedCurrency['code'];
         $exchange = $this->nullableString(
             $row['exchange_rate'] ?? $row['exchangeRate'] ?? $row['exc'] ?? $row['exchange'] ?? null
         );
@@ -668,7 +679,7 @@ class WebForwarderProductService
         );
         $remarks = $this->nullableString($row['remarks'] ?? $row['remark'] ?? $row['note'] ?? null);
 
-        if ($currency === WebForwarderCharge::CURRENCY_INR) {
+        if (strtoupper($currency) === WebForwarderCharge::CURRENCY_INR) {
             $exchange = $exchange ?: '-';
             if ($inr === null && $charges !== null) {
                 $inr = $charges;
@@ -681,6 +692,7 @@ class WebForwarderProductService
             'title_id' => $titleId,
             'title' => $title,
             'currency' => $currency,
+            'currency_id' => $resolvedCurrency['id'],
             'charges' => $charges,
             'exchange_rate' => $exchange,
             'inr_amount' => $inr,
@@ -820,13 +832,112 @@ class WebForwarderProductService
         return number_format($value, 2, '.', '');
     }
 
-    private function normalizeCurrency($value): string
+    /**
+     * @param  array<string, mixed>  $row
+     * @return array{id:?int, code:string, name:string}
+     */
+    private function currencyFromChargePayload(array $row): array
     {
-        $currency = strtoupper(trim((string) $value));
+        $raw = $row['currency'] ?? $row['curr'] ?? null;
+        $rawId = $row['currency_id'] ?? $row['currencyId'] ?? null;
+        $rawCode = $row['currency_code'] ?? $row['currencyCode'] ?? $row['code'] ?? null;
 
-        return $currency === WebForwarderCharge::CURRENCY_USD
-            ? WebForwarderCharge::CURRENCY_USD
-            : WebForwarderCharge::CURRENCY_INR;
+        if (is_array($raw)) {
+            $rawId = $rawId ?? ($raw['id'] ?? $raw['currency_id'] ?? $raw['currencyId'] ?? null);
+            $rawCode = $rawCode ?? ($raw['code'] ?? $raw['name'] ?? $raw['currency'] ?? null);
+            $raw = null;
+        }
+
+        if ($rawId === null && is_numeric($raw)) {
+            $rawId = $raw;
+            $raw = null;
+        }
+
+        return $this->resolveVendorCurrency($rawId, $rawCode ?? $raw);
+    }
+
+    /**
+     * @return array{id:?int, code:string, name:string}
+     */
+    private function defaultCurrency(): array
+    {
+        return $this->resolveVendorCurrency(null, WebForwarderCharge::CURRENCY_INR);
+    }
+
+    /**
+     * Map a saved or posted currency (id or code) to the vendor_currencies master row.
+     *
+     * @return array{id:?int, code:string, name:string}
+     */
+    private function resolveVendorCurrency($rawId, $rawCode): array
+    {
+        $id = is_numeric($rawId) ? (int) $rawId : null;
+        $code = is_string($rawCode) || is_numeric($rawCode) ? trim((string) $rawCode) : '';
+
+        $row = null;
+        if ($id) {
+            $row = $this->findVendorCurrencyById($id);
+        }
+        if ($row === null && $code !== '') {
+            if (ctype_digit($code)) {
+                $row = $this->findVendorCurrencyById((int) $code);
+            }
+            if ($row === null) {
+                $row = $this->findVendorCurrencyByName($code);
+            }
+        }
+        if ($row !== null) {
+            return [
+                'id' => (int) $row->id,
+                'code' => (string) $row->name,
+                'name' => (string) $row->name,
+            ];
+        }
+
+        if ($code !== '') {
+            return [
+                'id' => null,
+                'code' => strtoupper($code),
+                'name' => strtoupper($code),
+            ];
+        }
+
+        $inr = $this->findVendorCurrencyByName(WebForwarderCharge::CURRENCY_INR);
+        if ($inr !== null) {
+            return [
+                'id' => (int) $inr->id,
+                'code' => (string) $inr->name,
+                'name' => (string) $inr->name,
+            ];
+        }
+
+        return [
+            'id' => null,
+            'code' => WebForwarderCharge::CURRENCY_INR,
+            'name' => WebForwarderCharge::CURRENCY_INR,
+        ];
+    }
+
+    private function findVendorCurrencyById(int $id): ?VendorCurrency
+    {
+        $key = 'id:'.$id;
+        if (! array_key_exists($key, $this->vendorCurrencyCache)) {
+            $this->vendorCurrencyCache[$key] = VendorCurrency::query()->find($id);
+        }
+
+        return $this->vendorCurrencyCache[$key];
+    }
+
+    private function findVendorCurrencyByName(string $name): ?VendorCurrency
+    {
+        $key = 'name:'.strtolower($name);
+        if (! array_key_exists($key, $this->vendorCurrencyCache)) {
+            $this->vendorCurrencyCache[$key] = VendorCurrency::query()
+                ->whereRaw('LOWER(name) = ?', [strtolower($name)])
+                ->first();
+        }
+
+        return $this->vendorCurrencyCache[$key];
     }
 
     private function normalizeContainerSizeValue($value): ?int

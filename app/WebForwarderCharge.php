@@ -17,6 +17,7 @@ class WebForwarderCharge extends Model
         'title_id',
         'title',
         'currency',
+        'currency_id',
         'charges',
         'exchange_rate',
         'inr_amount',
@@ -28,6 +29,7 @@ class WebForwarderCharge extends Model
     protected $casts = [
         'product_id' => 'integer',
         'title_id' => 'integer',
+        'currency_id' => 'integer',
         'is_other' => 'integer',
         'sort_order' => 'integer',
     ];
@@ -40,5 +42,10 @@ class WebForwarderCharge extends Model
     public function titleRel()
     {
         return $this->belongsTo(VendorForwarderChargeTitle::class, 'title_id', 'id');
+    }
+
+    public function currencyRel()
+    {
+        return $this->belongsTo(VendorCurrency::class, 'currency_id', 'id');
     }
 }
