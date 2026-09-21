@@ -8349,6 +8349,187 @@ if (!file_exists('uploads')) {
         ], 200);
     }
 
+    public function getDomesticVendorCountries()
+    {
+        $rows = \App\DomesticVendorCountry::query()
+            ->where('status', \App\DomesticVendorCountry::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'description' => $row->description,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Domestic vendor countries fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getDomesticVendorStates(Request $request, $countryId = null)
+    {
+        $countryId = $countryId ?? $request->input('country_id', $request->input('countryId'));
+        $countryId = $countryId !== null && $countryId !== '' ? (int) $countryId : null;
+
+        $country = null;
+        if ($countryId) {
+            $country = \App\DomesticVendorCountry::query()
+                ->where('status', \App\DomesticVendorCountry::STATUS_ACTIVE)
+                ->find($countryId);
+
+            if ($country === null) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Domestic vendor country not found.',
+                    'data' => [],
+                ], 404);
+            }
+        }
+
+        $rows = \App\DomesticVendorState::query()
+            ->with('country:id,name')
+            ->where('status', \App\DomesticVendorState::STATUS_ACTIVE)
+            ->when($countryId, fn ($query) => $query->where('country_id', $countryId))
+            ->orderBy('name')
+            ->get(['id', 'name', 'description', 'country_id'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'description' => $row->description,
+                    'countryId' => (int) $row->country_id,
+                    'country_id' => (int) $row->country_id,
+                    'country' => optional($row->country)->name,
+                ];
+            })
+            ->values();
+
+        $payload = [
+            'status' => true,
+            'message' => 'Domestic vendor states fetched successfully.',
+            'data' => $rows,
+        ];
+        if ($country !== null) {
+            $payload['country'] = [
+                'id' => (int) $country->id,
+                'name' => $country->name,
+            ];
+        }
+
+        return response()->json($payload, 200);
+    }
+
+    public function getDomesticVendorCities(Request $request, $stateId = null)
+    {
+        $stateId = $stateId ?? $request->input('state_id', $request->input('stateId'));
+        $stateId = $stateId !== null && $stateId !== '' ? (int) $stateId : null;
+
+        $state = null;
+        if ($stateId) {
+            $state = \App\DomesticVendorState::query()
+                ->with('country:id,name')
+                ->where('status', \App\DomesticVendorState::STATUS_ACTIVE)
+                ->find($stateId);
+
+            if ($state === null) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Domestic vendor state not found.',
+                    'data' => [],
+                ], 404);
+            }
+        }
+
+        $rows = \App\DomesticVendorCity::query()
+            ->with('state.country:id,name')
+            ->where('status', \App\DomesticVendorCity::STATUS_ACTIVE)
+            ->when($stateId, fn ($query) => $query->where('state_id', $stateId))
+            ->orderBy('name')
+            ->get(['id', 'name', 'description', 'state_id'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'description' => $row->description,
+                    'stateId' => (int) $row->state_id,
+                    'state_id' => (int) $row->state_id,
+                    'state' => optional($row->state)->name,
+                    'countryId' => optional($row->state)->country_id !== null ? (int) $row->state->country_id : null,
+                    'country_id' => optional($row->state)->country_id !== null ? (int) $row->state->country_id : null,
+                    'country' => optional(optional($row->state)->country)->name,
+                ];
+            })
+            ->values();
+
+        $payload = [
+            'status' => true,
+            'message' => 'Domestic vendor cities fetched successfully.',
+            'data' => $rows,
+        ];
+        if ($state !== null) {
+            $payload['state'] = [
+                'id' => (int) $state->id,
+                'name' => $state->name,
+                'countryId' => $state->country_id !== null ? (int) $state->country_id : null,
+                'country' => optional($state->country)->name,
+            ];
+        }
+
+        return response()->json($payload, 200);
+    }
+
+    public function getDomesticVendorDestinations()
+    {
+        $rows = \App\DomesticVendorDestination::query()
+            ->where('status', \App\DomesticVendorDestination::STATUS_ACTIVE)
+            ->orderBy('name')
+            ->get(['id', 'name', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'name' => $row->name,
+                    'description' => $row->description,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Domestic vendor destinations fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
+    public function getDomesticVendorTruckSizes()
+    {
+        $rows = \App\DomesticVendorTruckSize::query()
+            ->where('status', \App\DomesticVendorTruckSize::STATUS_ACTIVE)
+            ->orderBy('size')
+            ->get(['id', 'size', 'label', 'description'])
+            ->map(function ($row) {
+                return [
+                    'id' => (int) $row->id,
+                    'size' => (float) $row->size,
+                    'label' => $row->displayLabel(),
+                    'unit' => 'MT',
+                    'description' => $row->description,
+                    'name' => $row->displayLabel(),
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Domestic vendor truck sizes fetched successfully.',
+            'data' => $rows,
+        ], 200);
+    }
+
     public function getCylinderTypes()
     {
         $types = \App\CylinderType::query()

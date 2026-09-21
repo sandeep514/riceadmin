@@ -530,6 +530,12 @@ class UsersController extends Controller
         $wasPendingActivation = (int) ($userDetail->is_active_by_admin ?? 0) === 0;
         $wasDeactivated = (int) ($userDetail->is_deactivated ?? 0) === 1;
 
+        if ($wasPendingActivation && $userDetail->getWebUserSubscription === null) {
+            Session::flash('error', 'Error|This user has no plan. Activate is not allowed.');
+
+            return back();
+        }
+
         if ($wasPendingActivation) {
             $user->update([
                 'is_active_by_admin' => 1,
@@ -594,9 +600,13 @@ class UsersController extends Controller
     public function webusers()
     {
         $vendorUsers = User::where('user_from', 'web')
-            ->with(['getWebPersonalDetails', 'getWebBusinessDetails' => function ($q) {
-                return $q->with(['getCategoryDetails:id,category']);
-            }])
+            ->with([
+                'getWebPersonalDetails',
+                'getWebUserSubscription',
+                'getWebBusinessDetails' => function ($q) {
+                    return $q->with(['getCategoryDetails:id,category']);
+                },
+            ])
             ->orderBy('id', 'desc')
             ->get();
         return view('users.webUser' , compact('vendorUsers'));
