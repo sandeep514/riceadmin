@@ -202,7 +202,36 @@
                                                                         {{ $paddyPrice->created_at ? $paddyPrice->created_at->format('Y-m-d') : '' }}
                                                                     </td>
                                                                     <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
-                                                                    <td></td>
+                                                                    <td style="white-space: nowrap;">
+                                                                        <a
+                                                                            href="{{ route('edit.paddy.price', array_filter(['id' => $paddyPrice->id, 'from' => $from ?? null, 'to' => $to ?? null])) }}"
+                                                                            class="btn btn-primary btn-xs"
+                                                                        >
+                                                                            <i class="fa fa-pencil"></i> Edit
+                                                                        </a>
+                                                                        <form
+                                                                            class="js-delete-paddy-price-form"
+                                                                            method="POST"
+                                                                            action="{{ route('delete.paddy.price', $paddyPrice->id) }}"
+                                                                            style="display:inline;"
+                                                                        >
+                                                                            @csrf
+                                                                            <input type="hidden" name="pin" class="js-delete-paddy-price-pin" value="">
+                                                                            @if(!empty($from))
+                                                                                <input type="hidden" name="from" value="{{ $from }}">
+                                                                            @endif
+                                                                            @if(!empty($to))
+                                                                                <input type="hidden" name="to" value="{{ $to }}">
+                                                                            @endif
+                                                                            <button
+                                                                                type="button"
+                                                                                class="btn btn-danger btn-xs js-delete-paddy-price-btn"
+                                                                                data-id="{{ $paddyPrice->id }}"
+                                                                            >
+                                                                                <i class="fa fa-trash"></i> Delete
+                                                                            </button>
+                                                                        </form>
+                                                                    </td>
                                                                 </tr>
                                                             @empty
                                                                 <tr>
@@ -263,6 +292,35 @@
         });
 
         loadMandis($state.val(), oldMandi);
+
+        $(document).on('click', '.js-delete-paddy-price-btn', function () {
+            var $btn = $(this);
+            var $form = $btn.closest('.js-delete-paddy-price-form');
+            var priceId = $btn.data('id');
+
+            if (typeof toastr !== 'undefined') {
+                toastr.warning('This action will permanently delete paddy price #' + priceId + '. Enter PIN to continue.', 'Confirm delete');
+            }
+
+            var confirmed = window.confirm('Are you sure you want to delete paddy price #' + priceId + '?');
+            if (!confirmed) return;
+
+            var pin = window.prompt('Enter security PIN to confirm delete:');
+            if (pin === null) return;
+
+            pin = String(pin).trim();
+            if (pin !== '22334455') {
+                if (typeof toastr !== 'undefined') {
+                    toastr.error('Invalid PIN. Paddy price was not deleted.', 'Error');
+                } else {
+                    alert('Invalid PIN. Paddy price was not deleted.');
+                }
+                return;
+            }
+
+            $form.find('.js-delete-paddy-price-pin').val(pin);
+            $form.trigger('submit');
+        });
     });
 </script>
 @endsection

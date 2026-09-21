@@ -2248,7 +2248,7 @@ class PortalApiController extends Controller
         $todayDate = Carbon::now()->format('Y-m-d');
         $livePricesCount = LivePrice::onCreatedDay($todayDate)->where('status' , 1)->count();
         $paddyMandiCount = PaddyPrice::whereDate('created_at' , $todayDate)->where('status' , 1)->count();
-        $tradeCount = TradeQueriesINR::whereDate('created_at' , $todayDate)->where('status' , 1)->count();
+        $tradeCount = TradeQueriesINR::whereDate('created_at' , $todayDate)->whereIn('status' , [1, 4, 6])->count();
 
         return response()->json([
                 'status'  => true,

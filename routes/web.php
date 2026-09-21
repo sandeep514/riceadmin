@@ -1057,9 +1057,9 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('paddy-prices', ['as' => 'list.paddy.price', 'uses' => 'PaddyPriceController@index']);
     Route::get('create/paddy-prices', ['as' => 'create.paddy.price', 'uses' => 'PaddyPriceController@create']);
     Route::post('save/paddy-prices', ['as' => 'save.paddy.price', 'uses' => 'PaddyPriceController@store']);
-    Route::get('paddy-prices/{id}', ['as' => 'edit.paddy.price', 'uses' => 'PaddyPriceController@edit']);
-    Route::put('update/paddy-prices', ['as' => 'update.paddy.price', 'uses' => 'PaddyPriceController@update']);
-    // Route::delete('paddy-prices/{id}', ['as' => 'delete.rice.grade', 'uses' => 'PaddyPriceController@deleteGrade']);
+    Route::get('paddy-prices/{id}/edit', ['as' => 'edit.paddy.price', 'uses' => 'PaddyPriceController@edit']);
+    Route::put('paddy-prices/{id}', ['as' => 'update.paddy.price', 'uses' => 'PaddyPriceController@update']);
+    Route::post('paddy-prices/delete/{id}', ['as' => 'delete.paddy.price', 'uses' => 'PaddyPriceController@destroy']);
 
 
 

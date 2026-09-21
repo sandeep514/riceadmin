@@ -291,6 +291,7 @@ class TradeController extends Controller
         $data['elongation'] = $request->elongation;
         $data['tradeFor'] = $request->tradeFor;
         $data['farmingType'] = $request->farmingType;
+        $data['status'] = 6;
         $tradeQuery = TradeQueriesINR::create($data);
         $this->syncTradeCategoryMaps($tradeQuery->id, $request->input('category_ids', []));
         $notifyNote = $this->dispatchTradeWebNotification($tradeQuery, $request);

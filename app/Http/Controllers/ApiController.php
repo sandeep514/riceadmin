@@ -6216,7 +6216,7 @@ if (!file_exists('uploads')) {
     {
         $now = $this->expirePastValidDayTrades();
 
-        $baseTradeQuery = TradeQueriesINR::where('status', 1)
+        $baseTradeQuery = TradeQueriesINR::whereIn('status', [1, 4, 6])
             ->where('validDays', '>', $now->format('Y-m-d H:i:s'))
             ->where(function ($query) use ($request) {
                 $this->applyTradeCountFilters($query, $request);
