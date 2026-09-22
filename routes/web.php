@@ -1098,6 +1098,8 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('get/web/forwarder-products/{id}', ['as' => 'get.web.forwarder.products.show', 'uses' => 'WebForwarderProductController@showProductToAdmin']);
     Route::post('toggle/web/forwarder-products/status/{id}', ['as' => 'toggle.web.forwarder.products.status', 'uses' => 'WebForwarderProductController@toggleStatus']);
     Route::get('get/web/domestic-freight-vendors', ['as' => 'get.web.domestic.freight.vendors.list', 'uses' => 'DomesticFreightVendorController@index']);
+    Route::get('get/web/domestic-freight-vendors/{userId}/charges', ['as' => 'get.web.domestic.freight.vendors.charges', 'uses' => 'DomesticFreightVendorController@charges']);
+    Route::post('toggle/web/domestic-freight-charges/status/{id}', ['as' => 'toggle.web.domestic.freight.charges.status', 'uses' => 'DomesticFreightVendorController@toggleChargeStatus']);
     Route::post('ask-vendor/web/{kind}-products/{id}', ['as' => 'ask.vendor.product', 'uses' => 'VendorProductReviewController@askVendor'])
         ->where('kind', 'rice_bag|cartoon|cylinder|lab_equipment|machinery_equipment|clearing_agent|forwarder');
 

@@ -414,6 +414,11 @@ class VendorProductAdminNotificationService
                 'label' => 'Forwarder',
                 'showRoute' => 'get.web.forwarder.products.show',
             ],
+            'domestic_freight' => [
+                'label' => 'Domestic freight',
+                'noun' => 'charges',
+                'showRoute' => null,
+            ],
             default => [
                 'label' => 'Vendor',
                 'showRoute' => null,
@@ -446,6 +451,13 @@ class VendorProductAdminNotificationService
                 ! empty($product->port_type) ? (string) $product->port_type : null,
                 ! empty($product->port_location) ? (string) $product->port_location : null,
                 ! empty($product->destination) ? (string) $product->destination : null,
+            ]);
+            $label = $parts !== [] ? implode(' / ', $parts) : '—';
+        } elseif ($kind === 'domestic_freight') {
+            $parts = array_filter([
+                ! empty($product->city) ? (string) $product->city : null,
+                ! empty($product->destination) ? (string) $product->destination : null,
+                ! empty($product->truck_size) ? (string) $product->truck_size : null,
             ]);
             $label = $parts !== [] ? implode(' / ', $parts) : '—';
         } else {

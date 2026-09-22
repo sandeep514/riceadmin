@@ -164,6 +164,41 @@ class WebDomesticFreightProductService
     }
 
     /**
+     * Admin verify / de-activate a freight charge (status 0 <-> 1).
+     *
+     * @return array{ok:bool, activated?:bool, deactivated?:bool, missing_reason?:bool}|false
+     */
+    public function toggleStatus(int $id, ?string $reason = null)
+    {
+        $product = WebDomesticFreightProduct::find($id);
+        if ($product === null) {
+            return false;
+        }
+
+        $wasActive = (int) $product->status === 1;
+        if ($wasActive) {
+            $reason = is_string($reason) ? trim($reason) : '';
+            if ($reason === '') {
+                return ['ok' => false, 'deactivated' => false, 'missing_reason' => true];
+            }
+
+            $product->update(['status' => 0]);
+            VendorProductAdminNotificationService::notifyDeactivated(
+                'domestic_freight',
+                $product->fresh(),
+                $reason
+            );
+
+            return ['ok' => true, 'deactivated' => true];
+        }
+
+        $product->update(['status' => 1, 'admin_message' => null]);
+        VendorProductAdminNotificationService::notifyAccepted('domestic_freight', $product->fresh());
+
+        return ['ok' => true, 'activated' => true];
+    }
+
+    /**
      * @param  array<string, mixed>  $route
      * @return array<string, mixed>
      */

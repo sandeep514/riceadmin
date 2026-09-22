@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\ServiceProviderUserMap;
+use App\Services\WebDomesticFreightProductService;
 use App\User;
 use App\WebBusinessDetails;
 use App\WebDomesticFreightProduct;
+use Illuminate\Http\Request;
+use Session;
 
 class DomesticFreightVendorController extends Controller
 {
@@ -86,5 +89,47 @@ class DomesticFreightVendorController extends Controller
                 ->get();
 
         return view('domestic-freight-vendors.index', compact('vendors'));
+    }
+
+    public function charges($userId)
+    {
+        $vendor = User::query()->findOrFail((int) $userId);
+
+        $charges = WebDomesticFreightProduct::with([
+            'user:id,name,email,mobile',
+            'stateRel',
+            'cityRel',
+            'destinationRel',
+            'truckSizeRel',
+        ])
+            ->where('user_id', (int) $userId)
+            ->orderByDesc('id')
+            ->get();
+
+        return view('domestic-freight-vendors.charges', compact('vendor', 'charges'));
+    }
+
+    public function toggleChargeStatus(Request $request, $id)
+    {
+        $result = (new WebDomesticFreightProductService())->toggleStatus((int) $id, $request->input('reason'));
+        if ($result === false) {
+            Session::flash('error', 'Error|Domestic freight charge not found.');
+
+            return back();
+        }
+        if (! empty($result['missing_reason'])) {
+            Session::flash('error', 'Error|Please provide a reason to de-activate this charge.');
+
+            return back();
+        }
+
+        Session::flash(
+            'success',
+            ! empty($result['deactivated'])
+                ? 'Success|Charge de-activated and vendor notified.'
+                : 'Success|Charge verified successfully.'
+        );
+
+        return back();
     }
 }

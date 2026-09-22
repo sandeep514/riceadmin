@@ -92,7 +92,7 @@
                                 @endif
                             </td>
                             <td style="white-space:nowrap;">
-                                <a href="{{ route('view.user', $vendor->id) }}" class="btn btn-info btn-xs">View user</a>
+                                <a href="{{ route('get.web.domestic.freight.vendors.charges', $vendor->id) }}" class="btn btn-info btn-xs">View charges</a>
                             </td>
                         </tr>
                     @empty

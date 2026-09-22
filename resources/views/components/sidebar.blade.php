@@ -546,6 +546,7 @@
                 ];
                 $domesticVendorProductRoutes = [
                     'get.web.domestic.freight.vendors.list',
+                    'get.web.domestic.freight.vendors.charges',
                 ];
                 $domesticVendorRoutes = array_merge($domesticVendorMasterRoutes, $domesticVendorProductRoutes);
             @endphp
@@ -583,7 +584,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="{{ $currentRoute === 'get.web.domestic.freight.vendors.list' ? 'active' : '' }}">
+                    <li class="{{ in_array($currentRoute, ['get.web.domestic.freight.vendors.list', 'get.web.domestic.freight.vendors.charges']) ? 'active' : '' }}">
                         <a href="{{ route('get.web.domestic.freight.vendors.list') }}"><i class="fa fa-circle-o"></i> Domestic Freight Vendors</a>
                     </li>
                 </ul>
