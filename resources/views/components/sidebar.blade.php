@@ -544,8 +544,12 @@
                     'domestic-vendor-destinations','create.domestic-vendor-destination','edit.domestic-vendor-destination',
                     'domestic-vendor-truck-sizes','create.domestic-vendor-truck-size','edit.domestic-vendor-truck-size',
                 ];
+                $domesticVendorProductRoutes = [
+                    'get.web.domestic.freight.vendors.list',
+                ];
+                $domesticVendorRoutes = array_merge($domesticVendorMasterRoutes, $domesticVendorProductRoutes);
             @endphp
-            <li class="treeview {{ in_array($currentRoute, $domesticVendorMasterRoutes) ? 'active' : '' }}">
+            <li class="treeview {{ in_array($currentRoute, $domesticVendorRoutes) ? 'active' : '' }}">
                 <a href="javascript:void(0)">
                     <i class="fa fa-industry"></i>
                     <span>Domestic Vendor</span>
@@ -578,6 +582,9 @@
                                 <a href="{{ route('domestic-vendor-truck-sizes') }}"><i class="fa fa-circle-o"></i> Truck Size (per MT)</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="{{ $currentRoute === 'get.web.domestic.freight.vendors.list' ? 'active' : '' }}">
+                        <a href="{{ route('get.web.domestic.freight.vendors.list') }}"><i class="fa fa-circle-o"></i> Domestic Freight Vendors</a>
                     </li>
                 </ul>
             </li>
