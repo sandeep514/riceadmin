@@ -600,7 +600,11 @@ class WebBrandController extends Controller
         $categoryId = (int) $vendorType;
         $categoryName = trim((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''));
         $kind = VendorProductCatalog::detectKindFromCategoryId($categoryId);
-        $productOwnerIds = VendorProductCatalog::productOwnerIdsForKind($kind);
+        // productOwnerIdsForKind(null) is every vendor with any catalog product.
+        // Categories without a catalog, such as Domestic Transporters, must stay on selected_category.
+        $productOwnerIds = $kind !== null
+            ? VendorProductCatalog::productOwnerIdsForKind($kind)
+            : [];
         $productOwnerIdList = array_keys($productOwnerIds);
 
         $webBusinessDetails = WebBusinessDetails::query()
@@ -616,7 +620,10 @@ class WebBrandController extends Controller
                 })->where('is_active_listing', 1);
 
                 if ($productOwnerIdList !== []) {
-                    $query->orWhereIn('user_id', $productOwnerIdList);
+                    $query->orWhere(function ($owners) use ($productOwnerIdList) {
+                        $owners->whereIn('user_id', $productOwnerIdList)
+                            ->where('is_active_listing', 1);
+                    });
                 }
             })
             ->orderByDesc('is_sntc_recommended')
