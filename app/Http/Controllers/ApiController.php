@@ -2083,6 +2083,23 @@ class ApiController extends Controller
 
     public function getPricesWeb(Request $request ,$state, $ricetype)
     {
+        // Prices change only on admin save (see LivePricesController: version bump).
+        // Cache the whole payload so repeated polls are served in ms, not seconds.
+        $version = (int) Cache::get('web:prices:version', 1);
+        $cacheKey = 'web:prices:v' . $version . ':' . md5(json_encode([$state, $ricetype, $request->get('year')]));
+
+        $payload = Cache::remember($cacheKey, now()->addSeconds(180), function () use ($request, $state, $ricetype) {
+            return $this->computePricesWeb($request, $state, $ricetype)->getData(true);
+        });
+
+        return response()->json($payload);
+    }
+
+    /**
+     * Heavy builder behind getPricesWeb (result cached by getPricesWeb).
+     */
+    private function computePricesWeb(Request $request ,$state, $ricetype)
+    {
         $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
         $todayDate = Carbon::now();
         $latestCropYear = (int) (LivePrice::max('cropYear') ?: $todayDate->year);
@@ -2165,8 +2182,6 @@ class ApiController extends Controller
         |--------------------------------------------------------------------------
         */
 
-        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
-
         [$priceDayStart, $priceDayNext] = LivePrice::createdAtDayRange($lastEnteredRecord->created_at);
         $latestPriceIdsForDate = LivePrice::query()
             ->selectRaw('MAX(id) as id')
@@ -2197,6 +2212,16 @@ class ApiController extends Controller
             ->get();
 
         $data = $this->attachLivePriceTradeCounts($data);
+
+        // Restrict the "invalid latest tuple" check to tuples actually present in
+        // this payload. Same filter outcome, but probes ~dozens of index ranges
+        // instead of scanning every row of the state+year.
+        $pricePairs = $data
+            ->map(fn ($row) => [(string) $row->getAttribute('name'), (string) $row->getAttribute('form')])
+            ->unique(fn ($pair) => $pair[0] . '|' . $pair[1])
+            ->values()
+            ->all();
+        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear, $pricePairs);
 
         $data = $data
             ->filter(function ($row) use ($invalidLatestTupleKeys) {
@@ -2384,14 +2409,29 @@ class ApiController extends Controller
         ]);
     }
 
-    private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
+    private function invalidLatestLivePriceTupleKeys($state, $cropYear = null, ?array $onlyPairs = null): array
     {
+        // Restricted mode (pairs of [name, form]): only check these tuples.
+        // Same result for callers that filter an already-fetched row set.
+        if (is_array($onlyPairs) && $onlyPairs === []) {
+            return [];
+        }
+
         $latestIds = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->where('state', $state)
             ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
+            ->when(is_array($onlyPairs) && $onlyPairs !== [], function ($q) use ($onlyPairs) {
+                $q->where(function ($qq) use ($onlyPairs) {
+                    foreach ($onlyPairs as $pair) {
+                        $qq->orWhere(function ($w) use ($pair) {
+                            $w->where('name', $pair[0])->where('form', $pair[1]);
+                        });
+                    }
+                });
+            })
             ->groupBy('name', 'form', 'state', 'cropYear');
 
         return LivePrice::query()

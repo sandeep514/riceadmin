@@ -9,6 +9,7 @@ use App\LivePriceStatusMessage;
 use App\LivePricesOpeningClosing;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Session;
 
@@ -341,6 +342,9 @@ class LivePricesController extends Controller
         // }/
 
 
+        // Bust the cached web price payloads (ApiController@getPricesWeb).
+        Cache::increment('web:prices:version');
+
         Session::flash('success','Success|Price saved successfully!');
         return back();
     }
@@ -430,6 +434,9 @@ class LivePricesController extends Controller
                 ]
             );
         }
+
+        // Bust the cached web price payloads (ApiController@getPricesWeb).
+        Cache::increment('web:prices:version');
 
         return response()->json(['status' => true , 'message' => 'data uploaded successfully']);
     }
