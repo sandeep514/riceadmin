@@ -2106,12 +2106,9 @@ class ApiController extends Controller
 
         $cropYear = (request()->has('year')) ? request()->get('year') : $latestCropYear;
 
-        $year = ($todayDate->year >= $latestCropYear) ? $todayDate->year : $cropYear;
-        $date = $todayDate->day;
-        $month = $todayDate->month;
-
-        $lastEnteredRecord = Carbon::createFromDate($year, $month, $date)->format('Y-m-d');
-        [$lastEnteredStart, $lastEnteredNext] = LivePrice::createdAtDayRange($lastEnteredRecord);
+        // Latest matching row overall (today preferred naturally: newest first).
+        // Single ORDER BY id DESC walk — no temp-table GROUP BY subquery.
+        [, $lastEnteredNext] = LivePrice::createdAtDayRange($todayDate);
 
         $lastRecord = LivePrice::query()
             ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
@@ -2123,36 +2120,14 @@ class ApiController extends Controller
             ->where('live_prices.min_price', '>', 0)
             ->where('live_prices.max_price', '>', 0)
             ->where('live_prices.state', $state)
-            ->where('live_prices.created_at', '>=', $lastEnteredStart)
-            ->where('live_prices.created_at', '<', $lastEnteredNext)
             ->where('live_prices.cropYear', $cropYear)
+            ->where('live_prices.created_at', '<', $lastEnteredNext)
             ->where('rn.type', $ricetype)
             ->where('rf.type', $ricetype)
             ->where('rf.status', 1)
             ->select('live_prices.*')
-            ->latest('live_prices.id')
+            ->orderByDesc('live_prices.id')
             ->first();
-
-        if (!$lastRecord) {
-            $lastRecord = LivePrice::query()
-                ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
-                ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
-                ->where('live_prices.name', '!=', '0')
-                ->where('live_prices.form', '!=', '0')
-                ->whereNotNull('live_prices.min_price')
-                ->whereNotNull('live_prices.max_price')
-                ->where('live_prices.min_price', '>', 0)
-                ->where('live_prices.max_price', '>', 0)
-                ->where('live_prices.state', $state)
-                ->where('live_prices.cropYear', $cropYear)
-                ->where('live_prices.created_at', '<', $lastEnteredStart)
-                ->where('rn.type', $ricetype)
-                ->where('rf.type', $ricetype)
-                ->where('rf.status', 1)
-                ->select('live_prices.*')
-                ->latest('live_prices.id')
-                ->first();
-        }
 
         $lastEnteredRecord = $lastRecord;
 
@@ -2221,7 +2196,7 @@ class ApiController extends Controller
             ->unique(fn ($pair) => $pair[0] . '|' . $pair[1])
             ->values()
             ->all();
-        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear, $pricePairs);
+        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeysForPairs($state, $cropYear, $pricePairs);
 
         $data = $data
             ->filter(function ($row) use ($invalidLatestTupleKeys) {
@@ -2409,33 +2384,59 @@ class ApiController extends Controller
         ]);
     }
 
-    private function invalidLatestLivePriceTupleKeys($state, $cropYear = null, ?array $onlyPairs = null): array
+    private function invalidLatestLivePriceTupleKeys($state, $cropYear = null): array
     {
-        // Restricted mode (pairs of [name, form]): only check these tuples.
-        // Same result for callers that filter an already-fetched row set.
-        if (is_array($onlyPairs) && $onlyPairs === []) {
-            return [];
-        }
-
         $latestIds = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
             ->where('state', $state)
             ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
-            ->when(is_array($onlyPairs) && $onlyPairs !== [], function ($q) use ($onlyPairs) {
-                $q->where(function ($qq) use ($onlyPairs) {
-                    foreach ($onlyPairs as $pair) {
-                        $qq->orWhere(function ($w) use ($pair) {
-                            $w->where('name', $pair[0])->where('form', $pair[1]);
-                        });
-                    }
-                });
-            })
             ->groupBy('name', 'form', 'state', 'cropYear');
 
         return LivePrice::query()
             ->whereIn('id', $latestIds)
+            ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
+            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
+            ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
+            ->all();
+    }
+
+    /**
+     * Same as invalidLatestLivePriceTupleKeys but only for the given
+     * [name, form] pairs (tuples already fetched by the caller).
+     *
+     * Per-pair MAX(id) index dives + one PK fetch — no temp-table GROUP BY
+     * over the whole state+year, which stalls under I/O contention.
+     *
+     * @param  array<int, array{0: string, 1: string}>  $pairs
+     * @return array<string, true>
+     */
+    private function invalidLatestLivePriceTupleKeysForPairs($state, $cropYear, array $pairs): array
+    {
+        if ($pairs === []) {
+            return [];
+        }
+
+        $maxIds = [];
+        foreach ($pairs as $pair) {
+            $id = LivePrice::query()
+                ->where('state', $state)
+                ->where('cropYear', $cropYear)
+                ->where('name', $pair[0])
+                ->where('form', $pair[1])
+                ->max('id');
+            if ($id) {
+                $maxIds[] = $id;
+            }
+        }
+
+        if ($maxIds === []) {
+            return [];
+        }
+
+        return LivePrice::query()
+            ->whereIn('id', $maxIds)
             ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
             ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
             ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
