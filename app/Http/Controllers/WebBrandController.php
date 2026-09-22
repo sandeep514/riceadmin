@@ -609,7 +609,7 @@ class WebBrandController extends Controller
 
         $webBusinessDetails = WebBusinessDetails::query()
             ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
-            ->where(function ($query) use ($vendorType, $categoryId, $categoryName, $productOwnerIdList) {
+            ->where(function ($query) use ($vendorType, $categoryId, $categoryName, $productOwnerIdList, $kind) {
                 $query->where(function ($inner) use ($vendorType, $categoryId, $categoryName) {
                     $inner->where('selected_category', $vendorType)
                         ->orWhere('selected_category', (string) $categoryId)
