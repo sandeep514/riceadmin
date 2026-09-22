@@ -2158,7 +2158,12 @@ class ApiController extends Controller
         */
 
         [$priceDayStart, $priceDayNext] = LivePrice::createdAtDayRange($lastEnteredRecord->created_at);
-        $latestPriceIdsForDate = LivePrice::query()
+
+        // Latest id per tuple for the price day (covering index, ~10ms).
+        // Fetched FIRST as a plain id list: embedding it as a subquery makes
+        // MySQL drive the outer query from rice_forms and probe ~60k index
+        // rows instead of fetching these few dozen rows by PK (~8s).
+        $priceDayIds = LivePrice::query()
             ->selectRaw('MAX(id) as id')
             ->where('name', '!=', '0')
             ->where('form', '!=', '0')
@@ -2166,25 +2171,30 @@ class ApiController extends Controller
             ->where('cropYear', $cropYear)
             ->where('created_at', '>=', $priceDayStart)
             ->where('created_at', '<', $priceDayNext)
-            ->groupBy('name', 'form', 'state', 'cropYear');
+            ->groupBy('name', 'form', 'state', 'cropYear')
+            ->pluck('id')
+            ->all();
 
-        $data = LivePrice::query()
-            ->with([
-                'name_rel:id,name,type,order',
-                'form_rel:id,form_name,type,order,status',
-            ])
-            ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
-            ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
-            ->select('live_prices.*')
-            ->whereIn('live_prices.id', $latestPriceIdsForDate)
-            ->where('live_prices.state', $state)
-            ->where('live_prices.cropYear' , $cropYear)
-            ->where('rn.type', $ricetype)
-            ->where('rf.type', $ricetype)
-            ->where('rf.status', 1)
-            ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
-            ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
-            ->get();
+        $data = collect();
+        if ($priceDayIds !== []) {
+            $data = LivePrice::query()
+                ->with([
+                    'name_rel:id,name,type,order',
+                    'form_rel:id,form_name,type,order,status',
+                ])
+                ->join('rice_names as rn', 'rn.id', '=', 'live_prices.name')
+                ->join('rice_forms as rf', 'rf.id', '=', 'live_prices.form')
+                ->select('live_prices.*')
+                ->whereIntegerInRaw('live_prices.id', $priceDayIds)
+                ->where('live_prices.state', $state)
+                ->where('live_prices.cropYear' , $cropYear)
+                ->where('rn.type', $ricetype)
+                ->where('rf.type', $ricetype)
+                ->where('rf.status', 1)
+                ->orderByRaw('ISNULL(rn.order) ASC, rn.order ASC')
+                ->orderByRaw('ISNULL(rf.order) ASC, rf.order ASC')
+                ->get();
+        }
 
         $data = $this->attachLivePriceTradeCounts($data);
 
