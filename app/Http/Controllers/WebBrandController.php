@@ -620,9 +620,14 @@ class WebBrandController extends Controller
                 })->where('is_active_listing', 1);
 
                 if ($productOwnerIdList !== []) {
-                    $query->orWhere(function ($owners) use ($productOwnerIdList) {
-                        $owners->whereIn('user_id', $productOwnerIdList)
-                            ->where('is_active_listing', 1);
+                    $query->orWhere(function ($owners) use ($productOwnerIdList, $kind) {
+                        $owners->whereIn('user_id', $productOwnerIdList);
+                        // Domestic freight: an admin-verified charge IS the active
+                        // listing, so verified vendors show even when the vendor-level
+                        // listing toggle is off. Other kinds keep the toggle requirement.
+                        if ($kind !== VendorProductCatalog::KIND_DOMESTIC_FREIGHT) {
+                            $owners->where('is_active_listing', 1);
+                        }
                     });
                 }
             })
