@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PackingType;
 use App\Services\WebClearingAgentProductService;
+use App\Services\WebDomesticFreightProductService;
 use App\Services\WebForwarderProductService;
 use App\Services\WebVendorEquipmentProductService;
 use App\Services\WebVendorPackagingProductService;
@@ -11,6 +12,7 @@ use App\Support\VendorProductCatalog;
 use App\VendorPackingType;
 use App\WebBusinessDetails;
 use App\WebClearingAgentProduct;
+use App\WebDomesticFreightProduct;
 use App\WebForwarderProduct;
 use App\WebRiceBagProduct;
 use Illuminate\Http\Request;
@@ -107,6 +109,11 @@ class WebVendorProductController extends Controller
             $imageBasePath = null;
         } elseif ($kind === VendorProductCatalog::KIND_CLEARING_AGENT) {
             $service = new WebClearingAgentProductService();
+            $products = $service->verifiedProductsForOwners($ownerIds);
+            $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
+            $imageBasePath = null;
+        } elseif ($kind === VendorProductCatalog::KIND_DOMESTIC_FREIGHT) {
+            $service = new WebDomesticFreightProductService();
             $products = $service->verifiedProductsForOwners($ownerIds);
             $data = $products->map(fn ($product) => $service->serializeVendorProduct($product))->values();
             $imageBasePath = null;
@@ -265,6 +272,61 @@ class WebVendorProductController extends Controller
                 'recommended' => 0,
                 'has_products' => true,
                 'vendorKind' => VendorProductCatalog::KIND_FORWARDER,
+            ],
+            'data' => [$service->serializeVendorProduct($product)],
+            'imageBasePath' => null,
+        ], 200);
+    }
+
+    /**
+     * Public catalog alias for domestic freight vendors.
+     * {id} is a vendor/business id; if that misses, fall back to a charge-row id.
+     */
+    public function listDomesticFreightCharges(Request $request, $id)
+    {
+        $response = $this->listByVendorId($request, $id);
+        if ((int) $response->getStatusCode() !== 404) {
+            return $response;
+        }
+
+        $product = WebDomesticFreightProduct::with([
+            'stateRel',
+            'cityRel',
+            'destinationRel',
+            'truckSizeRel',
+        ])->find((int) $id);
+
+        if ($product === null) {
+            return $response;
+        }
+
+        $ownerId = (int) $product->user_id;
+        if ($ownerId > 0 && $ownerId !== (int) $id) {
+            $ownerResponse = $this->listByVendorId($request, $ownerId);
+            if ((int) $ownerResponse->getStatusCode() !== 404) {
+                return $ownerResponse;
+            }
+        }
+
+        if ((int) $product->status !== 1) {
+            return $response;
+        }
+
+        $service = new WebDomesticFreightProductService();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Vendor products fetched successfully.',
+            'vendor' => [
+                'id' => $ownerId > 0 ? $ownerId : (int) $product->id,
+                'company_name' => null,
+                'product' => null,
+                'contactPerson' => null,
+                'contactMobile' => null,
+                'address' => null,
+                'recommended' => 0,
+                'has_products' => true,
+                'vendorKind' => VendorProductCatalog::KIND_DOMESTIC_FREIGHT,
             ],
             'data' => [$service->serializeVendorProduct($product)],
             'imageBasePath' => null,

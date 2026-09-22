@@ -303,6 +303,8 @@ use Pusher\Pusher;
     Route::get('web/vendor/cleaning-agent-charges/{id}' , ['as' => 'web.vendor.cleaning.agent.charges' , 'uses' => 'WebVendorProductController@listClearingAgentCharges', 'middleware' => 'portal.api.token' ]);
     Route::get('web/vendor/forwarder-charges/{id}' , ['as' => 'web.vendor.forwarder.charges' , 'uses' => 'WebVendorProductController@listForwarderCharges', 'middleware' => 'portal.api.token' ]);
     Route::get('web/vendor/forwarder/{id}' , ['as' => 'web.vendor.forwarder' , 'uses' => 'WebVendorProductController@listForwarderCharges', 'middleware' => 'portal.api.token' ]);
+    Route::get('web/vendor/domestic-freight-charges/{id}' , ['as' => 'web.vendor.domestic.freight.charges' , 'uses' => 'WebVendorProductController@listDomesticFreightCharges', 'middleware' => 'portal.api.token' ]);
+    Route::get('web/vendor/domestic-freight/{id}' , ['as' => 'web.vendor.domestic.freight' , 'uses' => 'WebVendorProductController@listDomesticFreightCharges', 'middleware' => 'portal.api.token' ]);
 
     
 

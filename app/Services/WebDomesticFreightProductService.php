@@ -141,6 +141,28 @@ class WebDomesticFreightProductService
         ], 200);
     }
 
+    public function serializeVendorProduct(WebDomesticFreightProduct $row): array
+    {
+        return $this->serialize($row);
+    }
+
+    /**
+     * Verified (status = 1) freight charges for the public buyer catalog.
+     */
+    public function verifiedProductsForOwners(array $ownerIds)
+    {
+        $ownerIds = array_values(array_unique(array_filter(array_map('intval', $ownerIds))));
+        if ($ownerIds === []) {
+            return WebDomesticFreightProduct::query()->whereRaw('1 = 0')->get();
+        }
+
+        return WebDomesticFreightProduct::with(['stateRel', 'cityRel', 'destinationRel', 'truckSizeRel'])
+            ->whereIn('user_id', $ownerIds)
+            ->where('status', 1)
+            ->orderByDesc('id')
+            ->get();
+    }
+
     public function delete(Request $request, $id)
     {
         $product = WebDomesticFreightProduct::query()->find((int) $id);
