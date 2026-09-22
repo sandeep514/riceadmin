@@ -6,6 +6,7 @@ use App\Category;
 use App\ServiceProviderUserMap;
 use App\User;
 use App\WebBusinessDetails;
+use App\WebDomesticFreightProduct;
 
 class DomesticFreightVendorController extends Controller
 {
@@ -67,7 +68,14 @@ class DomesticFreightVendorController extends Controller
             ->filter(fn ($id) => $id > 0)
             ->all();
 
-        $userIds = array_values(array_unique(array_merge($businessUserIds, $mapUserIds)));
+        $productUserIds = WebDomesticFreightProduct::query()
+            ->distinct()
+            ->pluck('user_id')
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn ($id) => $id > 0)
+            ->all();
+
+        $userIds = array_values(array_unique(array_merge($businessUserIds, $mapUserIds, $productUserIds)));
 
         $vendors = $userIds === []
             ? collect()

@@ -115,6 +115,10 @@
             Route::get('web/forwarder-product/{id}', [\App\Http\Controllers\WebForwarderProductController::class, 'show'])->where('id', '[0-9]+');
             Route::delete('web/forwarder-product/{id}', [\App\Http\Controllers\WebForwarderProductController::class, 'delete'])->where('id', '[0-9]+');
 
+            Route::post('web/domestic-freight-product/sync', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'sync']);
+            Route::get('web/domestic-freight-product/list/{userId}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'listByUser']);
+            Route::delete('web/domestic-freight-product/{id}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'delete'])->where('id', '[0-9]+');
+
             Route::post('web/plans/by-role-category', [PortalApiController::class, 'getWebPlansByRoleCategory']);
             Route::get('years/closure-status', [PortalApiController::class, 'getYearClosureStatus']);
             

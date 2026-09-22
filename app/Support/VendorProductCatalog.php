@@ -7,6 +7,7 @@ use App\WebBusinessDetails;
 use App\WebCartoonProduct;
 use App\WebClearingAgentProduct;
 use App\WebCylinderProduct;
+use App\WebDomesticFreightProduct;
 use App\WebForwarderProduct;
 use App\WebLabEquipmentProduct;
 use App\WebMachineryEquipmentProduct;
@@ -30,6 +31,8 @@ final class VendorProductCatalog
 
     public const KIND_FORWARDER = 'forwarder';
 
+    public const KIND_DOMESTIC_FREIGHT = 'domestic_freight';
+
     /** @deprecated Use KIND_CLEARING_AGENT */
     public const KIND_CLEANING_AGENT = self::KIND_CLEARING_AGENT;
 
@@ -46,6 +49,7 @@ final class VendorProductCatalog
             self::KIND_MACHINERY_EQUIPMENT => WebMachineryEquipmentProduct::class,
             self::KIND_FORWARDER => WebForwarderProduct::class,
             self::KIND_CLEARING_AGENT => WebClearingAgentProduct::class,
+            self::KIND_DOMESTIC_FREIGHT => WebDomesticFreightProduct::class,
         ];
     }
 
@@ -69,6 +73,13 @@ final class VendorProductCatalog
 
         if (str_contains($name, 'forwarder') || str_contains($name, 'forwarding')) {
             return self::KIND_FORWARDER;
+        }
+
+        if (
+            str_contains($name, 'domestic')
+            && (str_contains($name, 'transport') || str_contains($name, 'freight') || str_contains($name, 'transporter'))
+        ) {
+            return self::KIND_DOMESTIC_FREIGHT;
         }
 
         if (str_contains($name, 'cleaning') || str_contains($name, 'clearing')) {
