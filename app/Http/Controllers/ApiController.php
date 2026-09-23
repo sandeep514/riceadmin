@@ -2642,6 +2642,9 @@ class ApiController extends Controller
                 'name_rel',
                 'form_rel' => $formRelConstraint,
             ])->where(['state' => $state])
+                ->whereNotNull('max_price')
+                ->where('max_price', '!=', '')
+                ->where('max_price', '>', 0)
                 ->where(function ($q) use ($year) {
                     $this->applyLivePriceCropYearMatch($q, $year);
                 })
@@ -2655,6 +2658,9 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])
+                    ->whereNotNull('max_price')
+                    ->where('max_price', '!=', '')
+                    ->where('max_price', '>', 0)
                     ->createdBetweenDays($periodStart, $periodEnd)
                     ->get();
 
@@ -2665,13 +2671,19 @@ class ApiController extends Controller
                     'name_rel',
                     'form_rel' => $formRelConstraint,
                 ])->where(['state' => $state])
+                    ->whereNotNull('max_price')
+                    ->where('max_price', '!=', '')
+                    ->where('max_price', '>', 0)
                     ->createdBetweenDays($periodStart, $periodEnd)
                     ->get();
             }
         }
 
         // Multiple updates on the same day: keep only the last added row per IST calendar day.
-        $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices);
+        // Exclude rows where price is null / empty / 0.
+        $pricesLastEntryPerDay = $this->collapseLivePricesToLatestPerDay($prices)->filter(function ($row) {
+            return $row->max_price !== null && $row->max_price !== '' && is_numeric($row->max_price) && (float) $row->max_price > 0;
+        })->values();
 
         // Earliest / latest IST dates in the series (season open = first chart point for these params).
         $seasonOpeningDate = null;
