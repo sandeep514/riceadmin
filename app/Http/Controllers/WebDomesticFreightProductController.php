@@ -29,6 +29,11 @@ class WebDomesticFreightProductController extends Controller
         return $this->service->statesSummary($request);
     }
 
+    public function listByState(Request $request, $stateId = null)
+    {
+        return $this->service->listByState($request, $stateId);
+    }
+
     public function delete(Request $request, $id)
     {
         return $this->service->delete($request, $id);

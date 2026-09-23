@@ -117,6 +117,7 @@
 
             Route::post('web/domestic-freight-product/sync', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'sync']);
             Route::get('web/domestic-freight-product/states-summary', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'statesSummary']);
+            Route::get('web/domestic-freight-product/state/{stateId}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'listByState'])->where('stateId', '[0-9]+');
             Route::get('web/domestic-freight-product/list/{userId}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'listByUser']);
             Route::delete('web/domestic-freight-product/{id}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'delete'])->where('id', '[0-9]+');
 

@@ -201,6 +201,53 @@ class WebDomesticFreightProductService
         ], 200);
     }
 
+    /**
+     * Login user's own domestic charges for a single state.
+     * State id comes from route param {stateId} or query ?state_id= / ?stateId=
+     */
+    public function listByState(Request $request, $stateId = null)
+    {
+        $authUser = $request->user();
+        $userId = $authUser ? (int) $authUser->id : (int) $request->input('user_id', $request->input('userId', 0));
+
+        if ($userId <= 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User id is required.',
+            ], 422);
+        }
+
+        $stateId = $stateId ?? $request->input('state_id', $request->input('stateId'));
+        $stateId = (int) $stateId;
+
+        if ($stateId <= 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'stateId is required.',
+            ], 422);
+        }
+
+        $products = WebDomesticFreightProduct::query()
+            ->with(['stateRel', 'cityRel', 'destinationRel', 'truckSizeRel'])
+            ->where('user_id', $userId)
+            ->where('state_id', $stateId)
+            ->orderByDesc('id')
+            ->get()
+            ->map(fn (WebDomesticFreightProduct $row) => $this->serialize($row))
+            ->values();
+
+        $stateName = DomesticVendorState::query()->where('id', $stateId)->value('name');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Domestic freight state routes fetched successfully.',
+            'state_id' => $stateId,
+            'state' => $stateName,
+            'count' => $products->count(),
+            'data' => $products,
+        ], 200);
+    }
+
     public function serializeVendorProduct(WebDomesticFreightProduct $row): array
     {
         return $this->serialize($row);
