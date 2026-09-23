@@ -141,6 +141,66 @@ class WebDomesticFreightProductService
         ], 200);
     }
 
+    /**
+     * Login user's own domestic charges grouped by state with row counts.
+     * Response: [{state_id, state, count}]
+     */
+    public function statesSummary(Request $request)
+    {
+        $authUser = $request->user();
+        $userId = $authUser ? (int) $authUser->id : (int) $request->input('user_id', $request->input('userId', 0));
+
+        if ($userId <= 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User id is required.',
+            ], 422);
+        }
+
+        $rows = WebDomesticFreightProduct::query()
+            ->with('stateRel')
+            ->where('user_id', $userId)
+            ->get(['id', 'user_id', 'state_id', 'state']);
+
+        $grouped = $rows
+            ->groupBy(function (WebDomesticFreightProduct $row) {
+                if ($row->state_id) {
+                    return 'id:'.$row->state_id;
+                }
+                $name = trim((string) ($row->state ?? ''));
+                if ($name === '') {
+                    return 'unknown';
+                }
+
+                return 'name:'.mb_strtolower($name);
+            })
+            ->map(function ($items) {
+                /** @var WebDomesticFreightProduct $first */
+                $first = $items->first();
+                $stateName = $first->state;
+                if (($stateName === null || trim((string) $stateName) === '') && $first->stateRel) {
+                    $stateName = $first->stateRel->name;
+                }
+
+                return [
+                    'state_id' => $first->state_id !== null ? (int) $first->state_id : null,
+                    'state' => $stateName,
+                    'count' => $items->count(),
+                ];
+            })
+            ->values()
+            ->sortBy('state')
+            ->values();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Domestic freight states summary fetched successfully.',
+            'data' => $grouped,
+            'total_states' => $grouped->count(),
+            'total_charges' => $rows->count(),
+        ], 200);
+    }
+
     public function serializeVendorProduct(WebDomesticFreightProduct $row): array
     {
         return $this->serialize($row);

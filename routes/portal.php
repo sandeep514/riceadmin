@@ -116,6 +116,7 @@
             Route::delete('web/forwarder-product/{id}', [\App\Http\Controllers\WebForwarderProductController::class, 'delete'])->where('id', '[0-9]+');
 
             Route::post('web/domestic-freight-product/sync', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'sync']);
+            Route::get('web/domestic-freight-product/states-summary', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'statesSummary']);
             Route::get('web/domestic-freight-product/list/{userId}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'listByUser']);
             Route::delete('web/domestic-freight-product/{id}', [\App\Http\Controllers\WebDomesticFreightProductController::class, 'delete'])->where('id', '[0-9]+');
 
