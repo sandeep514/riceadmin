@@ -34,9 +34,9 @@
                         <th>Category</th>
                         <th>Contact</th>
                         <th>Products</th>
-                        <th>Listing</th>
                         <th>SNTC Recommended</th>
                         <th>Status</th>
+                        <th>Listing</th>
                         <th width="180">Action</th>
                     </tr>
                     </thead>
@@ -72,13 +72,6 @@
                                 <br><small>{{ $counts->verified ?? 0 }} verified</small>
                             </td>
                             <td>
-                                @if((int) optional($business)->is_active_listing === 1)
-                                    <span class="label label-success">Active listing</span>
-                                @else
-                                    <span class="label label-default">Hidden</span>
-                                @endif
-                            </td>
-                            <td>
                                 @if($business)
                                     <x-sntc-recommended-yes-no
                                         :user-id="$vendor->id"
@@ -95,6 +88,13 @@
                                     <span class="label label-success">Active</span>
                                 @else
                                     <span class="label label-warning">Pending</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if((int) optional($business)->is_active_listing === 1)
+                                    <span class="label label-success">Active listing</span>
+                                @else
+                                    <span class="label label-default">Hidden</span>
                                 @endif
                             </td>
                             <td style="white-space:nowrap;">
@@ -121,7 +121,7 @@
         $('#forwarderVendorsTable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [7, 9] }]
+            columnDefs: [{ orderable: false, targets: [6, 8, 9] }]
         });
     });
 </script>

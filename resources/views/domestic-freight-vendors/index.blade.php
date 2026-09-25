@@ -29,9 +29,9 @@
                         <th>Category</th>
                         <th>Product</th>
                         <th>Contact</th>
-                        <th>Listing</th>
                         <th>SNTC Recommended</th>
                         <th>Status</th>
+                        <th>Listing</th>
                         <th width="120">Action</th>
                     </tr>
                     </thead>
@@ -64,16 +64,6 @@
                             </td>
                             <td>
                                 @if($business)
-                                    <x-active-listing-yes-no
-                                        :user-id="$vendor->id"
-                                        :value="$business->is_active_listing"
-                                    />
-                                @else
-                                    —
-                                @endif
-                            </td>
-                            <td>
-                                @if($business)
                                     <x-sntc-recommended-yes-no
                                         :user-id="$vendor->id"
                                         :value="$business->is_sntc_recommended"
@@ -89,6 +79,16 @@
                                     <span class="label label-success">Active</span>
                                 @else
                                     <span class="label label-warning">Pending</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($business)
+                                    <x-active-listing-yes-no
+                                        :user-id="$vendor->id"
+                                        :value="$business->is_active_listing"
+                                    />
+                                @else
+                                    —
                                 @endif
                             </td>
                             <td style="white-space:nowrap;">
@@ -114,7 +114,7 @@
         $('#domesticFreightVendorsTable').DataTable({
             pageLength: 25,
             order: [[0, 'desc']],
-            columnDefs: [{ orderable: false, targets: [6, 7, 9] }]
+            columnDefs: [{ orderable: false, targets: [6, 8, 9] }]
         });
     });
 </script>
