@@ -597,37 +597,72 @@ class WebBrandController extends Controller
 
     public function vendorList($vendorType)
     {
-        $categoryId = (int) $vendorType;
-        $categoryName = trim((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''));
-        $kind = VendorProductCatalog::detectKindFromCategoryId($categoryId);
+        $rawType = trim((string) $vendorType);
+        $categoryId = (int) $rawType;
+        $categoryName = $categoryId > 0
+            ? trim((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''))
+            : '';
+        $kind = $categoryId > 0
+            ? VendorProductCatalog::detectKindFromCategoryId($categoryId)
+            : null;
+
+        // Backward compatibility: earlier clients send legacy bag_vendor type ids
+        // (1-14, see BagVendors::vendorType()) instead of category.id.
+        // Resolve those to a catalog kind + legacy names so the list still matches.
+        $legacyNames = [];
+        if ($kind === null) {
+            $legacyMap = \App\BagVendors::vendorType();
+            if (isset($legacyMap[$categoryId])) {
+                $legacyNames[] = trim((string) $legacyMap[$categoryId]);
+                $kind = VendorProductCatalog::detectKindFromCategoryName($legacyMap[$categoryId]);
+            } elseif ($rawType !== '' && $categoryId <= 0) {
+                // Non-numeric type (e.g. "Clearing agents") passed directly.
+                $kind = VendorProductCatalog::detectKindFromCategoryName($rawType);
+            }
+        }
         // productOwnerIdsForKind(null) is every vendor with any catalog product.
-        // Categories without a catalog, such as Domestic Transporters, must stay on selected_category.
+        // Categories without a catalog must stay on selected_category.
         $productOwnerIds = $kind !== null
             ? VendorProductCatalog::productOwnerIdsForKind($kind)
             : [];
         $productOwnerIdList = array_keys($productOwnerIds);
 
+        $categoryNameLower = $categoryName !== '' ? strtolower($categoryName) : null;
+        $legacyLower = array_values(array_unique(array_filter(array_map(
+            fn ($n) => strtolower(trim((string) $n)),
+            $legacyNames
+        ))));
+
         $webBusinessDetails = WebBusinessDetails::query()
-            ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended'])
-            ->where(function ($query) use ($vendorType, $categoryId, $categoryName, $productOwnerIdList, $kind) {
-                $query->where(function ($inner) use ($vendorType, $categoryId, $categoryName) {
-                    $inner->where('selected_category', $vendorType)
-                        ->orWhere('selected_category', (string) $categoryId)
-                        ->orWhere('selected_category', $categoryId);
-                    if ($categoryName !== '') {
-                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [strtolower($categoryName)]);
+            ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended', 'is_active_listing', 'selected_category'])
+            // Inactive vendors stay hidden until admin approves (is_active_listing = 1).
+            ->where('is_active_listing', 1)
+            ->where(function ($query) use ($rawType, $categoryId, $categoryNameLower, $legacyLower, $productOwnerIdList) {
+                $query->where(function ($inner) use ($rawType, $categoryId, $categoryNameLower, $legacyLower) {
+                    $inner->where('selected_category', $rawType);
+                    if ((string) $categoryId !== $rawType) {
+                        $inner->orWhere('selected_category', (string) $categoryId);
                     }
-                })->where('is_active_listing', 1);
+                    $inner->orWhere('selected_category', $categoryId);
+                    // selected_category may be stored as CSV ("20,21") or with spaces.
+                    if ($categoryId > 0) {
+                        $inner->orWhereRaw('FIND_IN_SET(?, selected_category) > 0', [(string) $categoryId]);
+                    }
+                    if ($categoryNameLower !== null) {
+                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [$categoryNameLower]);
+                    }
+                    foreach ($legacyLower as $legacy) {
+                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [$legacy]);
+                    }
+                });
 
                 if ($productOwnerIdList !== []) {
-                    $query->orWhere(function ($owners) use ($productOwnerIdList, $kind) {
-                        $owners->whereIn('user_id', $productOwnerIdList);
-                        // Domestic freight: an admin-verified charge IS the active
-                        // listing, so verified vendors show even when the vendor-level
-                        // listing toggle is off. Other kinds keep the toggle requirement.
-                        if ($kind !== VendorProductCatalog::KIND_DOMESTIC_FREIGHT) {
-                            $owners->where('is_active_listing', 1);
-                        }
+                    // Verified product vendors, matched by users.id as well as
+                    // web_business_details.id (products were historically stored
+                    // under either). Listing toggle above still applies.
+                    $query->orWhere(function ($owners) use ($productOwnerIdList) {
+                        $owners->whereIn('user_id', $productOwnerIdList)
+                            ->orWhereIn('id', $productOwnerIdList);
                     });
                 }
             })
