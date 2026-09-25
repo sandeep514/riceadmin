@@ -695,6 +695,23 @@ class WebBrandController extends Controller
             ])
             ->values();
 
+        if (request()->boolean('debug')) {
+            return response()->json([
+                'status' => true,
+                'message' => 'Vendors get successfully.',
+                'data' => $data,
+                'debug' => [
+                    'type' => $rawType,
+                    'category_id' => $categoryId,
+                    'category_name' => $categoryName !== '' ? $categoryName : null,
+                    'kind' => $kind,
+                    'verified_owner_count' => count($productOwnerIdList),
+                    'verified_owner_sample' => array_slice($productOwnerIdList, 0, 20),
+                    'result_count' => $data->count(),
+                ],
+            ], 200);
+        }
+
         return response()->json([
             'status' => true,
             'message' => 'Vendors get successfully.',
