@@ -340,34 +340,170 @@ class PaddyApiController extends Controller
         $cropYear = $this->requestCropYear($request);
         $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, $cropYear);
 
-        $paddyPricePre = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
+        $rows = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
             ->where('quality_id', $quality_id)
-            ->orderBy('created_at');
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->get(['id', 'hand_cutting_price', 'machine_cutting_price', 'created_at']);
 
-        $hand_cutting_price = (clone $paddyPricePre)
-            ->where('hand_cutting_price', '!=', '----')
-            ->pluck('hand_cutting_price', 'created_at')
-            ->map(function ($q) {
-                return (int) ((str_contains((string) $q, '-')) ? explode('-', (string) $q)[1] : $q);
-            });
+        // Collapse to latest row per IST calendar day (same as live graph),
+        // keeping date (Y-m-d) + amount (int, upper bound of range) format.
+        $handByDay = [];
+        $machineByDay = [];
+        foreach ($rows as $row) {
+            if (! $row->created_at) {
+                continue;
+            }
+            $day = $row->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
+            $hand = $this->parsePaddyGraphAmount($row->hand_cutting_price);
+            if ($hand !== null) {
+                $handByDay[$day] = $hand; // later rows overwrite => latest per day wins
+            }
+            $machine = $this->parsePaddyGraphAmount($row->machine_cutting_price);
+            if ($machine !== null) {
+                $machineByDay[$day] = $machine;
+            }
+        }
+        ksort($handByDay);
+        ksort($machineByDay);
 
-        $machine_cutting_price = (clone $paddyPricePre)
-            ->where('machine_cutting_price', '!=', '----')
-            ->pluck('machine_cutting_price', 'created_at')
-            ->map(function ($q) {
-                return (int) ((str_contains((string) $q, '-')) ? explode('-', (string) $q)[1] : $q);
-            });
+        $handSeries = $this->buildPaddyGraphSeries($handByDay);
+        $machineSeries = $this->buildPaddyGraphSeries($machineByDay);
+
+        // Union timeline across both cuttings (same `date` array style as live graph).
+        $allDays = array_values(array_unique(array_merge(array_keys($handByDay), array_keys($machineByDay))));
+        sort($allDays);
+        $date = array_map(fn ($d) => strtotime($d), $allDays);
+
+        $allValues = array_merge(array_values($handByDay), array_values($machineByDay));
+        $lowValue = $allValues !== [] ? min($allValues) : 0;
+        $highValue = $allValues !== [] ? max($allValues) : 0;
+        $lowDate = '';
+        $highDate = '';
+        if ($allValues !== []) {
+            $lowDay = array_search($lowValue, array_merge($handByDay, $machineByDay));
+            $highDay = array_search($highValue, array_merge($handByDay, $machineByDay));
+            $lowDate = $lowDay ? Carbon::parse($lowDay)->format('d-m-Y') : '';
+            $highDate = $highDay ? Carbon::parse($highDay)->format('d-m-Y') : '';
+        }
 
         return response()->json([
             'status' => true,
             'message' => 'Paddy get successfully',
             'lastSnapshotDate' => $lastEnterDate,
             'crop_year' => $cropYear,
+            // Live-graph compatible timeline + overall extremes.
+            'date' => $date,
+            'lowValue' => $lowValue,
+            'highValue' => $highValue,
+            'lowDate' => $lowDate,
+            'highDate' => $highDate,
+            'seasonOpeningDate' => $allDays[0] ?? null,
+            'latestDate' => $allDays !== [] ? end($allDays) : null,
+            // Per-cutting blocks mirror live getpriceByTimePeriod shape
+            // (date / prices / combinedData / low-high / constant), so the
+            // same graph component can render either series.
+            'hand_cutting_price' => $handSeries,
+            'machine_cutting_price' => $machineSeries,
+            // Backward-compatible day-keyed maps (previously keyed by full
+            // created_at datetime, now Y-m-d like live prices).
             'data' => [
-                'hand_cutting_price' => $hand_cutting_price,
-                'machine_cutting_price' => $machine_cutting_price,
+                'hand_cutting_price' => $handByDay,
+                'machine_cutting_price' => $machineByDay,
             ],
         ]);
+    }
+
+    /**
+     * Paddy price amount for graphs: stored as "min-max" range or "----".
+     * Returns upper-bound int, or null when missing/invalid (same int
+     * amount style as live graph max_price).
+     */
+    private function parsePaddyGraphAmount($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+        $str = trim((string) $value);
+        if ($str === '' || $str === '----') {
+            return null;
+        }
+        if (str_contains($str, '-')) {
+            $parts = explode('-', $str);
+            $str = trim(end($parts));
+        }
+        if (! is_numeric($str) || (float) $str <= 0) {
+            return null;
+        }
+
+        return (int) $str;
+    }
+
+    /**
+     * Build a live-graph style series from a sorted [Y-m-d => int] map.
+     * Mirrors getpriceByTimePeriod: date (sec timestamps), prices,
+     * combinedData ([ms, int] pairs), low/high + d-m-Y dates, longest
+     * constant-price run.
+     */
+    private function buildPaddyGraphSeries(array $byDay): array
+    {
+        $date = [];
+        $prices = [];
+        $combinedData = [];
+        foreach ($byDay as $day => $val) {
+            $ts = strtotime($day);
+            $date[] = $ts;
+            $prices[] = (int) $val;
+            $combinedData[] = [$ts * 1000, (int) $val];
+        }
+
+        $lowValue = $prices !== [] ? min($prices) : 0;
+        $highValue = $prices !== [] ? max($prices) : 0;
+        $lowDate = '';
+        $highDate = '';
+        if ($prices !== []) {
+            $lowDay = array_search($lowValue, $byDay);
+            $highDay = array_search($highValue, $byDay);
+            $lowDate = $lowDay ? Carbon::parse($lowDay)->format('d-m-Y') : '';
+            $highDate = $highDay ? Carbon::parse($highDay)->format('d-m-Y') : '';
+        }
+
+        // Longest constant-price run (same logic as live graph).
+        $constantValue = 0;
+        $maxCount = 0;
+        $currVal = null;
+        $currLen = 0;
+        $bestVal = null;
+        $bestLen = 0;
+        foreach ($prices as $val) {
+            $num = (float) $val;
+            if ($currVal === null || $num != $currVal) {
+                $currVal = $num;
+                $currLen = 1;
+            } else {
+                $currLen++;
+            }
+            if ($currLen > $bestLen) {
+                $bestLen = $currLen;
+                $bestVal = $num;
+            }
+        }
+        if ($bestVal !== null) {
+            $constantValue = $bestVal;
+            $maxCount = $bestLen;
+        }
+
+        return [
+            'date' => $date,
+            'prices' => $prices,
+            'combinedData' => $combinedData,
+            'lowValue' => $lowValue,
+            'highValue' => $highValue,
+            'lowDate' => $lowDate,
+            'highDate' => $highDate,
+            'constantValue' => $constantValue,
+            'maxCountConstant' => $maxCount,
+        ];
     }
 
     /**
