@@ -446,14 +446,12 @@ class PaddyApiController extends Controller
             $constantPrice = $bestVal;
         }
 
-        // 1-based keys => JSON objects (not arrays).
+        // Plain sequential arrays => JSON arrays (values only, no keys).
         $date = [];
         $prices = [];
-        $i = 1;
         foreach ($byDay as $day => $val) {
-            $date[$i] = $day;
-            $prices[$i] = (int) $val;
-            $i++;
+            $date[] = $day;
+            $prices[] = (int) $val;
         }
 
         return [
@@ -461,8 +459,8 @@ class PaddyApiController extends Controller
             'highvalue' => $highvalue,
             'lowdate' => $lowdate,
             'highdate' => $highdate,
-            'date' => $date !== [] ? $date : (object) [],
-            'prices' => $prices !== [] ? $prices : (object) [],
+            'date' => $date,
+            'prices' => $prices,
             'constantPrice' => $constantPrice,
         ];
     }
