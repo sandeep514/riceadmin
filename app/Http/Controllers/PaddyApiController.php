@@ -367,50 +367,15 @@ class PaddyApiController extends Controller
         ksort($handByDay);
         ksort($machineByDay);
 
-        $handSeries = $this->buildPaddyGraphSeries($handByDay);
-        $machineSeries = $this->buildPaddyGraphSeries($machineByDay);
-
-        // Union timeline across both cuttings (same `date` array style as live graph).
+        // Union timeline across both cuttings.
         $allDays = array_values(array_unique(array_merge(array_keys($handByDay), array_keys($machineByDay))));
         sort($allDays);
-        $date = array_map(fn ($d) => strtotime($d), $allDays);
-
-        $allValues = array_merge(array_values($handByDay), array_values($machineByDay));
-        $lowValue = $allValues !== [] ? min($allValues) : 0;
-        $highValue = $allValues !== [] ? max($allValues) : 0;
-        $lowDate = '';
-        $highDate = '';
-        if ($allValues !== []) {
-            $lowDay = array_search($lowValue, array_merge($handByDay, $machineByDay));
-            $highDay = array_search($highValue, array_merge($handByDay, $machineByDay));
-            $lowDate = $lowDay ? Carbon::parse($lowDay)->format('d-m-Y') : '';
-            $highDate = $highDay ? Carbon::parse($highDay)->format('d-m-Y') : '';
-        }
 
         return response()->json([
             'status' => true,
-            'message' => 'Paddy get successfully',
-            'lastSnapshotDate' => $lastEnterDate,
-            'crop_year' => $cropYear,
-            // Live-graph compatible timeline + overall extremes.
-            'date' => $date,
-            'lowValue' => $lowValue,
-            'highValue' => $highValue,
-            'lowDate' => $lowDate,
-            'highDate' => $highDate,
-            'seasonOpeningDate' => $allDays[0] ?? null,
-            'latestDate' => $allDays !== [] ? end($allDays) : null,
-            // Per-cutting blocks mirror live getpriceByTimePeriod shape
-            // (date / prices / combinedData / low-high / constant), so the
-            // same graph component can render either series.
-            'hand_cutting_price' => $handSeries,
-            'machine_cutting_price' => $machineSeries,
-            // Backward-compatible day-keyed maps (previously keyed by full
-            // created_at datetime, now Y-m-d like live prices).
-            'data' => [
-                'hand_cutting_price' => $handByDay,
-                'machine_cutting_price' => $machineByDay,
-            ],
+            'date' => $allDays,
+            'handCutting' => $this->buildPaddyCuttingBlock($handByDay),
+            'machineCutting' => $this->buildPaddyCuttingBlock($machineByDay),
         ]);
     }
 
@@ -440,42 +405,31 @@ class PaddyApiController extends Controller
     }
 
     /**
-     * Build a live-graph style series from a sorted [Y-m-d => int] map.
-     * Mirrors getpriceByTimePeriod: date (sec timestamps), prices,
-     * combinedData ([ms, int] pairs), low/high + d-m-Y dates, longest
-     * constant-price run.
+     * Build one cutting block: lowvalue/highvalue/lowdate/highdate plus
+     * date + prices as objects (1-based index => value, so JSON encodes
+     * objects) and the longest constant-price run.
      */
-    private function buildPaddyGraphSeries(array $byDay): array
+    private function buildPaddyCuttingBlock(array $byDay): array
     {
-        $date = [];
-        $prices = [];
-        $combinedData = [];
-        foreach ($byDay as $day => $val) {
-            $ts = strtotime($day);
-            $date[] = $ts;
-            $prices[] = (int) $val;
-            $combinedData[] = [$ts * 1000, (int) $val];
+        $values = array_values($byDay);
+        $lowvalue = $values !== [] ? min($values) : 0;
+        $highvalue = $values !== [] ? max($values) : 0;
+        $lowdate = '';
+        $highdate = '';
+        if ($values !== []) {
+            $lowDay = array_search($lowvalue, $byDay);
+            $highDay = array_search($highvalue, $byDay);
+            $lowdate = $lowDay ? Carbon::parse($lowDay)->format('d-m-Y') : '';
+            $highdate = $highDay ? Carbon::parse($highDay)->format('d-m-Y') : '';
         }
 
-        $lowValue = $prices !== [] ? min($prices) : 0;
-        $highValue = $prices !== [] ? max($prices) : 0;
-        $lowDate = '';
-        $highDate = '';
-        if ($prices !== []) {
-            $lowDay = array_search($lowValue, $byDay);
-            $highDay = array_search($highValue, $byDay);
-            $lowDate = $lowDay ? Carbon::parse($lowDay)->format('d-m-Y') : '';
-            $highDate = $highDay ? Carbon::parse($highDay)->format('d-m-Y') : '';
-        }
-
-        // Longest constant-price run (same logic as live graph).
-        $constantValue = 0;
-        $maxCount = 0;
+        // Longest constant-price run (same logic as live graph constantValue).
+        $constantPrice = 0;
         $currVal = null;
         $currLen = 0;
         $bestVal = null;
         $bestLen = 0;
-        foreach ($prices as $val) {
+        foreach ($values as $val) {
             $num = (float) $val;
             if ($currVal === null || $num != $currVal) {
                 $currVal = $num;
@@ -489,20 +443,27 @@ class PaddyApiController extends Controller
             }
         }
         if ($bestVal !== null) {
-            $constantValue = $bestVal;
-            $maxCount = $bestLen;
+            $constantPrice = $bestVal;
+        }
+
+        // 1-based keys => JSON objects (not arrays).
+        $date = [];
+        $prices = [];
+        $i = 1;
+        foreach ($byDay as $day => $val) {
+            $date[$i] = $day;
+            $prices[$i] = (int) $val;
+            $i++;
         }
 
         return [
-            'date' => $date,
-            'prices' => $prices,
-            'combinedData' => $combinedData,
-            'lowValue' => $lowValue,
-            'highValue' => $highValue,
-            'lowDate' => $lowDate,
-            'highDate' => $highDate,
-            'constantValue' => $constantValue,
-            'maxCountConstant' => $maxCount,
+            'lowvalue' => $lowvalue,
+            'highvalue' => $highvalue,
+            'lowdate' => $lowdate,
+            'highdate' => $highdate,
+            'date' => $date !== [] ? $date : (object) [],
+            'prices' => $prices !== [] ? $prices : (object) [],
+            'constantPrice' => $constantPrice,
         ];
     }
 
