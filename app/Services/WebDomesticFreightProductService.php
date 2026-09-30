@@ -127,8 +127,18 @@ class WebDomesticFreightProductService
 
     public function listByUser(Request $request, $userId)
     {
+        $targetUserId = (int) $userId > 0 ? (int) $userId : $this->resolveExplicitOwnerId($request);
+        if ($targetUserId <= 0) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User id is required.',
+            ], 422);
+        }
+
+        // Only admin-verified listings, for owner and visitors alike.
         $products = WebDomesticFreightProduct::query()
-            ->where('user_id', (int) $userId)
+            ->where('user_id', $targetUserId)
+            ->where('status', WebDomesticFreightProduct::STATUS_VERIFIED)
             ->orderByDesc('id')
             ->get()
             ->map(fn (WebDomesticFreightProduct $row) => $this->serialize($row))
@@ -142,25 +152,25 @@ class WebDomesticFreightProductService
     }
 
     /**
-     * Login user's own domestic charges grouped by state with row counts.
+     * Admin-verified domestic charges grouped by state with row counts.
+     * Same verified list is visible to owner and visitors.
+     * Optional filter: ?user_id={ownerId} (or userId/owner_id/ownerId) for
+     * a single owner's verified list; otherwise all verified listings.
      * Response: [{state_id, state, count}]
      */
     public function statesSummary(Request $request)
     {
-        $authUser = $request->user();
-        $userId = $authUser ? (int) $authUser->id : (int) $request->input('user_id', $request->input('userId', 0));
+        $userId = $this->resolveExplicitOwnerId($request);
 
-        if ($userId <= 0) {
-            return response()->json([
-                'status' => false,
-                'message' => 'User id is required.',
-            ], 422);
+        $query = WebDomesticFreightProduct::query()
+            ->with('stateRel')
+            ->where('status', WebDomesticFreightProduct::STATUS_VERIFIED);
+
+        if ($userId > 0) {
+            $query->where('user_id', $userId);
         }
 
-        $rows = WebDomesticFreightProduct::query()
-            ->with('stateRel')
-            ->where('user_id', $userId)
-            ->get(['id', 'user_id', 'state_id', 'state']);
+        $rows = $query->get(['id', 'user_id', 'state_id', 'state']);
 
         $grouped = $rows
             ->groupBy(function (WebDomesticFreightProduct $row) {
@@ -202,20 +212,14 @@ class WebDomesticFreightProductService
     }
 
     /**
-     * Login user's own domestic charges for a single state.
+     * Admin-verified domestic charges for a single state.
+     * Same verified list is visible to owner and visitors.
+     * Optional filter: ?user_id={ownerId} (or userId/owner_id/ownerId).
      * State id comes from route param {stateId} or query ?state_id= / ?stateId=
      */
     public function listByState(Request $request, $stateId = null)
     {
-        $authUser = $request->user();
-        $userId = $authUser ? (int) $authUser->id : (int) $request->input('user_id', $request->input('userId', 0));
-
-        if ($userId <= 0) {
-            return response()->json([
-                'status' => false,
-                'message' => 'User id is required.',
-            ], 422);
-        }
+        $userId = $this->resolveExplicitOwnerId($request);
 
         $stateId = $stateId ?? $request->input('state_id', $request->input('stateId'));
         $stateId = (int) $stateId;
@@ -229,7 +233,11 @@ class WebDomesticFreightProductService
 
         $products = WebDomesticFreightProduct::query()
             ->with(['stateRel', 'cityRel', 'destinationRel', 'truckSizeRel'])
-            ->where('user_id', $userId)
+            ->where('status', WebDomesticFreightProduct::STATUS_VERIFIED)
+            ->when(
+                $userId > 0,
+                fn ($q) => $q->where('user_id', $userId)
+            )
             ->where('state_id', $stateId)
             ->orderByDesc('id')
             ->get()
@@ -380,6 +388,57 @@ class WebDomesticFreightProductService
             'created_at' => optional($row->created_at)->toIso8601String(),
             'updated_at' => optional($row->updated_at)->toIso8601String(),
         ];
+    }
+
+    /**
+     * Explicit owner filter from query/body (user_id, userId, owner_id, ownerId).
+     * Returns 0 when not provided (meaning: all owners).
+     */
+    private function resolveExplicitOwnerId(Request $request, $routeUserId = null): int
+    {
+        foreach (['user_id', 'userId', 'owner_id', 'ownerId'] as $key) {
+            $value = $request->input($key);
+            if ($value !== null && $value !== '' && (int) $value > 0) {
+                return (int) $value;
+            }
+        }
+
+        if ($routeUserId !== null && (int) $routeUserId > 0) {
+            return (int) $routeUserId;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Resolve whose freight list is being requested.
+     * Explicit owner id (query/body: user_id, userId, owner_id, ownerId)
+     * takes precedence so visitors can view an owner's list.
+     * Falls back to the logged-in user for "my list" calls.
+     */
+    private function resolveTargetUserId(Request $request, $routeUserId = null): int
+    {
+        foreach (['user_id', 'userId', 'owner_id', 'ownerId'] as $key) {
+            $value = $request->input($key);
+            if ($value !== null && $value !== '' && (int) $value > 0) {
+                return (int) $value;
+            }
+        }
+
+        if ($routeUserId !== null && (int) $routeUserId > 0) {
+            return (int) $routeUserId;
+        }
+
+        $authUser = $request->user();
+
+        return $authUser ? (int) $authUser->id : 0;
+    }
+
+    private function isOwner(Request $request, int $targetUserId): bool
+    {
+        $authUser = $request->user();
+
+        return $authUser !== null && (int) $authUser->id === $targetUserId;
     }
 
     private function denyIfUserMismatch(Request $request)

@@ -69,19 +69,30 @@ class PortalApiTokenAuth
 
         // Enforce ownership for user-scoped routes/payloads.
         // If an endpoint carries user identity, it must match token owner.
-        $routeUserId = $request->route('userId');
-        if ($routeUserId !== null && (int) $routeUserId !== (int) $user->id) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Forbidden: You are not allowed to access this user data.'
-            ], 403);
-        }
+        // Exception: read-only domestic-freight views allow visitors to see
+        // an owner's verified list (?user_id={ownerId} or /list/{ownerId}).
+        $isDomesticFreightRead = $request->isMethod('get')
+            && (
+                $request->is('*/domestic-freight-product/states-summary')
+                || $request->is('*/domestic-freight-product/state/*')
+                || $request->is('*/domestic-freight-product/list/*')
+            );
 
-        if ($request->has('user_id') && (int) $request->input('user_id') !== (int) $user->id) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Forbidden: You are not allowed to perform this action for another user.'
-            ], 403);
+        if (! $isDomesticFreightRead) {
+            $routeUserId = $request->route('userId');
+            if ($routeUserId !== null && (int) $routeUserId !== (int) $user->id) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Forbidden: You are not allowed to access this user data.'
+                ], 403);
+            }
+
+            if ($request->has('user_id') && (int) $request->input('user_id') !== (int) $user->id) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Forbidden: You are not allowed to perform this action for another user.'
+                ], 403);
+            }
         }
 
         $request->attributes->set('auth_platform', $user->getAttribute('auth_platform') ?: $platform);
