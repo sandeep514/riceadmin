@@ -284,13 +284,18 @@ class PaddyApiController extends Controller
         $paddyPrices = collect();
 
         if ($lastEnterDate !== null) {
+            // created_at is the admin-entered entry date (always 00:00),
+            // so "last updated" must come from updated_at (actual save time).
             $anchorRow = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
                 ->whereDate('created_at', $lastEnterDate)
-                ->orderByDesc('created_at')
+                ->orderByDesc('updated_at')
                 ->orderByDesc('id')
                 ->first();
             if ($anchorRow) {
-                $lastCreated_at = $anchorRow->created_at->format('Y-m-d H:i');
+                $anchorTime = $anchorRow->updated_at ?: $anchorRow->created_at;
+                $lastCreated_at = $anchorTime
+                    ? Carbon::parse($anchorTime)->timezone('Asia/Kolkata')->format('Y-m-d H:i')
+                    : '';
             }
 
             $paddyPrices = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
@@ -331,13 +336,18 @@ class PaddyApiController extends Controller
         $paddyPrices = collect();
 
         if ($lastEnterDate !== null) {
+            // created_at is the admin-entered entry date (always 00:00),
+            // so "last updated" must come from updated_at (actual save time).
             $anchorRow = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
                 ->whereDate('created_at', $lastEnterDate)
-                ->orderByDesc('created_at')
+                ->orderByDesc('updated_at')
                 ->orderByDesc('id')
                 ->first();
             if ($anchorRow) {
-                $lastCreated_at = $anchorRow->created_at->format('Y-m-d H:i');
+                $anchorTime = $anchorRow->updated_at ?: $anchorRow->created_at;
+                $lastCreated_at = $anchorTime
+                    ? Carbon::parse($anchorTime)->timezone('Asia/Kolkata')->format('Y-m-d H:i')
+                    : '';
             }
 
             $paddyPrices = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
