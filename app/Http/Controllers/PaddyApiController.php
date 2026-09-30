@@ -116,7 +116,8 @@ class PaddyApiController extends Controller
      */
     public function listPaddy(Request $request)
     {
-        $cropYear = $this->requestCropYear($request);
+        $requestedCropYear = $this->requestCropYear($request);
+        $cropYear = $requestedCropYear;
         $lastAddedDate = $this->latestPaddyPricesDate(null, null, $cropYear);
 
         if ($cropYear !== null) {
@@ -128,12 +129,49 @@ class PaddyApiController extends Controller
                     ->values()
                     ->toArray()
             );
+
+            // Fallback: requested crop year has no data (or frontend stopped
+            // sending cropYear) -> return latest snapshot instead of empty.
+            if ($selectedStatesIds === []) {
+                $cropYear = null;
+                $lastAddedDate = $this->latestPaddyPricesDate(null, null, null);
+                if ($lastAddedDate !== null) {
+                    $selectedStatesIds = array_unique(
+                        $this->paddyPriceBaseQuery(null, null, null)
+                            ->whereDate('created_at', $lastAddedDate)
+                            ->pluck('state')
+                            ->filter()
+                            ->values()
+                            ->toArray()
+                    );
+                }
+                if ($selectedStatesIds === []) {
+                    $selectedStatesIds = array_unique(
+                        $this->paddyPriceBaseQuery(null, null, null)
+                            ->pluck('state')
+                            ->filter()
+                            ->values()
+                            ->toArray()
+                    );
+                }
+            }
         } else {
             $selectedStatesIds = [];
             if ($lastAddedDate !== null) {
                 $selectedStatesIds = array_unique(
                     $this->paddyPriceBaseQuery(null, null, null)
                         ->whereDate('created_at', $lastAddedDate)
+                        ->pluck('state')
+                        ->filter()
+                        ->values()
+                        ->toArray()
+                );
+            }
+
+            // Latest snapshot yielded nothing (edge case) -> all states with any prices.
+            if ($selectedStatesIds === []) {
+                $selectedStatesIds = array_unique(
+                    $this->paddyPriceBaseQuery(null, null, null)
                         ->pluck('state')
                         ->filter()
                         ->values()
@@ -166,6 +204,12 @@ class PaddyApiController extends Controller
         $cropYear = $this->requestCropYear($request);
         $lastAddedDate = $this->latestPaddyPricesDate($stateId, null, $cropYear);
 
+        // Fallback to latest overall when requested crop year has no data.
+        if ($cropYear !== null && $lastAddedDate === null) {
+            $cropYear = null;
+            $lastAddedDate = $this->latestPaddyPricesDate($stateId, null, null);
+        }
+
         $selectedMandiIds = [];
         if ($lastAddedDate !== null) {
             $selectedMandiIds = array_unique(
@@ -178,7 +222,7 @@ class PaddyApiController extends Controller
             );
         }
 
-        if ($cropYear !== null && $selectedMandiIds === []) {
+        if ($selectedMandiIds === [] && $cropYear !== null) {
             $selectedMandiIds = array_unique(
                 $this->paddyPriceBaseQuery($stateId, null, $cropYear)
                     ->pluck('mandi')
@@ -186,6 +230,23 @@ class PaddyApiController extends Controller
                     ->values()
                     ->toArray()
             );
+        }
+
+        // Still empty -> latest overall mandis for this state (any date).
+        if ($selectedMandiIds === []) {
+            $fallbackDate = $this->latestPaddyPricesDate($stateId, null, null);
+            if ($fallbackDate !== null) {
+                $cropYear = null;
+                $lastAddedDate = $fallbackDate;
+                $selectedMandiIds = array_unique(
+                    $this->paddyPriceBaseQuery($stateId, null, null)
+                        ->whereDate('created_at', $fallbackDate)
+                        ->pluck('mandi')
+                        ->filter()
+                        ->values()
+                        ->toArray()
+                );
+            }
         }
 
         $paddyMandi = $selectedMandiIds === []
@@ -212,6 +273,12 @@ class PaddyApiController extends Controller
     {
         $cropYear = $this->requestCropYear($request);
         $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, $cropYear);
+
+        // Fallback to latest overall when requested crop year has no data.
+        if ($cropYear !== null && $lastEnterDate === null) {
+            $cropYear = null;
+            $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, null);
+        }
         $lastCreated_at = '';
 
         $paddyPrices = collect();
@@ -253,6 +320,12 @@ class PaddyApiController extends Controller
         $cropYear = $this->requestCropYear($request);
         $mandiId = $request->input('mandi_id', $request->input('mandi'));
         $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, $cropYear);
+
+        // Fallback to latest overall when requested crop year has no data.
+        if ($cropYear !== null && $lastEnterDate === null) {
+            $cropYear = null;
+            $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, null);
+        }
         $lastCreated_at = '';
 
         $paddyPrices = collect();
@@ -295,6 +368,12 @@ class PaddyApiController extends Controller
         $cropYear = $this->requestCropYear($request);
         $mandiId = $request->input('mandi_id', $request->input('mandi'));
         $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, $cropYear);
+
+        // Fallback to latest overall when requested crop year has no data.
+        if ($cropYear !== null && $lastEnterDate === null) {
+            $cropYear = null;
+            $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, null);
+        }
         $qualities = collect();
 
         if ($lastEnterDate !== null) {
