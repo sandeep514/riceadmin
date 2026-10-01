@@ -161,6 +161,54 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                                <form method="POST" action="{{ route('save.paddy.price.defaults') }}" class="form-inline" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; background: #f9f9f9; padding: 10px; border: 1px solid #eee;">
+                                                    @csrf
+                                                    <div class="form-group">
+                                                        <label for="default-state-id" style="margin-right: 6px;">Default State</label>
+                                                        <select id="default-state-id" name="default_state_id" class="form-control">
+                                                            <option value="">-- None --</option>
+                                                            @foreach($paddyStateModel as $v)
+                                                                <option value="{{ $v->id }}" {{ (int) old('default_state_id', $priceDefaults->default_state_id ?? '') === (int) $v->id ? 'selected' : '' }}>
+                                                                    {{ $v->state }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="default-mandi-id" style="margin-right: 6px;">Default Mandi</label>
+                                                        <select id="default-mandi-id" name="default_mandi_id" class="form-control">
+                                                            <option value="">-- None --</option>
+                                                            @foreach($paddyMandiModel as $v)
+                                                                <option value="{{ $v->id }}" data-state-id="{{ $v->state_id }}" {{ (int) old('default_mandi_id', $priceDefaults->default_mandi_id ?? '') === (int) $v->id ? 'selected' : '' }}>
+                                                                    {{ $v->mandi }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="default-quality-id" style="margin-right: 6px;">Default Crop</label>
+                                                        <select id="default-quality-id" name="default_quality_id" class="form-control">
+                                                            <option value="">-- None --</option>
+                                                            @foreach($quality as $v)
+                                                                <option value="{{ $v->id }}" {{ (int) old('default_quality_id', $priceDefaults->default_quality_id ?? '') === (int) $v->id ? 'selected' : '' }}>
+                                                                    {{ $v->type_label }} - {{ $v->quality }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="default-crop-year" style="margin-right: 6px;">Default Crop Year</label>
+                                                        <select id="default-crop-year" name="default_crop_year" class="form-control">
+                                                            <option value="">-- None --</option>
+                                                            @for($year = (int) date('Y'); $year >= (int) date('Y') - 5; $year--)
+                                                                <option value="{{ $year }}" {{ (string) old('default_crop_year', $priceDefaults->default_crop_year ?? '') === (string) $year ? 'selected' : '' }}>
+                                                                    {{ $year }}
+                                                                </option>
+                                                            @endfor
+                                                        </select>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Save Defaults</button>
+                                                </form>
                                                 <form method="GET" action="{{ route('list.paddy.price') }}" class="form-inline" style="margin-bottom: 15px;">
                                                     <div class="form-group" style="margin-right: 10px;">
                                                         <label for="from" style="margin-right: 6px;">From</label>
@@ -305,6 +353,46 @@
         });
 
         loadMandis($state.val(), oldMandi);
+
+        var $defaultState = $('#default-state-id');
+        var $defaultMandi = $('#default-mandi-id');
+        var defaultMandiOptions = $defaultMandi.find('option[data-state-id]').clone();
+        var savedDefaultMandi = @json((string) old('default_mandi_id', $priceDefaults->default_mandi_id ?? ''));
+
+        function loadDefaultMandis(stateId, selectedMandi) {
+            var currentOptions = $defaultMandi.find('option[data-state-id]').clone();
+            if (currentOptions.length === 0) {
+                currentOptions = defaultMandiOptions;
+            } else {
+                defaultMandiOptions = currentOptions.clone();
+            }
+            $defaultMandi.empty().append('<option value="">-- None --</option>');
+
+            if (!stateId) {
+                currentOptions.each(function () {
+                    $defaultMandi.append($(this).clone());
+                });
+            } else {
+                currentOptions.each(function () {
+                    var $option = $(this);
+                    if (String($option.data('state-id')) === String(stateId)) {
+                        $defaultMandi.append($option.clone());
+                    }
+                });
+            }
+
+            if (selectedMandi && $defaultMandi.find('option[value="' + selectedMandi + '"]').length) {
+                $defaultMandi.val(selectedMandi);
+            } else {
+                $defaultMandi.val('');
+            }
+        }
+
+        $defaultState.on('change', function () {
+            loadDefaultMandis($(this).val(), '');
+        });
+
+        loadDefaultMandis($defaultState.val(), savedDefaultMandi);
 
         $('#market-paddy-status').on('change', function () {
             var status = $(this).val();

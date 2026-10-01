@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\PaddyStateModel;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
+use App\PaddyPriceDefault;
 use App\PaddyQuality;
 use App\PaddyTradeCurrentStatus;
 use App\Export\PaddyPriceExport;
@@ -56,6 +57,8 @@ class PaddyPriceController extends Controller
         $currentMarketStatus = (int) $marketStatus->currentStatus;
         $currentMarketLabel = $marketStatusLabels[$currentMarketStatus] ?? $marketStatus->message;
 
+        $priceDefaults = PaddyPriceDefault::current();
+
         return view('paddyPrices.index', compact(
             'paddyPrices',
             'paddyStateModel',
@@ -66,8 +69,54 @@ class PaddyPriceController extends Controller
             'marketStatus',
             'marketStatusLabels',
             'currentMarketStatus',
-            'currentMarketLabel'
+            'currentMarketLabel',
+            'priceDefaults'
         ));
+    }
+
+    /**
+     * Save admin-chosen default state / mandi / crop (quality) / crop year
+     * for paddy prices. Frontend reads them from the prices API
+     * to pre-select the same defaults.
+     */
+    public function saveDefaults(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'default_state_id' => 'nullable|integer|exists:paddyStates,id',
+            'default_mandi_id' => 'nullable|integer|exists:paddyMandi,id',
+            'default_quality_id' => 'nullable|integer|exists:paddy_qualities,id',
+            'default_crop_year' => 'nullable|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $toIdOrNull = function ($value) {
+            if ($value === null || $value === '') {
+                return null;
+            }
+
+            return (int) $value > 0 ? (int) $value : null;
+        };
+
+        $cropYear = $request->input('default_crop_year');
+        $cropYear = is_string($cropYear) ? trim($cropYear) : $cropYear;
+        if ($cropYear === '') {
+            $cropYear = null;
+        }
+
+        $row = PaddyPriceDefault::current();
+        $row->update([
+            'default_state_id' => $toIdOrNull($request->input('default_state_id')),
+            'default_mandi_id' => $toIdOrNull($request->input('default_mandi_id')),
+            'default_quality_id' => $toIdOrNull($request->input('default_quality_id')),
+            'default_crop_year' => $cropYear,
+        ]);
+
+        Session::flash('success', 'Success|Default mandi / crop saved successfully.');
+
+        return redirect()->route('list.paddy.price');
     }
 
     private function activePaddyQualities()

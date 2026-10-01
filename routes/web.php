@@ -1055,6 +1055,7 @@ Route::group(['prefix'=>'administrator'], function(){
 
     // routes/web.php (add these routes)
     Route::get('paddy-prices', ['as' => 'list.paddy.price', 'uses' => 'PaddyPriceController@index']);
+    Route::post('save/paddy-price-defaults', ['as' => 'save.paddy.price.defaults', 'uses' => 'PaddyPriceController@saveDefaults']);
     Route::get('create/paddy-prices', ['as' => 'create.paddy.price', 'uses' => 'PaddyPriceController@create']);
     Route::post('save/paddy-prices', ['as' => 'save.paddy.price', 'uses' => 'PaddyPriceController@store']);
     Route::get('paddy-prices/{id}/edit', ['as' => 'edit.paddy.price', 'uses' => 'PaddyPriceController@edit']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PaddyMandiModel;
 use App\PaddyPrice;
+use App\PaddyPriceDefault;
 use App\PaddyQuality;
 use App\PaddySellQuery;
 use App\PaddyStateModel;
@@ -312,6 +313,8 @@ class PaddyApiController extends Controller
 
         $marketStatus = PaddyTradeCurrentStatus::current();
 
+        $priceDefaults = PaddyPriceDefault::current()->toDefaultsArray();
+
         return response()->json([
             'status' => true,
             'message' => 'Paddy get successfully',
@@ -319,6 +322,7 @@ class PaddyApiController extends Controller
             'crop_year' => $cropYear,
             'lastUpdatedDate' => $lastCreated_at,
             'lastSnapshotDate' => $lastEnterDate,
+            'defaults' => $priceDefaults,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => [
