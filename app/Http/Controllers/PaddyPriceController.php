@@ -6,6 +6,7 @@ use App\PaddyStateModel;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
 use App\PaddyQuality;
+use App\PaddyTradeCurrentStatus;
 use App\Export\PaddyPriceExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -50,13 +51,22 @@ class PaddyPriceController extends Controller
             ->get();
         $quality = $this->activePaddyQualities();
 
+        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatusLabels = PaddyTradeCurrentStatus::$marketStatus;
+        $currentMarketStatus = (int) $marketStatus->currentStatus;
+        $currentMarketLabel = $marketStatusLabels[$currentMarketStatus] ?? $marketStatus->message;
+
         return view('paddyPrices.index', compact(
             'paddyPrices',
             'paddyStateModel',
             'paddyMandiModel',
             'quality',
             'from',
-            'to'
+            'to',
+            'marketStatus',
+            'marketStatusLabels',
+            'currentMarketStatus',
+            'currentMarketLabel'
         ));
     }
 

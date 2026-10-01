@@ -148,6 +148,19 @@
                                         <div class="row text-left" style="margin-top: 20px;">
                                             {{-- <a href="{{ route('paddy-prices.create') }}" class="btn btn-primary mb-3">Add New Price</a> --}}
                                             <div class="col-md-12 inputs">
+                                                <div class="form-inline" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                                                    <span class="label label-{{ (int)($currentMarketStatus ?? 1) === 1 ? 'success' : ((int)($currentMarketStatus ?? 1) === 12 ? 'warning' : 'danger') }}" style="font-size: 13px; padding: 6px 10px;">
+                                                        Market Paddy: {{ ucfirst($currentMarketLabel ?? 'open') }}
+                                                    </span>
+                                                    <div class="form-group">
+                                                        <label for="market-paddy-status" style="margin-right: 6px;">Market Paddy</label>
+                                                        <select id="market-paddy-status" class="form-control">
+                                                            <option value="1" {{ (int)($currentMarketStatus ?? 1) === 1 ? 'selected' : '' }}>Open</option>
+                                                            <option value="11" {{ (int)($currentMarketStatus ?? 1) === 11 ? 'selected' : '' }}>Close</option>
+                                                            <option value="12" {{ (int)($currentMarketStatus ?? 1) === 12 ? 'selected' : '' }}>Hold</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <form method="GET" action="{{ route('list.paddy.price') }}" class="form-inline" style="margin-bottom: 15px;">
                                                     <div class="form-group" style="margin-right: 10px;">
                                                         <label for="from" style="margin-right: 6px;">From</label>
@@ -292,6 +305,12 @@
         });
 
         loadMandis($state.val(), oldMandi);
+
+        $('#market-paddy-status').on('change', function () {
+            var status = $(this).val();
+            var baseUrl = @json(route('update.paddy.market.status', ['tradeStatus' => '__STATUS__']));
+            window.location.href = baseUrl.replace('__STATUS__', status);
+        });
 
         $(document).on('click', '.js-delete-paddy-price-btn', function () {
             var $btn = $(this);
