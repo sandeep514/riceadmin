@@ -376,6 +376,8 @@ class PaddyApiController extends Controller
                 ->first() ?? collect();
         }
 
+        $marketStatus = PaddyTradeCurrentStatus::current();
+
         return response()->json([
             'status' => true,
             'message' => 'Paddy get successfully',
@@ -383,6 +385,14 @@ class PaddyApiController extends Controller
             'crop_year' => $cropYear,
             'lastUpdatedDate' => $lastCreated_at,
             'lastSnapshotDate' => $lastEnterDate,
+            'defaults' => PaddyPriceDefault::current()->toDefaultsArray(),
+            'currentStatus' => (int) $marketStatus->currentStatus,
+            'statusMessage' => $marketStatus->message,
+            'market_status' => [
+                'currentStatus' => (int) $marketStatus->currentStatus,
+                'label' => $marketStatus->status_label,
+                'message' => $marketStatus->message,
+            ],
         ]);
     }
 
