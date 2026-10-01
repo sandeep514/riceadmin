@@ -11,15 +11,14 @@ class CreatePaddyPriceDefaultsTable extends Migration
     {
         Schema::create('paddy_price_defaults', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('default_mandi_id')->nullable();
-            $table->unsignedBigInteger('default_quality_id')->nullable();
+            // Which frontend "View by" button is active by default: mandi (Mandis) or crop (Crops).
+            $table->string('default_view_by', 10)->default('mandi');
             $table->timestamps();
         });
 
         DB::table('paddy_price_defaults')->insert([
             'id' => 1,
-            'default_mandi_id' => null,
-            'default_quality_id' => null,
+            'default_view_by' => 'mandi',
             'created_at' => now(),
             'updated_at' => now(),
         ]);

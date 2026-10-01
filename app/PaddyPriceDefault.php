@@ -9,8 +9,7 @@ class PaddyPriceDefault extends Model
     protected $table = 'paddy_price_defaults';
 
     protected $fillable = [
-        'default_mandi_id',
-        'default_quality_id',
+        'default_view_by',
     ];
 
     /**
@@ -24,25 +23,20 @@ class PaddyPriceDefault extends Model
         }
 
         return self::create([
-            'default_mandi_id' => null,
-            'default_quality_id' => null,
+            'default_view_by' => 'mandi',
         ]);
     }
 
     /**
-     * Defaults payload for APIs so frontend can pre-select
-     * the admin-chosen mandi / crop (quality).
+     * Defaults payload for APIs so frontend knows which
+     * "View by" button (Mandis / Crops) is active by default.
      */
     public function toDefaultsArray(): array
     {
-        $mandiId = $this->default_mandi_id ? (int) $this->default_mandi_id : null;
-        $qualityId = $this->default_quality_id ? (int) $this->default_quality_id : null;
+        $viewBy = strtolower(trim((string) $this->default_view_by));
 
         return [
-            'mandi_id' => $mandiId,
-            'mandi' => $mandiId ? PaddyMandiModel::query()->where('id', $mandiId)->value('mandi') : null,
-            'quality_id' => $qualityId,
-            'quality' => $qualityId ? PaddyQuality::query()->where('id', $qualityId)->value('quality') : null,
+            'view_by' => $viewBy === 'crop' ? 'crop' : 'mandi',
         ];
     }
 }

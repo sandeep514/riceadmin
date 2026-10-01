@@ -164,28 +164,13 @@
                                                 <form method="POST" action="{{ route('save.paddy.price.defaults') }}" class="form-inline" style="margin-bottom: 15px; display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; background: #f9f9f9; padding: 10px; border: 1px solid #eee;">
                                                     @csrf
                                                     <div class="form-group">
-                                                        <label for="default-mandi-id" style="margin-right: 6px;">Default Mandi</label>
-                                                        <select id="default-mandi-id" name="default_mandi_id" class="form-control">
-                                                            <option value="">-- None --</option>
-                                                            @foreach($paddyMandiModel as $v)
-                                                                <option value="{{ $v->id }}" {{ (int) old('default_mandi_id', $priceDefaults->default_mandi_id ?? '') === (int) $v->id ? 'selected' : '' }}>
-                                                                    {{ $v->mandi }}
-                                                                </option>
-                                                            @endforeach
+                                                        <label for="default-view-by" style="margin-right: 6px;">Default View By</label>
+                                                        <select id="default-view-by" name="default_view_by" class="form-control">
+                                                            <option value="mandi" {{ old('default_view_by', $priceDefaults->default_view_by ?? 'mandi') === 'mandi' ? 'selected' : '' }}>Mandis</option>
+                                                            <option value="crop" {{ old('default_view_by', $priceDefaults->default_view_by ?? 'mandi') === 'crop' ? 'selected' : '' }}>Crops</option>
                                                         </select>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <label for="default-quality-id" style="margin-right: 6px;">Default Crop</label>
-                                                        <select id="default-quality-id" name="default_quality_id" class="form-control">
-                                                            <option value="">-- None --</option>
-                                                            @foreach($quality as $v)
-                                                                <option value="{{ $v->id }}" {{ (int) old('default_quality_id', $priceDefaults->default_quality_id ?? '') === (int) $v->id ? 'selected' : '' }}>
-                                                                    {{ $v->type_label }} - {{ $v->quality }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <button type="submit" class="btn btn-primary btn-sm">Save Defaults</button>
+                                                    <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                                 </form>
                                                 <form method="GET" action="{{ route('list.paddy.price') }}" class="form-inline" style="margin-bottom: 15px;">
                                                     <div class="form-group" style="margin-right: 10px;">

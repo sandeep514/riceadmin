@@ -75,35 +75,25 @@ class PaddyPriceController extends Controller
     }
 
     /**
-     * Save admin-chosen default mandi / crop (quality) for paddy prices.
-     * Frontend reads them from the prices API to pre-select the same defaults.
+     * Save admin-chosen default "View by" (Mandis / Crops) for paddy prices.
+     * Frontend reads it from the prices API to keep the same button active.
      */
     public function saveDefaults(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'default_mandi_id' => 'nullable|integer|exists:paddyMandi,id',
-            'default_quality_id' => 'nullable|integer|exists:paddy_qualities,id',
+            'default_view_by' => 'required|in:mandi,crop',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        $toIdOrNull = function ($value) {
-            if ($value === null || $value === '') {
-                return null;
-            }
-
-            return (int) $value > 0 ? (int) $value : null;
-        };
-
         $row = PaddyPriceDefault::current();
         $row->update([
-            'default_mandi_id' => $toIdOrNull($request->input('default_mandi_id')),
-            'default_quality_id' => $toIdOrNull($request->input('default_quality_id')),
+            'default_view_by' => $request->input('default_view_by'),
         ]);
 
-        Session::flash('success', 'Success|Default mandi / crop saved successfully.');
+        Session::flash('success', 'Success|Default view saved successfully.');
 
         return redirect()->route('list.paddy.price');
     }
