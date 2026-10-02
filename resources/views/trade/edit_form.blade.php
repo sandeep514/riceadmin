@@ -151,7 +151,7 @@
                                 <div class="trade-media-preview" style="margin-top:8px;display:none;"></div>
                                 @if(!empty($tradequeriesinr->video_file))
                                     <div class="trade-media-existing" style="margin-top:10px;" data-remove-name="remove_video_file">
-                                        <video src="{{ asset('uploads/'.$tradequeriesinr->video_file) }}" controls style="max-width:320px;width:100%;"></video>
+                                        <video src="{{ asset('uploads/'.$tradequeriesinr->video_file) }}" controls style="max-width:400px;max-height:400px;width:100%;height:auto;display:block;background:#000;"></video>
                                         <div style="margin-top:6px;">
                                             <label class="text-danger" style="font-weight:normal;">
                                                 <input type="checkbox" name="remove_video_file" value="1" class="trade-media-remove">

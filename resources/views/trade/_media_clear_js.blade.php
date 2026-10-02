@@ -19,7 +19,7 @@
         var url = URL.createObjectURL(file);
         if ((file.type || '').indexOf('video/') === 0) {
             $preview.html(
-                '<video src="' + url + '" controls style="max-width:320px;width:100%;"></video>' +
+                '<video src="' + url + '" controls style="max-width:400px;max-height:400px;width:100%;height:auto;display:block;background:#000;"></video>' +
                 '<div class="text-muted" style="font-size:12px;margin-top:4px;">Selected: ' + $('<div>').text(file.name).html() + '</div>'
             ).show();
         } else if ((file.type || '').indexOf('image/') === 0 || !file.type) {
