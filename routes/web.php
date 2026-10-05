@@ -60,6 +60,14 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('users/update/{id}/{role}',['as'=>'update.user','uses'=>'UsersController@update','action'=>'edit']);
                 Route::delete('users/delete/{id}/{role}',['as'=>'delete.user','uses'=>'UsersController@delete','action'=>'delete']);
 
+                //Analyser (historical price viewer/downloader)
+                Route::get('analyser-accounts',['as'=>'analyser-accounts.index','uses'=>'AnalyserController@index','action'=>'view']);
+                Route::get('analyser-accounts/create',['as'=>'analyser-accounts.create','uses'=>'AnalyserController@create','action'=>'create']);
+                Route::post('analyser-accounts',['as'=>'analyser-accounts.store','uses'=>'AnalyserController@store','action'=>'create']);
+                Route::get('analyser-accounts/{id}/edit',['as'=>'analyser-accounts.edit','uses'=>'AnalyserController@edit','action'=>'edit']);
+                Route::put('analyser-accounts/{id}',['as'=>'analyser-accounts.update','uses'=>'AnalyserController@update','action'=>'edit']);
+                Route::delete('analyser-accounts/{id}',['as'=>'analyser-accounts.destroy','uses'=>'AnalyserController@destroy','action'=>'delete']);
+
 
                 Route::get('list/web/change/status/user/{userId}', ['as' => 'list.web.change.status.user', 'uses' => 'UsersController@listWebChangeSttausUser']);
 

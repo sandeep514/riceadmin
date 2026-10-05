@@ -13,6 +13,8 @@
     ], function() {
         Route::post('save/user', [PortalApiController::class, 'saveUser']);
         Route::post('login/user', [PortalApiController::class, 'loginUser']);
+        Route::post('analyser/request-otp', [\App\Http\Controllers\AnalyserPortalController::class, 'requestOtp']);
+        Route::post('analyser/verify-otp', [\App\Http\Controllers\AnalyserPortalController::class, 'verifyOtp']);
         Route::post('verify/otp/login', [PortalApiController::class, 'verifyOTPAndLogin']);
         Route::post('verify/otp', [PortalApiController::class, 'verifyOTP']);
         Route::post('resend/otp', [PortalApiController::class, 'resendOTP']);

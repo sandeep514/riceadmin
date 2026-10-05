@@ -64,7 +64,7 @@
 
             @if(auth()->user()->role == 2 && auth()->user()->id == 1)
 
-                <li class="treeview {{ (in_array($currentRoute,['users','create.user','edit.user','designations']) && in_array(request()->role, [2,3,4,5]))?'active':'' }}">
+                <li class="treeview {{ ((in_array($currentRoute,['users','create.user','edit.user','designations']) && in_array(request()->role, [2,3,4,5])) || in_array($currentRoute,['analyser-accounts.index','analyser-accounts.create','analyser-accounts.edit']))?'active':'' }}">
                     <a href="javascript:void(0)">
                         <i class="fa fa-users"></i> <span>User Management</span>
                         <span class="pull-right-container">
@@ -99,6 +99,9 @@
                         </li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('users','12') }}"><i class="fa fa-circle-o"></i> Service Provider</a>
+                        </li>
+                        <li class="{{ (in_array($currentRoute, ['analyser-accounts.index','analyser-accounts.create','analyser-accounts.edit']))?'active':'' }}">
+                            <a href="{{ route('analyser-accounts.index') }}"><i class="fa fa-circle-o"></i> Analyser</a>
                         </li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user','get.new.vendors']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('get.new.vendors') }}"><i class="fa fa-circle-o"></i> New Vendors</a>
