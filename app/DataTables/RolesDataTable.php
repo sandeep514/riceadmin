@@ -22,10 +22,10 @@ class RolesDataTable extends DataTable
         return datatables()
             ->eloquent($query)
             ->editColumn('created_at', function ($model) {
-                return $model->created_at->diffForHumans();
+                return optional($model->created_at)->diffForHumans() ?? '-';
             })->addColumn('action', function ($model) {
-                return view('roles._Actions', ['model' => $model]);
-            });
+                return view('roles._actions', ['model' => $model]);
+            })->rawColumns(['action']);
     }
 
     /**
