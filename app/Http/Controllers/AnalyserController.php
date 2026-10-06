@@ -7,16 +7,90 @@ use App\Http\Requests\AnalyserRequest;
 use App\Role;
 use App\Support\QueuedMail;
 use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Session;
 
 class AnalyserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $accounts = AnalyserAccount::with('user')->orderBy('id', 'desc')->get();
+        $status = $request->query('status');
+        $from = $request->query('from');
+        $to = $request->query('to');
 
-        return view('analyser_accounts.index', compact('accounts'));
+        $allowedStatuses = ['active', 'inactive', 'expired', 'upcoming', 'disabled'];
+        if (! in_array($status, $allowedStatuses, true)) {
+            $status = '';
+        }
+
+        try {
+            $fromDate = $from ? Carbon::parse($from)->toDateString() : null;
+        } catch (\Exception $e) {
+            $fromDate = null;
+        }
+        try {
+            $toDate = $to ? Carbon::parse($to)->toDateString() : null;
+        } catch (\Exception $e) {
+            $toDate = null;
+        }
+
+        $today = Carbon::today()->toDateString();
+        $hasDeactivatedColumn = Schema::hasColumn('users', 'is_deactivated');
+
+        $query = AnalyserAccount::with('user')->orderBy('id', 'desc');
+
+        if ($fromDate) {
+            $query->whereDate('analyser_accounts.created_at', '>=', $fromDate);
+        }
+        if ($toDate) {
+            $query->whereDate('analyser_accounts.created_at', '<=', $toDate);
+        }
+
+        if ($status === 'active') {
+            $query->whereHas('user', function ($q) use ($hasDeactivatedColumn) {
+                $q->where('status', 1);
+                if ($hasDeactivatedColumn) {
+                    $q->where('is_deactivated', 0);
+                }
+            })->where(function ($q) use ($today) {
+                $q->whereNull('start_date')->orWhereDate('start_date', '<=', $today);
+            })->where(function ($q) use ($today) {
+                $q->whereNull('end_date')->orWhereDate('end_date', '>=', $today);
+            });
+        } elseif ($status === 'inactive') {
+            $query->where(function ($q) use ($today, $hasDeactivatedColumn) {
+                $q->whereDoesntHave('user')
+                    ->orWhereHas('user', function ($uq) use ($hasDeactivatedColumn) {
+                        $uq->where('status', '!=', 1);
+                        if ($hasDeactivatedColumn) {
+                            $uq->orWhere('is_deactivated', 1);
+                        }
+                    })
+                    ->orWhereDate('start_date', '>', $today)
+                    ->orWhereDate('end_date', '<', $today);
+            });
+        } elseif ($status === 'expired') {
+            $query->whereDate('end_date', '<', $today);
+        } elseif ($status === 'upcoming') {
+            $query->whereDate('start_date', '>', $today);
+        } elseif ($status === 'disabled') {
+            $query->where(function ($q) use ($hasDeactivatedColumn) {
+                $q->whereDoesntHave('user')
+                    ->orWhereHas('user', function ($uq) use ($hasDeactivatedColumn) {
+                        $uq->where('status', '!=', 1);
+                        if ($hasDeactivatedColumn) {
+                            $uq->orWhere('is_deactivated', 1);
+                        }
+                    });
+            });
+        }
+
+        $accounts = $query->get();
+
+        return view('analyser_accounts.index', compact('accounts', 'status', 'fromDate', 'toDate'));
     }
 
     public function create()

@@ -111,9 +111,12 @@ class PaddyApiController extends Controller
     /**
      * List active paddy states.
      *
+     * Snapshot rule (per scope): show only rows of the latest entry date
+     * in this scope. Previous-date rows stay visible until a new row with
+     * today's entry date arrives in this scope, then only today is visible.
+     * No any-date fallback: empty snapshot returns empty (not previous data).
+     *
      * Optional: ?cropYear=2025 | ?crop_year=2025
-     * When crop year is set, returns only states that have paddy prices for that year
-     * (linked with list/paddy/crop-years?state=...).
      */
     public function listPaddy(Request $request)
     {
@@ -121,64 +124,22 @@ class PaddyApiController extends Controller
         $cropYear = $requestedCropYear;
         $lastAddedDate = $this->latestPaddyPricesDate(null, null, $cropYear);
 
-        if ($cropYear !== null) {
-            // Dependent filter: all states that have prices for this crop year.
+        // Fallback to latest overall when requested crop year has no data.
+        if ($cropYear !== null && $lastAddedDate === null) {
+            $cropYear = null;
+            $lastAddedDate = $this->latestPaddyPricesDate(null, null, null);
+        }
+
+        $selectedStatesIds = [];
+        if ($lastAddedDate !== null) {
             $selectedStatesIds = array_unique(
                 $this->paddyPriceBaseQuery(null, null, $cropYear)
+                    ->whereDate('created_at', $lastAddedDate)
                     ->pluck('state')
                     ->filter()
                     ->values()
                     ->toArray()
             );
-
-            // Fallback: requested crop year has no data (or frontend stopped
-            // sending cropYear) -> return latest snapshot instead of empty.
-            if ($selectedStatesIds === []) {
-                $cropYear = null;
-                $lastAddedDate = $this->latestPaddyPricesDate(null, null, null);
-                if ($lastAddedDate !== null) {
-                    $selectedStatesIds = array_unique(
-                        $this->paddyPriceBaseQuery(null, null, null)
-                            ->whereDate('created_at', $lastAddedDate)
-                            ->pluck('state')
-                            ->filter()
-                            ->values()
-                            ->toArray()
-                    );
-                }
-                if ($selectedStatesIds === []) {
-                    $selectedStatesIds = array_unique(
-                        $this->paddyPriceBaseQuery(null, null, null)
-                            ->pluck('state')
-                            ->filter()
-                            ->values()
-                            ->toArray()
-                    );
-                }
-            }
-        } else {
-            $selectedStatesIds = [];
-            if ($lastAddedDate !== null) {
-                $selectedStatesIds = array_unique(
-                    $this->paddyPriceBaseQuery(null, null, null)
-                        ->whereDate('created_at', $lastAddedDate)
-                        ->pluck('state')
-                        ->filter()
-                        ->values()
-                        ->toArray()
-                );
-            }
-
-            // Latest snapshot yielded nothing (edge case) -> all states with any prices.
-            if ($selectedStatesIds === []) {
-                $selectedStatesIds = array_unique(
-                    $this->paddyPriceBaseQuery(null, null, null)
-                        ->pluck('state')
-                        ->filter()
-                        ->values()
-                        ->toArray()
-                );
-            }
         }
 
         $paddyState = $selectedStatesIds === []
@@ -200,6 +161,11 @@ class PaddyApiController extends Controller
         ]);
     }
 
+    /**
+     * Snapshot rule (per state + crop scope): only mandis having rows on the
+     * latest entry date are visible. Previous-date mandis are hidden once a
+     * new row with today's entry date arrives in this state scope.
+     */
     public function listPaddyMandi(Request $request, $stateId)
     {
         $cropYear = $this->requestCropYear($request);
@@ -221,33 +187,6 @@ class PaddyApiController extends Controller
                     ->values()
                     ->toArray()
             );
-        }
-
-        if ($selectedMandiIds === [] && $cropYear !== null) {
-            $selectedMandiIds = array_unique(
-                $this->paddyPriceBaseQuery($stateId, null, $cropYear)
-                    ->pluck('mandi')
-                    ->filter()
-                    ->values()
-                    ->toArray()
-            );
-        }
-
-        // Still empty -> latest overall mandis for this state (any date).
-        if ($selectedMandiIds === []) {
-            $fallbackDate = $this->latestPaddyPricesDate($stateId, null, null);
-            if ($fallbackDate !== null) {
-                $cropYear = null;
-                $lastAddedDate = $fallbackDate;
-                $selectedMandiIds = array_unique(
-                    $this->paddyPriceBaseQuery($stateId, null, null)
-                        ->whereDate('created_at', $fallbackDate)
-                        ->pluck('mandi')
-                        ->filter()
-                        ->values()
-                        ->toArray()
-                );
-            }
         }
 
         $paddyMandi = $selectedMandiIds === []
