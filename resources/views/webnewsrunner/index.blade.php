@@ -22,6 +22,113 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
+                        @if(isset($editNews))
+                        <form method="POST" action="{{ route('web.master.news.runner.update', ['newsId' => $editNews->id]) }}">
+                            {{ csrf_field() }}
+
+                            <div class="row" style="border-bottom: 2px solid #fff;padding-bottom: 10px">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>User App Type</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="type[]" value="usd" {{ $editNews->type == 'usd' ? 'checked' : '' }}> USD</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="checkbox">
+                                            <label><input type="checkbox" name="type[]" value="inr" {{ $editNews->type == 'inr' ? 'checked' : '' }}> INR</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                </div>
+
+                            </div>
+                            <div class="row" style="border-bottom: 2px solid #fff;padding-bottom: 10px">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>News Type</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <div class="radio">
+                                            <label><input type="radio" name="newsType" value="recent" {{ $editNews->newsType == 'recent' ? 'checked' : '' }}> Recent</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="radio">
+                                            <label><input type="radio" name="newsType" value="sntc" {{ $editNews->newsType == 'sntc' ? 'checked' : '' }}> SNTC</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="news_date">News Date</label>
+                                <input type="date" class="form-control" id="news_date" name="news_date" value="{{ old('news_date', $editNews->news_date ? \Carbon\Carbon::parse($editNews->news_date)->format('Y-m-d') : date('Y-m-d')) }}" autocomplete="off" required>
+                            </div>
+                            @error('news_date')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="title">Title <small class="text-muted">(optional)</small></label>
+                                <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $editNews->title) }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input type="text" class="form-control" id="description" name="description" value="{{ old('description', $editNews->description) }}">
+                            </div>
+                            @error('description')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                            @error('title')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+                            @error('type')
+                                <span class="" style="color: red">
+                                    Please select all required fields.
+                                </span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" name="status" required>
+                                    <option value="1" {{ old('status', $editNews->status) == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="2" {{ old('status', $editNews->status) == 2 ? 'selected' : '' }}>De-active</option>
+                                </select>
+                            </div>
+                            @error('status')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+
+                            <button type="submit" name="submit" value="submit" class="btn btn-primary">Update</button>
+                            <a href="{{ route('web.master.news.runner') }}" class="btn btn-default">Cancel</a>
+                        </form>
+                        @else
                         <form method="POST" action="{{ route('web.master.post.news.runner') }}">
                             {{ csrf_field() }}
 
@@ -142,6 +249,7 @@
                             
                             <button type="submit" name="submit" value="submit">Submit</button>
                         </form>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -176,6 +284,8 @@
 
 
                                                     <td style="text-align: center;">
+
+                                                        <a class="btn btn-warning btn-sm" href="{{ route('web.master.news.runner.edit' , [ 'newsId' => $v->id ]) }}">Edit</a>
 
                                                         @if($v->status == 2)
                                                             <a class="btn btn-info btn-sm" href="{{ route('web.master.news.change.status' ,[ 'newsId' => $v->id , 'status'=> 1]) }}">Activate</a>

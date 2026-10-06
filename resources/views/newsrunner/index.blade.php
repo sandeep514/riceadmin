@@ -22,6 +22,63 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
+                        @if(isset($editNews))
+                        <form method="POST" action="{{ route('master.news.runner.update', ['newsId' => $editNews->id]) }}">
+                            {{ csrf_field() }}
+
+                            <div class="row" style="border-bottom: 2px solid #fff;padding-bottom: 10px">
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p>User App Type</p>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-4">
+                                        <div class="radio">
+                                            <label><input type="radio" name="type" value="usd" {{ $editNews->type == 'usd' ? 'checked' : '' }}> USD</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="radio">
+                                            <label><input type="radio" name="type" value="inr" {{ $editNews->type == 'inr' ? 'checked' : '' }}> INR</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2"></div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label for="comment">Runner:</label>
+                                <input type="text" class="form-control" name="title" value="{{ old('title', $editNews->title) }}">
+                            </div>
+                            @error('title')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control" id="status" name="status" required>
+                                    <option value="1" {{ old('status', $editNews->status) == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="2" {{ old('status', $editNews->status) == 2 ? 'selected' : '' }}>De-active</option>
+                                </select>
+                            </div>
+                            @error('status')
+                                <span class="" style="color: red">
+                                    {{ $message }}
+                                </span>
+                            @enderror
+
+                            <button type="submit" name="submit" value="submit" class="btn btn-primary">Update</button>
+                            <a href="{{ route('master.news.runner') }}" class="btn btn-default">Cancel</a>
+                        </form>
+                        @else
                         <form method="POST" action="{{ route('master.post.news.runner') }}">
                             {{ csrf_field() }}
 
@@ -92,6 +149,7 @@
                             
                             <button type="submit" name="submit" value="submit">Submit</button>
                         </form>
+                        @endif
                     </div>
                 </div>
             </section>
@@ -120,6 +178,8 @@
 
 
                                                     <td style="text-align: center;">
+
+                                                        <a class="btn btn-warning btn-sm" href="{{ route('master.news.runner.edit' , [ 'newsId' => $v->id ]) }}">Edit</a>
 
                                                         @if($v->status == 2)
                                                             <a class="btn btn-info btn-sm" href="{{ route('master.news.change.status' ,[ 'newsId' => $v->id , 'status'=> 1]) }}">Activate</a>

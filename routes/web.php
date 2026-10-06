@@ -918,10 +918,14 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::get('news/runner' , [ 'as' => 'master.news.runner' , 'uses' => 'NewsRunnerController@index']);
         Route::post('create/news/runner' , [ 'as' => 'master.post.news.runner' , 'uses' => 'NewsRunnerController@create']);
         Route::get('update/news/status/{newsId}/{status}' , [ 'as' => 'master.news.change.status' , 'uses' => 'NewsRunnerController@updateStatus']);
+        Route::get('news/runner/edit/{newsId}' , [ 'as' => 'master.news.runner.edit' , 'uses' => 'NewsRunnerController@edit']);
+        Route::post('update/news/runner/{newsId}' , [ 'as' => 'master.news.runner.update' , 'uses' => 'NewsRunnerController@update']);
 
         Route::get('web/news/runner' , [ 'as' => 'web.master.news.runner' , 'uses' => 'NewsRunnerController@webIndex']);
         Route::post('web/create/news/runner' , [ 'as' => 'web.master.post.news.runner' , 'uses' => 'NewsRunnerController@webCreate']);
         Route::get('web/update/news/status/{newsId}/{status}' , [ 'as' => 'web.master.news.change.status' , 'uses' => 'NewsRunnerController@webUpdateStatus']);
+        Route::get('web/news/runner/edit/{newsId}' , [ 'as' => 'web.master.news.runner.edit' , 'uses' => 'NewsRunnerController@webEdit']);
+        Route::post('web/update/news/runner/{newsId}' , [ 'as' => 'web.master.news.runner.update' , 'uses' => 'NewsRunnerController@webUpdate']);
         
     });
 
