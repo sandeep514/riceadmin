@@ -28,6 +28,7 @@ use App\RiceFormMilestone3;
 use Mail;
 use App\Support\QueuedMail;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Export\CalculatorExport;
 use App\Export\MasterRiceFormExport;
 use App\Export\MasterRiceNameExport;
 use App\Export\MasterCityExport;
@@ -514,14 +515,29 @@ class MasterController extends Controller
 		return back();
 	}
 	
-	public function createCalculator()
+	public function createCalculator(Request $request)
 	{
-		$threeDaysBackDate = Carbon::now()->format('Y-m-d');
+		[$from, $to, $packing] = $this->resolveCalculatorFilters($request);
 
 		$query = QualityMaster::get()->map(function($query){
 			return $query->id;
 		});
-		$usdPrice = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])->whereDate('created_at', '>=', $threeDaysBackDate)->whereIn('rice' , $query)->orderBy('created_at' , 'DESC')->get();
+		$usdPriceQuery = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])
+			->whereIn('rice', $query)
+			->orderBy('created_at', 'DESC');
+
+		if ($from) {
+			$usdPriceQuery->whereDate('created_at', '>=', $from);
+		} else {
+			$usdPriceQuery->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'));
+		}
+		if ($to) {
+			$usdPriceQuery->whereDate('created_at', '<=', $to);
+		}
+		if ($packing) {
+			$usdPriceQuery->where('usd_defaultMaster_id', $packing);
+		}
+		$usdPrice = $usdPriceQuery->get();
 
 
 		// $usdPrice = [];
@@ -559,8 +575,54 @@ class MasterController extends Controller
 		$riceName = QualityMaster::all();
 		$defaultValue = Defaultvalue::first();
 		$dollarRate = $defaultValue->dollarvalue;
-		
-		return view('calculator.create' , compact('riceName' , 'usdPrice','dollarRate','defaultValue'));
+		$packings = USD_defaultmaster::orderBy('bag_size')->orderBy('bag_type')->get(['id', 'bag_size', 'bag_type']);
+
+		return view('calculator.create', compact('riceName', 'usdPrice', 'dollarRate', 'defaultValue', 'packings', 'from', 'to', 'packing'));
+	}
+
+	public function exportCalculator(Request $request)
+	{
+		[$from, $to, $packing] = $this->resolveCalculatorFilters($request);
+
+		$riceIds = QualityMaster::pluck('id');
+		$rows = USD_prices::with(['getRiceQuality', 'getUSDDefaultMaster'])
+			->whereIn('rice', $riceIds)
+			->orderBy('created_at', 'DESC')
+			->when($from, fn ($q) => $q->whereDate('created_at', '>=', $from))
+			->when($to, fn ($q) => $q->whereDate('created_at', '<=', $to))
+			->when($packing, fn ($q) => $q->where('usd_defaultMaster_id', $packing))
+			->get();
+
+		$filename = 'calculator_'.($from ?? 'start').'_'.($to ?? 'end').($packing ? '_packing-'.$packing : '').'.xlsx';
+
+		return Excel::download(new CalculatorExport($rows), $filename);
+	}
+
+	private function resolveCalculatorFilters(Request $request): array
+	{
+		$from = $this->validFilterDate($request->input('from'));
+		$to = $this->validFilterDate($request->input('to'));
+		if ($from && $to && $from > $to) {
+			[$from, $to] = [$to, $from];
+		}
+		$packing = $request->input('packing');
+		$packing = is_numeric($packing) && (int) $packing > 0 ? (int) $packing : null;
+
+		return [$from, $to, $packing];
+	}
+
+	private function validFilterDate($value): ?string
+	{
+		$value = is_string($value) ? trim($value) : '';
+		if ($value === '' || ! preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
+			return null;
+		}
+
+		try {
+			return Carbon::createFromFormat('Y-m-d', $value)->format('Y-m-d');
+		} catch (\Exception $e) {
+			return null;
+		}
 	}
 
 	public function USDPriceReport()

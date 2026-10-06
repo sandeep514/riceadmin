@@ -35,6 +35,29 @@
                     </div>
 
                     <div class="col-md-12">
+                        <form method="GET" action="{{ route('create.calculator') }}" class="form-inline" style="margin-bottom: 15px;">
+                            <div class="form-group" style="margin-right: 10px;">
+                                <label for="from" style="margin-right: 5px;">From:</label>
+                                <input type="date" name="from" id="from" class="form-control input-sm" value="{{ $from ?? '' }}">
+                            </div>
+                            <div class="form-group" style="margin-right: 10px;">
+                                <label for="to" style="margin-right: 5px;">To:</label>
+                                <input type="date" name="to" id="to" class="form-control input-sm" value="{{ $to ?? '' }}">
+                            </div>
+                            <div class="form-group" style="margin-right: 10px;">
+                                <label for="packing" style="margin-right: 5px;">Packing:</label>
+                                <select name="packing" id="packing" class="form-control input-sm">
+                                    <option value="">-- All Packing --</option>
+                                    @foreach($packings ?? [] as $pack)
+                                        <option value="{{ $pack->id }}" {{ (string)($packing ?? '') === (string)$pack->id ? 'selected' : '' }}>{{ $pack->bag_size }} - {{ $pack->bag_type }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-info btn-sm">Filter</button>
+                            <a href="{{ route('create.calculator') }}" class="btn btn-default btn-sm">Reset</a>
+                            <a href="{{ route('export.calculator', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'packing' => $packing ?? null])) }}" class="btn btn-success btn-sm">Export to Excel</a>
+                            <span class="text-muted" style="margin-left: 10px;">Total: {{ $usdPrice->count() }}</span>
+                        </form>
                         <table id="example2" class="display" style="width: 100%;">
                             <thead>
                                 <tr>

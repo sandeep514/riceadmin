@@ -882,6 +882,7 @@ Route::group(['prefix'=>'administrator'], function(){
         Route::post('save/version', ['as' => 'save.version', 'uses' => 'MasterController@saveVersion']);
 
         Route::get('create/calculator' , ['as' => 'create.calculator' , 'uses' => 'MasterController@createCalculator']);
+        Route::get('export/calculator' , ['as' => 'export.calculator' , 'uses' => 'MasterController@exportCalculator']);
         Route::get('report/usd/prices' , ['as' => 'report.calculator' , 'uses' => 'MasterController@USDPriceReport']);
         Route::get('delete/rice/quality/{id}' , ['as' => 'delete.rice.quality' , 'uses' => 'MasterController@deleteRiceQualityUSD']);
         Route::get('edit/rice/quality/{id}' , ['as' => 'edit.rice.quality' , 'uses' => 'MasterController@editRiceQualityUSD']);
