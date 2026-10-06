@@ -310,7 +310,12 @@ class PaddyApiController extends Controller
                 ->get()
                 ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
                 ->map(function ($group) {
-                    return $group->groupBy('quality_id')->map(fn ($qGroup) => $qGroup);
+                    // One row per mandi (latest id wins) so the same mandi
+                    // never renders twice when duplicate price rows exist
+                    // for the snapshot date (store() always inserts).
+                    return $group->groupBy('mandi')->map(
+                        fn ($mGroup) => $mGroup->sortByDesc('id')->first()
+                    )->values();
                 })
                 ->first() ?? collect();
         }
