@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\RiceForm;
 use App\RiceName;
 use App\RiceType;
@@ -586,9 +587,40 @@ class MasterController extends Controller
 	{
 		[$from, $to, $packing] = $this->resolveCalculatorFilters($request);
 
+		$export = new CalculatorExport($from, $to, $packing);
+		$total = $export->query()->count();
+
+		// PhpSpreadsheet holds the whole sheet in memory (~1KB/cell),
+		// so cap one file to what a typical 128-256M PHP limit can build.
+		$maxRows = 5000;
+		if ($total > $maxRows) {
+			return back()->withErrors(['error' => 'Too much data for one Excel file ('.number_format($total).' rows, max '.number_format($maxRows).'). Please select a shorter date range or a specific packing and export again.']);
+		}
+		if ($total === 0) {
+			return back()->withErrors(['error' => 'No calculator records found for the selected filters.']);
+		}
+
+		@ini_set('memory_limit', '512M');
+		if (function_exists('set_time_limit')) {
+			@set_time_limit(300);
+		}
+
 		$filename = 'calculator_'.($from ?? 'start').'_'.($to ?? 'end').($packing ? '_packing-'.$packing : '').'.xlsx';
 
-		return Excel::download(new CalculatorExport($from, $to, $packing), $filename);
+		try {
+			return Excel::download($export, $filename);
+		} catch (\Throwable $e) {
+			Log::error('Calculator export failed', [
+				'message' => $e->getMessage(),
+				'file' => $e->getFile(),
+				'line' => $e->getLine(),
+				'from' => $from,
+				'to' => $to,
+				'packing' => $packing,
+			]);
+
+			return back()->withErrors(['error' => 'Excel export failed: '.$e->getMessage()]);
+		}
 	}
 
 	private function resolveCalculatorFilters(Request $request): array
