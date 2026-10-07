@@ -2,17 +2,38 @@
 
 namespace App\Export;
 
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use App\QualityMaster;
+use App\USD_prices;
+use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class CalculatorExport implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize
+class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyles, ShouldAutoSize
 {
-    public function __construct(private Collection $rows)
+    private int $rowNumber = 0;
+
+    public function __construct(
+        private ?string $from = null,
+        private ?string $to = null,
+        private ?int $packing = null
+    ) {
+    }
+
+    public function query(): Builder
     {
+        $riceIds = QualityMaster::pluck('id');
+
+        return USD_prices::query()
+            ->with(['getRiceQuality', 'getUSDDefaultMaster'])
+            ->whereIn('rice', $riceIds)
+            ->orderBy('created_at', 'DESC')
+            ->when($this->from, fn ($q) => $q->whereDate('created_at', '>=', $this->from))
+            ->when($this->to, fn ($q) => $q->whereDate('created_at', '<=', $this->to))
+            ->when($this->packing, fn ($q) => $q->where('usd_defaultMaster_id', $this->packing));
     }
 
     public function headings(): array
@@ -34,28 +55,27 @@ class CalculatorExport implements FromCollection, WithHeadings, WithStyles, Shou
         ];
     }
 
-    public function collection()
+    public function map($item): array
     {
-        return $this->rows->values()->map(function ($item, $index) {
-            $quality = optional($item->getRiceQuality);
-            $packing = optional($item->getUSDDefaultMaster);
+        $this->rowNumber++;
+        $quality = optional($item->getRiceQuality);
+        $packing = optional($item->getUSDDefaultMaster);
 
-            return [
-                $index + 1,
-                trim(($quality->quality ?? '').' '.($quality->quality_name ?? '')),
-                $item->ricemin,
-                $item->ricemax,
-                $packing->bag_size ?? '',
-                $packing->bag_type ?? '',
-                $quality->quality_type ?? '',
-                $item->transportmin,
-                $item->transportmax,
-                $item->dollarrate,
-                $item->fobmin,
-                $item->fobmax,
-                $item->created_at ? $item->created_at->format('Y-m-d H:i') : '',
-            ];
-        });
+        return [
+            $this->rowNumber,
+            trim(($quality->quality ?? '').' '.($quality->quality_name ?? '')),
+            $item->ricemin,
+            $item->ricemax,
+            $packing->bag_size ?? '',
+            $packing->bag_type ?? '',
+            $quality->quality_type ?? '',
+            $item->transportmin,
+            $item->transportmax,
+            $item->dollarrate,
+            $item->fobmin,
+            $item->fobmax,
+            $item->created_at ? $item->created_at->format('Y-m-d H:i') : '',
+        ];
     }
 
     public function styles(Worksheet $sheet)

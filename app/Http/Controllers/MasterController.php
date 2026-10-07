@@ -586,18 +586,9 @@ class MasterController extends Controller
 	{
 		[$from, $to, $packing] = $this->resolveCalculatorFilters($request);
 
-		$riceIds = QualityMaster::pluck('id');
-		$rows = USD_prices::with(['getRiceQuality', 'getUSDDefaultMaster'])
-			->whereIn('rice', $riceIds)
-			->orderBy('created_at', 'DESC')
-			->when($from, fn ($q) => $q->whereDate('created_at', '>=', $from))
-			->when($to, fn ($q) => $q->whereDate('created_at', '<=', $to))
-			->when($packing, fn ($q) => $q->where('usd_defaultMaster_id', $packing))
-			->get();
-
 		$filename = 'calculator_'.($from ?? 'start').'_'.($to ?? 'end').($packing ? '_packing-'.$packing : '').'.xlsx';
 
-		return Excel::download(new CalculatorExport($rows), $filename);
+		return Excel::download(new CalculatorExport($from, $to, $packing), $filename);
 	}
 
 	private function resolveCalculatorFilters(Request $request): array
