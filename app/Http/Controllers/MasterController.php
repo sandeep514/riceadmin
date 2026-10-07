@@ -537,7 +537,9 @@ class MasterController extends Controller
 		if ($packing) {
 			$usdPriceQuery->where('usd_defaultMaster_id', $packing);
 		}
-		$usdPrice = $usdPriceQuery->get();
+		// Paginate: a wide from-to range can span thousands of rows
+		// (one row per packing per save) and exhaust memory while rendering.
+		$usdPrice = $usdPriceQuery->paginate(50)->appends($request->except('page'));
 
 
 		// $usdPrice = [];

@@ -56,7 +56,7 @@
                             <button type="submit" class="btn btn-info btn-sm">Filter</button>
                             <a href="{{ route('create.calculator') }}" class="btn btn-default btn-sm">Reset</a>
                             <a href="{{ route('export.calculator', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'packing' => $packing ?? null])) }}" class="btn btn-success btn-sm">Export to Excel</a>
-                            <span class="text-muted" style="margin-left: 10px;">Total: {{ $usdPrice->count() }}</span>
+                            <span class="text-muted" style="margin-left: 10px;">Total: {{ $usdPrice->total() }}</span>
                         </form>
                         <table id="example2" class="display" style="width: 100%;">
                             <thead>
@@ -113,6 +113,9 @@
                                 </tr>
                             </tfoot>
                         </table>
+                        <div style="margin-top: 10px;">
+                            {{ $usdPrice->onEachSide(1)->links() }}
+                        </div>
                     </div>
                 </div>
             </div>
