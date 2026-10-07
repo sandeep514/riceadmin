@@ -465,7 +465,7 @@
                     <span>Web Access</span>
                 </a>
             </li>
-            <li class="{{ (in_array($currentRoute,['post-a-job','create.post-a-job','edit.post-a-job']))?'active':'' }}">
+            <li class="{{ (in_array($currentRoute,['post-a-job','create.post-a-job','edit.post-a-job','post-a-job.applications']))?'active':'' }}">
                 <a href="{{ route('post-a-job') }}">
                     <i class="fa fa-briefcase"></i>
                     <span>Post a job</span>

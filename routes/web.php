@@ -200,6 +200,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::put('post-a-job/update/{id}', ['as' => 'update.post-a-job', 'uses' => 'PostedJobController@update', 'action' => 'edit']);
                 Route::delete('post-a-job/delete/{id}', ['as' => 'delete.post-a-job', 'uses' => 'PostedJobController@delete', 'action' => 'delete']);
                 Route::get('post-a-job/change-status/{id}/{status}', ['as' => 'post-a-job.change-status', 'uses' => 'PostedJobController@changeStatus', 'action' => 'edit']);
+                Route::get('post-a-job/applications/{id?}', ['as' => 'post-a-job.applications', 'uses' => 'PostedJobController@applications', 'action' => 'view']);
             });
 
             // Role Category Map

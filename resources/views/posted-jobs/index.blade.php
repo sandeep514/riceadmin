@@ -54,6 +54,7 @@
                                             @endif
                                         </td>
                                         <td style="text-align: center; white-space: nowrap;">
+                                            <a href="{{ route('post-a-job.applications', $v->id) }}" class="btn btn-primary btn-xs">Applications ({{ $v->applications_count ?? 0 }})</a>
                                             @if((int) $v->status === \App\PostedJob::STATUS_ACTIVE)
                                                 <a href="{{ route('post-a-job.change-status', ['id' => $v->id, 'status' => \App\PostedJob::STATUS_INACTIVE]) }}" class="btn btn-warning btn-xs" onclick="return confirm('Mark this job as deactive? It will be hidden from the public job list.');">Deactive</a>
                                             @else

@@ -40,4 +40,9 @@ class PostedJob extends Model
             self::EMPLOYMENT_PARTTIME => 'Part time',
         ];
     }
+
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class, 'posted_job_id', 'id');
+    }
 }

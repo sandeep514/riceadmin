@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostedJobRequest;
+use App\JobApplication;
 use App\PostedJob;
 use Session;
 
@@ -10,7 +11,7 @@ class PostedJobController extends Controller
 {
     public function index()
     {
-        $jobs = PostedJob::orderBy('id', 'DESC')->get();
+        $jobs = PostedJob::withCount('applications')->orderBy('id', 'DESC')->get();
 
         return view('posted-jobs.index', compact('jobs'));
     }
@@ -72,6 +73,20 @@ class PostedJobController extends Controller
         Session::flash('success', 'Success|Job posting deleted successfully!');
 
         return back();
+    }
+
+    /**
+     * Applications received for posted vacancies (all, or filtered by job).
+     */
+    public function applications($jobId = null)
+    {
+        $jobs = PostedJob::orderBy('id', 'DESC')->get(['id', 'title']);
+        $applications = JobApplication::with('postedJob')
+            ->when($jobId, fn ($q) => $q->where('posted_job_id', (int) $jobId))
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        return view('posted-jobs.applications', compact('jobs', 'applications', 'jobId'));
     }
 
     /**

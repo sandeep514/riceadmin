@@ -7864,6 +7864,31 @@ if (!file_exists('uploads')) {
             'status' => 1,
         ]);
 
+        $cvAbsolutePath = $cvRelativePath ? public_path($cvRelativePath) : null;
+        QueuedMail::send(
+            'mail.jobApplicationReceived',
+            [
+                'job_title' => $job->title,
+                'job_role' => $job->job_role,
+                'job_location' => $job->location,
+                'job_type' => $job->employment_type,
+                'job_last_date' => $job->last_date_apply ? $job->last_date_apply->format('d-m-Y') : null,
+                'application_id' => $row->id,
+                'applicant_name' => $row->name,
+                'applicant_email' => $row->email,
+                'applicant_mobile' => $row->mobile,
+                'applicant_experience' => $row->experience,
+                'cv_url' => $cvRelativePath ? url($cvRelativePath) : null,
+                'applied_at' => $row->created_at ? $row->created_at->format('d-m-Y H:i') : null,
+            ],
+            'enquiry@sntcgroup.com',
+            'New Job Application - ' . $job->title . ' (' . $row->name . ')',
+            'info@sntcgroup.com',
+            'SNTC Team - India',
+            null,
+            ($cvAbsolutePath && is_file($cvAbsolutePath)) ? $cvAbsolutePath : null
+        );
+
         return response()->json([
             'status' => true,
             'message' => 'Application submitted successfully.',
