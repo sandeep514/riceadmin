@@ -17,7 +17,9 @@ use App\HotDealAccept;
 use App\Notifications\SNTCNotification;
 use App\Jobs\SendPushNotificationJob;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Messaging\CloudMessage;
 
@@ -26,7 +28,29 @@ class NotificationController extends Controller
 {
     public function index()
     {
-        return View('notification.index');
+        $pushQueue = (string) config('queue.push_notification_queue', 'notifications');
+        $pendingJobs = null;
+        $failedJobs = null;
+        $latestFailure = null;
+        try {
+            if (Schema::hasTable('jobs')) {
+                $pendingJobs = DB::table('jobs')->where('queue', $pushQueue)->count();
+            }
+            if (Schema::hasTable('failed_jobs')) {
+                $failedJobs = DB::table('failed_jobs')->where('queue', $pushQueue)->count();
+                $latestFailure = DB::table('failed_jobs')
+                    ->where('queue', $pushQueue)
+                    ->orderByDesc('id')
+                    ->first(['id', 'failed_at', 'exception']);
+                if ($latestFailure && isset($latestFailure->exception)) {
+                    $latestFailure->excerpt = mb_substr((string) $latestFailure->exception, 0, 300);
+                }
+            }
+        } catch (\Throwable $e) {
+            // Queue tables unavailable (e.g. sync driver) — page still renders.
+        }
+
+        return View('notification.index', compact('pushQueue', 'pendingJobs', 'failedJobs', 'latestFailure'));
     }
 
     public function sendNotification(Request $request)

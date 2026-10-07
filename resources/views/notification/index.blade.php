@@ -17,6 +17,36 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
+                        <div class="box box-default">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Queue Status (queue: {{ $pushQueue ?? 'notifications' }})</h3>
+                            </div>
+                            <div class="box-body">
+                                @if(is_null($pendingJobs) && is_null($failedJobs))
+                                    <span class="text-muted">Queue tables unavailable — QUEUE_CONNECTION is probably set to sync.</span>
+                                @else
+                                    <span class="label {{ ($pendingJobs ?? 0) > 0 ? 'label-danger' : 'label-success' }}">
+                                        Pending: {{ $pendingJobs ?? '?' }}
+                                    </span>
+                                    &nbsp;
+                                    <span class="label {{ ($failedJobs ?? 0) > 0 ? 'label-warning' : 'label-success' }}">
+                                        Failed: {{ $failedJobs ?? '?' }}
+                                    </span>
+                                    @if(($pendingJobs ?? 0) > 0)
+                                        <p class="text-danger" style="margin-top: 8px;">
+                                            Jobs are waiting but no worker is processing the "{{ $pushQueue }}" queue.
+                                            Run: <code>php artisan queue:work database --queue={{ $pushQueue }},default --sleep=3 --tries=3 --timeout=300</code>
+                                        </p>
+                                    @endif
+                                    @if(!empty($latestFailure))
+                                        <p class="text-muted" style="margin-top: 8px;">
+                                            Latest failure #{{ $latestFailure->id }} at {{ $latestFailure->failed_at }}:<br>
+                                            <code>{{ $latestFailure->excerpt ?? '' }}</code>
+                                        </p>
+                                    @endif
+                                @endif
+                            </div>
+                        </div>
                         <form method="POST" action="{{ route('post.push.notification') }}" id="push-notification-form">
                             {{ csrf_field() }}
 
