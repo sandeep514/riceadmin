@@ -7959,7 +7959,11 @@ if (!file_exists('uploads')) {
                 'cv_url' => $cvRelativePath ? url($cvRelativePath) : null,
                 'applied_at' => $row->created_at ? $row->created_at->format('d-m-Y H:i') : null,
             ],
-            'enquiry@sntcgroup.com',
+            [
+                'enquiry@sntcgroup.com',
+                'hrassistantsntc@gmail.com',
+                'rbajaj@sntcgroup.com',
+            ],
             'New Job Application - ' . $job->title . ' (' . $row->name . ')',
             'info@sntcgroup.com',
             'SNTC Team - India',
