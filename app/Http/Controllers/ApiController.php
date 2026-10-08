@@ -8845,7 +8845,7 @@ if (!file_exists('uploads')) {
 
     public function getTestimonial()
     {
-        $testimonial = Testimonial::get();
+        $testimonial = Testimonial::where('status', 1)->get();
         return response()->json(['status' => true, 'data' => $testimonial], 200);
     }
     public function getTestimonialVideos()

@@ -29,6 +29,7 @@
                                                 <tr>
                                                     <th>Title</th>
                                                     <th>Message</th>
+                                                    <th>Status</th>
                                                     <th>Action</th>
                                                 </tr>
                                                 </thead>
@@ -37,9 +38,24 @@
                                                         <tr>
                                                             <td style="text-transform: capitalize;">{{ $value->title }}</td>
                                                             <td style="text-transform: capitalize;">{{ $value->message }}</td>
-                                                           
+                                                            <td>
+                                                                @if((int) $value->status === 1)
+                                                                    <span class="label label-success">Active</span>
+                                                                @else
+                                                                    <span class="label label-danger">Deactive</span>
+                                                                @endif
+                                                            </td>
                                                             <td>
                                                                 <ul style="list-style: none;display: inline-flex;padding: 0">
+                                                                    @if((int) $value->status === 1)
+                                                                        <li style="margin-left: 20px">
+                                                                            <a class="btn btn-sm btn-warning" href="{{ route('testimonial.change-status' , [base64_encode($value->id), 0]) }}"> Deactive </a>
+                                                                        </li>
+                                                                    @else
+                                                                        <li style="margin-left: 20px">
+                                                                            <a class="btn btn-sm btn-success" href="{{ route('testimonial.change-status' , [base64_encode($value->id), 1]) }}"> Active </a>
+                                                                        </li>
+                                                                    @endif
                                                                 
                                                                     <li style="margin-left: 20px">
                                                                         <a class="btn btn-sm btn-info" href="{{ route('testimonial.video.delete' , base64_encode($value->id)) }}"> Delete </a>

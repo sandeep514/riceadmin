@@ -104,6 +104,33 @@ class TestimonialController extends Controller
         }
     }
 
+    /**
+     * Toggle visibility: status 1 = Active (public), 0 = Deactive (hidden from public API).
+     */
+    public function changeStatus($id, $status)
+    {
+        $status = (int) $status;
+        if (! in_array($status, [0, 1], true)) {
+            abort(404);
+        }
+
+        $decodedId = base64_decode($id);
+        $testimonial = Testimonial::find($decodedId);
+        if ($testimonial == null) {
+            Session::flash('error','Error|No record found!');
+            return back();
+        }
+
+        $testimonial->status = $status;
+        $testimonial->save();
+
+        Session::flash('success', $status === 1
+            ? 'Success|Testimonial marked as active.'
+            : 'Success|Testimonial marked as deactive.');
+
+        return back();
+    }
+
 
 
     public function videoIndex(){
