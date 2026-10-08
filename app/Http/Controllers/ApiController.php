@@ -7798,20 +7798,22 @@ if (!file_exists('uploads')) {
 
         $appliedJobIds = [];
         if ($email || $mobile) {
-            $appliedJobIds = JobApplication::query()
+            $mobileDigits = $mobile !== null ? preg_replace('/\D+/', '', $mobile) : null;
+            $applications = JobApplication::query()
                 ->whereIn('posted_job_id', $rows->pluck('id'))
-                ->where(function ($q) use ($email, $mobile) {
-                    if ($email) {
-                        $q->whereRaw('LOWER(TRIM(email)) = ?', [$email]);
-                    }
-                    if ($mobile) {
-                        $q->orWhereRaw('TRIM(mobile) = ?', [$mobile]);
-                    }
-                })
-                ->pluck('posted_job_id')
-                ->map(fn ($id) => (int) $id)
-                ->all();
-            $appliedJobIds = array_flip($appliedJobIds);
+                ->get(['posted_job_id', 'email', 'mobile']);
+            foreach ($applications as $app) {
+                $emailMatch = $email !== null && strtolower(trim((string) $app->email)) === $email;
+                $mobileMatch = false;
+                if ($mobile !== null) {
+                    $rowMobile = trim((string) $app->mobile);
+                    $mobileMatch = $rowMobile === $mobile
+                        || ($mobileDigits !== '' && preg_replace('/\D+/', '', $rowMobile) === $mobileDigits);
+                }
+                if ($emailMatch || $mobileMatch) {
+                    $appliedJobIds[(int) $app->posted_job_id] = true;
+                }
+            }
         }
 
         $data = $rows->map(function (PostedJob $job) use ($typeLabels, $appliedJobIds, $email, $mobile) {
@@ -7870,14 +7872,31 @@ if (!file_exists('uploads')) {
 
         $normalizedEmail = strtolower(trim($validated['email']));
         $normalizedMobile = trim($validated['mobile']);
+        $normalizedMobileDigits = preg_replace('/\D+/', '', $normalizedMobile);
 
-        $alreadyApplied = JobApplication::query()
+        // Foolproof duplicate check: compare in PHP with full normalization so
+        // a match on EITHER email OR mobile blocks the repeat application.
+        // (Same email + different mobile => blocked. Same mobile + different
+        // email => blocked.)
+        $existing = JobApplication::query()
             ->where('posted_job_id', (int) $validated['application_id'])
-            ->where(function ($q) use ($normalizedEmail, $normalizedMobile) {
-                $q->whereRaw('LOWER(TRIM(email)) = ?', [$normalizedEmail])
-                    ->orWhereRaw('TRIM(mobile) = ?', [$normalizedMobile]);
-            })
-            ->exists();
+            ->get(['email', 'mobile']);
+
+        $alreadyApplied = $existing->contains(function ($row) use ($normalizedEmail, $normalizedMobile, $normalizedMobileDigits) {
+            if (strtolower(trim((string) $row->email)) === $normalizedEmail) {
+                return true;
+            }
+            $rowMobile = trim((string) $row->mobile);
+            if ($rowMobile === $normalizedMobile) {
+                return true;
+            }
+            // Digit-only fallback so "+91 99999 99999" matches "9999999999".
+            if ($normalizedMobileDigits !== '' && preg_replace('/\D+/', '', $rowMobile) === $normalizedMobileDigits) {
+                return true;
+            }
+
+            return false;
+        });
 
         if ($alreadyApplied) {
             return response()->json([
@@ -7985,19 +8004,28 @@ if (!file_exists('uploads')) {
 
         $email = ! empty($validated['email']) ? strtolower(trim($validated['email'])) : null;
         $mobile = ! empty($validated['mobile']) ? trim($validated['mobile']) : null;
+        $mobileDigits = $mobile !== null ? preg_replace('/\D+/', '', $mobile) : null;
 
-        $hasApplied = JobApplication::query()
+        $existing = JobApplication::query()
             ->where('posted_job_id', (int) $validated['application_id'])
-            ->where(function ($q) use ($email, $mobile) {
-                if ($email) {
-                    $q->whereRaw('LOWER(TRIM(email)) = ?', [$email]);
+            ->get(['email', 'mobile']);
+
+        $hasApplied = $existing->contains(function ($row) use ($email, $mobile, $mobileDigits) {
+            if ($email !== null && strtolower(trim((string) $row->email)) === $email) {
+                return true;
+            }
+            if ($mobile !== null) {
+                $rowMobile = trim((string) $row->mobile);
+                if ($rowMobile === $mobile) {
+                    return true;
                 }
-                if ($mobile) {
-                    // Use orWhere so a match on either identifier counts.
-                    $q->orWhereRaw('TRIM(mobile) = ?', [$mobile]);
+                if ($mobileDigits !== '' && preg_replace('/\D+/', '', $rowMobile) === $mobileDigits) {
+                    return true;
                 }
-            })
-            ->exists();
+            }
+
+            return false;
+        });
 
         return response()->json([
             'status' => true,
