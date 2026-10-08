@@ -7777,8 +7777,10 @@ if (!file_exists('uploads')) {
 
     /**
      * Public list of posted jobs that are still open for applications (last_date_apply on or after today).
+     * Optional query params `email` / `mobile`: when provided, each job includes
+     * `has_applied` so the frontend can disable the Apply button for repeat applicants.
      */
-    public function getPublicPostedJobs()
+    public function getPublicPostedJobs(Request $request)
     {
         $today = Carbon::today();
 
@@ -7791,8 +7793,29 @@ if (!file_exists('uploads')) {
 
         $typeLabels = PostedJob::employmentTypeOptions();
 
-        $data = $rows->map(function (PostedJob $job) use ($typeLabels) {
-            return [
+        $email = $request->query('email') ? strtolower(trim($request->query('email'))) : null;
+        $mobile = $request->query('mobile') ? trim($request->query('mobile')) : null;
+
+        $appliedJobIds = [];
+        if ($email || $mobile) {
+            $appliedJobIds = JobApplication::query()
+                ->whereIn('posted_job_id', $rows->pluck('id'))
+                ->where(function ($q) use ($email, $mobile) {
+                    if ($email) {
+                        $q->whereRaw('LOWER(TRIM(email)) = ?', [$email]);
+                    }
+                    if ($mobile) {
+                        $q->orWhereRaw('TRIM(mobile) = ?', [$mobile]);
+                    }
+                })
+                ->pluck('posted_job_id')
+                ->map(fn ($id) => (int) $id)
+                ->all();
+            $appliedJobIds = array_flip($appliedJobIds);
+        }
+
+        $data = $rows->map(function (PostedJob $job) use ($typeLabels, $appliedJobIds, $email, $mobile) {
+            $item = [
                 'id' => $job->id,
                 'title' => $job->title,
                 'description' => $job->description,
@@ -7803,6 +7826,11 @@ if (!file_exists('uploads')) {
                 'last_date_apply' => $job->last_date_apply ? $job->last_date_apply->format('Y-m-d') : null,
                 'number_of_positions' => (int) $job->number_of_positions,
             ];
+            if ($email || $mobile) {
+                $item['has_applied'] = isset($appliedJobIds[(int) $job->id]);
+            }
+
+            return $item;
         })->values();
 
         return response()->json([
@@ -7840,6 +7868,24 @@ if (!file_exists('uploads')) {
             ], 422);
         }
 
+        $normalizedEmail = strtolower(trim($validated['email']));
+        $normalizedMobile = trim($validated['mobile']);
+
+        $alreadyApplied = JobApplication::query()
+            ->where('posted_job_id', (int) $validated['application_id'])
+            ->where(function ($q) use ($normalizedEmail, $normalizedMobile) {
+                $q->whereRaw('LOWER(TRIM(email)) = ?', [$normalizedEmail])
+                    ->orWhereRaw('TRIM(mobile) = ?', [$normalizedMobile]);
+            })
+            ->exists();
+
+        if ($alreadyApplied) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You have already applied for this job.',
+            ], 422);
+        }
+
         $cvRelativePath = null;
         if ($request->hasFile('cv')) {
             $file = $request->file('cv');
@@ -7854,15 +7900,28 @@ if (!file_exists('uploads')) {
             $cvRelativePath = $relativeDir . '/' . $safe;
         }
 
-        $row = JobApplication::create([
-            'posted_job_id' => (int) $validated['application_id'],
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'mobile' => $validated['mobile'],
-            'experience' => $validated['experience'] ?? null,
-            'cv_file' => $cvRelativePath,
-            'status' => 1,
-        ]);
+        $row = null;
+        try {
+            $row = JobApplication::create([
+                'posted_job_id' => (int) $validated['application_id'],
+                'name' => trim($validated['name']),
+                'email' => $normalizedEmail,
+                'mobile' => $normalizedMobile,
+                'experience' => $validated['experience'] ?? null,
+                'cv_file' => $cvRelativePath,
+                'status' => 1,
+            ]);
+        } catch (\Illuminate\Database\QueryException $e) {
+            // SQLSTATE 23000 = unique constraint violation (race condition
+            // between the exists() check above and insert).
+            if ($e->getCode() === '23000') {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You have already applied for this job.',
+                ], 422);
+            }
+            throw $e;
+        }
 
         $cvAbsolutePath = $cvRelativePath ? public_path($cvRelativePath) : null;
         QueuedMail::send(
@@ -7903,6 +7962,48 @@ if (!file_exists('uploads')) {
                 'status' => (int) $row->status,
             ],
         ], 201);
+    }
+
+    /**
+     * Public: check whether the given email/mobile has already applied for a job.
+     * Used by the frontend to disable the Apply button for repeat applicants.
+     */
+    public function checkJobApplication(Request $request)
+    {
+        $validated = $request->validate([
+            'application_id' => 'required|integer|exists:posted_jobs,id',
+            'email' => 'nullable|email|max:255',
+            'mobile' => 'nullable|string|max:64',
+        ]);
+
+        if (empty($validated['email']) && empty($validated['mobile'])) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Either email or mobile is required.',
+            ], 422);
+        }
+
+        $email = ! empty($validated['email']) ? strtolower(trim($validated['email'])) : null;
+        $mobile = ! empty($validated['mobile']) ? trim($validated['mobile']) : null;
+
+        $hasApplied = JobApplication::query()
+            ->where('posted_job_id', (int) $validated['application_id'])
+            ->where(function ($q) use ($email, $mobile) {
+                if ($email) {
+                    $q->whereRaw('LOWER(TRIM(email)) = ?', [$email]);
+                }
+                if ($mobile) {
+                    // Use orWhere so a match on either identifier counts.
+                    $q->orWhereRaw('TRIM(mobile) = ?', [$mobile]);
+                }
+            })
+            ->exists();
+
+        return response()->json([
+            'status' => true,
+            'has_applied' => $hasApplied,
+            'message' => $hasApplied ? 'You have already applied for this job.' : 'Not applied yet.',
+        ]);
     }
 
     public function getTradeDetail($tradeId)

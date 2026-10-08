@@ -227,6 +227,11 @@ use Pusher\Pusher;
         'uses' => 'ApiController@saveJobApplication',
     ]);
 
+    Route::match(['get', 'post'], 'check/job-application', [
+        'as' => 'check.job.application',
+        'uses' => 'ApiController@checkJobApplication',
+    ]);
+
 
     Route::get('get/personal/query/count/{userId}' , ['as' => 'get.personal.query' , 'uses' => 'ApiController@getPersonalQueryCount', 'middleware' => 'app.api.token']);
 
