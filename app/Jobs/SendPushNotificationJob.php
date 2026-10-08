@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Notification;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,9 +15,15 @@ use Illuminate\Support\Facades\Log;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Messaging\CloudMessage;
 
-class SendPushNotificationJob implements ShouldQueue
+class SendPushNotificationJob implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * Block an identical dispatch (double-click / retry storm) for 10 minutes.
+     * Identity is the stable $batchKey (title|body|appType|userIds).
+     */
+    public int $uniqueFor = 600;
 
     /**
      * Number of seconds before the job times out.
@@ -59,6 +66,11 @@ class SendPushNotificationJob implements ShouldQueue
         if ($queue !== '') {
             $this->onQueue($queue);
         }
+    }
+
+    public function uniqueId(): string
+    {
+        return (string) $this->batchKey;
     }
 
     /**

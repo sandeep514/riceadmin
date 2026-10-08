@@ -48,7 +48,9 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
+            // Must exceed worker --timeout=300 and job $timeout=120,
+            // otherwise the job is released early and a second worker sends it again.
+            'retry_after' => 330,
         ],
 
         'beanstalkd' => [

@@ -67,6 +67,7 @@ class NotificationController extends Controller
         $totalUsers = 0;
         $chunkCount = 0;
         $chunkSize = 500;
+        $seenIds = [];
 
         foreach ($appTypes as $userAppType) {
             $this->pushRecipientQuery($userAppType, $request->userType)
@@ -75,7 +76,8 @@ class NotificationController extends Controller
                     $request,
                     $userAppType,
                     &$totalUsers,
-                    &$chunkCount
+                    &$chunkCount,
+                    &$seenIds
                 ) {
                     $chunk = $users
                         ->map(static fn ($user) => [
@@ -83,6 +85,15 @@ class NotificationController extends Controller
                             'user_token' => (string) $user->user_token,
                         ])
                         ->filter(static fn ($row) => $row['id'] > 0 && $row['user_token'] !== '')
+                        // Same user can match both usd + inr filters — send only once.
+                        ->reject(static function ($row) use (&$seenIds) {
+                            if (isset($seenIds[$row['id']])) {
+                                return true;
+                            }
+                            $seenIds[$row['id']] = true;
+
+                            return false;
+                        })
                         ->values()
                         ->all();
 
