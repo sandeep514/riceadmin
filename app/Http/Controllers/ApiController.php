@@ -4787,6 +4787,122 @@ class ApiController extends Controller
         return response()->json(['status' => true, 'basmatiPrices' => $basData, 'nonbasmatiPrices' => $nonBasData, 'defaultCIFPrice' => floatval($defalutPortPrice), 'latestDate' => $latestDate, 'defalutPort' => $defalutPort, 'test' => 1]);
     }
 
+    /**
+     * V2: date-aware USD prices for the mobile app.
+     * GET api/get/usd/prices2/{userId}?date=YYYY-MM-DD
+     * - date omitted/invalid => latest date present in USD_prices.
+     * - Returns latest row per (rice, packing) ON that date for 50kg + 55kg packings,
+     *   with rice_name included, same basmati/non-basmati grouping as v1.
+     */
+    public function getUSDPrices2(Request $request, $userId)
+    {
+        $today = Carbon::now()->format('Y-m-d');
+
+        $requestedDate = is_string($request->input('date')) ? trim((string) $request->input('date')) : '';
+        $priceDate = null;
+        if ($requestedDate !== '' && preg_match('/^\d{4}-\d{2}-\d{2}$/', $requestedDate)) {
+            try {
+                $priceDate = Carbon::createFromFormat('Y-m-d', $requestedDate)->format('Y-m-d');
+            } catch (\Exception $e) {
+                $priceDate = null;
+            }
+        }
+        if ($priceDate === null) {
+            $latest = USD_prices::orderBy('created_at', 'DESC')->value('created_at');
+            $priceDate = $latest ? Carbon::parse($latest)->format('Y-m-d') : $today;
+        }
+
+        $packingIds = USD_defaultmaster::query()
+            ->whereIn('bag_size', ['50kg', '55kg'])
+            ->pluck('id')
+            ->toArray();
+
+        $usdData = collect();
+        if ($packingIds !== []) {
+            $latestRecords = USD_prices::whereIn('usd_defaultMaster_id', $packingIds)
+                ->whereDate('created_at', $priceDate)
+                ->select('rice', 'usd_defaultMaster_id', \DB::raw('MAX(id) as max_id'))
+                ->groupBy('rice', 'usd_defaultMaster_id');
+
+            $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
+                $join->on('USD_prices.id', '=', 'latest_records.max_id');
+            })
+                ->mergeBindings($latestRecords->getQuery())
+                ->select('USD_prices.*')
+                ->with(['getUSDDefaultMaster', 'getRiceQuality'])
+                ->orderBy('USD_prices.rice', 'ASC')
+                ->orderBy('USD_prices.id', 'DESC')
+                ->get();
+        }
+
+        $latestDate = null;
+        $latestRow = USD_prices::select('created_at')->where('status', 1)->latest('id')->first();
+        if ($latestRow && $latestRow->created_at) {
+            $latestDate = Carbon::parse($latestRow->created_at)->format('d-M-Y, g:i A');
+        }
+
+        $basmatiData = [];
+        $nonbasmatiData = [];
+
+        foreach ($usdData as $v) {
+            if ((int) $v->ricemin === 0) {
+                continue;
+            }
+            if ($v->getUSDDefaultMaster == null || $v->getRiceQuality == null) {
+                continue;
+            }
+            $v['fobmin'] = floatval($v->fobmin);
+            $v['fobmax'] = floatval($v->fobmax);
+            $v['rice_name'] = trim(($v->getRiceQuality->quality ?? '').' '.($v->getRiceQuality->quality_name ?? ''));
+
+            if ($v->getRiceQuality->quality_type == 'basmati') {
+                $basmatiData[$v->getRiceQuality->order][$v->rice.'_'.$v->usd_defaultMaster_id] = $v;
+            } else {
+                $nonbasmatiData[$v->getRiceQuality->order][$v->rice.'_'.$v->usd_defaultMaster_id] = $v;
+            }
+        }
+
+        $defalutPort = 'Jebel Ali';
+        $userData = User::where('id', $userId)->where('userType', 1)->first();
+        if ($userData && $userData->import_port != null && $userData->import_port != '') {
+            $defalutPort = $userData->import_port;
+        }
+
+        $defalutPortPrice = 0;
+        $defalutPortDetail = OceanFreight::where('port', $defalutPort)->get();
+        if ($defalutPortDetail->count() > 0) {
+            $defalutPortPrice = $defalutPortDetail[0]['freight_25MT_1MT'];
+        }
+        ksort($basmatiData);
+        ksort($nonbasmatiData);
+
+        $basData = [];
+        $nonBasData = [];
+        foreach ($basmatiData as $group) {
+            foreach ($group as $vv) {
+                $basData[] = $vv;
+            }
+        }
+
+        foreach ($nonbasmatiData as $group) {
+            foreach ($group as $vv) {
+                $nonBasData[] = $vv;
+            }
+        }
+
+        return response()->json([
+            'status' => true,
+            'basmatiPrices' => $basData,
+            'nonbasmatiPrices' => $nonBasData,
+            'defaultCIFPrice' => floatval($defalutPortPrice),
+            'latestDate' => $latestDate,
+            'defalutPort' => $defalutPort,
+            'priceDate' => $priceDate,
+            'requestedDate' => $requestedDate !== '' ? $requestedDate : null,
+            'isStale' => $priceDate < $today,
+        ]);
+    }
+
     public function USDOceanFreight()
     {
         $oceanfreight = OceanFreight::get();
