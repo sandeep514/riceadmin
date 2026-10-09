@@ -523,14 +523,25 @@ class MasterController extends Controller
 		$query = QualityMaster::get()->map(function($query){
 			return $query->id;
 		});
+		// Default to the latest date present in USD_prices (not today),
+		// so restored backup data (e.g. 2026-04-01) still lists instead of showing empty.
+		// If today is not added yet, this shows the last day that has prices.
+		$today = Carbon::now()->format('Y-m-d');
+		$latest = USD_prices::whereIn('rice', $query)->orderBy('created_at', 'DESC')->value('created_at');
+		$maxDate = $latest ? Carbon::parse($latest)->format('Y-m-d') : null;
+		if ($from === null && $to === null && $maxDate !== null) {
+			$from = $maxDate;
+			$to = $maxDate;
+		}
+		// Banner only on the default (unfiltered) view: today missing => we show last available date.
+		$showingFallback = $request->input('from') === null && $request->input('to') === null
+			&& $maxDate !== null && $maxDate < $today;
 		$usdPriceQuery = USD_prices::with(['getRiceQuality','getUSDDefaultMaster'])
 			->whereIn('rice', $query)
 			->orderBy('created_at', 'DESC');
 
 		if ($from) {
 			$usdPriceQuery->whereDate('created_at', '>=', $from);
-		} else {
-			$usdPriceQuery->whereDate('created_at', '>=', Carbon::now()->format('Y-m-d'));
 		}
 		if ($to) {
 			$usdPriceQuery->whereDate('created_at', '<=', $to);
@@ -580,7 +591,7 @@ class MasterController extends Controller
 		$dollarRate = $defaultValue->dollarvalue;
 		$packings = USD_defaultmaster::orderBy('bag_size')->orderBy('bag_type')->get(['id', 'bag_size', 'bag_type']);
 
-		return view('calculator.create', compact('riceName', 'usdPrice', 'dollarRate', 'defaultValue', 'packings', 'from', 'to', 'packing'));
+		return view('calculator.create', compact('riceName', 'usdPrice', 'dollarRate', 'defaultValue', 'packings', 'from', 'to', 'packing', 'maxDate', 'today', 'showingFallback'));
 	}
 
 	public function exportCalculator(Request $request)

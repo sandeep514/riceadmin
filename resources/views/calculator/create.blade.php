@@ -35,6 +35,12 @@
                     </div>
 
                     <div class="col-md-12">
+                        @if(!empty($showingFallback))
+                            <div class="alert alert-warning" style="margin-bottom: 15px;">
+                                Today's prices ({{ $today }}) not added yet — showing last available date {{ $maxDate }}.
+                                Use Clone on a row to carry it forward to today, or POST a new calculation above.
+                            </div>
+                        @endif
                         <form method="GET" action="{{ route('create.calculator') }}" class="form-inline" style="margin-bottom: 15px;">
                             <div class="form-group" style="margin-right: 10px;">
                                 <label for="from" style="margin-right: 5px;">From:</label>
