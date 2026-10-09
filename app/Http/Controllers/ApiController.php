@@ -4710,7 +4710,7 @@ class ApiController extends Controller
 
 
         $latestRecords = USD_prices::whereIn('usd_defaultMaster_id', $fiftykgbgids)
-            ->select('id', 'rice', \DB::raw('MAX(created_at) as max_id'))
+            ->select('rice', \DB::raw('MAX(created_at) as max_created_at'))
             ->groupBy('rice');
 
         $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
