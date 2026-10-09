@@ -4710,17 +4710,18 @@ class ApiController extends Controller
 
 
         $latestRecords = USD_prices::whereIn('usd_defaultMaster_id', $fiftykgbgids)
-            ->select('id', 'rice', \DB::raw('MAX(id) as max_id'))
+            ->select('id', 'rice', \DB::raw('MAX(created_at) as max_id'))
             ->groupBy('rice');
 
         $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
-            $join->on('USD_prices.id', '=', 'latest_records.max_id');
+            $join->on('USD_prices.rice', '=', 'latest_records.rice')
+            ->on('USD_prices.created_at', '=', 'latest_records.max_created_at');
         })
             ->mergeBindings($latestRecords->getQuery())
             ->select('USD_prices.*')
             ->with(['getUSDDefaultMaster', 'getRiceQuality'])
             ->orderBy('USD_prices.rice', 'ASC')
-            ->orderBy('USD_prices.id', 'DESC')
+            ->orderBy('USD_prices.created_at', 'DESC')
             ->get();
 
 
@@ -4825,13 +4826,14 @@ class ApiController extends Controller
                 ->groupBy('rice', 'usd_defaultMaster_id');
 
             $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
-                $join->on('USD_prices.id', '=', 'latest_records.max_id');
+                $join->on('USD_prices.rice', '=', 'latest_records.rice')
+            ->on('USD_prices.created_at', '=', 'latest_records.max_created_at');
             })
                 ->mergeBindings($latestRecords->getQuery())
                 ->select('USD_prices.*')
                 ->with(['getUSDDefaultMaster', 'getRiceQuality'])
                 ->orderBy('USD_prices.rice', 'ASC')
-                ->orderBy('USD_prices.id', 'DESC')
+                ->orderBy('USD_prices.created_at', 'DESC')
                 ->get();
         }
 
