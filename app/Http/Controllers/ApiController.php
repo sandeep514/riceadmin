@@ -4726,8 +4726,11 @@ class ApiController extends Controller
 
 
 
-        $getUSDPrices = USD_prices::select('created_at')->where('status', 1)->latest('id')->first();
-        $latestDate = $getUSDPrices->created_at->format('d-M-Y, g:i A');
+        // Same packing scope as $usdData; order by created_at (id order can lag behind).
+        $latestAt = USD_prices::whereIn('usd_defaultMaster_id', $fiftykgbgids)
+            ->orderBy('created_at', 'DESC')
+            ->value('created_at');
+        $latestDate = $latestAt ? Carbon::parse($latestAt)->format('d-M-Y, g:i A') : null;
 
         $basmatiData = [];
         $nonbasmatiData = [];
@@ -4838,9 +4841,9 @@ class ApiController extends Controller
         }
 
         $latestDate = null;
-        $latestRow = USD_prices::select('created_at')->where('status', 1)->latest('id')->first();
-        if ($latestRow && $latestRow->created_at) {
-            $latestDate = Carbon::parse($latestRow->created_at)->format('d-M-Y, g:i A');
+        $latestAt = USD_prices::orderBy('created_at', 'DESC')->value('created_at');
+        if ($latestAt) {
+            $latestDate = Carbon::parse($latestAt)->format('d-M-Y, g:i A');
         }
 
         $basmatiData = [];
