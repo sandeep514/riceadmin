@@ -227,6 +227,7 @@ class WebPlanController extends Controller
 
     public function editPlan($webPlanId)
     {
+        \DB::enableQueryLog();
         $data = WebPlanModel::where('id' , $webPlanId)->with(['getPlanKeyMap' => function($q){
             // return $q->with(['getPlanKey']);
         }])->first();
@@ -236,7 +237,30 @@ class WebPlanController extends Controller
             ->orderBy('id')
             ->get();
         $roles = Role::where('type', 'web')->pluck('role_name', 'id');
-        return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel','roles'));
+        $debugSql = collect(\DB::getQueryLog())
+            ->map(fn ($entry) => self::interpolateQuery($entry['query'], $entry['bindings'] ?? []))
+            ->implode(";\n\n").';';
+        \DB::disableQueryLog();
+        return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel','roles','debugSql'));
+    }
+
+    /**
+     * Fill ? bindings into raw SQL for display (debug only, not for execution).
+     */
+    private static function interpolateQuery(string $sql, array $bindings): string
+    {
+        foreach ($bindings as $binding) {
+            $value = match (true) {
+                is_null($binding) => 'NULL',
+                is_bool($binding) => $binding ? '1' : '0',
+                is_int($binding), is_float($binding) => (string) $binding,
+                $binding instanceof \DateTimeInterface => "'".$binding->format('Y-m-d H:i:s')."'",
+                default => "'".str_replace("'", "''", (string) $binding)."'",
+            };
+            $sql = preg_replace('/\?/', $value, $sql, 1);
+        }
+
+        return $sql;
     }
 
     public function updatePlan(Request $request)

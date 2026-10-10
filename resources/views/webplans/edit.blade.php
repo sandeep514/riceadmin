@@ -33,6 +33,19 @@
                     </div>
 
                     <!-- /.box -->
+                    @if(!empty($debugSql ?? null))
+                        <div class="box box-default collapsed-box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Exact SQL (this page load)</h3>
+                                <div class="box-tools pull-right">
+                                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="box-body">
+                                <pre style="white-space: pre-wrap; word-break: break-all;">{{ $debugSql }}</pre>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
         </section>
