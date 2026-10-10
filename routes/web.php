@@ -1057,6 +1057,7 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::POST('testimonial/video/save', ['as' => 'testimonial.video.save' , 'uses' => 'TestimonialController@videoSave']);
     Route::get('testimonial/video/edit/{id}', ['as' => 'testimonial.video.edit' , 'uses' => 'TestimonialController@videoEdit']);
     Route::POST('testimonial/video/update', ['as' => 'testimonial.video.update' , 'uses' => 'TestimonialController@videoUpdate']);
+    Route::POST('testimonial/video/update-order', ['as' => 'testimonial.video.update-order' , 'uses' => 'TestimonialController@videoUpdateOrder']);
     Route::get('testimonial/video/delete/{testimonialId}', ['as' => 'testimonial.video.delete' , 'uses' => 'TestimonialController@videoDelete']);
 
 

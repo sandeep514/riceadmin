@@ -8971,7 +8971,7 @@ if (!file_exists('uploads')) {
     }
     public function getTestimonialVideos()
     {
-        $testimonial = TestimonialVideo::get();
+        $testimonial = TestimonialVideo::orderByRaw('order_no IS NULL, order_no ASC')->orderBy('id')->get();
         return response()->json(['status' => true,'basePath' => 'uploads/testimonial/video','data' => $testimonial ], 200);
     }
     public function contactUs(Request $request)

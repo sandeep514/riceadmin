@@ -27,6 +27,7 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
+                                                    <th>Order</th>
                                                     <th>Title</th>
                                                     <th>Attachment</th>
                                                     <th>Action</th>
@@ -35,6 +36,9 @@
                                                 <tbody>
                                                     @foreach($testimonial as $key => $value)
                                                         <tr>
+                                                            <td data-order="{{ $value->order_no ?? 999999 }}">
+                                                                @include('components.master-order-input', ['model' => $value, 'route' => 'testimonial.video.update-order'])
+                                                            </td>
                                                             <td style="text-transform: capitalize;">{{ $value->title }}</td>
                                                             <td style="text-transform: capitalize;">
                                                                 <video width="220" height="140" controls>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DataTables\RolesDataTable;
+use App\Support\MasterOrderUpdater;
 use App\Testimonial;
 use App\TestimonialVideo;
 use Illuminate\Support\Facades\Hash;
@@ -134,7 +135,9 @@ class TestimonialController extends Controller
 
 
     public function videoIndex(){
-        $testimonial = TestimonialVideo::all();
+        $testimonial = TestimonialVideo::orderByRaw('order_no IS NULL, order_no ASC')
+            ->orderBy('id')
+            ->get();
 
         return View('testimonialVideo.index' , compact('testimonial'));
     }
@@ -163,9 +166,21 @@ class TestimonialController extends Controller
             $data['file'] = $fileName;
         }
 
+        $data['order_no'] = MasterOrderUpdater::nextOrder(TestimonialVideo::class);
+
         TestimonialVideo::create($data);
         Session::flash('success','Success|Record Saved Successfully!');
         return redirect()->route('testimonial.video.index');
+    }
+    public function videoUpdateOrder(Request $request){
+        $request->validate([
+            'id' => 'required|integer|exists:testimonial_video,id',
+            'order_no' => 'required|integer|min:1',
+        ]);
+
+        MasterOrderUpdater::swap(TestimonialVideo::class, (int) $request->id, (int) $request->order_no);
+        Session::flash('success','Success|Video order updated successfully!');
+        return back();
     }
     public function videoEdit(){
         $decodedId = base64_decode($id);

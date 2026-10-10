@@ -18,8 +18,8 @@ class WebAccessRepository
                 
                 $saved[] = WebAccess::create([
                     'role_id' => $request->role_id,
-                    'category_id' => $request->category_id,
-                    'plan_id' => $request->plan_id,
+                    'category_id' => $request->category_id ?: null,
+                    'plan_id' => $request->plan_id ?: null,
                     'web_side_menu_id' => $menuId,
                     'can_create' => isset($permissions['can_create']) ? 1 : 0,
                     'can_read' => isset($permissions['can_read']) ? 1 : 0,
