@@ -72,6 +72,7 @@ class RolesDataTable extends DataTable
 
             Column::make('id'),
             Column::make('role_name'),
+            Column::make('type'),
             Column::make('created_at'),
             Column::computed('action')
                 ->exportable(false)

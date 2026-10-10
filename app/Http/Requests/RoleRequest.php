@@ -25,11 +25,13 @@ class RoleRequest extends FormRequest
     {
         if(request()->method == 'PUT'){
             return [
-                'role_name' => 'required|unique:roles,role_name,'.request()->id
+                'role_name' => 'required|unique:roles,role_name,'.request()->id,
+                'type' => 'required|in:web,app',
             ];
         }else{
             return [
-                'role_name' => 'required|unique:roles'
+                'role_name' => 'required|unique:roles',
+                'type' => 'required|in:web,app',
             ];
         }
     }

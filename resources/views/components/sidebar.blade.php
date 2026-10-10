@@ -119,6 +119,11 @@
                         <i class="fa fa-users"></i> <span>Modules & Permissions</span>
                     </a>
                 </li>
+                <li class="{{ (in_array($currentRoute,['roles','create.role','edit.role']))?'active':'' }}">
+                    <a href="{{ route('roles') }}">
+                        <i class="fa fa-id-badge"></i> <span>Roles</span>
+                    </a>
+                </li>
             @endif
 
             @php
