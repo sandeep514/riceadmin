@@ -4702,35 +4702,47 @@ class ApiController extends Controller
 
     public function getUSDPrices($userId)
     {
-        $fiftykgbgids = USD_defaultmaster::query()
-            ->select('id')
-            ->where('bag_size', '50kg')
+        $appTz = config('app.timezone', 'Asia/Kolkata');
+
+        // App list is 50kg PP only. Admin save still creates every packing in the same
+        // second, so the join below must keep filtering by these master ids.
+        $fiftyKgPpIds = USD_defaultmaster::query()
+            ->whereRaw('LOWER(TRIM(bag_size)) = ?', ['50kg'])
+            ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['pp'])
             ->pluck('id')
             ->toArray();
 
+        $usdData = collect();
+        $latestDate = null;
 
-        $latestRecords = USD_prices::whereIn('usd_defaultMaster_id', $fiftykgbgids)
-            ->select('rice', \DB::raw('MAX(created_at) as max_created_at'))
-            ->groupBy('rice');
+        if ($fiftyKgPpIds !== []) {
+            $latestRecords = USD_prices::whereIn('usd_defaultMaster_id', $fiftyKgPpIds)
+                ->select('rice', \DB::raw('MAX(created_at) as max_created_at'))
+                ->groupBy('rice');
 
-        $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
-            $join->on('USD_prices.rice', '=', 'latest_records.rice')
-            ->on('USD_prices.created_at', '=', 'latest_records.max_created_at');
-        })
-            ->mergeBindings($latestRecords->getQuery())
-            ->select('USD_prices.*')
-            ->with(['getUSDDefaultMaster', 'getRiceQuality'])
-            ->orderBy('USD_prices.rice', 'ASC')
-            ->orderBy('USD_prices.created_at', 'DESC')
-            ->get();
+            $usdData = USD_prices::join(\DB::raw("({$latestRecords->toSql()}) as latest_records"), function ($join) {
+                $join->on('USD_prices.rice', '=', 'latest_records.rice')
+                    ->on('USD_prices.created_at', '=', 'latest_records.max_created_at');
+            })
+                ->mergeBindings($latestRecords->getQuery())
+                ->whereIn('USD_prices.usd_defaultMaster_id', $fiftyKgPpIds)
+                ->select('USD_prices.*')
+                ->with(['getUSDDefaultMaster', 'getRiceQuality'])
+                ->orderBy('USD_prices.rice', 'ASC')
+                ->orderBy('USD_prices.id', 'DESC')
+                ->get();
 
-
-
-        // Same packing scope as $usdData; order by created_at (id order can lag behind).
-        $latestAt = USD_prices::whereIn('usd_defaultMaster_id', $fiftykgbgids)
-            ->orderBy('created_at', 'DESC')
-            ->value('created_at');
-        $latestDate = $latestAt ? Carbon::parse($latestAt)->format('d-M-Y, g:i A') : null;
+            $latestRow = USD_prices::whereIn('usd_defaultMaster_id', $fiftyKgPpIds)
+                ->orderBy('created_at', 'DESC')
+                ->orderBy('id', 'DESC')
+                ->first(['created_at']);
+            if ($latestRow && $latestRow->created_at) {
+                $latestDate = $latestRow->created_at
+                    ->copy()
+                    ->timezone($appTz)
+                    ->format('d-M-Y, g:i A');
+            }
+        }
 
         $basmatiData = [];
         $nonbasmatiData = [];
@@ -4762,10 +4774,11 @@ class ApiController extends Controller
         $defalutPort = "Jebel Ali";
         $userData = User::where('id', $userId)->where('userType' , 1)->first();
 
-        if ($userData->import_port != null && $userData->import_port != '') {
+        if ($userData && $userData->import_port != null && $userData->import_port != '') {
             $defalutPort = $userData->import_port;
         }
 
+        $defalutPortPrice = 0;
         $defalutPortDetail = OceanFreight::where('port', $defalutPort)->get();
         if ($defalutPortDetail->count() > 0) {
             $defalutPortPrice = $defalutPortDetail[0]['freight_25MT_1MT'];
