@@ -113,7 +113,8 @@ class NewsRunnerController extends Controller
 
         // Keep single row per record on edit (type checkbox acts as single-select here).
         // If multiple types checked, keep the first one to avoid duplicating rows.
-        $type = is_array($request->type) ? reset($request->type) : $request->type;
+        $types = $request->input('type');
+        $type = is_array($types) ? reset($types) : $types;
 
         WebNewsRunner::whereId($newsId)->update([
             'type' => $type,

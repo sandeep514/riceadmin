@@ -33,6 +33,19 @@ $netlifyFrontendOrigins = [
     'https://sntc.netlify.com',
 ];
 
+// Live sites (apex + www, http + https) — always allowed regardless of APP_ENV
+// so APIs work from both snjtradelink.com and sntcgroup.com deployments.
+$sntcLiveOrigins = [
+    'https://snjtradelink.com',
+    'https://www.snjtradelink.com',
+    'http://snjtradelink.com',
+    'http://www.snjtradelink.com',
+    'https://sntcgroup.com',
+    'https://www.sntcgroup.com',
+    'http://sntcgroup.com',
+    'http://www.sntcgroup.com',
+];
+
 $defaultOrigins = $isLocal
     ? array_values(array_unique(array_filter(array_merge(
         [
@@ -42,16 +55,14 @@ $defaultOrigins = $isLocal
             'http://127.0.0.1:3000',
             'http://10.139.48.97:5173',
         ],
+        $sntcLiveOrigins,
         $netlifyFrontendOrigins
     ))))
     : array_values(array_unique(array_filter(array_merge(
         [
             env('FRONTEND_URL'),
-            'https://snjtradelink.com',
-            'https://www.snjtradelink.com',
-            'http://snjtradelink.com',
-            'http://www.snjtradelink.com',
         ],
+        $sntcLiveOrigins,
         $netlifyFrontendOrigins
     ))));
 
@@ -60,6 +71,11 @@ $allowedOrigins = array_values(array_unique(array_filter(array_merge($fromEnv, $
 $snjtradelinkPatterns = [
     '#^https://([a-zA-Z0-9-]+\.)*snjtradelink\.com(:\d+)?$#',
     '#^http://([a-zA-Z0-9-]+\.)*snjtradelink\.com(:\d+)?$#',
+];
+
+$sntcgroupPatterns = [
+    '#^https://([a-zA-Z0-9-]+\.)*sntcgroup\.com(:\d+)?$#',
+    '#^http://([a-zA-Z0-9-]+\.)*sntcgroup\.com(:\d+)?$#',
 ];
 
 // Netlify branch / deploy preview URLs, e.g. https://deploy-preview-12--sntc.netlify.app
@@ -80,7 +96,8 @@ $customPattern = $customRegex ? '#' . trim($customRegex, '#') . '#' : null;
 $allowedOriginsPatterns = array_values(array_filter(array_merge(
     $customPattern ? [$customPattern] : [],
     $netlifyPatterns,
-    $isLocal ? [] : $snjtradelinkPatterns,
+    $snjtradelinkPatterns,
+    $sntcgroupPatterns,
     $lanPatterns,
     $isLocal ? [
         '#^http://localhost:\d+$#',
