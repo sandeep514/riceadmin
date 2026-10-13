@@ -13,6 +13,10 @@ $paths = [
     '*api/*',
     'sanctum/csrf-cookie',
     '*sanctum/csrf-cookie',
+    // Management SPA (management.sntcgroup.com) also XHRs administrator/* web routes.
+    // Without these, HandleCors sends no headers for those paths and browser reports CORS.
+    'administrator/*',
+    '*administrator/*',
 ];
 if ($appUrlPath !== '') {
     $paths[] = $appUrlPath . '/api/*';
@@ -33,7 +37,7 @@ $netlifyFrontendOrigins = [
     'https://sntc.netlify.com',
 ];
 
-// Live sites (apex + www, http + https) — always allowed regardless of APP_ENV
+// Live sites (apex + www + management SPA, http + https) — always allowed regardless of APP_ENV
 // so APIs work from both snjtradelink.com and sntcgroup.com deployments.
 $sntcLiveOrigins = [
     'https://snjtradelink.com',
@@ -44,6 +48,8 @@ $sntcLiveOrigins = [
     'https://www.sntcgroup.com',
     'http://sntcgroup.com',
     'http://www.sntcgroup.com',
+    'https://management.sntcgroup.com',
+    'http://management.sntcgroup.com',
 ];
 
 $defaultOrigins = $isLocal
