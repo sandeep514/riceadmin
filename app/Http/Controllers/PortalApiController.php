@@ -2301,8 +2301,13 @@ class PortalApiController extends Controller
         }
 
         // Re-create web session so future calls can work with cookies.
-        auth('web')->login($user);
-        $request->session()->save();
+        // Skip when the session already belongs to this user: login() + save()
+        // rewrites + fsyncs the session file on every call (file driver blocks
+        // concurrent requests on the session lock).
+        if ((int) auth('web')->id() !== (int) $user->id) {
+            auth('web')->login($user);
+            $request->session()->save();
+        }
 
         return $this->buildPortalSessionResponse((int) $user->id);
     }

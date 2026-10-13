@@ -131,9 +131,21 @@ class User extends Authenticatable
         'session_version' => 'integer',
     ];
 
+    /** Cached Schema::hasColumn results — information_schema lookups are slow, never run them per-request. */
+    private static array $columnExistsCache = [];
+
+    private static function usersTableHasColumn(string $column): bool
+    {
+        if (! array_key_exists($column, self::$columnExistsCache)) {
+            self::$columnExistsCache[$column] = Schema::hasColumn((new static)->getTable(), $column);
+        }
+
+        return self::$columnExistsCache[$column];
+    }
+
     public function isDeactivated(): bool
     {
-        if (! Schema::hasColumn($this->getTable(), 'is_deactivated')) {
+        if (! self::usersTableHasColumn('is_deactivated')) {
             return false;
         }
 
@@ -261,7 +273,7 @@ class User extends Authenticatable
      */
     public function allowsAdminInterestManagement(): bool
     {
-        if (! Schema::hasColumn($this->getTable(), 'can_edit_by_admin')) {
+        if (! self::usersTableHasColumn('can_edit_by_admin')) {
             return false;
         }
 
@@ -270,7 +282,7 @@ class User extends Authenticatable
 
     public function canEditByAdminFlag(): int
     {
-        if (! Schema::hasColumn($this->getTable(), 'can_edit_by_admin')) {
+        if (! self::usersTableHasColumn('can_edit_by_admin')) {
             return 0;
         }
 
