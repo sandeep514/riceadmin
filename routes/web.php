@@ -207,6 +207,17 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('role-category-map', ['as' => 'role-category-map.index', 'uses' => 'RoleCategoryMapController@index']);
             Route::post('role-category-map/save', ['as' => 'role-category-map.save', 'uses' => 'RoleCategoryMapController@save']);
 
+            // Category master (categories mapped on Role Category Map)
+            Route::group(['module' => 'category_master', 'icon' => 'fa-tags'], function () {
+                Route::get('category-masters', ['as' => 'category-masters', 'uses' => 'CategoryController@index', 'action' => 'view']);
+                Route::get('category-masters/create', ['as' => 'create.category-master', 'uses' => 'CategoryController@create', 'action' => 'create']);
+                Route::post('category-masters/save', ['as' => 'save.category-master', 'uses' => 'CategoryController@save', 'action' => 'create']);
+                Route::get('category-masters/edit/{id}', ['as' => 'edit.category-master', 'uses' => 'CategoryController@edit', 'action' => 'edit']);
+                Route::put('category-masters/update/{id}', ['as' => 'update.category-master', 'uses' => 'CategoryController@update', 'action' => 'edit']);
+                Route::delete('category-masters/delete/{id}', ['as' => 'delete.category-master', 'uses' => 'CategoryController@delete', 'action' => 'delete']);
+                Route::get('category-masters/change-status/{id}', ['as' => 'category-master.change-status', 'uses' => 'CategoryController@changeStatus', 'action' => 'edit']);
+            });
+
             // Avg Length Map
             Route::group(['module'=>'avg_length_map','icon'=>'fa-arrows-h'], function() {
                 Route::get('avg-length-map', ['as' => 'avg-length-map', 'uses' => 'AvgLengthMapController@index', 'action' => 'view']);

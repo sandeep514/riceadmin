@@ -32,15 +32,6 @@ class ValidateMultipartPostSize
             return $this->payloadTooLargeResponse($request);
         }
 
-        if (
-            $contentLength > 0
-            && empty($request->all())
-            && empty($request->allFiles())
-            && $this->wantsJson($request)
-        ) {
-            return $this->payloadTooLargeResponse($request);
-        }
-
         return $next($request);
     }
 

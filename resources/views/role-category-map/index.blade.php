@@ -19,6 +19,11 @@
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Map Categories With Role</h3>
+                            <div class="pull-right">
+                                <a href="{{ route('create.category-master') }}" class="btn btn-primary btn-sm">
+                                    <i class="fa fa-plus"></i> Add Category
+                                </a>
+                            </div>
                         </div>
 
                         <form method="GET" action="{{ route('role-category-map.index') }}">
