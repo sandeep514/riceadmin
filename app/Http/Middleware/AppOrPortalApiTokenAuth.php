@@ -56,7 +56,9 @@ class AppOrPortalApiTokenAuth
                 ?? $request->route('userId')
                 ?? $request->route('user_id');
 
-            if ($blockedMessage = User::authAccessBlockedMessageForUserId($candidateId)) {
+            // Hard ban only: rejected/on-hold users must still reach APIs,
+            // so they are not 403 here.
+            if ($blockedMessage = User::portalHardBlockedMessageForUserId($candidateId)) {
                 return response()->json([
                     'status' => false,
                     'message' => $blockedMessage,
@@ -71,7 +73,7 @@ class AppOrPortalApiTokenAuth
             ], 401);
         }
 
-        if ($blockedMessage = $user->authAccessBlockedMessage()) {
+        if ($blockedMessage = $user->portalHardBlockedMessage()) {
             return response()->json([
                 'status' => false,
                 'message' => $blockedMessage,
