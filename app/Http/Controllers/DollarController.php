@@ -34,7 +34,23 @@ class DollarController extends Controller
                                 if( count(array_filter($v)) > 3 ){
 
                                     if( $k > 1 ){
-                                        $countableData = (float)((float)round($v[3])+(float)$v[4]+(float)$v[5]+(float)$v[6]+(float)$v[7]);
+                                        // The sheet's own Total column (v[8]) is authoritative. In current
+                                        // files col H holds the running subtotal (bag + freight + CHA + bank),
+                                        // so recomputing total from v[3..7] double-counts those components
+                                        // (e.g. 50kg PP stored 10475/111 instead of 5448/58).
+                                        $componentsSum = (float)((float)round($v[3])+(float)$v[4]+(float)$v[5]+(float)$v[6]);
+                                        $sheetTotal = (float)($v[8] ?? 0);
+                                        if ($sheetTotal > 0) {
+                                            $countableData = $sheetTotal;
+                                            $insValue = $sheetTotal - $componentsSum;
+                                            if ($insValue < 0) {
+                                                $insValue = $v[7];
+                                            }
+                                        } else {
+                                            $countableData = (float)($componentsSum + (float)$v[7]);
+                                            $insValue = $v[7];
+                                        }
+                                        $conversionRate = (float)($v[9] ?? 0);
                                         $processedData[] = [
                                             'order'          => $v[0],
                                             'bag_size'          => $v[1],
@@ -43,10 +59,10 @@ class DollarController extends Controller
                                             'local_freight'     =>  $v[4],
                                             'cha'               =>  $v[5],
                                             'bank_charges'      =>  $v[6],
-                                            'ins'               =>  $v[7],
+                                            'ins'               =>  $insValue,
                                             'total'             =>  $countableData,
                                             'conversion_rate'   =>  $v[9],
-                                            'PMT_USD'           =>  round(($countableData / $v[9])),
+                                            'PMT_USD'           =>  $conversionRate > 0 ? round(($countableData / $conversionRate)) : 0,
                                             'applied_for'       =>  ($v[11] == 'All Basmati Varients')? 1 : 0
                                         ];
                                     }
