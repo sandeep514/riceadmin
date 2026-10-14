@@ -758,6 +758,7 @@ class PortalApiController extends Controller
                 }
 
                 // ✅ Return response with session cookie
+                $holdInfo = $data->portalHoldInfo();
                 return response()->json([
                     'status' => true, 
                     'message' => 'Success', 
@@ -767,6 +768,8 @@ class PortalApiController extends Controller
                     'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasTrialDone' => $hasTrialDone,
                     'hasActivePlan' => $hasActivePlan,
+                    'account_on_hold' => $holdInfo['account_on_hold'],
+                    'hold_message' => $holdInfo['hold_message'],
                     'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $user->id),
                     'planDetails' => $data->getWebUserSubscription, 
                     'data' => $data
@@ -863,6 +866,7 @@ class PortalApiController extends Controller
                 }
 
                 // ✅ Return response with session cookie
+                $holdInfo = $data->portalHoldInfo();
                 return response()->json([
                     'status' => true, 
                     'message' => 'OTP verified successfully', 
@@ -872,6 +876,8 @@ class PortalApiController extends Controller
                     'hasUploadedDocuments' => $hasUploadedDocuments,
                     'hasActivePlan' => $hasActivePlan,
                     'hasTrialDone' => $hasTrialDone,
+                    'account_on_hold' => $holdInfo['account_on_hold'],
+                    'hold_message' => $holdInfo['hold_message'],
                     'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $user->id),
                     'planDetails' => $data->getWebUserSubscription, 
                     'data' => $data
@@ -1187,11 +1193,13 @@ class PortalApiController extends Controller
     }
 
     /**
-     * Block portal login/session when admin has deactivated or rejected the user.
+     * Hard-ban portal login/session only when admin has deactivated an approved user.
+     * Rejected/on-hold users stay logged in (with account_on_hold flag in payloads)
+     * so they can re-upload documents.
      */
-    private function portalAccessBlockedResponse(User $user): ?\Illuminate\Http\JsonResponse
+    private function portalHardBlockedResponse(User $user): ?\Illuminate\Http\JsonResponse
     {
-        if ($blockedMessage = $user->authAccessBlockedMessage()) {
+        if ($blockedMessage = $user->portalHardBlockedMessage()) {
             return response()->json([
                 'status' => false,
                 'message' => $blockedMessage,
@@ -1199,6 +1207,11 @@ class PortalApiController extends Controller
         }
 
         return null;
+    }
+
+    private function portalAccessBlockedResponse(User $user): ?\Illuminate\Http\JsonResponse
+    {
+        return $this->portalHardBlockedResponse($user);
     }
 
     /**
@@ -2434,6 +2447,7 @@ class PortalApiController extends Controller
             unset($userArray['get_web_business_details']['get_bag_vendor_web']);
         }
 
+        $holdInfo = $data->portalHoldInfo();
         return response()->json([
             'status' => true,
             'message' => 'Session restored',
@@ -2441,6 +2455,8 @@ class PortalApiController extends Controller
             'hasUploadedDocuments' => $hasUploadedDocuments,
             'hasTrialDone' => $hasTrialDone,
             'hasActivePlan' => $hasActivePlan,
+            'account_on_hold' => $holdInfo['account_on_hold'],
+            'hold_message' => $holdInfo['hold_message'],
             'total_available_days' => $this->getTotalAvailableSubscriptionDays($userId),
             'planDetails' => $data->getWebUserSubscription,
             'data' => $userArray,

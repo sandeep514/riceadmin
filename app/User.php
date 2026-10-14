@@ -206,6 +206,46 @@ class User extends Authenticatable
         return $user ? $user->authAccessBlockedMessage() : null;
     }
 
+    /**
+     * Hard ban only: admin-approved user later deactivated. Always 403.
+     * Rejected/on-hold users (isAdminRejected) are NOT hard-blocked: they must
+     * stay logged in so they can re-upload documents after admin rejection.
+     */
+    public function portalHardBlockedMessage(): ?string
+    {
+        if ($this->isAdminDeactivated()) {
+            return 'Your account has been deactivated. Please contact the administrator enquiry@sntcgroup.com for further assistance or to reactivate your account.';
+        }
+
+        return null;
+    }
+
+    public static function portalHardBlockedMessageForUserId($userId): ?string
+    {
+        if ($userId === null || $userId === '') {
+            return null;
+        }
+
+        $user = static::query()->find((int) $userId);
+
+        return $user ? $user->portalHardBlockedMessage() : null;
+    }
+
+    /**
+     * Soft hold info for rejected/on-hold users. Frontend shows a banner with
+     * hold_message and keeps the user logged in (no logout on this flag).
+     *
+     * @return array{account_on_hold:bool, hold_message:?string}
+     */
+    public function portalHoldInfo(): array
+    {
+        if ($this->isAdminRejected()) {
+            return ['account_on_hold' => true, 'hold_message' => $this->authAccessBlockedMessage()];
+        }
+
+        return ['account_on_hold' => false, 'hold_message' => null];
+    }
+
     public function role_rel()
     {
         return $this->belongsTo(Role::class, 'role', 'id');
