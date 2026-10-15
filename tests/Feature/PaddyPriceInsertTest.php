@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\PaddyPrice;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Tests\TestCase;
@@ -137,6 +138,34 @@ class PaddyPriceInsertTest extends TestCase
         $this->assertSame(1, PaddyPrice::query()->count());
         $this->assertSame('2026-10-12', Carbon::parse($row->created_at)->format('Y-m-d'));
         $this->assertSame('2026-10-14', Carbon::parse($row->updated_at)->format('Y-m-d'));
+    }
+
+    public function test_stored_wall_time_date_matches_chosen_form_date(): void
+    {
+        $tz = config('app.timezone', 'Asia/Kolkata');
+
+        // Same entryDate construction as PaddyPriceController@store().
+        $entryDate = Carbon::createFromFormat('Y-m-d', '2026-07-02', $tz)->startOfDay();
+        $row = $this->newPrice([
+            'mandi' => 1,
+            'state' => 1,
+            'quality_id' => 1,
+            'crop_year' => 2026,
+            'hand_cutting_price' => '100-200',
+            'machine_cutting_price' => '100-200',
+            'moisture' => '----',
+            'total_arrivals' => '----',
+            'change' => 'Stable',
+            'status' => 1,
+            'created_at' => $entryDate,
+            'updated_at' => Carbon::createFromFormat('Y-m-d H:i:s', '2026-07-02 10:00:00', $tz),
+        ]);
+
+        // The literal value persisted must carry the chosen date. On MySQL
+        // TIMESTAMP read back in a UTC session this fails (shows 2026-07-01
+        // 18:30) — which is why the columns must be DATETIME, not TIMESTAMP.
+        $raw = (string) DB::table('paddy_prices')->where('id', $row->id)->value('created_at');
+        $this->assertStringStartsWith('2026-07-02', $raw);
     }
 
     public function test_store_method_is_insert_only(): void
