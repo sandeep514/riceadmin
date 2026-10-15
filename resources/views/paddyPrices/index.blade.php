@@ -205,6 +205,7 @@
                                                                 <th>Total Arrivals</th>
                                                                 <th>Change</th>
                                                                 <th>Created At</th>
+                                                                <th>Updated At</th>
                                                                 <th>Status</th>
                                                                 <th>Actions</th>
                                                             </tr>
@@ -224,6 +225,9 @@
                                                                     <td>{{ $paddyPrice->change }}</td>
                                                                     <td>
                                                                         {{ $paddyPrice->created_at ? $paddyPrice->created_at->format('Y-m-d') : '' }}
+                                                                    </td>
+                                                                    <td>
+                                                                        {{ $paddyPrice->updated_at ? $paddyPrice->updated_at->format('Y-m-d') : '' }}
                                                                     </td>
                                                                     <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
                                                                     <td style="white-space: nowrap;">
@@ -259,7 +263,7 @@
                                                                 </tr>
                                                             @empty
                                                                 <tr>
-                                                                    <td colspan="13" class="text-center text-muted">No paddy prices found for the selected date range.</td>
+                                                                    <td colspan="14" class="text-center text-muted">No paddy prices found for the selected date range.</td>
                                                                 </tr>
                                                             @endforelse
                                                         </tbody>

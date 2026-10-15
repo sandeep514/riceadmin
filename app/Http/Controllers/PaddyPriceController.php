@@ -195,8 +195,13 @@ class PaddyPriceController extends Controller
             config('app.timezone', 'Asia/Kolkata')
         )->startOfDay();
 
-        // Every submission is historical data: always insert a new row, even if
-        // another row has the same date, mandi, state, quality and price values.
+        // Every submission is historical data: always INSERT a brand-new row.
+        // Never UPDATE a previous row here: a new date must create a new id
+        // and leave existing rows (and their updated_at) completely untouched.
+        // NOTE: created_at is the admin-entered price date (start of day), while
+        // updated_at is the actual save time — so a back-dated insert naturally
+        // looks like created_at=2026-10-12 / updated_at=2026-10-14. That is a NEW
+        // row, not an update of the 2026-10-12 row. Check the row id to confirm.
         $paddyPrice = new PaddyPrice([
             'mandi' => (int) $request->mandi,
             'state' => (int) $mandiData->state_id,
@@ -212,8 +217,27 @@ class PaddyPriceController extends Controller
         $paddyPrice->created_at = $entryDate;
         $paddyPrice->updated_at = now();
         $paddyPrice->save();
+        $paddyPrice->refresh();
 
-        return redirect()->route('list.paddy.price')->with('success', 'Paddy Price created successfully.');
+        // Sibling rows for the same price date + scope are intentionally left
+        // untouched — the new submission is always its own row (new id).
+        $siblingIds = PaddyPrice::query()
+            ->where('id', '!=', $paddyPrice->id)
+            ->whereDate('created_at', $entryDate->format('Y-m-d'))
+            ->where('mandi', $paddyPrice->mandi)
+            ->where('state', $paddyPrice->state)
+            ->where('quality_id', $paddyPrice->quality_id)
+            ->where('crop_year', $paddyPrice->crop_year)
+            ->orderBy('id')
+            ->pluck('id')
+            ->all();
+
+        $message = 'Paddy Price created successfully as new row #' . $paddyPrice->id . '.';
+        if ($siblingIds !== []) {
+            $message .= ' Existing row(s) #' . implode(', #', $siblingIds) . ' for the same date left untouched.';
+        }
+
+        return redirect()->route('list.paddy.price')->with('success', $message);
     }
 
     public function show($id)
