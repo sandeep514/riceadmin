@@ -500,6 +500,21 @@ class PaddySellQueryController extends Controller
         }
 
         $status = (int) $request->status;
+
+        // Setting Active / In-Process / Hold on a past-due trade is
+        // self-defeating: the listing sweeper (expirePastValidDayTrades)
+        // would flip it straight back to Expired on the next page load,
+        // so the change would appear to "not stick". Block it and point
+        // the admin to extend Valid Days via Edit instead (extending the
+        // date reactivates the trade automatically).
+        if (in_array($status, PaddyTrade::$expirableStatuses, true) && $trade->expiryHasPassed()) {
+            $label = PaddyTrade::$statusLabels[$status] ?? $status;
+            $expiry = optional($trade->parsedExpiry())->format('d-m-Y H:i') ?: $trade->valid_days;
+            Session::flash('error', 'Error|Cannot set status to ' . $label . ': Valid Days (' . $expiry . ') has already passed. Extend Valid Days via Edit first.');
+
+            return back();
+        }
+
         $payload = ['status' => $status];
 
         if ($status === 3) {

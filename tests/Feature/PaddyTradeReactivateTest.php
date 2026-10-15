@@ -115,4 +115,36 @@ class PaddyTradeReactivateTest extends TestCase
             'updateTrade() must reactivate an Expired trade when expiry is extended'
         );
     }
+
+    public function test_update_trade_status_controller_blocks_past_due_reactivation(): void
+    {
+        $src = file_get_contents(app_path('Http/Controllers/PaddySellQueryController.php'));
+        $this->assertNotFalse($src);
+
+        $start = strpos($src, 'public function updateTradeStatus(');
+        $this->assertNotFalse($start);
+        $next = strpos($src, 'public function close(', $start);
+        $body = substr($src, $start, $next ? $next - $start : 5000);
+
+        $this->assertStringContainsString(
+            'expiryHasPassed',
+            $body,
+            'updateTradeStatus() must refuse Active/In-Process/Hold on past-due trades'
+        );
+    }
+
+    public function test_expiry_has_passed(): void
+    {
+        $past = $this->makeTrade(2, Carbon::now()->subDay()->format('Y-m-d H:i:s'));
+        $this->assertTrue($past->expiryHasPassed());
+
+        $future = $this->makeTrade(2, Carbon::now()->addDay()->format('Y-m-d H:i:s'));
+        $this->assertFalse($future->expiryHasPassed());
+
+        $blank = $this->makeTrade(2, null);
+        $this->assertFalse($blank->expiryHasPassed());
+
+        $garbage = $this->makeTrade(2, 'not-a-date');
+        $this->assertFalse($garbage->expiryHasPassed());
+    }
 }

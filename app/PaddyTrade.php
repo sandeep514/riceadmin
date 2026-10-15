@@ -114,6 +114,37 @@ class PaddyTrade extends Model
     }
 
     /**
+     * Parsed valid_days expiry in app timezone, or null when blank/unparseable.
+     */
+    public function parsedExpiry(): ?Carbon
+    {
+        if ($this->valid_days === null || trim((string) $this->valid_days) === '') {
+            return null;
+        }
+
+        try {
+            return Carbon::parse((string) $this->valid_days, config('app.timezone', 'Asia/Kolkata'));
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    /**
+     * True only when valid_days parses to a past datetime. Blank/unparseable
+     * returns false (the expiry sweeper also skips those rows).
+     */
+    public function expiryHasPassed(): bool
+    {
+        $expiry = $this->parsedExpiry();
+
+        if ($expiry === null) {
+            return false;
+        }
+
+        return $expiry->lte(Carbon::now(config('app.timezone', 'Asia/Kolkata')));
+    }
+
+    /**
      * Reactivate an Expired trade whose valid_days now lies in the future.
      * expirePastValidDayTrades() only ever moves 1/4/12 -> 2, never back, so
      * without this an admin extending the expiry date would see the date
@@ -127,13 +158,9 @@ class PaddyTrade extends Model
             return false;
         }
 
-        if ($this->valid_days === null || trim((string) $this->valid_days) === '') {
-            return false;
-        }
+        $expiry = $this->parsedExpiry();
 
-        try {
-            $expiry = Carbon::parse((string) $this->valid_days, config('app.timezone', 'Asia/Kolkata'));
-        } catch (\Throwable $e) {
+        if ($expiry === null) {
             return false;
         }
 
