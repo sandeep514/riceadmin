@@ -113,6 +113,39 @@ class PaddyTrade extends Model
         return $now;
     }
 
+    /**
+     * Reactivate an Expired trade whose valid_days now lies in the future.
+     * expirePastValidDayTrades() only ever moves 1/4/12 -> 2, never back, so
+     * without this an admin extending the expiry date would see the date
+     * change but the trade stay Expired forever.
+     * Only status 2 (Expired) is flipped; Sold/Deactivated are left alone.
+     * Returns true when status was flipped 2 -> 1.
+     */
+    public function reactivateIfExpiryExtended(): bool
+    {
+        if ((int) $this->status !== 2) {
+            return false;
+        }
+
+        if ($this->valid_days === null || trim((string) $this->valid_days) === '') {
+            return false;
+        }
+
+        try {
+            $expiry = Carbon::parse((string) $this->valid_days, config('app.timezone', 'Asia/Kolkata'));
+        } catch (\Throwable $e) {
+            return false;
+        }
+
+        if (! $expiry->gt(Carbon::now(config('app.timezone', 'Asia/Kolkata')))) {
+            return false;
+        }
+
+        $this->update(['status' => 1]);
+
+        return true;
+    }
+
     public function getStatusBadgeClassAttribute(): string
     {
         return self::$statusBadgeClass[(int) $this->status] ?? 'default';

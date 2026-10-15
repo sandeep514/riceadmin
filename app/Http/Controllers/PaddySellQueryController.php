@@ -129,7 +129,13 @@ class PaddySellQueryController extends Controller
 
         $trade->update($payload);
 
-        Session::flash('success', 'Success|Paddy trade updated successfully.');
+        // Extending the expiry date on an Expired trade reactivates it;
+        // otherwise the new date would save but status would stay Expired.
+        $reactivated = $trade->reactivateIfExpiryExtended();
+
+        Session::flash('success', $reactivated
+            ? 'Success|Paddy trade updated and reactivated to Active.'
+            : 'Success|Paddy trade updated successfully.');
 
         return redirect()->route('view.paddy.trade', $trade->id);
     }
