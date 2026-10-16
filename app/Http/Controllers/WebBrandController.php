@@ -80,6 +80,8 @@ use Session;
 use App\RiceBrandForm;
 use App\WebBusinessDetails;
 use App\BrandAvailability;
+use App\Services\WebPortalNotificationDelivery;
+use App\Support\QueuedMail;
 use App\Support\VendorProductCatalog;
 
 class WebBrandController extends Controller
@@ -350,8 +352,15 @@ class WebBrandController extends Controller
         $brand = WebBrands::find($id);
 
         if ($brand) {
+            $wasPending = (int) $brand->status !== 1;
             $newStatus = $brand->status == 1 ? 0 : 1; // toggle 1→0 or 0→1
             $brand->update(['status' => $newStatus]);
+
+            // Brand request accepted (pending → active): mail + queue
+            // notification to the requesting user. Deactivation sends nothing.
+            if ($wasPending && $newStatus === 1) {
+                $this->notifyBrandAccepted($brand->fresh());
+            }
 
             Session::flash('success' , 'Success|Status updated successfully');
             return back();
@@ -359,6 +368,66 @@ class WebBrandController extends Controller
         Session::flash('error' , 'Error|Something went wrong');
         return back();
 
+    }
+
+    /**
+     * Mail + queued portal notification to the user whose brand request
+     * was just accepted. Never throws — acceptance must succeed even if
+     * notifying fails.
+     */
+    private function notifyBrandAccepted(WebBrands $brand): void
+    {
+        $userId = (int) ($brand->user_id ?? 0);
+        if ($userId <= 0) {
+            return;
+        }
+
+        $user = User::query()->find($userId, ['id', 'name', 'email']);
+        if ($user === null) {
+            return;
+        }
+
+        $brandName = $brand->name ?: ('Brand #'.$brand->id);
+
+        try {
+            if (! empty($user->email)) {
+                QueuedMail::send(
+                    'mail.webBrandAccepted',
+                    ['data' => [
+                        'userName' => $user->name ?: 'User',
+                        'brandId' => (int) $brand->id,
+                        'brandName' => $brandName,
+                        'qualityName' => $brand->RiceName->name ?? '—',
+                        'acceptedAt' => Carbon::now()->timezone('Asia/Kolkata')->format('d-m-Y, g:i A'),
+                    ]],
+                    $user->email,
+                    'Your brand request has been accepted – '.$brandName,
+                    'info@sntcgroup.com',
+                    'SNTC Team - India',
+                    $user->name ?: null,
+                );
+            }
+        } catch (\Throwable $e) {
+            \Log::warning('Web brand accepted mail failed: '.$e->getMessage(), ['brand_id' => $brand->id]);
+        }
+
+        try {
+            app(WebPortalNotificationDelivery::class)->deliverToUsers(
+                [$userId],
+                'Brand request accepted',
+                'Your brand "'.$brandName.'" has been accepted and is now live on the portal.',
+                [
+                    'audience_mode' => 'individual',
+                    'push_type' => 'brand_accepted',
+                    'payload' => [
+                        'type' => 'brand_accepted',
+                        'brand_id' => (string) $brand->id,
+                    ],
+                ]
+            );
+        } catch (\Throwable $e) {
+            \Log::warning('Web brand accepted notification failed: '.$e->getMessage(), ['brand_id' => $brand->id]);
+        }
     }
 
     public function indexVariant($brandId, Request $request){

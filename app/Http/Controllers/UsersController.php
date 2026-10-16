@@ -470,7 +470,7 @@ class UsersController extends Controller
         $this->sendWebUserNotification(
             $userId,
             'Account On Hold',
-            'Your account has been rejected . Reason: ' . $mailmessage
+            'Your account is on hold. Reason: ' . $mailmessage
         );
 
         // Keep api_token / mobile_api_token so other open sessions still resolve the user
