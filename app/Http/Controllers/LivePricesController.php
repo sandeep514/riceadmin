@@ -726,6 +726,8 @@ class LivePricesController extends Controller
 
     public function delete($id){
         LivePrice::find($id)->delete();
+        // Bust the cached web price payloads (ApiController@getPricesWeb).
+        Cache::increment('web:prices:version');
         Session::flash('success','Success|Record deleted successfully!');
         return back();
     }
@@ -739,6 +741,12 @@ class LivePricesController extends Controller
         ]; 
 
         LivePriceStatusMessage::where('id' , 1)->update(['currentStatus' => $stausArray[$status], 'message' => $status]);
+
+        // The cached web price payloads embed livePriceStatusMessage
+        // (currentState/message) — bust them too, or the API keeps serving
+        // the previous market status until the 180s TTL expires.
+        Cache::increment('web:prices:version');
+
         Session::flash('success','Success|Record deleted successfully!');
         return back();
     }
