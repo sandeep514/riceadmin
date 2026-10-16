@@ -747,7 +747,7 @@ class LivePricesController extends Controller
         // the previous market status until the 180s TTL expires.
         Cache::increment('web:prices:version');
 
-        Session::flash('success','Success|Record deleted successfully!');
+        Session::flash('success', 'Success|Market status updated to ' . ucfirst($status) . '.');
         return back();
     }
 }
