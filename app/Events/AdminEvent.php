@@ -3,13 +3,12 @@
 namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AdminEvent implements ShouldBroadcast
+class AdminEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -30,11 +29,16 @@ class AdminEvent implements ShouldBroadcast
     }
 
     /**
-     * Private channel for admin events (Echo: private('admin-events')).
+     * Public channel for admin events (Echo: channel('admin-events')).
+     * Public (not private) so dashboard/React test notifications arrive with
+     * no auth handshake — this matches docs/REACT_REVERB_SETUP.md. A public
+     * subscriber on 'admin-events' never receives events sent to the private
+     * 'private-admin-events' channel, which is why the test button appeared
+     * to do nothing.
      */
     public function broadcastOn(): array
     {
-        return [new PrivateChannel('admin-events')];
+        return [new Channel('admin-events')];
     }
 
     /**

@@ -57,7 +57,11 @@
             radioClass: 'iradio_square-blue',
             increaseArea: '20%' /* optional */
         });
-        const ws = new WebSocket("wss://snjtradelink.com/app/ru9fetnneiub1ezhirqo");
+        // Reverb connectivity probe — follows the current domain so it keeps
+        // working after domain moves (was hardcoded to snjtradelink.com).
+        const reverbKey = @json(config('broadcasting.connections.reverb.key'));
+        const wsScheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        const ws = new WebSocket(wsScheme + "://" + window.location.host + "/app/" + reverbKey);
 
         ws.onopen = () => console.log("✅ Connected");
         ws.onerror = (e) => console.log("❌ Error", e);
