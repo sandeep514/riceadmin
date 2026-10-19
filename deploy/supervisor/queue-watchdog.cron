@@ -1,0 +1,2 @@
+# Auto-restart FATAL supervisor programs every 5 min
+*/5 * * * * root /usr/bin/supervisorctl status 2>/dev/null | grep " FATAL " | awk -F: '{print $1}' | while read -r p; do supervisorctl start "$p:*"; done >> /var/log/supervisor/watchdog.log 2>&1
