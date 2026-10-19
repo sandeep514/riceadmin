@@ -2441,6 +2441,59 @@ class ApiController extends Controller
     }
 
     /**
+     * Same hide-semantics as invalidLatestLivePriceTupleKeysForPairs but for
+     * candidate rows spanning MULTIPLE states / crop years (public state
+     * list APIs). A tuple (name, form, state, cropYear) is hidden when its
+     * absolute-latest live_prices row — across all days — has a null, blank
+     * or zero min/max price: an admin nulled price must never be resurfaced
+     * by older-day data.
+     *
+     * @param  \Illuminate\Support\Collection  $rows
+     * @return array<string, true>
+     */
+    private function invalidLivePriceTupleKeysForRows($rows): array
+    {
+        if ($rows->isEmpty()) {
+            return [];
+        }
+
+        $tuples = [];
+        foreach ($rows as $row) {
+            $holder = (object) [
+                'name' => $row->name,
+                'form' => $row->form,
+                'state' => $row->state,
+                'cropYear' => $row->cropYear,
+            ];
+            $tuples[$this->livePriceTupleKey($holder)] = $holder;
+        }
+
+        $maxIds = [];
+        foreach ($tuples as $tuple) {
+            $id = LivePrice::query()
+                ->where('name', $tuple->name)
+                ->where('form', $tuple->form)
+                ->where('state', $tuple->state)
+                ->when($tuple->cropYear !== null && $tuple->cropYear !== '', fn ($q) => $q->where('cropYear', $tuple->cropYear))
+                ->max('id');
+            if ($id) {
+                $maxIds[] = (int) $id;
+            }
+        }
+
+        if ($maxIds === []) {
+            return [];
+        }
+
+        return LivePrice::query()
+            ->whereIntegerInRaw('id', $maxIds)
+            ->get(['name', 'form', 'state', 'cropYear', 'min_price', 'max_price'])
+            ->filter(fn ($row) => ! $this->hasUsableLivePrice($row))
+            ->mapWithKeys(fn ($row) => [$this->livePriceTupleKey($row) => true])
+            ->all();
+    }
+
+    /**
      * Same as invalidLatestLivePriceTupleKeys but only for the given
      * [name, form] pairs (tuples already fetched by the caller).
      *
@@ -2458,9 +2511,14 @@ class ApiController extends Controller
 
         $maxIds = [];
         foreach ($pairs as $pair) {
+            // cropYear must follow the caller's filter semantics (imports null /
+            // '' → no filter). A strict where() here made the lookup match only
+            // cropYear IS NULL rows whenever `year` was absent, so admin-hidden
+            // tuples (nulled min/max) were never detected and the previous
+            // day's price stayed visible.
             $id = LivePrice::query()
                 ->where('state', $state)
-                ->where('cropYear', $cropYear)
+                ->when($cropYear !== null && $cropYear !== '', fn ($q) => $q->where('cropYear', $cropYear))
                 ->where('name', $pair[0])
                 ->where('form', $pair[1])
                 ->max('id');
@@ -3395,9 +3453,22 @@ class ApiController extends Controller
             $livePrice = $livePrice->onCreatedDay($lastEnteredRecord);
         }
 
-        $states = $livePrice->distinct()->pluck('state');
+            // A state must only be listed when at least one (name, form)
+            // tuple survives tuple-level hide checks (admin-nulled min/max
+            // or zeroed rows must not resurface previous-day prices).
+            $dayRows = $livePrice->get([
+                'state', 'name', 'form', 'cropYear', 'min_price', 'max_price',
+            ]);
+            $dayRows = $dayRows->filter(fn ($row) => $this->hasUsableLivePrice($row));
+            $stateInvalidKeys = $this->invalidLivePriceTupleKeysForRows($dayRows);
+            $states = $dayRows
+                ->filter(fn ($row) => ! isset($stateInvalidKeys[$this->livePriceTupleKey($row)]))
+                ->pluck('state')
+                ->unique()
+                ->values()
+                ->all();
 
-        return response()->json(['error' => null, 'data' => $states], 200);
+            return response()->json(['error' => null, 'data' => $states], 200);
     }
     public function getBasmatiStateForWeb(Request $request)
     {
@@ -3733,7 +3804,20 @@ class ApiController extends Controller
             $livePrice = $livePrice->onCreatedDay($lastEnteredRecord);
         }
 
-            $states = $livePrice->distinct()->pluck('state')->values()->all();
+            // Same hide-check as the basmati list: nulled/zeroed tuples must
+            // not resurrect previous-day prices for their state.
+            $dayRows = $livePrice->get([
+                'state', 'name', 'form', 'cropYear', 'min_price', 'max_price',
+            ]);
+            $dayRows = $dayRows->filter(fn ($row) => $this->hasUsableLivePrice($row));
+            $stateInvalidKeys = $this->invalidLivePriceTupleKeysForRows($dayRows);
+            $states = $dayRows
+                ->filter(fn ($row) => ! isset($stateInvalidKeys[$this->livePriceTupleKey($row)]))
+                ->pluck('state')
+                ->unique()
+                ->values()
+                ->all();
+
             $sortArray = LivePrice::distinct('state')->orderBy('state_order')->pluck('state', 'state_order')->toArray();
             $orderByState = array_flip($sortArray); // state => order
             usort($states, function ($a, $b) use ($orderByState) {

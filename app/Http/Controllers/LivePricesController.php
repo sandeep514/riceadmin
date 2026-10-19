@@ -292,7 +292,11 @@ class LivePricesController extends Controller
                 }   
             }  
         }
-        LivePrice::where('min_price' , null)->where('max_price' , null)->delete();
+        // KEEP fully-nulled rows: a null/zero min+max row is the admin's
+        // "hide this price" marker (name/form/state/cropYear). Deleting it
+        // made the APIs fall back to the previous day's price. All read
+        // paths already treat null/0 min or max as unusable
+        // (ApiController::hasUsableLivePrice).
         LivePrice::where('name' , 0)->where('form' , 0)->where('min_price' , 0)->where('max_price' , 0)->delete();
         
         // $lastAvaibleRecord = LivePrice::orderBy('created_at' , "DESC")->first();

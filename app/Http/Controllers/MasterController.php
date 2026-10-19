@@ -25,6 +25,8 @@ use App\SellQueriesINR;
 use App\FutureSellQueriesINR;
 use App\BuyQueriesINR;
 use App\FutureBuyQueriesINR;
+use App\Buyerpackinginr;
+use App\SellerPackingINR;
 use App\RiceFormMilestone3;
 use Mail;
 use App\Support\QueuedMail;
@@ -1247,8 +1249,8 @@ class MasterController extends Controller
 			dd("here");
 		}
 
-		$convertPrefill = $this->buildConvertTradePrefill($query);
 		$defaultTradeType = $this->resolveConvertTradeType($type);
+		$convertPrefill = $this->buildConvertTradePrefill($query, $defaultTradeType);
 		$qualityMaster = RiceName::pluck('type_status' , 'type');
         $packingLists = TradeQueriesINR::packingListsForJs();
         $packing = TradeQueriesINR::packingOptionsForTradeType($defaultTradeType ?: 1);
@@ -1281,11 +1283,13 @@ class MasterController extends Controller
 	 * @param  \Illuminate\Database\Eloquent\Model|null  $query
 	 * @return array<string, mixed>|null
 	 */
-	private function buildConvertTradePrefill($query): ?array
+	private function buildConvertTradePrefill($query, $tradeType = null): ?array
 	{
 		if ($query === null) {
 			return null;
 		}
+
+		$ricePackingId = $this->resolveConvertTradeRicePackingId($query, $tradeType);
 
 		return [
 			'quality_type' => $query->quality_type ?? null,
@@ -1294,16 +1298,27 @@ class MasterController extends Controller
 			'grade' => $query->grade ?? null,
 			'packing_type' => $query->packing_type ?? null,
 			'packing' => $query->packing ?? null,
-			'ricepacking' => $this->resolveConvertTradeRicePackingId($query),
+			'ricepacking' => $ricePackingId,
+			'packing_stream_type' => $this->resolveConvertTradePackingStreamType($query, $ricePackingId),
 		];
 	}
 
 	/**
 	 * Map query packing fields to trade form ricepacking option id.
+	 *
+	 * The packing master id spaces of buyer_packing_INR / sellerPackingINR /
+	 * public_packing_milestone3 are DIFFERENT (e.g. "50Kg PP" is buyer id 1 but
+	 * seller id 2), so a raw id passthrough is only trusted when the id exists
+	 * in the packing list of the trade type being created. Miller-style queries
+	 * (packing_type 0) and future-sell / duplicate-less records store enum
+	 * values (0 = "50 kg PP", 1 = "55 kg PP") instead of master ids — those
+	 * resolve by matching the packing label in the target list. Anything that
+	 * cannot be matched returns null so the admin picks concously instead of a
+	 * wrong packing being saved silently.
 	 */
-	private function resolveConvertTradeRicePackingId($query): ?int
+	private function resolveConvertTradeRicePackingId($query, $tradeType = null): ?int
 	{
-		if ($query === null) {
+		if ($query === null || $tradeType === null) {
 			return null;
 		}
 
@@ -1312,11 +1327,111 @@ class MasterController extends Controller
 			return null;
 		}
 
-		if (isset($query->packing_type) && (int) $query->packing_type === 0) {
-			return (int) $packing === 0 ? 2 : ((int) $packing === 1 ? 1 : null);
+		$normalize = function ($value) {
+			return strtolower(preg_replace('/[^a-z0-9]+/i', '', trim((string) $value)));
+		};
+		$matchLabel = function (string $wanted) use ($tradeType, $normalize): ?int {
+			return $this->findRicePackingByLabel(
+				TradeQueriesINR::packingOptionsForTradeType($tradeType),
+				[$wanted],
+				$normalize
+			);
+		};
+
+		$packingId = is_numeric($packing) ? (int) $packing : null;
+
+		// Miller-style enum (0 = "50 kg PP", 1 = "55 kg PP") — never an id even
+		// if the value collides with an id in the target list.
+		if ($this->queryUsesMillerPackingEnum($query)) {
+			$label = $packingId === 0 ? '50 kg PP' : ($packingId === 1 ? '55 kg PP' : null);
+			return $label !== null ? $matchLabel($label) : null;
 		}
 
-		return (int) $packing;
+		if ($packingId !== null) {
+			if (TradeQueriesINR::packingOptionsForTradeType($tradeType)->firstWhere('id', $packingId)) {
+				return $packingId;
+			}
+
+			// Id exists only in another packing table — carrying it over would
+			// point at a different packing; resolve through the source label.
+			$sourceRow = Buyerpackinginr::find($packingId)
+				?: SellerPackingINR::find($packingId)
+				?: PublicPacking::find($packingId);
+			if ($sourceRow !== null) {
+				return $this->findRicePackingByLabel(
+					TradeQueriesINR::packingOptionsForTradeType($tradeType),
+					[$sourceRow->label ?? TradeQueriesINR::packingLabel($sourceRow)],
+					$normalize
+				);
+			}
+
+			// Not a known master id → historical enum (e.g. future-sell 0/1).
+			$label = $packingId === 0 ? '50 kg PP' : ($packingId === 1 ? '55 kg PP' : null);
+			return $label !== null ? $matchLabel($label) : null;
+		}
+
+		return $matchLabel((string) $packing);
+	}
+
+	private function queryUsesMillerPackingEnum($query): bool
+	{
+		$attributes = $query->getAttributes();
+
+		return array_key_exists('packing_type', $attributes)
+			&& is_numeric($attributes['packing_type'])
+			&& (int) $attributes['packing_type'] === 0;
+	}
+
+	private function findRicePackingByLabel($rows, array $candidates, callable $normalize): ?int
+	{
+		$wanted = [];
+		foreach ($candidates as $candidate) {
+			$normalized = $normalize($candidate);
+			if ($normalized !== '' && ! in_array($normalized, $wanted, true)) {
+				$wanted[] = $normalized;
+			}
+		}
+		if ($wanted === []) {
+			return null;
+		}
+
+		foreach ($rows as $row) {
+			$parts = [
+				TradeQueriesINR::packingLabel($row),
+				trim(($row->packing ?? '') . ' ' . ($row->description ?? '')),
+			];
+			foreach ($parts as $part) {
+				$normalized = $normalize($part);
+				if ($normalized !== '' && in_array($normalized, $wanted, true)) {
+					return (int) $row->id;
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Pick the packingStreamType select value for the trade being created from
+	 * the resolved ricepacking id. Values present in both bulk lists (ids 1-7)
+	 * are treated as bulk.
+	 */
+	private function resolveConvertTradePackingStreamType($query, ?int $resolvedRicePackingId): ?int
+	{
+		if ($resolvedRicePackingId === null) {
+			return null;
+		}
+
+		if (TradeQueriesINR::packingOptionsForTradeType(1)->firstWhere('id', $resolvedRicePackingId)
+			|| TradeQueriesINR::packingOptionsForTradeType(2)->firstWhere('id', $resolvedRicePackingId)) {
+			return 1;
+		}
+
+		if (TradeQueriesINR::publicPackingOptions()->firstWhere('id', $resolvedRicePackingId)) {
+			return 2;
+		}
+
+		return null;
 	}
 
 	public function listBuyQueries()

@@ -100,9 +100,15 @@
             const selectedPacking = convertPrefill && convertPrefill.ricepacking != null && convertPrefill.ricepacking !== ''
                 ? String(convertPrefill.ricepacking)
                 : ($("select[name=ricepacking]").val() || '');
+            if (convertPrefill && convertPrefill.packing_stream_type != null && convertPrefill.packing_stream_type !== '' && this === $('select[name=tradeType]')[0]) {
+                $('select[name=packingStreamType]').val(String(convertPrefill.packing_stream_type));
+            }
             fillPackingSelect(tradeType, selectedPacking);
         })
 
+        if (convertPrefill && convertPrefill.packing_stream_type != null && convertPrefill.packing_stream_type !== '') {
+            $('select[name=packingStreamType]').val(String(convertPrefill.packing_stream_type));
+        }
         fillPackingSelect($('select[name=tradeType]').val() || '1', convertPrefill && convertPrefill.ricepacking ? String(convertPrefill.ricepacking) : ($("select[name=ricepacking]").val() || ''));
         $('select[name=category]').change(function(event){
             let riceCategory = $('select[name=category] :selected').val();
