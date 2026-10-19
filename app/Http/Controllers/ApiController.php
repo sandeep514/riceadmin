@@ -6703,7 +6703,7 @@ if (!file_exists('uploads')) {
     private function loadOrderedWebTradesLean(Request $request, ?int $interestUserId, bool $hasTradeTypeFilter, ?int $appliedTradeType)
     {
         $lean = TradeQueriesINR::query()
-            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, $hasTradeTypeFilter, $appliedTradeType))
+            ->tap(fn ($query) => $this->applyWebTradeListScope($query, $request, $hasTradeTypeFilter, $appliedTradeType, $interestUserId))
             ->select([
                 'id',
                 'status',
@@ -6989,7 +6989,7 @@ if (!file_exists('uploads')) {
     {
         $collection = $orderedTrades instanceof \Illuminate\Support\Collection ? $orderedTrades : collect($orderedTrades);
         $perPage = $this->resolveTradeFilterPerPage($request);
-        $activeCounts = $this->countWebActiveTradesForListing($request, $hasTradeTypeFilter, $appliedTradeType);
+        $activeCounts = $this->countWebActiveTradesForListing($request, $hasTradeTypeFilter, $appliedTradeType, $userId);
         $listOrder = $this->resolveWebTradeListSideOrder($userId);
 
         $soldInList = 0;
@@ -7146,7 +7146,7 @@ if (!file_exists('uploads')) {
     /**
      * Status / tradeType scope for web trade listing queries.
      */
-    private function applyWebTradeListScope($query, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): void
+    private function applyWebTradeListScope($query, Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType, ?int $userId = null): void
     {
         $nowStr = Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
 
@@ -7165,7 +7165,33 @@ if (!file_exists('uploads')) {
                 ->whereIn('tradeType', [1, 2, 3, 4]);
         }
 
+        if ($userId !== null) {
+            $this->applyWebTradeCategoryVisibility($query, $userId);
+        }
+
         $this->applyWebTradeListOptionalFilters($query, $request);
+    }
+
+    /**
+     * Web-category visibility: a trade created with web categories
+     * (trade_category_map rows) must be visible ONLY to users whose
+     * business-profile category (web_business_details.selected_category)
+     * is among them. Trades without category rows stay public.
+     */
+    private function applyWebTradeCategoryVisibility($query, int $userId): void
+    {
+        $userCategoryId = $userId > 0 ? $this->resolveWebUserCategoryId($userId) : null;
+
+        $query->where(function ($q) use ($userCategoryId) {
+            $q->whereDoesntHave('tradeCategoryMaps');
+
+            if ($userCategoryId !== null) {
+                $q->orWhereHas('tradeCategoryMaps', function ($m) use ($userCategoryId) {
+                    $m->where('category_id', $userCategoryId)
+                        ->where('status', 1);
+                });
+            }
+        });
     }
 
     /**
@@ -7211,7 +7237,7 @@ if (!file_exists('uploads')) {
      *
      * @return array{buy_active: int, sell_active: int, future_buy_active: int, future_sell_active: int}
      */
-    private function countWebActiveTradesForListing(Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType): array
+    private function countWebActiveTradesForListing(Request $request, bool $hasTradeTypeFilter, ?int $appliedTradeType, ?int $userId = null): array
     {
         $empty = [
             'buy_active' => 0,
@@ -7230,12 +7256,18 @@ if (!file_exists('uploads')) {
             ->whereIn('status', [1, 4, 6])
             ->where('validDays', '>', $nowStr);
         $this->applyWebTradeListOptionalFilters($base, $request);
+        if ($userId !== null) {
+            $this->applyWebTradeCategoryVisibility($base, $userId);
+        }
 
         // Hold (12) counted separately, same optional filters + valid-days guard.
         $holdBase = TradeQueriesINR::query()
             ->where('status', 12)
             ->where('validDays', '>', $nowStr);
         $this->applyWebTradeListOptionalFilters($holdBase, $request);
+        if ($userId !== null) {
+            $this->applyWebTradeCategoryVisibility($holdBase, $userId);
+        }
 
         if ($hasTradeTypeFilter) {
             $total = (clone $base)->where('tradeType', $appliedTradeType)->count();
