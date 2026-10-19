@@ -7246,10 +7246,10 @@ if (!file_exists('uploads')) {
         $interestTuples = UserInterestService::getActiveInterestTuplesForUser($userId);
 
         $sold = $collection->filter(fn ($trade) => (int) $trade->status === 3);
-        // Non-sold, non-hold: normal trades. Hold (12) gets its own bucket,
-        // placed after all normal trades (i.e. after the in-process ones).
-        $nonSold = $collection->filter(fn ($trade) => (int) $trade->status !== 3 && (int) $trade->status !== 12);
-        $held = $collection->filter(fn ($trade) => (int) $trade->status === 12);
+        // Non-sold includes hold (12): status changes must NOT move a trade's
+        // position — clients expect the id sequence to stay stable regardless
+        // of active / in-process / hold labels.
+        $nonSold = $collection->filter(fn ($trade) => (int) $trade->status !== 3);
 
         $placedIds = [];
 
@@ -7319,18 +7319,7 @@ if (!file_exists('uploads')) {
             })
             ->all();
 
-        $heldSorted = $held
-            ->sortByDesc(fn ($trade) => (int) $trade->id)
-            ->values()
-            ->map(fn ($trade) => $trade->setAttribute('matches_user_interest', false))
-            ->map(function ($trade) use ($categoryTradeIds) {
-                $trade->setAttribute('matches_user_category', isset($categoryTradeIds[$trade->id]));
-
-                return $trade;
-            })
-            ->all();
-
-        return collect(array_merge($bucket1, $bucket2, $bucket3, $heldSorted, $bucket4))->values();
+        return collect(array_merge($bucket1, $bucket2, $bucket3, $bucket4))->values();
     }
 
     /**
@@ -7362,7 +7351,10 @@ if (!file_exists('uploads')) {
             : [];
 
         $sellFirst = $this->resolveWebTradeListSideOrder($userId) === 'sell_first';
-        $statusOrder = [6 => 0, 4 => 1, 1 => 2, 12 => 3, 11 => 4];
+        // Active (6), in-process (4), pending (1) and hold (12) share ONE rank:
+        // the list must keep the stable id sequence — an admin flipping a trade
+        // to hold/in-process must not move it in the order clients see.
+        $statusOrder = [1 => 0, 4 => 0, 6 => 0, 12 => 0, 11 => 4];
 
         $active = [];
         $sold = [];

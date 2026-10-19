@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <div class="content-wrapper" style="padding-left:0;padding-right:0;">
+    <div class="content-wrapper" style="padding-left:15px;padding-right:15px;">
         <!-- Content Header (Page header) -->
         <section class="content-header" style="padding-left:0;padding-right:0;">
             <h1>
@@ -42,7 +42,7 @@
         </section>
 
         <!-- Main content -->
-        <section class="content" style="padding-left:0;padding-right:0;">
+        <section class="content" style="padding-left:15px;padding-right:15px;">
             @if(!empty($serverInsights))
                 @include('home._server_insights')
             @endif
