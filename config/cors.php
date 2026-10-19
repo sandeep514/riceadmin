@@ -105,10 +105,12 @@ $allowedOriginsPatterns = array_values(array_filter(array_merge(
     $snjtradelinkPatterns,
     $sntcgroupPatterns,
     $lanPatterns,
-    $isLocal ? [
+    // Always allow localhost dev origins (admin testing prod API from :5173).
+    // Previously local-only, which broke all APIs after APP_ENV=production.
+    [
         '#^http://localhost:\d+$#',
         '#^http://127\.0\.0\.1:\d+$#',
-    ] : [],
+    ],
 )));
 
 return [

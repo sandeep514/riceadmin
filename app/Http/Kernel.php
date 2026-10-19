@@ -41,7 +41,9 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
+            // Raised from 60/min: mobile + web burst 10+ parallel calls on launch
+            // behind shared NAT IPs caused false 429s. Success payloads unchanged.
+            'throttle:300,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];

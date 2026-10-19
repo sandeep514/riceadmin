@@ -40,9 +40,10 @@ class PublicLivePriceController extends Controller
             }
         }
 
+        $version = (int) Cache::get('web:prices:version', 1);
         $payload = Cache::remember(
-            'public:live_prices:latest:'.md5(json_encode([$stateFilter, $riceTypeFilter, $cropYear])),
-            30,
+            'public:live_prices:latest:v'.$version.':'.md5(json_encode([$stateFilter, $riceTypeFilter, $cropYear])),
+            120,
             function () use ($stateFilter, $riceTypeFilter, $cropYear) {
                 return $this->latestPayload($stateFilter, $riceTypeFilter, $cropYear);
             }

@@ -1301,6 +1301,20 @@ class ApiController extends Controller
 
     public function getPrices($state, $ricetype)
     {
+        // Cached wrapper: identical JSON, served from cache to avoid a full
+        // live_prices scan on every poll. Busted via web:prices:version on admin save.
+        $cropYearKey = request()->get('year');
+        $version = (int) Cache::get('web:prices:version', 1);
+        $cacheKey = 'api:getPrices:v'.$version.':'.md5(json_encode([$state, $ricetype, $cropYearKey]));
+        $payload = Cache::remember($cacheKey, now()->addSeconds(120), function () use ($state, $ricetype) {
+            return $this->computeGetPrices($state, $ricetype)->getData(true);
+        });
+
+        return response()->json($payload);
+    }
+
+    private function computeGetPrices($state, $ricetype)
+    {
         $cropYear = request()->get('year');
         // $today = Carbon::now();  
         // $day = $today->day;
@@ -1321,7 +1335,8 @@ class ApiController extends Controller
             ->where('state', $state)
             ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear));
 
-        $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeys($state, $cropYear);
+        // Deferred invalid-tuple check: computed per-pair AFTER the payload ids
+        // are known (same filter outcome, no full state+year GROUP BY scan).
         $closedTupleKeys = $this->closedLivePriceTupleKeys($state, $cropYear);
 
         // Latest activity for this state/crop year (admin saves touch updated_at).
@@ -1352,7 +1367,9 @@ class ApiController extends Controller
 
             $data = collect();
             if ($nameIds->isNotEmpty() && $formIds->isNotEmpty()) {
-                $latestIdsForWindow = LivePrice::query()
+                // Fetch ids first as a plain list: embedding the GROUP BY as a
+                // subquery makes MySQL scan ~700k rows instead of PK-fetching dozens.
+                $latestIdList = LivePrice::query()
                     ->selectRaw('MAX(id) as id')
                     ->whereNotNull('min_price')
                     ->whereNotNull('max_price')
@@ -1362,21 +1379,32 @@ class ApiController extends Controller
                     ->whereIn('form', $formIds)
                     ->where('updated_at', '>=', $rangeStart)
                     ->where('updated_at', '<', $latestNext)
-                    ->groupBy('name', 'form');
+                    ->groupBy('name', 'form')
+                    ->pluck('id')
+                    ->all();
 
-                $data = LivePrice::query()
-                    ->with([
-                        'name_rel:id,name,type,order',
-                        'form_rel:id,form_name,type,order,status',
-                    ])
-                    ->whereIn('id', $latestIdsForWindow)
-                    ->orderByDesc('updated_at')
-                    ->get();
+                if ($latestIdList !== []) {
+                    $data = LivePrice::query()
+                        ->with([
+                            'name_rel:id,name,type,order',
+                            'form_rel:id,form_name,type,order,status',
+                        ])
+                        ->whereIntegerInRaw('id', $latestIdList)
+                        ->orderByDesc('updated_at')
+                        ->get();
+                }
             }
 
             $data->each(function ($row) use ($closingMap) {
                 $row->closing_data = $closingMap[$this->livePriceTupleKey($row)] ?? null;
             });
+
+            $pricePairs = $data
+                ->map(fn ($row) => [(string) $row->getAttribute('name'), (string) $row->getAttribute('form')])
+                ->unique(fn ($pair) => $pair[0].'|'.$pair[1])
+                ->values()
+                ->all();
+            $invalidLatestTupleKeys = $this->invalidLatestLivePriceTupleKeysForPairs($state, $cropYear, $pricePairs);
 
                 // Same-day re-saves: keep the row with the latest updated_at per name+form.
                 $data = $data
@@ -2568,6 +2596,13 @@ class ApiController extends Controller
         $rice = $this->decodeEncodedRouteSegment((string) $rice);
         $timePeriod = $this->decodeEncodedRouteSegment((string) $timePeriod);
 
+        // Cached wrapper: identical JSON, 5-min TTL. Busted on admin price save.
+        $chartVersion = (int) Cache::get('web:prices:version', 1);
+        $chartCacheKey = 'api:priceByPeriod:v'.$chartVersion.':'.md5(json_encode([$state, $riceType, $rice, $timePeriod, $request->get('year')]));
+        if (Cache::has($chartCacheKey)) {
+            return response()->json(Cache::get($chartCacheKey));
+        }
+
         $rice = str_replace('_', ' ', $rice);
 
         $todayDate = Carbon::now();
@@ -2801,6 +2836,8 @@ class ApiController extends Controller
             'latestDateOpeningPrice' => $latestDateOpeningPrice,
         ];
 
+        Cache::put($chartCacheKey, $responseData, now()->addSeconds(300));
+
         return response()->json($responseData);
 
         if ($timePeriod == '15_Days') {
@@ -2880,6 +2917,13 @@ class ApiController extends Controller
      */
     public function getPriceChartRecords($encodedRiceType, $encodedRice)
     {
+        // Cached: identical JSON, 5-min TTL. Busted on admin price save.
+        $chartVersion = (int) Cache::get('web:prices:version', 1);
+        $chartCacheKey = 'api:priceChartRecords:v'.$chartVersion.':'.md5(json_encode([$encodedRiceType, $encodedRice]));
+        if (Cache::has($chartCacheKey)) {
+            return response()->json(Cache::get($chartCacheKey));
+        }
+
         // Match live_prices.state values used by getPrices() / admin (typically PUNJAB-HARYANA).
         $state = 'PUNJAB-HARYANA';
         $riceType = $this->decodeEncodedRouteSegment((string) $encodedRiceType);
@@ -2987,7 +3031,7 @@ class ApiController extends Controller
             $maxCount = $bestLen;
         }
 
-        return response()->json([
+        $payloadChartRecords = [
             'errors' => null,
             'date' => $created_at,
             'prices' => $arrayValuesPrices,
@@ -2999,7 +3043,11 @@ class ApiController extends Controller
             'highValue' => $highValue,
             'constantValue' => $constantValue,
             'maxCountConstant' => $maxCount,
-        ]);
+        ];
+
+        Cache::put($chartCacheKey, $payloadChartRecords, now()->addSeconds(300));
+
+        return response()->json($payloadChartRecords);
     }
 
     public function getGalleryData(Request $request)
@@ -9128,7 +9176,8 @@ if (!file_exists('uploads')) {
         }
 
         $cropYear = $request->get('year');
-        $cacheKey = 'api:live_prices_today:'.md5(json_encode(['year' => $cropYear]));
+        $version = (int) Cache::get('web:prices:version', 1);
+        $cacheKey = 'api:live_prices_today:v'.$version.':'.md5(json_encode(['year' => $cropYear]));
 
         $payload = Cache::remember($cacheKey, now()->addSeconds(60), function () use ($cropYear) {
             if ($cropYear !== null && $cropYear !== '') {
