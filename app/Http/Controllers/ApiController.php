@@ -7067,12 +7067,13 @@ if (!file_exists('uploads')) {
         $nowStr = Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
 
         if ($hasTradeTypeFilter) {
-            $query->whereIn('status', [1, 4, 6])
+            // Hold (12) included: listed after the in-process trades.
+            $query->whereIn('status', [1, 4, 6, 12])
                 ->where('validDays', '>', $nowStr)
                 ->where('tradeType', $appliedTradeType);
         } else {
-            // All tab: active trades + sold (for latest-15 bucket); exclude expired, de-active, hold, close.
-            $query->whereIn('status', [1, 4, 6, 3])
+            // All tab: active trades + hold + sold (for latest-15 bucket); exclude expired, de-active, close.
+            $query->whereIn('status', [1, 4, 6, 12, 3])
                 ->where(function ($q) use ($nowStr) {
                     $q->where('status', 3)
                         ->orWhere('validDays', '>', $nowStr);
@@ -7133,20 +7134,37 @@ if (!file_exists('uploads')) {
             'sell_active' => 0,
             'future_buy_active' => 0,
             'future_sell_active' => 0,
+            'hold_buy' => 0,
+            'hold_sell' => 0,
+            'hold_future_buy' => 0,
+            'hold_future_sell' => 0,
         ];
+
+        $nowStr = Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s');
 
         $base = TradeQueriesINR::query()
             ->whereIn('status', [1, 4, 6])
-            ->where('validDays', '>', Carbon::now(config('app.timezone', 'Asia/Kolkata'))->format('Y-m-d H:i:s'));
+            ->where('validDays', '>', $nowStr);
         $this->applyWebTradeListOptionalFilters($base, $request);
+
+        // Hold (12) counted separately, same optional filters + valid-days guard.
+        $holdBase = TradeQueriesINR::query()
+            ->where('status', 12)
+            ->where('validDays', '>', $nowStr);
+        $this->applyWebTradeListOptionalFilters($holdBase, $request);
 
         if ($hasTradeTypeFilter) {
             $total = (clone $base)->where('tradeType', $appliedTradeType)->count();
+            $holdTotal = (clone $holdBase)->where('tradeType', $appliedTradeType)->count();
             $key = [1 => 'buy_active', 2 => 'sell_active', 3 => 'future_buy_active', 4 => 'future_sell_active'][$appliedTradeType] ?? null;
+            $holdKey = [1 => 'hold_buy', 2 => 'hold_sell', 3 => 'hold_future_buy', 4 => 'hold_future_sell'][$appliedTradeType] ?? null;
             if ($key === null) {
                 return $empty;
             }
             $empty[$key] = $total;
+            if ($holdKey !== null) {
+                $empty[$holdKey] = $holdTotal;
+            }
 
             return $empty;
         }
@@ -7156,6 +7174,10 @@ if (!file_exists('uploads')) {
             'sell_active' => (clone $base)->where('tradeType', 2)->count(),
             'future_buy_active' => (clone $base)->where('tradeType', 3)->count(),
             'future_sell_active' => (clone $base)->where('tradeType', 4)->count(),
+            'hold_buy' => (clone $holdBase)->where('tradeType', 1)->count(),
+            'hold_sell' => (clone $holdBase)->where('tradeType', 2)->count(),
+            'hold_future_buy' => (clone $holdBase)->where('tradeType', 3)->count(),
+            'hold_future_sell' => (clone $holdBase)->where('tradeType', 4)->count(),
         ];
     }
 
@@ -7224,7 +7246,10 @@ if (!file_exists('uploads')) {
         $interestTuples = UserInterestService::getActiveInterestTuplesForUser($userId);
 
         $sold = $collection->filter(fn ($trade) => (int) $trade->status === 3);
-        $nonSold = $collection->filter(fn ($trade) => (int) $trade->status !== 3);
+        // Non-sold, non-hold: normal trades. Hold (12) gets its own bucket,
+        // placed after all normal trades (i.e. after the in-process ones).
+        $nonSold = $collection->filter(fn ($trade) => (int) $trade->status !== 3 && (int) $trade->status !== 12);
+        $held = $collection->filter(fn ($trade) => (int) $trade->status === 12);
 
         $placedIds = [];
 
@@ -7294,7 +7319,18 @@ if (!file_exists('uploads')) {
             })
             ->all();
 
-        return collect(array_merge($bucket1, $bucket2, $bucket3, $bucket4))->values();
+        $heldSorted = $held
+            ->sortByDesc(fn ($trade) => (int) $trade->id)
+            ->values()
+            ->map(fn ($trade) => $trade->setAttribute('matches_user_interest', false))
+            ->map(function ($trade) use ($categoryTradeIds) {
+                $trade->setAttribute('matches_user_category', isset($categoryTradeIds[$trade->id]));
+
+                return $trade;
+            })
+            ->all();
+
+        return collect(array_merge($bucket1, $bucket2, $bucket3, $heldSorted, $bucket4))->values();
     }
 
     /**
@@ -7558,7 +7594,9 @@ if (!file_exists('uploads')) {
 
     private function isWebActiveTradeStatus(int $status): bool
     {
-        return in_array($status, [1, 4, 6], true);
+        // Hold (12) participates in listing order — it ranks after pending
+        // (see $statusOrder maps) so hold trades appear after in-process ones.
+        return in_array($status, [1, 4, 6, 12], true);
     }
 
     /**
