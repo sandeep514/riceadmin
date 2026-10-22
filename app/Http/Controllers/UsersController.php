@@ -131,6 +131,10 @@ class UsersController extends Controller
         // Deactivate vendor catalog products before removing the account.
         VendorProductCatalog::deactivateVerifiedProductsForUser((int) $user->id);
 
+        // Hide the business/listing row before removing the account so the
+        // vendor list and other web consumers cannot surface a deleted user.
+        WebBusinessDetails::where('user_id', $user->id)->update(['is_active_listing' => 0]);
+
         $role = $user->role;
         $user->delete();
         Session::flash('success', 'Success|Web user deleted successfully. Active products were deactivated.');

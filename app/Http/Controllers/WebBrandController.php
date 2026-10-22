@@ -706,6 +706,10 @@ class WebBrandController extends Controller
             ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended', 'is_active_listing', 'selected_category'])
             // Inactive vendors stay hidden until admin approves (is_active_listing = 1).
             ->where('is_active_listing', 1)
+            // Deleted users are removed with a hard delete (users table has no
+            // soft deletes) while their business row stays behind — explicitly
+            // require a live user account or deleted vendors still list here.
+            ->whereIn('user_id', User::query()->select('id'))
             ->where(function ($query) use ($rawType, $categoryId, $categoryNameLower, $legacyLower, $productOwnerIdList) {
                 $query->where(function ($inner) use ($rawType, $categoryId, $categoryNameLower, $legacyLower) {
                     $inner->where('selected_category', $rawType);
