@@ -7619,7 +7619,9 @@ if (!file_exists('uploads')) {
 
     /**
      * Preferred active-trade side order for the All-trades web list.
-     * Seller (4) / Supplier (6) → sell_first; Buyer (5) and everyone else → buy_first.
+     * Seller (4) / Supplier (6) role, or Manufacturer business category
+     * (e.g. "Manufacturer", "Manufacturer & Exporter") → sell_first;
+     * Buyer (5) and everyone else → buy_first.
      *
      * @return 'sell_first'|'buy_first'
      */
@@ -7644,6 +7646,17 @@ if (!file_exists('uploads')) {
         // Known IDs: Seller=4, Supplier=6. Also match by role_name for safety.
         if (in_array($roleId, [4, 6], true) || in_array($roleName, ['seller', 'supplier'], true)) {
             return 'sell_first';
+        }
+
+        // Manufacturer business category (category names containing
+        // "manufactur", e.g. "Manufacturer", "Manufacturer & Exporter")
+        // also sees sell trades before buy trades.
+        $categoryId = $this->resolveWebUserCategoryId((int) $userId);
+        if ($categoryId !== null) {
+            $categoryName = strtolower((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''));
+            if ($categoryName !== '' && str_contains($categoryName, 'manufactur')) {
+                return 'sell_first';
+            }
         }
 
         return 'buy_first';
