@@ -52,8 +52,8 @@ class ReportController extends Controller
 
         $this->applyLivePriceReportFilters($query, $from, $to, $cropYear, $nameId, $formId, $state, $hideEmptyPrices, 'live_prices');
 
-        // One latest row per name + form + state + crop year + date
-        $query->whereIn('live_prices.id', $this->latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state, $hideEmptyPrices));
+        // One last-created row per name + form + state + crop year + date (screen + export).
+        $this->applyLatestPerDayScope($query, $hideEmptyPrices);
 
         // Full export (CSV) with filtered latest rows, ignoring pagination
         if (!empty($export) && $export === 'csv') {
@@ -182,38 +182,32 @@ class ReportController extends Controller
     }
 
     /**
-     * Latest live_prices.id for each name + form + state + crop year + calendar date.
+     * Scope: keep ONLY the last entry of each calendar date per
+     * name + form + state + crop year group (last = highest id; ids are
+     * monotonic per save, so saved order beats created_at ties).
+     * Applied directly to the main query so the screen and the CSV export
+     * share one code path.
      */
-    private function latestLivePriceIds($from, $to, $cropYear, $nameId, $formId, $state, bool $hideEmptyPrices)
+    private function applyLatestPerDayScope($query, bool $hideEmptyPrices): void
     {
-        $latestPerGroup = LivePrice::query()
-            ->select([
-                'name',
-                'form',
-                'state',
-                'cropYear',
-                DB::raw('DATE(created_at) as price_date'),
-                DB::raw('MAX(created_at) as max_created'),
-            ])
-            ->whereNotNull('name')
-            ->whereNotNull('form')
-            ->where('name', '>', 0)
-            ->where('form', '>', 0);
+        $table = 'live_prices';
+        $lp = $table;
 
-        $this->applyLivePriceReportFilters($latestPerGroup, $from, $to, $cropYear, $nameId, $formId, $state, $hideEmptyPrices, '');
+        $query->whereRaw(
+            "NOT EXISTS (
+                SELECT 1 FROM {$table} newer
+                WHERE newer.name = {$lp}.name
+                  AND newer.form = {$lp}.form
+                  AND ((newer.state IS NULL AND {$lp}.state IS NULL) OR newer.state = {$lp}.state)
+                  AND ((newer.cropYear IS NULL AND {$lp}.cropYear IS NULL) OR newer.cropYear = {$lp}.cropYear)
+                  AND DATE(newer.created_at) = DATE({$lp}.created_at)
+                  AND newer.id > {$lp}.id
+            )"
+        );
 
-        $latestPerGroup->groupBy('name', 'form', 'state', 'cropYear', DB::raw('DATE(created_at)'));
-
-        return LivePrice::query()
-            ->from('live_prices as lp')
-            ->selectRaw('MAX(lp.id) as id')
-            ->joinSub($latestPerGroup, 'latest', function ($join) {
-                $join->on('lp.name', '=', 'latest.name')
-                    ->on('lp.form', '=', 'latest.form')
-                    ->on('lp.state', '=', 'latest.state')
-                    ->on('lp.created_at', '=', 'latest.max_created')
-                    ->whereRaw('lp.cropYear <=> latest.cropYear');
-            })
-            ->groupBy('lp.name', 'lp.form', 'lp.state', 'lp.cropYear', 'latest.price_date');
+        if ($hideEmptyPrices) {
+            $query->whereRaw("CAST(COALESCE(NULLIF(TRIM({$lp}.min_price), ''), '0') AS DECIMAL(18,4)) > 0")
+                ->whereRaw("CAST(COALESCE(NULLIF(TRIM({$lp}.max_price), ''), '0') AS DECIMAL(18,4)) > 0");
+        }
     }
 }
