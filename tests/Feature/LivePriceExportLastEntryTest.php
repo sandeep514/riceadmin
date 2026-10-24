@@ -57,6 +57,23 @@ class LivePriceExportLastEntryTest extends TestCase
             $t->integer('role')->nullable();
             $t->rememberToken()->nullable();
         });
+        Schema::create('chatStatus', function ($t) {
+            $t->increments('id');
+            $t->integer('status')->nullable();
+        });
+        Schema::create('roles', function ($t) {
+            $t->increments('id');
+            $t->string('name')->nullable();
+            $t->text('modules')->nullable();
+        });
+        Schema::create('modules', function ($t) {
+            $t->increments('id');
+            $t->string('title')->nullable();
+            $t->string('url')->nullable();
+            $t->integer('status')->nullable();
+        });
+        DB::table('chatStatus')->insert(['id' => 1, 'status' => 1]);
+        DB::table('roles')->insert(['id' => 2, 'name' => 'admin']);
     }
 
     public function seedData(): void
@@ -142,5 +159,25 @@ class LivePriceExportLastEntryTest extends TestCase
 
         // Next date's own last entry kept.
         $this->assertStringContainsString('1121,Steam,Punjab,'.$date21.',2026,1400,1500', $dataCsv);
+    }
+
+    public function test_screen_listing_shows_last_entry_per_day_without_export()
+    {
+        $this->seedData();
+
+        DB::table('users')->insert(['id' => 1, 'name' => 'Admin', 'email' => 'admin@test.local', 'password' => bcrypt('secret'), 'role' => 2]);
+
+        $response = $this->actingAs(\App\User::find(1))->get(route('reports.live-prices', [
+            'from' => '2026-10-20',
+            'to' => '2026-10-21',
+        ]));
+
+        $response->assertOk();
+
+        $html = $response->getContent();
+        $this->assertStringContainsString('1250', $html);
+        $this->assertStringContainsString('1130', $html);
+        $this->assertStringNotContainsString('>1225<', $html);
+        $this->assertStringNotContainsString('>1100<', $html);
     }
 }
