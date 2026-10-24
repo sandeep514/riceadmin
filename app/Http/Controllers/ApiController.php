@@ -7794,13 +7794,15 @@ if (!file_exists('uploads')) {
 
     /**
      * Format validDays for trade APIs (IST wall-clock as stored).
-     * Mobile default: 03/09/2026 19:00 — matches app Valid Till parsing.
+     * Mobile default: 2026-09-03T19:00:00+05:30 — must stay parseable by the app's
+     * `new Date(validDays)` (generateDate). Never use d/m/Y here: JS Date parsing
+     * of DD/MM/YYYY returns Invalid Date → NaN in the app.
      * Web: pass d-m-Y, g:i A (e.g. 12-04-2026, 7:00 PM).
      *
      * @param  \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection  $trades
      * @return \Illuminate\Support\Collection|\Illuminate\Database\Eloquent\Collection
      */
-    private function formatTradeCollectionValidDays($trades, string $dateFormat = 'd/m/Y H:i')
+    private function formatTradeCollectionValidDays($trades, string $dateFormat = 'Y-m-d\TH:i:sP')
     {
         return $trades->map(function ($trade) use ($dateFormat) {
             $raw = $trade->getAttributes()['validDays'] ?? $trade->validDays ?? null;
