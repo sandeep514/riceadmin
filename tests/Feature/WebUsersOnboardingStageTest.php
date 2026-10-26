@@ -38,6 +38,8 @@ class WebUsersOnboardingStageTest extends TestCase
             $t->integer('is_viewed_by_admin')->default(0);
             $t->integer('is_active_by_admin')->default(0);
             $t->unsignedTinyInteger('is_deactivated')->default(0);
+            $t->timestamp('created_at')->nullable();
+            $t->timestamp('updated_at')->nullable();
             $t->rememberToken()->nullable();
         });
         Schema::create('web_user_subscription', function ($t) {
@@ -101,14 +103,20 @@ class WebUsersOnboardingStageTest extends TestCase
 
     private function seedStages(): void
     {
-        DB::table('users')->insert([
-            ['id' => 1, 'name' => 'OtpOnly', 'user_from' => 'web'],
-            ['id' => 2, 'name' => 'Profile', 'user_from' => 'web'],
-            ['id' => 3, 'name' => 'Docs', 'user_from' => 'web'],
-            ['id' => 4, 'name' => 'Trial', 'user_from' => 'web'],
-            ['id' => 5, 'name' => 'PaidPendingActivation', 'user_from' => 'web'],
-            ['id' => 6, 'name' => 'PaidActive', 'user_from' => 'web'],
-        ]);
+        $dates = [
+            '2026-10-01 09:00:00',
+            '2026-10-05 10:00:00',
+            '2026-10-10 11:00:00',
+            '2026-10-15 12:00:00',
+            '2026-10-20 13:00:00',
+            '2026-10-25 14:00:00',
+        ];
+        $names = ['OtpOnly', 'Profile', 'Docs', 'Trial', 'PaidPendingActivation', 'PaidActive'];
+        $rows = [];
+        foreach ($names as $i => $name) {
+            $rows[] = ['id' => $i + 1, 'name' => $name, 'user_from' => 'web', 'created_at' => $dates[$i], 'updated_at' => $dates[$i]];
+        }
+        DB::table('users')->insert($rows);
         DB::table('web_personal_details')->insert(['user_id' => 2]);
         DB::table('web_user_attachment')->insert(['user_id' => 3, 'panCard' => 'uploads/pan.jpg']);
         DB::table('web_user_subscription')->insert([
@@ -138,5 +146,35 @@ class WebUsersOnboardingStageTest extends TestCase
         $this->assertStringContainsString('Trial started', $html);
         $this->assertStringContainsString('Paid plan — Monthly', $html);
         $this->assertStringContainsString('Paid plan — Active', $html);
+    }
+
+    public function test_from_to_filter_scopes_list_and_export(): void
+    {
+        $this->seedStages();
+        DB::table('users')->insert([
+            ['id' => 99, 'name' => 'Admin', 'email' => 'admin@test.local', 'password' => bcrypt('secret'), 'role' => 2],
+        ]);
+
+        $auth = ['actingAs' => \App\User::find(99)];
+
+        // Screen: only the 10-05..10-15 window.
+        $screen = $this->actingAs($auth['actingAs'])->get(route('web.user', ['from' => '2026-10-05', 'to' => '2026-10-15']));
+        $screen->assertOk();
+        $html = $screen->getContent();
+        $this->assertStringContainsString('Profile', $html);
+        $this->assertStringContainsString('Trial', $html);
+        $this->assertStringNotContainsString('PaidPendingActivation', $html);
+        $this->assertStringNotContainsString('OtpOnly', $html);
+
+        // Export: same window, CSV without pagination.
+        $export = $this->actingAs($auth['actingAs'])->get(route('web.user', ['from' => '2026-10-05', 'to' => '2026-10-15', 'export' => 'csv']));
+        $export->assertOk();
+
+        $csv = $export->streamedContent();
+        $this->assertStringContainsString('"User ID",Name,Email,Phone,"Joined At",Category,"Onboarding Stage"', $csv);
+        $this->assertStringContainsString('Profile completed', $csv);
+        $this->assertStringContainsString('Trial started', $csv);
+        $this->assertStringNotContainsString('PaidPendingActivation', $csv);
+        $this->assertStringNotContainsString('OtpOnly', $csv);
     }
 }

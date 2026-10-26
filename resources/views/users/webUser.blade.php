@@ -20,6 +20,23 @@
                         <div class="box-header">
                             <h3 class="box-title">List of web users</h3>
                         </div>
+                        <div style="padding: 10px">
+                            <form method="GET" action="{{ route('web.user') }}" class="form-inline" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+                                <div class="form-group">
+                                    <label for="from" style="margin-right:5px">Joined From</label>
+                                    <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="to" style="margin-right:5px">Joined To</label>
+                                    <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                                <a href="{{ route('web.user') }}" class="btn btn-default btn-sm">Clear</a>
+                                <a href="{{ request()->fullUrlWithQuery(['from' => $from ?? '', 'to' => $to ?? '', 'export' => 'csv']) }}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-download"></i> Export CSV (Full)
+                                </a>
+                            </form>
+                        </div>
                         <a href="{{ route('mark.as.viewed') }}" class="btn btn-success btn-sm">Mark as viewed</a>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -30,6 +47,7 @@
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
+                                            <th style="text-align: center">Joined</th>
                                             <th style="text-align: center">Category </th>
                                             <th style="text-align: center">Onboarding Stage</th>
                                             <th style="text-align: center">SNTC Recommended</th>
@@ -50,7 +68,8 @@
                                                     
                                                     {{ $v->name ?? '--' }}</td>
                                                 <td style="text-align: center">{{ $v->email ?? '--' }}</td>
-                                                <td style="text-align: center">{{ ($v->phone)? $v->phone : $v->mobile  }}</td>
+                                                <td style="text-align: center">{{ $v->phone ?: $v->mobile }}</td>
+                                                <td style="text-align: center">{{ $v->created_at ? \Illuminate\Support\Carbon::parse($v->created_at)->format('d-m-Y') : '--' }}</td>
 
                                                 <td style="text-align: center">{{ ($v->getWebBusinessDetails != null)?  ( $v->getWebBusinessDetails->getCategoryDetails )? ($v->getWebBusinessDetails->getCategoryDetails->category) : '--' : '--' }}</td>
                                                 <td style="text-align: center">
@@ -108,6 +127,7 @@
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
+                                            <th style="text-align: center">Joined</th>
                                             <th style="text-align: center">Category </th>
                                             <th style="text-align: center">Onboarding Stage</th>
                                             <th style="text-align: center">SNTC Recommended</th>

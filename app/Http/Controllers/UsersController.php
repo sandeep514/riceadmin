@@ -603,7 +603,29 @@ class UsersController extends Controller
 
     public function webusers()
     {
-        $vendorUsers = User::where('user_from', 'web')
+        $request = request();
+        $from = trim((string) $request->get('from'));
+        $to = trim((string) $request->get('to'));
+        $export = $request->get('export');
+
+        $vendorUsers = $this->webUserQuery($from, $to);
+
+        // Full CSV export (ignores pagination), filtered the same way as the screen.
+        if ($export === 'csv') {
+            return $this->exportWebUsersCsv($vendorUsers, $from, $to);
+        }
+
+        foreach ($vendorUsers as $user) {
+            $user->setAttribute('onboarding_stage', $this->webUserOnboardingStage($user));
+        }
+
+        return view('users.webUser' , compact('vendorUsers', 'from', 'to'));
+    }
+
+    private function webUserQuery(string $from, string $to)
+    {
+        $query = User::where('user_from', 'web')
+            ->orderBy('id', 'desc')
             ->with([
                 'getWebPersonalDetails',
                 'getWebUserSubscription',
@@ -611,15 +633,59 @@ class UsersController extends Controller
                 'getWebBusinessDetails' => function ($q) {
                     return $q->with(['getCategoryDetails:id,category']);
                 },
-            ])
-            ->orderBy('id', 'desc')
-            ->get();
+            ]);
 
-        foreach ($vendorUsers as $user) {
-            $user->setAttribute('onboarding_stage', $this->webUserOnboardingStage($user));
+        if ($from !== '') {
+            $query->where('created_at', '>=', \Illuminate\Support\Carbon::parse($from, 'Asia/Kolkata')->startOfDay());
+        }
+        if ($to !== '') {
+            $query->where('created_at', '<=', \Illuminate\Support\Carbon::parse($to, 'Asia/Kolkata')->endOfDay());
         }
 
-        return view('users.webUser' , compact('vendorUsers'));
+        return $query->get();
+    }
+
+    private function exportWebUsersCsv($vendorUsers, string $from, string $to)
+    {
+        @set_time_limit(0);
+
+        $filename = 'web_users_'.($from !== '' ? $from : 'start').'_'.($to !== '' ? $to : 'end').'.csv';
+
+        return response()->streamDownload($this->webUsersCsvWriter($vendorUsers), $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    private function webUsersCsvWriter($vendorUsers): \Closure
+    {
+        return function () use ($vendorUsers) {
+            $out = fopen('php://output', 'w');
+            fputcsv($out, [
+                'User ID', 'Name', 'Email', 'Phone', 'Joined At', 'Category', 'Onboarding Stage',
+                'SNTC Recommended', 'Status',
+            ], ',', '"', '\\');
+
+            foreach ($vendorUsers as $user) {
+                $stage = $this->webUserOnboardingStage($user);
+                $business = $user->getWebBusinessDetails;
+                $phone = $user->phone ?: $user->mobile;
+
+                fputcsv($out, [
+                    $user->id,
+                    (string) ($user->name ?? ''),
+                    (string) ($user->email ?? ''),
+                    (string) ($phone ?? ''),
+                    $user->created_at ? \Illuminate\Support\Carbon::parse($user->created_at)->format('Y-m-d') : '',
+                    (string) ($business->getCategoryDetails->category ?? ''),
+                    $stage,
+                    $business !== null ? (int) ($business->is_sntc_recommended ?? 0) : '',
+                    (int) ($user->is_deactivated ?? 0) === 1 ? 'Deactivated'
+                        : ((int) ($user->is_active_by_admin ?? 0) === 1 ? 'Active' : 'Pending'),
+                ], ',', '"', '\\');
+            }
+
+            fclose($out);
+        };
     }
 
     /**
