@@ -218,6 +218,10 @@ class WebUsersOnboardingStageTest extends TestCase
         $this->assertStringContainsString('Rejection Reason', $html);
         $this->assertStringContainsString('Invalid GST documents.', $html);
 
+        // Reject textarea is pre-filled with the stored reason.
+        $this->assertStringContainsString('placeholder="Enter the reason for rejecting this user"', $html);
+        $this->assertStringContainsString('>Invalid GST documents.</textarea>', $html);
+
         $response2 = $this->actingAs(\App\User::find(99))->get(route('view.user', 8));
         $response2->assertOk();
         $html2 = $response2->getContent();

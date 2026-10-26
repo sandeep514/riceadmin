@@ -415,7 +415,7 @@
 									rows="4"
 									required
 									placeholder="Enter the reason for rejecting this user"
-								>{{ old('message') }}</textarea>
+								>{{ old('message', (($user['is_deactivated'] ?? 0) == 1 && ($user['is_active_by_admin'] ?? 0) == 0) ? ($rejectionReason ?? '') : '') }}</textarea>
 								@error('message')
 									<span class="help-block text-danger">{{ $message }}</span>
 								@enderror
