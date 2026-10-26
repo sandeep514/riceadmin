@@ -471,11 +471,19 @@ class UsersController extends Controller
         $mailmessage = trim($validated['message']);
 
         // Notify before clearing tokens so FCM can still reach the device.
-        $this->sendWebUserNotification(
-            $userId,
-            'Account On Hold',
-            'Your account is on hold. Reason: ' . $mailmessage
-        );
+        // Notification failures must never block or fail the admin reject action.
+        try {
+            $this->sendWebUserNotification(
+                $userId,
+                'Account On Hold',
+                'Your account is on hold. Reason: ' . $mailmessage
+            );
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Reject user: notification failed.', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         // Keep api_token / mobile_api_token so other open sessions still resolve the user
         // and receive the reject/on-hold message from auth middleware (not "Invalid API token").
@@ -488,7 +496,16 @@ class UsersController extends Controller
         ]);
 
         // Products go back to pending so admin must re-verify after account reactivation.
-        VendorProductCatalog::deactivateVerifiedProductsForUser($userId);
+        // Rewind failures are logged, surfaced as a session warning, never a 500.
+        try {
+            VendorProductCatalog::deactivateVerifiedProductsForUser($userId);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Reject user: product deactivation failed.', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+            ]);
+            Session::flash('warning', 'Rejected|User rejected, but resetting vendor products failed: '.$e->getMessage());
+        }
 
         $userDetail = User::where( ['id' => $userId  ])->first();
 
@@ -499,7 +516,17 @@ class UsersController extends Controller
         $mailFrom = 'info@sntcgroup.com';
         $mailFromName = 'SNTC Team - India';
 
-        QueuedMail::send('mail.rejectedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailmessage);
+        // Send user mail asynchronously (queue); a sync-queue SMTP failure is
+        // logged, warned in session, and must not turn the reject into a 500.
+        try {
+            QueuedMail::send('mail.rejectedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailmessage);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error('Reject user: mail dispatch failed.', [
+                'user_id' => $userId,
+                'error' => $e->getMessage(),
+            ]);
+            Session::flash('warning', 'Success|User rejected, but the rejection mail could not be queued: '.$e->getMessage());
+        }
 
         Session::flash('success', 'Success|User rejected successfully! Reason: '.$mailmessage);
         return back();
@@ -549,12 +576,18 @@ class UsersController extends Controller
         } elseif ($wasDeactivated) {
             $user->update(['is_deactivated' => 0]);
         } else {
-            // Notify before clearing tokens so FCM can still reach the device.
-            $this->sendWebUserNotification(
-                (int) $userId,
-                'Account Deactivated',
-                'Your account has been deactivated . Please contact support if you need help.'
-            );
+            try {
+                $this->sendWebUserNotification(
+                    (int) $userId,
+                    'Account Deactivated',
+                    'Your account has been deactivated . Please contact support if you need help.'
+                );
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Deactivate user: notification failed.', [
+                    'user_id' => $userId,
+                    'error' => $e->getMessage(),
+                ]);
+            }
 
             // Keep api_token / mobile_api_token so other open sessions still resolve the user
             // and receive the deactivated message from auth middleware (not "Invalid API token").
@@ -564,7 +597,15 @@ class UsersController extends Controller
             ]);
 
             // Products go back to pending so admin must re-verify after account reactivation.
-            VendorProductCatalog::deactivateVerifiedProductsForUser((int) $userId);
+            try {
+                VendorProductCatalog::deactivateVerifiedProductsForUser((int) $userId);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Deactivate user: product deactivation failed.', [
+                    'user_id' => $userId,
+                    'error' => $e->getMessage(),
+                ]);
+                Session::flash('warning', 'Success|User deactivated, but resetting vendor products failed: '.$e->getMessage());
+            }
 
             $mailTo = $userDetail->email;
             if (! empty($mailTo)) {
@@ -574,7 +615,14 @@ class UsersController extends Controller
                 $mailFromName = 'SNTC Team - India';
                 $mailMessage = '';
 
-                QueuedMail::send('mail.deactivatedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
+                try {
+                    QueuedMail::send('mail.deactivatedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
+                } catch (\Throwable $e) {
+                    \Illuminate\Support\Facades\Log::error('Deactivate user: mail dispatch failed.', [
+                        'user_id' => $userId,
+                        'error' => $e->getMessage(),
+                    ]);
+                }
             }
         }
 
@@ -588,13 +636,27 @@ class UsersController extends Controller
             $mailFrom = 'info@sntcgroup.com';
             $mailFromName = 'SNTC Team - India';
 
-            QueuedMail::send('mail.activeUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
+            try {
+                QueuedMail::send('mail.activeUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailMessage);
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Activate user: mail dispatch failed.', [
+                    'user_id' => $userId,
+                    'error' => $e->getMessage(),
+                ]);
+            }
 
-            $this->sendWebUserNotification(
-                (int) $userId,
-                'Account Activated',
-                'Your account has been activated. Welcome aboard!'
-            );
+            try {
+                $this->sendWebUserNotification(
+                    (int) $userId,
+                    'Account Activated',
+                    'Your account has been activated. Welcome aboard!'
+                );
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::error('Activate user: notification failed.', [
+                    'user_id' => $userId,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
 
         Session::flash('success','Success|User status updated successfully!');
