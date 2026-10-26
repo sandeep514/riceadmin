@@ -1005,7 +1005,11 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('move/sell/queries/{sellQueryId}' , ['as' => 'move.to.trade.sell.queries' , 'uses' => 'MasterController@moveToTradeSellQueries']);
     Route::get('convert/queries/{type}/{id}' , ['as' => 'convert.to.trade.queries' , 'uses' => 'MasterController@convertToTradeQueries']);
 
-    Route::get('list/buy/queries/INR' , ['as' => 'master.list.buy.queries.INR' , 'uses' => 'MasterController@listBuyQueries']);
+        Route::get('list/buy/queries/INR' , ['as' => 'master.list.buy.queries.INR' , 'uses' => 'MasterController@listBuyQueries']);
+        Route::get('export/buy/queries/INR' , ['as' => 'master.export.buy.queries.INR' , 'uses' => 'MasterController@exportBuyQueriesINR']);
+        Route::get('export/future/buy/queries/INR' , ['as' => 'master.export.future.buy.queries.INR' , 'uses' => 'MasterController@exportFutureBuyQueriesINR']);
+        Route::get('export/sell/queries/INR' , ['as' => 'master.export.sell.queries.INR' , 'uses' => 'MasterController@exportSellQueriesINR']);
+        Route::get('export/future/sell/queries/INR' , ['as' => 'master.export.future.sell.queries.INR' , 'uses' => 'MasterController@exportFutureSellQueriesINR']);
     Route::get('list/future/buy/queries/INR' , ['as' => 'master.future.list.buy.queries.INR' , 'uses' => 'MasterController@listFutureBuyQueries']);
     Route::get('close/buy/queries/{buyQueryId}' , ['as' => 'close.buy.queries' , 'uses' => 'MasterController@closeBuyQueries']);
     Route::get('move/buy/queries/{buyQueryId}' , ['as' => 'move.to.trade.buy.queries' , 'uses' => 'MasterController@moveToTradeBuyQueries']);

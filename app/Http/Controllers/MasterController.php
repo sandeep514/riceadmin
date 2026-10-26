@@ -28,6 +28,7 @@ use App\FutureBuyQueriesINR;
 use App\Buyerpackinginr;
 use App\SellerPackingINR;
 use App\RiceFormMilestone3;
+use App\Packing;
 use Mail;
 use App\Support\QueuedMail;
 use Maatwebsite\Excel\Facades\Excel;
@@ -1441,6 +1442,157 @@ class MasterController extends Controller
 		return View('buyINR.index' , compact('buyQueries'));
 
 	}
+
+	public function exportBuyQueriesINR()
+	{
+		$buyQueries = BuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();
+
+		$headers = ['ID', 'Quality Type', 'Quality', 'Grade', 'Packing Type', 'Packing', 'Quantity',
+			'Additional Info', 'Created By', 'Contact Person', 'Contact Number', 'Created At', 'Remarks', 'Status'];
+
+		return response()->streamDownload($this->queriesCsvWriter($buyQueries, $headers, function ($q) {
+			return [
+				(string) ($q->id ?? ''),
+				(int) ($q->quality_type ?? 0) == 1 ? 'Basmati' : 'Non-Basmati',
+				$this->queriesQualityLabel($q),
+				$this->queriesGradeLabel($q),
+				BuyQueriesINR::$packingTypeStaus[$q->packing_type] ?? '',
+				$this->queriesPackingLabel($q),
+				(string) ($q->quantity ?? ''),
+				(string) ($q->additional_info ?? ''),
+				trim((string) optional($q->UserDetail)->name).' - '.(string) optional($q->UserDetail)->mobile,
+				(string) ($q->contactPerson ?? ''),
+				(string) ($q->contactMobile ?? ''),
+				$q->created_at ? Carbon::parse($q->created_at)->format('d-m-Y') : '',
+				(string) ($q->remarks ?? ''),
+				BuyQueriesINR::$status[$q->status] ?? '',
+			];
+		}), 'buy_queries_inr.csv');
+	}
+
+	public function exportFutureBuyQueriesINR()
+	{
+		$buyQueries = FutureBuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();
+
+		$headers = ['ID', 'Quality Type', 'Quality', 'Grade', 'Packing Type', 'Packing', 'Quantity',
+			'Additional Info', 'Created By', 'Contact Person', 'Contact Number', 'Created At', 'Remarks', 'Status'];
+
+		return response()->streamDownload($this->queriesCsvWriter($buyQueries, $headers, function ($q) {
+			return [
+				(string) ($q->id ?? ''),
+				(int) ($q->quality_type ?? 0) == 1 ? 'Basmati' : 'Non-Basmati',
+				$this->queriesQualityLabel($q),
+				$this->queriesGradeLabel($q),
+				FutureBuyQueriesINR::$packingTypeStaus[$q->packing_type] ?? '',
+				$this->queriesPackingLabel($q),
+				(string) ($q->quantity ?? ''),
+				(string) ($q->additional_info ?? ''),
+				trim((string) optional($q->UserDetail)->name).' - '.(string) optional($q->UserDetail)->mobile,
+				(string) ($q->contactPerson ?? ''),
+				(string) ($q->contactMobile ?? ''),
+				$q->created_at ? Carbon::parse($q->created_at)->format('d-m-Y') : '',
+				(string) ($q->remarks ?? ''),
+				FutureBuyQueriesINR::$status[$q->status] ?? '',
+			];
+		}), 'future_buy_queries_inr.csv');
+	}
+
+	public function exportSellQueriesINR()
+	{
+		$sellerQueries = SellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();
+
+		$headers = ['ID', 'Quality Type', 'Quality', 'Quality Form', 'Grade', 'Packing', 'Quantity',
+			'Ex-factory Price', 'Valid Days', 'Warehouse Location', 'Contact Person', 'Contact Phone',
+			'Created By', 'Remarks', 'Status', 'Created At'];
+
+		return response()->streamDownload($this->queriesCsvWriter($sellerQueries, $headers, function ($q) {
+			return [
+				(string) ($q->id ?? ''),
+				(string) ($q->RiceQualityRiceNames->type ?? ''),
+				(string) ($q->RiceQualityRiceNames->name ?? ''),
+				(string) ($q->RiceFormMilestone3->name ?? ''),
+				$this->queriesGradeLabel($q),
+				(string) optional($q->RicePacking)->packing,
+				(string) ($q->quantity ?? ''),
+				(string) ($q->offerPrice ?? ''),
+				(string) ($q->validDays ?? ''),
+				(string) ($q->warehouselocation ?? ''),
+				(string) ($q->contactperson ?? ''),
+				(string) ($q->contactMobile ?? ''),
+				(string) (optional($q->UserDetail)->name ?? '--'),
+				(string) ($q->remarks ?? ''),
+				SellQueriesINR::$status[$q->status] ?? '',
+				$q->created_at ? Carbon::parse($q->created_at)->format('d-m-Y') : '',
+			];
+		}), 'sell_queries_inr.csv');
+	}
+
+	public function exportFutureSellQueriesINR()
+	{
+		$sellerQueries = FutureSellQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();
+
+		$headers = ['ID', 'Quality Type', 'Quality', 'Quality Form', 'Grade', 'Packing', 'Quantity',
+			'Ex-factory Price', 'Valid Days', 'Warehouse Location', 'Contact Person', 'Contact Phone',
+			'Created By', 'Remarks', 'Status', 'Created At'];
+
+		return response()->streamDownload($this->queriesCsvWriter($sellerQueries, $headers, function ($q) {
+			return [
+				(string) ($q->id ?? ''),
+				(string) ($q->RiceQualityRiceNames->type ?? ''),
+				(string) ($q->RiceQualityRiceNames->name ?? ''),
+				(string) ($q->RiceFormMilestone3->name ?? ''),
+				$this->queriesGradeLabel($q),
+				(string) optional($q->RicePacking)->packing,
+				(string) ($q->quantity ?? ''),
+				(string) ($q->offerPrice ?? ''),
+				(string) ($q->validDays ?? ''),
+				(string) ($q->warehouselocation ?? ''),
+				(string) ($q->contactperson ?? ''),
+				(string) ($q->contactMobile ?? ''),
+				(string) (optional($q->UserDetail)->name ?? '--'),
+				(string) ($q->remarks ?? ''),
+				FutureSellQueriesINR::$status[$q->status] ?? '',
+				$q->created_at ? Carbon::parse($q->created_at)->format('d-m-Y') : '',
+			];
+		}), 'future_sell_queries_inr.csv');
+	}
+
+	private function queriesGradeLabel($q): string
+	{
+		$grade = $q->riceGrade;
+
+		return trim((string) ($grade?->getWandType?->type ?? '--').' '.(string) ($grade?->value ?? '--'));
+	}
+
+	private function queriesQualityLabel($q): string
+	{
+		return trim((string) ($q->RiceQualityRiceNames->name ?? '')
+			.(($q->RiceFormMilestone3->name ?? '') !== '' ? ' '.($q->RiceFormMilestone3->name ?? '') : ''));
+	}
+
+	private function queriesPackingLabel($q): string
+	{
+		if ((int) ($q->packing_type ?? 0) === 1 && $q->RicePacking) {
+			return trim(($q->RicePacking->packing ?? '').' '.($q->RicePacking->description ?? ''));
+		}
+
+		return Packing::$millerPacking[$q->packing] ?? '';
+	}
+
+	private function queriesCsvWriter($rows, array $headers, \Closure $rowMapper): \Closure
+	{
+		return function () use ($rows, $headers, $rowMapper) {
+			$out = fopen('php://output', 'w');
+			fputcsv($out, $headers, ',', '"', '\\');
+
+			foreach ($rows as $row) {
+				fputcsv($out, $rowMapper($row), ',', '"', '\\');
+			}
+
+			fclose($out);
+		};
+	}
+
 	public function listFutureBuyQueries()
 	{
 		$buyQueries = FutureBuyQueriesINR::with(['RiceFormMilestone3','RiceQualityRiceNames','UserDetail','RicePacking','riceGrade.getWandType'])->orderBy('id', 'DESC')->get();

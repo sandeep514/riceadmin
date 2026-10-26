@@ -20,6 +20,9 @@
                     <div class="box">
                         <div class="box-header">
                             <h3 class="box-title">Sell Query INR</h3>
+                            <div style="float: right;">
+                                <a href="{{ route('master.export.future.sell.queries.INR') }}" class="btn btn-success btn-sm"><i class="fa fa-download"></i> Export CSV (full database)</a>
+                            </div>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
