@@ -14,20 +14,27 @@
 						<i class="fa fa-trash"></i> Delete Web User
 					</button>
 				</form>
-				@if( array_key_exists('get_web_user_subscription', $user) && $user['get_web_user_subscription'] != null )
-					@if( (int) ($user['is_active_by_admin'] ?? 0) === 0 )
-						<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-info" style="margin-left: 8px;">
-							Activate this user
-						</a>
-					@elseif( (int) ($user['is_deactivated'] ?? 0) === 1 )
-						<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-info" style="margin-left: 8px;">
-							Re-Activate this user
-						</a>
-					@else
-						<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-danger" style="margin-left: 8px;">
-							De-Activate this user
-						</a>
+				@php
+					$hasSubscription = array_key_exists('get_web_user_subscription', $user) && $user['get_web_user_subscription'] != null;
+				@endphp
+				@if( (int) ($user['is_active_by_admin'] ?? 0) === 0 )
+					<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-info" style="margin-left: 8px;">
+						Activate this user
+					</a>
+					@if(! $hasSubscription)
+						<span class="text-muted" style="margin-left: 6px;">(activation needs a subscription)</span>
 					@endif
+				@elseif( (int) ($user['is_deactivated'] ?? 0) === 1 )
+					<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-info" style="margin-left: 8px;">
+						Re-Activate this user
+					</a>
+					@if(! $hasSubscription)
+						<span class="text-muted" style="margin-left: 6px;">(no subscription found)</span>
+					@endif
+				@else
+					<a href="{{ route('list.web.change.status.user', $user['id']) }}" class="btn btn-sm btn-danger" style="margin-left: 8px;">
+						De-Activate this user
+					</a>
 				@endif
 			</div>
 		@endif

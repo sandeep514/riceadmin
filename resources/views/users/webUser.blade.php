@@ -109,8 +109,9 @@
                                                         $hasPlan = $v->getWebUserSubscription !== null;
                                                     @endphp
                                                     @if((int) ($v->is_active_by_admin ?? 0) === 0)
-                                                        @if($hasPlan)
-                                                            <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-success btn-xs" onclick="return confirm('Activate this user?');">Activate</a>
+                                                        <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-success btn-xs" onclick="return confirm('Activate this user?');" title="{{ $hasPlan ? '' : 'Activation needs a subscription' }}">Activate</a>
+                                                        @if(! $hasPlan)
+                                                            <span class="text-muted" style="margin-left:4px">(no plan)</span>
                                                         @endif
                                                     @elseif((int) ($v->is_deactivated ?? 0) === 1)
                                                         <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-success btn-xs" onclick="return confirm('Re-activate this user?');">Re-Activate</a>

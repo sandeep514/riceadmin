@@ -237,4 +237,74 @@ class WebUsersOnboardingStageTest extends TestCase
         $this->assertStringContainsString('>Rejected<', $html3);
         $this->assertStringContainsString('>Deactivated<', $html3);
     }
+
+    public function test_view_page_activate_buttons_visible_after_reject_and_deactivate(): void
+    {
+        Schema::dropIfExists('web_user_subscription');
+        Schema::create('web_user_subscription', function ($t) {
+            $t->increments('id');
+            $t->unsignedInteger('user_id')->nullable();
+            $t->unsignedInteger('plan_id')->nullable();
+            $t->string('subscription_type')->nullable();
+            $t->string('period_start')->nullable();
+            $t->string('period_end')->nullable();
+            $t->string('status')->nullable();
+            $t->string('amount')->nullable();
+            $t->timestamps();
+        });
+
+        Schema::dropIfExists('web_user_attachment');
+        Schema::create('web_user_attachment', function ($t) {
+            $t->increments('id');
+            $t->unsignedInteger('user_id')->nullable();
+            $t->string('panCard')->nullable();
+            $t->string('farmer_file')->nullable();
+            $t->string('gst_fssai')->nullable();
+            $t->string('gstCard')->nullable();
+            $t->string('fssaiCard')->nullable();
+            $t->integer('status')->nullable();
+        });
+
+        $this->seedStages();
+        DB::table('users')->insert([
+            ['id' => 99, 'name' => 'Admin', 'email' => 'admin@test.local', 'password' => bcrypt('secret'), 'role' => 2],
+        ]);
+
+        // With plan: rejected user (is_active_by_admin=0) and deactivated user (approved, held).
+        DB::table('users')->insert([
+            'id' => 7, 'name' => 'RejectedWithPlan', 'user_from' => 'web',
+            'is_deactivated' => 1, 'is_active_by_admin' => 0,
+            'has_validation' => 'Reason here.',
+        ]);
+        DB::table('users')->insert([
+            'id' => 8, 'name' => 'DeactivatedWithPlan', 'user_from' => 'web',
+            'is_deactivated' => 1, 'is_active_by_admin' => 1,
+        ]);
+        DB::table('web_user_subscription')->insert([
+            ['user_id' => 7, 'subscription_type' => 'monthly', 'status' => 1],
+            ['user_id' => 8, 'subscription_type' => 'yearly', 'status' => 1],
+        ]);
+
+        $rejectedView = $this->actingAs(\App\User::find(99))->get(route('view.user', 7))->getContent();
+        $this->assertStringContainsString('Activate this user', $rejectedView);
+
+        $deactivatedView = $this->actingAs(\App\User::find(99))->get(route('view.user', 8))->getContent();
+        $this->assertStringContainsString('Re-Activate this user', $deactivatedView);
+
+        // Without plan, the undo action must still be offered (currently it is not).
+        Schema::dropIfExists('web_user_subscription');
+        Schema::create('web_user_subscription', function ($t) {
+            $t->increments('id');
+            $t->unsignedInteger('user_id')->nullable();
+            $t->unsignedInteger('plan_id')->nullable();
+            $t->string('subscription_type')->nullable();
+            $t->timestamps();
+        });
+
+        $rejectedNoPlan = $this->actingAs(\App\User::find(99))->get(route('view.user', 7))->getContent();
+        $this->assertStringContainsString('Activate this user', $rejectedNoPlan, 'Activate button must be visible even without a subscription');
+
+        $deactivatedNoPlan = $this->actingAs(\App\User::find(99))->get(route('view.user', 8))->getContent();
+        $this->assertStringContainsString('Re-Activate this user', $deactivatedNoPlan, 'Re-Activate button must be visible even without a subscription');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Export;
 use App\QualityMaster;
 use App\USD_prices;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -25,15 +26,26 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
 
     public function query(): Builder
     {
-        $riceIds = QualityMaster::pluck('id');
-
-        return USD_prices::query()
-            ->with(['getRiceQuality', 'getUSDDefaultMaster'])
-            ->whereIn('rice', $riceIds)
-            ->orderBy('created_at', 'DESC')
+        $candidates = USD_prices::query()
+            ->whereIn('rice', QualityMaster::pluck('id'))
             ->when($this->from, fn ($q) => $q->whereDate('created_at', '>=', $this->from))
             ->when($this->to, fn ($q) => $q->whereDate('created_at', '<=', $this->to))
             ->when($this->packing, fn ($q) => $q->where('usd_defaultMaster_id', $this->packing));
+
+        // Only the last saved entry of each calendar day per (quality, packing,
+        // packing type, rice type) group — earlier same-day saves are superseded
+        // duplicates (the screen lists the freshest rows first; the export keeps
+        // one final row per day so values are not duplicated).
+        $lastOfDayIds = (clone $candidates)
+            ->selectRaw('MAX(id) as id')
+            ->groupBy(DB::raw('DATE(created_at)'), 'rice', 'usd_defaultMaster_id');
+
+        return USD_prices::query()
+            ->with(['getRiceQuality', 'getUSDDefaultMaster'])
+            ->whereIn('id', $lastOfDayIds)
+            ->orderBy('created_at', 'DESC')
+            ->orderBy('rice')
+            ->orderBy('usd_defaultMaster_id');
     }
 
     public function headings(): array
