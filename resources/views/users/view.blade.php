@@ -59,17 +59,32 @@
 				<tr><th>Mobile</th><td>{{ $user['mobile'] ?? '-' }}</td></tr>
 				<tr><th>Role</th><td>{{ $user['role_rel']['role_name'] ?? ($user['role'] ?? '-') }}</td></tr>
 				<tr>
+					@php
+						$isDeactivated = (int) ($user['is_deactivated'] ?? 0) === 1;
+						$isActiveByAdmin = (int) ($user['is_active_by_admin'] ?? 0) === 1;
+						$rejectionReason = trim((string) ($user['has_validation'] ?? '')) !== ''
+							? $user['has_validation']
+							: ($user['message'] ?? '');
+					@endphp
 					<th>Account Status</th>
 					<td>
-						@if((int) ($user['is_deactivated'] ?? 0) === 1)
+						@if($isDeactivated && ! $isActiveByAdmin)
+							<span class="status-inactive">Rejected (On Hold)</span>
+						@elseif($isDeactivated)
 							<span class="status-inactive">Deactivated</span>
-						@elseif(($user['is_active_by_admin'] ?? 0) == 1)
+						@elseif($isActiveByAdmin)
 							<span class="status-active">Active</span>
 						@else
 							<span class="status-inactive">Pending Activation</span>
 						@endif
 					</td>
 				</tr>
+				@if($isDeactivated && ! $isActiveByAdmin)
+					<tr>
+						<th>Rejection Reason</th>
+						<td>{{ $rejectionReason !== '' ? $rejectionReason : '—' }}</td>
+					</tr>
+				@endif
 				<tr>
 					<th>Verification Status</th>
 					<td>

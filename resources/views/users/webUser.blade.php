@@ -93,7 +93,9 @@
                                                     @endif
                                                 </td>
                                                 <td style="text-align: center">
-                                                    @if((int) ($v->is_deactivated ?? 0) === 1)
+                                                    @if((int) ($v->is_deactivated ?? 0) === 1 && (int) ($v->is_active_by_admin ?? 0) === 0)
+                                                        <span class="label label-danger">Rejected</span>
+                                                    @elseif((int) ($v->is_deactivated ?? 0) === 1)
                                                         <span class="label label-danger">Deactivated</span>
                                                     @elseif((int) ($v->is_active_by_admin ?? 0) === 1)
                                                         <span class="label label-success">Active</span>

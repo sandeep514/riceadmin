@@ -501,7 +501,7 @@ class UsersController extends Controller
 
         QueuedMail::send('mail.rejectedUserMail', $data, $mailTo, $subject, $mailFrom, $mailFromName, $mailmessage);
 
-        Session::flash('success','Success|User rejected successfully!');
+        Session::flash('success', 'Success|User rejected successfully! Reason: '.$mailmessage);
         return back();
 
     }
@@ -679,8 +679,9 @@ class UsersController extends Controller
                     (string) ($business->getCategoryDetails->category ?? ''),
                     $stage,
                     $business !== null ? (int) ($business->is_sntc_recommended ?? 0) : '',
-                    (int) ($user->is_deactivated ?? 0) === 1 ? 'Deactivated'
-                        : ((int) ($user->is_active_by_admin ?? 0) === 1 ? 'Active' : 'Pending'),
+                    $user->is_deactivated == 1
+                        ? ($user->is_active_by_admin == 1 ? 'Deactivated' : 'Rejected')
+                        : ($user->is_active_by_admin == 1 ? 'Active' : 'Pending'),
                 ], ',', '"', '\\');
             }
 

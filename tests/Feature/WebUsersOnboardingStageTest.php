@@ -38,6 +38,9 @@ class WebUsersOnboardingStageTest extends TestCase
             $t->integer('is_viewed_by_admin')->default(0);
             $t->integer('is_active_by_admin')->default(0);
             $t->unsignedTinyInteger('is_deactivated')->default(0);
+            $t->text('has_validation')->nullable();
+            $t->text('user_token')->nullable();
+            $t->text('message')->nullable();
             $t->timestamp('created_at')->nullable();
             $t->timestamp('updated_at')->nullable();
             $t->rememberToken()->nullable();
@@ -89,8 +92,16 @@ class WebUsersOnboardingStageTest extends TestCase
             $t->increments('id');
             $t->integer('status')->nullable();
         });
-        Schema::create('modules', function ($t) {
+        Schema::create('user_interested_map_table', function ($t) {
             $t->increments('id');
+            $t->unsignedInteger('user_id')->nullable();
+            $t->unsignedInteger('rice_name_id')->nullable();
+            $t->unsignedInteger('form_id')->nullable();
+            $t->unsignedInteger('grade')->nullable();
+            $t->integer('status')->default(1);
+            $t->timestamps();
+        });
+        Schema::create('modules', function ($t) {            $t->increments('id');
             $t->string('title')->nullable();
             $t->string('url')->nullable();
             $t->integer('status')->nullable();
@@ -176,5 +187,50 @@ class WebUsersOnboardingStageTest extends TestCase
         $this->assertStringContainsString('Trial started', $csv);
         $this->assertStringNotContainsString('PaidPendingActivation', $csv);
         $this->assertStringNotContainsString('OtpOnly', $csv);
+    }
+
+    public function test_view_page_shows_rejected_status_and_reason(): void
+    {
+        $this->seedStages();
+        DB::table('users')->insert([
+            ['id' => 99, 'name' => 'Admin', 'email' => 'admin@test.local', 'password' => bcrypt('secret'), 'role' => 2],
+        ]);
+
+        // Rejected (on hold) user: message recorded by reject + not admin approved.
+        DB::table('users')->insert([
+            'id' => 7, 'name' => 'RejectedUser', 'user_from' => 'web',
+            'is_deactivated' => 1, 'is_active_by_admin' => 0,
+            'has_validation' => 'Invalid GST documents.',
+            'message' => 'Invalid GST documents.',
+        ]);
+
+        // Plain deactivated active user stays "Deactivated".
+        DB::table('users')->insert([
+            'id' => 8, 'name' => 'JustDeactivated', 'user_from' => 'web',
+            'is_deactivated' => 1, 'is_active_by_admin' => 1,
+        ]);
+
+        $response = $this->actingAs(\App\User::find(99))->get(route('view.user', 7));
+        $response->assertOk();
+        $html = $response->getContent();
+
+        $this->assertStringContainsString('Rejected (On Hold)', $html);
+        $this->assertStringContainsString('Rejection Reason', $html);
+        $this->assertStringContainsString('Invalid GST documents.', $html);
+
+        $response2 = $this->actingAs(\App\User::find(99))->get(route('view.user', 8));
+        $response2->assertOk();
+        $html2 = $response2->getContent();
+
+        $this->assertStringContainsString('Deactivated', $html2);
+        $this->assertStringNotContainsString('Rejected (On Hold)', $html2);
+
+        // Web users list marks rejected users distinctly too.
+        $response3 = $this->actingAs(\App\User::find(99))->get(route('web.user'));
+        $response3->assertOk();
+        $html3 = $response3->getContent();
+
+        $this->assertStringContainsString('>Rejected<', $html3);
+        $this->assertStringContainsString('>Deactivated<', $html3);
     }
 }
