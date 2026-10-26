@@ -31,6 +31,7 @@
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
                                             <th style="text-align: center">Category </th>
+                                            <th style="text-align: center">Onboarding Stage</th>
                                             <th style="text-align: center">SNTC Recommended</th>
                                             <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
@@ -52,6 +53,16 @@
                                                 <td style="text-align: center">{{ ($v->phone)? $v->phone : $v->mobile  }}</td>
 
                                                 <td style="text-align: center">{{ ($v->getWebBusinessDetails != null)?  ( $v->getWebBusinessDetails->getCategoryDetails )? ($v->getWebBusinessDetails->getCategoryDetails->category) : '--' : '--' }}</td>
+                                                <td style="text-align: center">
+                                                    @php
+                                                        $stageLabel = $v->onboarding_stage ?? '';
+                                                        $stageClass = str_starts_with($stageLabel, 'Paid plan') ? 'label-success'
+                                                            : ($stageLabel === 'Trial started' ? 'label-info'
+                                                            : ($stageLabel === 'Documents uploaded' ? 'label-primary'
+                                                            : ($stageLabel === 'Profile completed' ? 'label-warning' : 'label-danger')));
+                                                    @endphp
+                                                    <span class="label {{ $stageClass }}">{{ $stageLabel }}</span>
+                                                </td>
                                                 <td style="text-align: center">
                                                     @if($v->getWebBusinessDetails)
                                                         <x-sntc-recommended-yes-no
@@ -98,6 +109,7 @@
                                             <th style="text-align: center">email </th>
                                             <th style="text-align: center">Phone </th>
                                             <th style="text-align: center">Category </th>
+                                            <th style="text-align: center">Onboarding Stage</th>
                                             <th style="text-align: center">SNTC Recommended</th>
                                             <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
@@ -115,3 +127,4 @@
     </div>
 @endsection
 @section('scripts')
+@endsection

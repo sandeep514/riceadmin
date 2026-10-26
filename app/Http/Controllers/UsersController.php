@@ -607,13 +607,52 @@ class UsersController extends Controller
             ->with([
                 'getWebPersonalDetails',
                 'getWebUserSubscription',
+                'getWebUserAttachment',
                 'getWebBusinessDetails' => function ($q) {
                     return $q->with(['getCategoryDetails:id,category']);
                 },
             ])
             ->orderBy('id', 'desc')
             ->get();
+
+        foreach ($vendorUsers as $user) {
+            $user->setAttribute('onboarding_stage', $this->webUserOnboardingStage($user));
+        }
+
         return view('users.webUser' , compact('vendorUsers'));
+    }
+
+    /**
+     * "Where the user left": furthest step of the onboarding journey.
+     * OTP login → profile details → documents → trial → paid plan (+ admin activation).
+     */
+    private function webUserOnboardingStage(User $user): string
+    {
+        $subscription = $user->getWebUserSubscription;
+        $type = $subscription !== null ? (string) ($subscription->subscription_type ?? '') : '';
+
+        if ($user->is_active_by_admin == 1 && $type !== '' && $type !== 'trial') {
+            return 'Paid plan — Active';
+        }
+
+        if ($type !== '') {
+            return $type === 'trial' ? 'Trial started' : 'Paid plan — '.ucfirst($type);
+        }
+
+        $attachment = $user->getWebUserAttachment;
+        if ($attachment !== null && (
+            ! empty(trim((string) $attachment->panCard))
+            || ! empty(trim((string) $attachment->farmer_file))
+            || ($attachment->resolveGstFssaiRelativePath() ?? '') !== ''
+        )) {
+            return 'Documents uploaded';
+        }
+
+        if ($user->getWebPersonalDetails !== null || $user->getWebBusinessDetails !== null) {
+            return 'Profile completed';
+        }
+
+        return 'OTP login only';
     }
 
     public function markAsViewed()
