@@ -51,22 +51,21 @@ class CalculatorExportLastEntryTest extends TestCase
 
     public function seedData(): void
     {
-        // Quality 1 = rice type "Old", Quality 2 = "New".
-        foreach ([1 => 'Old', 2 => 'New'] as $id => $name) {
-            \Illuminate\Support\Facades\DB::table('quality_master')->insert([
-                'id' => $id, 'quality' => '1121', 'quality_name' => $name, 'quality_type' => $name,
-            ]);
-        }
+        // Quality 1 = basmati "Old", Quality 2 = non-basmati "New".
+        \Illuminate\Support\Facades\DB::table('quality_master')->insert([
+            ['id' => 1, 'quality' => '1121', 'quality_name' => 'Old', 'quality_type' => 'basmati'],
+            ['id' => 2, 'quality' => '1121', 'quality_name' => 'New', 'quality_type' => 'non-basmati'],
+        ]);
         // Packing 25 = 5kg PP, Packing 26 = 25kg Jute.
         \Illuminate\Support\Facades\DB::table('USD_defaultmaster')->insert([
             ['id' => 25, 'bag_size' => '5kg', 'bag_type' => 'PP'],
             ['id' => 26, 'bag_size' => '25kg', 'bag_type' => 'Jute'],
         ]);
 
-        $insert = fn (int $rice, int $packing, string $day, string $time, string $min, string $max) => \Illuminate\Support\Facades\DB::table('USD_prices')->insert([
+        $insert = fn (int $rice, int $packing, string $day, string $time, string $min, string $max, string $fobmin = '10') => \Illuminate\Support\Facades\DB::table('USD_prices')->insert([
             'rice' => $rice, 'ricemin' => $min, 'ricemax' => $max,
             'transportmin' => '0', 'transportmax' => '0', 'dollarrate' => '85',
-            'fobmin' => '0', 'fobmax' => '0',
+            'fobmin' => $fobmin, 'fobmax' => '12',
             'usd_defaultMaster_id' => $packing,
             'created_at' => "$day $time", 'updated_at' => "$day $time",
         ]);
@@ -96,7 +95,7 @@ class CalculatorExportLastEntryTest extends TestCase
         $this->assertCount(4, $query);
 
         $keys = $query->map(fn ($row) => [
-            substr($row->created_at, 0, 10), $row->rice, $row->usd_defaultMaster_id, $row->ricemin, $row->ricemax,
+            substr((string) $row->created_at, 0, 10), $row->rice, $row->usd_defaultMaster_id, $row->ricemin, $row->ricemax,
         ])->toArray();
 
         // Last entries per day kept.
@@ -127,9 +126,72 @@ class CalculatorExportLastEntryTest extends TestCase
         $query = (new CalculatorExport('2026-10-20', '2026-10-21', 25))->query()->get();
 
         $this->assertCount(3, $query);
-        $this->assertTrue($query->contains(fn ($row) => $row->usd_defaultMaster_id === 25 && $row->ricemin === '110'));
-        $this->assertTrue($query->contains(fn ($row) => $row->usd_defaultMaster_id === 25 && $row->ricemin === '115'));
-        $this->assertTrue($query->contains(fn ($row) => $row->usd_defaultMaster_id === 25 && $row->ricemin === '120'));
-        $this->assertFalse($query->contains(fn ($row) => $row->usd_defaultMaster_id === 26));
+        $this->assertTrue($query->contains(fn ($row) => (int) $row->usd_defaultMaster_id === 25 && $row->ricemin === '110'));
+        $this->assertTrue($query->contains(fn ($row) => (int) $row->usd_defaultMaster_id === 25 && $row->ricemin === '115'));
+        $this->assertTrue($query->contains(fn ($row) => (int) $row->usd_defaultMaster_id === 25 && $row->ricemin === '120'));
+        $this->assertFalse($query->contains(fn ($row) => (int) $row->usd_defaultMaster_id === 26));
+    }
+
+    public function test_zero_fob_rows_are_excluded(): void
+    {
+        $this->seedData();
+
+        \Illuminate\Support\Facades\DB::table('USD_prices')->insert([
+            'rice' => 1,
+            'ricemin' => '999',
+            'ricemax' => '1000',
+            'transportmin' => '0',
+            'transportmax' => '0',
+            'dollarrate' => '85',
+            'fobmin' => '0',
+            'fobmax' => '0',
+            'usd_defaultMaster_id' => 25,
+            'created_at' => '2026-10-22 12:00:00',
+            'updated_at' => '2026-10-22 12:00:00',
+        ]);
+
+        $query = (new CalculatorExport('2026-10-22', '2026-10-22'))->query()->get();
+
+        $this->assertCount(0, $query);
+        $this->assertFalse($query->contains(fn ($row) => $row->ricemin === '999'));
+    }
+
+    public function test_type_filter_keeps_matching_quality_type(): void
+    {
+        $this->seedData();
+
+        $basmati = (new CalculatorExport('2026-10-20', '2026-10-21', null, 'basmati'))->query()->get();
+        $this->assertCount(3, $basmati);
+        $this->assertTrue($basmati->every(fn ($row) => (int) $row->rice === 1));
+
+        $nonBasmati = (new CalculatorExport('2026-10-20', '2026-10-21', null, 'non-basmati'))->query()->get();
+        $this->assertCount(1, $nonBasmati);
+        $this->assertTrue($nonBasmati->every(fn ($row) => (int) $row->rice === 2));
+    }
+
+    public function test_packing_and_type_filters_combine_with_fob_rule(): void
+    {
+        $this->seedData();
+
+        \Illuminate\Support\Facades\DB::table('USD_prices')->insert([
+            'rice' => 1,
+            'ricemin' => '200',
+            'ricemax' => '210',
+            'transportmin' => '0',
+            'transportmax' => '0',
+            'dollarrate' => '85',
+            'fobmin' => '0',
+            'fobmax' => '5',
+            'usd_defaultMaster_id' => 25,
+            'created_at' => '2026-10-20 15:00:00',
+            'updated_at' => '2026-10-20 15:00:00',
+        ]);
+
+        // Zero FOB latest same-day row must not replace the previous non-zero last entry.
+        $query = (new CalculatorExport('2026-10-20', '2026-10-20', 25, 'basmati'))->query()->get();
+
+        $this->assertCount(1, $query);
+        $this->assertSame('110', $query->first()->ricemin);
+        $this->assertFalse($query->contains(fn ($row) => $row->ricemin === '200'));
     }
 }

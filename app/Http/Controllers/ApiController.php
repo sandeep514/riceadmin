@@ -41,6 +41,7 @@ use App\FutureSellQueriesINR;
 use App\Helpers\StatusChat;
 use App\BrandAvailability;
 use App\USD_prices;
+use App\Jobs\ExportUsdPricesMailJob;
 // use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -5070,38 +5071,66 @@ class ApiController extends Controller
 
     public function getAllPorts($riceQualityId, $userId)
     {
+        $userData = User::where('id', $userId)->first();
+        if (! $userData) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        return response()->json($this->buildUsdPricesGraphPayload($riceQualityId, $userData));
+    }
+
+    /**
+     * USD prices graph (+ ports/packing/FOB) for the Bearer-authenticated user.
+     * GET /api/usd-prices/graph/{riceQualityId}
+     */
+    public function getUsdPricesGraph(Request $request, $riceQualityId)
+    {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized: API token is required.',
+                'session_expired' => true,
+            ], 401);
+        }
+
+        return response()->json($this->buildUsdPricesGraphPayload($riceQualityId, $user));
+    }
+
+    /**
+     * Shared payload for USD graph screens (legacy getAllPorts + Bearer graph API).
+     *
+     * @return array<string, mixed>
+     */
+    private function buildUsdPricesGraphPayload($riceQualityId, User $userData): array
+    {
+        $riceQualityId = (int) $riceQualityId;
 
         $chartUSDPrice = USD_prices::with(['getRiceQuality', 'getUSDDefaultMaster' => function ($query) {
-            return $query->where('bag_size', '50kg')->get();
-        }])->orderBy('created_at', 'DESC')->where('ricemin', '!=', 0)->where('ricemax', '!=', 0)->where('rice', $riceQualityId)->get();
-        // dd($chartUSDPrice);
-        // $hasRiceType = $chartUSDPrice->getRiceQuality;
-
-
-
-        // $chartUSDPrice = USD_prices::with(['getRiceQuality', 'getUSDDefaultMaster'])->orderBy('created_at' , 'DESC')->where('rice' , $riceQualityId)->get();
+            return $query->where('bag_size', '50kg');
+        }])->orderBy('created_at', 'DESC')
+            ->where('ricemin', '!=', 0)
+            ->where('ricemax', '!=', 0)
+            ->where('rice', $riceQualityId)
+            ->get();
 
         $date = [];
         $prices = [];
         $combinedData = [];
-        $usdDefaultMasterId = '';
-        foreach ($chartUSDPrice as $k => $v) {
-            if (isset($v->getUSDDefaultMaster)) {
-                if ($v->getUSDDefaultMaster !=  null) {
-                    $usdDefaultMasterId = $v->usd_defaultMaster_id;
-                    if (!array_key_exists(strtotime($v->created_at) . "000", $combinedData)) {
-                        $date[] = strtotime($v->created_at) . "000";
-                        $prices[] = $v->fobmax;
-                        $combinedData[strtotime($v->created_at) . "000"] = [(int)((strtotime($v->created_at)) * 1000), (int)($v->fobmax)];
-                    }
+        foreach ($chartUSDPrice as $v) {
+            if ($v->getUSDDefaultMaster != null) {
+                $tsKey = strtotime($v->created_at).'000';
+                if (! array_key_exists($tsKey, $combinedData)) {
+                    $date[] = $tsKey;
+                    $prices[] = $v->fobmax;
+                    $combinedData[$tsKey] = [(int) ((strtotime($v->created_at)) * 1000), (int) ($v->fobmax)];
                 }
             }
         }
 
         $chartData = ['date' => $date, 'prices' => $prices, 'combinedData' => array_values($combinedData)];
-        $defalutPort = "Jebel Ali";
-
-        $userData = User::where('id', $userId)->where('userType' , 1)->first();
+        $defalutPort = 'Jebel Ali';
+        $defalutPortPrice = null;
 
         if ($userData->import_port != null && $userData->import_port != '') {
             $defalutPort = $userData->import_port;
@@ -5113,41 +5142,68 @@ class ApiController extends Controller
         }
 
         $riceQualityIdDetails = QualityMaster::where('id', $riceQualityId)->first();
+        if (! $riceQualityIdDetails) {
+            return [
+                'status' => false,
+                'message' => 'Rice quality not found',
+                'chartData' => $chartData,
+            ];
+        }
 
-        if ($riceQualityIdDetails['quality_type_status'] == 2) {
+        if ((int) $riceQualityIdDetails['quality_type_status'] === 2) {
             $newAppliedFor = '1';
         } else {
             $newAppliedFor = '0';
         }
-        if ($riceQualityIdDetails['quality_type'] == "non-basmati") {
+        if ($riceQualityIdDetails['quality_type'] == 'non-basmati') {
             $quality_type_status = 1;
         } else {
             $quality_type_status = 0;
         }
+
         $oceanPorts = OceanFreight::where('freight_21MT', '!=', 0)->get()->groupBy('region')->map(function ($query) {
             return $query->groupBy('country')->map(function ($query2) {
                 return $query2->groupBy('port');
             });
         });
+
         $PMT_data = USD_defaultmaster::where('bag_size', 'like', '50Kg')->where('applied_for', $newAppliedFor)->first();
 
-        $getUSDPrices = USD_prices::where('rice', $riceQualityId)->where('ricemin', '!=', 0)->where('ricemax', '!=', 0)->where('usd_defaultMaster_id', $PMT_data->id)->orderBy('id', 'desc')->first();
-        // $getUSDPrices = USD_prices::where('rice' , $riceQualityId )->where('ricemin' , '!=' , 0)->where('ricemax' , '!=' , 0)->where('status' , 1)->orderBy('id' , 'desc')->first();
+        $getUSDPrices = null;
+        if ($PMT_data) {
+            $getUSDPrices = USD_prices::where('rice', $riceQualityId)
+                ->where('ricemin', '!=', 0)
+                ->where('ricemax', '!=', 0)
+                ->where('usd_defaultMaster_id', $PMT_data->id)
+                ->orderBy('id', 'desc')
+                ->first();
+        }
 
+        $USD_fiftykg_master = USD_defaultmaster::select('id', 'bag_size', 'bag_type', 'PMT_USD')
+            ->where('applied_for', $newAppliedFor)
+            ->where('bag_size', 'like', '50Kg')
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $latestDate = $getUSDPrices->created_at->format('d-M-Y, g:i A');
+        $usdDefaultMasterArray = USD_defaultmaster::select('bag_size', 'bag_type', 'id', 'PMT_USD')
+            ->orderBy('order', 'ASC')
+            ->where('applied_for', $quality_type_status)
+            ->get()
+            ->toArray();
 
-        $USD_fiftykg_master = USD_defaultmaster::select('id', 'bag_size', 'bag_type', 'PMT_USD')->where('applied_for', $newAppliedFor)->where('bag_size', 'like', '50Kg')->orderBy('created_at', 'desc')->first();
-
-        $usdDefaultMaster = USD_defaultmaster::select('bag_size', 'bag_type', 'id', 'PMT_USD')->orderBy('order', 'ASC')->where('applied_for', $quality_type_status)->get();
-        $usdDefaultMasterArray = $usdDefaultMaster->toArray();
-        // dd($usdDefaultMasterArray);
-        //             $updatedArray = [];
-        //             foreach($usdDefaultMasterArray  as $k => $v){
-        //                 $updatedArray[$usdDefaultMasterArray[$k]['id']] = $v;
-        //             }
-        // dd($updatedArray);
-        return response()->json(['status' => true, 'ports' => $oceanPorts->toArray(), 'packing' => $usdDefaultMasterArray, 'riceQuality' => $riceQualityIdDetails, 'PMT_data' => $PMT_data, 'FOB' => $getUSDPrices, 'fiftykgMaster' => $USD_fiftykg_master, 'defalutPortPrice' => $defalutPortPrice, 'defalutPort' => $defalutPort, 'chartData' => $chartData, 'defalutPortDetail' => $defalutPortDetail]);
+        return [
+            'status' => true,
+            'ports' => $oceanPorts->toArray(),
+            'packing' => $usdDefaultMasterArray,
+            'riceQuality' => $riceQualityIdDetails,
+            'PMT_data' => $PMT_data,
+            'FOB' => $getUSDPrices,
+            'fiftykgMaster' => $USD_fiftykg_master,
+            'defalutPortPrice' => $defalutPortPrice,
+            'defalutPort' => $defalutPort,
+            'chartData' => $chartData,
+            'defalutPortDetail' => $defalutPortDetail,
+        ];
     }
 
     public function getQualityDetails($id)
@@ -5398,6 +5454,100 @@ class ApiController extends Controller
 
         return response()->json(['status' => true, 'qualityMaster' => $qualityMaster, 'defaultValues' => $defaultValues, 'fiftykg' => $USD_fiftykg_master, 'USD_master' => $USD_master]);
     }
+
+    /**
+     * Packing dropdown for USD prices export filters.
+     */
+    public function getUsdPricesPackingOptions()
+    {
+        $rows = USD_defaultmaster::query()
+            ->orderBy('bag_size')
+            ->orderBy('bag_type')
+            ->get(['id', 'bag_size', 'bag_type']);
+
+        $data = $rows->map(function ($pack) {
+            return [
+                'id' => (int) $pack->id,
+                'label' => trim(($pack->bag_size ?? '').' - '.($pack->bag_type ?? '')),
+                'bag_size' => $pack->bag_size,
+                'bag_type' => $pack->bag_type,
+            ];
+        })->values();
+
+        return response()->json(['status' => true, 'data' => $data], 200);
+    }
+
+    /**
+     * Queue USD prices XLSX export and email it to the Bearer-authenticated user
+     * (latest row per day; ignores FOB min = 0).
+     */
+    public function exportUsdPricesEmail(Request $request)
+    {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized: API token is required.',
+                'session_expired' => true,
+            ], 401);
+        }
+
+        $email = trim((string) ($user->email ?? ''));
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $personalEmail = trim((string) optional($user->getWebPersonalDetails)->email);
+            if ($personalEmail !== '' && filter_var($personalEmail, FILTER_VALIDATE_EMAIL)) {
+                $email = $personalEmail;
+            }
+        }
+
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No valid email found on your account. Please update your profile email first.',
+            ], 422);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'type' => 'nullable|in:basmati,non-basmati',
+            'from' => 'nullable|date_format:Y-m-d',
+            'to' => 'nullable|date_format:Y-m-d',
+            'packing' => 'nullable|integer|min:1|exists:USD_defaultmaster,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $from = $request->input('from');
+        $to = $request->input('to');
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
+        $packing = $request->input('packing');
+        $packing = is_numeric($packing) && (int) $packing > 0 ? (int) $packing : null;
+        $type = $request->input('type');
+        $type = is_string($type) && $type !== '' ? strtolower(trim($type)) : null;
+
+        ExportUsdPricesMailJob::dispatch(
+            $email,
+            $from,
+            $to,
+            $packing,
+            $type
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Export queued. You will receive an email shortly.',
+            'email' => $email,
+        ], 202);
+    }
+
     public function saveUSDPrices(Request $request)
     {
         $category            = $request->category;

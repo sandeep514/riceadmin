@@ -20,22 +20,34 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
     public function __construct(
         private ?string $from = null,
         private ?string $to = null,
-        private ?int $packing = null
+        private ?int $packing = null,
+        private ?string $type = null,
+        private bool $ignoreZeroFob = true
     ) {
     }
 
     public function query(): Builder
     {
+        $qualityIds = QualityMaster::query()
+            ->when($this->type, function ($q) {
+                $q->whereRaw('LOWER(quality_type) = ?', [strtolower((string) $this->type)]);
+            })
+            ->pluck('id');
+
         $candidates = USD_prices::query()
-            ->whereIn('rice', QualityMaster::pluck('id'))
+            ->whereIn('rice', $qualityIds)
             ->when($this->from, fn ($q) => $q->whereDate('created_at', '>=', $this->from))
             ->when($this->to, fn ($q) => $q->whereDate('created_at', '<=', $this->to))
             ->when($this->packing, fn ($q) => $q->where('usd_defaultMaster_id', $this->packing));
 
-        // Only the last saved entry of each calendar day per (quality, packing,
-        // packing type, rice type) group — earlier same-day saves are superseded
-        // duplicates (the screen lists the freshest rows first; the export keeps
-        // one final row per day so values are not duplicated).
+        if ($this->ignoreZeroFob) {
+            $candidates->whereRaw(
+                'CAST(NULLIF(TRIM(fobmin), "") AS DECIMAL(12,2)) > 0'
+            );
+        }
+
+        // Only the last saved entry of each calendar day per (quality, packing)
+        // group — earlier same-day saves are superseded duplicates.
         $lastOfDayIds = (clone $candidates)
             ->selectRaw('MAX(id) as id')
             ->groupBy(DB::raw('DATE(created_at)'), 'rice', 'usd_defaultMaster_id');
