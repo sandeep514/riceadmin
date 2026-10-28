@@ -141,7 +141,16 @@ class LivePricesController extends Controller
         // }
 
         // $prices = $query->get();
-        $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
+        $settings = \App\AppSetting::current();
+        $resolvedMarket = $settings->resolvedLiveMarket();
+        $LivePriceStatusMessage = (object) [
+            'id' => 1,
+            'currentStatus' => $resolvedMarket['currentStatus'],
+            'message' => $resolvedMarket['message']
+                . ($resolvedMarket['mode'] === 'auto'
+                    ? ' (auto '.$resolvedMarket['schedule']['from'].'–'.$resolvedMarket['schedule']['to'].' IST)'
+                    : ' (manual)'),
+        ];
         
         $prices = collect();
 
@@ -745,7 +754,15 @@ class LivePricesController extends Controller
             'open' => 1,
             'closed' => 2,
             'hold' => 3
-        ]; 
+        ];
+
+        if (! isset($stausArray[$status])) {
+            Session::flash('error', 'Error|Invalid market status.');
+            return back();
+        }
+
+        // Manual Open / Closed / Hold always takes over from the auto schedule.
+        \App\AppSetting::current()->enableManualMarket();
 
         LivePriceStatusMessage::where('id' , 1)->update(['currentStatus' => $stausArray[$status], 'message' => $status]);
 
@@ -754,7 +771,7 @@ class LivePricesController extends Controller
         // the previous market status until the 180s TTL expires.
         Cache::increment('web:prices:version');
 
-        Session::flash('success', 'Success|Market status updated to ' . ucfirst($status) . '.');
+        Session::flash('success', 'Success|Market status updated to ' . ucfirst($status) . ' (manual mode).');
         return back();
     }
 }

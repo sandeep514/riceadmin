@@ -802,6 +802,12 @@
                     <span>SQL Import</span>
                 </a>
             </li>
+            <li class="{{ in_array($currentRoute, ['settings.index', 'settings.update']) ? 'active' : '' }}">
+                <a href="{{ route('settings.index') }}">
+                    <i class="fa fa-gears"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
         </ul>
       
     </section>

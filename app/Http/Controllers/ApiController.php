@@ -73,6 +73,7 @@ use App\WandTypeModel;
 use App\SellerPackingINR;
 use App\PublicPacking;
 use App\RiceFormMilestone3;
+use App\AppSetting;
 use App\LivePriceStatusMessage;
 use App\SellQueriesINR;
 use App\PaddySellQuery;
@@ -2121,7 +2122,30 @@ class ApiController extends Controller
             return $this->computePricesWeb($request, $state, $ricetype)->getData(true);
         });
 
+        // Market open/close + Call Now follow IST schedule — overlay after cache
+        // so status flips on time without waiting for the 180s price TTL.
+        $appSettings = AppSetting::current();
+        $payload['livePriceStatusMessage'] = $appSettings->livePriceStatusMessagePayload();
+        $payload['call_now'] = $appSettings->callNowPayload();
+
         return response()->json($payload);
+    }
+
+    /**
+     * Lightweight timing settings for app/website (Call Now + live market).
+     */
+    public function getAppTimingSettings()
+    {
+        $settings = AppSetting::current();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'App timing settings',
+            'timezone' => 'Asia/Kolkata',
+            'call_now' => $settings->callNowPayload(),
+            'live_market' => $settings->resolvedLiveMarket(),
+            'livePriceStatusMessage' => $settings->livePriceStatusMessagePayload(),
+        ]);
     }
 
     /**
@@ -2129,7 +2153,9 @@ class ApiController extends Controller
      */
     private function computePricesWeb(Request $request ,$state, $ricetype)
     {
-        $LivePriceStatusMessage = LivePriceStatusMessage::orderBy('id' , 'desc')->first();
+        $appSettings = AppSetting::current();
+        $LivePriceStatusMessage = $appSettings->livePriceStatusMessagePayload();
+        $callNow = $appSettings->callNowPayload();
         $todayDate = Carbon::now();
         $latestCropYear = (int) (LivePrice::max('cropYear') ?: $todayDate->year);
 
@@ -2171,6 +2197,7 @@ class ApiController extends Controller
             return response()->json([
                 'errors' => null,
                 'livePriceStatusMessage' => $LivePriceStatusMessage,
+                'call_now' => $callNow,
                 'prices' => [],
                 'closing' => [$ricetype => []],
                 'latest' => $latestForMeta
@@ -2416,6 +2443,7 @@ class ApiController extends Controller
         return response()->json([
             'errors' => null,
             'livePriceStatusMessage' => $LivePriceStatusMessage,
+            'call_now' => $callNow,
             'prices' => $processedData,
             'closing' => [$ricetype => $livePricesClosingOpening],
             'latest' => Carbon::parse($lastEnteredRecord->created_at)->format('Y-m-d'),

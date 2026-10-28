@@ -678,6 +678,9 @@ Route::group(['prefix'=>'administrator'], function(){
 
             Route::get('update/live/price/market/status/{status}',['as'=>'update.live.price.market.status','uses'=>'LivePricesController@updateMarketStatus']);
 
+            // App settings (Call Now + market schedule)
+            Route::get('settings', ['as' => 'settings.index', 'uses' => 'SettingsController@index']);
+            Route::post('settings', ['as' => 'settings.update', 'uses' => 'SettingsController@update']);
 
             //Plan
             Route::get('plan',['as'=>'plan.create','uses'=>'PlanController@index']);
