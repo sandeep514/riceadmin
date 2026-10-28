@@ -653,6 +653,8 @@ class LivePricesController extends Controller
         $openingOrClosing = [];
         $rows = [];
         foreach ($lastUpdatedPrice as $v) {
+            $opening = $v->opening ?? '';
+            // New day must not carry over previous day's closing price.
             $rows[] = [
                 'name' => $v->name,
                 'form' => $v->form,
@@ -662,8 +664,8 @@ class LivePricesController extends Controller
                 'cropYear' => $v->cropYear,
                 'cropGrade' => $v->cropGrade,
                 'state' => $v->state,
-                'opening' => $v->opening ?? '',
-                'closing' => $v->closing ?? '',
+                'opening' => $opening,
+                'closing' => '',
                 'monthStart' => $v->monthStart ?? '',
                 'monthEnd' => $v->monthEnd ?? '',
                 'up_down' => $v->up_down,
@@ -671,14 +673,15 @@ class LivePricesController extends Controller
                 'updated_at' => $currentTimestamp,
             ];
 
-            if (isset($v->opening) || isset($v->closing)) {
+            // Only sync opening from clone; leave closing empty so upsert does not overwrite.
+            if ($opening !== '') {
                 $openingOrClosing[] = [
                     'name' => $v->name,
                     'form' => $v->form,
                     'state' => $v->state,
                     'cropYear' => $v->cropYear,
-                    'opening' => $v->opening ?? '',
-                    'closing' => $v->closing ?? '',
+                    'opening' => $opening,
+                    'closing' => '',
                 ];
             }
         }

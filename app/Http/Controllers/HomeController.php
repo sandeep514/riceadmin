@@ -98,6 +98,8 @@ class HomeController extends Controller
                     foreach ($columns as $column) {
                         $data[$column] = $row->getAttribute($column);
                     }
+                    // New day must not carry over previous day's closing price.
+                    $data['closing'] = '';
                     $data['created_at'] = $now;
                     $data['updated_at'] = $now;
 
