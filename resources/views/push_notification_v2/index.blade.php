@@ -148,6 +148,10 @@
 $(function () {
     var base = window.route || '{{ url('/administrator') }}';
     var oldCategoryIds = @json(array_map('intval', (array) old('category_ids', [])));
+    var $master = $('#push-v2-categories-select-all');
+    var $grid = $('#push-v2-categories-grid');
+    var syncingFromMaster = false;
+    var syncingFromGrid = false;
 
     if ($.fn.select2) {
         $('#push_v2_role_id').select2({ width: '100%' });
@@ -157,14 +161,53 @@ $(function () {
         return $('<div>').text(text == null ? '' : String(text)).html();
     }
 
+    function initICheck($inputs) {
+        if (!$.fn.iCheck || !$inputs.length) {
+            return;
+        }
+        $inputs.each(function () {
+            var $el = $(this);
+            if ($el.data('iCheck')) {
+                $el.iCheck('destroy');
+            }
+            $el.iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue'
+            });
+        });
+    }
+
+    function setChecked($input, checked) {
+        if ($.fn.iCheck && $input.data('iCheck')) {
+            $input.iCheck(checked ? 'check' : 'uncheck');
+        } else {
+            $input.prop('checked', !!checked);
+        }
+    }
+
+    function syncMasterFromGrid() {
+        if (syncingFromMaster) {
+            return;
+        }
+        var $checks = $grid.find('input.push-v2-category');
+        var total = $checks.length;
+        syncingFromGrid = true;
+        if (!total) {
+            setChecked($master, false);
+            syncingFromGrid = false;
+            return;
+        }
+        var n = $checks.filter(function () {
+            return $(this).prop('checked');
+        }).length;
+        setChecked($master, n === total);
+        syncingFromGrid = false;
+    }
+
     function renderCategories(list, selectedIds) {
         selectedIds = selectedIds || [];
-        var $grid = $('#push-v2-categories-grid');
         $grid.empty();
-        $('#push-v2-categories-select-all').prop('checked', false);
-        if ($.fn.iCheck) {
-            $('#push-v2-categories-select-all').iCheck('update');
-        }
+        setChecked($master, false);
 
         if (!list || !list.length) {
             $grid.append('<div class="col-md-12 text-muted push-v2-empty" style="padding:8px;">No categories found for this role.</div>');
@@ -183,24 +226,20 @@ $(function () {
             );
         });
 
-        if ($.fn.iCheck) {
-            $grid.find('input.push-v2-category').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue'
-            });
-        }
+        initICheck($grid.find('input.push-v2-category'));
+        syncMasterFromGrid();
     }
 
     function loadCategories(roleId, selectedIds) {
         if (!roleId) {
-            $('#push-v2-categories-grid').html(
+            $grid.html(
                 '<div class="col-md-12 text-muted push-v2-empty" style="padding:8px;">Select a role to load categories.</div>'
             );
-            $('#push-v2-categories-select-all').prop('checked', false);
+            setChecked($master, false);
             return;
         }
 
-        $('#push-v2-categories-grid').html(
+        $grid.html(
             '<div class="col-md-12 text-muted" style="padding:8px;">Loading categories…</div>'
         );
 
@@ -209,35 +248,50 @@ $(function () {
                 renderCategories((res && res.data) ? res.data : [], selectedIds || []);
             })
             .fail(function () {
-                $('#push-v2-categories-grid').html(
+                $grid.html(
                     '<div class="col-md-12 text-danger" style="padding:8px;">Failed to load categories.</div>'
                 );
             });
     }
 
-    function setAllCategories(checked) {
-        var $boxes = $('#push-v2-categories-grid input.push-v2-category');
-        $boxes.prop('checked', checked);
-        if ($.fn.iCheck) {
-            $boxes.iCheck(checked ? 'check' : 'uncheck');
+    initICheck($master);
+
+    $master.on('ifChanged change', function () {
+        if (syncingFromGrid) {
+            return;
         }
-    }
+        syncingFromMaster = true;
+        var on = $master.prop('checked');
+        $grid.find('input.push-v2-category').each(function () {
+            setChecked($(this), on);
+        });
+        syncingFromMaster = false;
+    });
+
+    $grid.on('ifChanged change', 'input.push-v2-category', function () {
+        if (syncingFromMaster) {
+            return;
+        }
+        syncMasterFromGrid();
+    });
 
     $('#push_v2_role_id').on('change', function () {
         loadCategories($(this).val(), []);
     });
 
-    $('#push-v2-categories-select-all').on('change ifChanged', function () {
-        setAllCategories($(this).is(':checked'));
-    });
-
     $('#push-notification-v2-form').on('submit', function (e) {
-        if ($('#push-v2-categories-grid input.push-v2-category:checked').length === 0) {
+        if ($grid.find('input.push-v2-category:checked').length === 0) {
             e.preventDefault();
             alert('Please select at least one category.');
             return false;
         }
     });
+
+    // Server-rendered categories (validation old input) also need iCheck + All sync.
+    if ($grid.find('input.push-v2-category').length) {
+        initICheck($grid.find('input.push-v2-category'));
+        syncMasterFromGrid();
+    }
 });
 </script>
 @endsection
