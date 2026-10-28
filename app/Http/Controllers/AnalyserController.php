@@ -3,10 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\AnalyserAccount;
+use App\Category;
 use App\Http\Requests\AnalyserRequest;
 use App\Role;
 use App\Support\QueuedMail;
 use App\User;
+use App\WebBusinessDetails;
+use App\WebCities;
+use App\WebStates;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -95,7 +99,7 @@ class AnalyserController extends Controller
 
     public function create()
     {
-        return view('analyser_accounts.create');
+        return view('analyser_accounts.create', $this->businessFormOptions());
     }
 
     public function store(AnalyserRequest $request)
@@ -130,6 +134,8 @@ class AnalyserController extends Controller
                 'has_today_access' => $request->has_today_access,
                 'created_by' => auth()->id(),
             ]);
+
+            $this->syncBusinessDetails($user->id, $request);
         });
 
         if ($request->boolean('send_mail')) {
@@ -142,13 +148,16 @@ class AnalyserController extends Controller
 
     public function edit($id)
     {
-        $account = AnalyserAccount::with('user')->find($id);
+        $account = AnalyserAccount::with(['user.getWebBusinessDetails'])->find($id);
         if ($account == null) {
             Session::flash('error', 'Error|No record found!');
             return back();
         }
 
-        return view('analyser_accounts.edit', ['model' => $account]);
+        return view('analyser_accounts.edit', array_merge(
+            ['model' => $account, 'businessDetails' => optional($account->user)->getWebBusinessDetails],
+            $this->businessFormOptions()
+        ));
     }
 
     public function update(AnalyserRequest $request, $id)
@@ -182,6 +191,8 @@ class AnalyserController extends Controller
                 'download_limit' => $request->download_limit,
                 'has_today_access' => $request->has_today_access,
             ]);
+
+            $this->syncBusinessDetails($account->user_id, $request);
         });
 
         if ($otp) {
@@ -201,12 +212,74 @@ class AnalyserController extends Controller
         }
 
         DB::transaction(function () use ($account) {
+            WebBusinessDetails::where('user_id', $account->user_id)->delete();
             User::where('id', $account->user_id)->delete();
             $account->delete();
         });
 
         Session::flash('success', 'Success|Analyser account deleted successfully!');
         return back();
+    }
+
+    /**
+     * @return array{categories: array<int|string, string>, states: array<int|string, string>, cities: \Illuminate\Support\Collection}
+     */
+    private function businessFormOptions(): array
+    {
+        $categories = Category::query()
+            ->where('status', 1)
+            ->orderByRaw('COALESCE(`order`, 999999)')
+            ->orderBy('category')
+            ->pluck('category', 'id')
+            ->toArray();
+
+        $states = WebStates::query()
+            ->orderBy('state_name')
+            ->pluck('state_name', 'id')
+            ->toArray();
+
+        $cities = WebCities::query()
+            ->orderBy('city_name')
+            ->get(['id', 'city_name', 'state_id']);
+
+        return compact('categories', 'states', 'cities');
+    }
+
+    private function syncBusinessDetails(int $userId, Request $request): void
+    {
+        $input = $request->input('business', []);
+        if (! is_array($input)) {
+            $input = [];
+        }
+
+        $fillable = array_flip((new WebBusinessDetails)->getFillable());
+        unset($fillable['user_id']);
+
+        $data = array_intersect_key($input, $fillable);
+
+        foreach (['company_name', 'product', 'contactPerson', 'contactMobile', 'designation', 'address', 'registered_email', 'phone', 'locality', 'landmark', 'state', 'city', 'selected_category'] as $key) {
+            if (array_key_exists($key, $data) && is_string($data[$key])) {
+                $data[$key] = trim($data[$key]);
+            }
+        }
+
+        $data['status'] = (int) ($data['status'] ?? 1);
+        $data['is_sntc_recommended'] = (int) ($data['is_sntc_recommended'] ?? 0);
+        $data['is_active_listing'] = (int) ($data['is_active_listing'] ?? 0);
+        $data['user_id'] = $userId;
+
+        // Default contact fields from analyser account when left blank.
+        if (($data['contactPerson'] ?? '') === '') {
+            $data['contactPerson'] = (string) $request->input('contact_person_name', '');
+        }
+        if (($data['contactMobile'] ?? '') === '') {
+            $data['contactMobile'] = (string) $request->input('contact_mobile', '');
+        }
+        if (($data['registered_email'] ?? '') === '') {
+            $data['registered_email'] = (string) $request->input('email', '');
+        }
+
+        WebBusinessDetails::updateOrCreate(['user_id' => $userId], $data);
     }
 
     private function sendCredentialsMail(string $email, int $otp): void

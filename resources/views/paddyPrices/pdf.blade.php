@@ -33,8 +33,10 @@
                 <th>State</th>
                 <th>Quality</th>
                 <th>Crop Year</th>
-                <th>Hand Cutting</th>
-                <th>Machine Cutting</th>
+                <th>Min Hand</th>
+                <th>Max Hand</th>
+                <th>Min Machine</th>
+                <th>Max Machine</th>
                 <th>Moisture</th>
                 <th>Arrivals</th>
                 <th>Change</th>
@@ -56,7 +58,9 @@
                         @endif
                     </td>
                     <td>{{ $paddyPrice->crop_year }}</td>
+                    <td>{{ $paddyPrice->min_hand_cutting_price }}</td>
                     <td>{{ $paddyPrice->hand_cutting_price }}</td>
+                    <td>{{ $paddyPrice->min_machine_cutting_price }}</td>
                     <td>{{ $paddyPrice->machine_cutting_price }}</td>
                     <td>{{ $paddyPrice->moisture }}</td>
                     <td>{{ $paddyPrice->total_arrivals }}</td>
@@ -66,7 +70,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="12">No records found.</td>
+                    <td colspan="14">No records found.</td>
                 </tr>
             @endforelse
         </tbody>

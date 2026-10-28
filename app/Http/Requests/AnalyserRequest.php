@@ -42,6 +42,24 @@ class AnalyserRequest extends FormRequest
             'download_limit' => 'nullable|integer|min:1',
             'has_today_access' => 'required|boolean',
             'send_mail' => 'sometimes|boolean',
+
+            'business' => 'nullable|array',
+            'business.company_name' => 'nullable|string|max:256',
+            'business.product' => 'nullable|string|max:5000',
+            'business.contactPerson' => 'nullable|string|max:255',
+            'business.contactMobile' => 'nullable|string|max:256',
+            'business.designation' => 'nullable|string|max:256',
+            'business.address' => 'nullable|string|max:5000',
+            'business.registered_email' => 'nullable|email|max:256',
+            'business.phone' => 'nullable|string|max:256',
+            'business.locality' => 'nullable|string|max:256',
+            'business.landmark' => 'nullable|string|max:256',
+            'business.state' => 'nullable|string|max:256',
+            'business.city' => 'nullable|string|max:256',
+            'business.selected_category' => 'nullable|string|max:256',
+            'business.status' => 'nullable|in:0,1',
+            'business.is_sntc_recommended' => 'nullable|in:0,1',
+            'business.is_active_listing' => 'nullable|in:0,1',
         ];
     }
 }

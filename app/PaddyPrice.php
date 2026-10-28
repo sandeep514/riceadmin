@@ -19,8 +19,10 @@ class PaddyPrice extends Model
         'state',
         'quality_id',
         'crop_year',
-        'hand_cutting_price',
-        'machine_cutting_price',
+        'min_hand_cutting_price',
+        'hand_cutting_price', // max hand cutting price
+        'min_machine_cutting_price',
+        'machine_cutting_price', // max machine cutting price
         'moisture',
         'total_arrivals',
         'change',
@@ -30,7 +32,27 @@ class PaddyPrice extends Model
     protected $attributes = [
         'change' => 'stable',
         'status' => 1,
+        'min_hand_cutting_price' => '----',
+        'min_machine_cutting_price' => '----',
     ];
+
+    /**
+     * Explicit max aliases for API consumers (same value as hand/machine_cutting_price).
+     */
+    protected $appends = [
+        'max_hand_cutting_price',
+        'max_machine_cutting_price',
+    ];
+
+    public function getMaxHandCuttingPriceAttribute()
+    {
+        return $this->attributes['hand_cutting_price'] ?? null;
+    }
+
+    public function getMaxMachineCuttingPriceAttribute()
+    {
+        return $this->attributes['machine_cutting_price'] ?? null;
+    }
 
     public function getMandi_rel()
     {

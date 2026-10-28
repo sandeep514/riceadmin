@@ -179,7 +179,9 @@ class PaddyPriceController extends Controller
                 }),
             ],
             'crop_year' => 'required|integer|digits:4|min:1900|max:'.now()->year,
+            'minHandCutting' => 'nullable|string|max:256',
             'handCutting' => 'nullable|string|max:256',
+            'minMachineCutting' => 'nullable|string|max:256',
             'machineCutting' => 'nullable|string|max:256',
             'moisture' => 'nullable|string|max:256',
             'bags' => 'nullable|string|max:256',
@@ -202,12 +204,15 @@ class PaddyPriceController extends Controller
         // updated_at is the actual save time — so a back-dated insert naturally
         // looks like created_at=2026-10-12 / updated_at=2026-10-14. That is a NEW
         // row, not an update of the 2026-10-12 row. Check the row id to confirm.
+        // hand_cutting_price / machine_cutting_price store MAX values.
         $paddyPrice = new PaddyPrice([
             'mandi' => (int) $request->mandi,
             'state' => (int) $mandiData->state_id,
             'quality_id' => (int) $request->quality_id,
             'crop_year' => (int) $request->crop_year,
+            'min_hand_cutting_price' => $request->minHandCutting ?? '----',
             'hand_cutting_price' => $request->handCutting ?? '----',
+            'min_machine_cutting_price' => $request->minMachineCutting ?? '----',
             'machine_cutting_price' => $request->machineCutting ?? '----',
             'moisture' => $request->moisture ?? '----',
             'total_arrivals' => $request->bags ?? '----',
@@ -288,7 +293,9 @@ class PaddyPriceController extends Controller
                 }),
             ],
             'crop_year' => 'required|integer|digits:4|min:1900|max:'.now()->year,
+            'min_hand_cutting_price' => 'nullable|string|max:256',
             'hand_cutting_price' => 'nullable|string|max:256',
+            'min_machine_cutting_price' => 'nullable|string|max:256',
             'machine_cutting_price' => 'nullable|string|max:256',
             'moisture' => 'nullable|string|max:256',
             'total_arrivals' => 'nullable|string|max:256',
@@ -311,7 +318,9 @@ class PaddyPriceController extends Controller
         $paddyPrice->state = (int) $mandiData->state_id;
         $paddyPrice->quality_id = (int) $request->quality_id;
         $paddyPrice->crop_year = (int) $request->crop_year;
+        $paddyPrice->min_hand_cutting_price = $request->min_hand_cutting_price ?? '----';
         $paddyPrice->hand_cutting_price = $request->hand_cutting_price ?? '----';
+        $paddyPrice->min_machine_cutting_price = $request->min_machine_cutting_price ?? '----';
         $paddyPrice->machine_cutting_price = $request->machine_cutting_price ?? '----';
         $paddyPrice->moisture = $request->moisture ?? '----';
         $paddyPrice->total_arrivals = $request->total_arrivals ?? '----';

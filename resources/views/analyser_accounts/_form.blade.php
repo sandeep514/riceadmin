@@ -1,3 +1,11 @@
+@php
+    $business = $businessDetails ?? (isset($model) && $model->user ? $model->user->getWebBusinessDetails : null);
+    $biz = function ($key, $default = null) use ($business) {
+        return old('business.'.$key, $business ? $business->{$key} : $default);
+    };
+    $categoryOptions = ['' => 'Select category'] + ($categories ?? []);
+    $stateOptions = ['' => 'Select state'] + ($states ?? []);
+@endphp
 <div class="box-body">
     <div class="row">
         <div class="form-group col-md-6 @error('name') has-error @enderror">
@@ -79,4 +87,163 @@
             <p class="help-block">No password is set. The client logs in with the OTP sent on mail.</p>
         </div>
     </div>
+
+    <hr>
+    <h4 style="margin-top: 0;">Business Details (Web Portal)</h4>
+    <div class="row">
+        <div class="form-group col-md-6 @error('business.company_name') has-error @enderror">
+            {!! Form::label('business[company_name]','Company Name') !!}
+            {!! Form::text('business[company_name]', $biz('company_name'), ['class'=>'form-control']) !!}
+            @error('business.company_name')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.product') has-error @enderror">
+            {!! Form::label('business[product]','Product') !!}
+            {!! Form::text('business[product]', $biz('product'), ['class'=>'form-control']) !!}
+            @error('business.product')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.contactPerson') has-error @enderror">
+            {!! Form::label('business[contactPerson]','Business Contact Person') !!}
+            {!! Form::text('business[contactPerson]', $biz('contactPerson'), ['class'=>'form-control']) !!}
+            @error('business.contactPerson')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.contactMobile') has-error @enderror">
+            {!! Form::label('business[contactMobile]','Business Contact Mobile') !!}
+            {!! Form::text('business[contactMobile]', $biz('contactMobile'), ['class'=>'form-control']) !!}
+            @error('business.contactMobile')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.designation') has-error @enderror">
+            {!! Form::label('business[designation]','Designation') !!}
+            {!! Form::text('business[designation]', $biz('designation'), ['class'=>'form-control']) !!}
+            @error('business.designation')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.registered_email') has-error @enderror">
+            {!! Form::label('business[registered_email]','Registered Email') !!}
+            {!! Form::text('business[registered_email]', $biz('registered_email'), ['class'=>'form-control']) !!}
+            @error('business.registered_email')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.phone') has-error @enderror">
+            {!! Form::label('business[phone]','Phone') !!}
+            {!! Form::text('business[phone]', $biz('phone'), ['class'=>'form-control']) !!}
+            @error('business.phone')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.selected_category') has-error @enderror">
+            {!! Form::label('business[selected_category]','Selected Category') !!}
+            {!! Form::select('business[selected_category]', $categoryOptions, $biz('selected_category'), ['class'=>'form-control']) !!}
+            @error('business.selected_category')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-12 @error('business.address') has-error @enderror">
+            {!! Form::label('business[address]','Address') !!}
+            {!! Form::textarea('business[address]', $biz('address'), ['class'=>'form-control','rows'=>2]) !!}
+            @error('business.address')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.locality') has-error @enderror">
+            {!! Form::label('business[locality]','Locality') !!}
+            {!! Form::text('business[locality]', $biz('locality'), ['class'=>'form-control']) !!}
+            @error('business.locality')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.landmark') has-error @enderror">
+            {!! Form::label('business[landmark]','Landmark') !!}
+            {!! Form::text('business[landmark]', $biz('landmark'), ['class'=>'form-control']) !!}
+            @error('business.landmark')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.state') has-error @enderror">
+            {!! Form::label('business[state]','State') !!}
+            {!! Form::select('business[state]', $stateOptions, $biz('state'), ['class'=>'form-control','id'=>'business_state']) !!}
+            @error('business.state')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('business.city') has-error @enderror">
+            {!! Form::label('business[city]','City') !!}
+            <select name="business[city]" id="business_city" class="form-control">
+                <option value="">Select city</option>
+            </select>
+            @error('business.city')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-4 @error('business.status') has-error @enderror">
+            {!! Form::label('business[status]','Business Status') !!}
+            {!! Form::select('business[status]', [1=>'Active',0=>'Inactive'], (int) $biz('status', 1), ['class'=>'form-control']) !!}
+            @error('business.status')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-4 @error('business.is_sntc_recommended') has-error @enderror">
+            {!! Form::label('business[is_sntc_recommended]','SNTC Recommended') !!}
+            {!! Form::select('business[is_sntc_recommended]', [0=>'No',1=>'Yes'], (int) $biz('is_sntc_recommended', 0), ['class'=>'form-control']) !!}
+            @error('business.is_sntc_recommended')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-4 @error('business.is_active_listing') has-error @enderror">
+            {!! Form::label('business[is_active_listing]','Active Listing') !!}
+            {!! Form::select('business[is_active_listing]', [0=>'No',1=>'Yes'], (int) $biz('is_active_listing', 0), ['class'=>'form-control']) !!}
+            @error('business.is_active_listing')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+    </div>
 </div>
+@php
+    $cityRows = collect($cities ?? [])->map(function ($row) {
+        return [
+            'id' => (string) $row->id,
+            'state_id' => (string) $row->state_id,
+            'name' => $row->city_name,
+        ];
+    })->values();
+    $selectedCity = (string) $biz('city', '');
+@endphp
+<script>
+(function () {
+    var cities = @json($cityRows);
+    var selectedCity = @json($selectedCity);
+
+    function fillCities(stateId, selectedId) {
+        var $city = $('#business_city');
+        $city.empty().append($('<option>', { value: '', text: 'Select city' }));
+        if (!stateId) {
+            return;
+        }
+        cities.forEach(function (row) {
+            if (String(row.state_id) !== String(stateId)) {
+                return;
+            }
+            $city.append($('<option>', {
+                value: row.id,
+                text: row.name,
+                selected: String(row.id) === String(selectedId)
+            }));
+        });
+    }
+
+    $('#business_state').on('change', function () {
+        fillCities($(this).val(), '');
+    });
+
+    fillCities($('#business_state').val(), selectedCity);
+})();
+</script>

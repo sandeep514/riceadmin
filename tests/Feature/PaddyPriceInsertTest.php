@@ -29,7 +29,9 @@ class PaddyPriceInsertTest extends TestCase
             $table->integer('state');
             $table->integer('quality_id');
             $table->integer('crop_year')->nullable();
+            $table->string('min_hand_cutting_price', 256)->nullable();
             $table->string('hand_cutting_price', 256)->nullable();
+            $table->string('min_machine_cutting_price', 256)->nullable();
             $table->string('machine_cutting_price', 256)->nullable();
             $table->string('moisture', 256)->nullable();
             $table->string('total_arrivals', 256)->nullable();

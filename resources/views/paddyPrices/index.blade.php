@@ -108,21 +108,29 @@
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Hand Cutting Price</label>
+                                    <label>Min Hand Cutting Price</label>
+                                    <input type="text" class="form-control" name="minHandCutting" value="{{ old('minHandCutting') }}">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Max Hand Cutting Price</label>
                                     <input type="text" class="form-control" name="handCutting" value="{{ old('handCutting') }}">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Machine Cutting Price</label>
-                                    <input type="text" class="form-control" name="machineCutting" value="{{ old('machineCutting') }}">
+                                    <label>Min Machine Cutting Price</label>
+                                    <input type="text" class="form-control" name="minMachineCutting" value="{{ old('minMachineCutting') }}">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label>Moisture</label>
-                                    <input type="text" class="form-control" name="moisture" value="{{ old('moisture') }}">
+                                    <label>Max Machine Cutting Price</label>
+                                    <input type="text" class="form-control" name="machineCutting" value="{{ old('machineCutting') }}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div>
+                                <div class="form-group col-md-3">
+                                    <label>Moisture</label>
+                                    <input type="text" class="form-control" name="moisture" value="{{ old('moisture') }}">
+                                </div>
                                 <div class="form-group col-md-3">
                                     <label>Total Arrival (Bags)</label>
                                     <input type="text" class="form-control" name="bags" value="{{ old('bags') }}">
@@ -199,8 +207,10 @@
                                                                 <th>State</th>
                                                                 <th>Quality</th>
                                                                 <th>Crop Year</th>
-                                                                <th>Hand Cutting Price</th>
-                                                                <th>Machine Cutting Price</th>
+                                                                <th>Min Hand</th>
+                                                                <th>Max Hand</th>
+                                                                <th>Min Machine</th>
+                                                                <th>Max Machine</th>
                                                                 <th>Moisture</th>
                                                                 <th>Total Arrivals</th>
                                                                 <th>Change</th>
@@ -218,7 +228,9 @@
                                                                     <td>{{ optional($paddyPrice->getState_rel)->state }}</td>
                                                                     <td>{{ optional($paddyPrice->quality_rel)->quality ? ($paddyPrice->quality_rel->type_label.' - '.$paddyPrice->quality_rel->quality) : '—' }}</td>
                                                                     <td>{{ $paddyPrice->crop_year }}</td>
+                                                                    <td>{{ $paddyPrice->min_hand_cutting_price }}</td>
                                                                     <td>{{ $paddyPrice->hand_cutting_price }}</td>
+                                                                    <td>{{ $paddyPrice->min_machine_cutting_price }}</td>
                                                                     <td>{{ $paddyPrice->machine_cutting_price }}</td>
                                                                     <td>{{ $paddyPrice->moisture }}</td>
                                                                     <td>{{ $paddyPrice->total_arrivals }}</td>

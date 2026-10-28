@@ -115,19 +115,36 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label>Hand Cutting Price</label>
+                                        <label>Min Hand Cutting Price</label>
+                                        <input type="text" class="form-control" name="min_hand_cutting_price" value="{{ old('min_hand_cutting_price', $paddyPrice->min_hand_cutting_price) }}">
+                                        @error('min_hand_cutting_price')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Max Hand Cutting Price</label>
                                         <input type="text" class="form-control" name="hand_cutting_price" value="{{ old('hand_cutting_price', $paddyPrice->hand_cutting_price) }}">
                                         @error('hand_cutting_price')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-3">
-                                        <label>Machine Cutting Price</label>
+                                        <label>Min Machine Cutting Price</label>
+                                        <input type="text" class="form-control" name="min_machine_cutting_price" value="{{ old('min_machine_cutting_price', $paddyPrice->min_machine_cutting_price) }}">
+                                        @error('min_machine_cutting_price')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label>Max Machine Cutting Price</label>
                                         <input type="text" class="form-control" name="machine_cutting_price" value="{{ old('machine_cutting_price', $paddyPrice->machine_cutting_price) }}">
                                         @error('machine_cutting_price')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="form-group col-md-3">
                                         <label>Moisture</label>
                                         <input type="text" class="form-control" name="moisture" value="{{ old('moisture', $paddyPrice->moisture) }}">
@@ -135,9 +152,6 @@
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
-                                </div>
-
-                                <div class="row">
                                     <div class="form-group col-md-3">
                                         <label>Total Arrival (Bags)</label>
                                         <input type="text" class="form-control" name="total_arrivals" value="{{ old('total_arrivals', $paddyPrice->total_arrivals) }}">

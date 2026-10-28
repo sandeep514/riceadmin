@@ -400,10 +400,11 @@ class PaddyApiController extends Controller
             ->where('quality_id', $quality_id)
             ->orderBy('created_at')
             ->orderBy('id')
-            ->get(['id', 'hand_cutting_price', 'machine_cutting_price', 'created_at']);
+            ->get(['id', 'min_hand_cutting_price', 'hand_cutting_price', 'min_machine_cutting_price', 'machine_cutting_price', 'created_at']);
 
         // Collapse to latest row per IST calendar day (same as live graph),
-        // keeping date (Y-m-d) + amount (int, upper bound of range) format.
+        // keeping date (Y-m-d) + amount (int). Graph uses MAX cutting prices;
+        // falls back to min when max is empty (legacy / partial rows).
         $handByDay = [];
         $machineByDay = [];
         foreach ($rows as $row) {
@@ -412,10 +413,16 @@ class PaddyApiController extends Controller
             }
             $day = $row->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d');
             $hand = $this->parsePaddyGraphAmount($row->hand_cutting_price);
+            if ($hand === null) {
+                $hand = $this->parsePaddyGraphAmount($row->min_hand_cutting_price);
+            }
             if ($hand !== null) {
                 $handByDay[$day] = $hand; // later rows overwrite => latest per day wins
             }
             $machine = $this->parsePaddyGraphAmount($row->machine_cutting_price);
+            if ($machine === null) {
+                $machine = $this->parsePaddyGraphAmount($row->min_machine_cutting_price);
+            }
             if ($machine !== null) {
                 $machineByDay[$day] = $machine;
             }
