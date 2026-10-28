@@ -26,6 +26,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Rice Form Name</th>
+                                    <th>Description</th>
                                     <th>Type</th>
                                     <th>Order</th>
                                     <th>Status</th>
@@ -37,6 +38,7 @@
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $form->form_name }}</td>
+                                        <td>{{ $form->description ? \Illuminate\Support\Str::limit($form->description, 80) : '—' }}</td>
                                         <td>{{ $form->type }}</td>
                                         <td>{{ $form->order ?? '-' }}</td>
                                         <td>
@@ -68,6 +70,6 @@
 
 @section('javascript')
 <script>
-    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[3,'asc']] }); });
+    $(function(){ $('.master-datatable').DataTable({ pageLength: 25, order: [[4,'asc']] }); });
 </script>
 @endsection

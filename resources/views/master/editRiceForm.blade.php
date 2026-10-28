@@ -38,6 +38,10 @@
                                         {!! Form::label('order','Order') !!}
                                         {!! Form::number('order' , $riceForm->order , ['class' => 'form-control', 'min' => 1, 'placeholder' => 'Enter sort order']) !!}
                                     </div>
+                                    <div class="form-group col-md-12">
+                                        {!! Form::label('description','Description (optional)') !!}
+                                        {!! Form::textarea('description' , $riceForm->description , ['class' => 'form-control', 'rows' => 2, 'placeholder' => 'Optional description']) !!}
+                                    </div>
                                     <input type="hidden" name="id" value="{{ $riceForm->id }}">
                                 </div>
 

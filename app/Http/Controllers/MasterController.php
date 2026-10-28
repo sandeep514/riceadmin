@@ -69,6 +69,7 @@ class MasterController extends Controller
 		}
 		RiceForm::where('id' , $request->id)->update([
 			'form_name' => $request->name,
+			'description' => $request->filled('description') ? trim((string) $request->description) : null,
 			'type' => $request->riceType,
 			'order' => $request->order ?? null,
 		]);
@@ -88,6 +89,7 @@ class MasterController extends Controller
 
 		RiceForm::create([
 			'form_name' => $request->name,
+			'description' => $request->filled('description') ? trim((string) $request->description) : null,
 			'type' => $request->riceType,
 			'order' => $request->order ?? null,
 		]);

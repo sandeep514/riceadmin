@@ -9405,7 +9405,10 @@ if (!file_exists('uploads')) {
 
     public function getRiceForms()
     {
-        $riceForms = RiceForm::select('id' , 'form_name')->where('status' , 1)->orderBy('order')->get();
+        $riceForms = RiceForm::select('id', 'form_name', 'description')
+            ->where('status', 1)
+            ->orderBy('order')
+            ->get();
         return response()->json(['status' => true , 'message' => 'Forms get successfully' , 'data' => $riceForms]);
     }
 

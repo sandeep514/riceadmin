@@ -12,7 +12,7 @@ class MasterRiceFormExport implements FromCollection, WithHeadings, WithStyles
 {
     public function headings(): array
     {
-        return ['#', 'Rice Form Name', 'Type', 'Created At'];
+        return ['#', 'Rice Form Name', 'Description', 'Type', 'Created At'];
     }
 
     public function collection()
@@ -21,6 +21,7 @@ class MasterRiceFormExport implements FromCollection, WithHeadings, WithStyles
             return [
                 $index + 1,
                 $item->form_name,
+                $item->description ?? '',
                 $item->type,
                 $item->created_at ? $item->created_at->format('d M Y') : '',
             ];
