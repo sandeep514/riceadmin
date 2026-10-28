@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class AppSetting extends Model
 {
@@ -14,7 +15,12 @@ class AppSetting extends Model
         'call_now_to',
         'market_from',
         'market_to',
-        'market_mode',
+        'market_override_status',
+        'market_override_until',
+    ];
+
+    protected $casts = [
+        'market_override_until' => 'datetime',
     ];
 
     public static function current(): self
@@ -24,18 +30,18 @@ class AppSetting extends Model
             return $row;
         }
 
-        return self::create([
+        $attrs = [
             'call_now_from' => '09:00',
             'call_now_to' => '18:00',
             'market_from' => '09:00',
             'market_to' => '18:00',
-            'market_mode' => 'manual',
-        ]);
-    }
+        ];
+        if (Schema::hasColumn('app_settings', 'market_override_status')) {
+            $attrs['market_override_status'] = null;
+            $attrs['market_override_until'] = null;
+        }
 
-    public function isAutoMarket(): bool
-    {
-        return strtolower(trim((string) $this->market_mode)) === 'auto';
+        return self::create($attrs);
     }
 
     public function isCallNowAvailable(?Carbon $at = null): bool
@@ -75,13 +81,9 @@ class AppSetting extends Model
             return $now >= $from && $now <= $to;
         }
 
-        // Overnight: e.g. 22:00 → 06:00
         return $now >= $from || $now <= $to;
     }
 
-    /**
-     * Payload for APIs / admin about Call Now.
-     */
     public function callNowPayload(?Carbon $at = null): array
     {
         return [
@@ -93,48 +95,49 @@ class AppSetting extends Model
     }
 
     /**
-     * Resolved live market status for API (respects auto schedule vs manual override).
+     * Always automatic from schedule, unless a live/price manual override is still active.
      *
-     * @return array{currentStatus:int,message:string,mode:string,schedule:array}
+     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string}
      */
     public function resolvedLiveMarket(?Carbon $at = null): array
     {
+        $now = $at ? $at->copy()->timezone('Asia/Kolkata') : Carbon::now('Asia/Kolkata');
+
         $schedule = [
             'from' => $this->normalizeTime((string) $this->market_from) ?? '09:00',
             'to' => $this->normalizeTime((string) $this->market_to) ?? '18:00',
             'timezone' => 'Asia/Kolkata',
-            'in_window' => $this->isMarketOpenBySchedule($at),
+            'in_window' => $this->isMarketOpenBySchedule($now),
         ];
 
-        if ($this->isAutoMarket()) {
-            $open = $schedule['in_window'];
+        $this->clearExpiredOverride($now);
+
+        $overrideStatus = $this->market_override_status ?? null;
+        $overrideUntil = $this->market_override_until ?? null;
+        if ($overrideStatus !== null && $overrideUntil && $now->lt($overrideUntil)) {
+            $code = (int) $overrideStatus;
+            $message = $code === 1 ? 'open' : ($code === 3 ? 'hold' : 'closed');
 
             return [
-                'currentStatus' => $open ? 1 : 2,
-                'message' => $open ? 'open' : 'closed',
-                'mode' => 'auto',
+                'currentStatus' => $code,
+                'message' => $message,
+                'mode' => 'manual_override',
                 'schedule' => $schedule,
+                'override_until' => $overrideUntil->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
             ];
         }
 
-        $row = LivePriceStatusMessage::query()->orderBy('id')->first();
-        $code = (int) ($row->currentStatus ?? 1);
-        $message = (string) ($row->message ?? 'open');
-        if ($message === '') {
-            $message = $code === 1 ? 'open' : ($code === 3 ? 'hold' : 'closed');
-        }
+        $open = $schedule['in_window'];
 
         return [
-            'currentStatus' => $code,
-            'message' => $message,
-            'mode' => 'manual',
+            'currentStatus' => $open ? 1 : 2,
+            'message' => $open ? 'open' : 'closed',
+            'mode' => 'auto',
             'schedule' => $schedule,
+            'override_until' => null,
         ];
     }
 
-    /**
-     * Object-shaped payload matching historical livePriceStatusMessage + extras.
-     */
     public function livePriceStatusMessagePayload(?Carbon $at = null): array
     {
         $resolved = $this->resolvedLiveMarket($at);
@@ -145,17 +148,82 @@ class AppSetting extends Model
             'message' => $resolved['message'],
             'mode' => $resolved['mode'],
             'schedule' => $resolved['schedule'],
+            'override_until' => $resolved['override_until'],
         ];
     }
 
-    public function enableAutoMarket(): void
+    /**
+     * Admin Open / Closed / Hold from live/price — temporary override until next schedule boundary.
+     */
+    public function applyManualMarketOverride(int $statusCode, string $message): void
     {
-        $this->update(['market_mode' => 'auto']);
+        $until = $this->nextScheduleBoundary();
+
+        $payload = [];
+        if (Schema::hasColumn('app_settings', 'market_override_status')) {
+            $payload['market_override_status'] = $statusCode;
+            $payload['market_override_until'] = $until;
+        }
+        // Legacy column if present — keep unused; schedule is always the default.
+        if (Schema::hasColumn('app_settings', 'market_mode')) {
+            $payload['market_mode'] = 'auto';
+        }
+        if ($payload !== []) {
+            $this->update($payload);
+        }
+
+        LivePriceStatusMessage::query()->where('id', 1)->update([
+            'currentStatus' => $statusCode,
+            'message' => $message,
+        ]);
     }
 
-    public function enableManualMarket(): void
+    /**
+     * Next IST moment when the market schedule flips (open→close or close→open).
+     */
+    public function nextScheduleBoundary(?Carbon $at = null): Carbon
     {
-        $this->update(['market_mode' => 'manual']);
+        $now = $at ? $at->copy()->timezone('Asia/Kolkata') : Carbon::now('Asia/Kolkata');
+        $from = $this->normalizeTime((string) $this->market_from) ?? '09:00';
+        $to = $this->normalizeTime((string) $this->market_to) ?? '18:00';
+
+        [$fromH, $fromM] = array_map('intval', explode(':', $from));
+        [$toH, $toM] = array_map('intval', explode(':', $to));
+
+        $fromToday = $now->copy()->setTime($fromH, $fromM, 0);
+        $toToday = $now->copy()->setTime($toH, $toM, 0);
+
+        if ($from <= $to) {
+            // Same-day window: next flip is toToday if still before it, else fromTomorrow.
+            if ($now->lt($toToday)) {
+                return $toToday;
+            }
+
+            return $fromToday->copy()->addDay();
+        }
+
+        // Overnight window: open from→midnight and midnight→to.
+        if ($now->gte($fromToday)) {
+            return $toToday->copy()->addDay();
+        }
+        if ($now->lte($toToday)) {
+            return $toToday;
+        }
+
+        return $fromToday;
+    }
+
+    private function clearExpiredOverride(Carbon $now): void
+    {
+        if (! Schema::hasColumn('app_settings', 'market_override_status')) {
+            return;
+        }
+        if ($this->market_override_until && $now->gte($this->market_override_until)) {
+            $this->forceFill([
+                'market_override_status' => null,
+                'market_override_until' => null,
+            ])->save();
+        }
     }
 
     private function normalizeTime(string $value): ?string

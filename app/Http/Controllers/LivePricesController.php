@@ -143,13 +143,13 @@ class LivePricesController extends Controller
         // $prices = $query->get();
         $settings = \App\AppSetting::current();
         $resolvedMarket = $settings->resolvedLiveMarket();
+        $statusNote = $resolvedMarket['mode'] === 'auto'
+            ? ' (auto '.$resolvedMarket['schedule']['from'].'–'.$resolvedMarket['schedule']['to'].' IST)'
+            : ' (manual until '.($resolvedMarket['override_until'] ?? '').')';
         $LivePriceStatusMessage = (object) [
             'id' => 1,
             'currentStatus' => $resolvedMarket['currentStatus'],
-            'message' => $resolvedMarket['message']
-                . ($resolvedMarket['mode'] === 'auto'
-                    ? ' (auto '.$resolvedMarket['schedule']['from'].'–'.$resolvedMarket['schedule']['to'].' IST)'
-                    : ' (manual)'),
+            'message' => $resolvedMarket['message'].$statusNote,
         ];
         
         $prices = collect();
@@ -761,17 +761,15 @@ class LivePricesController extends Controller
             return back();
         }
 
-        // Manual Open / Closed / Hold always takes over from the auto schedule.
-        \App\AppSetting::current()->enableManualMarket();
-
-        LivePriceStatusMessage::where('id' , 1)->update(['currentStatus' => $stausArray[$status], 'message' => $status]);
+        // Temporary override until the next schedule open/close flip, then auto resumes.
+        \App\AppSetting::current()->applyManualMarketOverride($stausArray[$status], $status);
 
         // The cached web price payloads embed livePriceStatusMessage
         // (currentState/message) — bust them too, or the API keeps serving
         // the previous market status until the 180s TTL expires.
         Cache::increment('web:prices:version');
 
-        Session::flash('success', 'Success|Market status updated to ' . ucfirst($status) . ' (manual mode).');
+        Session::flash('success', 'Success|Market status updated to ' . ucfirst($status) . ' (manual override until next schedule change).');
         return back();
     }
 }

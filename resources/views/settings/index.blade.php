@@ -50,8 +50,10 @@
                             <hr>
                             <h4>2. Market open / close timing</h4>
                             <p class="help-block">
-                                In <strong>Automatic</strong> mode the API returns open inside this window and closed outside.
-                                Use Live Prices Open / Closed / Hold buttons for <strong>Manual</strong> control (switches mode to Manual).
+                                Always automatic from this window (open inside, closed outside).
+                                Admins can still force Open / Closed / Hold from
+                                <a href="{{ route('live_prices') }}">Live Prices</a>
+                                — that override lasts until the next schedule change, then auto resumes.
                             </p>
                             <div class="row">
                                 <div class="form-group col-md-6 @error('market_from') has-error @enderror">
@@ -67,26 +69,13 @@
                                     @error('market_to')<span class="help-block text-danger">{{ $message }}</span>@enderror
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="form-group col-md-6 @error('market_mode') has-error @enderror">
-                                    <label>Market control mode*</label>
-                                    <select name="market_mode" class="form-control">
-                                        <option value="auto" {{ old('market_mode', $settings->market_mode) === 'auto' ? 'selected' : '' }}>
-                                            Automatic (follow schedule)
-                                        </option>
-                                        <option value="manual" {{ old('market_mode', $settings->market_mode) === 'manual' ? 'selected' : '' }}>
-                                            Manual (admin Open / Closed / Hold)
-                                        </option>
-                                    </select>
-                                    @error('market_mode')<span class="help-block text-danger">{{ $message }}</span>@enderror
-                                </div>
-                            </div>
                             <p class="text-muted">
                                 Resolved market status now:
                                 <strong>{{ strtoupper($resolved['message'] ?? 'open') }}</strong>
-                                (mode: {{ $resolved['mode'] ?? 'manual' }}
-                                @if(($resolved['mode'] ?? '') === 'auto')
-                                    , schedule {{ $resolved['schedule']['from'] ?? '' }}–{{ $resolved['schedule']['to'] ?? '' }} IST
+                                ({{ $resolved['mode'] ?? 'auto' }}
+                                , schedule {{ $resolved['schedule']['from'] ?? '' }}–{{ $resolved['schedule']['to'] ?? '' }} IST
+                                @if(!empty($resolved['override_until']))
+                                    , override until {{ $resolved['override_until'] }}
                                 @endif
                                 ).
                             </p>
