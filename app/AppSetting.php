@@ -135,14 +135,15 @@ class AppSetting extends Model
 
         $this->clearExpiredOverride($now);
 
+        $closingNotice = RicePriceClosing::noticeFor($now, $schedule['to']);
+
         // Special closed days win over a leftover manual Open/Closed/Hold override.
         // (Manual reopen on a festival day: delete the closing entry first.)
-        $special = Schema::hasTable('rice_price_closings')
-            ? RicePriceClosing::forDate($now)
-            : null;
+        $special = RicePriceClosing::forDate($now);
         if ($special) {
-            $reason = trim((string) $special->reason);
-            $message = $reason !== '' ? ('closed - '.$reason) : 'closed';
+            // Prefer range notice (e.g. 30 Oct–2 Nov) over single-day reason.
+            $message = $closingNotice['message']
+                ?? (($reason = trim((string) $special->reason)) !== '' ? ('closed - '.$reason) : 'closed');
 
             return [
                 'currentStatus' => 2,
@@ -151,6 +152,7 @@ class AppSetting extends Model
                 'schedule' => $schedule,
                 'override_until' => null,
                 'special_closing' => $special->toApiArray(),
+                'closing_notice' => $closingNotice,
             ];
         }
 
@@ -167,18 +169,24 @@ class AppSetting extends Model
                 'schedule' => $schedule,
                 'override_until' => $overrideUntil->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
                 'special_closing' => null,
+                'closing_notice' => $code === 1 ? null : $closingNotice,
             ];
         }
 
         $open = $schedule['in_window'];
 
+        // After daily close (e.g. after 18:00 on 29th), surface next multi-day
+        // closing notice (30th–2nd strike) even though today is not a special day.
+        $message = $open ? 'open' : ($closingNotice['message'] ?? 'closed');
+
         return [
             'currentStatus' => $open ? 1 : 2,
-            'message' => $open ? 'open' : 'closed',
-            'mode' => 'auto',
+            'message' => $message,
+            'mode' => $open ? 'auto' : ($closingNotice ? 'scheduled_closing_notice' : 'auto'),
             'schedule' => $schedule,
             'override_until' => null,
             'special_closing' => null,
+            'closing_notice' => $open ? null : $closingNotice,
         ];
     }
 
@@ -210,6 +218,7 @@ class AppSetting extends Model
             'schedule' => $resolved['schedule'],
             'override_until' => $resolved['override_until'],
             'special_closing' => $resolved['special_closing'] ?? null,
+            'closing_notice' => $resolved['closing_notice'] ?? null,
             // Explicit fields for frontend timing UI
             'open_time' => $timing['open_time'],
             'close_time' => $timing['close_time'],
@@ -224,14 +233,20 @@ class AppSetting extends Model
      */
     public function upcomingClosingsPayload(?int $limit = 30): array
     {
-        if (! Schema::hasTable('rice_price_closings')) {
-            return [];
-        }
-
         return RicePriceClosing::upcoming($limit)
             ->map(fn (RicePriceClosing $row) => $row->toApiArray())
             ->values()
             ->all();
+    }
+
+    /**
+     * Contiguous closing ranges (same reason, consecutive dates).
+     */
+    public function upcomingClosingBlocksPayload(): array
+    {
+        return RicePriceClosing::contiguousBlocks(
+            Carbon::now('Asia/Kolkata')->startOfDay()
+        );
     }
 
     /**

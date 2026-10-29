@@ -1318,6 +1318,7 @@ class ApiController extends Controller
         $payload['market_timing'] = $appSettings->marketTimingPayload();
         $payload['call_now'] = $appSettings->callNowPayload();
         $payload['upcoming_rice_price_closings'] = $appSettings->upcomingClosingsPayload();
+        $payload['upcoming_closing_blocks'] = $appSettings->upcomingClosingBlocksPayload();
 
         return response()->json($payload);
     }
@@ -2136,6 +2137,7 @@ class ApiController extends Controller
         $payload['market_timing'] = $appSettings->marketTimingPayload();
         $payload['call_now'] = $appSettings->callNowPayload();
         $payload['upcoming_rice_price_closings'] = $appSettings->upcomingClosingsPayload();
+        $payload['upcoming_closing_blocks'] = $appSettings->upcomingClosingBlocksPayload();
 
         return response()->json($payload);
     }
@@ -2156,6 +2158,7 @@ class ApiController extends Controller
             'live_market' => $settings->resolvedLiveMarket(),
             'livePriceStatusMessage' => $settings->livePriceStatusMessagePayload(),
             'upcoming_rice_price_closings' => $settings->upcomingClosingsPayload(),
+            'upcoming_closing_blocks' => $settings->upcomingClosingBlocksPayload(),
         ]);
     }
 
