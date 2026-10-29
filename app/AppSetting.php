@@ -95,6 +95,26 @@ class AppSetting extends Model
     }
 
     /**
+     * Market open/close window for frontend display (IST).
+     */
+    public function marketTimingPayload(?Carbon $at = null): array
+    {
+        $open = $this->normalizeTime((string) $this->market_from) ?? '09:00';
+        $close = $this->normalizeTime((string) $this->market_to) ?? '18:00';
+
+        return [
+            'open_time' => $open,
+            'close_time' => $close,
+            'market_open_time' => $open,
+            'market_close_time' => $close,
+            'from' => $open,
+            'to' => $close,
+            'timezone' => 'Asia/Kolkata',
+            'in_window' => $this->isMarketOpenBySchedule($at),
+        ];
+    }
+
+    /**
      * Always automatic from schedule, unless a live/price manual override is still active.
      *
      * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string}
@@ -124,6 +144,25 @@ class AppSetting extends Model
                 'mode' => 'manual_override',
                 'schedule' => $schedule,
                 'override_until' => $overrideUntil->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
+                'special_closing' => null,
+            ];
+        }
+
+        // Special closed days (festival / strike) force market closed for that IST date.
+        $special = Schema::hasTable('rice_price_closings')
+            ? RicePriceClosing::forDate($now)
+            : null;
+        if ($special) {
+            $reason = trim((string) $special->reason);
+            $message = $reason !== '' ? ('closed - '.$reason) : 'closed';
+
+            return [
+                'currentStatus' => 2,
+                'message' => $message,
+                'mode' => 'special_closing',
+                'schedule' => $schedule,
+                'override_until' => null,
+                'special_closing' => $special->toApiArray(),
             ];
         }
 
@@ -135,12 +174,14 @@ class AppSetting extends Model
             'mode' => 'auto',
             'schedule' => $schedule,
             'override_until' => null,
+            'special_closing' => null,
         ];
     }
 
     public function livePriceStatusMessagePayload(?Carbon $at = null): array
     {
         $resolved = $this->resolvedLiveMarket($at);
+        $timing = $this->marketTimingPayload($at);
 
         return [
             'id' => 1,
@@ -149,7 +190,29 @@ class AppSetting extends Model
             'mode' => $resolved['mode'],
             'schedule' => $resolved['schedule'],
             'override_until' => $resolved['override_until'],
+            'special_closing' => $resolved['special_closing'] ?? null,
+            // Explicit fields for frontend timing UI
+            'open_time' => $timing['open_time'],
+            'close_time' => $timing['close_time'],
+            'market_open_time' => $timing['market_open_time'],
+            'market_close_time' => $timing['market_close_time'],
+            'timezone' => $timing['timezone'],
         ];
+    }
+
+    /**
+     * Upcoming special closed days for frontend calendars / banners.
+     */
+    public function upcomingClosingsPayload(?int $limit = 30): array
+    {
+        if (! Schema::hasTable('rice_price_closings')) {
+            return [];
+        }
+
+        return RicePriceClosing::upcoming($limit)
+            ->map(fn (RicePriceClosing $row) => $row->toApiArray())
+            ->values()
+            ->all();
     }
 
     /**

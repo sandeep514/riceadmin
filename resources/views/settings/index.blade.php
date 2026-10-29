@@ -83,6 +83,7 @@
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Save Settings</button>
                             <a href="{{ route('live_prices') }}" class="btn btn-default">Live Prices (manual Open/Close)</a>
+                            <a href="{{ route('rice-price-closings.index') }}" class="btn btn-warning">Upcoming Rice Price Closings</a>
                         </div>
                     </form>
                 </div>

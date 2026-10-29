@@ -682,6 +682,12 @@ Route::group(['prefix'=>'administrator'], function(){
             Route::get('settings', ['as' => 'settings.index', 'uses' => 'SettingsController@index']);
             Route::post('settings', ['as' => 'settings.update', 'uses' => 'SettingsController@update']);
 
+            // Upcoming rice price closings (festival / strike days)
+            Route::get('upcoming-rice-price-closings', ['as' => 'rice-price-closings.index', 'uses' => 'RicePriceClosingController@index']);
+            Route::post('upcoming-rice-price-closings', ['as' => 'rice-price-closings.store', 'uses' => 'RicePriceClosingController@store']);
+            Route::put('upcoming-rice-price-closings/{id}', ['as' => 'rice-price-closings.update', 'uses' => 'RicePriceClosingController@update']);
+            Route::delete('upcoming-rice-price-closings/{id}', ['as' => 'rice-price-closings.destroy', 'uses' => 'RicePriceClosingController@destroy']);
+
             //Plan
             Route::get('plan',['as'=>'plan.create','uses'=>'PlanController@index']);
             Route::post('plan/save',['as'=>'plan.save','uses'=>'PlanController@save']);

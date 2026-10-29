@@ -808,6 +808,12 @@
                     <span>Settings</span>
                 </a>
             </li>
+            <li class="{{ str_starts_with((string) $currentRoute, 'rice-price-closings.') ? 'active' : '' }}">
+                <a href="{{ route('rice-price-closings.index') }}">
+                    <i class="fa fa-calendar-times-o"></i>
+                    <span>Upcoming Rice Price Closings</span>
+                </a>
+            </li>
         </ul>
       
     </section>

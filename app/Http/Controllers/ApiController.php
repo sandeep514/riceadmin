@@ -1312,6 +1312,13 @@ class ApiController extends Controller
             return $this->computeGetPrices($state, $ricetype)->getData(true);
         });
 
+        // Overlay market timing after cache so open/close times stay current.
+        $appSettings = AppSetting::current();
+        $payload['livePriceStatusMessage'] = $appSettings->livePriceStatusMessagePayload();
+        $payload['market_timing'] = $appSettings->marketTimingPayload();
+        $payload['call_now'] = $appSettings->callNowPayload();
+        $payload['upcoming_rice_price_closings'] = $appSettings->upcomingClosingsPayload();
+
         return response()->json($payload);
     }
 
@@ -2126,7 +2133,9 @@ class ApiController extends Controller
         // so status flips on time without waiting for the 180s price TTL.
         $appSettings = AppSetting::current();
         $payload['livePriceStatusMessage'] = $appSettings->livePriceStatusMessagePayload();
+        $payload['market_timing'] = $appSettings->marketTimingPayload();
         $payload['call_now'] = $appSettings->callNowPayload();
+        $payload['upcoming_rice_price_closings'] = $appSettings->upcomingClosingsPayload();
 
         return response()->json($payload);
     }
@@ -2143,8 +2152,10 @@ class ApiController extends Controller
             'message' => 'App timing settings',
             'timezone' => 'Asia/Kolkata',
             'call_now' => $settings->callNowPayload(),
+            'market_timing' => $settings->marketTimingPayload(),
             'live_market' => $settings->resolvedLiveMarket(),
             'livePriceStatusMessage' => $settings->livePriceStatusMessagePayload(),
+            'upcoming_rice_price_closings' => $settings->upcomingClosingsPayload(),
         ]);
     }
 
