@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AppSetting;
 use App\Courier;
 use App\LivePrice;
 use App\LivePriceEvent;
@@ -2753,10 +2754,12 @@ class PortalApiController extends Controller
             ->whereIn('status', PaddyTrade::$listableStatuses)
             ->count();
         $paddyMarketStatus = PaddyTradeCurrentStatus::current();
+        $callNow = AppSetting::current()->callNowPayload();
 
         return response()->json([
             'status' => true,
             'message' => 'Web access permissions retrieved successfully',
+            'call_now' => $callNow,
             'data' => [
                 'user_id' => $userId,
                 'plan_id' => $planId,
@@ -2785,6 +2788,7 @@ class PortalApiController extends Controller
                     'label' => $paddyMarketStatus->status_label,
                     'message' => $paddyMarketStatus->message,
                 ],
+                'call_now' => $callNow,
             ]
         ], 200);
     }

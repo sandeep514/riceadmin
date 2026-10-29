@@ -6528,8 +6528,16 @@ if (!file_exists('uploads')) {
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
+        $callNow = AppSetting::current()->callNowPayload();
 
-        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade->values(), 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+        return response()->json([
+            'status' => true,
+            'data' => $trade,
+            'allTrade' => $allTrade->values(),
+            'currentStatus' => $tradeStatus['currentStatus'],
+            'statusMessage' => $tradeStatus['message'],
+            'call_now' => $callNow,
+        ]);
     }
 
     /**
@@ -6550,6 +6558,7 @@ if (!file_exists('uploads')) {
 
         $tradeStatus = TradeCurrentStatus::first();
         $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null, $interestUserId);
+        $callNow = AppSetting::current()->callNowPayload();
 
         return response()->json([
             'status' => true,
@@ -6560,6 +6569,7 @@ if (!file_exists('uploads')) {
             'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
+            'call_now' => $callNow,
             'user_interests_applied' => $interestTuples !== [],
             'preferred_interest_user_id' => $interestUserId,
             'preferred_interest_count' => count($interestTuples),
@@ -6845,8 +6855,16 @@ if (!file_exists('uploads')) {
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::first();
+        $callNow = AppSetting::current()->callNowPayload();
 
-        return response()->json(['status' => true, 'data' => $trade, 'allTrade' => $allTrade->values(), 'currentStatus' => $tradeStatus['currentStatus'], 'statusMessage' => $tradeStatus['message']]);
+        return response()->json([
+            'status' => true,
+            'data' => $trade,
+            'allTrade' => $allTrade->values(),
+            'currentStatus' => $tradeStatus['currentStatus'],
+            'statusMessage' => $tradeStatus['message'],
+            'call_now' => $callNow,
+        ]);
     }
 
     /**
@@ -6870,6 +6888,7 @@ if (!file_exists('uploads')) {
 
         $tradeStatus = TradeCurrentStatus::first();
         $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType, $interestUserId);
+        $callNow = AppSetting::current()->callNowPayload();
 
         return response()->json([
             'status' => true,
@@ -6881,6 +6900,7 @@ if (!file_exists('uploads')) {
             'trade_list_meta' => $tradeListMeta,
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
+            'call_now' => $callNow,
             'user_interests_applied' => $interestTuples !== [],
             'preferred_interest_user_id' => $interestUserId,
             'preferred_interest_count' => count($interestTuples),

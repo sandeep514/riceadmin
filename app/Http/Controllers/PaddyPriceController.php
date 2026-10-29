@@ -11,6 +11,7 @@ use App\PaddyTradeCurrentStatus;
 use App\Export\PaddyPriceExport;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -26,13 +27,13 @@ class PaddyPriceController extends Controller
 
         $export = strtolower((string) $request->input('export', ''));
         if ($export === 'excel') {
-            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false);
+            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false, lastOfDayOnly: true);
             $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.xlsx';
 
             return Excel::download(new PaddyPriceExport($paddyPrices), $filename);
         }
         if ($export === 'pdf') {
-            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false);
+            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false, lastOfDayOnly: true);
             $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.pdf';
             $pdf = Pdf::loadView('paddyPrices.pdf', compact('paddyPrices', 'from', 'to'))
                 ->setPaper('a4', 'landscape');
@@ -118,16 +119,36 @@ class PaddyPriceController extends Controller
         return [$from, $to];
     }
 
-    private function filteredPaddyPrices(?string $from, ?string $to, bool $paginate = false)
+    private function filteredPaddyPrices(?string $from, ?string $to, bool $paginate = false, bool $lastOfDayOnly = false)
     {
+        $applyDateFilters = function ($q) use ($from, $to) {
+            if ($from) {
+                $q->where('created_at', '>=', Carbon::parse($from, config('app.timezone', 'Asia/Kolkata'))->startOfDay());
+            }
+            if ($to) {
+                $q->where('created_at', '<=', Carbon::parse($to, config('app.timezone', 'Asia/Kolkata'))->endOfDay());
+            }
+        };
+
         $query = PaddyPrice::with(['getMandi_rel', 'getState_rel', 'quality_rel'])
             ->orderBy('id', 'DESC');
+        $applyDateFilters($query);
 
-        if ($from) {
-            $query->where('created_at', '>=', Carbon::parse($from, config('app.timezone', 'Asia/Kolkata'))->startOfDay());
-        }
-        if ($to) {
-            $query->where('created_at', '<=', Carbon::parse($to, config('app.timezone', 'Asia/Kolkata'))->endOfDay());
+        // Export: one row per day × state × mandi × quality × crop year
+        // (earlier same-day saves for that combo are superseded duplicates).
+        if ($lastOfDayOnly) {
+            $lastIds = PaddyPrice::query()
+                ->selectRaw('MAX(id) as id');
+            $applyDateFilters($lastIds);
+            $lastIds->groupBy(
+                DB::raw('DATE(created_at)'),
+                'state',
+                'mandi',
+                'quality_id',
+                'crop_year'
+            );
+
+            $query->whereIn('id', $lastIds);
         }
 
         if ($paginate) {

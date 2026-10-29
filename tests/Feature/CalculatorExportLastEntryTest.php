@@ -156,6 +156,46 @@ class CalculatorExportLastEntryTest extends TestCase
         $this->assertFalse($query->contains(fn ($row) => $row->ricemin === '999'));
     }
 
+    public function test_null_and_blank_fob_rows_are_excluded(): void
+    {
+        $this->seedData();
+
+        \Illuminate\Support\Facades\DB::table('USD_prices')->insert([
+            [
+                'rice' => 1, 'ricemin' => '1', 'ricemax' => '2',
+                'transportmin' => '0', 'transportmax' => '0', 'dollarrate' => '85',
+                'fobmin' => null, 'fobmax' => '5', 'usd_defaultMaster_id' => 25,
+                'created_at' => '2026-10-23 10:00:00', 'updated_at' => '2026-10-23 10:00:00',
+            ],
+            [
+                'rice' => 1, 'ricemin' => '3', 'ricemax' => '4',
+                'transportmin' => '0', 'transportmax' => '0', 'dollarrate' => '85',
+                'fobmin' => '  ', 'fobmax' => '5', 'usd_defaultMaster_id' => 25,
+                'created_at' => '2026-10-23 11:00:00', 'updated_at' => '2026-10-23 11:00:00',
+            ],
+        ]);
+
+        $query = (new CalculatorExport('2026-10-23', '2026-10-23'))->query()->get();
+
+        $this->assertCount(0, $query);
+    }
+
+    public function test_map_hides_zero_and_null_numeric_cells(): void
+    {
+        $this->seedData();
+
+        $row = (new CalculatorExport('2026-10-20', '2026-10-20', 26))->query()->first();
+        $this->assertNotNull($row);
+
+        $mapped = (new CalculatorExport('2026-10-20', '2026-10-20', 26))->map($row);
+
+        // transport min/max are 0 in seed → blank in Excel
+        $this->assertSame('', $mapped[7]);
+        $this->assertSame('', $mapped[8]);
+        // FOB kept when positive
+        $this->assertSame('10', (string) $mapped[10]);
+    }
+
     public function test_type_filter_keeps_matching_quality_type(): void
     {
         $this->seedData();
