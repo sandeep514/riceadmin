@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\AppSetting;
+use App\LivePriceStatusMessage;
 use App\RicePriceClosing;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,11 +57,14 @@ class RicePriceClosingController extends Controller
             return redirect()->back()->withInput();
         }
 
+        $reason = trim((string) $request->input('reason'));
         RicePriceClosing::create([
             'close_date' => $date,
-            'reason' => trim((string) $request->input('reason')),
+            'reason' => $reason,
             'created_by' => auth()->id(),
         ]);
+
+        $this->syncTodayClosingIfNeeded($date, $reason);
 
         Cache::increment('web:prices:version');
 
@@ -97,10 +102,13 @@ class RicePriceClosingController extends Controller
             return redirect()->back()->withInput();
         }
 
+        $reason = trim((string) $request->input('reason'));
         $closing->update([
             'close_date' => $date,
-            'reason' => trim((string) $request->input('reason')),
+            'reason' => $reason,
         ]);
+
+        $this->syncTodayClosingIfNeeded($date, $reason);
 
         Cache::increment('web:prices:version');
 
@@ -120,12 +128,38 @@ class RicePriceClosingController extends Controller
         }
 
         $month = $closing->close_date ? $closing->close_date->format('Y-m') : null;
+        $wasToday = $closing->close_date
+            && $closing->close_date->toDateString() === Carbon::now('Asia/Kolkata')->toDateString();
         $closing->delete();
+
+        // Removing today's special closing: drop leftover manual override so schedule applies.
+        if ($wasToday) {
+            AppSetting::current()->clearManualMarketOverride();
+        }
 
         Cache::increment('web:prices:version');
 
         Session::flash('success', 'Success|Closing deleted.');
 
         return redirect()->route('rice-price-closings.index', array_filter(['month' => $month]));
+    }
+
+    /**
+     * If the closing is for today (IST), clear any manual Open override and sync status.
+     */
+    private function syncTodayClosingIfNeeded(string $date, string $reason): void
+    {
+        $today = Carbon::now('Asia/Kolkata')->toDateString();
+        if ($date !== $today) {
+            return;
+        }
+
+        AppSetting::current()->clearManualMarketOverride();
+
+        $message = $reason !== '' ? ('closed - '.$reason) : 'closed';
+        LivePriceStatusMessage::query()->where('id', 1)->update([
+            'currentStatus' => 2,
+            'message' => $message,
+        ]);
     }
 }

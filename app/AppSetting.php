@@ -115,9 +115,12 @@ class AppSetting extends Model
     }
 
     /**
-     * Always automatic from schedule, unless a live/price manual override is still active.
+     * Resolve live market status (IST):
+     * 1) special closing for today (festival/strike)
+     * 2) temporary manual Open/Closed/Hold override
+     * 3) daily open/close schedule
      *
-     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string}
+     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string,special_closing:?array}
      */
     public function resolvedLiveMarket(?Carbon $at = null): array
     {
@@ -132,23 +135,8 @@ class AppSetting extends Model
 
         $this->clearExpiredOverride($now);
 
-        $overrideStatus = $this->market_override_status ?? null;
-        $overrideUntil = $this->market_override_until ?? null;
-        if ($overrideStatus !== null && $overrideUntil && $now->lt($overrideUntil)) {
-            $code = (int) $overrideStatus;
-            $message = $code === 1 ? 'open' : ($code === 3 ? 'hold' : 'closed');
-
-            return [
-                'currentStatus' => $code,
-                'message' => $message,
-                'mode' => 'manual_override',
-                'schedule' => $schedule,
-                'override_until' => $overrideUntil->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
-                'special_closing' => null,
-            ];
-        }
-
-        // Special closed days (festival / strike) force market closed for that IST date.
+        // Special closed days win over a leftover manual Open/Closed/Hold override.
+        // (Manual reopen on a festival day: delete the closing entry first.)
         $special = Schema::hasTable('rice_price_closings')
             ? RicePriceClosing::forDate($now)
             : null;
@@ -166,6 +154,22 @@ class AppSetting extends Model
             ];
         }
 
+        $overrideStatus = $this->market_override_status ?? null;
+        $overrideUntil = $this->market_override_until ?? null;
+        if ($overrideStatus !== null && $overrideUntil && $now->lt($overrideUntil)) {
+            $code = (int) $overrideStatus;
+            $message = $code === 1 ? 'open' : ($code === 3 ? 'hold' : 'closed');
+
+            return [
+                'currentStatus' => $code,
+                'message' => $message,
+                'mode' => 'manual_override',
+                'schedule' => $schedule,
+                'override_until' => $overrideUntil->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
+                'special_closing' => null,
+            ];
+        }
+
         $open = $schedule['in_window'];
 
         return [
@@ -176,6 +180,21 @@ class AppSetting extends Model
             'override_until' => null,
             'special_closing' => null,
         ];
+    }
+
+    /**
+     * Clear temporary Live Prices Open/Closed/Hold override.
+     */
+    public function clearManualMarketOverride(): void
+    {
+        $payload = [];
+        if (Schema::hasColumn('app_settings', 'market_override_status')) {
+            $payload['market_override_status'] = null;
+            $payload['market_override_until'] = null;
+        }
+        if ($payload !== []) {
+            $this->update($payload);
+        }
     }
 
     public function livePriceStatusMessagePayload(?Carbon $at = null): array
