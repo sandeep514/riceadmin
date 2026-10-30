@@ -41,7 +41,10 @@ class AnalyserAccount extends Model
 
     public static function analyserRoleId(): ?int
     {
-        $role = Role::where('role_name', 'analyser')->first();
+        $role = Role::query()
+            ->whereRaw('LOWER(role_name) = ?', ['analyser'])
+            ->orderBy('id')
+            ->first();
 
         return $role ? (int) $role->id : null;
     }

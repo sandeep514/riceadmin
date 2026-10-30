@@ -13,7 +13,15 @@ class RoleCategoryMapController extends Controller
 {
     public function index(Request $request)
     {
-        $roles = Role::where('type', 'web')->orderBy('role_name')->get();
+        // Include analyser so admin can map categories used by Analyser Accounts.
+        $roles = Role::query()
+            ->where(function ($q) {
+                $q->where('type', 'web')
+                    ->orWhere('type', 'analyser')
+                    ->orWhereRaw('LOWER(role_name) = ?', ['analyser']);
+            })
+            ->orderBy('role_name')
+            ->get();
         $categories = Category::where('status', 1)->orderBy('order', 'asc')->orderBy('category', 'asc')->get();
 
         $selectedRoleId = $request->get('role_id');

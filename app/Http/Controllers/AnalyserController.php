@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AnalyserAccount;
+use App\Category;
 use App\CategoryRoleMap;
 use App\Http\Requests\AnalyserRequest;
 use App\Role;
@@ -107,7 +108,7 @@ class AnalyserController extends Controller
 
     public function store(AnalyserRequest $request)
     {
-        $role = Role::firstOrCreate(['role_name' => 'analyser'], ['type' => 'analyser']);
+        $role = $this->resolveAnalyserRole();
         $otp = random_int(100000, 999999);
         $plainPassword = (string) $request->password;
         $planId = (int) $request->plan_id;
@@ -272,7 +273,7 @@ class AnalyserController extends Controller
      */
     private function formOptions(): array
     {
-        $analyserRole = Role::firstOrCreate(['role_name' => 'analyser'], ['type' => 'analyser']);
+        $analyserRole = $this->resolveAnalyserRole();
         $analyserRoleId = (int) $analyserRole->id;
         $analyserRoleName = (string) ($analyserRole->role_name ?: 'analyser');
 
@@ -292,33 +293,64 @@ class AnalyserController extends Controller
         return compact('categories', 'states', 'cities', 'plans', 'analyserRoleId', 'analyserRoleName');
     }
 
+    private function resolveAnalyserRole(): Role
+    {
+        $role = Role::query()
+            ->whereRaw('LOWER(role_name) = ?', ['analyser'])
+            ->orderBy('id')
+            ->first();
+
+        if ($role) {
+            return $role;
+        }
+
+        return Role::create([
+            'role_name' => 'analyser',
+            'type' => 'analyser',
+        ]);
+    }
+
     /**
-     * Categories mapped to the analyser role only.
+     * Categories for analyser role:
+     * 1) category_role_map for that role
+     * 2) plus category_id from analyser-role web plans
      *
      * @return array<int|string, string>
      */
     private function analyserCategoryOptions(int $roleId): array
     {
-        $mapQuery = CategoryRoleMap::query()
-            ->where('role', $roleId)
-            ->with(['category_rel' => function ($q) {
-                $q->where('status', 1)
-                    ->orderByRaw('COALESCE(`order`, 999999)')
-                    ->orderBy('category');
-            }]);
-
+        $mapQuery = CategoryRoleMap::query()->where('role', $roleId);
         if (Schema::hasColumn('category_role_map', 'status')) {
-            $mapQuery->where('status', 1);
+            $mapQuery->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            });
+        }
+        $categoryIds = $mapQuery->pluck('category')->filter()->map(fn ($id) => (int) $id)->all();
+
+        $planCategoryIds = WebPlanModel::query()
+            ->where('role_id', $roleId)
+            ->where('status', 1)
+            ->whereNotNull('category_id')
+            ->pluck('category_id')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->all();
+
+        $categoryIds = array_values(array_unique(array_merge($categoryIds, $planCategoryIds)));
+
+        if ($categoryIds === []) {
+            return [];
         }
 
-        $options = [];
-        foreach ($mapQuery->get() as $map) {
-            if ($map->category_rel) {
-                $options[$map->category_rel->id] = $map->category_rel->category;
-            }
-        }
-
-        return $options;
+        return Category::query()
+            ->whereIn('id', $categoryIds)
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            })
+            ->orderByRaw('COALESCE(`order`, 999999)')
+            ->orderBy('category')
+            ->pluck('category', 'id')
+            ->toArray();
     }
 
     /**

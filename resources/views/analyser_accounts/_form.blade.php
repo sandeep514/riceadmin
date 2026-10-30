@@ -129,7 +129,11 @@
             @error('business.selected_category')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
-            <p class="help-block">Only categories mapped to the analyser role are listed.</p>
+            @if(count($categories ?? []) === 0)
+                <p class="help-block text-danger">No categories found for analyser. Map them under Role–Category Map (select Analyser), or set category on analyser Web Plans.</p>
+            @else
+                <p class="help-block">Only categories mapped to the analyser role are listed.</p>
+            @endif
         </div>
         <div class="form-group col-md-6 @error('business.company_name') has-error @enderror">
             {!! Form::label('business[company_name]','Company Name') !!}
