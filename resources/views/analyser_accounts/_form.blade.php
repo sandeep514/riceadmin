@@ -50,6 +50,18 @@
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
+        <div class="form-group col-md-6 @error('plan_id') has-error @enderror">
+            {!! Form::label('plan_id','Plan*') !!}
+            {!! Form::select(
+                'plan_id',
+                ['' => 'Select plan'] + ($plans ?? []),
+                old('plan_id', isset($model) ? $model->plan_id : null),
+                ['class'=>'form-control']
+            ) !!}
+            @error('plan_id')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
         <div class="form-group col-md-6 @error('start_date') has-error @enderror">
             {!! Form::label('start_date','Start Date*') !!}
             {!! Form::date('start_date', isset($model) && $model->start_date ? $model->start_date->format('Y-m-d') : null, ['class'=>'form-control']) !!}

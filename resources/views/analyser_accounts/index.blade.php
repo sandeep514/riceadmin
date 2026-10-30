@@ -51,6 +51,7 @@
                                         <tr>
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">Email</th>
+                                            <th style="text-align: center">Plan</th>
                                             <th style="text-align: center">Contact Person</th>
                                             <th style="text-align: center">Mobile</th>
                                             <th style="text-align: center">Start Date</th>
@@ -82,6 +83,7 @@
                                             <tr>
                                                 <td style="text-align: center">{{ optional($account->user)->name }}</td>
                                                 <td style="text-align: center">{{ optional($account->user)->email }}</td>
+                                                <td style="text-align: center">{{ optional($account->plan)->title ?? '-' }}</td>
                                                 <td style="text-align: center">{{ $account->contact_person_name }}</td>
                                                 <td style="text-align: center">{{ $account->contact_mobile }}</td>
                                                 <td style="text-align: center">{{ $account->start_date ? $account->start_date->format('d-m-Y') : '-' }}</td>
@@ -103,6 +105,7 @@
                                         <tr>
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">Email</th>
+                                            <th style="text-align: center">Plan</th>
                                             <th style="text-align: center">Contact Person</th>
                                             <th style="text-align: center">Mobile</th>
                                             <th style="text-align: center">Start Date</th>

@@ -9,6 +9,7 @@ class AnalyserAccount extends Model
 {
     protected $fillable = [
         'user_id',
+        'plan_id',
         'start_date',
         'end_date',
         'received_amount',
@@ -31,6 +32,11 @@ class AnalyserAccount extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(WebPlanModel::class, 'plan_id');
     }
 
     public static function analyserRoleId(): ?int

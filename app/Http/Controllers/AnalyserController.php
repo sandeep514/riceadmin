@@ -10,7 +10,9 @@ use App\Support\QueuedMail;
 use App\User;
 use App\WebBusinessDetails;
 use App\WebCities;
+use App\WebPlanModel;
 use App\WebStates;
+use App\WebUserSubscriptionModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,7 +47,7 @@ class AnalyserController extends Controller
         $today = Carbon::today()->toDateString();
         $hasDeactivatedColumn = Schema::hasColumn('users', 'is_deactivated');
 
-        $query = AnalyserAccount::with('user')->orderBy('id', 'desc');
+        $query = AnalyserAccount::with(['user', 'plan'])->orderBy('id', 'desc');
 
         if ($fromDate) {
             $query->whereDate('analyser_accounts.created_at', '>=', $fromDate);
@@ -100,7 +102,7 @@ class AnalyserController extends Controller
 
     public function create()
     {
-        return view('analyser_accounts.create', $this->businessFormOptions());
+        return view('analyser_accounts.create', $this->formOptions());
     }
 
     public function store(AnalyserRequest $request)
@@ -108,8 +110,9 @@ class AnalyserController extends Controller
         $role = Role::firstOrCreate(['role_name' => 'analyser'], ['type' => 'analyser']);
         $otp = random_int(100000, 999999);
         $plainPassword = (string) $request->password;
+        $planId = (int) $request->plan_id;
 
-        DB::transaction(function () use ($request, $role, $otp, $plainPassword) {
+        DB::transaction(function () use ($request, $role, $otp, $plainPassword, $planId) {
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -126,6 +129,7 @@ class AnalyserController extends Controller
 
             AnalyserAccount::create([
                 'user_id' => $user->id,
+                'plan_id' => $planId,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -138,6 +142,13 @@ class AnalyserController extends Controller
             ]);
 
             $this->syncBusinessDetails($user->id, $request);
+            $this->syncAnalyserSubscription(
+                $user->id,
+                $planId,
+                $request->start_date,
+                $request->end_date,
+                $request->received_amount
+            );
         });
 
         if ($request->boolean('send_mail')) {
@@ -150,7 +161,7 @@ class AnalyserController extends Controller
 
     public function edit($id)
     {
-        $account = AnalyserAccount::with(['user.getWebBusinessDetails'])->find($id);
+        $account = AnalyserAccount::with(['user.getWebBusinessDetails', 'plan'])->find($id);
         if ($account == null) {
             Session::flash('error', 'Error|No record found!');
             return back();
@@ -158,7 +169,7 @@ class AnalyserController extends Controller
 
         return view('analyser_accounts.edit', array_merge(
             ['model' => $account, 'businessDetails' => optional($account->user)->getWebBusinessDetails],
-            $this->businessFormOptions()
+            $this->formOptions()
         ));
     }
 
@@ -176,8 +187,9 @@ class AnalyserController extends Controller
         }
 
         $plainPassword = filled($request->password) ? (string) $request->password : null;
+        $planId = (int) $request->plan_id;
 
-        DB::transaction(function () use ($request, $account, $otp, $plainPassword) {
+        DB::transaction(function () use ($request, $account, $otp, $plainPassword, $planId) {
             $userUpdate = [
                 'name' => $request->name,
                 'email' => $request->email,
@@ -194,6 +206,7 @@ class AnalyserController extends Controller
             $account->user->update($userUpdate);
 
             $account->update([
+                'plan_id' => $planId,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -205,6 +218,13 @@ class AnalyserController extends Controller
             ]);
 
             $this->syncBusinessDetails($account->user_id, $request);
+            $this->syncAnalyserSubscription(
+                (int) $account->user_id,
+                $planId,
+                $request->start_date,
+                $request->end_date,
+                $request->received_amount
+            );
         });
 
         if ($otp) {
@@ -224,6 +244,13 @@ class AnalyserController extends Controller
         }
 
         DB::transaction(function () use ($account) {
+            $referencePrefix = 'analyser_admin_'.$account->user_id;
+            WebUserSubscriptionModel::where('user_id', $account->user_id)
+                ->where(function ($q) use ($referencePrefix) {
+                    $q->where('payment_id', 'like', $referencePrefix.'%')
+                        ->orWhere('order_id', 'like', $referencePrefix.'%');
+                })
+                ->delete();
             WebBusinessDetails::where('user_id', $account->user_id)->delete();
             User::where('id', $account->user_id)->delete();
             $account->delete();
@@ -234,9 +261,14 @@ class AnalyserController extends Controller
     }
 
     /**
-     * @return array{categories: array<int|string, string>, states: array<int|string, string>, cities: \Illuminate\Support\Collection}
+     * @return array{
+     *   categories: array<int|string, string>,
+     *   states: array<int|string, string>,
+     *   cities: \Illuminate\Support\Collection,
+     *   plans: array<int|string, string>
+     * }
      */
-    private function businessFormOptions(): array
+    private function formOptions(): array
     {
         $categories = Category::query()
             ->where('status', 1)
@@ -254,7 +286,96 @@ class AnalyserController extends Controller
             ->orderBy('city_name')
             ->get(['id', 'city_name', 'state_id']);
 
-        return compact('categories', 'states', 'cities');
+        $plans = $this->analyserPlanOptions();
+
+        return compact('categories', 'states', 'cities', 'plans');
+    }
+
+    /**
+     * Active web plans for analyser accounts (prefer analyser-role plans).
+     *
+     * @return array<int|string, string>
+     */
+    private function analyserPlanOptions(): array
+    {
+        $roleId = AnalyserAccount::analyserRoleId();
+
+        $query = WebPlanModel::query()
+            ->where('status', 1)
+            ->orderBy('title');
+
+        if ($roleId) {
+            $rolePlans = (clone $query)->where('role_id', $roleId)->pluck('title', 'id')->toArray();
+            if ($rolePlans !== []) {
+                return $rolePlans;
+            }
+        }
+
+        return $query->pluck('title', 'id')->toArray();
+    }
+
+    /**
+     * Upsert web_user_subscription for the analyser user (same table/shape as other roles).
+     */
+    private function syncAnalyserSubscription(
+        int $userId,
+        int $planId,
+        string $startDate,
+        string $endDate,
+        $receivedAmount = null
+    ): void {
+        $periodStart = Carbon::parse($startDate)->format('Y-m-d');
+        $periodEnd = Carbon::parse($endDate)->format('Y-m-d');
+        $referencePrefix = 'analyser_admin_'.$userId;
+
+        $amount = null;
+        if ($receivedAmount !== null && $receivedAmount !== '') {
+            $amount = $receivedAmount;
+        } else {
+            $plan = WebPlanModel::query()->find($planId);
+            if ($plan) {
+                $amount = $plan->yearly_final_amount
+                    ?? $plan->yearly_price
+                    ?? $plan->monthly_final_amount
+                    ?? $plan->monthly_price
+                    ?? $plan->amount
+                    ?? null;
+            }
+        }
+
+        // Same columns as portal paid/trial subscriptions for other roles.
+        $payload = [
+            'user_id' => $userId,
+            'plan_id' => $planId,
+            'period_start' => $periodStart,
+            'period_end' => $periodEnd,
+            // Custom date range from admin; treat as yearly-style paid access.
+            'subscription_type' => 'yearly',
+            'amount' => $amount,
+            'currency' => 'INR',
+            'status' => 1,
+        ];
+
+        $existing = WebUserSubscriptionModel::query()
+            ->where('user_id', $userId)
+            ->where(function ($q) use ($referencePrefix) {
+                $q->where('payment_id', 'like', $referencePrefix.'%')
+                    ->orWhere('order_id', 'like', $referencePrefix.'%');
+            })
+            ->orderByDesc('id')
+            ->first();
+
+        if ($existing) {
+            $existing->update($payload);
+
+            return;
+        }
+
+        $reference = $referencePrefix.'_'.time();
+        WebUserSubscriptionModel::create(array_merge($payload, [
+            'payment_id' => $reference,
+            'order_id' => $reference,
+        ]));
     }
 
     private function syncBusinessDetails(int $userId, Request $request): void

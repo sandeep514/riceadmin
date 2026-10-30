@@ -43,6 +43,7 @@ class AnalyserRequest extends FormRequest
                 : 'required|string|min:6',
             'contact_person_name' => 'required|string|max:255',
             'contact_mobile' => 'required|string|max:20',
+            'plan_id' => 'required|integer|exists:web_plan,id',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'received_amount' => 'nullable|numeric|min:0',
