@@ -108,7 +108,7 @@ class AnalyserController extends Controller
 
     public function store(AnalyserRequest $request)
     {
-        $role = $this->resolveMarketAnalystRoleOrFail();
+        $role = $this->resolveAnalyserRoleOrFail();
         $otp = random_int(100000, 999999);
         $plainPassword = (string) $request->password;
         $planId = (int) $request->plan_id;
@@ -131,6 +131,7 @@ class AnalyserController extends Controller
             AnalyserAccount::create([
                 'user_id' => $user->id,
                 'plan_id' => $planId,
+                'subscription_type' => $request->subscription_type,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -148,7 +149,8 @@ class AnalyserController extends Controller
                 $planId,
                 $request->start_date,
                 $request->end_date,
-                $request->received_amount
+                $request->received_amount,
+                (string) $request->subscription_type
             );
         });
 
@@ -156,7 +158,7 @@ class AnalyserController extends Controller
             $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
-        Session::flash('success', 'Success|Market Analyst account created successfully!');
+        Session::flash('success', 'Success|Analyser account created successfully!');
         return redirect()->route('analyser-accounts.index');
     }
 
@@ -208,6 +210,7 @@ class AnalyserController extends Controller
 
             $account->update([
                 'plan_id' => $planId,
+                'subscription_type' => $request->subscription_type,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -224,7 +227,8 @@ class AnalyserController extends Controller
                 $planId,
                 $request->start_date,
                 $request->end_date,
-                $request->received_amount
+                $request->received_amount,
+                (string) $request->subscription_type
             );
         });
 
@@ -232,7 +236,7 @@ class AnalyserController extends Controller
             $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
-        Session::flash('success', 'Success|Market Analyst account updated successfully!');
+        Session::flash('success', 'Success|Analyser account updated successfully!');
         return redirect()->route('analyser-accounts.index');
     }
 
@@ -257,7 +261,7 @@ class AnalyserController extends Controller
             $account->delete();
         });
 
-        Session::flash('success', 'Success|Market Analyst account deleted successfully!');
+        Session::flash('success', 'Success|Analyser account deleted successfully!');
         return back();
     }
 
@@ -273,9 +277,9 @@ class AnalyserController extends Controller
      */
     private function formOptions(): array
     {
-        $analyserRole = $this->resolveMarketAnalystRoleOrFail();
+        $analyserRole = $this->resolveAnalyserRoleOrFail();
         $analyserRoleId = (int) $analyserRole->id;
-        $analyserRoleName = (string) ($analyserRole->role_name ?: 'Market Analyst');
+        $analyserRoleName = (string) ($analyserRole->role_name ?: 'analyser');
 
         $categories = $this->analyserCategoryOptions($analyserRoleId);
 
@@ -293,23 +297,23 @@ class AnalyserController extends Controller
         return compact('categories', 'states', 'cities', 'plansByCategory', 'analyserRoleId', 'analyserRoleName');
     }
 
-    private function resolveMarketAnalystRoleOrFail(): Role
+    private function resolveAnalyserRoleOrFail(): Role
     {
-        $role = AnalyserAccount::resolveMarketAnalystRole();
+        $role = AnalyserAccount::resolveAnalyserRole();
         if ($role) {
             return $role;
         }
 
         return Role::create([
-            'role_name' => 'Market Analyst',
-            'type' => 'web',
+            'role_name' => 'analyser',
+            'type' => 'analyser',
         ]);
     }
 
     /**
-     * Categories for Market Analyst role:
+     * Categories for analyser role:
      * 1) category_role_map for that role
-     * 2) plus category_id from Market Analyst web plans
+     * 2) plus category_id from analyser web plans
      *
      * @return array<int|string, string>
      */
@@ -350,7 +354,7 @@ class AnalyserController extends Controller
     }
 
     /**
-     * Unique active plans for Market Analyst, grouped by category_id.
+     * Unique active plans for analyser role, grouped by category_id.
      * Duplicate titles within the same category keep the latest id only.
      *
      * @return array<string, array<int, array{id:int, title:string}>>
@@ -364,7 +368,17 @@ class AnalyserController extends Controller
             ->where('role_id', $roleId)
             ->whereNotNull('category_id')
             ->orderByDesc('id')
-            ->get(['id', 'title', 'category_id']);
+            ->get([
+                'id',
+                'title',
+                'category_id',
+                'monthly_price',
+                'quarterly_price',
+                'yearly_price',
+                'monthly_final_amount',
+                'quarterly_final_amount',
+                'yearly_final_amount',
+            ]);
 
         $grouped = [];
         $seen = [];
@@ -380,6 +394,11 @@ class AnalyserController extends Controller
             $grouped[$categoryKey][] = [
                 'id' => (int) $row->id,
                 'title' => (string) $row->title,
+                'prices' => [
+                    'monthly' => AnalyserAccount::planAmountForType($row, 'monthly'),
+                    'half_yearly' => AnalyserAccount::planAmountForType($row, 'half_yearly'),
+                    'yearly' => AnalyserAccount::planAmountForType($row, 'yearly'),
+                ],
             ];
         }
 
@@ -398,25 +417,23 @@ class AnalyserController extends Controller
         int $planId,
         string $startDate,
         string $endDate,
-        $receivedAmount = null
+        $receivedAmount = null,
+        string $subscriptionType = 'yearly'
     ): void {
         $periodStart = Carbon::parse($startDate)->format('Y-m-d');
         $periodEnd = Carbon::parse($endDate)->format('Y-m-d');
         $referencePrefix = 'analyser_admin_'.$userId;
+
+        if (! array_key_exists($subscriptionType, AnalyserAccount::SUBSCRIPTION_TYPES)) {
+            $subscriptionType = 'yearly';
+        }
 
         $amount = null;
         if ($receivedAmount !== null && $receivedAmount !== '') {
             $amount = $receivedAmount;
         } else {
             $plan = WebPlanModel::query()->find($planId);
-            if ($plan) {
-                $amount = $plan->yearly_final_amount
-                    ?? $plan->yearly_price
-                    ?? $plan->monthly_final_amount
-                    ?? $plan->monthly_price
-                    ?? $plan->amount
-                    ?? null;
-            }
+            $amount = AnalyserAccount::planAmountForType($plan, $subscriptionType);
         }
 
         // Same columns as portal paid/trial subscriptions for other roles.
@@ -425,8 +442,7 @@ class AnalyserController extends Controller
             'plan_id' => $planId,
             'period_start' => $periodStart,
             'period_end' => $periodEnd,
-            // Custom date range from admin; treat as yearly-style paid access.
-            'subscription_type' => 'yearly',
+            'subscription_type' => $subscriptionType,
             'amount' => $amount,
             'currency' => 'INR',
             'status' => 1,

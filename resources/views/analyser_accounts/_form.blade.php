@@ -11,6 +11,11 @@
             ?? $biz('selected_category', '')
     );
     $selectedPlanId = (string) old('plan_id', isset($model) ? $model->plan_id : '');
+    $selectedSubscriptionType = (string) old(
+        'subscription_type',
+        isset($model) ? ($model->subscription_type ?? '') : ''
+    );
+    $subscriptionTypeOptions = ['' => 'Select duration'] + \App\AnalyserAccount::SUBSCRIPTION_TYPES;
 @endphp
 <div class="box-body">
     <div class="row">
@@ -58,7 +63,7 @@
         </div>
         <div class="form-group col-md-4">
             {!! Form::label('analyser_role_display','Role') !!}
-            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'Market Analyst', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
+            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'analyser', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
             {!! Form::hidden('analyser_role_id', $analyserRoleId ?? null) !!}
         </div>
         <div class="form-group col-md-4 @error('category_id') has-error @enderror">
@@ -68,7 +73,7 @@
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
             @if(count($categories ?? []) === 0)
-                <p class="help-block text-danger">No categories for Market Analyst. Map them under Role–Category Map.</p>
+                <p class="help-block text-danger">No categories for analyser. Map them under Role–Category Map.</p>
             @endif
         </div>
         <div class="form-group col-md-4 @error('plan_id') has-error @enderror">
@@ -91,29 +96,38 @@
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
             @if(empty($plansByCategory ?? []))
-                <p class="help-block text-danger">No Market Analyst plans found. Create a Web Plan with role <strong>Market Analyst</strong>.</p>
+                <p class="help-block text-danger">No analyser plans found. Create a Web Plan with role <strong>analyser</strong>.</p>
             @endif
         </div>
-        <div class="form-group col-md-6 @error('start_date') has-error @enderror">
+        <div class="form-group col-md-4 @error('subscription_type') has-error @enderror">
+            {!! Form::label('subscription_type','Plan Duration*') !!}
+            {!! Form::select('subscription_type', $subscriptionTypeOptions, $selectedSubscriptionType, ['class'=>'form-control', 'id'=>'analyser_subscription_type']) !!}
+            @error('subscription_type')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+            <p class="help-block">Monthly / Half Yearly / Yearly price from the selected web plan.</p>
+        </div>
+        <div class="form-group col-md-4 @error('start_date') has-error @enderror">
             {!! Form::label('start_date','Start Date*') !!}
-            {!! Form::date('start_date', isset($model) && $model->start_date ? $model->start_date->format('Y-m-d') : null, ['class'=>'form-control']) !!}
+            {!! Form::date('start_date', old('start_date', isset($model) && $model->start_date ? $model->start_date->format('Y-m-d') : null), ['class'=>'form-control', 'id'=>'analyser_start_date']) !!}
             @error('start_date')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
-        <div class="form-group col-md-6 @error('end_date') has-error @enderror">
+        <div class="form-group col-md-4 @error('end_date') has-error @enderror">
             {!! Form::label('end_date','End Date*') !!}
-            {!! Form::date('end_date', isset($model) && $model->end_date ? $model->end_date->format('Y-m-d') : null, ['class'=>'form-control']) !!}
+            {!! Form::date('end_date', old('end_date', isset($model) && $model->end_date ? $model->end_date->format('Y-m-d') : null), ['class'=>'form-control', 'id'=>'analyser_end_date']) !!}
             @error('end_date')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
         <div class="form-group col-md-6 @error('received_amount') has-error @enderror">
-            {!! Form::label('received_amount','Received Amount (optional)') !!}
-            {!! Form::number('received_amount', isset($model) ? $model->received_amount : null, ['class'=>'form-control','step'=>'0.01','min'=>'0']) !!}
+            {!! Form::label('received_amount','Received Amount*') !!}
+            {!! Form::number('received_amount', old('received_amount', isset($model) ? $model->received_amount : null), ['class'=>'form-control','step'=>'0.01','min'=>'0', 'id'=>'analyser_received_amount']) !!}
             @error('received_amount')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
+            <p class="help-block">Auto-filled from plan price; you can override.</p>
         </div>
         <div class="form-group col-md-6 @error('download_limit') has-error @enderror">
             {!! Form::label('download_limit','Number of Download Access (optional)') !!}
@@ -274,6 +288,12 @@ window.__analyserAccountForm = {
     selectedCity: @json($selectedCity),
     plansByCategory: @json($plansByCategory ?? new \stdClass()),
     selectedCategoryId: @json((string) $selectedCategoryId),
-    selectedPlanId: @json((string) $selectedPlanId)
+    selectedPlanId: @json((string) $selectedPlanId),
+    selectedSubscriptionType: @json((string) $selectedSubscriptionType),
+    subscriptionDays: {
+        monthly: {{ \App\AnalyserAccount::subscriptionDays('monthly') }},
+        half_yearly: {{ \App\AnalyserAccount::subscriptionDays('half_yearly') }},
+        yearly: {{ \App\AnalyserAccount::subscriptionDays('yearly') }}
+    }
 };
 </script>

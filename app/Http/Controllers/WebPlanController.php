@@ -246,7 +246,7 @@ class WebPlanController extends Controller
 
     /**
      * Roles available when creating/editing web plans.
-     * Market Analyst is a normal web role (legacy analyser role is merged into it).
+     * Includes analyser so Analyser Accounts can be linked to web plans.
      *
      * @return \Illuminate\Support\Collection<int|string, string>
      */
@@ -255,8 +255,6 @@ class WebPlanController extends Controller
         return Role::query()
             ->where(function ($q) {
                 $q->where('type', 'web')
-                    ->orWhereRaw('LOWER(role_name) = ?', ['market analyst'])
-                    // Legacy until merge migration runs.
                     ->orWhere('type', 'analyser')
                     ->orWhereRaw('LOWER(role_name) = ?', ['analyser']);
             })

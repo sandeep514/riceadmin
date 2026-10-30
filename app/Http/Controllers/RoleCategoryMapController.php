@@ -13,11 +13,10 @@ class RoleCategoryMapController extends Controller
 {
     public function index(Request $request)
     {
-        // Market Analyst is type=web; keep legacy analyser visible until merge migration.
+        // Include analyser so admin can map categories used by Analyser Accounts.
         $roles = Role::query()
             ->where(function ($q) {
                 $q->where('type', 'web')
-                    ->orWhereRaw('LOWER(role_name) = ?', ['market analyst'])
                     ->orWhere('type', 'analyser')
                     ->orWhereRaw('LOWER(role_name) = ?', ['analyser']);
             })

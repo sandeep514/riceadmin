@@ -10,6 +10,7 @@ class AnalyserAccount extends Model
     protected $fillable = [
         'user_id',
         'plan_id',
+        'subscription_type',
         'start_date',
         'end_date',
         'received_amount',
@@ -21,6 +22,48 @@ class AnalyserAccount extends Model
         'has_today_access',
         'created_by',
     ];
+
+    public const SUBSCRIPTION_TYPES = [
+        'monthly' => 'Monthly',
+        'half_yearly' => 'Half Yearly',
+        'yearly' => 'Yearly',
+    ];
+
+    public static function subscriptionDays(string $type): int
+    {
+        if ($type === 'monthly') {
+            return 30;
+        }
+        if ($type === 'half_yearly') {
+            return 183;
+        }
+        if ($type === 'yearly') {
+            return 365;
+        }
+
+        return 30;
+    }
+
+    public static function planAmountForType(?WebPlanModel $plan, string $type): ?float
+    {
+        if (! $plan) {
+            return null;
+        }
+
+        if ($type === 'yearly') {
+            $amount = $plan->yearly_final_amount ?? $plan->yearly_price;
+        } elseif ($type === 'half_yearly') {
+            $amount = $plan->quarterly_final_amount ?? $plan->quarterly_price;
+        } else {
+            $amount = $plan->monthly_final_amount ?? $plan->monthly_price;
+        }
+
+        if ($amount === null || $amount === '') {
+            return null;
+        }
+
+        return round((float) $amount, 2);
+    }
 
     protected $casts = [
         'start_date' => 'date',
@@ -39,29 +82,15 @@ class AnalyserAccount extends Model
         return $this->belongsTo(WebPlanModel::class, 'plan_id');
     }
 
-    /**
-     * Market Analyst is the canonical role for analyser accounts
-     * (legacy "analyser" role is merged away).
-     */
     public static function analyserRoleId(): ?int
     {
-        $role = self::resolveMarketAnalystRole();
+        $role = self::resolveAnalyserRole();
 
         return $role ? (int) $role->id : null;
     }
 
-    public static function resolveMarketAnalystRole(): ?Role
+    public static function resolveAnalyserRole(): ?Role
     {
-        $role = Role::query()
-            ->whereRaw('LOWER(role_name) = ?', ['market analyst'])
-            ->orderBy('id')
-            ->first();
-
-        if ($role) {
-            return $role;
-        }
-
-        // Legacy fallback while migration runs / old DBs.
         return Role::query()
             ->where(function ($q) {
                 $q->whereRaw('LOWER(role_name) = ?', ['analyser'])

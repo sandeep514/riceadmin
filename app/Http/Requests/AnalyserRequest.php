@@ -97,9 +97,10 @@ class AnalyserRequest extends FormRequest
                     }
                 }),
             ],
+            'subscription_type' => 'required|string|in:monthly,half_yearly,yearly',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'received_amount' => 'nullable|numeric|min:0',
+            'received_amount' => 'required|numeric|min:0',
             'has_historical_access' => 'required|boolean',
             'download_limit' => 'nullable|integer|min:1',
             'has_today_access' => 'required|boolean',
