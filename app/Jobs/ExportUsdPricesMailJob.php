@@ -11,8 +11,8 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Excel as ExcelWriter;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExportUsdPricesMailJob implements ShouldQueue
@@ -44,7 +44,6 @@ class ExportUsdPricesMailJob implements ShouldQueue
 
         $rowCount = (clone $export->query())->count();
         $filters = $this->filterSummary();
-        $relativePath = null;
 
         try {
             if ($rowCount === 0) {
@@ -67,20 +66,17 @@ class ExportUsdPricesMailJob implements ShouldQueue
                 .($this->type ? '_'.Str::slug($this->type) : '')
                 .'_'.now()->format('YmdHis').'.xlsx';
 
-            $relativePath = 'exports/'.$filename;
-            Excel::store($export, $relativePath, 'local');
-
-            $absolutePath = Storage::disk('local')->path($relativePath);
+            // Build XLSX in memory and attach directly — no local storage write.
+            $xlsxBinary = Excel::raw($export, ExcelWriter::XLSX);
 
             Mail::send('mail.usdPricesExport', [
                 'hasAttachment' => true,
                 'rowCount' => $rowCount,
                 'filters' => $filters,
-            ], function ($message) use ($absolutePath, $filename) {
+            ], function ($message) use ($xlsxBinary, $filename) {
                 $message->to($this->email)
                     ->subject('USD Prices Export')
-                    ->attach($absolutePath, [
-                        'as' => $filename,
+                    ->attachData($xlsxBinary, $filename, [
                         'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     ]);
             });
@@ -93,10 +89,6 @@ class ExportUsdPricesMailJob implements ShouldQueue
                 'type' => $this->type,
             ]);
             throw $e;
-        } finally {
-            if ($relativePath && Storage::disk('local')->exists($relativePath)) {
-                Storage::disk('local')->delete($relativePath);
-            }
         }
     }
 

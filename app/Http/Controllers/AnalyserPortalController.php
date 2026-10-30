@@ -7,12 +7,41 @@ use App\Support\ClientPlatform;
 use App\Support\QueuedMail;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class AnalyserPortalController extends Controller
 {
     /**
-     * Request an email OTP for an analyser account (no password login).
+     * Login with email + password for an analyser account.
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $user = $this->findAnalyserUser($request->email);
+
+        if (! $user || blank($user->password) || ! Hash::check($request->password, $user->password)) {
+            return response()->json(['status' => false, 'message' => 'Invalid email or password.'], 401);
+        }
+
+        if ($blockedMessage = $user->authAccessBlockedMessage()) {
+            return response()->json(['status' => false, 'message' => $blockedMessage], 403);
+        }
+
+        $account = $this->accountFor($user);
+        if (! $account->isActive()) {
+            return response()->json(['status' => false, 'message' => 'Your analyser access period is not active.'], 403);
+        }
+
+        return response()->json($this->loginSuccessPayload($user, $account, $request), 200);
+    }
+
+    /**
+     * Request an email OTP for an analyser account (fallback when password login is not used).
      */
     public function requestOtp(Request $request)
     {
@@ -71,13 +100,22 @@ class AnalyserPortalController extends Controller
             return response()->json(['status' => false, 'message' => 'Your analyser access period is not active.'], 403);
         }
 
-        $token = $this->generateWebToken($user->id);
         $user->update(['otp' => null]);
+
+        return response()->json($this->loginSuccessPayload($user, $account, $request), 200);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function loginSuccessPayload(User $user, AnalyserAccount $account, Request $request): array
+    {
+        $token = $this->generateWebToken($user->id);
 
         auth('web')->login($user);
         $request->session()->save();
 
-        return response()->json([
+        return [
             'status' => true,
             'message' => 'Logged in successfully.',
             'data' => [
@@ -97,7 +135,7 @@ class AnalyserPortalController extends Controller
                     'downloads_remaining' => $account->downloadsRemaining(),
                 ],
             ],
-        ], 200);
+        ];
     }
 
     private function findAnalyserUser(string $email): ?User

@@ -14,6 +14,7 @@ use App\WebStates;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Session;
 
@@ -106,12 +107,13 @@ class AnalyserController extends Controller
     {
         $role = Role::firstOrCreate(['role_name' => 'analyser'], ['type' => 'analyser']);
         $otp = random_int(100000, 999999);
+        $plainPassword = (string) $request->password;
 
-        DB::transaction(function () use ($request, $role, $otp) {
+        DB::transaction(function () use ($request, $role, $otp, $plainPassword) {
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
-                'password' => null,
+                'password' => Hash::make($plainPassword),
                 'contact_person_name' => $request->contact_person_name,
                 'mobile' => $request->contact_mobile,
                 'role' => $role->id,
@@ -139,7 +141,7 @@ class AnalyserController extends Controller
         });
 
         if ($request->boolean('send_mail')) {
-            $this->sendCredentialsMail($request->email, $otp);
+            $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
         Session::flash('success', 'Success|Analyser account created successfully!');
@@ -173,13 +175,23 @@ class AnalyserController extends Controller
             $otp = random_int(100000, 999999);
         }
 
-        DB::transaction(function () use ($request, $account, $otp) {
-            $account->user->update([
+        $plainPassword = filled($request->password) ? (string) $request->password : null;
+
+        DB::transaction(function () use ($request, $account, $otp, $plainPassword) {
+            $userUpdate = [
                 'name' => $request->name,
                 'email' => $request->email,
                 'contact_person_name' => $request->contact_person_name,
                 'mobile' => $request->contact_mobile,
-            ] + ($otp ? ['otp' => $otp] : []));
+            ];
+            if ($plainPassword !== null) {
+                $userUpdate['password'] = Hash::make($plainPassword);
+            }
+            if ($otp) {
+                $userUpdate['otp'] = $otp;
+            }
+
+            $account->user->update($userUpdate);
 
             $account->update([
                 'start_date' => $request->start_date,
@@ -196,7 +208,7 @@ class AnalyserController extends Controller
         });
 
         if ($otp) {
-            $this->sendCredentialsMail($request->email, $otp);
+            $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
         Session::flash('success', 'Success|Analyser account updated successfully!');
@@ -282,7 +294,7 @@ class AnalyserController extends Controller
         WebBusinessDetails::updateOrCreate(['user_id' => $userId], $data);
     }
 
-    private function sendCredentialsMail(string $email, int $otp): void
+    private function sendCredentialsMail(string $email, int $otp, ?string $plainPassword = null): void
     {
         $user = User::where('email', $email)->first();
         $account = $user ? AnalyserAccount::where('user_id', $user->id)->first() : null;
@@ -292,6 +304,7 @@ class AnalyserController extends Controller
             [
                 'userName' => $user ? $user->name : '',
                 'email' => $email,
+                'password' => $plainPassword,
                 'otp' => $otp,
                 'loginUrl' => config('analyser.login_url', 'abc'),
                 'startDate' => $account && $account->start_date ? $account->start_date->format('d-m-Y') : '',

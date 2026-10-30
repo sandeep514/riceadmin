@@ -22,6 +22,20 @@
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
+        <div class="form-group col-md-6 @error('password') has-error @enderror">
+            {!! Form::label('password', isset($model) ? 'Password (leave blank to keep current)' : 'Password*') !!}
+            {!! Form::password('password', ['class'=>'form-control', 'autocomplete'=>'new-password']) !!}
+            @error('password')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
+        <div class="form-group col-md-6 @error('password_confirmation') has-error @enderror">
+            {!! Form::label('password_confirmation', isset($model) ? 'Confirm Password (if changing)' : 'Confirm Password*') !!}
+            {!! Form::password('password_confirmation', ['class'=>'form-control', 'autocomplete'=>'new-password']) !!}
+            @error('password_confirmation')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+        </div>
         <div class="form-group col-md-6 @error('contact_person_name') has-error @enderror">
             {!! Form::label('contact_person_name','Contact Person Name*') !!}
             {!! Form::text('contact_person_name', isset($model) ? $model->contact_person_name : null, ['class'=>'form-control']) !!}
@@ -81,10 +95,10 @@
         <div class="form-group col-md-12">
             <div class="checkbox">
                 <label>
-                    {!! Form::checkbox('send_mail', 1, !isset($model)) !!} Send mail to client with login URL and email
+                    {!! Form::checkbox('send_mail', 1, !isset($model)) !!} Send mail to client with login URL, email and password
                 </label>
             </div>
-            <p class="help-block">No password is set. The client logs in with the OTP sent on mail.</p>
+            <p class="help-block">Client can log in with email and password. OTP login remains available as a fallback.</p>
         </div>
     </div>
 

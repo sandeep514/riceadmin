@@ -30,9 +30,17 @@ class AnalyserRequest extends FormRequest
             $emailRule = 'required|email|max:255|unique:users,email,' . $userId;
         }
 
+        $isUpdate = in_array($this->method(), ['PUT', 'PATCH'], true);
+
         return [
             'name' => 'required|string|max:255',
             'email' => $emailRule,
+            'password' => $isUpdate
+                ? 'nullable|string|min:6|confirmed'
+                : 'required|string|min:6|confirmed',
+            'password_confirmation' => $isUpdate
+                ? 'nullable|string|min:6'
+                : 'required|string|min:6',
             'contact_person_name' => 'required|string|max:255',
             'contact_mobile' => 'required|string|max:20',
             'start_date' => 'required|date',
