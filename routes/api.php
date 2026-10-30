@@ -127,6 +127,7 @@ use Pusher\Pusher;
     Route::get('get/buyer/details/{id}' , ['as' => 'get.buyer.details' ,'uses' =>'ApiController@getBuyerDetails']);
     Route::get('get/calculator/data' , ['as' => 'get.calculator.data' ,'uses' =>'ApiController@getCalculatorData']);
     Route::get('usd-prices/packing-options', ['as' => 'usd.prices.packing.options', 'uses' => 'ApiController@getUsdPricesPackingOptions']);
+    Route::get('usd-prices/filter-packings', ['as' => 'usd.prices.filter.packings', 'uses' => 'ApiController@getUsdPricesFilterPackings', 'middleware' => 'app.or.portal.api.token']);
     Route::get('usd-prices/graph/{riceQualityId}', ['as' => 'usd.prices.graph', 'uses' => 'ApiController@getUsdPricesGraph', 'middleware' => 'app.or.portal.api.token']);
     Route::post('usd-prices/export', ['as' => 'usd.prices.export', 'uses' => 'ApiController@exportUsdPrices', 'middleware' => 'app.or.portal.api.token']);
     // Legacy alias — same handler as usd-prices/export

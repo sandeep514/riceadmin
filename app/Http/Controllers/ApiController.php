@@ -5544,6 +5544,109 @@ class ApiController extends Controller
     }
 
     /**
+     * Fixed packing filters for USD prices (basmati / non-basmati):
+     * 40kg Jute, Jute Inner, 50kg PP.
+     *
+     * GET /api/usd-prices/filter-packings
+     * Optional ?type=basmati|non-basmati
+     */
+    public function getUsdPricesFilterPackings(Request $request)
+    {
+        $type = strtolower(trim((string) $request->query('type', '')));
+        if ($type !== '' && ! in_array($type, ['basmati', 'non-basmati'], true)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid type. Allowed values: basmati, non-basmati',
+            ], 422);
+        }
+
+        $definitions = [
+            [
+                'key' => '40kg_jute',
+                'label' => '40kg Jute',
+                'match' => function ($q) {
+                    $q->whereRaw('LOWER(TRIM(bag_size)) = ?', ['40kg'])
+                        ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute']);
+                },
+            ],
+            [
+                'key' => 'jute_inner',
+                'label' => 'Jute Inner',
+                'match' => function ($q) {
+                    $q->where(function ($inner) {
+                        $inner->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute inner'])
+                            ->orWhereRaw('LOWER(REPLACE(TRIM(bag_type), \'-\', \' \')) LIKE ?', ['%jute%inner%']);
+                    });
+                },
+            ],
+            [
+                'key' => '50kg_pp',
+                'label' => '50kg PP',
+                'match' => function ($q) {
+                    $q->whereRaw('LOWER(TRIM(bag_size)) = ?', ['50kg'])
+                        ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['pp']);
+                },
+            ],
+        ];
+
+        $buildForAppliedFor = function (int $appliedFor) use ($definitions) {
+            $items = [];
+            foreach ($definitions as $def) {
+                $row = USD_defaultmaster::query()
+                    ->select(['id', 'bag_size', 'bag_type', 'PMT_USD', 'applied_for', 'order'])
+                    ->where('applied_for', $appliedFor)
+                    ->where(function ($q) use ($def) {
+                        ($def['match'])($q);
+                    })
+                    ->orderBy('order', 'ASC')
+                    ->orderBy('id', 'ASC')
+                    ->first();
+
+                if (! $row) {
+                    continue;
+                }
+
+                $items[] = [
+                    'id' => (int) $row->id,
+                    'key' => $def['key'],
+                    'label' => $def['label'],
+                    'bag_size' => $row->bag_size,
+                    'bag_type' => $row->bag_type,
+                    'PMT_USD' => $row->PMT_USD,
+                    'applied_for' => (int) $row->applied_for,
+                ];
+            }
+
+            return $items;
+        };
+
+        // applied_for: 1 = Basmati, 0 = Non-Basmati (same as admin UI)
+        if ($type === 'basmati') {
+            return response()->json([
+                'status' => true,
+                'type' => 'basmati',
+                'data' => $buildForAppliedFor(1),
+            ], 200);
+        }
+
+        if ($type === 'non-basmati') {
+            return response()->json([
+                'status' => true,
+                'type' => 'non-basmati',
+                'data' => $buildForAppliedFor(0),
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'basmati' => $buildForAppliedFor(1),
+                'non-basmati' => $buildForAppliedFor(0),
+            ],
+        ], 200);
+    }
+
+    /**
      * USD prices XLSX export.
      * POST /api/usd-prices/export
      *
