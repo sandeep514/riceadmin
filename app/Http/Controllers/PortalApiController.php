@@ -711,76 +711,101 @@ class PortalApiController extends Controller
             $user = User::where(['mobile' => $mobile, 'otp' => $otp, 'userType' => 2])->first();
 
             if ($user) {
-                if ($blocked = $this->portalAccessBlockedResponse($user)) {
-                    return $blocked;
-                }
-                $token = $this->generateAndStoreApiToken((int) $user->id, $this->resolveLoginPlatform($request));
-                // ✅ Create Laravel session using 'web' guard (sets httpOnly cookie automatically)
-                auth('web')->login($user);
-                
-                // ✅ Ensure session is saved so Set-Cookie header is sent
-                $request->session()->save();
-                
-                // ✅ Reload user with relationships using the user ID to ensure we get the correct user
-                $data = User::where('id', $user->id)->where('userType', 2)->with(array_merge(
-                    $this->portalPersonalDetailsWithRelations(),
-                    [
-                        'getWebBusinessDetails' => function ($q) {
-                            return $q->with(['getCategoryDetails:id,category']);
-                        },
-                        'getWebUserAttachment',
-                        'getWebUserSubscription' => function ($q) {
-                            return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
-                        },
-                        'role_rel',
-                    ]
-                ))->first();
-                
-                // Check if user data was found
-                if (!$data) {
-                    return response()->json(['status' => false, 'message' => 'User not found'], 404);
-                }
-
-                $this->hydratePersonalLocationRelations($data->getWebPersonalDetails);
-
-                $hasActivePlan = false;
-                if($data->getWebUserSubscription){
-                    $hasActivePlan = true;
-                }
-                
-                $hasBasicDetails = $this->portalUserHasBasicProfileDetails($data);
-                $hasUploadedDocuments = $this->portalUserHasUploadedDocuments($data);
-
-                $checkIfTrailDone = WebUserSubscriptionModel::where('user_id', $user->id)->where('subscription_type', 'trial')->first();
-                
-                $hasTrialDone = false;
-                if($checkIfTrailDone){
-                    $hasTrialDone = true;
-                }
-
-                // ✅ Return response with session cookie
-                $holdInfo = $data->portalHoldInfo();
-                return response()->json([
-                    'status' => true, 
-                    'message' => 'Success', 
-                    'token' => $token,
-                    'platform' => $this->resolveLoginPlatform($request),
-                    'hasBasicDetails' => $hasBasicDetails,
-                    'hasUploadedDocuments' => $hasUploadedDocuments,
-                    'hasTrialDone' => $hasTrialDone,
-                    'hasActivePlan' => $hasActivePlan,
-                    'account_on_hold' => $holdInfo['account_on_hold'],
-                    'hold_message' => $holdInfo['hold_message'],
-                    'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $user->id),
-                    'planDetails' => $data->getWebUserSubscription, 
-                    'data' => $data
-                ], 200);
+                return $this->portalLoginSuccessResponse($user, $request, 'Success');
             } else {
                 return response()->json(['status' => false, 'message' => 'Wrong user credentials'], 401);
             }
         } else {
             return response()->json(['status' => false, 'message' => 'Required fields are missing'], 401);
         }
+    }
+
+    /**
+     * Web portal login with email + password (same response shape as OTP login).
+     * POST /portal/login/password
+     */
+    public function loginWithPassword(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation Error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $user = User::where('email', $request->email)
+            ->where('userType', 2)
+            ->first();
+
+        if (! $user || blank($user->password) || ! Hash::check($request->password, $user->password)) {
+            return response()->json(['status' => false, 'message' => 'Wrong user credentials'], 401);
+        }
+
+        return $this->portalLoginSuccessResponse($user, $request, 'Success');
+    }
+
+    /**
+     * Shared success payload for portal OTP / password login.
+     */
+    private function portalLoginSuccessResponse(User $user, Request $request, string $message = 'Success')
+    {
+        if ($blocked = $this->portalAccessBlockedResponse($user)) {
+            return $blocked;
+        }
+
+        $token = $this->generateAndStoreApiToken((int) $user->id, $this->resolveLoginPlatform($request));
+        auth('web')->login($user);
+        $request->session()->save();
+
+        $data = User::where('id', $user->id)->where('userType', 2)->with(array_merge(
+            $this->portalPersonalDetailsWithRelations(),
+            [
+                'getWebBusinessDetails' => function ($q) {
+                    return $q->with(['getCategoryDetails:id,category']);
+                },
+                'getWebUserAttachment',
+                'getWebUserSubscription' => function ($q) {
+                    return $q->whereDate('period_end', '>=', Carbon::now()->format('Y-m-d'));
+                },
+                'role_rel',
+            ]
+        ))->first();
+
+        if (! $data) {
+            return response()->json(['status' => false, 'message' => 'User not found'], 404);
+        }
+
+        $this->hydratePersonalLocationRelations($data->getWebPersonalDetails);
+
+        $hasActivePlan = (bool) $data->getWebUserSubscription;
+        $hasBasicDetails = $this->portalUserHasBasicProfileDetails($data);
+        $hasUploadedDocuments = $this->portalUserHasUploadedDocuments($data);
+        $hasTrialDone = WebUserSubscriptionModel::where('user_id', $user->id)
+            ->where('subscription_type', 'trial')
+            ->exists();
+        $holdInfo = $data->portalHoldInfo();
+
+        return response()->json([
+            'status' => true,
+            'message' => $message,
+            'token' => $token,
+            'platform' => $this->resolveLoginPlatform($request),
+            'hasBasicDetails' => $hasBasicDetails,
+            'hasUploadedDocuments' => $hasUploadedDocuments,
+            'hasTrialDone' => $hasTrialDone,
+            'hasActivePlan' => $hasActivePlan,
+            'account_on_hold' => $holdInfo['account_on_hold'],
+            'hold_message' => $holdInfo['hold_message'],
+            'total_available_days' => $this->getTotalAvailableSubscriptionDays((int) $user->id),
+            'planDetails' => $data->getWebUserSubscription,
+            'data' => $data,
+        ], 200);
     }
 
     public function saveUser(Request $request)
