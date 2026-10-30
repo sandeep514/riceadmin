@@ -266,7 +266,7 @@ class AnalyserController extends Controller
      *   categories: array<int|string, string>,
      *   states: array<int|string, string>,
      *   cities: \Illuminate\Support\Collection,
-     *   plans: array<int|string, string>,
+     *   plansByCategory: array<string, array<int, array{id:int, title:string}>>,
      *   analyserRoleId: int|null,
      *   analyserRoleName: string
      * }
@@ -288,9 +288,9 @@ class AnalyserController extends Controller
             ->orderBy('city_name')
             ->get(['id', 'city_name', 'state_id']);
 
-        $plans = $this->analyserPlanOptions();
+        $plansByCategory = $this->analyserPlansByCategory($analyserRoleId);
 
-        return compact('categories', 'states', 'cities', 'plans', 'analyserRoleId', 'analyserRoleName');
+        return compact('categories', 'states', 'cities', 'plansByCategory', 'analyserRoleId', 'analyserRoleName');
     }
 
     private function resolveMarketAnalystRoleOrFail(): Role
@@ -350,22 +350,44 @@ class AnalyserController extends Controller
     }
 
     /**
-     * Active web plans for the Market Analyst role only (no other roles).
+     * Unique active plans for Market Analyst, grouped by category_id.
+     * Duplicate titles within the same category keep the latest id only.
      *
-     * @return array<int|string, string>
+     * @return array<string, array<int, array{id:int, title:string}>>
      */
-    private function analyserPlanOptions(): array
+    private function analyserPlansByCategory(int $roleId): array
     {
-        $roleId = (int) $this->resolveMarketAnalystRoleOrFail()->id;
-
-        return WebPlanModel::query()
+        $rows = WebPlanModel::query()
             ->where(function ($q) {
                 $q->where('status', 1)->orWhereNull('status');
             })
             ->where('role_id', $roleId)
-            ->orderBy('title')
-            ->pluck('title', 'id')
-            ->toArray();
+            ->whereNotNull('category_id')
+            ->orderByDesc('id')
+            ->get(['id', 'title', 'category_id']);
+
+        $grouped = [];
+        $seen = [];
+
+        foreach ($rows as $row) {
+            $categoryKey = (string) (int) $row->category_id;
+            $titleKey = strtolower(trim((string) $row->title));
+            $dedupeKey = $categoryKey.'|'.$titleKey;
+            if (isset($seen[$dedupeKey])) {
+                continue;
+            }
+            $seen[$dedupeKey] = true;
+            $grouped[$categoryKey][] = [
+                'id' => (int) $row->id,
+                'title' => (string) $row->title,
+            ];
+        }
+
+        foreach ($grouped as $categoryKey => $plans) {
+            usort($grouped[$categoryKey], fn ($a, $b) => strcasecmp($a['title'], $b['title']));
+        }
+
+        return $grouped;
     }
 
     /**
@@ -464,6 +486,11 @@ class AnalyserController extends Controller
         }
         if (($data['registered_email'] ?? '') === '') {
             $data['registered_email'] = (string) $request->input('email', '');
+        }
+
+        // Keep business category in sync with the account Role→Category→Plan selection.
+        if ($request->filled('category_id')) {
+            $data['selected_category'] = (string) $request->input('category_id');
         }
 
         WebBusinessDetails::updateOrCreate(['user_id' => $userId], $data);

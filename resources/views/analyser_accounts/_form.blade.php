@@ -5,6 +5,12 @@
     };
     $categoryOptions = ['' => 'Select category'] + ($categories ?? []);
     $stateOptions = ['' => 'Select state'] + ($states ?? []);
+    $selectedCategoryId = (string) old(
+        'category_id',
+        optional(isset($model) ? $model->plan : null)->category_id
+            ?? $biz('selected_category', '')
+    );
+    $selectedPlanId = (string) old('plan_id', isset($model) ? $model->plan_id : '');
 @endphp
 <div class="box-body">
     <div class="row">
@@ -50,19 +56,31 @@
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
-        <div class="form-group col-md-6 @error('plan_id') has-error @enderror">
+        <div class="form-group col-md-4">
+            {!! Form::label('analyser_role_display','Role') !!}
+            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'Market Analyst', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
+            {!! Form::hidden('analyser_role_id', $analyserRoleId ?? null) !!}
+        </div>
+        <div class="form-group col-md-4 @error('category_id') has-error @enderror">
+            {!! Form::label('category_id','Category*') !!}
+            {!! Form::select('category_id', $categoryOptions, $selectedCategoryId, ['class'=>'form-control', 'id'=>'analyser_category_id']) !!}
+            @error('category_id')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+            @if(count($categories ?? []) === 0)
+                <p class="help-block text-danger">No categories for Market Analyst. Map them under Role–Category Map.</p>
+            @endif
+        </div>
+        <div class="form-group col-md-4 @error('plan_id') has-error @enderror">
             {!! Form::label('plan_id','Plan*') !!}
-            {!! Form::select(
-                'plan_id',
-                ['' => 'Select plan'] + ($plans ?? []),
-                old('plan_id', isset($model) ? $model->plan_id : null),
-                ['class'=>'form-control']
-            ) !!}
+            <select name="plan_id" id="analyser_plan_id" class="form-control">
+                <option value="">Select plan</option>
+            </select>
             @error('plan_id')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
-            @if(count($plans ?? []) === 0)
-                <p class="help-block text-danger">No Market Analyst plans found. Create a Web Plan with role <strong>Market Analyst</strong> (and map categories first under Role–Category Map).</p>
+            @if(empty($plansByCategory ?? []))
+                <p class="help-block text-danger">No Market Analyst plans found. Create a Web Plan with role <strong>Market Analyst</strong>.</p>
             @endif
         </div>
         <div class="form-group col-md-6 @error('start_date') has-error @enderror">
@@ -120,24 +138,6 @@
     <hr>
     <h4 style="margin-top: 0;">Business Details (Web Portal)</h4>
     <div class="row">
-        <div class="form-group col-md-6">
-            {!! Form::label('analyser_role_display','Role') !!}
-            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'Market Analyst', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
-            {!! Form::hidden('analyser_role_id', $analyserRoleId ?? null) !!}
-            <p class="help-block">Fixed to Market Analyst role for these accounts.</p>
-        </div>
-        <div class="form-group col-md-6 @error('business.selected_category') has-error @enderror">
-            {!! Form::label('business[selected_category]','Selected Category*') !!}
-            {!! Form::select('business[selected_category]', $categoryOptions, $biz('selected_category'), ['class'=>'form-control']) !!}
-            @error('business.selected_category')
-            <span class="help-block text-danger" role="alert">{{ $message }}</span>
-            @enderror
-            @if(count($categories ?? []) === 0)
-                <p class="help-block text-danger">No categories found for Market Analyst. Map them under Role–Category Map (select Market Analyst), or set category on Market Analyst Web Plans.</p>
-            @else
-                <p class="help-block">Only categories mapped to the Market Analyst role are listed.</p>
-            @endif
-        </div>
         <div class="form-group col-md-6 @error('business.company_name') has-error @enderror">
             {!! Form::label('business[company_name]','Company Name') !!}
             {!! Form::text('business[company_name]', $biz('company_name'), ['class'=>'form-control']) !!}
@@ -261,6 +261,9 @@
 (function () {
     var cities = @json($cityRows);
     var selectedCity = @json($selectedCity);
+    var plansByCategory = @json($plansByCategory ?? []);
+    var selectedCategoryId = @json((string) $selectedCategoryId);
+    var selectedPlanId = @json((string) $selectedPlanId);
 
     function fillCities(stateId, selectedId) {
         var $city = $('#business_city');
@@ -280,10 +283,31 @@
         });
     }
 
+    function fillPlans(categoryId, selectedId) {
+        var $plan = $('#analyser_plan_id');
+        $plan.empty().append($('<option>', { value: '', text: 'Select plan' }));
+        if (!categoryId) {
+            return;
+        }
+        var plans = plansByCategory[String(categoryId)] || plansByCategory[categoryId] || [];
+        plans.forEach(function (row) {
+            $plan.append($('<option>', {
+                value: String(row.id),
+                text: row.title,
+                selected: String(row.id) === String(selectedId)
+            }));
+        });
+    }
+
     $('#business_state').on('change', function () {
         fillCities($(this).val(), '');
     });
 
+    $('#analyser_category_id').on('change', function () {
+        fillPlans($(this).val(), '');
+    });
+
     fillCities($('#business_state').val(), selectedCity);
+    fillPlans($('#analyser_category_id').val() || selectedCategoryId, selectedPlanId);
 })();
 </script>
