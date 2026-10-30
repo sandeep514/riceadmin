@@ -31,14 +31,29 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // For subfolder deployments (e.g. /staging/public), set APP_URL to the full base
-        // so redirects like login -> dashboard generate the correct path.
-        // Do not force a bare host APP_URL — that breaks local Herd domains (e.g. riceadmin.test).
+        // For subfolder deployments (e.g. /staging/public), force a root URL so
+        // redirects keep the /staging/public prefix. Prefer the current request host
+        // when it is an allowed alternate (sntcgroup.com) so both domains work
+        // side-by-side without sending browsers from sntcgroup -> snjtradelink.
         $appUrl = config('app.url');
         if (is_string($appUrl) && $appUrl !== '') {
             $configuredPath = rtrim((string) (parse_url($appUrl, PHP_URL_PATH) ?? ''), '/');
             if ($configuredPath !== '' && $configuredPath !== '/') {
-                URL::forceRootUrl($appUrl);
+                $rootUrl = $appUrl;
+                try {
+                    $request = request();
+                    $host = strtolower((string) $request->getHost());
+                    $allowedAlternateHosts = [
+                        'sntcgroup.com',
+                        'www.sntcgroup.com',
+                    ];
+                    if (in_array($host, $allowedAlternateHosts, true)) {
+                        $rootUrl = $request->getSchemeAndHttpHost().$configuredPath;
+                    }
+                } catch (\Throwable $e) {
+                    $rootUrl = $appUrl;
+                }
+                URL::forceRootUrl($rootUrl);
             }
         }
         Schema::defaultStringLength(191);
