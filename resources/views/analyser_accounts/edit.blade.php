@@ -33,3 +33,7 @@
         </section>
     </div>
 @endsection
+
+@section('javascript')
+@include('analyser_accounts._form_js')
+@endsection

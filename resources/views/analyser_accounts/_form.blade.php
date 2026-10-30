@@ -73,8 +73,19 @@
         </div>
         <div class="form-group col-md-4 @error('plan_id') has-error @enderror">
             {!! Form::label('plan_id','Plan*') !!}
+            @php
+                $initialPlans = [];
+                if ($selectedCategoryId !== '' && isset($plansByCategory[(string) $selectedCategoryId])) {
+                    $initialPlans = $plansByCategory[(string) $selectedCategoryId];
+                }
+            @endphp
             <select name="plan_id" id="analyser_plan_id" class="form-control">
                 <option value="">Select plan</option>
+                @foreach($initialPlans as $planRow)
+                    <option value="{{ $planRow['id'] }}" {{ (string) $selectedPlanId === (string) $planRow['id'] ? 'selected' : '' }}>
+                        {{ $planRow['title'] }}
+                    </option>
+                @endforeach
             </select>
             @error('plan_id')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
@@ -258,56 +269,11 @@
     $selectedCity = (string) $biz('city', '');
 @endphp
 <script>
-(function () {
-    var cities = @json($cityRows);
-    var selectedCity = @json($selectedCity);
-    var plansByCategory = @json($plansByCategory ?? []);
-    var selectedCategoryId = @json((string) $selectedCategoryId);
-    var selectedPlanId = @json((string) $selectedPlanId);
-
-    function fillCities(stateId, selectedId) {
-        var $city = $('#business_city');
-        $city.empty().append($('<option>', { value: '', text: 'Select city' }));
-        if (!stateId) {
-            return;
-        }
-        cities.forEach(function (row) {
-            if (String(row.state_id) !== String(stateId)) {
-                return;
-            }
-            $city.append($('<option>', {
-                value: row.id,
-                text: row.name,
-                selected: String(row.id) === String(selectedId)
-            }));
-        });
-    }
-
-    function fillPlans(categoryId, selectedId) {
-        var $plan = $('#analyser_plan_id');
-        $plan.empty().append($('<option>', { value: '', text: 'Select plan' }));
-        if (!categoryId) {
-            return;
-        }
-        var plans = plansByCategory[String(categoryId)] || plansByCategory[categoryId] || [];
-        plans.forEach(function (row) {
-            $plan.append($('<option>', {
-                value: String(row.id),
-                text: row.title,
-                selected: String(row.id) === String(selectedId)
-            }));
-        });
-    }
-
-    $('#business_state').on('change', function () {
-        fillCities($(this).val(), '');
-    });
-
-    $('#analyser_category_id').on('change', function () {
-        fillPlans($(this).val(), '');
-    });
-
-    fillCities($('#business_state').val(), selectedCity);
-    fillPlans($('#analyser_category_id').val() || selectedCategoryId, selectedPlanId);
-})();
+window.__analyserAccountForm = {
+    cities: @json($cityRows),
+    selectedCity: @json($selectedCity),
+    plansByCategory: @json($plansByCategory ?? new \stdClass()),
+    selectedCategoryId: @json((string) $selectedCategoryId),
+    selectedPlanId: @json((string) $selectedPlanId)
+};
 </script>
