@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\AnalyserAccount;
-use App\Category;
+use App\CategoryRoleMap;
 use App\Http\Requests\AnalyserRequest;
 use App\Role;
 use App\Support\QueuedMail;
@@ -265,17 +265,18 @@ class AnalyserController extends Controller
      *   categories: array<int|string, string>,
      *   states: array<int|string, string>,
      *   cities: \Illuminate\Support\Collection,
-     *   plans: array<int|string, string>
+     *   plans: array<int|string, string>,
+     *   analyserRoleId: int|null,
+     *   analyserRoleName: string
      * }
      */
     private function formOptions(): array
     {
-        $categories = Category::query()
-            ->where('status', 1)
-            ->orderByRaw('COALESCE(`order`, 999999)')
-            ->orderBy('category')
-            ->pluck('category', 'id')
-            ->toArray();
+        $analyserRole = Role::firstOrCreate(['role_name' => 'analyser'], ['type' => 'analyser']);
+        $analyserRoleId = (int) $analyserRole->id;
+        $analyserRoleName = (string) ($analyserRole->role_name ?: 'analyser');
+
+        $categories = $this->analyserCategoryOptions($analyserRoleId);
 
         $states = WebStates::query()
             ->orderBy('state_name')
@@ -288,30 +289,56 @@ class AnalyserController extends Controller
 
         $plans = $this->analyserPlanOptions();
 
-        return compact('categories', 'states', 'cities', 'plans');
+        return compact('categories', 'states', 'cities', 'plans', 'analyserRoleId', 'analyserRoleName');
     }
 
     /**
-     * Active web plans for analyser accounts (prefer analyser-role plans).
+     * Categories mapped to the analyser role only.
+     *
+     * @return array<int|string, string>
+     */
+    private function analyserCategoryOptions(int $roleId): array
+    {
+        $mapQuery = CategoryRoleMap::query()
+            ->where('role', $roleId)
+            ->with(['category_rel' => function ($q) {
+                $q->where('status', 1)
+                    ->orderByRaw('COALESCE(`order`, 999999)')
+                    ->orderBy('category');
+            }]);
+
+        if (Schema::hasColumn('category_role_map', 'status')) {
+            $mapQuery->where('status', 1);
+        }
+
+        $options = [];
+        foreach ($mapQuery->get() as $map) {
+            if ($map->category_rel) {
+                $options[$map->category_rel->id] = $map->category_rel->category;
+            }
+        }
+
+        return $options;
+    }
+
+    /**
+     * Active web plans for the analyser role only (no other roles).
      *
      * @return array<int|string, string>
      */
     private function analyserPlanOptions(): array
     {
         $roleId = AnalyserAccount::analyserRoleId();
-
-        $query = WebPlanModel::query()
-            ->where('status', 1)
-            ->orderBy('title');
-
-        if ($roleId) {
-            $rolePlans = (clone $query)->where('role_id', $roleId)->pluck('title', 'id')->toArray();
-            if ($rolePlans !== []) {
-                return $rolePlans;
-            }
+        if (! $roleId) {
+            return [];
         }
 
-        return $query->pluck('title', 'id')->toArray();
+        return WebPlanModel::query()
+            ->where('status', 1)
+            ->where('role_id', $roleId)
+            ->orderBy('title')
+            ->pluck('title', 'id')
+            ->toArray();
     }
 
     /**

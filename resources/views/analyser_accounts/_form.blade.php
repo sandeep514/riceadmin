@@ -117,6 +117,20 @@
     <hr>
     <h4 style="margin-top: 0;">Business Details (Web Portal)</h4>
     <div class="row">
+        <div class="form-group col-md-6">
+            {!! Form::label('analyser_role_display','Role') !!}
+            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'analyser', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
+            {!! Form::hidden('analyser_role_id', $analyserRoleId ?? null) !!}
+            <p class="help-block">Fixed to analyser role for these accounts.</p>
+        </div>
+        <div class="form-group col-md-6 @error('business.selected_category') has-error @enderror">
+            {!! Form::label('business[selected_category]','Selected Category*') !!}
+            {!! Form::select('business[selected_category]', $categoryOptions, $biz('selected_category'), ['class'=>'form-control']) !!}
+            @error('business.selected_category')
+            <span class="help-block text-danger" role="alert">{{ $message }}</span>
+            @enderror
+            <p class="help-block">Only categories mapped to the analyser role are listed.</p>
+        </div>
         <div class="form-group col-md-6 @error('business.company_name') has-error @enderror">
             {!! Form::label('business[company_name]','Company Name') !!}
             {!! Form::text('business[company_name]', $biz('company_name'), ['class'=>'form-control']) !!}
@@ -163,13 +177,6 @@
             {!! Form::label('business[phone]','Phone') !!}
             {!! Form::text('business[phone]', $biz('phone'), ['class'=>'form-control']) !!}
             @error('business.phone')
-            <span class="help-block text-danger" role="alert">{{ $message }}</span>
-            @enderror
-        </div>
-        <div class="form-group col-md-6 @error('business.selected_category') has-error @enderror">
-            {!! Form::label('business[selected_category]','Selected Category') !!}
-            {!! Form::select('business[selected_category]', $categoryOptions, $biz('selected_category'), ['class'=>'form-control']) !!}
-            @error('business.selected_category')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
         </div>
