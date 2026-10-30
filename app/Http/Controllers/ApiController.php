@@ -41,9 +41,11 @@ use App\FutureSellQueriesINR;
 use App\Helpers\StatusChat;
 use App\BrandAvailability;
 use App\USD_prices;
+use App\Export\CalculatorExport;
 use App\Jobs\ExportUsdPricesMailJob;
 // use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Contracts\Validation\Validator as ValidatorContract;
@@ -5148,25 +5150,32 @@ class ApiController extends Controller
     {
         $riceQualityId = (int) $riceQualityId;
 
-        $chartUSDPrice = USD_prices::with(['getRiceQuality', 'getUSDDefaultMaster' => function ($query) {
-            return $query->where('bag_size', '50kg');
-        }])->orderBy('created_at', 'DESC')
-            ->where('ricemin', '!=', 0)
-            ->where('ricemax', '!=', 0)
-            ->where('rice', $riceQualityId)
-            ->get();
+        // Chart: filter 50kg masters in SQL (same as eager where bag_size=50kg),
+        // select only columns needed — avoids loading every price row + relations.
+        $fiftyKgMasterIds = USD_defaultmaster::query()
+            ->where('bag_size', '50kg')
+            ->pluck('id');
+
+        $chartRows = $fiftyKgMasterIds->isEmpty()
+            ? collect()
+            : USD_prices::query()
+                ->where('rice', $riceQualityId)
+                ->where('ricemin', '!=', 0)
+                ->where('ricemax', '!=', 0)
+                ->whereIn('usd_defaultMaster_id', $fiftyKgMasterIds)
+                ->orderBy('created_at', 'DESC')
+                ->get(['created_at', 'fobmax']);
 
         $date = [];
         $prices = [];
         $combinedData = [];
-        foreach ($chartUSDPrice as $v) {
-            if ($v->getUSDDefaultMaster != null) {
-                $tsKey = strtotime($v->created_at).'000';
-                if (! array_key_exists($tsKey, $combinedData)) {
-                    $date[] = $tsKey;
-                    $prices[] = $v->fobmax;
-                    $combinedData[$tsKey] = [(int) ((strtotime($v->created_at)) * 1000), (int) ($v->fobmax)];
-                }
+        foreach ($chartRows as $v) {
+            $ts = strtotime($v->created_at);
+            $tsKey = $ts.'000';
+            if (! array_key_exists($tsKey, $combinedData)) {
+                $date[] = $tsKey;
+                $prices[] = $v->fobmax;
+                $combinedData[$tsKey] = [(int) ($ts * 1000), (int) $v->fobmax];
             }
         }
 
@@ -5183,7 +5192,7 @@ class ApiController extends Controller
             $defalutPortPrice = $defalutPortDetail[0]['freight_25MT_1MT'];
         }
 
-        $riceQualityIdDetails = QualityMaster::where('id', $riceQualityId)->first();
+        $riceQualityIdDetails = QualityMaster::find($riceQualityId);
         if (! $riceQualityIdDetails) {
             return [
                 'status' => false,
@@ -5203,13 +5212,22 @@ class ApiController extends Controller
             $quality_type_status = 0;
         }
 
-        $oceanPorts = OceanFreight::where('freight_21MT', '!=', 0)->get()->groupBy('region')->map(function ($query) {
-            return $query->groupBy('country')->map(function ($query2) {
-                return $query2->groupBy('port');
-            });
+        // Ports tree is identical for every rice quality — cache it.
+        $oceanPorts = Cache::remember('api:usd-prices-graph:ocean-ports:v1', now()->addMinutes(10), function () {
+            return OceanFreight::where('freight_21MT', '!=', 0)
+                ->get()
+                ->groupBy('region')
+                ->map(function ($query) {
+                    return $query->groupBy('country')->map(function ($query2) {
+                        return $query2->groupBy('port');
+                    });
+                })
+                ->toArray();
         });
 
-        $PMT_data = USD_defaultmaster::where('bag_size', 'like', '50Kg')->where('applied_for', $newAppliedFor)->first();
+        $PMT_data = USD_defaultmaster::where('bag_size', 'like', '50Kg')
+            ->where('applied_for', $newAppliedFor)
+            ->first();
 
         $getUSDPrices = null;
         if ($PMT_data) {
@@ -5227,15 +5245,21 @@ class ApiController extends Controller
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $usdDefaultMasterArray = USD_defaultmaster::select('bag_size', 'bag_type', 'id', 'PMT_USD')
-            ->orderBy('order', 'ASC')
-            ->where('applied_for', $quality_type_status)
-            ->get()
-            ->toArray();
+        $usdDefaultMasterArray = Cache::remember(
+            'api:usd-prices-graph:packing:'.$quality_type_status,
+            now()->addMinutes(10),
+            function () use ($quality_type_status) {
+                return USD_defaultmaster::select('bag_size', 'bag_type', 'id', 'PMT_USD')
+                    ->orderBy('order', 'ASC')
+                    ->where('applied_for', $quality_type_status)
+                    ->get()
+                    ->toArray();
+            }
+        );
 
         return [
             'status' => true,
-            'ports' => $oceanPorts->toArray(),
+            'ports' => $oceanPorts,
             'packing' => $usdDefaultMasterArray,
             'riceQuality' => $riceQualityIdDetails,
             'PMT_data' => $PMT_data,
@@ -5520,10 +5544,13 @@ class ApiController extends Controller
     }
 
     /**
-     * Queue USD prices XLSX export and email it to the Bearer-authenticated user
-     * (latest row per day; ignores FOB min = 0).
+     * USD prices XLSX export.
+     * POST /api/usd-prices/export
+     *
+     * downloadType=mail    → queue email to the authenticated user's email
+     * downloadType=browser → generate file and return a download URL
      */
-    public function exportUsdPricesEmail(Request $request)
+    public function exportUsdPrices(Request $request)
     {
         $user = $request->user();
         if (! $user) {
@@ -5534,22 +5561,8 @@ class ApiController extends Controller
             ], 401);
         }
 
-        $email = trim((string) ($user->email ?? ''));
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $personalEmail = trim((string) optional($user->getWebPersonalDetails)->email);
-            if ($personalEmail !== '' && filter_var($personalEmail, FILTER_VALIDATE_EMAIL)) {
-                $email = $personalEmail;
-            }
-        }
-
-        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'No valid email found on your account. Please update your profile email first.',
-            ], 422);
-        }
-
         $validator = Validator::make($request->all(), [
+            'downloadType' => 'required|in:mail,browser',
             'type' => 'nullable|in:basmati,non-basmati',
             'from' => 'nullable|date_format:Y-m-d',
             'to' => 'nullable|date_format:Y-m-d',
@@ -5564,6 +5577,7 @@ class ApiController extends Controller
             ], 422);
         }
 
+        $downloadType = strtolower(trim((string) $request->input('downloadType')));
         $from = $request->input('from');
         $to = $request->input('to');
         if ($from && $to && $from > $to) {
@@ -5575,19 +5589,69 @@ class ApiController extends Controller
         $type = $request->input('type');
         $type = is_string($type) && $type !== '' ? strtolower(trim($type)) : null;
 
-        ExportUsdPricesMailJob::dispatch(
-            $email,
-            $from,
-            $to,
-            $packing,
-            $type
-        );
+        if ($downloadType === 'mail') {
+            $email = trim((string) ($user->email ?? ''));
+            if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $personalEmail = trim((string) optional($user->getWebPersonalDetails)->email);
+                if ($personalEmail !== '' && filter_var($personalEmail, FILTER_VALIDATE_EMAIL)) {
+                    $email = $personalEmail;
+                }
+            }
+
+            if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No valid email found on your account. Please update your profile email first.',
+                ], 422);
+            }
+
+            ExportUsdPricesMailJob::dispatch(
+                $email,
+                $from,
+                $to,
+                $packing,
+                $type
+            );
+
+            return response()->json([
+                'status' => true,
+                'downloadType' => 'mail',
+                'message' => 'Export queued. You will receive an email shortly.',
+                'email' => $email,
+            ], 202);
+        }
+
+        // browser — generate XLSX and return a public download URL
+        $export = new CalculatorExport($from, $to, $packing, $type, true);
+        $rowCount = (clone $export->query())->count();
+        if ($rowCount === 0) {
+            return response()->json([
+                'status' => false,
+                'downloadType' => 'browser',
+                'message' => 'No rows found for selected filters.',
+                'download_url' => null,
+            ], 404);
+        }
+
+        @ini_set('memory_limit', '512M');
+
+        $filename = 'usd_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
+            .($packing ? '_packing-'.$packing : '')
+            .($type ? '_'.Str::slug($type) : '')
+            .'_'.now()->format('YmdHis').'.xlsx';
+
+        Excel::store($export, $filename, 'publicexcel');
+
+        $downloadUrl = url('excel/'.$filename);
 
         return response()->json([
             'status' => true,
-            'message' => 'Export queued. You will receive an email shortly.',
-            'email' => $email,
-        ], 202);
+            'downloadType' => 'browser',
+            'message' => 'Export ready.',
+            'download_url' => $downloadUrl,
+            'filename' => $filename,
+            'rowCount' => $rowCount,
+        ], 200);
     }
 
     public function saveUSDPrices(Request $request)

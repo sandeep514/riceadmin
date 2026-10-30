@@ -128,7 +128,9 @@ use Pusher\Pusher;
     Route::get('get/calculator/data' , ['as' => 'get.calculator.data' ,'uses' =>'ApiController@getCalculatorData']);
     Route::get('usd-prices/packing-options', ['as' => 'usd.prices.packing.options', 'uses' => 'ApiController@getUsdPricesPackingOptions']);
     Route::get('usd-prices/graph/{riceQualityId}', ['as' => 'usd.prices.graph', 'uses' => 'ApiController@getUsdPricesGraph', 'middleware' => 'app.or.portal.api.token']);
-    Route::post('usd-prices/export-email', ['as' => 'usd.prices.export.email', 'uses' => 'ApiController@exportUsdPricesEmail', 'middleware' => 'app.or.portal.api.token']);
+    Route::post('usd-prices/export', ['as' => 'usd.prices.export', 'uses' => 'ApiController@exportUsdPrices', 'middleware' => 'app.or.portal.api.token']);
+    // Legacy alias — same handler as usd-prices/export
+    Route::post('usd-prices/export-email', ['as' => 'usd.prices.export.email', 'uses' => 'ApiController@exportUsdPrices', 'middleware' => 'app.or.portal.api.token']);
     Route::POST('save/usd/prices' , ['as' => 'save.usd.prices' ,'uses' =>'ApiController@saveUSDPrices']);
     Route::get('get/my/bids/{id}' , ['as' => 'get.my.bids' ,'uses' =>'ApiController@getMyBids']);
     Route::POST('save/user/bid' , ['as' => 'save.user.bid' ,'uses' =>'ApiController@saveUserBid']);
