@@ -101,7 +101,7 @@
                             <a href="{{ route('users','12') }}"><i class="fa fa-circle-o"></i> Service Provider</a>
                         </li>
                         <li class="{{ (in_array($currentRoute, ['analyser-accounts.index','analyser-accounts.create','analyser-accounts.edit']))?'active':'' }}">
-                            <a href="{{ route('analyser-accounts.index') }}"><i class="fa fa-circle-o"></i> Analyser</a>
+                            <a href="{{ route('analyser-accounts.index') }}"><i class="fa fa-circle-o"></i> Market Analyst</a>
                         </li>
                         <li class="{{ (in_array($currentRoute, ['users','create.user','edit.user','get.new.vendors']) && request()->role == 6)?'active':'' }}">
                             <a href="{{ route('get.new.vendors') }}"><i class="fa fa-circle-o"></i> New Vendors</a>

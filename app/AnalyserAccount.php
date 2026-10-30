@@ -39,14 +39,36 @@ class AnalyserAccount extends Model
         return $this->belongsTo(WebPlanModel::class, 'plan_id');
     }
 
+    /**
+     * Market Analyst is the canonical role for analyser accounts
+     * (legacy "analyser" role is merged away).
+     */
     public static function analyserRoleId(): ?int
     {
+        $role = self::resolveMarketAnalystRole();
+
+        return $role ? (int) $role->id : null;
+    }
+
+    public static function resolveMarketAnalystRole(): ?Role
+    {
         $role = Role::query()
-            ->whereRaw('LOWER(role_name) = ?', ['analyser'])
+            ->whereRaw('LOWER(role_name) = ?', ['market analyst'])
             ->orderBy('id')
             ->first();
 
-        return $role ? (int) $role->id : null;
+        if ($role) {
+            return $role;
+        }
+
+        // Legacy fallback while migration runs / old DBs.
+        return Role::query()
+            ->where(function ($q) {
+                $q->whereRaw('LOWER(role_name) = ?', ['analyser'])
+                    ->orWhere('type', 'analyser');
+            })
+            ->orderBy('id')
+            ->first();
     }
 
     /**

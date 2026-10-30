@@ -61,6 +61,9 @@
             @error('plan_id')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
+            @if(count($plans ?? []) === 0)
+                <p class="help-block text-danger">No Market Analyst plans found. Create a Web Plan with role <strong>Market Analyst</strong> (and map categories first under Role–Category Map).</p>
+            @endif
         </div>
         <div class="form-group col-md-6 @error('start_date') has-error @enderror">
             {!! Form::label('start_date','Start Date*') !!}
@@ -119,9 +122,9 @@
     <div class="row">
         <div class="form-group col-md-6">
             {!! Form::label('analyser_role_display','Role') !!}
-            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'analyser', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
+            {!! Form::text('analyser_role_display', $analyserRoleName ?? 'Market Analyst', ['class'=>'form-control', 'disabled' => true, 'readonly' => true]) !!}
             {!! Form::hidden('analyser_role_id', $analyserRoleId ?? null) !!}
-            <p class="help-block">Fixed to analyser role for these accounts.</p>
+            <p class="help-block">Fixed to Market Analyst role for these accounts.</p>
         </div>
         <div class="form-group col-md-6 @error('business.selected_category') has-error @enderror">
             {!! Form::label('business[selected_category]','Selected Category*') !!}
@@ -130,9 +133,9 @@
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror
             @if(count($categories ?? []) === 0)
-                <p class="help-block text-danger">No categories found for analyser. Map them under Role–Category Map (select Analyser), or set category on analyser Web Plans.</p>
+                <p class="help-block text-danger">No categories found for Market Analyst. Map them under Role–Category Map (select Market Analyst), or set category on Market Analyst Web Plans.</p>
             @else
-                <p class="help-block">Only categories mapped to the analyser role are listed.</p>
+                <p class="help-block">Only categories mapped to the Market Analyst role are listed.</p>
             @endif
         </div>
         <div class="form-group col-md-6 @error('business.company_name') has-error @enderror">

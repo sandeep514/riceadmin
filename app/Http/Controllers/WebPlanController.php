@@ -144,7 +144,7 @@ class WebPlanController extends Controller
             ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('id')
             ->get();
-        $roles = Role::where('type', 'web')->pluck('role_name', 'id');
+        $roles = $this->webPlanRoleOptions();
         return View('webplans.create', compact('WebPlanKeysModel', 'roles'));
     }
 
@@ -236,12 +236,32 @@ class WebPlanController extends Controller
             ->orderByRaw('order_no IS NULL, order_no ASC')
             ->orderBy('id')
             ->get();
-        $roles = Role::where('type', 'web')->pluck('role_name', 'id');
+        $roles = $this->webPlanRoleOptions();
         $debugSql = collect(\DB::getQueryLog())
             ->map(fn ($entry) => self::interpolateQuery($entry['query'], $entry['bindings'] ?? []))
             ->implode(";\n\n").';';
         \DB::disableQueryLog();
         return view('webplans.edit' , compact('data','selectedMapKeys','WebPlanKeysModel','roles','debugSql'));
+    }
+
+    /**
+     * Roles available when creating/editing web plans.
+     * Market Analyst is a normal web role (legacy analyser role is merged into it).
+     *
+     * @return \Illuminate\Support\Collection<int|string, string>
+     */
+    private function webPlanRoleOptions()
+    {
+        return Role::query()
+            ->where(function ($q) {
+                $q->where('type', 'web')
+                    ->orWhereRaw('LOWER(role_name) = ?', ['market analyst'])
+                    // Legacy until merge migration runs.
+                    ->orWhere('type', 'analyser')
+                    ->orWhereRaw('LOWER(role_name) = ?', ['analyser']);
+            })
+            ->orderBy('role_name')
+            ->pluck('role_name', 'id');
     }
 
     /**

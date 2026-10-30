@@ -3,13 +3,13 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>
-                Analyser Accounts
+                Market Analyst Accounts
                 <small>List</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li><a href="javascript:void(0)">User Management</a></li>
-                <li class="active">Analyser</li>
+                <li class="active">Market Analyst</li>
             </ol>
         </section>
         <section class="content">
@@ -17,7 +17,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">List of analyser accounts</h3>
+                            <h3 class="box-title">List of Market Analyst accounts</h3>
                             <a href="{{ route('analyser-accounts.create') }}" class="btn btn-primary btn-sm pull-right">Create New</a>
                         </div>
                         <div class="box-body">

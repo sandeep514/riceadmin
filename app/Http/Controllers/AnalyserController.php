@@ -108,7 +108,7 @@ class AnalyserController extends Controller
 
     public function store(AnalyserRequest $request)
     {
-        $role = $this->resolveAnalyserRole();
+        $role = $this->resolveMarketAnalystRoleOrFail();
         $otp = random_int(100000, 999999);
         $plainPassword = (string) $request->password;
         $planId = (int) $request->plan_id;
@@ -156,7 +156,7 @@ class AnalyserController extends Controller
             $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
-        Session::flash('success', 'Success|Analyser account created successfully!');
+        Session::flash('success', 'Success|Market Analyst account created successfully!');
         return redirect()->route('analyser-accounts.index');
     }
 
@@ -232,7 +232,7 @@ class AnalyserController extends Controller
             $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
-        Session::flash('success', 'Success|Analyser account updated successfully!');
+        Session::flash('success', 'Success|Market Analyst account updated successfully!');
         return redirect()->route('analyser-accounts.index');
     }
 
@@ -257,7 +257,7 @@ class AnalyserController extends Controller
             $account->delete();
         });
 
-        Session::flash('success', 'Success|Analyser account deleted successfully!');
+        Session::flash('success', 'Success|Market Analyst account deleted successfully!');
         return back();
     }
 
@@ -273,9 +273,9 @@ class AnalyserController extends Controller
      */
     private function formOptions(): array
     {
-        $analyserRole = $this->resolveAnalyserRole();
+        $analyserRole = $this->resolveMarketAnalystRoleOrFail();
         $analyserRoleId = (int) $analyserRole->id;
-        $analyserRoleName = (string) ($analyserRole->role_name ?: 'analyser');
+        $analyserRoleName = (string) ($analyserRole->role_name ?: 'Market Analyst');
 
         $categories = $this->analyserCategoryOptions($analyserRoleId);
 
@@ -293,27 +293,23 @@ class AnalyserController extends Controller
         return compact('categories', 'states', 'cities', 'plans', 'analyserRoleId', 'analyserRoleName');
     }
 
-    private function resolveAnalyserRole(): Role
+    private function resolveMarketAnalystRoleOrFail(): Role
     {
-        $role = Role::query()
-            ->whereRaw('LOWER(role_name) = ?', ['analyser'])
-            ->orderBy('id')
-            ->first();
-
+        $role = AnalyserAccount::resolveMarketAnalystRole();
         if ($role) {
             return $role;
         }
 
         return Role::create([
-            'role_name' => 'analyser',
-            'type' => 'analyser',
+            'role_name' => 'Market Analyst',
+            'type' => 'web',
         ]);
     }
 
     /**
-     * Categories for analyser role:
+     * Categories for Market Analyst role:
      * 1) category_role_map for that role
-     * 2) plus category_id from analyser-role web plans
+     * 2) plus category_id from Market Analyst web plans
      *
      * @return array<int|string, string>
      */
@@ -354,19 +350,18 @@ class AnalyserController extends Controller
     }
 
     /**
-     * Active web plans for the analyser role only (no other roles).
+     * Active web plans for the Market Analyst role only (no other roles).
      *
      * @return array<int|string, string>
      */
     private function analyserPlanOptions(): array
     {
-        $roleId = AnalyserAccount::analyserRoleId();
-        if (! $roleId) {
-            return [];
-        }
+        $roleId = (int) $this->resolveMarketAnalystRoleOrFail()->id;
 
         return WebPlanModel::query()
-            ->where('status', 1)
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            })
             ->where('role_id', $roleId)
             ->orderBy('title')
             ->pluck('title', 'id')
