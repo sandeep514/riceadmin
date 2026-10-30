@@ -17,7 +17,7 @@
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">List of Analyser accounts</h3>
+                            <h3 class="box-title">List of analyser accounts</h3>
                             <a href="{{ route('analyser-accounts.create') }}" class="btn btn-primary btn-sm pull-right">Create New</a>
                         </div>
                         <div class="box-body">
@@ -52,8 +52,6 @@
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">Email</th>
                                             <th style="text-align: center">Plan</th>
-                                            <th style="text-align: center">Duration</th>
-                                            <th style="text-align: center">Amount</th>
                                             <th style="text-align: center">Contact Person</th>
                                             <th style="text-align: center">Mobile</th>
                                             <th style="text-align: center">Start Date</th>
@@ -86,8 +84,6 @@
                                                 <td style="text-align: center">{{ optional($account->user)->name }}</td>
                                                 <td style="text-align: center">{{ optional($account->user)->email }}</td>
                                                 <td style="text-align: center">{{ optional($account->plan)->title ?? '-' }}</td>
-                                                <td style="text-align: center">{{ \App\AnalyserAccount::SUBSCRIPTION_TYPES[$account->subscription_type] ?? ($account->subscription_type ?: '-') }}</td>
-                                                <td style="text-align: center">{{ $account->received_amount !== null ? number_format((float) $account->received_amount, 2) : '-' }}</td>
                                                 <td style="text-align: center">{{ $account->contact_person_name }}</td>
                                                 <td style="text-align: center">{{ $account->contact_mobile }}</td>
                                                 <td style="text-align: center">{{ $account->start_date ? $account->start_date->format('d-m-Y') : '-' }}</td>
@@ -110,8 +106,6 @@
                                             <th style="text-align: center">Name</th>
                                             <th style="text-align: center">Email</th>
                                             <th style="text-align: center">Plan</th>
-                                            <th style="text-align: center">Duration</th>
-                                            <th style="text-align: center">Amount</th>
                                             <th style="text-align: center">Contact Person</th>
                                             <th style="text-align: center">Mobile</th>
                                             <th style="text-align: center">Start Date</th>

@@ -20,7 +20,7 @@
                         <div class="box-header with-border">
                             <h3 class="box-title">Analyser Details</h3>
                         </div>
-                        {!! Form::model($model, ['route'=>['analyser-accounts.update', $model->id], 'method'=>'PUT']) !!}
+                        {!! Form::model($model, ['method'=>'PUT','route'=>['analyser-accounts.update',$model->id]]) !!}
                         @include('analyser_accounts._form')
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Update</button>

@@ -131,7 +131,6 @@ class AnalyserController extends Controller
             AnalyserAccount::create([
                 'user_id' => $user->id,
                 'plan_id' => $planId,
-                'subscription_type' => $request->subscription_type,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -149,8 +148,7 @@ class AnalyserController extends Controller
                 $planId,
                 $request->start_date,
                 $request->end_date,
-                $request->received_amount,
-                (string) $request->subscription_type
+                $request->received_amount
             );
         });
 
@@ -210,7 +208,6 @@ class AnalyserController extends Controller
 
             $account->update([
                 'plan_id' => $planId,
-                'subscription_type' => $request->subscription_type,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -227,8 +224,7 @@ class AnalyserController extends Controller
                 $planId,
                 $request->start_date,
                 $request->end_date,
-                $request->received_amount,
-                (string) $request->subscription_type
+                $request->received_amount
             );
         });
 
@@ -270,7 +266,7 @@ class AnalyserController extends Controller
      *   categories: array<int|string, string>,
      *   states: array<int|string, string>,
      *   cities: \Illuminate\Support\Collection,
-     *   plansByCategory: array<string, array<int, array{id:int, title:string}>>,
+     *   plans: array<int|string, string>,
      *   analyserRoleId: int|null,
      *   analyserRoleName: string
      * }
@@ -292,9 +288,9 @@ class AnalyserController extends Controller
             ->orderBy('city_name')
             ->get(['id', 'city_name', 'state_id']);
 
-        $plansByCategory = $this->analyserPlansByCategory($analyserRoleId);
+        $plans = $this->analyserPlanOptions();
 
-        return compact('categories', 'states', 'cities', 'plansByCategory', 'analyserRoleId', 'analyserRoleName');
+        return compact('categories', 'states', 'cities', 'plans', 'analyserRoleId', 'analyserRoleName');
     }
 
     private function resolveAnalyserRoleOrFail(): Role
@@ -354,59 +350,25 @@ class AnalyserController extends Controller
     }
 
     /**
-     * Unique active plans for analyser role, grouped by category_id.
-     * Duplicate titles within the same category keep the latest id only.
+     * Active web plans for the analyser role only.
      *
-     * @return array<string, array<int, array{id:int, title:string}>>
+     * @return array<int|string, string>
      */
-    private function analyserPlansByCategory(int $roleId): array
+    private function analyserPlanOptions(): array
     {
-        $rows = WebPlanModel::query()
+        $roleId = AnalyserAccount::analyserRoleId();
+        if (! $roleId) {
+            return [];
+        }
+
+        return WebPlanModel::query()
             ->where(function ($q) {
                 $q->where('status', 1)->orWhereNull('status');
             })
             ->where('role_id', $roleId)
-            ->whereNotNull('category_id')
-            ->orderByDesc('id')
-            ->get([
-                'id',
-                'title',
-                'category_id',
-                'monthly_price',
-                'quarterly_price',
-                'yearly_price',
-                'monthly_final_amount',
-                'quarterly_final_amount',
-                'yearly_final_amount',
-            ]);
-
-        $grouped = [];
-        $seen = [];
-
-        foreach ($rows as $row) {
-            $categoryKey = (string) (int) $row->category_id;
-            $titleKey = strtolower(trim((string) $row->title));
-            $dedupeKey = $categoryKey.'|'.$titleKey;
-            if (isset($seen[$dedupeKey])) {
-                continue;
-            }
-            $seen[$dedupeKey] = true;
-            $grouped[$categoryKey][] = [
-                'id' => (int) $row->id,
-                'title' => (string) $row->title,
-                'prices' => [
-                    'monthly' => AnalyserAccount::planAmountForType($row, 'monthly'),
-                    'half_yearly' => AnalyserAccount::planAmountForType($row, 'half_yearly'),
-                    'yearly' => AnalyserAccount::planAmountForType($row, 'yearly'),
-                ],
-            ];
-        }
-
-        foreach ($grouped as $categoryKey => $plans) {
-            usort($grouped[$categoryKey], fn ($a, $b) => strcasecmp($a['title'], $b['title']));
-        }
-
-        return $grouped;
+            ->orderBy('title')
+            ->pluck('title', 'id')
+            ->toArray();
     }
 
     /**
@@ -417,23 +379,25 @@ class AnalyserController extends Controller
         int $planId,
         string $startDate,
         string $endDate,
-        $receivedAmount = null,
-        string $subscriptionType = 'yearly'
+        $receivedAmount = null
     ): void {
         $periodStart = Carbon::parse($startDate)->format('Y-m-d');
         $periodEnd = Carbon::parse($endDate)->format('Y-m-d');
         $referencePrefix = 'analyser_admin_'.$userId;
-
-        if (! array_key_exists($subscriptionType, AnalyserAccount::SUBSCRIPTION_TYPES)) {
-            $subscriptionType = 'yearly';
-        }
 
         $amount = null;
         if ($receivedAmount !== null && $receivedAmount !== '') {
             $amount = $receivedAmount;
         } else {
             $plan = WebPlanModel::query()->find($planId);
-            $amount = AnalyserAccount::planAmountForType($plan, $subscriptionType);
+            if ($plan) {
+                $amount = $plan->yearly_final_amount
+                    ?? $plan->yearly_price
+                    ?? $plan->monthly_final_amount
+                    ?? $plan->monthly_price
+                    ?? $plan->amount
+                    ?? null;
+            }
         }
 
         // Same columns as portal paid/trial subscriptions for other roles.
@@ -442,7 +406,7 @@ class AnalyserController extends Controller
             'plan_id' => $planId,
             'period_start' => $periodStart,
             'period_end' => $periodEnd,
-            'subscription_type' => $subscriptionType,
+            'subscription_type' => 'yearly',
             'amount' => $amount,
             'currency' => 'INR',
             'status' => 1,
@@ -502,11 +466,6 @@ class AnalyserController extends Controller
         }
         if (($data['registered_email'] ?? '') === '') {
             $data['registered_email'] = (string) $request->input('email', '');
-        }
-
-        // Keep business category in sync with the account Role→Category→Plan selection.
-        if ($request->filled('category_id')) {
-            $data['selected_category'] = (string) $request->input('category_id');
         }
 
         WebBusinessDetails::updateOrCreate(['user_id' => $userId], $data);
