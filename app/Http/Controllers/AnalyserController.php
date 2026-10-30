@@ -11,7 +11,6 @@ use App\Support\QueuedMail;
 use App\User;
 use App\WebBusinessDetails;
 use App\WebCities;
-use App\WebPlanModel;
 use App\WebStates;
 use App\WebUserSubscriptionModel;
 use Carbon\Carbon;
@@ -48,7 +47,7 @@ class AnalyserController extends Controller
         $today = Carbon::today()->toDateString();
         $hasDeactivatedColumn = Schema::hasColumn('users', 'is_deactivated');
 
-        $query = AnalyserAccount::with(['user', 'plan'])->orderBy('id', 'desc');
+        $query = AnalyserAccount::with(['user'])->orderBy('id', 'desc');
 
         if ($fromDate) {
             $query->whereDate('analyser_accounts.created_at', '>=', $fromDate);
@@ -111,9 +110,8 @@ class AnalyserController extends Controller
         $role = $this->resolveAnalyserRoleOrFail();
         $otp = random_int(100000, 999999);
         $plainPassword = (string) $request->password;
-        $planId = (int) $request->plan_id;
 
-        DB::transaction(function () use ($request, $role, $otp, $plainPassword, $planId) {
+        DB::transaction(function () use ($request, $role, $otp, $plainPassword) {
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -130,7 +128,6 @@ class AnalyserController extends Controller
 
             AnalyserAccount::create([
                 'user_id' => $user->id,
-                'plan_id' => $planId,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -143,13 +140,6 @@ class AnalyserController extends Controller
             ]);
 
             $this->syncBusinessDetails($user->id, $request);
-            $this->syncAnalyserSubscription(
-                $user->id,
-                $planId,
-                $request->start_date,
-                $request->end_date,
-                $request->received_amount
-            );
         });
 
         if ($request->boolean('send_mail')) {
@@ -162,7 +152,7 @@ class AnalyserController extends Controller
 
     public function edit($id)
     {
-        $account = AnalyserAccount::with(['user.getWebBusinessDetails', 'plan'])->find($id);
+        $account = AnalyserAccount::with(['user.getWebBusinessDetails'])->find($id);
         if ($account == null) {
             Session::flash('error', 'Error|No record found!');
             return back();
@@ -188,9 +178,8 @@ class AnalyserController extends Controller
         }
 
         $plainPassword = filled($request->password) ? (string) $request->password : null;
-        $planId = (int) $request->plan_id;
 
-        DB::transaction(function () use ($request, $account, $otp, $plainPassword, $planId) {
+        DB::transaction(function () use ($request, $account, $otp, $plainPassword) {
             $userUpdate = [
                 'name' => $request->name,
                 'email' => $request->email,
@@ -207,7 +196,6 @@ class AnalyserController extends Controller
             $account->user->update($userUpdate);
 
             $account->update([
-                'plan_id' => $planId,
                 'start_date' => $request->start_date,
                 'end_date' => $request->end_date,
                 'received_amount' => $request->received_amount,
@@ -219,13 +207,6 @@ class AnalyserController extends Controller
             ]);
 
             $this->syncBusinessDetails($account->user_id, $request);
-            $this->syncAnalyserSubscription(
-                (int) $account->user_id,
-                $planId,
-                $request->start_date,
-                $request->end_date,
-                $request->received_amount
-            );
         });
 
         if ($otp) {
@@ -266,7 +247,6 @@ class AnalyserController extends Controller
      *   categories: array<int|string, string>,
      *   states: array<int|string, string>,
      *   cities: \Illuminate\Support\Collection,
-     *   plans: array<int|string, string>,
      *   analyserRoleId: int|null,
      *   analyserRoleName: string
      * }
@@ -288,9 +268,7 @@ class AnalyserController extends Controller
             ->orderBy('city_name')
             ->get(['id', 'city_name', 'state_id']);
 
-        $plans = $this->analyserPlanOptions();
-
-        return compact('categories', 'states', 'cities', 'plans', 'analyserRoleId', 'analyserRoleName');
+        return compact('categories', 'states', 'cities', 'analyserRoleId', 'analyserRoleName');
     }
 
     private function resolveAnalyserRoleOrFail(): Role
@@ -307,9 +285,7 @@ class AnalyserController extends Controller
     }
 
     /**
-     * Categories for analyser role:
-     * 1) category_role_map for that role
-     * 2) plus category_id from analyser web plans
+     * Categories from Role–Category Map only (no web-plan fallback).
      *
      * @return array<int|string, string>
      */
@@ -317,22 +293,9 @@ class AnalyserController extends Controller
     {
         $mapQuery = CategoryRoleMap::query()->where('role', $roleId);
         if (Schema::hasColumn('category_role_map', 'status')) {
-            $mapQuery->where(function ($q) {
-                $q->where('status', 1)->orWhereNull('status');
-            });
+            $mapQuery->where('status', 1);
         }
-        $categoryIds = $mapQuery->pluck('category')->filter()->map(fn ($id) => (int) $id)->all();
-
-        $planCategoryIds = WebPlanModel::query()
-            ->where('role_id', $roleId)
-            ->where('status', 1)
-            ->whereNotNull('category_id')
-            ->pluck('category_id')
-            ->filter()
-            ->map(fn ($id) => (int) $id)
-            ->all();
-
-        $categoryIds = array_values(array_unique(array_merge($categoryIds, $planCategoryIds)));
+        $categoryIds = $mapQuery->pluck('category')->filter()->map(fn ($id) => (int) $id)->unique()->values()->all();
 
         if ($categoryIds === []) {
             return [];
@@ -347,91 +310,6 @@ class AnalyserController extends Controller
             ->orderBy('category')
             ->pluck('category', 'id')
             ->toArray();
-    }
-
-    /**
-     * Active web plans for the analyser role only.
-     *
-     * @return array<int|string, string>
-     */
-    private function analyserPlanOptions(): array
-    {
-        $roleId = AnalyserAccount::analyserRoleId();
-        if (! $roleId) {
-            return [];
-        }
-
-        return WebPlanModel::query()
-            ->where(function ($q) {
-                $q->where('status', 1)->orWhereNull('status');
-            })
-            ->where('role_id', $roleId)
-            ->orderBy('title')
-            ->pluck('title', 'id')
-            ->toArray();
-    }
-
-    /**
-     * Upsert web_user_subscription for the analyser user (same table/shape as other roles).
-     */
-    private function syncAnalyserSubscription(
-        int $userId,
-        int $planId,
-        string $startDate,
-        string $endDate,
-        $receivedAmount = null
-    ): void {
-        $periodStart = Carbon::parse($startDate)->format('Y-m-d');
-        $periodEnd = Carbon::parse($endDate)->format('Y-m-d');
-        $referencePrefix = 'analyser_admin_'.$userId;
-
-        $amount = null;
-        if ($receivedAmount !== null && $receivedAmount !== '') {
-            $amount = $receivedAmount;
-        } else {
-            $plan = WebPlanModel::query()->find($planId);
-            if ($plan) {
-                $amount = $plan->yearly_final_amount
-                    ?? $plan->yearly_price
-                    ?? $plan->monthly_final_amount
-                    ?? $plan->monthly_price
-                    ?? $plan->amount
-                    ?? null;
-            }
-        }
-
-        // Same columns as portal paid/trial subscriptions for other roles.
-        $payload = [
-            'user_id' => $userId,
-            'plan_id' => $planId,
-            'period_start' => $periodStart,
-            'period_end' => $periodEnd,
-            'subscription_type' => 'yearly',
-            'amount' => $amount,
-            'currency' => 'INR',
-            'status' => 1,
-        ];
-
-        $existing = WebUserSubscriptionModel::query()
-            ->where('user_id', $userId)
-            ->where(function ($q) use ($referencePrefix) {
-                $q->where('payment_id', 'like', $referencePrefix.'%')
-                    ->orWhere('order_id', 'like', $referencePrefix.'%');
-            })
-            ->orderByDesc('id')
-            ->first();
-
-        if ($existing) {
-            $existing->update($payload);
-
-            return;
-        }
-
-        $reference = $referencePrefix.'_'.time();
-        WebUserSubscriptionModel::create(array_merge($payload, [
-            'payment_id' => $reference,
-            'order_id' => $reference,
-        ]));
     }
 
     private function syncBusinessDetails(int $userId, Request $request): void

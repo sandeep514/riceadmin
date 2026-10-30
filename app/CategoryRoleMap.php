@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryRoleMap extends Model
 {
-    protected $fillable = ['role' , 'category'];
+    protected $fillable = ['role', 'category', 'status'];
     protected $table = "category_role_map";
 
 

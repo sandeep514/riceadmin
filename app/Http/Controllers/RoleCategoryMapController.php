@@ -65,14 +65,15 @@ class RoleCategoryMapController extends Controller
             ->values();
 
         DB::transaction(function () use ($roleId, $categories) {
+            // Replace mapping fully so unchecked categories disappear from forms.
             CategoryRoleMap::where('role', $roleId)->delete();
 
             foreach ($categories as $categoryId) {
-                CategoryRoleMap::create([
-                    'role' => $roleId,
-                    'category' => $categoryId,
-                    'status' => 1,
-                ]);
+                $row = new CategoryRoleMap();
+                $row->role = $roleId;
+                $row->category = $categoryId;
+                $row->status = 1;
+                $row->save();
             }
         });
 

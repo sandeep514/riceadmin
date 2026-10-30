@@ -9,7 +9,6 @@ class AnalyserAccount extends Model
 {
     protected $fillable = [
         'user_id',
-        'plan_id',
         'start_date',
         'end_date',
         'received_amount',
@@ -34,11 +33,6 @@ class AnalyserAccount extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function plan()
-    {
-        return $this->belongsTo(WebPlanModel::class, 'plan_id');
-    }
-
     public static function analyserRoleId(): ?int
     {
         $role = self::resolveAnalyserRole();
@@ -48,11 +42,17 @@ class AnalyserAccount extends Model
 
     public static function resolveAnalyserRole(): ?Role
     {
+        $byName = Role::query()
+            ->whereRaw('LOWER(role_name) = ?', ['analyser'])
+            ->orderBy('id')
+            ->first();
+
+        if ($byName) {
+            return $byName;
+        }
+
         return Role::query()
-            ->where(function ($q) {
-                $q->whereRaw('LOWER(role_name) = ?', ['analyser'])
-                    ->orWhere('type', 'analyser');
-            })
+            ->where('type', 'analyser')
             ->orderBy('id')
             ->first();
     }

@@ -246,18 +246,13 @@ class WebPlanController extends Controller
 
     /**
      * Roles available when creating/editing web plans.
-     * Includes analyser so Analyser Accounts can be linked to web plans.
      *
      * @return \Illuminate\Support\Collection<int|string, string>
      */
     private function webPlanRoleOptions()
     {
         return Role::query()
-            ->where(function ($q) {
-                $q->where('type', 'web')
-                    ->orWhere('type', 'analyser')
-                    ->orWhereRaw('LOWER(role_name) = ?', ['analyser']);
-            })
+            ->where('type', 'web')
             ->orderBy('role_name')
             ->pluck('role_name', 'id');
     }

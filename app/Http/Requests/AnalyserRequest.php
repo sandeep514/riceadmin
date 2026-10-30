@@ -47,19 +47,6 @@ class AnalyserRequest extends FormRequest
                 : 'required|string|min:6',
             'contact_person_name' => 'required|string|max:255',
             'contact_mobile' => 'required|string|max:20',
-            'plan_id' => [
-                'required',
-                'integer',
-                Rule::exists('web_plan', 'id')->where(function ($query) {
-                    $roleId = AnalyserAccount::analyserRoleId();
-                    $query->where('status', 1);
-                    if ($roleId) {
-                        $query->where('role_id', $roleId);
-                    } else {
-                        $query->whereRaw('1 = 0');
-                    }
-                }),
-            ],
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'received_amount' => 'nullable|numeric|min:0',
