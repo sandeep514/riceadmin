@@ -8,12 +8,15 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class PaddyPricesApiExport implements FromQuery, WithMapping, WithHeadings, WithStyles, ShouldAutoSize
+class PaddyPricesApiExport implements FromQuery, WithMapping, WithEvents, WithCustomStartCell, ShouldAutoSize
 {
     /** @var list<int>|null null = no quality filter; [] = force empty result */
     private ?array $qualityIds = null;
@@ -68,23 +71,9 @@ class PaddyPricesApiExport implements FromQuery, WithMapping, WithHeadings, With
             ->orderBy('quality_id');
     }
 
-    public function headings(): array
+    public function startCell(): string
     {
-        return [
-            'price_date',
-            'mandi',
-            'state',
-            'rice_type',
-            'seed',
-            'crop_year',
-            'min_hand_cutting_price',
-            'max_hand_cutting_price',
-            'min_machine_cutting_price',
-            'max_machine_cutting_price',
-            'moisture',
-            'total_arrivals',
-            'change',
-        ];
+        return 'A3';
     }
 
     public function map($item): array
@@ -93,25 +82,65 @@ class PaddyPricesApiExport implements FromQuery, WithMapping, WithHeadings, With
 
         return [
             $item->created_at ? $item->created_at->format('Y-m-d') : '',
-            optional($item->getMandi_rel)->mandi ?? '',
             optional($item->getState_rel)->state ?? '',
-            $quality->type_label ?? ($quality->type ?? ''),
+            optional($item->getMandi_rel)->mandi ?? '',
             $quality->quality ?? '',
             $item->crop_year ?? '',
-            $this->blankZeroOrNull($item->min_hand_cutting_price),
-            $this->blankZeroOrNull($item->hand_cutting_price),
             $this->blankZeroOrNull($item->min_machine_cutting_price),
             $this->blankZeroOrNull($item->machine_cutting_price),
-            $this->blankZeroOrNull($item->moisture),
-            $this->blankZeroOrNull($item->total_arrivals),
-            $item->change ?? '',
+            $this->blankZeroOrNull($item->min_hand_cutting_price),
+            $this->blankZeroOrNull($item->hand_cutting_price),
         ];
     }
 
-    public function styles(Worksheet $sheet)
+    public function registerEvents(): array
     {
         return [
-            1 => ['font' => ['bold' => true]],
+            AfterSheet::class => function (AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+
+                $sheet->setCellValue('A1', 'Date');
+                $sheet->setCellValue('B1', 'State');
+                $sheet->setCellValue('C1', 'Mandi');
+                $sheet->setCellValue('D1', 'Quality');
+                $sheet->setCellValue('E1', 'Crop Year');
+                $sheet->setCellValue('F1', 'Machine Cutting (INR)');
+                $sheet->setCellValue('H1', 'Hand Cutting (INR)');
+                $sheet->setCellValue('F2', 'Min');
+                $sheet->setCellValue('G2', 'Max');
+                $sheet->setCellValue('H2', 'Min');
+                $sheet->setCellValue('I2', 'Max');
+
+                $sheet->mergeCells('A1:A2');
+                $sheet->mergeCells('B1:B2');
+                $sheet->mergeCells('C1:C2');
+                $sheet->mergeCells('D1:D2');
+                $sheet->mergeCells('E1:E2');
+                $sheet->mergeCells('F1:G1');
+                $sheet->mergeCells('H1:I1');
+
+                $sheet->getStyle('A1:I2')->applyFromArray([
+                    'font' => ['bold' => true],
+                    'alignment' => [
+                        'horizontal' => Alignment::HORIZONTAL_CENTER,
+                        'vertical' => Alignment::VERTICAL_CENTER,
+                        'wrapText' => true,
+                    ],
+                    'fill' => [
+                        'fillType' => Fill::FILL_SOLID,
+                        'startColor' => ['rgb' => 'B8CCE4'],
+                    ],
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['rgb' => '000000'],
+                        ],
+                    ],
+                ]);
+
+                $sheet->getRowDimension(1)->setRowHeight(22);
+                $sheet->getRowDimension(2)->setRowHeight(20);
+            },
         ];
     }
 

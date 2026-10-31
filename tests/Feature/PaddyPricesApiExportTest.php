@@ -128,15 +128,14 @@ class PaddyPricesApiExportTest extends TestCase
         $mapped = (new PaddyPricesApiExport('2026-10-31', '2026-10-31', [1]))->map($row);
 
         $this->assertSame('2026-10-31', $mapped[0]);
-        $this->assertSame('KARNAL', $mapped[1]);
-        $this->assertSame('HARYANA', $mapped[2]);
-        $this->assertSame('Basmati', $mapped[3]);
-        $this->assertSame('1121', $mapped[4]);
-        $this->assertSame(2026, (int) $mapped[5]);
-        $this->assertSame('', $mapped[6]);
-        $this->assertSame('3500', (string) $mapped[7]);
-        $this->assertSame('', $mapped[8]);
-        $this->assertSame('', $mapped[9]);
+        $this->assertSame('HARYANA', $mapped[1]);
+        $this->assertSame('KARNAL', $mapped[2]);
+        $this->assertSame('1121', $mapped[3]);
+        $this->assertSame(2026, (int) $mapped[4]);
+        $this->assertSame('', $mapped[5]); // machine min ----
+        $this->assertSame('', $mapped[6]); // machine max 0
+        $this->assertSame('', $mapped[7]); // hand min ----
+        $this->assertSame('3500', (string) $mapped[8]);
     }
 
     private function insertPrice(int $qualityId, string $at, string $hand): void
