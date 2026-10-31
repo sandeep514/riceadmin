@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Export\CalculatorExport;
+use App\Support\UsdPricePackingFilter;
 use App\USD_defaultmaster;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -23,12 +24,16 @@ class ExportUsdPricesMailJob implements ShouldQueue
 
     public int $timeout = 300;
 
+    /**
+     * @param  list<int>|null  $packingIds
+     */
     public function __construct(
         public string $email,
         public ?string $fromDate = null,
         public ?string $toDate = null,
-        public ?int $packingId = null,
-        public ?string $type = null
+        public ?array $packingIds = null,
+        public ?string $type = null,
+        public ?string $packingKey = null
     ) {
     }
 
@@ -37,7 +42,7 @@ class ExportUsdPricesMailJob implements ShouldQueue
         $export = new CalculatorExport(
             $this->fromDate,
             $this->toDate,
-            $this->packingId,
+            $this->packingIds,
             $this->type,
             true
         );
@@ -61,8 +66,12 @@ class ExportUsdPricesMailJob implements ShouldQueue
 
             @ini_set('memory_limit', '512M');
 
+            $packingSlug = $this->packingKey
+                ? '_'.Str::slug($this->packingKey)
+                : ($this->packingIds ? '_packing-'.implode('-', $this->packingIds) : '');
+
             $filename = 'usd_prices_'.Str::slug(($this->fromDate ?? 'start').'_'.($this->toDate ?? 'end'))
-                .($this->packingId ? '_packing-'.$this->packingId : '')
+                .$packingSlug
                 .($this->type ? '_'.Str::slug($this->type) : '')
                 .'_'.now()->format('YmdHis').'.xlsx';
 
@@ -85,7 +94,8 @@ class ExportUsdPricesMailJob implements ShouldQueue
                 'email' => $this->email,
                 'from' => $this->fromDate,
                 'to' => $this->toDate,
-                'packing' => $this->packingId,
+                'packingIds' => $this->packingIds,
+                'packingKey' => $this->packingKey,
                 'type' => $this->type,
             ]);
             throw $e;
@@ -97,12 +107,17 @@ class ExportUsdPricesMailJob implements ShouldQueue
      */
     private function filterSummary(): array
     {
-        $packingLabel = 'All';
-        if ($this->packingId) {
-            $pack = USD_defaultmaster::query()->find($this->packingId);
+        if ($this->packingKey) {
+            $packingLabel = UsdPricePackingFilter::labelForKey($this->packingKey);
+        } elseif (is_array($this->packingIds) && count($this->packingIds) === 1) {
+            $pack = USD_defaultmaster::query()->find($this->packingIds[0]);
             $packingLabel = $pack
                 ? trim(($pack->bag_size ?? '').' - '.($pack->bag_type ?? ''))
-                : (string) $this->packingId;
+                : (string) $this->packingIds[0];
+        } elseif (is_array($this->packingIds) && count($this->packingIds) > 1) {
+            $packingLabel = 'Selected packings ('.count($this->packingIds).')';
+        } else {
+            $packingLabel = 'All';
         }
 
         return [

@@ -17,13 +17,26 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
 {
     private int $rowNumber = 0;
 
+    /** @var list<int>|null null = no packing filter; [] = force empty result */
+    private ?array $packingIds = null;
+
+    /**
+     * @param  int|list<int>|null  $packing  Single master id, list of ids, or null (no packing filter)
+     */
     public function __construct(
         private ?string $from = null,
         private ?string $to = null,
-        private ?int $packing = null,
+        int|array|null $packing = null,
         private ?string $type = null,
         private bool $ignoreZeroFob = true
     ) {
+        if (is_int($packing)) {
+            $this->packingIds = [$packing];
+        } elseif (is_array($packing)) {
+            $this->packingIds = array_values(array_unique(array_map('intval', $packing)));
+        } else {
+            $this->packingIds = null;
+        }
     }
 
     public function query(): Builder
@@ -37,8 +50,15 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
         $candidates = USD_prices::query()
             ->whereIn('rice', $qualityIds)
             ->when($this->from, fn ($q) => $q->whereDate('created_at', '>=', $this->from))
-            ->when($this->to, fn ($q) => $q->whereDate('created_at', '<=', $this->to))
-            ->when($this->packing, fn ($q) => $q->where('usd_defaultMaster_id', $this->packing));
+            ->when($this->to, fn ($q) => $q->whereDate('created_at', '<=', $this->to));
+
+        if ($this->packingIds !== null) {
+            if ($this->packingIds === []) {
+                $candidates->whereRaw('1 = 0');
+            } else {
+                $candidates->whereIn('usd_defaultMaster_id', $this->packingIds);
+            }
+        }
 
         if ($this->ignoreZeroFob) {
             // Drop null / blank / zero FOB min rows entirely.

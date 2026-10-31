@@ -43,6 +43,7 @@ use App\BrandAvailability;
 use App\USD_prices;
 use App\Export\CalculatorExport;
 use App\Jobs\ExportUsdPricesMailJob;
+use App\Support\UsdPricePackingFilter;
 // use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
@@ -5549,6 +5550,10 @@ class ApiController extends Controller
      *
      * GET /api/usd-prices/filter-packings
      * Optional ?type=basmati|non-basmati
+     *
+     * Each item includes `key` (e.g. 50kg_pp) for POST /api/usd-prices/export `packingKey`.
+     * When type can be All, send packingKey — not a single master id — because basmati
+     * and non-basmati use different USD_defaultmaster ids for the same packing style.
      */
     public function getUsdPricesFilterPackings(Request $request)
     {
@@ -5560,43 +5565,14 @@ class ApiController extends Controller
             ], 422);
         }
 
-        $definitions = [
-            [
-                'key' => '40kg_jute',
-                'label' => '40kg Jute',
-                'match' => function ($q) {
-                    $q->whereRaw('LOWER(TRIM(bag_size)) = ?', ['40kg'])
-                        ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute']);
-                },
-            ],
-            [
-                'key' => 'jute_inner',
-                'label' => 'Jute Inner',
-                'match' => function ($q) {
-                    $q->where(function ($inner) {
-                        $inner->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute inner'])
-                            ->orWhereRaw('LOWER(REPLACE(TRIM(bag_type), \'-\', \' \')) LIKE ?', ['%jute%inner%']);
-                    });
-                },
-            ],
-            [
-                'key' => '50kg_pp',
-                'label' => '50kg PP',
-                'match' => function ($q) {
-                    $q->whereRaw('LOWER(TRIM(bag_size)) = ?', ['50kg'])
-                        ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['pp']);
-                },
-            ],
-        ];
-
-        $buildForAppliedFor = function (int $appliedFor) use ($definitions) {
+        $buildForAppliedFor = function (int $appliedFor) {
             $items = [];
-            foreach ($definitions as $def) {
+            foreach (UsdPricePackingFilter::packingDefinitions() as $def) {
                 $row = USD_defaultmaster::query()
                     ->select(['id', 'bag_size', 'bag_type', 'PMT_USD', 'applied_for', 'order'])
                     ->where('applied_for', $appliedFor)
                     ->where(function ($q) use ($def) {
-                        ($def['match'])($q);
+                        UsdPricePackingFilter::applyKeyMatch($q, $def['key']);
                     })
                     ->orderBy('order', 'ASC')
                     ->orderBy('id', 'ASC')
@@ -5625,6 +5601,7 @@ class ApiController extends Controller
             return response()->json([
                 'status' => true,
                 'type' => 'basmati',
+                'packingKeys' => UsdPricePackingFilter::allowedKeys(),
                 'data' => $buildForAppliedFor(1),
             ], 200);
         }
@@ -5633,12 +5610,14 @@ class ApiController extends Controller
             return response()->json([
                 'status' => true,
                 'type' => 'non-basmati',
+                'packingKeys' => UsdPricePackingFilter::allowedKeys(),
                 'data' => $buildForAppliedFor(0),
             ], 200);
         }
 
         return response()->json([
             'status' => true,
+            'packingKeys' => UsdPricePackingFilter::allowedKeys(),
             'data' => [
                 'basmati' => $buildForAppliedFor(1),
                 'non-basmati' => $buildForAppliedFor(0),
@@ -5652,6 +5631,12 @@ class ApiController extends Controller
      *
      * downloadType=mail    → queue email to the authenticated user's email
      * downloadType=browser → generate file and return a download URL
+     *
+     * Filters:
+     * - type: null/omit = All, or basmati|non-basmati
+     * - packingKey: null/omit = All filter packings (40kg_jute, jute_inner, 50kg_pp),
+     *   or one of those keys. Resolved to 1–6 USD_defaultmaster ids.
+     * - packing: legacy single master id (used only when packingKey is omitted)
      */
     public function exportUsdPrices(Request $request)
     {
@@ -5669,6 +5654,7 @@ class ApiController extends Controller
             'type' => 'nullable|in:basmati,non-basmati',
             'from' => 'nullable|date_format:Y-m-d',
             'to' => 'nullable|date_format:Y-m-d',
+            'packingKey' => 'nullable|in:'.implode(',', UsdPricePackingFilter::allowedKeys()),
             'packing' => 'nullable|integer|min:1|exists:USD_defaultmaster,id',
         ]);
 
@@ -5687,10 +5673,24 @@ class ApiController extends Controller
             [$from, $to] = [$to, $from];
         }
 
-        $packing = $request->input('packing');
-        $packing = is_numeric($packing) && (int) $packing > 0 ? (int) $packing : null;
         $type = $request->input('type');
         $type = is_string($type) && $type !== '' ? strtolower(trim($type)) : null;
+
+        $packingKey = $request->input('packingKey');
+        $packingKey = is_string($packingKey) && $packingKey !== '' ? strtolower(trim($packingKey)) : null;
+
+        $legacyPackingId = $request->input('packing');
+        $legacyPackingId = is_numeric($legacyPackingId) && (int) $legacyPackingId > 0
+            ? (int) $legacyPackingId
+            : null;
+
+        // Prefer packingKey (supports type=All → multiple ids). Legacy packing id otherwise.
+        // When neither is sent, resolve All packing styles for the selected type scope.
+        if ($packingKey !== null || $legacyPackingId === null) {
+            $packingIds = UsdPricePackingFilter::resolveMasterIds($type, $packingKey);
+        } else {
+            $packingIds = [$legacyPackingId];
+        }
 
         if ($downloadType === 'mail') {
             $email = trim((string) ($user->email ?? ''));
@@ -5712,8 +5712,9 @@ class ApiController extends Controller
                 $email,
                 $from,
                 $to,
-                $packing,
-                $type
+                $packingIds,
+                $type,
+                $packingKey
             );
 
             return response()->json([
@@ -5721,11 +5722,14 @@ class ApiController extends Controller
                 'downloadType' => 'mail',
                 'message' => 'Export queued. You will receive an email shortly.',
                 'email' => $email,
+                'type' => $type,
+                'packingKey' => $packingKey,
+                'packingIds' => $packingIds,
             ], 202);
         }
 
         // browser — generate XLSX and return a public download URL
-        $export = new CalculatorExport($from, $to, $packing, $type, true);
+        $export = new CalculatorExport($from, $to, $packingIds, $type, true);
         $rowCount = (clone $export->query())->count();
         if ($rowCount === 0) {
             return response()->json([
@@ -5733,13 +5737,20 @@ class ApiController extends Controller
                 'downloadType' => 'browser',
                 'message' => 'No rows found for selected filters.',
                 'download_url' => null,
+                'type' => $type,
+                'packingKey' => $packingKey,
+                'packingIds' => $packingIds,
             ], 404);
         }
 
         @ini_set('memory_limit', '512M');
 
+        $packingSlug = $packingKey
+            ? '_'.Str::slug($packingKey)
+            : ($packingIds !== [] ? '_packing-'.implode('-', $packingIds) : '');
+
         $filename = 'usd_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
-            .($packing ? '_packing-'.$packing : '')
+            .$packingSlug
             .($type ? '_'.Str::slug($type) : '')
             .'_'.now()->format('YmdHis').'.xlsx';
 
@@ -5754,6 +5765,9 @@ class ApiController extends Controller
             'download_url' => $downloadUrl,
             'filename' => $filename,
             'rowCount' => $rowCount,
+            'type' => $type,
+            'packingKey' => $packingKey,
+            'packingIds' => $packingIds,
         ], 200);
     }
 
