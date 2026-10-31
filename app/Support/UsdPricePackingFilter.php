@@ -126,43 +126,44 @@ class UsdPricePackingFilter
     }
 
     /**
-     * Resolve type + packingKey to master ids.
+     * Resolve packingKey to USD_defaultmaster ids.
      *
-     * - type All + packing All → up to 6 ids
-     * - type All + packing 50kg_pp → 2 ids
-     * - type basmati + packing 50kg_pp → 1 id
+     * Rice type is not applied here. Calculator saves historically store basmati
+     * prices against applied_for=0 packing rows and non-basmati against
+     * applied_for=1 (inverted vs the packing master labels). Scoping ids by type
+     * therefore returned packing ids that never appear on matching USD_prices
+     * rows, so type=basmati / type=non-basmati exports were empty while type=All
+     * (both applied_for sets) worked.
      *
-     * @return list<int>|null null means no packing filter (All packings for the type scope
-     *                        is still constrained via quality type on export; when packing
-     *                        is All we still limit to the 3 known styles' ids so only
-     *                        filter packings are exported)
+     * Type is filtered on quality_master in CalculatorExport instead.
+     *
+     * - packing All → up to 6 ids (3 styles × both applied_for)
+     * - packing 50kg_pp → both applied_for ids for that style
+     *
+     * @return list<int>
      */
     public static function resolveMasterIds(?string $type, ?string $packingKey): array
     {
-        $appliedForList = self::appliedForList($type);
         $keys = ($packingKey === null || $packingKey === '')
             ? self::allowedKeys()
             : [strtolower(trim($packingKey))];
 
         $ids = [];
-        foreach ($appliedForList as $appliedFor) {
-            foreach ($keys as $key) {
-                if (! in_array($key, self::allowedKeys(), true)) {
-                    continue;
-                }
+        foreach ($keys as $key) {
+            if (! in_array($key, self::allowedKeys(), true)) {
+                continue;
+            }
 
-                $row = USD_defaultmaster::query()
-                    ->where('applied_for', $appliedFor)
-                    ->where(function ($q) use ($key) {
-                        self::applyKeyMatch($q, $key);
-                    })
-                    ->orderBy('order', 'ASC')
-                    ->orderBy('id', 'ASC')
-                    ->first(['id']);
+            $rows = USD_defaultmaster::query()
+                ->where(function ($q) use ($key) {
+                    self::applyKeyMatch($q, $key);
+                })
+                ->orderBy('order', 'ASC')
+                ->orderBy('id', 'ASC')
+                ->get(['id']);
 
-                if ($row) {
-                    $ids[] = (int) $row->id;
-                }
+            foreach ($rows as $row) {
+                $ids[] = (int) $row->id;
             }
         }
 

@@ -41,7 +41,7 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
     {
         $qualityIds = QualityMaster::query()
             ->when($this->type, function ($q) {
-                $q->whereRaw('LOWER(quality_type) = ?', [strtolower((string) $this->type)]);
+                $q->whereRaw('LOWER(TRIM(quality_type)) = ?', [strtolower(trim((string) $this->type))]);
             })
             ->pluck('id');
 
