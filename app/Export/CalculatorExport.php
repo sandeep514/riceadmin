@@ -15,8 +15,6 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyles, ShouldAutoSize
 {
-    private int $rowNumber = 0;
-
     /** @var list<int>|null null = no packing filter; [] = force empty result */
     private ?array $packingIds = null;
 
@@ -84,42 +82,29 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
     public function headings(): array
     {
         return [
-            '#',
-            'Quality',
-            'Rice Min',
-            'Rice Max',
-            'Packing',
-            'Packing Name',
-            'Rice Type',
-            'Transport Min',
-            'Transport Max',
-            'USD Rate',
-            'FOB Min',
-            'FOB Max',
-            'Created At',
+            'price_date',
+            'rice_name',
+            'rice_type',
+            'packing',
+            'packing_name',
+            'fobmin',
+            'fobmax',
         ];
     }
 
     public function map($item): array
     {
-        $this->rowNumber++;
         $quality = optional($item->getRiceQuality);
         $packing = optional($item->getUSDDefaultMaster);
 
         return [
-            $this->rowNumber,
+            $item->created_at ? $item->created_at->format('Y-m-d') : '',
             trim(($quality->quality ?? '').' '.($quality->quality_name ?? '')),
-            $this->blankZeroOrNull($item->ricemin),
-            $this->blankZeroOrNull($item->ricemax),
+            $quality->quality_type ?? '',
             $packing->bag_size ?? '',
             $packing->bag_type ?? '',
-            $quality->quality_type ?? '',
-            $this->blankZeroOrNull($item->transportmin),
-            $this->blankZeroOrNull($item->transportmax),
-            $this->blankZeroOrNull($item->dollarrate),
             $this->blankZeroOrNull($item->fobmin),
             $this->blankZeroOrNull($item->fobmax),
-            $item->created_at ? $item->created_at->format('Y-m-d H:i') : '',
         ];
     }
 

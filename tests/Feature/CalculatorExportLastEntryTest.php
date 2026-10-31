@@ -189,11 +189,11 @@ class CalculatorExportLastEntryTest extends TestCase
 
         $mapped = (new CalculatorExport('2026-10-20', '2026-10-20', 26))->map($row);
 
-        // transport min/max are 0 in seed → blank in Excel
-        $this->assertSame('', $mapped[7]);
-        $this->assertSame('', $mapped[8]);
-        // FOB kept when positive
-        $this->assertSame('10', (string) $mapped[10]);
+        $this->assertSame('2026-10-20', $mapped[0]);
+        $this->assertSame('25kg', $mapped[3]);
+        $this->assertSame('Jute', $mapped[4]);
+        $this->assertSame('10', (string) $mapped[5]);
+        $this->assertSame('12', (string) $mapped[6]);
     }
 
     public function test_type_filter_keeps_matching_quality_type(): void
