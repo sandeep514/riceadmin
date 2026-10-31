@@ -5546,7 +5546,7 @@ class ApiController extends Controller
 
     /**
      * Fixed packing filters for USD prices (basmati / non-basmati):
-     * 40kg Jute, Jute Inner, 50kg PP.
+     * 40kg Jute, 40kg Jute Inner, 50kg PP.
      *
      * GET /api/usd-prices/filter-packings
      * Optional ?type=basmati|non-basmati
@@ -5585,7 +5585,7 @@ class ApiController extends Controller
                 $items[] = [
                     'id' => (int) $row->id,
                     'key' => $def['key'],
-                    'label' => $def['label'],
+                    'label' => UsdPricePackingFilter::displayLabel($def['key'], $row->bag_size),
                     'bag_size' => $row->bag_size,
                     'bag_type' => $row->bag_type,
                     'PMT_USD' => $row->PMT_USD,

@@ -20,24 +20,48 @@ class UsdPricePackingFilter
     public const KEY_50KG_PP = '50kg_pp';
 
     /**
-     * @return array<int, array{key:string, label:string}>
+     * @return array<int, array{key:string, label:string, typeLabel:string}>
      */
     public static function packingDefinitions(): array
     {
         return [
             [
                 'key' => self::KEY_40KG_JUTE,
+                'typeLabel' => 'Jute',
                 'label' => '40kg Jute',
             ],
             [
                 'key' => self::KEY_JUTE_INNER,
-                'label' => 'Jute Inner',
+                'typeLabel' => 'Jute Inner',
+                'label' => '40kg Jute Inner',
             ],
             [
                 'key' => self::KEY_50KG_PP,
+                'typeLabel' => 'PP',
                 'label' => '50kg PP',
             ],
         ];
+    }
+
+    public static function displayLabel(string $packingKey, ?string $bagSize): string
+    {
+        $typeLabel = '';
+        foreach (self::packingDefinitions() as $def) {
+            if ($def['key'] === $packingKey) {
+                $typeLabel = $def['typeLabel'];
+                break;
+            }
+        }
+
+        $size = trim((string) $bagSize);
+        if ($size === '') {
+            return $typeLabel !== '' ? $typeLabel : $packingKey;
+        }
+        if ($typeLabel === '') {
+            return $size;
+        }
+
+        return $size.' '.$typeLabel;
     }
 
     /**
