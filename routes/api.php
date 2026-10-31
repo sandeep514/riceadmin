@@ -294,6 +294,9 @@ use Pusher\Pusher;
     Route::get('web/get/paddy/trade/{id}', ['as' => 'web.get.paddy.trade.api', 'uses' => 'PaddyApiController@getPaddyTradeDetail', 'middleware' => 'portal.api.token']);
     Route::post('web/interested/paddy/trade', ['as' => 'web.interested.paddy.trade.api', 'uses' => 'PaddyApiController@showPaddyTradeInterest', 'middleware' => 'portal.api.token']);
 
+    Route::get('paddy-prices/filter-seeds', ['as' => 'paddy.prices.filter.seeds', 'uses' => 'PaddyApiController@getPaddyPricesFilterSeeds', 'middleware' => 'app.or.portal.api.token']);
+    Route::post('paddy-prices/export', ['as' => 'paddy.prices.export', 'uses' => 'PaddyApiController@exportPaddyPrices', 'middleware' => 'app.or.portal.api.token']);
+
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
     Route::get('get/paddy/prices/by/paddy/{stateId}/{paddyId}',      ['as' => 'get.paddy.prices.by.paddy',    'uses' => 'PaddyApiController@getPaddyPricesByPaddy']);
     Route::get('get/states/by/paddy/{stateId}',      ['as' => 'get.paddy.states',    'uses' => 'PaddyApiController@getPaddyQualities']);

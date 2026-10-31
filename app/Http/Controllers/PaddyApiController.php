@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Export\PaddyPricesApiExport;
+use App\Jobs\ExportPaddyPricesMailJob;
 use App\PaddyMandiModel;
 use App\PaddyPrice;
 use App\PaddyPriceDefault;
@@ -11,13 +13,15 @@ use App\PaddyStateModel;
 use App\PaddyTrade;
 use App\PaddyTradeCurrentStatus;
 use App\PaddyTradeInterested;
+use App\Support\PaddyPriceSeedFilter;
+use App\Support\QueuedMail;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Support\QueuedMail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PaddyApiController extends Controller
 {
@@ -1246,6 +1250,232 @@ class PaddyApiController extends Controller
             'created_at' => $row->created_at,
             'updated_at' => $row->updated_at,
         ];
+    }
+
+    /**
+     * Seed (quality) filters for paddy price export.
+     *
+     * GET /api/paddy-prices/filter-seeds
+     * Optional ?type=basmati|non-basmati
+     *
+     * Each item includes `key` (e.g. 1121) for POST /api/paddy-prices/export `seedKey`.
+     * When type is All, send seedKey — not a single quality id — because the same
+     * seed name can exist on both basmati and non-basmati.
+     */
+    public function getPaddyPricesFilterSeeds(Request $request)
+    {
+        $type = strtolower(trim((string) $request->query('type', '')));
+        if ($type === 'all') {
+            $type = '';
+        }
+        if ($type !== '' && ! in_array($type, ['basmati', 'non-basmati'], true)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid type. Allowed values: basmati, non-basmati',
+            ], 422);
+        }
+
+        if ($type === 'basmati' || $type === 'non-basmati') {
+            return response()->json([
+                'status' => true,
+                'type' => $type,
+                'data' => PaddyPriceSeedFilter::listSeeds($type),
+            ], 200);
+        }
+
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'basmati' => PaddyPriceSeedFilter::listSeeds('basmati'),
+                'non-basmati' => PaddyPriceSeedFilter::listSeeds('non-basmati'),
+            ],
+        ], 200);
+    }
+
+    /**
+     * Paddy prices XLSX export.
+     * POST /api/paddy-prices/export
+     *
+     * downloadType=mail    → queue email to the authenticated user's email
+     * downloadType=browser → generate file and return a download URL
+     *
+     * Filters:
+     * - range: today | historical
+     * - type: null/omit = All, or basmati|non-basmati
+     * - seedKey: null/omit = All seeds for the type scope, or a quality name (1121, 1509)
+     * - seed: legacy single paddy_qualities id (used only when seedKey is omitted)
+     * - from/to: required when range=historical (Y-m-d)
+     */
+    public function exportPaddyPrices(Request $request)
+    {
+        $user = $request->user();
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized: API token is required.',
+                'session_expired' => true,
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'downloadType' => 'required|in:mail,browser',
+            'range' => 'required|in:today,historical',
+            'type' => 'nullable|in:basmati,non-basmati,all',
+            'from' => 'nullable|required_if:range,historical|date_format:Y-m-d',
+            'to' => 'nullable|required_if:range,historical|date_format:Y-m-d',
+            'seedKey' => 'nullable|string|max:191',
+            'seed' => 'nullable|integer|min:1|exists:paddy_qualities,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $downloadType = strtolower(trim((string) $request->input('downloadType')));
+        $range = strtolower(trim((string) $request->input('range')));
+
+        $type = $request->input('type');
+        $type = is_string($type) && $type !== '' ? strtolower(trim($type)) : null;
+        if ($type === 'all') {
+            $type = null;
+        }
+
+        $seedKey = $request->input('seedKey');
+        $seedKey = is_string($seedKey) && trim($seedKey) !== '' ? trim($seedKey) : null;
+
+        $legacySeedId = $request->input('seed');
+        $legacySeedId = is_numeric($legacySeedId) && (int) $legacySeedId > 0
+            ? (int) $legacySeedId
+            : null;
+
+        if ($seedKey !== null || $legacySeedId === null) {
+            $qualityIds = PaddyPriceSeedFilter::resolveQualityIds($type, $seedKey, null);
+        } else {
+            $qualityIds = PaddyPriceSeedFilter::resolveQualityIds($type, null, $legacySeedId);
+        }
+
+        [$from, $to] = $this->resolvedPaddyExportDates($range, $request->input('from'), $request->input('to'));
+
+        if ($downloadType === 'mail') {
+            $email = $this->resolvedExportEmail($user);
+            if ($email === null) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'No valid email found on your account. Please update your profile email first.',
+                ], 422);
+            }
+
+            ExportPaddyPricesMailJob::dispatch(
+                $email,
+                $from,
+                $to,
+                $qualityIds,
+                $type,
+                $seedKey,
+                $range
+            );
+
+            return response()->json([
+                'status' => true,
+                'downloadType' => 'mail',
+                'message' => 'Export queued. You will receive an email shortly.',
+                'email' => $email,
+                'range' => $range,
+                'from' => $from,
+                'to' => $to,
+                'type' => $type,
+                'seedKey' => $seedKey,
+                'qualityIds' => $qualityIds,
+            ], 202);
+        }
+
+        $export = new PaddyPricesApiExport($from, $to, $qualityIds);
+        $rowCount = (clone $export->query())->count();
+        if ($rowCount === 0) {
+            return response()->json([
+                'status' => false,
+                'downloadType' => 'browser',
+                'message' => 'No rows found for selected filters.',
+                'download_url' => null,
+                'range' => $range,
+                'from' => $from,
+                'to' => $to,
+                'type' => $type,
+                'seedKey' => $seedKey,
+                'qualityIds' => $qualityIds,
+            ], 404);
+        }
+
+        @ini_set('memory_limit', '512M');
+
+        $seedSlug = $seedKey
+            ? '_'.Str::slug($seedKey)
+            : ($qualityIds ? '_seed-'.implode('-', $qualityIds) : '');
+
+        $filename = 'paddy_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
+            .$seedSlug
+            .($type ? '_'.Str::slug($type) : '')
+            .'_'.now()->format('YmdHis').'.xlsx';
+
+        Excel::store($export, $filename, 'publicexcel');
+
+        return response()->json([
+            'status' => true,
+            'downloadType' => 'browser',
+            'message' => 'Export ready.',
+            'download_url' => url('excel/'.$filename),
+            'filename' => $filename,
+            'rowCount' => $rowCount,
+            'range' => $range,
+            'from' => $from,
+            'to' => $to,
+            'type' => $type,
+            'seedKey' => $seedKey,
+            'qualityIds' => $qualityIds,
+        ], 200);
+    }
+
+    /**
+     * @return array{0:?string,1:?string}
+     */
+    private function resolvedPaddyExportDates(string $range, mixed $from, mixed $to): array
+    {
+        $tz = config('app.timezone', 'Asia/Kolkata');
+
+        if ($range === 'today') {
+            $today = Carbon::now($tz)->format('Y-m-d');
+
+            return [$today, $today];
+        }
+
+        $from = is_string($from) && $from !== '' ? $from : null;
+        $to = is_string($to) && $to !== '' ? $to : null;
+        if ($from && $to && $from > $to) {
+            [$from, $to] = [$to, $from];
+        }
+
+        return [$from, $to];
+    }
+
+    private function resolvedExportEmail($user): ?string
+    {
+        $email = trim((string) ($user->email ?? ''));
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $personalEmail = trim((string) optional($user->getWebPersonalDetails)->email);
+            if ($personalEmail !== '' && filter_var($personalEmail, FILTER_VALIDATE_EMAIL)) {
+                $email = $personalEmail;
+            }
+        }
+
+        if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return null;
+        }
+
+        return $email;
     }
 }
 
