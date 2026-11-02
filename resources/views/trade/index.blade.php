@@ -450,14 +450,6 @@
         $('#tradeNoteModal').modal('show');
     });
 
-    var tradeSearchTimer = null;
-    $('#trade-search-input').on('input', function () {
-        clearTimeout(tradeSearchTimer);
-        tradeSearchTimer = setTimeout(function () {
-            $('#trade-search-form').trigger('submit');
-        }, 400);
-    });
-
     $(document).on('change', '.js-trade-packing', function () {
         var $select = $(this);
         var tradeId = $select.data('trade-id');
