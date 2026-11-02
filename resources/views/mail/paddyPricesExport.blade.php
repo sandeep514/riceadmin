@@ -1,9 +1,9 @@
 <p>Hello,</p>
 
 @if (!empty($hasAttachment))
-    <p>Your paddy prices export is attached ({{ number_format((int) ($rowCount ?? 0)) }} row(s)).</p>
+    <p>Please find your paddy prices export attached ({{ number_format((int) ($rowCount ?? 0)) }} record(s)).</p>
 @else
-    <p>No paddy price rows matched the selected filters, so no file was attached.</p>
+    <p>No paddy price records match the selected criteria. No file has been attached.</p>
 @endif
 
 <p><strong>Filters</strong></p>

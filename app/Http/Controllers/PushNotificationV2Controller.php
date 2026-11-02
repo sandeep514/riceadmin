@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\CategoryRoleMap;
 use App\Role;
 use App\Services\TradeWebNotificationService;
 use App\Services\WebPortalNotificationDelivery;
-use App\WebPlanModel;
 use App\WebUserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Session;
 
 /**
@@ -140,18 +141,24 @@ class PushNotificationV2Controller extends Controller
     }
 
     /**
-     * Active categories linked to the role via web plans (same source as Notify Web User).
+     * Active categories mapped to the role in Role Category Map
+     * (same source as Analyser Accounts).
      *
      * @return \Illuminate\Support\Collection<int, \App\Category>
      */
     private function categoriesForRole(int $roleId)
     {
-        $categoryIds = WebPlanModel::query()
-            ->where('role_id', $roleId)
-            ->where('status', 1)
-            ->whereNotNull('category_id')
-            ->distinct()
-            ->pluck('category_id');
+        $mapQuery = CategoryRoleMap::query()->where('role', $roleId);
+        if (Schema::hasColumn('category_role_map', 'status')) {
+            $mapQuery->where('status', 1);
+        }
+
+        $categoryIds = $mapQuery
+            ->pluck('category')
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values();
 
         if ($categoryIds->isEmpty()) {
             return collect();
@@ -159,7 +166,10 @@ class PushNotificationV2Controller extends Controller
 
         return Category::query()
             ->whereIn('id', $categoryIds)
-            ->where('status', 1)
+            ->where(function ($q) {
+                $q->where('status', 1)->orWhereNull('status');
+            })
+            ->orderByRaw('COALESCE(`order`, 999999)')
             ->orderBy('category')
             ->get(['id', 'category']);
     }

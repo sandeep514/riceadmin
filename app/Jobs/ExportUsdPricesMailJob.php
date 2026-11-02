@@ -58,7 +58,7 @@ class ExportUsdPricesMailJob implements ShouldQueue
                     'filters' => $filters,
                 ], function ($message) {
                     $message->to($this->email)
-                        ->subject('USD Prices Export — no rows for selected filters');
+                        ->subject('USD Prices Export — No matching records');
                 });
 
                 return;

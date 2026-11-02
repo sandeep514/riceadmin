@@ -56,7 +56,7 @@ class ExportPaddyPricesMailJob implements ShouldQueue
                     'filters' => $filters,
                 ], function ($message) {
                     $message->to($this->email)
-                        ->subject('Paddy Prices Export — no rows for selected filters');
+                        ->subject('Paddy Prices Export — No matching records');
                 });
 
                 return;

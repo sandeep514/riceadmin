@@ -5561,7 +5561,7 @@ class ApiController extends Controller
         if ($type !== '' && ! in_array($type, ['basmati', 'non-basmati'], true)) {
             return response()->json([
                 'status' => false,
-                'message' => 'Invalid type. Allowed values: basmati, non-basmati',
+                'message' => 'Please select a valid type: Basmati or Non-Basmati.',
             ], 422);
         }
 
@@ -5644,7 +5644,7 @@ class ApiController extends Controller
         if (! $user) {
             return response()->json([
                 'status' => false,
-                'message' => 'Unauthorized: API token is required.',
+                'message' => 'Authentication is required. Please sign in and try again.',
                 'session_expired' => true,
             ], 401);
         }
@@ -5661,7 +5661,7 @@ class ApiController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Validation failed',
+                'message' => 'Please review the selected options and try again.',
                 'errors' => $validator->errors(),
             ], 422);
         }
@@ -5704,7 +5704,7 @@ class ApiController extends Controller
             if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'No valid email found on your account. Please update your profile email first.',
+                    'message' => 'A valid email address is required to send this export. Please update your profile and try again.',
                 ], 422);
             }
 
@@ -5720,7 +5720,7 @@ class ApiController extends Controller
             return response()->json([
                 'status' => true,
                 'downloadType' => 'mail',
-                'message' => 'Export queued. You will receive an email shortly.',
+                'message' => 'Your export has been queued. You will receive an email shortly.',
                 'email' => $email,
                 'type' => $type,
                 'packingKey' => $packingKey,
@@ -5735,7 +5735,7 @@ class ApiController extends Controller
             return response()->json([
                 'status' => false,
                 'downloadType' => 'browser',
-                'message' => 'No rows found for selected filters.',
+                'message' => 'No records match the selected criteria. Please adjust your filters and try again.',
                 'download_url' => null,
                 'type' => $type,
                 'packingKey' => $packingKey,
@@ -5761,7 +5761,7 @@ class ApiController extends Controller
         return response()->json([
             'status' => true,
             'downloadType' => 'browser',
-            'message' => 'Export ready.',
+            'message' => 'Your export is ready for download.',
             'download_url' => $downloadUrl,
             'filename' => $filename,
             'rowCount' => $rowCount,

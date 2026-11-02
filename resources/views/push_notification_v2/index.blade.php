@@ -26,7 +26,8 @@
                             <p class="help-block" style="margin-top:0;">
                                 Sends <strong>Reverb/Pusher</strong> to matching web portal users and <strong>Firebase</strong>
                                 to matching app users (and web users with an app token).
-                                Recipients are matched by <strong>role</strong> and selected <strong>business categories</strong>.
+                                Recipients are matched by <strong>role</strong> and selected <strong>business categories</strong>
+                                (from Role Category Map).
                             </p>
 
                             <div class="form-group col-md-6" style="padding-left:0;">
