@@ -124,9 +124,22 @@
                         
                         <!-- /.box-header -->
                         <div class="box-body">
+                            <form method="GET" action="{{ route('master.trade') }}" id="trade-search-form" style="margin:0 0 12px;">
+                                <div class="input-group" style="max-width:420px;">
+                                    <input type="text" name="q" id="trade-search-input" value="{{ $search ?? '' }}"
+                                           class="form-control" placeholder="Search lot no, trade id, quality, type, status..."
+                                           autocomplete="off">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+                                        @if(!empty($search))
+                                            <a href="{{ route('master.trade') }}" class="btn btn-default">Clear</a>
+                                        @endif
+                                    </span>
+                                </div>
+                            </form>
                             <div class="table-responsive">
                                 <div class="col-md-12">
-                                    <table id="example2" class="display" style="width: 100%;">
+                                    <table id="trade-list-table" class="table table-bordered table-striped" style="width: 100%;">
                                         <thead>
                                             <tr>
                                                 <th style="text-align: center; width: 36px;">
@@ -155,7 +168,7 @@
                                         </thead>
 
                                         <tbody>
-                                            @foreach($sellQueries as $k => $v)
+                                            @forelse($sellQueries as $k => $v)
                                                 <tr data-trade-id="{{ $v->id }}">
                                                     <td style="text-align:center;">
                                                         <input type="checkbox" class="js-trade-select" value="{{ $v->id }}">
@@ -231,7 +244,17 @@
                                                     </td>
                                                 </tr>
                                                 
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="20" class="text-center" style="padding:18px;">
+                                                        @if(!empty($search))
+                                                            No trades match “{{ $search }}”.
+                                                        @else
+                                                            No trades found.
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                         
                                         <tfoot>
@@ -259,6 +282,16 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                    <div class="clearfix" style="padding:10px 0;">
+                                        <div class="pull-left" style="padding-top:8px;">
+                                            @if($sellQueries->total())
+                                                Showing {{ $sellQueries->firstItem() }} to {{ $sellQueries->lastItem() }} of {{ $sellQueries->total() }}
+                                            @endif
+                                        </div>
+                                        <div class="pull-right">
+                                            {{ $sellQueries->onEachSide(1)->links() }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -269,7 +302,7 @@
         </section>
     </div>
 @endsection
-@section('scripts')
+@section('javascript')
 <script>
     function tradeSelectIsChecked($input) {
         if (!$input || !$input.length) {
@@ -415,6 +448,14 @@
         $('#tradeNoteText').text('This action will delete  '+ label +' records older than 30 days.');
         $('#purgeType').val(type);
         $('#tradeNoteModal').modal('show');
+    });
+
+    var tradeSearchTimer = null;
+    $('#trade-search-input').on('input', function () {
+        clearTimeout(tradeSearchTimer);
+        tradeSearchTimer = setTimeout(function () {
+            $('#trade-search-form').trigger('submit');
+        }, 400);
     });
 
     $(document).on('change', '.js-trade-packing', function () {

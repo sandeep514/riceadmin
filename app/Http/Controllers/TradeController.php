@@ -38,12 +38,10 @@ use Illuminate\Support\Facades\DB;
 class TradeController extends Controller
 {
     protected array $lastQueuedTradeNotifyUserIds = [];
-    public function index(){
-        // $sellQueries = TradeQueriesINR::with(['RiceNameData' , 'RiceFormMilestone3','RicePackingBuyer' ,'RicePackingSeller','riceGrade' => function($query){
-        //     return $query->with('getWandType');
-        // }])->orderBy('id' , 'DESC')->get();
+    public function index(Request $request){
+        $search = trim((string) $request->input('q', ''));
 
-        $sellQueries = TradeQueriesINR::with([
+        $query = TradeQueriesINR::with([
             'RiceFormData',
             'RiceNameData',
             'RiceFormMilestone3',
@@ -54,10 +52,15 @@ class TradeController extends Controller
                 return $query->with('getWandType');
             }
         ])
-        ->where('status', '>', 0)
+        ->where('status', '>', 0);
+
+        $this->applyTradeListSearch($query, $search);
+
+        $sellQueries = $query
         ->orderByRaw("FIELD(status, 1,4,6,5,2,3,11,12)")
         ->orderBy('id', 'DESC')
-        ->get();
+        ->paginate(25)
+        ->appends($request->except('page'));
 
         $tradeStatusLabels = [
             1 => 'open',
@@ -84,6 +87,7 @@ class TradeController extends Controller
 
         return View('trade.index' , compact(
             'sellQueries',
+            'search',
             'currentTrade',
             'currentMarketStatus',
             'currentMarketLabel',
@@ -96,6 +100,75 @@ class TradeController extends Controller
             'buyerPackings',
             'publicPackings'
         ));
+    }
+
+    /**
+     * Filter the admin trade list by lot no, trade id, quality, type, status, etc.
+     */
+    private function applyTradeListSearch($query, string $search): void
+    {
+        $term = trim($search);
+        if ($term === '') {
+            return;
+        }
+
+        $like = '%'.$term.'%';
+        $lower = strtolower($term);
+
+        $statusIds = [];
+        foreach (TradeQueriesINR::$tradeStatus as $id => $label) {
+            if (str_contains(strtolower((string) $label), $lower)) {
+                $statusIds[] = (int) $id;
+            }
+        }
+
+        $typeIds = [];
+        foreach (TradeQueriesINR::$tradeType as $id => $label) {
+            if (str_contains(strtolower((string) $label), $lower)) {
+                $typeIds[] = (int) $id;
+            }
+        }
+
+        $qualityTypeIds = [];
+        if (str_contains($lower, 'non') && str_contains($lower, 'basmati')) {
+            $qualityTypeIds = [0, 2];
+        } elseif (str_contains($lower, 'basmati')) {
+            $qualityTypeIds = [1];
+        }
+
+        $idFromLabel = null;
+        if (preg_match('/^(?:trade[_\s-]*)?(\d+)$/i', $term, $m)) {
+            $idFromLabel = (int) $m[1];
+        }
+
+        $query->where(function ($q) use ($like, $statusIds, $typeIds, $qualityTypeIds, $idFromLabel) {
+            $q->where('sntcLotNo', 'like', $like)
+                ->orWhere('quantity', 'like', $like)
+                ->orWhere('offerPrice', 'like', $like)
+                ->orWhere('location', 'like', $like)
+                ->orWhere('stateLinkWithLivePrice', 'like', $like)
+                ->orWhere('additioanlInfo', 'like', $like)
+                ->orWhereHas('RiceNameData', fn ($r) => $r->where('name', 'like', $like))
+                ->orWhereHas('RiceFormMilestone3', fn ($r) => $r->where('name', 'like', $like))
+                ->orWhereHas('RiceFormData', fn ($r) => $r->where('form_name', 'like', $like))
+                ->orWhereHas('riceGrade', function ($r) use ($like) {
+                    $r->where('value', 'like', $like)
+                        ->orWhereHas('getWandType', fn ($t) => $t->where('type', 'like', $like));
+                });
+
+            if ($idFromLabel !== null && $idFromLabel > 0) {
+                $q->orWhere('id', $idFromLabel);
+            }
+            if ($statusIds !== []) {
+                $q->orWhereIn('status', $statusIds);
+            }
+            if ($typeIds !== []) {
+                $q->orWhereIn('tradeType', $typeIds);
+            }
+            if ($qualityTypeIds !== []) {
+                $q->orWhereIn('quality_type', $qualityTypeIds);
+            }
+        });
     }
 
     public function purgeOldByStatus(Request $request)
