@@ -59,7 +59,7 @@ class TradeController extends Controller
         $sellQueries = $query
         ->orderByRaw("FIELD(status, 1,4,6,5,2,3,11,12)")
         ->orderBy('id', 'DESC')
-        ->paginate(25)
+        ->paginate(20)
         ->appends($request->except('page'));
 
         $tradeStatusLabels = [

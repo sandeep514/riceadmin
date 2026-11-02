@@ -289,7 +289,7 @@
                                             @endif
                                         </div>
                                         <div class="pull-right">
-                                            {{ $sellQueries->onEachSide(1)->links() }}
+                                            {{ $sellQueries->onEachSide(2)->links('pagination.page-numbers') }}
                                         </div>
                                     </div>
                                 </div>
