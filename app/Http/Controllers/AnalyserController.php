@@ -9,8 +9,10 @@ use App\Http\Requests\AnalyserRequest;
 use App\Role;
 use App\Support\QueuedMail;
 use App\User;
+use App\Support\PortalProfileDisplay;
 use App\WebBusinessDetails;
 use App\WebCities;
+use App\WebPersonalDetails;
 use App\WebStates;
 use App\WebUserSubscriptionModel;
 use Carbon\Carbon;
@@ -140,6 +142,7 @@ class AnalyserController extends Controller
             ]);
 
             $this->syncBusinessDetails($user->id, $request);
+            $this->syncPersonalName($user->id, (string) $request->name);
         });
 
         if ($request->boolean('send_mail')) {
@@ -207,6 +210,7 @@ class AnalyserController extends Controller
             ]);
 
             $this->syncBusinessDetails($account->user_id, $request);
+            $this->syncPersonalName((int) $account->user_id, (string) $request->name);
         });
 
         if ($otp) {
@@ -347,6 +351,27 @@ class AnalyserController extends Controller
         }
 
         WebBusinessDetails::updateOrCreate(['user_id' => $userId], $data);
+    }
+
+    /**
+     * Analyser admin form has a single Name field. Split it into personal first/last
+     * so GET /portal/get/user/details can return last_name.
+     */
+    private function syncPersonalName(int $userId, string $fullName): void
+    {
+        [$firstName, $lastName] = PortalProfileDisplay::splitName(null, null, $fullName);
+        if ($firstName === null && $lastName === null) {
+            return;
+        }
+
+        $row = WebPersonalDetails::query()->firstOrNew(['user_id' => $userId]);
+        if ($firstName !== null) {
+            $row->firstname = $firstName;
+        }
+        if ($lastName !== null) {
+            $row->lastname = $lastName;
+        }
+        $row->save();
     }
 
     private function sendCredentialsMail(string $email, int $otp, ?string $plainPassword = null): void

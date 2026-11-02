@@ -85,6 +85,7 @@ use App\VendorUserMap;
 use App\WebRiceFormMap;
 use App\UserInterestedMap;
 use App\ServiceProviderUserMap;
+use App\Support\PortalProfileDisplay;
 use Razorpay\Api\Api;
 use Exception;
 use Illuminate\Support\Facades\Cache;
@@ -814,6 +815,7 @@ class PortalApiController extends Controller
         }
 
         $userArray = $this->appendWebBusinessContactFields($userArray);
+        $userArray = PortalProfileDisplay::mergeIntoUserArray($userArray, $data);
         // Compat for clients that read token from data.api_token
         $userArray['api_token'] = $token;
 
@@ -1454,6 +1456,7 @@ class PortalApiController extends Controller
             }
 
             $user = $this->appendWebBusinessContactFields($user);
+            $user = PortalProfileDisplay::mergeIntoUserArray($user, $userModel);
 
             return response()->json(['status' => true, 'message' => 'user details added successfully', 'data' => $user, 'prefix' => [
                 'avatar' => 'webPortal/' . $userId . '/attachments/avatar',
@@ -2418,7 +2421,11 @@ class PortalApiController extends Controller
                 $this->portalPersonalDetailsWithRelations(),
                 [
                     'getWebBusinessDetails' => function ($q) {
-                        return $q->with(['getCategoryDetails:id,category']);
+                        return $q->with([
+                            'cityRel:id,city_name',
+                            'stateRel:id,state_name',
+                            'getCategoryDetails:id,category',
+                        ]);
                     },
                     'getWebUserAttachment',
                     'getWebUserSubscription' => function ($q) {
@@ -2450,6 +2457,8 @@ class PortalApiController extends Controller
         if (isset($userArray['get_web_business_details']['get_bag_vendor_web'])) {
             unset($userArray['get_web_business_details']['get_bag_vendor_web']);
         }
+        $userArray = $this->appendWebBusinessContactFields($userArray);
+        $userArray = PortalProfileDisplay::mergeIntoUserArray($userArray, $data);
 
         $holdInfo = $data->portalHoldInfo();
         return response()->json([

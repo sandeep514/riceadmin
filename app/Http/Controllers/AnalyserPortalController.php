@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AnalyserAccount;
 use App\Support\ClientPlatform;
+use App\Support\PortalProfileDisplay;
 use App\Support\QueuedMail;
 use App\User;
 use Illuminate\Http\Request;
@@ -115,15 +116,17 @@ class AnalyserPortalController extends Controller
         auth('web')->login($user);
         $request->session()->save();
 
+        $profile = PortalProfileDisplay::compactForUser($user);
+
         return [
             'status' => true,
             'message' => 'Logged in successfully.',
             'data' => [
-                'user' => [
+                'user' => array_merge([
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                ],
+                ], $profile),
                 'api_token' => $token,
                 'access' => [
                     'start_date' => $account->start_date ? $account->start_date->format('Y-m-d') : null,
