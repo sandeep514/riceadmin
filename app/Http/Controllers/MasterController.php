@@ -552,8 +552,13 @@ class MasterController extends Controller
 		if ($to) {
 			$usdPriceQuery->whereDate('created_at', '<=', $to);
 		}
-		if ($packing) {
-			$usdPriceQuery->where('usd_defaultMaster_id', $packing);
+		$packingIds = $this->calculatorPackingIds($packing);
+		if ($packingIds !== null) {
+			if ($packingIds === []) {
+				$usdPriceQuery->whereRaw('1 = 0');
+			} else {
+				$usdPriceQuery->whereIn('usd_defaultMaster_id', $packingIds);
+			}
 		}
 		// Paginate: a wide from-to range can span thousands of rows
 		// (one row per packing per save) and exhaust memory while rendering.
@@ -594,7 +599,7 @@ class MasterController extends Controller
 
 		$riceName = QualityMaster::all();
 		$defaultValue = Defaultvalue::first();
-		$dollarRate = $defaultValue->dollarvalue;
+		$dollarRate = optional($defaultValue)->dollarvalue;
 		$packings = USD_defaultmaster::orderBy('bag_size')->orderBy('bag_type')->get(['id', 'bag_size', 'bag_type']);
 
 		return view('calculator.create', compact('riceName', 'usdPrice', 'dollarRate', 'defaultValue', 'packings', 'from', 'to', 'packing', 'maxDate', 'today', 'showingFallback'));
@@ -604,7 +609,7 @@ class MasterController extends Controller
 	{
 		[$from, $to, $packing] = $this->resolveCalculatorFilters($request);
 
-		$export = new CalculatorExport($from, $to, $packing);
+		$export = new CalculatorExport($from, $to, $this->calculatorPackingIds($packing));
 		$total = $export->query()->count();
 
 		// PhpSpreadsheet holds the whole sheet in memory (~1KB/cell),
@@ -649,12 +654,23 @@ class MasterController extends Controller
 		}
 		$packing = $request->input('packing');
 		$packing = is_numeric($packing) && (int) $packing > 0 ? (int) $packing : null;
-		if ($packing === null) {
-			$allowedIds = UsdPricePackingFilter::resolveMasterIds(null, null);
-			$packing = $allowedIds !== [] ? $allowedIds : null;
-		}
 
 		return [$from, $to, $packing];
+	}
+
+	/**
+	 * All packing on the calculator list/export is 50kg PP + 40kg Jute Inner only.
+	 *
+	 * @return list<int>|null null = no packing constraint (no matching masters)
+	 */
+	private function calculatorPackingIds(?int $packing): ?array
+	{
+		$allowedIds = UsdPricePackingFilter::resolveMasterIds(null, null);
+		if ($packing === null) {
+			return $allowedIds !== [] ? $allowedIds : null;
+		}
+
+		return [$packing];
 	}
 
 	private function validFilterDate($value): ?string
