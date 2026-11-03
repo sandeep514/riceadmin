@@ -59,10 +59,13 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
         }
 
         if ($this->ignoreZeroFob) {
-            // Drop null / blank / zero FOB min rows entirely.
+            // Drop null / blank / zero FOB and rice-min rows entirely.
             $candidates->whereNotNull('fobmin')
                 ->whereRaw('TRIM(fobmin) <> ""')
-                ->whereRaw($this->positiveNumericSql('fobmin'));
+                ->whereRaw($this->positiveNumericSql('fobmin'))
+                ->whereNotNull('ricemin')
+                ->whereRaw('TRIM(ricemin) <> ""')
+                ->whereRaw($this->positiveNumericSql('ricemin'));
         }
 
         // One row per calendar day × quality × packing (bag size/type via master id).

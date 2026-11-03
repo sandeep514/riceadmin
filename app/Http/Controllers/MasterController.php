@@ -33,6 +33,7 @@ use Mail;
 use App\Support\QueuedMail;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Export\CalculatorExport;
+use App\Support\UsdPricePackingFilter;
 use App\Export\MasterRiceFormExport;
 use App\Export\MasterRiceNameExport;
 use App\Export\MasterCityExport;
@@ -648,6 +649,10 @@ class MasterController extends Controller
 		}
 		$packing = $request->input('packing');
 		$packing = is_numeric($packing) && (int) $packing > 0 ? (int) $packing : null;
+		if ($packing === null) {
+			$allowedIds = UsdPricePackingFilter::resolveMasterIds(null, null);
+			$packing = $allowedIds !== [] ? $allowedIds : null;
+		}
 
 		return [$from, $to, $packing];
 	}

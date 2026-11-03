@@ -46,10 +46,25 @@ class UsdPricePackingFilterTest extends TestCase
             ['id' => 20, 'bag_size' => '50kg', 'bag_type' => 'PP', 'applied_for' => 1, 'order' => 1],
             ['id' => 30, 'bag_size' => '40kg', 'bag_type' => 'Jute', 'applied_for' => 0, 'order' => 2],
             ['id' => 40, 'bag_size' => '40kg', 'bag_type' => 'Jute', 'applied_for' => 1, 'order' => 2],
+            ['id' => 50, 'bag_size' => '40kg', 'bag_type' => 'Jute Inner', 'applied_for' => 0, 'order' => 3],
+            ['id' => 60, 'bag_size' => '40kg', 'bag_type' => 'Jute Inner', 'applied_for' => 1, 'order' => 3],
+            ['id' => 70, 'bag_size' => '55kg', 'bag_type' => 'PP', 'applied_for' => 0, 'order' => 4],
         ]);
 
         $ids = UsdPricePackingFilter::resolveMasterIds('basmati', null);
 
-        $this->assertEqualsCanonicalizing([10, 20, 30, 40], $ids);
+        $this->assertEqualsCanonicalizing([10, 20, 50, 60], $ids);
+        $this->assertEqualsCanonicalizing(
+            [UsdPricePackingFilter::KEY_50KG_PP, UsdPricePackingFilter::KEY_JUTE_INNER],
+            UsdPricePackingFilter::allowedKeys()
+        );
+        $this->assertNotContains(UsdPricePackingFilter::KEY_40KG_JUTE, UsdPricePackingFilter::allowedKeys());
+
+        $fromAllKey = UsdPricePackingFilter::resolveMasterIds('basmati', 'all');
+        $this->assertEqualsCanonicalizing([10, 20, 50, 60], $fromAllKey);
+        $this->assertEqualsCanonicalizing(
+            [UsdPricePackingFilter::KEY_ALL, UsdPricePackingFilter::KEY_50KG_PP, UsdPricePackingFilter::KEY_JUTE_INNER],
+            UsdPricePackingFilter::exportKeys()
+        );
     }
 }

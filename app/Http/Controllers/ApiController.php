@@ -4986,7 +4986,7 @@ class ApiController extends Controller
      * V2: date-aware USD prices for the mobile app.
      * GET api/get/usd/prices2/{userId}?date=YYYY-MM-DD
      * - date omitted/invalid => latest date present in USD_prices.
-     * - Returns latest row per (rice, packing) ON that date for 50kg + 55kg packings,
+     * - Returns latest row per (rice, packing) ON that date for 50kg PP + 40kg Jute Inner,
      *   with rice_name included, same basmati/non-basmati grouping as v1.
      */
     public function getUSDPrices2(Request $request, $userId)
@@ -5007,10 +5007,7 @@ class ApiController extends Controller
             $priceDate = $latest ? Carbon::parse($latest)->format('Y-m-d') : $today;
         }
 
-        $packingIds = USD_defaultmaster::query()
-            ->whereIn('bag_size', ['50kg', '55kg'])
-            ->pluck('id')
-            ->toArray();
+        $packingIds = UsdPricePackingFilter::resolveMasterIds(null, null);
 
         $usdData = collect();
         if ($packingIds !== []) {
@@ -5041,7 +5038,7 @@ class ApiController extends Controller
         $nonbasmatiData = [];
 
         foreach ($usdData as $v) {
-            if ((int) $v->ricemin === 0) {
+            if ((int) $v->ricemin === 0 || (float) $v->fobmin == 0.0) {
                 continue;
             }
             if ($v->getUSDDefaultMaster == null || $v->getRiceQuality == null) {
@@ -5546,7 +5543,7 @@ class ApiController extends Controller
 
     /**
      * Fixed packing filters for USD prices (basmati / non-basmati):
-     * 40kg Jute, 40kg Jute Inner, 50kg PP.
+     * 50kg PP, 40kg Jute Inner.
      *
      * GET /api/usd-prices/filter-packings
      * Optional ?type=basmati|non-basmati
@@ -5601,7 +5598,7 @@ class ApiController extends Controller
             return response()->json([
                 'status' => true,
                 'type' => 'basmati',
-                'packingKeys' => UsdPricePackingFilter::allowedKeys(),
+                'packingKeys' => UsdPricePackingFilter::exportKeys(),
                 'data' => $buildForAppliedFor(1),
             ], 200);
         }
@@ -5610,14 +5607,14 @@ class ApiController extends Controller
             return response()->json([
                 'status' => true,
                 'type' => 'non-basmati',
-                'packingKeys' => UsdPricePackingFilter::allowedKeys(),
+                'packingKeys' => UsdPricePackingFilter::exportKeys(),
                 'data' => $buildForAppliedFor(0),
             ], 200);
         }
 
         return response()->json([
             'status' => true,
-            'packingKeys' => UsdPricePackingFilter::allowedKeys(),
+            'packingKeys' => UsdPricePackingFilter::exportKeys(),
             'data' => [
                 'basmati' => $buildForAppliedFor(1),
                 'non-basmati' => $buildForAppliedFor(0),
@@ -5634,9 +5631,9 @@ class ApiController extends Controller
      *
      * Filters:
      * - type: null/omit = All, or basmati|non-basmati
-     * - packingKey: null/omit = All filter packings (40kg_jute, jute_inner, 50kg_pp),
-     *   or one of those keys. Resolved to 1–6 USD_defaultmaster ids.
-     * - packing: legacy single master id (used only when packingKey is omitted)
+     * - packingKey: null/omit/all = 50kg PP + 40kg Jute Inner only (not every master packing),
+     *   or 50kg_pp | jute_inner for a single style.
+     * - packing: legacy single master id (used only when packingKey is a specific style)
      */
     public function exportUsdPrices(Request $request)
     {
@@ -5654,7 +5651,7 @@ class ApiController extends Controller
             'type' => 'nullable|in:basmati,non-basmati',
             'from' => 'nullable|date_format:Y-m-d',
             'to' => 'nullable|date_format:Y-m-d',
-            'packingKey' => 'nullable|in:'.implode(',', UsdPricePackingFilter::allowedKeys()),
+            'packingKey' => 'nullable|in:'.implode(',', UsdPricePackingFilter::exportKeys()),
             'packing' => 'nullable|integer|min:1|exists:USD_defaultmaster,id',
         ]);
 
@@ -5678,18 +5675,24 @@ class ApiController extends Controller
 
         $packingKey = $request->input('packingKey');
         $packingKey = is_string($packingKey) && $packingKey !== '' ? strtolower(trim($packingKey)) : null;
+        if (UsdPricePackingFilter::isAllKey($packingKey)) {
+            $packingKey = null;
+        }
 
         $legacyPackingId = $request->input('packing');
         $legacyPackingId = is_numeric($legacyPackingId) && (int) $legacyPackingId > 0
             ? (int) $legacyPackingId
             : null;
 
-        // Prefer packingKey (supports type=All → multiple ids). Legacy packing id otherwise.
-        // When neither is sent, resolve All packing styles for the selected type scope.
-        if ($packingKey !== null || $legacyPackingId === null) {
+        // All packings always means 50kg PP + 40kg Jute Inner only — never every master row.
+        // A specific packingKey still wins. A legacy packing id is kept only if it is one of those two styles.
+        $allowedIds = UsdPricePackingFilter::resolveMasterIds($type, null);
+        if ($packingKey !== null) {
             $packingIds = UsdPricePackingFilter::resolveMasterIds($type, $packingKey);
-        } else {
+        } elseif ($legacyPackingId !== null && in_array($legacyPackingId, $allowedIds, true)) {
             $packingIds = [$legacyPackingId];
+        } else {
+            $packingIds = $allowedIds;
         }
 
         if ($downloadType === 'mail') {

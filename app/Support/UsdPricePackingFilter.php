@@ -13,32 +13,32 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class UsdPricePackingFilter
 {
+    /** @deprecated Not included in historical / export packing filters. */
     public const KEY_40KG_JUTE = '40kg_jute';
+
+    public const KEY_ALL = 'all';
 
     public const KEY_JUTE_INNER = 'jute_inner';
 
     public const KEY_50KG_PP = '50kg_pp';
 
     /**
+     * Historical USD data and export packing filters: 50kg PP and 40kg Jute Inner only.
+     *
      * @return array<int, array{key:string, label:string, typeLabel:string}>
      */
     public static function packingDefinitions(): array
     {
         return [
             [
-                'key' => self::KEY_40KG_JUTE,
-                'typeLabel' => 'Jute',
-                'label' => '40kg Jute',
+                'key' => self::KEY_50KG_PP,
+                'typeLabel' => 'PP',
+                'label' => '50kg PP',
             ],
             [
                 'key' => self::KEY_JUTE_INNER,
                 'typeLabel' => 'Jute Inner',
                 'label' => '40kg Jute Inner',
-            ],
-            [
-                'key' => self::KEY_50KG_PP,
-                'typeLabel' => 'PP',
-                'label' => '50kg PP',
             ],
         ];
     }
@@ -74,7 +74,7 @@ class UsdPricePackingFilter
 
     public static function labelForKey(?string $packingKey): string
     {
-        if ($packingKey === null || $packingKey === '') {
+        if (self::isAllKey($packingKey)) {
             return 'All';
         }
 
@@ -84,7 +84,29 @@ class UsdPricePackingFilter
             }
         }
 
-        return $packingKey;
+        return (string) $packingKey;
+    }
+
+    public static function isAllKey(?string $packingKey): bool
+    {
+        if ($packingKey === null) {
+            return true;
+        }
+
+        $key = strtolower(trim($packingKey));
+
+        return $key === '' || $key === self::KEY_ALL;
+    }
+
+    /**
+     * packingKey values accepted by POST /api/usd-prices/export.
+     * `all` is the UI "All packings" option and maps to the two allowed styles.
+     *
+     * @return list<string>
+     */
+    public static function exportKeys(): array
+    {
+        return array_merge([self::KEY_ALL], self::allowedKeys());
     }
 
     /**
@@ -93,13 +115,12 @@ class UsdPricePackingFilter
     public static function applyKeyMatch(Builder $query, string $packingKey): Builder
     {
         return match ($packingKey) {
-            self::KEY_40KG_JUTE => $query
+            self::KEY_JUTE_INNER => $query
                 ->whereRaw('LOWER(TRIM(bag_size)) = ?', ['40kg'])
-                ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute']),
-            self::KEY_JUTE_INNER => $query->where(function ($inner) {
-                $inner->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute inner'])
-                    ->orWhereRaw('LOWER(REPLACE(TRIM(bag_type), \'-\', \' \')) LIKE ?', ['%jute%inner%']);
-            }),
+                ->where(function ($inner) {
+                    $inner->whereRaw('LOWER(TRIM(bag_type)) = ?', ['jute inner'])
+                        ->orWhereRaw('LOWER(REPLACE(TRIM(bag_type), \'-\', \' \')) LIKE ?', ['%jute%inner%']);
+                }),
             self::KEY_50KG_PP => $query
                 ->whereRaw('LOWER(TRIM(bag_size)) = ?', ['50kg'])
                 ->whereRaw('LOWER(TRIM(bag_type)) = ?', ['pp']),
@@ -137,16 +158,16 @@ class UsdPricePackingFilter
      *
      * Type is filtered on quality_master in CalculatorExport instead.
      *
-     * - packing All → up to 6 ids (3 styles × both applied_for)
+     * - packing All / all / omit → only 50kg PP + 40kg Jute Inner (both applied_for)
      * - packing 50kg_pp → both applied_for ids for that style
      *
      * @return list<int>
      */
     public static function resolveMasterIds(?string $type, ?string $packingKey): array
     {
-        $keys = ($packingKey === null || $packingKey === '')
+        $keys = self::isAllKey($packingKey)
             ? self::allowedKeys()
-            : [strtolower(trim($packingKey))];
+            : [strtolower(trim((string) $packingKey))];
 
         $ids = [];
         foreach ($keys as $key) {

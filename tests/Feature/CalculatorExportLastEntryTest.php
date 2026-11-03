@@ -132,6 +132,29 @@ class CalculatorExportLastEntryTest extends TestCase
         $this->assertFalse($query->contains(fn ($row) => (int) $row->usd_defaultMaster_id === 26));
     }
 
+    public function test_zero_rice_min_rows_are_excluded(): void
+    {
+        $this->seedData();
+
+        \Illuminate\Support\Facades\DB::table('USD_prices')->insert([
+            'rice' => 1,
+            'ricemin' => '0',
+            'ricemax' => '0',
+            'transportmin' => '0',
+            'transportmax' => '0',
+            'dollarrate' => '85',
+            'fobmin' => '15',
+            'fobmax' => '16',
+            'usd_defaultMaster_id' => 25,
+            'created_at' => '2026-10-24 12:00:00',
+            'updated_at' => '2026-10-24 12:00:00',
+        ]);
+
+        $query = (new CalculatorExport('2026-10-24', '2026-10-24'))->query()->get();
+
+        $this->assertCount(0, $query);
+    }
+
     public function test_zero_fob_rows_are_excluded(): void
     {
         $this->seedData();
