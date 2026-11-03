@@ -398,7 +398,9 @@ class PaddyApiController extends Controller
     public function GetPaddyMapData(Request $request, $mandi_id, $state_id, $quality_id)
     {
         $cropYear = $this->requestCropYear($request);
-        $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, $cropYear);
+        if ($cropYear === null) {
+            $cropYear = $this->latestPaddyCropYear($state_id, $mandi_id, $quality_id);
+        }
 
         $rows = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
             ->where('quality_id', $quality_id)
@@ -440,10 +442,27 @@ class PaddyApiController extends Controller
 
         return response()->json([
             'status' => true,
+            'crop_year' => $cropYear,
             'date' => $allDays,
             'handCutting' => $this->buildPaddyCuttingBlock($handByDay),
             'machineCutting' => $this->buildPaddyCuttingBlock($machineByDay),
         ]);
+    }
+
+    /**
+     * Latest crop year that has prices for this state + mandi + quality.
+     */
+    private function latestPaddyCropYear($stateId, $mandiId, $qualityId): ?string
+    {
+        $year = $this->paddyPriceBaseQuery($stateId, $mandiId, null)
+            ->where('quality_id', (int) $qualityId)
+            ->whereNotNull('crop_year')
+            ->where('crop_year', '!=', '')
+            ->orderByDesc('crop_year')
+            ->orderByDesc('id')
+            ->value('crop_year');
+
+        return $this->normalizedCropYear($year);
     }
 
     /**
