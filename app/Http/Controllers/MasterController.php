@@ -659,15 +659,14 @@ class MasterController extends Controller
 	}
 
 	/**
-	 * All packing on the calculator list/export is 50kg PP + 40kg Jute Inner only.
+	 * Packing = All on the calculator list/export shows every packing master row.
 	 *
 	 * @return list<int>|null null = no packing constraint (no matching masters)
 	 */
 	private function calculatorPackingIds(?int $packing): ?array
 	{
-		$allowedIds = UsdPricePackingFilter::resolveMasterIds(null, null);
 		if ($packing === null) {
-			return $allowedIds !== [] ? $allowedIds : null;
+			return null;
 		}
 
 		return [$packing];

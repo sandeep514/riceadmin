@@ -87,6 +87,47 @@ class UsdPricePackingFilter
         return (string) $packingKey;
     }
 
+    /**
+     * Human packing names for a set of USD_defaultmaster ids.
+     * Groups by filter style so both applied_for rows of 50kg PP become "50kg PP".
+     *
+     * @param  list<int>|null  $ids
+     */
+    public static function labelsForIds(?array $ids): string
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids ?? []))));
+        if ($ids === []) {
+            return implode(', ', array_column(self::packingDefinitions(), 'label'));
+        }
+
+        $labels = [];
+        foreach (self::packingDefinitions() as $def) {
+            $styleIds = self::resolveMasterIds(null, $def['key']);
+            if ($styleIds !== [] && array_intersect($ids, $styleIds) !== []) {
+                $labels[] = $def['label'];
+            }
+        }
+
+        if ($labels !== []) {
+            return implode(', ', $labels);
+        }
+
+        $rows = USD_defaultmaster::query()
+            ->whereIn('id', $ids)
+            ->orderBy('bag_size')
+            ->orderBy('bag_type')
+            ->get(['bag_size', 'bag_type']);
+
+        $fallback = $rows
+            ->map(fn ($pack) => trim(($pack->bag_size ?? '').' '.($pack->bag_type ?? '')))
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
+
+        return $fallback !== [] ? implode(', ', $fallback) : 'All';
+    }
+
     public static function isAllKey(?string $packingKey): bool
     {
         if ($packingKey === null) {

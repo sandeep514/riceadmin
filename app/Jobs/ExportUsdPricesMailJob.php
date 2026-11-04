@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Export\CalculatorExport;
 use App\Support\UsdPricePackingFilter;
-use App\USD_defaultmaster;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -107,17 +106,10 @@ class ExportUsdPricesMailJob implements ShouldQueue
      */
     private function filterSummary(): array
     {
-        if ($this->packingKey) {
+        if ($this->packingKey && ! UsdPricePackingFilter::isAllKey($this->packingKey)) {
             $packingLabel = UsdPricePackingFilter::labelForKey($this->packingKey);
-        } elseif (is_array($this->packingIds) && count($this->packingIds) === 1) {
-            $pack = USD_defaultmaster::query()->find($this->packingIds[0]);
-            $packingLabel = $pack
-                ? trim(($pack->bag_size ?? '').' - '.($pack->bag_type ?? ''))
-                : (string) $this->packingIds[0];
-        } elseif (is_array($this->packingIds) && count($this->packingIds) > 1) {
-            $packingLabel = 'Selected packings ('.count($this->packingIds).')';
         } else {
-            $packingLabel = 'All';
+            $packingLabel = UsdPricePackingFilter::labelsForIds($this->packingIds);
         }
 
         return [

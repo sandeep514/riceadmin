@@ -116,13 +116,25 @@ class ExportPaddyPricesMailJob implements ShouldQueue
             $seedLabel = 'All';
         }
 
-        $rangeLabel = $this->range === 'today' ? 'Today' : ($this->range === 'historical' ? 'Historical' : 'Custom');
+        if ($this->range === 'today') {
+            $dateRange = 'Today';
+        } elseif ($this->fromDate || $this->toDate) {
+            $dateRange = trim(($this->fromDate ?: 'start').' to '.($this->toDate ?: 'end'));
+        } elseif ($this->range === 'historical') {
+            $dateRange = 'Historical';
+        } else {
+            $dateRange = 'All';
+        }
+
+        $typeLabel = match ($this->type) {
+            'basmati' => 'Basmati',
+            'non-basmati' => 'Non-Basmati',
+            default => 'All',
+        };
 
         return [
-            'Range' => $rangeLabel,
-            'From' => $this->fromDate ?: 'All',
-            'To' => $this->toDate ?: 'All',
-            'Type' => $this->type ?: 'All',
+            'Date Range' => $dateRange,
+            'Type' => $typeLabel,
             'Seed' => $seedLabel,
         ];
     }

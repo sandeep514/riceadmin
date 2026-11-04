@@ -62,6 +62,11 @@ class UsdPricePackingFilterTest extends TestCase
 
         $fromAllKey = UsdPricePackingFilter::resolveMasterIds('basmati', 'all');
         $this->assertEqualsCanonicalizing([10, 20, 50, 60], $fromAllKey);
+        $this->assertSame(
+            '50kg PP, 40kg Jute Inner',
+            UsdPricePackingFilter::labelsForIds($fromAllKey)
+        );
+        $this->assertSame('50kg PP', UsdPricePackingFilter::labelsForIds([10, 20]));
         $this->assertEqualsCanonicalizing(
             [UsdPricePackingFilter::KEY_ALL, UsdPricePackingFilter::KEY_50KG_PP, UsdPricePackingFilter::KEY_JUTE_INNER],
             UsdPricePackingFilter::exportKeys()

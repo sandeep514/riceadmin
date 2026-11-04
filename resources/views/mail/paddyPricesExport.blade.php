@@ -1,16 +1,21 @@
 <p>Hello,</p>
 
 @if (!empty($hasAttachment))
-    <p>Please find your paddy prices export attached ({{ number_format((int) ($rowCount ?? 0)) }} record(s)).</p>
+    <p>Your Paddy Price Data has been successfully downloaded from the SNTC platform.</p>
 @else
-    <p>No paddy price records match the selected criteria. No file has been attached.</p>
+    <p>No Paddy Price Data matched the selected criteria on the SNTC platform. No file has been attached.</p>
 @endif
 
-<p><strong>Filters</strong></p>
-<ul>
-    @foreach (($filters ?? []) as $label => $value)
-        <li>{{ $label }}: {{ $value }}</li>
-    @endforeach
-</ul>
+<p>Please find the download details below:</p>
 
-<p>Regards,<br>SNTC Team</p>
+<p>
+    Date Range: {{ $filters['Date Range'] ?? 'All' }}<br>
+    Type: {{ $filters['Type'] ?? 'All' }}<br>
+    Seed: {{ $filters['Seed'] ?? 'All' }}
+</p>
+
+@if (!empty($hasAttachment))
+    <p>Downloaded data is attached to this email.</p>
+@endif
+
+<p>Thank you for using the SNTC platform.</p>
