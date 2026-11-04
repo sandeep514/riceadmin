@@ -5732,7 +5732,7 @@ class ApiController extends Controller
         }
 
         // browser — generate XLSX and return a public download URL
-        $export = new CalculatorExport($from, $to, $packingIds, $type, true);
+        $export = new CalculatorExport($from, $to, $packingIds, $type, true, true);
         $rowCount = (clone $export->query())->count();
         if ($rowCount === 0) {
             return response()->json([

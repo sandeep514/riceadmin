@@ -26,7 +26,8 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
         private ?string $to = null,
         int|array|null $packing = null,
         private ?string $type = null,
-        private bool $ignoreZeroFob = true
+        private bool $ignoreZeroFob = true,
+        private bool $friendlyHeadings = false
     ) {
         if (is_int($packing)) {
             $this->packingIds = [$packing];
@@ -84,6 +85,18 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
 
     public function headings(): array
     {
+        if ($this->friendlyHeadings) {
+            return [
+                'Date',
+                'Quality',
+                'Rice Type',
+                'Packing',
+                'Packing Name',
+                'FOB Min ($)',
+                'FOB Max ($)',
+            ];
+        }
+
         return [
             'price_date',
             'rice_name',
@@ -113,6 +126,16 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
 
     public function styles(Worksheet $sheet)
     {
+        if ($this->friendlyHeadings) {
+            return [
+                1 => [
+                    'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                    'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '4472C4']],
+                    'alignment' => ['horizontal' => 'center'],
+                ],
+            ];
+        }
+
         return [
             1 => ['font' => ['bold' => true]],
         ];

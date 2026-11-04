@@ -43,6 +43,7 @@ class ExportUsdPricesMailJob implements ShouldQueue
             $this->toDate,
             $this->packingIds,
             $this->type,
+            true,
             true
         );
 
