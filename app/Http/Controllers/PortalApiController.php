@@ -42,6 +42,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\FreeTrialMonths;
 use App\QualityMaster;
 use App\USD_defaultmaster;
@@ -932,11 +933,12 @@ class PortalApiController extends Controller
      * POST /portal/change/password
      *
      * Body: current_password, password, password_confirmation
+     * (also accepts camelCase: currentPassword, newPassword, confirmPassword)
      */
     public function changePassword(Request $request)
     {
-        $user = $request->user();
-        if (! $user || (int) ($user->userType ?? 0) !== 2) {
+        $authUser = $request->user();
+        if (! $authUser || (int) ($authUser->userType ?? 0) !== 2) {
             return response()->json([
                 'status' => false,
                 'message' => 'Authentication is required. Please sign in and try again.',
@@ -944,13 +946,47 @@ class PortalApiController extends Controller
             ], 401);
         }
 
-        $validator = Validator::make($request->all(), [
-            'current_password' => 'required|string',
-            'password' => 'required|string|min:6|confirmed|different:current_password',
-        ], [
+        // Normalize common frontend field aliases into snake_case.
+        $currentPassword = $request->input('current_password', $request->input('currentPassword'));
+        $newPassword = $request->input('password', $request->input('newPassword', $request->input('new_password')));
+        $confirmation = $request->input(
+            'password_confirmation',
+            $request->input('confirmPassword', $request->input('passwordConfirmation', $request->input('new_password_confirmation')))
+        );
+
+        $request->merge([
+            'current_password' => $currentPassword,
+            'password' => $newPassword,
+            'password_confirmation' => $confirmation,
+        ]);
+
+        $user = User::query()->where('id', (int) $authUser->id)->where('userType', 2)->first();
+        if (! $user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Authentication is required. Please sign in and try again.',
+                'session_expired' => true,
+            ], 401);
+        }
+
+        $storedHash = (string) ($user->getAuthPassword() ?? '');
+        $hasExistingPassword = $storedHash !== '';
+
+        $rules = [
+            'password' => 'required|string|min:6|max:72|confirmed',
+        ];
+        if ($hasExistingPassword) {
+            $rules['current_password'] = 'required|string';
+            $rules['password'] .= '|different:current_password';
+        } else {
+            $rules['current_password'] = 'nullable|string';
+        }
+
+        $validator = Validator::make($request->all(), $rules, [
             'password.confirmed' => 'New password and confirmation do not match.',
             'password.different' => 'New password must be different from the current password.',
             'password.min' => 'New password must be at least 6 characters.',
+            'password.max' => 'New password may not be greater than 72 characters.',
         ]);
 
         if ($validator->fails()) {
@@ -961,18 +997,43 @@ class PortalApiController extends Controller
             ], 422);
         }
 
-        if (blank($user->password) || ! Hash::check($request->input('current_password'), $user->password)) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Current password is incorrect.',
-                'errors' => [
-                    'current_password' => ['Current password is incorrect.'],
-                ],
-            ], 422);
+        if ($hasExistingPassword) {
+            $currentOk = false;
+            try {
+                $currentOk = Hash::check((string) $request->input('current_password'), $storedHash);
+            } catch (\Throwable $e) {
+                Log::warning('Portal changePassword Hash::check failed', [
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage(),
+                ]);
+                $currentOk = false;
+            }
+
+            if (! $currentOk) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Current password is incorrect.',
+                    'errors' => [
+                        'current_password' => ['Current password is incorrect.'],
+                    ],
+                ], 422);
+            }
         }
 
-        $user->password = Hash::make($request->input('password'));
-        $user->save();
+        try {
+            User::query()->where('id', $user->id)->update([
+                'password' => Hash::make((string) $request->input('password')),
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Portal changePassword update failed: '.$e->getMessage(), [
+                'user_id' => $user->id,
+            ]);
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Unable to change password right now. Please try again.',
+            ], 500);
+        }
 
         return response()->json([
             'status' => true,
