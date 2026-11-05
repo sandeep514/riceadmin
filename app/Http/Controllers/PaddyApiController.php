@@ -1276,6 +1276,9 @@ class PaddyApiController extends Controller
      *
      * GET /api/paddy-prices/filter-seeds
      * Optional ?type=basmati|non-basmati
+     * Optional ?dataFor=today|historical
+     *   - today → only seeds with price entries for today
+     *   - historical → require from & to (Y-m-d); only seeds with entries in that range
      *
      * Each item includes `key` (e.g. 1121) for POST /api/paddy-prices/export `seedKey`.
      * When type is All, send seedKey — not a single quality id — because the same
@@ -1294,21 +1297,69 @@ class PaddyApiController extends Controller
             ], 422);
         }
 
-        if ($type === 'basmati' || $type === 'non-basmati') {
+        $dataFor = strtolower(trim((string) $request->query('dataFor', '')));
+        if ($dataFor === '') {
+            $dataFor = null;
+        }
+        if ($dataFor !== null && ! in_array($dataFor, ['today', 'historical'], true)) {
             return response()->json([
-                'status' => true,
-                'type' => $type,
-                'data' => PaddyPriceSeedFilter::listSeeds($type),
-            ], 200);
+                'status' => false,
+                'message' => 'Please select a valid dataFor: today or historical.',
+            ], 422);
         }
 
-        return response()->json([
+        $from = $request->query('from');
+        $to = $request->query('to');
+        $from = is_string($from) && trim($from) !== '' ? trim($from) : null;
+        $to = is_string($to) && trim($to) !== '' ? trim($to) : null;
+
+        if ($dataFor === 'historical') {
+            $dateValidator = Validator::make(
+                ['from' => $from, 'to' => $to],
+                [
+                    'from' => 'required|date_format:Y-m-d',
+                    'to' => 'required|date_format:Y-m-d',
+                ]
+            );
+            if ($dateValidator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'From and to dates (Y-m-d) are required for historical seed filters.',
+                    'errors' => $dateValidator->errors(),
+                ], 422);
+            }
+        }
+
+        if ($dataFor === 'today') {
+            [$from, $to] = $this->resolvedPaddyExportDates('today', null, null);
+        } elseif ($dataFor === 'historical') {
+            [$from, $to] = $this->resolvedPaddyExportDates('historical', $from, $to);
+        } else {
+            // No dataFor → keep previous behaviour (all active seeds).
+            $from = null;
+            $to = null;
+        }
+
+        $meta = [
             'status' => true,
+            'dataFor' => $dataFor,
+            'from' => $from,
+            'to' => $to,
+        ];
+
+        if ($type === 'basmati' || $type === 'non-basmati') {
+            return response()->json(array_merge($meta, [
+                'type' => $type,
+                'data' => PaddyPriceSeedFilter::listSeeds($type, $from, $to),
+            ]), 200);
+        }
+
+        return response()->json(array_merge($meta, [
             'data' => [
-                'basmati' => PaddyPriceSeedFilter::listSeeds('basmati'),
-                'non-basmati' => PaddyPriceSeedFilter::listSeeds('non-basmati'),
+                'basmati' => PaddyPriceSeedFilter::listSeeds('basmati', $from, $to),
+                'non-basmati' => PaddyPriceSeedFilter::listSeeds('non-basmati', $from, $to),
             ],
-        ], 200);
+        ]), 200);
     }
 
     /**

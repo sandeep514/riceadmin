@@ -77,6 +77,20 @@ class PaddyPricesApiExportTest extends TestCase
         $this->assertCount(4, $allBasmati);
     }
 
+    public function test_filter_seeds_by_price_date_range(): void
+    {
+        $this->insertPrice(1, '2026-10-31 11:00:00', '3500'); // basmati 1121
+        $this->insertPrice(3, '2026-10-30 10:00:00', '2200'); // non-basmati PR-14
+        $this->insertPrice(2, '2026-10-29 09:00:00', '3600'); // basmati 1509 — outside range
+
+        $today = PaddyPriceSeedFilter::listSeeds('basmati', '2026-10-31', '2026-10-31');
+        $this->assertEquals(['1121'], array_column($today, 'key'));
+
+        $historical = PaddyPriceSeedFilter::listSeeds(null, '2026-10-30', '2026-10-31');
+        $this->assertEqualsCanonicalizing(['1121', 'PR-14'], array_column($historical, 'key'));
+        $this->assertFalse(in_array('1509', array_column($historical, 'key'), true));
+    }
+
     public function test_resolve_quality_ids_scopes_seed_by_type(): void
     {
         $this->assertEqualsCanonicalizing(

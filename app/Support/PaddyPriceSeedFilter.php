@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\PaddyQuality;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -53,9 +54,12 @@ class PaddyPriceSeedFilter
     }
 
     /**
+     * Active seeds, optionally limited to qualities that have paddy_prices
+     * entries between $from and $to (inclusive calendar days, app timezone).
+     *
      * @return list<array{id:int, key:string, label:string, type:string, type_label:string}>
      */
-    public static function listSeeds(?string $type = null): array
+    public static function listSeeds(?string $type = null, ?string $from = null, ?string $to = null): array
     {
         $query = PaddyQuality::query()
             ->select(['id', 'type', 'quality'])
@@ -65,6 +69,31 @@ class PaddyPriceSeedFilter
 
         if (self::canonicalType($type) !== null) {
             self::applyTypeMatch($query, (string) $type);
+        }
+
+        if ($from !== null || $to !== null) {
+            $query->whereExists(function ($sub) use ($from, $to) {
+                $sub->selectRaw('1')
+                    ->from('paddy_prices')
+                    ->whereColumn('paddy_prices.quality_id', 'paddy_qualities.id')
+                    ->whereNotNull('paddy_prices.quality_id');
+
+                $tz = config('app.timezone', 'Asia/Kolkata');
+                if ($from !== null && $from !== '') {
+                    $sub->where(
+                        'paddy_prices.created_at',
+                        '>=',
+                        Carbon::parse($from, $tz)->startOfDay()
+                    );
+                }
+                if ($to !== null && $to !== '') {
+                    $sub->where(
+                        'paddy_prices.created_at',
+                        '<=',
+                        Carbon::parse($to, $tz)->endOfDay()
+                    );
+                }
+            });
         }
 
         return $query->get()->map(function ($row) {
