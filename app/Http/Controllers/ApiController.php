@@ -5542,6 +5542,37 @@ class ApiController extends Controller
     }
 
     /**
+     * Earliest / latest calendar dates with USD price entries (for historical from/to pickers).
+     * GET /api/usd-prices/historical-min-date
+     */
+    public function getUsdPricesHistoricalMinDate()
+    {
+        $tz = config('app.timezone', 'Asia/Kolkata');
+        $bounds = USD_prices::query()
+            ->whereNotNull('created_at')
+            ->selectRaw('MIN(created_at) as min_at, MAX(created_at) as max_at')
+            ->first();
+
+        $minDate = null;
+        $maxDate = null;
+        if ($bounds && $bounds->min_at) {
+            $minDate = Carbon::parse($bounds->min_at)->timezone($tz)->format('Y-m-d');
+        }
+        if ($bounds && $bounds->max_at) {
+            $maxDate = Carbon::parse($bounds->max_at)->timezone($tz)->format('Y-m-d');
+        }
+
+        return response()->json([
+            'status' => true,
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
+            'message' => $minDate
+                ? 'Historical date range fetched successfully.'
+                : 'No USD price records found.',
+        ], 200);
+    }
+
+    /**
      * Fixed packing filters for USD prices (basmati / non-basmati):
      * 50kg PP, 40kg Jute Inner.
      *

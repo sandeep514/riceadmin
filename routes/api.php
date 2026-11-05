@@ -128,6 +128,7 @@ use Pusher\Pusher;
     Route::get('get/calculator/data' , ['as' => 'get.calculator.data' ,'uses' =>'ApiController@getCalculatorData']);
     Route::get('usd-prices/packing-options', ['as' => 'usd.prices.packing.options', 'uses' => 'ApiController@getUsdPricesPackingOptions']);
     Route::get('usd-prices/filter-packings', ['as' => 'usd.prices.filter.packings', 'uses' => 'ApiController@getUsdPricesFilterPackings', 'middleware' => 'app.or.portal.api.token']);
+    Route::get('usd-prices/historical-min-date', ['as' => 'usd.prices.historical.min.date', 'uses' => 'ApiController@getUsdPricesHistoricalMinDate', 'middleware' => 'app.or.portal.api.token']);
     Route::get('usd-prices/graph/{riceQualityId}', ['as' => 'usd.prices.graph', 'uses' => 'ApiController@getUsdPricesGraph', 'middleware' => 'app.or.portal.api.token']);
     Route::post('usd-prices/export', ['as' => 'usd.prices.export', 'uses' => 'ApiController@exportUsdPrices', 'middleware' => 'app.or.portal.api.token']);
     // Legacy alias — same handler as usd-prices/export
@@ -295,6 +296,7 @@ use Pusher\Pusher;
     Route::post('web/interested/paddy/trade', ['as' => 'web.interested.paddy.trade.api', 'uses' => 'PaddyApiController@showPaddyTradeInterest', 'middleware' => 'portal.api.token']);
 
     Route::get('paddy-prices/filter-seeds', ['as' => 'paddy.prices.filter.seeds', 'uses' => 'PaddyApiController@getPaddyPricesFilterSeeds', 'middleware' => 'app.or.portal.api.token']);
+    Route::get('paddy-prices/historical-min-date', ['as' => 'paddy.prices.historical.min.date', 'uses' => 'PaddyApiController@getPaddyPricesHistoricalMinDate', 'middleware' => 'app.or.portal.api.token']);
     Route::post('paddy-prices/export', ['as' => 'paddy.prices.export', 'uses' => 'PaddyApiController@exportPaddyPrices', 'middleware' => 'app.or.portal.api.token']);
 
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);
