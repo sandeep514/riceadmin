@@ -41,6 +41,8 @@
 
         Route::post('update/user/details', [PortalApiController::class, 'updateUserDetails'])
             ->middleware(['portal.session_or_token']);
+        Route::post('change/password', [PortalApiController::class, 'changePassword'])
+            ->middleware(['portal.session_or_token']);
         Route::post('delete/uploaded-document', [PortalApiController::class, 'deleteUserUploadedDocument'])
             ->middleware(['portal.session_or_token']);
 

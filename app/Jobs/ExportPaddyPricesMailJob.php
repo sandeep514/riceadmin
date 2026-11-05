@@ -69,7 +69,7 @@ class ExportPaddyPricesMailJob implements ShouldQueue
                 ? '_'.Str::slug($this->seedKey)
                 : ($this->qualityIds ? '_seed-'.implode('-', $this->qualityIds) : '');
 
-            $filename = 'paddy_prices_'.Str::slug(($this->fromDate ?? 'start').'_'.($this->toDate ?? 'end'))
+            $filename = 'SNTC_paddy_prices_'.Str::slug(($this->fromDate ?? 'start').'_'.($this->toDate ?? 'end'))
                 .$seedSlug
                 .($this->type ? '_'.Str::slug($this->type) : '')
                 .'_'.now()->format('YmdHis').'.xlsx';

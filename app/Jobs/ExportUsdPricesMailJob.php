@@ -70,7 +70,7 @@ class ExportUsdPricesMailJob implements ShouldQueue
                 ? '_'.Str::slug($this->packingKey)
                 : ($this->packingIds ? '_packing-'.implode('-', $this->packingIds) : '');
 
-            $filename = 'usd_prices_'.Str::slug(($this->fromDate ?? 'start').'_'.($this->toDate ?? 'end'))
+            $filename = 'SNTC_usd_prices_'.Str::slug(($this->fromDate ?? 'start').'_'.($this->toDate ?? 'end'))
                 .$packingSlug
                 .($this->type ? '_'.Str::slug($this->type) : '')
                 .'_'.now()->format('YmdHis').'.xlsx';

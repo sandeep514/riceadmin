@@ -927,6 +927,59 @@ class PortalApiController extends Controller
         }
     }
 
+    /**
+     * Change password for the authenticated portal user.
+     * POST /portal/change/password
+     *
+     * Body: current_password, password, password_confirmation
+     */
+    public function changePassword(Request $request)
+    {
+        $user = $request->user();
+        if (! $user || (int) ($user->userType ?? 0) !== 2) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Authentication is required. Please sign in and try again.',
+                'session_expired' => true,
+            ], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'current_password' => 'required|string',
+            'password' => 'required|string|min:6|confirmed|different:current_password',
+        ], [
+            'password.confirmed' => 'New password and confirmation do not match.',
+            'password.different' => 'New password must be different from the current password.',
+            'password.min' => 'New password must be at least 6 characters.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Please review the entered passwords and try again.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        if (blank($user->password) || ! Hash::check($request->input('current_password'), $user->password)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Current password is incorrect.',
+                'errors' => [
+                    'current_password' => ['Current password is incorrect.'],
+                ],
+            ], 422);
+        }
+
+        $user->password = Hash::make($request->input('password'));
+        $user->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Password changed successfully.',
+        ], 200);
+    }
+
     public function updateUserDetails(Request $request)
     {
         $user_id = (int) $request->input('user_id');

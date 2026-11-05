@@ -5753,7 +5753,7 @@ class ApiController extends Controller
             ? '_'.Str::slug($packingKey)
             : ($packingIds !== [] ? '_packing-'.implode('-', $packingIds) : '');
 
-        $filename = 'usd_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
+        $filename = 'SNTC_usd_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
             .$packingSlug
             .($type ? '_'.Str::slug($type) : '')
             .'_'.now()->format('YmdHis').'.xlsx';

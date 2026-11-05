@@ -1486,7 +1486,7 @@ class PaddyApiController extends Controller
             ? '_'.Str::slug($seedKey)
             : ($qualityIds ? '_seed-'.implode('-', $qualityIds) : '');
 
-        $filename = 'paddy_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
+        $filename = 'SNTC_paddy_prices_'.Str::slug(($from ?? 'start').'_'.($to ?? 'end'))
             .$seedSlug
             .($type ? '_'.Str::slug($type) : '')
             .'_'.now()->format('YmdHis').'.xlsx';
