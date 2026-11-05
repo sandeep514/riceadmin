@@ -5695,6 +5695,21 @@ class ApiController extends Controller
             $packingIds = $allowedIds;
         }
 
+        // Shared empty-result check for mail + browser — no email when nothing matches.
+        $export = new CalculatorExport($from, $to, $packingIds, $type, true, true);
+        $rowCount = (clone $export->query())->count();
+        if ($rowCount === 0) {
+            return response()->json([
+                'status' => false,
+                'downloadType' => $downloadType,
+                'message' => 'No records match the selected criteria. Please adjust your filters and try again.',
+                'download_url' => null,
+                'type' => $type,
+                'packingKey' => $packingKey,
+                'packingIds' => $packingIds,
+            ], 404);
+        }
+
         if ($downloadType === 'mail') {
             $email = trim((string) ($user->email ?? ''));
             if ($email === '' || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -5732,20 +5747,6 @@ class ApiController extends Controller
         }
 
         // browser — generate XLSX and return a public download URL
-        $export = new CalculatorExport($from, $to, $packingIds, $type, true, true);
-        $rowCount = (clone $export->query())->count();
-        if ($rowCount === 0) {
-            return response()->json([
-                'status' => false,
-                'downloadType' => 'browser',
-                'message' => 'No records match the selected criteria. Please adjust your filters and try again.',
-                'download_url' => null,
-                'type' => $type,
-                'packingKey' => $packingKey,
-                'packingIds' => $packingIds,
-            ], 404);
-        }
-
         @ini_set('memory_limit', '512M');
 
         $packingSlug = $packingKey

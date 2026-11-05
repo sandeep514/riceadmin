@@ -1379,6 +1379,23 @@ class PaddyApiController extends Controller
 
         [$from, $to] = $this->resolvedPaddyExportDates($range, $request->input('from'), $request->input('to'));
 
+        $export = new PaddyPricesApiExport($from, $to, $qualityIds);
+        $rowCount = (clone $export->query())->count();
+        if ($rowCount === 0) {
+            return response()->json([
+                'status' => false,
+                'downloadType' => $downloadType,
+                'message' => 'No records match the selected criteria. Please adjust your filters and try again.',
+                'download_url' => null,
+                'range' => $range,
+                'from' => $from,
+                'to' => $to,
+                'type' => $type,
+                'seedKey' => $seedKey,
+                'qualityIds' => $qualityIds,
+            ], 404);
+        }
+
         if ($downloadType === 'mail') {
             $email = $this->resolvedExportEmail($user);
             if ($email === null) {
@@ -1410,23 +1427,6 @@ class PaddyApiController extends Controller
                 'seedKey' => $seedKey,
                 'qualityIds' => $qualityIds,
             ], 202);
-        }
-
-        $export = new PaddyPricesApiExport($from, $to, $qualityIds);
-        $rowCount = (clone $export->query())->count();
-        if ($rowCount === 0) {
-            return response()->json([
-                'status' => false,
-                'downloadType' => 'browser',
-                'message' => 'No records match the selected criteria. Please adjust your filters and try again.',
-                'download_url' => null,
-                'range' => $range,
-                'from' => $from,
-                'to' => $to,
-                'type' => $type,
-                'seedKey' => $seedKey,
-                'qualityIds' => $qualityIds,
-            ], 404);
         }
 
         @ini_set('memory_limit', '512M');

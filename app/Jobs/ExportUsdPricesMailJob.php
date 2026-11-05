@@ -48,22 +48,22 @@ class ExportUsdPricesMailJob implements ShouldQueue
         );
 
         $rowCount = (clone $export->query())->count();
+        if ($rowCount === 0) {
+            Log::info('ExportUsdPricesMailJob skipped: no matching records', [
+                'email' => $this->email,
+                'from' => $this->fromDate,
+                'to' => $this->toDate,
+                'packingIds' => $this->packingIds,
+                'packingKey' => $this->packingKey,
+                'type' => $this->type,
+            ]);
+
+            return;
+        }
+
         $filters = $this->filterSummary();
 
         try {
-            if ($rowCount === 0) {
-                Mail::send('mail.usdPricesExport', [
-                    'hasAttachment' => false,
-                    'rowCount' => 0,
-                    'filters' => $filters,
-                ], function ($message) {
-                    $message->to($this->email)
-                        ->subject('USD Prices Export — No matching records');
-                });
-
-                return;
-            }
-
             @ini_set('memory_limit', '512M');
 
             $packingSlug = $this->packingKey

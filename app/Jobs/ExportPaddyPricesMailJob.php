@@ -46,22 +46,23 @@ class ExportPaddyPricesMailJob implements ShouldQueue
         );
 
         $rowCount = (clone $export->query())->count();
+        if ($rowCount === 0) {
+            Log::info('ExportPaddyPricesMailJob skipped: no matching records', [
+                'email' => $this->email,
+                'from' => $this->fromDate,
+                'to' => $this->toDate,
+                'qualityIds' => $this->qualityIds,
+                'seedKey' => $this->seedKey,
+                'type' => $this->type,
+                'range' => $this->range,
+            ]);
+
+            return;
+        }
+
         $filters = $this->filterSummary();
 
         try {
-            if ($rowCount === 0) {
-                Mail::send('mail.paddyPricesExport', [
-                    'hasAttachment' => false,
-                    'rowCount' => 0,
-                    'filters' => $filters,
-                ], function ($message) {
-                    $message->to($this->email)
-                        ->subject('Paddy Prices Export — No matching records');
-                });
-
-                return;
-            }
-
             @ini_set('memory_limit', '512M');
 
             $seedSlug = $this->seedKey
