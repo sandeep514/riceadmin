@@ -20,7 +20,11 @@
         </div>
         <div class="form-group col-md-6 @error('email') has-error @enderror">
             {!! Form::label('email','Email*') !!}
-            {!! Form::text('email', isset($model) && $model->user ? $model->user->email : null, ['class'=>'form-control']) !!}
+            @if(isset($model) && $model->user)
+                {!! Form::text('email', $model->user->email, ['class'=>'form-control', 'readonly' => true]) !!}
+            @else
+                {!! Form::text('email', null, ['class'=>'form-control']) !!}
+            @endif
             @error('email')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror

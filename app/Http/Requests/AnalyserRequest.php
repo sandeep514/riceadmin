@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\AnalyserAccount;
-use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -79,27 +78,13 @@ class AnalyserRequest extends FormRequest
             || $this->routeIs('analyser-accounts.update')
         );
 
-        $emailRules = ['required', 'email', 'max:255'];
-
-        $submittedEmail = strtolower(trim((string) $this->input('email', '')));
-        $currentEmail = null;
-        if ($ignoreUserId) {
-            $currentEmail = User::query()->whereKey($ignoreUserId)->value('email');
-            $currentEmail = $currentEmail !== null ? strtolower(trim((string) $currentEmail)) : null;
-        }
-
-        // Keeping this user's own email — do not run unique (also covers duplicate rows).
-        $emailUnchanged = $ignoreUserId
-            && $currentEmail !== null
-            && $currentEmail === $submittedEmail;
-
-        if (! $emailUnchanged) {
-            // Same pattern as UserRequest: unique:users,email,{userId}
-            if ($ignoreUserId) {
-                $emailRules[] = 'unique:users,email,'.$ignoreUserId;
-            } else {
-                $emailRules[] = 'unique:users,email';
-            }
+        // Email is editable only on create; on update it is read-only and not re-validated as unique.
+        if ($isUpdate) {
+            $emailRules = ['nullable', 'email', 'max:255'];
+        } elseif ($ignoreUserId) {
+            $emailRules = ['required', 'email', 'max:255', 'unique:users,email,'.$ignoreUserId];
+        } else {
+            $emailRules = ['required', 'email', 'max:255', 'unique:users,email'];
         }
 
         return [

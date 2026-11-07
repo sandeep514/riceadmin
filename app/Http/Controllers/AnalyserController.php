@@ -180,10 +180,12 @@ class AnalyserController extends Controller
 
         $plainPassword = filled($request->password) ? (string) $request->password : null;
 
+        $accountEmail = (string) optional($account->user)->email;
+
         DB::transaction(function () use ($request, $account, $otp, $plainPassword) {
+            // Email is not editable after create — never overwrite it on update.
             $userUpdate = [
                 'name' => $request->name,
-                'email' => $request->email,
                 'contact_person_name' => $request->contact_person_name,
                 'mobile' => $request->contact_mobile,
             ];
@@ -212,7 +214,7 @@ class AnalyserController extends Controller
         });
 
         if ($otp) {
-            $this->sendCredentialsMail($request->email, $otp, $plainPassword);
+            $this->sendCredentialsMail($accountEmail, $otp, $plainPassword);
         }
 
         Session::flash('success', 'Success|Data Analyst account updated successfully!');
