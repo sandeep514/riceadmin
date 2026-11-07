@@ -25,18 +25,28 @@ class AnalyserRequest extends FormRequest
      */
     public function rules()
     {
-        $emailRule = 'required|email|max:255|unique:users,email';
-        if (in_array($this->method(), ['PUT', 'PATCH']) && $this->route('id')) {
-            $account = \App\AnalyserAccount::find($this->route('id'));
-            $userId = $account ? $account->user_id : 0;
-            $emailRule = 'required|email|max:255|unique:users,email,' . $userId;
+        // Edit URL is analyser-accounts/{id} — always ignore that account's user
+        // when validating email (covers PUT/PATCH and method-spoofed POST).
+        $accountId = $this->route('id');
+        $ignoreUserId = null;
+        if ($accountId !== null && $accountId !== '') {
+            $ignoreUserId = AnalyserAccount::query()->whereKey($accountId)->value('user_id');
         }
 
-        $isUpdate = in_array($this->method(), ['PUT', 'PATCH'], true);
+        $isUpdate = $this->isMethod('put')
+            || $this->isMethod('patch')
+            || ($ignoreUserId !== null && $this->routeIs('analyser-accounts.update'));
+
+        $emailRules = ['required', 'email', 'max:255'];
+        $uniqueEmail = Rule::unique('users', 'email');
+        if ($ignoreUserId) {
+            $uniqueEmail = $uniqueEmail->ignore((int) $ignoreUserId);
+        }
+        $emailRules[] = $uniqueEmail;
 
         return [
             'name' => 'required|string|max:255',
-            'email' => $emailRule,
+            'email' => $emailRules,
             'password' => $isUpdate
                 ? 'nullable|string|min:6|confirmed'
                 : 'required|string|min:6|confirmed',
