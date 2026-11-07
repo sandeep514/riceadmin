@@ -358,7 +358,7 @@ class AnalyserController extends Controller
                 'email' => $email,
                 'password' => $plainPassword,
                 'otp' => $otp,
-                'loginUrl' => config('analyser.login_url', 'abc'),
+                'loginUrl' => config('analyser.login_url', 'https://analyst.sntcgroup.com/'),
                 'startDate' => $account && $account->start_date ? $account->start_date->format('d-m-Y') : '',
                 'endDate' => $account && $account->end_date ? $account->end_date->format('d-m-Y') : '',
                 'hasHistoricalAccess' => $account ? (bool) $account->has_historical_access : false,

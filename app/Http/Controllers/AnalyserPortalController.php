@@ -59,7 +59,7 @@ class AnalyserPortalController extends Controller
                 [
                     'userName' => $user->name,
                     'otp' => $otp,
-                    'loginUrl' => config('analyser.login_url', 'abc'),
+                    'loginUrl' => config('analyser.login_url', 'https://analyst.sntcgroup.com/'),
                 ],
                 $user->email,
                 'Your SNTC Data Analyst Login OTP',
