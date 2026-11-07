@@ -3,9 +3,7 @@
 namespace App\Http\Requests;
 
 use App\AnalyserAccount;
-use App\CategoryRoleMap;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
 
 class AnalyserRequest extends FormRequest
@@ -73,23 +71,16 @@ class AnalyserRequest extends FormRequest
                 'string',
                 'max:256',
                 Rule::exists('category', 'id')->where(function ($query) {
-                    $roleId = AnalyserAccount::analyserRoleId();
-                    if (! $roleId) {
+                    $categoryIds = AnalyserAccount::allowedCategoryIds();
+                    if ($categoryIds === []) {
                         $query->whereRaw('1 = 0');
 
                         return;
                     }
 
-                    $mapQuery = CategoryRoleMap::query()->where('role', $roleId);
-                    if (Schema::hasColumn('category_role_map', 'status')) {
-                        $mapQuery->where('status', 1);
-                    }
-                    $categoryIds = $mapQuery->pluck('category')->all();
-                    if ($categoryIds === []) {
-                        $query->whereRaw('1 = 0');
-                    } else {
-                        $query->whereIn('id', $categoryIds)->where('status', 1);
-                    }
+                    $query->whereIn('id', $categoryIds)->where(function ($q) {
+                        $q->where('status', 1)->orWhereNull('status');
+                    });
                 }),
             ],
             'business.status' => 'nullable|in:0,1',

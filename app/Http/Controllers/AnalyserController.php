@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\AnalyserAccount;
-use App\Category;
-use App\CategoryRoleMap;
 use App\Http\Requests\AnalyserRequest;
 use App\Role;
 use App\Support\QueuedMail;
@@ -149,7 +147,7 @@ class AnalyserController extends Controller
             $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
-        Session::flash('success', 'Success|Analyser account created successfully!');
+        Session::flash('success', 'Success|Data Analyst account created successfully!');
         return redirect()->route('analyser-accounts.index');
     }
 
@@ -217,7 +215,7 @@ class AnalyserController extends Controller
             $this->sendCredentialsMail($request->email, $otp, $plainPassword);
         }
 
-        Session::flash('success', 'Success|Analyser account updated successfully!');
+        Session::flash('success', 'Success|Data Analyst account updated successfully!');
         return redirect()->route('analyser-accounts.index');
     }
 
@@ -242,7 +240,7 @@ class AnalyserController extends Controller
             $account->delete();
         });
 
-        Session::flash('success', 'Success|Analyser account deleted successfully!');
+        Session::flash('success', 'Success|Data Analyst account deleted successfully!');
         return back();
     }
 
@@ -259,9 +257,9 @@ class AnalyserController extends Controller
     {
         $analyserRole = $this->resolveAnalyserRoleOrFail();
         $analyserRoleId = (int) $analyserRole->id;
-        $analyserRoleName = (string) ($analyserRole->role_name ?: 'analyser');
+        $analyserRoleName = (string) ($analyserRole->role_name ?: AnalyserAccount::ROLE_NAME);
 
-        $categories = $this->analyserCategoryOptions($analyserRoleId);
+        $categories = AnalyserAccount::categoryOptions();
 
         $states = WebStates::query()
             ->orderBy('state_name')
@@ -283,37 +281,9 @@ class AnalyserController extends Controller
         }
 
         return Role::create([
-            'role_name' => 'analyser',
-            'type' => 'analyser',
+            'role_name' => AnalyserAccount::ROLE_NAME,
+            'type' => AnalyserAccount::ROLE_TYPE,
         ]);
-    }
-
-    /**
-     * Categories from Role–Category Map only (no web-plan fallback).
-     *
-     * @return array<int|string, string>
-     */
-    private function analyserCategoryOptions(int $roleId): array
-    {
-        $mapQuery = CategoryRoleMap::query()->where('role', $roleId);
-        if (Schema::hasColumn('category_role_map', 'status')) {
-            $mapQuery->where('status', 1);
-        }
-        $categoryIds = $mapQuery->pluck('category')->filter()->map(fn ($id) => (int) $id)->unique()->values()->all();
-
-        if ($categoryIds === []) {
-            return [];
-        }
-
-        return Category::query()
-            ->whereIn('id', $categoryIds)
-            ->where(function ($q) {
-                $q->where('status', 1)->orWhereNull('status');
-            })
-            ->orderByRaw('COALESCE(`order`, 999999)')
-            ->orderBy('category')
-            ->pluck('category', 'id')
-            ->toArray();
     }
 
     private function syncBusinessDetails(int $userId, Request $request): void
@@ -393,7 +363,7 @@ class AnalyserController extends Controller
                 'hasTodayAccess' => $account ? (bool) $account->has_today_access : false,
             ],
             $email,
-            'Your SNTC Analyser Account - Login Details',
+            'Your SNTC Data Analyst Account - Login Details',
             'info@sntcgroup.com',
             'SNTC Team - India',
             $user ? $user->name : ''

@@ -157,6 +157,9 @@
         <div class="form-group col-md-6 @error('business.selected_category') has-error @enderror">
             {!! Form::label('business[selected_category]','Selected Category') !!}
             {!! Form::select('business[selected_category]', $categoryOptions, $biz('selected_category'), ['class'=>'form-control']) !!}
+            @if (count($categories ?? []) === 0)
+                <span class="help-block text-muted">No categories found. Map categories for the Data Analyst role under Role–Category Map, or add active categories in master.</span>
+            @endif
             @error('business.selected_category')
             <span class="help-block text-danger" role="alert">{{ $message }}</span>
             @enderror

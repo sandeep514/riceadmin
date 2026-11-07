@@ -13,12 +13,14 @@ class RoleCategoryMapController extends Controller
 {
     public function index(Request $request)
     {
-        // Include analyser so admin can map categories used by Analyser Accounts.
+        // Include Data Analyst so admin can map categories used by Data Analyst accounts.
         $roles = Role::query()
             ->where(function ($q) {
                 $q->where('type', 'web')
-                    ->orWhere('type', 'analyser')
-                    ->orWhereRaw('LOWER(role_name) = ?', ['analyser']);
+                    ->orWhere('type', \App\AnalyserAccount::ROLE_TYPE);
+                foreach (\App\AnalyserAccount::roleNameAliases() as $alias) {
+                    $q->orWhereRaw('LOWER(role_name) = ?', [$alias]);
+                }
             })
             ->orderBy('role_name')
             ->get();

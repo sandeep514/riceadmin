@@ -4,7 +4,7 @@
             <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">SNTC Rice Sourcing App</a>
         </div>
         <p>Dear {{ $userName }},</p>
-        <p>Your analyser account login details are below:</p>
+        <p>Your Data Analyst account login details are below:</p>
         <p>Login URL: <strong>{{ $loginUrl }}</strong></p>
         <p>Email: <strong>{{ $email }}</strong></p>
         @if(!empty($password))

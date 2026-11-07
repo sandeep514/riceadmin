@@ -35,14 +35,14 @@ class AnalyserPortalController extends Controller
 
         $account = $this->accountFor($user);
         if (! $account->isActive()) {
-            return response()->json(['status' => false, 'message' => 'Your analyser access period is not active.'], 403);
+            return response()->json(['status' => false, 'message' => 'Your Data Analyst access period is not active.'], 403);
         }
 
         return response()->json($this->loginSuccessPayload($user, $account, $request), 200);
     }
 
     /**
-     * Request an email OTP for an analyser account (fallback when password login is not used).
+     * Request an email OTP for a Data Analyst account (fallback when password login is not used).
      */
     public function requestOtp(Request $request)
     {
@@ -62,7 +62,7 @@ class AnalyserPortalController extends Controller
                     'loginUrl' => config('analyser.login_url', 'abc'),
                 ],
                 $user->email,
-                'Your SNTC Analyser Login OTP',
+                'Your SNTC Data Analyst Login OTP',
                 'info@sntcgroup.com',
                 'SNTC Team - India',
                 $user->name
@@ -98,7 +98,7 @@ class AnalyserPortalController extends Controller
 
         $account = $this->accountFor($user);
         if (! $account->isActive()) {
-            return response()->json(['status' => false, 'message' => 'Your analyser access period is not active.'], 403);
+            return response()->json(['status' => false, 'message' => 'Your Data Analyst access period is not active.'], 403);
         }
 
         $user->update(['otp' => null]);

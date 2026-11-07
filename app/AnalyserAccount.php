@@ -4,9 +4,31 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Schema;
 
 class AnalyserAccount extends Model
 {
+    /** Display / DB role_name for this product role. */
+    public const ROLE_NAME = 'Data Analyst';
+
+    /** Stable technical role type (kept as analyser for APIs / maps). */
+    public const ROLE_TYPE = 'analyser';
+
+    /**
+     * Legacy + current role_name values that identify this role.
+     *
+     * @return list<string>
+     */
+    public static function roleNameAliases(): array
+    {
+        return [
+            'data analyst',
+            'analyser',
+            'analyzer',
+            'market analyst',
+        ];
+    }
+
     protected $fillable = [
         'user_id',
         'start_date',
@@ -42,8 +64,23 @@ class AnalyserAccount extends Model
 
     public static function resolveAnalyserRole(): ?Role
     {
+        $aliases = self::roleNameAliases();
+
+        // Prefer the canonical display name first.
+        $byCanonical = Role::query()
+            ->whereRaw('LOWER(role_name) = ?', [strtolower(self::ROLE_NAME)])
+            ->orderBy('id')
+            ->first();
+        if ($byCanonical) {
+            return $byCanonical;
+        }
+
         $byName = Role::query()
-            ->whereRaw('LOWER(role_name) = ?', ['analyser'])
+            ->where(function ($q) use ($aliases) {
+                foreach ($aliases as $alias) {
+                    $q->orWhereRaw('LOWER(role_name) = ?', [$alias]);
+                }
+            })
             ->orderBy('id')
             ->first();
 
@@ -52,9 +89,101 @@ class AnalyserAccount extends Model
         }
 
         return Role::query()
-            ->where('type', 'analyser')
+            ->where('type', self::ROLE_TYPE)
             ->orderBy('id')
             ->first();
+    }
+
+    /**
+     * Role ids that may hold Data Analyst category maps (current + legacy names).
+     *
+     * @return list<int>
+     */
+    public static function categoryMapRoleIds(): array
+    {
+        $aliases = self::roleNameAliases();
+
+        $ids = Role::query()
+            ->where(function ($q) use ($aliases) {
+                foreach ($aliases as $alias) {
+                    $q->orWhereRaw('LOWER(role_name) = ?', [$alias]);
+                }
+                $q->orWhere('type', self::ROLE_TYPE);
+            })
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->unique()
+            ->values()
+            ->all();
+
+        $primary = self::analyserRoleId();
+        if ($primary && ! in_array($primary, $ids, true)) {
+            array_unshift($ids, $primary);
+        }
+
+        return $ids;
+    }
+
+    /**
+     * Active category ids mapped for analyser (Role–Category Map).
+     * Falls back to all active categories when no map rows exist.
+     *
+     * @return list<int>
+     */
+    public static function allowedCategoryIds(): array
+    {
+        $roleIds = self::categoryMapRoleIds();
+        $mapped = [];
+
+        if ($roleIds !== []) {
+            $mapQuery = CategoryRoleMap::query()->whereIn('role', $roleIds);
+            if (Schema::hasColumn('category_role_map', 'status')) {
+                // Older rows may have null status — treat as active.
+                $mapQuery->where(function ($q) {
+                    $q->where('status', 1)->orWhereNull('status');
+                });
+            }
+            $mapped = $mapQuery->pluck('category')
+                ->filter()
+                ->map(fn ($id) => (int) $id)
+                ->unique()
+                ->values()
+                ->all();
+        }
+
+        $categoryQuery = Category::query()->where(function ($q) {
+            $q->where('status', 1)->orWhereNull('status');
+        });
+
+        if ($mapped !== []) {
+            $categoryQuery->whereIn('id', $mapped);
+        }
+
+        return $categoryQuery
+            ->orderByRaw('COALESCE(`order`, 999999)')
+            ->orderBy('category')
+            ->pluck('id')
+            ->map(fn ($id) => (int) $id)
+            ->values()
+            ->all();
+    }
+
+    /**
+     * @return array<int, string> id => category name
+     */
+    public static function categoryOptions(): array
+    {
+        $ids = self::allowedCategoryIds();
+        if ($ids === []) {
+            return [];
+        }
+
+        return Category::query()
+            ->whereIn('id', $ids)
+            ->orderByRaw('COALESCE(`order`, 999999)')
+            ->orderBy('category')
+            ->pluck('category', 'id')
+            ->toArray();
     }
 
     /**
