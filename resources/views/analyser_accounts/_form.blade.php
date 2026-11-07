@@ -7,6 +7,9 @@
     $stateOptions = ['' => 'Select state'] + ($states ?? []);
 @endphp
 <div class="box-body">
+    @if(isset($model) && $model->user_id)
+        {!! Form::hidden('user_id', $model->user_id) !!}
+    @endif
     <div class="row">
         <div class="form-group col-md-6 @error('name') has-error @enderror">
             {!! Form::label('name','Name*') !!}

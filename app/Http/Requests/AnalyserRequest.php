@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\AnalyserAccount;
+use App\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,34 +20,92 @@ class AnalyserRequest extends FormRequest
     }
 
     /**
+     * Resolve analyser_accounts.id from the route/URL.
+     */
+    private function resolveAccountId(): ?int
+    {
+        $raw = $this->route('id');
+
+        if (($raw === null || $raw === '') && $this->route()) {
+            $raw = $this->route()->parameter('id');
+        }
+
+        // Fallback: .../analyser-accounts/{id}
+        if (($raw === null || $raw === '') && preg_match('#analyser-accounts/(\d+)#', $this->path(), $m)) {
+            $raw = $m[1];
+        }
+
+        $id = is_numeric($raw) ? (int) $raw : 0;
+
+        return $id > 0 ? $id : null;
+    }
+
+    /**
+     * users.id to ignore for unique email (must be the linked analyser user).
+     */
+    private function resolveIgnoreUserId(?int $accountId): ?int
+    {
+        $fromAccount = null;
+        if ($accountId) {
+            $fromAccount = AnalyserAccount::query()->whereKey($accountId)->value('user_id');
+            $fromAccount = $fromAccount ? (int) $fromAccount : null;
+        }
+
+        // Prefer DB-linked user_id; accept posted user_id only when it matches (or account missing).
+        $fromInput = $this->input('user_id');
+        $fromInput = is_numeric($fromInput) ? (int) $fromInput : null;
+        if ($fromInput && $fromInput > 0) {
+            if ($fromAccount === null || $fromAccount === $fromInput) {
+                return $fromInput;
+            }
+        }
+
+        return $fromAccount;
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
-        // Edit URL is analyser-accounts/{id} — always ignore that account's user
-        // when validating email (covers PUT/PATCH and method-spoofed POST).
-        $accountId = $this->route('id');
-        $ignoreUserId = null;
-        if ($accountId !== null && $accountId !== '') {
-            $ignoreUserId = AnalyserAccount::query()->whereKey($accountId)->value('user_id');
-        }
+        $accountId = $this->resolveAccountId();
+        $ignoreUserId = $this->resolveIgnoreUserId($accountId);
 
-        $isUpdate = $this->isMethod('put')
+        $isUpdate = $accountId !== null && (
+            $this->isMethod('put')
             || $this->isMethod('patch')
-            || ($ignoreUserId !== null && $this->routeIs('analyser-accounts.update'));
+            || $this->routeIs('analyser-accounts.update')
+        );
 
         $emailRules = ['required', 'email', 'max:255'];
-        $uniqueEmail = Rule::unique('users', 'email');
+
+        $submittedEmail = strtolower(trim((string) $this->input('email', '')));
+        $currentEmail = null;
         if ($ignoreUserId) {
-            $uniqueEmail = $uniqueEmail->ignore((int) $ignoreUserId);
+            $currentEmail = User::query()->whereKey($ignoreUserId)->value('email');
+            $currentEmail = $currentEmail !== null ? strtolower(trim((string) $currentEmail)) : null;
         }
-        $emailRules[] = $uniqueEmail;
+
+        // Keeping this user's own email — do not run unique (also covers duplicate rows).
+        $emailUnchanged = $ignoreUserId
+            && $currentEmail !== null
+            && $currentEmail === $submittedEmail;
+
+        if (! $emailUnchanged) {
+            // Same pattern as UserRequest: unique:users,email,{userId}
+            if ($ignoreUserId) {
+                $emailRules[] = 'unique:users,email,'.$ignoreUserId;
+            } else {
+                $emailRules[] = 'unique:users,email';
+            }
+        }
 
         return [
             'name' => 'required|string|max:255',
             'email' => $emailRules,
+            'user_id' => 'nullable|integer',
             'password' => $isUpdate
                 ? 'nullable|string|min:6|confirmed'
                 : 'required|string|min:6|confirmed',
