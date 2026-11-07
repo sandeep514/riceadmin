@@ -23,7 +23,7 @@ class WebTrialActivatedUserMail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address('info@sntcgroup.com', 'SNTC Team - India'),
-            subject: 'Your SNTC 30-Day Free Trial is Now Active.',
+            subject: \App\Support\QueuedMail::normalizeSntcSubject('Your SNTC 30-Day Free Trial is Now Active.'),
         );
     }
 

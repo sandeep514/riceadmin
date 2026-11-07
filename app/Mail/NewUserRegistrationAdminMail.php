@@ -26,7 +26,7 @@ class NewUserRegistrationAdminMail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address('info@sntcgroup.com', 'SNTC Team - India'),
-            subject: 'New User Registration-Webversion',
+            subject: \App\Support\QueuedMail::normalizeSntcSubject('New User Registration - Web Version'),
         );
     }
 

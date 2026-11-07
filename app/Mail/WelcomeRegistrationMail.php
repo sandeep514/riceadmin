@@ -20,7 +20,7 @@ class WelcomeRegistrationMail extends Mailable
     public function build()
     {
         $mail = $this->from('info@sntcgroup.com', 'SNTC Team - India')
-            ->subject('Welcome to SNTC')
+            ->subject(\App\Support\QueuedMail::normalizeSntcSubject('Welcome to SNTC'))
             ->view('mail.welcomeRegistration')
             ->with([
                 'userName' => $this->userName,

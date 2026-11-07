@@ -1272,6 +1272,167 @@ class PaddyApiController extends Controller
     }
 
     /**
+     * Aggregated paddy price graph for the last N days (default 60).
+     *
+     * GET /api/paddy-prices/graph
+     *
+     * Query:
+     * - qualityId|quality_id|seed (required): paddy_qualities id
+     * - stateId|state_id|state (optional)
+     * - cropYear|crop_year (optional)
+     * - days (optional, default 60, max 365)
+     *
+     * Chart series: daily average handCutting / machineCutting across mandis.
+     * Tooltip: per-day mandis[] with mandiName, handCutting, machineCutting + aggregates.
+     */
+    public function getPaddyPricesGraph(Request $request)
+    {
+        $qualityId = $request->input('qualityId', $request->input('quality_id', $request->input('seed')));
+        $validator = Validator::make(
+            array_merge($request->all(), ['qualityId' => $qualityId]),
+            [
+                'qualityId' => 'required|integer|min:1|exists:paddy_qualities,id',
+                'days' => 'nullable|integer|min:1|max:365',
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Please select a valid paddy quality / seed.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $qualityId = (int) $qualityId;
+        $days = (int) ($request->input('days', 60));
+        if ($days < 1) {
+            $days = 60;
+        }
+
+        $stateId = $this->requestStateId($request);
+        $cropYear = $this->requestCropYear($request);
+
+        $tz = config('app.timezone', 'Asia/Kolkata');
+        $to = Carbon::now($tz)->startOfDay();
+        $from = $to->copy()->subDays($days - 1);
+
+        $quality = PaddyQuality::query()->select(['id', 'type', 'quality'])->find($qualityId);
+
+        $rows = $this->paddyPriceBaseQuery($stateId, null, $cropYear)
+            ->where('quality_id', $qualityId)
+            ->where('created_at', '>=', $from->copy()->startOfDay())
+            ->where('created_at', '<=', $to->copy()->endOfDay())
+            ->with(['getMandi_rel:id,mandi'])
+            ->orderBy('created_at')
+            ->orderBy('id')
+            ->get([
+                'id',
+                'mandi',
+                'quality_id',
+                'crop_year',
+                'min_hand_cutting_price',
+                'hand_cutting_price',
+                'min_machine_cutting_price',
+                'machine_cutting_price',
+                'created_at',
+            ]);
+
+        // Latest row per IST day × mandi (same collapse rule as map/export graphs).
+        $latestByDayMandi = [];
+        foreach ($rows as $row) {
+            if (! $row->created_at) {
+                continue;
+            }
+            $day = $row->created_at->copy()->timezone($tz)->format('Y-m-d');
+            $mandiId = (int) ($row->mandi ?? 0);
+            if ($mandiId < 1) {
+                continue;
+            }
+            $latestByDayMandi[$day][$mandiId] = $row;
+        }
+        ksort($latestByDayMandi);
+
+        $dates = [];
+        $handSeries = [];
+        $machineSeries = [];
+        $data = [];
+
+        foreach ($latestByDayMandi as $day => $byMandi) {
+            $mandis = [];
+            $handValues = [];
+            $machineValues = [];
+
+            foreach ($byMandi as $mandiId => $row) {
+                $hand = $this->parsePaddyGraphAmount($row->hand_cutting_price);
+                if ($hand === null) {
+                    $hand = $this->parsePaddyGraphAmount($row->min_hand_cutting_price);
+                }
+                $machine = $this->parsePaddyGraphAmount($row->machine_cutting_price);
+                if ($machine === null) {
+                    $machine = $this->parsePaddyGraphAmount($row->min_machine_cutting_price);
+                }
+
+                if ($hand === null && $machine === null) {
+                    continue;
+                }
+
+                if ($hand !== null) {
+                    $handValues[] = $hand;
+                }
+                if ($machine !== null) {
+                    $machineValues[] = $machine;
+                }
+
+                $mandis[] = [
+                    'mandiId' => (int) $mandiId,
+                    'mandiName' => (string) (optional($row->getMandi_rel)->mandi ?? ''),
+                    'handCutting' => $hand,
+                    'machineCutting' => $machine,
+                ];
+            }
+
+            if ($mandis === []) {
+                continue;
+            }
+
+            usort($mandis, fn ($a, $b) => strcmp((string) $a['mandiName'], (string) $b['mandiName']));
+
+            $handAvg = $handValues !== [] ? (int) round(array_sum($handValues) / count($handValues)) : null;
+            $machineAvg = $machineValues !== [] ? (int) round(array_sum($machineValues) / count($machineValues)) : null;
+
+            $dates[] = $day;
+            $handSeries[] = $handAvg;
+            $machineSeries[] = $machineAvg;
+
+            $data[] = [
+                'date' => $day,
+                'handCutting' => $handAvg,
+                'machineCutting' => $machineAvg,
+                'mandiCount' => count($mandis),
+                'mandis' => $mandis,
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Paddy graph data fetched successfully.',
+            'from' => $from->format('Y-m-d'),
+            'to' => $to->format('Y-m-d'),
+            'days' => $days,
+            'qualityId' => $qualityId,
+            'quality' => $quality?->quality,
+            'type' => $quality ? PaddyPriceSeedFilter::canonicalType($quality->type) : null,
+            'stateId' => $stateId,
+            'crop_year' => $cropYear,
+            'dates' => $dates,
+            'handCutting' => $handSeries,
+            'machineCutting' => $machineSeries,
+            'data' => $data,
+        ], 200);
+    }
+
+    /**
      * Earliest / latest calendar dates with paddy price entries (for historical from/to pickers).
      * GET /api/paddy-prices/historical-min-date
      */

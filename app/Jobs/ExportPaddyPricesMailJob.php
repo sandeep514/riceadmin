@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Support\QueuedMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -82,7 +83,8 @@ class ExportPaddyPricesMailJob implements ShouldQueue
                 'filters' => $filters,
             ], function ($message) use ($xlsxBinary, $filename) {
                 $message->to($this->email)
-                    ->subject('Paddy Prices Export')
+                    ->from('info@sntcgroup.com', QueuedMail::normalizeSntcFromName('SNTC Team - India'))
+                    ->subject(QueuedMail::normalizeSntcSubject('Paddy Prices Export'))
                     ->attachData($xlsxBinary, $filename, [
                         'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     ]);

@@ -297,6 +297,7 @@ use Pusher\Pusher;
 
     Route::get('paddy-prices/filter-seeds', ['as' => 'paddy.prices.filter.seeds', 'uses' => 'PaddyApiController@getPaddyPricesFilterSeeds', 'middleware' => 'app.or.portal.api.token']);
     Route::get('paddy-prices/historical-min-date', ['as' => 'paddy.prices.historical.min.date', 'uses' => 'PaddyApiController@getPaddyPricesHistoricalMinDate', 'middleware' => 'app.or.portal.api.token']);
+    Route::get('paddy-prices/graph', ['as' => 'paddy.prices.graph', 'uses' => 'PaddyApiController@getPaddyPricesGraph', 'middleware' => 'app.or.portal.api.token']);
     Route::post('paddy-prices/export', ['as' => 'paddy.prices.export', 'uses' => 'PaddyApiController@exportPaddyPrices', 'middleware' => 'app.or.portal.api.token']);
 
     Route::get('get/paddy/prices/{mandi_id}/{state_id}',      ['as' => 'get.paddy.prices',    'uses' => 'PaddyApiController@getPaddyPrices']);

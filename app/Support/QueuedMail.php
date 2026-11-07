@@ -37,6 +37,9 @@ class QueuedMail
             return false;
         }
 
+        $subject = self::normalizeSntcSubject($subject);
+        $fromName = self::normalizeSntcFromName($fromName);
+
         return self::dispatchJob(new SendViewMailJob(
             $view,
             $viewData,
@@ -49,6 +52,41 @@ class QueuedMail
             $attachmentAs,
             $attachmentMime,
         ));
+    }
+
+    /**
+     * Ensure brand "SNTC" is always uppercase in mail subjects.
+     * Prefixes "SNTC " when the subject does not already include it.
+     */
+    public static function normalizeSntcSubject(string $subject): string
+    {
+        $subject = trim($subject);
+        if ($subject === '') {
+            return 'SNTC';
+        }
+
+        // Normalize any sntc / Sntc / etc. token to SNTC.
+        $subject = preg_replace('/\bSNTC\b/i', 'SNTC', $subject) ?? $subject;
+
+        if (! preg_match('/\bSNTC\b/', $subject)) {
+            $subject = 'SNTC '.$subject;
+        }
+
+        return $subject;
+    }
+
+    public static function normalizeSntcFromName(?string $fromName): ?string
+    {
+        if ($fromName === null) {
+            return null;
+        }
+
+        $fromName = trim($fromName);
+        if ($fromName === '') {
+            return $fromName;
+        }
+
+        return preg_replace('/\bSNTC\b/i', 'SNTC', $fromName) ?? $fromName;
     }
 
     public static function mailable(string|array $to, Mailable $mailable): bool

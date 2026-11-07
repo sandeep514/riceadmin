@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Export\CalculatorExport;
+use App\Support\QueuedMail;
 use App\Support\UsdPricePackingFilter;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -84,7 +85,8 @@ class ExportUsdPricesMailJob implements ShouldQueue
                 'filters' => $filters,
             ], function ($message) use ($xlsxBinary, $filename) {
                 $message->to($this->email)
-                    ->subject('USD Prices Export')
+                    ->from('info@sntcgroup.com', QueuedMail::normalizeSntcFromName('SNTC Team - India'))
+                    ->subject(QueuedMail::normalizeSntcSubject('USD Prices Export'))
                     ->attachData($xlsxBinary, $filename, [
                         'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                     ]);
