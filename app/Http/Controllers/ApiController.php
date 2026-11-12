@@ -9700,29 +9700,66 @@ if (!file_exists('uploads')) {
 
     public function saveBrandAvailability(Request $request)
     {
-        $processDate = [];
-        if($request->has('brand_id')){
-            $branchId = $request['brand_id'];
-            if( $request->has('availability') ){
-                $availability = $request['availability'];
+        if (! $request->has('brand_id')) {
+            return response()->json(['status' => false, 'message' => 'Required fields are missing', 'data' => []], 402);
+        }
 
-                foreach( $availability as $k => $v ){
-                    if( isset($v['state_id']) )  {
-                        $stateId = $v['state_id'];
-                        if( isset($v['city']) ){
-                            foreach($v['city'] as $key => $val){
-                                $processDate[] = ['brand_id' => $branchId , 'state_id' => $stateId , 'city_id' => $val];
-                            }
-                        }
+        $brandId = (int) $request->input('brand_id');
+        if ($brandId < 1) {
+            return response()->json(['status' => false, 'message' => 'Invalid brand id', 'data' => []], 422);
+        }
+
+        // Full replace: payload is the new availability set (removed cities/states are omitted).
+        $rows = [];
+        $seen = [];
+        $availability = $request->input('availability', []);
+        if (is_array($availability)) {
+            foreach ($availability as $v) {
+                if (! is_array($v) || ! isset($v['state_id'])) {
+                    continue;
+                }
+
+                $stateId = (int) $v['state_id'];
+                if ($stateId < 1 || ! isset($v['city']) || ! is_array($v['city'])) {
+                    continue;
+                }
+
+                foreach ($v['city'] as $cityId) {
+                    $cityId = (int) $cityId;
+                    if ($cityId < 1) {
+                        continue;
                     }
-                    
-                    
+
+                    $key = $brandId.'-'.$stateId.'-'.$cityId;
+                    if (isset($seen[$key])) {
+                        continue;
+                    }
+                    $seen[$key] = true;
+
+                    $rows[] = [
+                        'brand_id' => $brandId,
+                        'state_id' => $stateId,
+                        'city_id' => $cityId,
+                        'status' => 1,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
                 }
             }
-            BrandAvailability::insert($processDate);
-            return response()->json(['status' => true , 'message' => 'Brand Availability added successfully' , 'data' => []] , 200);
         }
-        return response()->json(['status' => false , 'message' => 'Required fields are missing' , 'data' => []] , 402);
+
+        DB::transaction(function () use ($brandId, $rows) {
+            BrandAvailability::where('brand_id', $brandId)->delete();
+            if ($rows !== []) {
+                BrandAvailability::insert($rows);
+            }
+        });
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Brand Availability updated successfully',
+            'data' => BrandAvailability::groupedForBrand($brandId),
+        ], 200);
     }
 
     public function getBrandAvailability($brandId)
