@@ -60,7 +60,8 @@
                 </div>
                 <div class="icon"><i class="fa fa-hourglass-half"></i></div>
                 <span class="small-box-footer">
-                    Disk temp tables: <span id="si-tmp">{{ $mysql['tmp_disk_tables'] ?? '—' }}</span>
+                    MySQL counter only — see table below for URL/API
+                    &nbsp;|&nbsp; Disk temp: <span id="si-tmp">{{ $mysql['tmp_disk_tables'] ?? '—' }}</span>
                 </span>
             </div>
         </div>
@@ -262,7 +263,7 @@
         var logBody = document.getElementById('si-log-body');
         if (logBody) {
             if (!logs.length) {
-                logBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No heavy SQL logged yet. Slow queries will appear here automatically.</td></tr>';
+                logBody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No slow requests/SQL logged yet. They appear here automatically when a page or API is slow.</td></tr>';
             } else {
                 logBody.innerHTML = logs.map(function (log) {
                     return '<tr class="' + (log.duration_ms >= 2000 ? 'danger' : 'warning') + '">' +
@@ -270,7 +271,7 @@
                         '<td>' + esc(log.duration_sec) + 's (' + fmt(log.duration_ms) + ' ms)</td>' +
                         '<td>' + (log.cpu_percent != null ? esc(log.cpu_percent) + '%' : '—') + '</td>' +
                         '<td>' + esc(log.source) + '</td>' +
-                        '<td>' + esc(log.request_path || log.connection || '—') + '</td>' +
+                        '<td style="max-width:360px; word-break:break-all;">' + esc(log.request_path || log.connection || '—') + '</td>' +
                         '<td style="white-space:pre-wrap; max-width:720px; font-family:monospace; font-size:12px;">' + esc(log.sql) + '</td>' +
                         '</tr>';
                 }).join('');

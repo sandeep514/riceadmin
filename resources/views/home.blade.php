@@ -272,9 +272,9 @@
             @if(!empty($serverInsights))
                 <div class="box box-warning" id="si-log-box">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Logged heavy SQL (CPU / slow queries)</h3>
+                        <h3 class="box-title">Logged slow requests &amp; heavy SQL</h3>
                         <div class="box-tools pull-right">
-                            <small class="text-muted">App queries ≥ 500ms and MySQL processlist ≥ 2s. Newest first.</small>
+                            <small class="text-muted">HTTP ≥ 1s · app SQL ≥ 500ms · processlist ≥ 2s. URL/API in the Path column. Newest first.</small>
                         </div>
                     </div>
                     <div class="box-body table-responsive no-padding">
@@ -285,8 +285,8 @@
                                     <th>Duration</th>
                                     <th>CPU %</th>
                                     <th>Source</th>
-                                    <th>Path</th>
-                                    <th>Query</th>
+                                    <th>URL / API</th>
+                                    <th>Detail</th>
                                 </tr>
                             </thead>
                             <tbody id="si-log-body">
@@ -296,11 +296,11 @@
                                         <td>{{ $log['duration_sec'] }}s ({{ number_format($log['duration_ms']) }} ms)</td>
                                         <td>{{ $log['cpu_percent'] !== null ? $log['cpu_percent'].'%' : '—' }}</td>
                                         <td>{{ $log['source'] }}</td>
-                                        <td>{{ $log['request_path'] ?: ($log['connection'] ?: '—') }}</td>
+                                        <td style="max-width:360px; word-break:break-all;">{{ $log['request_path'] ?: ($log['connection'] ?: '—') }}</td>
                                         <td style="white-space:pre-wrap; max-width:720px; font-family:monospace; font-size:12px;">{{ $log['sql'] }}</td>
                                     </tr>
                                 @empty
-                                    <tr><td colspan="6" class="text-center text-muted">No heavy SQL logged yet. Slow queries will appear here automatically.</td></tr>
+                                    <tr><td colspan="6" class="text-center text-muted">No slow requests/SQL logged yet. They appear here automatically when a page or API is slow.</td></tr>
                                 @endforelse
                             </tbody>
                         </table>

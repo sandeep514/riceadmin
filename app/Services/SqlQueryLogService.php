@@ -11,8 +11,10 @@ use Throwable;
 class SqlQueryLogService
 {
     public const APP_THRESHOLD_MS = 500;
+    public const REQUEST_THRESHOLD_MS = 1000;
     public const PROCESSLIST_THRESHOLD_SEC = 2;
     public const SQL_LIMIT = 1600;
+    public const PATH_LIMIT = 1000;
     public const KEEP_ROWS = 500;
 
     private static bool $writing = false;
@@ -60,10 +62,46 @@ class SqlQueryLogService
                 'sql_text' => $sql,
                 'db_name' => $row['db'] ?? null,
                 'connection' => trim((string) (($row['user'] ?? '') . '@' . ($row['host'] ?? '')), '@'),
+                // MySQL processlist has no HTTP context; app/request rows carry the URL.
                 'request_path' => null,
                 'mysql_thread_id' => isset($row['id']) ? (int) $row['id'] : null,
             ], 120);
         }
+    }
+
+    /**
+     * Log a slow HTTP request so the dashboard shows which URL/API is slow.
+     */
+    public function logSlowHttpRequest($request, int $durationMs, ?int $statusCode = null): void
+    {
+        if (self::$writing || $durationMs < self::REQUEST_THRESHOLD_MS) {
+            return;
+        }
+
+        if (! is_object($request) || ! method_exists($request, 'method')) {
+            return;
+        }
+
+        $path = $this->describeRequest($request);
+        if ($path === null || $this->shouldSkipRequestPath($path)) {
+            return;
+        }
+
+        $label = 'HTTP '.$path;
+        if ($statusCode !== null) {
+            $label .= ' [status '.$statusCode.']';
+        }
+
+        $this->store([
+            'source' => 'request',
+            'duration_ms' => $durationMs,
+            'cpu_percent' => $this->lastCpuPercent(),
+            'sql_text' => $label,
+            'db_name' => null,
+            'connection' => 'http',
+            'request_path' => $path,
+            'mysql_thread_id' => null,
+        ], 15);
     }
 
     public function recent(int $limit = 50): array
@@ -218,12 +256,71 @@ class SqlQueryLogService
     private function currentPath(): ?string
     {
         try {
-            $path = request()->method() . ' ' . request()->getPathInfo();
-
-            return strlen($path) > 255 ? substr($path, 0, 255) : $path;
+            if (! app()->runningInConsole() && app()->bound('request')) {
+                return $this->describeRequest(request());
+            }
         } catch (Throwable $e) {
             return null;
         }
+
+        return null;
+    }
+
+    /**
+     * Build a compact "METHOD /path?query | route:name | action:Controller@method" label.
+     */
+    private function describeRequest($request): ?string
+    {
+        try {
+            if (! $request || ! method_exists($request, 'method')) {
+                return null;
+            }
+
+            $method = strtoupper((string) $request->method());
+            $path = (string) $request->getPathInfo();
+            $query = method_exists($request, 'getQueryString') ? $request->getQueryString() : null;
+            $uri = $query ? ($path.'?'.$query) : $path;
+
+            $parts = [$method.' '.$uri];
+
+            $route = method_exists($request, 'route') ? $request->route() : null;
+            if ($route) {
+                $name = method_exists($route, 'getName') ? $route->getName() : null;
+                if (is_string($name) && $name !== '') {
+                    $parts[] = 'route:'.$name;
+                }
+
+                $action = method_exists($route, 'getActionName') ? $route->getActionName() : null;
+                if (is_string($action) && $action !== '' && $action !== 'Closure') {
+                    // Prefer short Controller@method
+                    if (str_contains($action, '\\')) {
+                        $action = substr($action, strrpos($action, '\\') + 1);
+                    }
+                    $parts[] = 'action:'.$action;
+                }
+            }
+
+            $out = implode(' | ', $parts);
+
+            return strlen($out) > self::PATH_LIMIT
+                ? substr($out, 0, self::PATH_LIMIT)
+                : $out;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
+    private function shouldSkipRequestPath(string $path): bool
+    {
+        $haystack = strtolower($path);
+
+        // Avoid logging the insights poller / static noise.
+        return str_contains($haystack, '/server-insights')
+            || str_contains($haystack, '/server/insights')
+            || str_contains($haystack, 'telescope')
+            || str_contains($haystack, '/_debugbar')
+            || str_contains($haystack, '/favicon')
+            || str_contains($haystack, '/horizon');
     }
 
     private function lastCpuPercent(): ?int

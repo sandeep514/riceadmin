@@ -38,6 +38,8 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            // After route binding so logs include route name / controller action.
+            \App\Http\Middleware\LogSlowHttpRequests::class,
         ],
 
         'api' => [
@@ -45,6 +47,7 @@ class Kernel extends HttpKernel
             // behind shared NAT IPs caused false 429s. Success payloads unchanged.
             'throttle:300,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\LogSlowHttpRequests::class,
         ],
     ];
 
