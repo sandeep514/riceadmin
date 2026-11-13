@@ -62,15 +62,21 @@ class LivePricesController extends Controller
         $RiceForm = RiceForm::where('status', 1)->get();       // all active forms
         $RiceName = RiceName::orderedForSelect(true)->get();
 
-        // lightweight grouped live prices (select only necessary columns)
-        // $livePrice = LivePrice::select('id','state','min_price','max_price')->get()->groupBy('state');
-        $livePrice = LivePrice::selectRaw('state_order,state, MIN(min_price) as min_price, MAX(max_price) as max_price')
-            ->where('min_price', '>', 0)
-            ->where('max_price', '>', 0)
-            ->orderBy('state_order')
-            ->groupBy('state')
-            ->get()
-            ->keyBy('state');
+        // State min/max summary — cached; full-table GROUP BY is expensive on large live_prices.
+        $pricesVersion = (int) Cache::get('web:prices:version', 1);
+        $livePrice = Cache::remember(
+            'admin:livePrices:stateMinMax:v'.$pricesVersion,
+            120,
+            function () {
+                return LivePrice::selectRaw('state_order,state, MIN(min_price) as min_price, MAX(max_price) as max_price')
+                    ->where('min_price', '>', 0)
+                    ->where('max_price', '>', 0)
+                    ->orderBy('state_order')
+                    ->groupBy('state')
+                    ->get()
+                    ->keyBy('state');
+            }
+        );
 
             // init variables
         $riceModel = null;

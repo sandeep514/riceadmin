@@ -108,25 +108,78 @@ class ApiController extends Controller
     /**
      * Latest live-price edit time across all states (not per viewed state).
      * Optionally limited to a crop year when the API is year-scoped.
+     *
+     * Uses MAX(updated_at) + short cache — avoids full-table ORDER BY updated_at LIMIT 1 scans.
      */
     protected function livePricesGlobalLastUpdatedAtFormatted($cropYear = null): string
     {
         $appTz = config('app.timezone', 'Asia/Kolkata');
-        $q = LivePrice::query()
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price');
+        $version = (int) Cache::get('web:prices:version', 1);
+        $yearKey = ($cropYear !== null && $cropYear !== '' && is_numeric($cropYear))
+            ? (string) ((int) $cropYear)
+            : 'all';
+        $cacheKey = 'livePrices:lastUpdatedAt:v'.$version.':'.$yearKey;
 
-        if ($cropYear !== null && $cropYear !== '' && is_numeric($cropYear)) {
-            $q->where('cropYear', (int) $cropYear);
+        $updatedAt = Cache::remember($cacheKey, 120, function () use ($cropYear) {
+            $q = LivePrice::query();
+            if ($cropYear !== null && $cropYear !== '' && is_numeric($cropYear)) {
+                $q->where('cropYear', (int) $cropYear);
+            }
+
+            return $q->max('updated_at');
+        });
+
+        if (! $updatedAt) {
+            return '';
         }
 
-        $row = $q->orderByDesc('updated_at')->orderByDesc('id')->first();
+        return Carbon::parse($updatedAt)->setTimezone($appTz)->format('d-M-Y, g:i A');
+    }
 
-        return ($row && $row->updated_at)
-            ? $row->updated_at->copy()->setTimezone($appTz)->format('d-M-Y, g:i A')
-            : '';
+    /**
+     * Cache::remember with a soft lock so concurrent polls don't all rebuild the same heavy payload.
+     *
+     * @param  callable():array  $callback
+     */
+    protected function rememberPricesPayload(string $cacheKey, int $ttlSeconds, callable $callback): array
+    {
+        $cached = Cache::get($cacheKey);
+        if (is_array($cached)) {
+            return $cached;
+        }
+
+        $lockKey = 'lock:'.$cacheKey;
+        $gotLock = Cache::add($lockKey, 1, max(30, $ttlSeconds));
+
+        if (! $gotLock) {
+            for ($i = 0; $i < 25; $i++) {
+                usleep(120000);
+                $cached = Cache::get($cacheKey);
+                if (is_array($cached)) {
+                    return $cached;
+                }
+            }
+        }
+
+        try {
+            $cached = Cache::get($cacheKey);
+            if (is_array($cached)) {
+                return $cached;
+            }
+
+            $payload = $callback();
+            if (! is_array($payload)) {
+                $payload = [];
+            }
+
+            Cache::put($cacheKey, $payload, $ttlSeconds);
+
+            return $payload;
+        } finally {
+            if ($gotLock) {
+                Cache::forget($lockKey);
+            }
+        }
     }
 
     public function getWebOtherServices()
@@ -1311,7 +1364,7 @@ class ApiController extends Controller
         $cropYearKey = request()->get('year');
         $version = (int) Cache::get('web:prices:version', 1);
         $cacheKey = 'api:getPrices:v'.$version.':'.md5(json_encode([$state, $ricetype, $cropYearKey]));
-        $payload = Cache::remember($cacheKey, now()->addSeconds(120), function () use ($state, $ricetype) {
+        $payload = $this->rememberPricesPayload($cacheKey, 120, function () use ($state, $ricetype) {
             return $this->computeGetPrices($state, $ricetype)->getData(true);
         });
 
@@ -1340,11 +1393,8 @@ class ApiController extends Controller
 
         $processedData = [];
 
-        $livePriceBaseQuery = fn () => LivePrice::query()
-            ->where('name', '!=', '0')
-            ->where('form', '!=', '0')
-            ->whereNotNull('min_price')
-            ->whereNotNull('max_price')
+        // Lean state/year lookups — use idx_live_prices_state_updated (no name/form filters).
+        $stateActivityQuery = fn () => LivePrice::query()
             ->where('state', $state)
             ->when($cropYear, fn ($q) => $q->where('cropYear', $cropYear));
 
@@ -1353,15 +1403,13 @@ class ApiController extends Controller
         $closedTupleKeys = $this->closedLivePriceTupleKeys($state, $cropYear);
 
         // Latest activity for this state/crop year (admin saves touch updated_at).
-        $lastRecord = $livePriceBaseQuery()
-            ->orderBy('updated_at', 'desc')
-            ->first(['id', 'updated_at']);
+        $lastUpdatedAt = $stateActivityQuery()->max('updated_at');
 
-        if ($lastRecord) {
-            $latestDate = LivePrice::dayStart($lastRecord->updated_at)->format('Y-m-d');
+        if ($lastUpdatedAt) {
+            $latestDate = LivePrice::dayStart($lastUpdatedAt)->format('Y-m-d');
             $latestStart = LivePrice::istDateTime(LivePrice::dayStart($latestDate));
 
-            $previousUpdatedAt = $livePriceBaseQuery()
+            $previousUpdatedAt = $stateActivityQuery()
                 ->where('updated_at', '<', $latestStart)
                 ->max('updated_at');
             $previousDate = $previousUpdatedAt
@@ -2129,7 +2177,7 @@ class ApiController extends Controller
         $version = (int) Cache::get('web:prices:version', 1);
         $cacheKey = 'web:prices:v' . $version . ':' . md5(json_encode([$state, $ricetype, $request->get('year')]));
 
-        $payload = Cache::remember($cacheKey, now()->addSeconds(180), function () use ($request, $state, $ricetype) {
+        $payload = $this->rememberPricesPayload($cacheKey, 180, function () use ($request, $state, $ricetype) {
             return $this->computePricesWeb($request, $state, $ricetype)->getData(true);
         });
 
@@ -2204,12 +2252,11 @@ class ApiController extends Controller
         $lastEnteredRecord = $lastRecord;
 
         if (!$lastEnteredRecord) {
-            $latestForMeta = LivePrice::query()
+            $latestMetaUpdatedAt = LivePrice::query()
                 ->where('state', $state)
                 ->where('cropYear', $cropYear)
-                ->orderBy('updated_at', 'desc')
-                ->first()
-                ?: LivePrice::orderBy('updated_at', 'desc')->first();
+                ->max('updated_at')
+                ?: LivePrice::query()->max('updated_at');
 
             return response()->json([
                 'errors' => null,
@@ -2217,8 +2264,8 @@ class ApiController extends Controller
                 'call_now' => $callNow,
                 'prices' => [],
                 'closing' => [$ricetype => []],
-                'latest' => $latestForMeta
-                    ? Carbon::parse($latestForMeta->created_at)->format('Y-m-d')
+                'latest' => $latestMetaUpdatedAt
+                    ? Carbon::parse($latestMetaUpdatedAt)->format('Y-m-d')
                     : $todayDate->format('Y-m-d'),
                 'lastUpdatedDate' => $this->livePricesGlobalLastUpdatedAtFormatted($cropYear),
             ]);
