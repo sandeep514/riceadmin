@@ -77,10 +77,14 @@ class CalculatorExport implements FromQuery, WithMapping, WithHeadings, WithStyl
 
         return USD_prices::query()
             ->with(['getRiceQuality', 'getUSDDefaultMaster'])
-            ->whereIn('id', $lastOfDayIds)
-            ->orderBy('created_at', 'DESC')
-            ->orderBy('rice')
-            ->orderBy('usd_defaultMaster_id');
+            ->join('quality_master', 'quality_master.id', '=', 'USD_prices.rice')
+            ->whereIn('USD_prices.id', $lastOfDayIds)
+            // Basmati block first, then non-basmati (and any other type last).
+            ->orderByRaw("CASE WHEN LOWER(TRIM(quality_master.quality_type)) = 'basmati' THEN 0 WHEN LOWER(TRIM(quality_master.quality_type)) IN ('non-basmati', 'non basmati', 'nonbasmati') THEN 1 ELSE 2 END")
+            ->orderBy('USD_prices.created_at', 'DESC')
+            ->orderBy('USD_prices.rice')
+            ->orderBy('USD_prices.usd_defaultMaster_id')
+            ->select('USD_prices.*');
     }
 
     public function headings(): array
