@@ -297,10 +297,13 @@ Quantity: {quantity}';
             return [];
         }
 
+        // Include portal / Data Analyst (userType 2) — they register FCM via update/user/token.
+        // Legacy native app remains userType 1 / user_from=app.
         $query = User::query()
             ->where(function ($q) {
                 $q->where('user_from', 'app')
-                    ->orWhere('userType', 1);
+                    ->orWhere('userType', 1)
+                    ->orWhere('userType', 2);
             })
             ->whereIn('role', $roleIds)
             ->whereNotNull('user_token')

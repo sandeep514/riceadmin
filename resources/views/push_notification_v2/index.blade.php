@@ -24,10 +24,14 @@
                         @csrf
                         <div class="box-body">
                             <p class="help-block" style="margin-top:0;">
-                                Sends <strong>Reverb/Pusher</strong> to matching web portal users and <strong>Firebase</strong>
-                                to matching app users (and web users with an app token).
-                                Recipients are matched by <strong>role</strong> and selected <strong>business categories</strong>
-                                (from Role Category Map).
+                                Sends <strong>Reverb socket</strong> to matching portal users on private channel
+                                <code>web-user.&#123;userId&#125;</code> event <code>.WebUserNotification</code>
+                                (Data Analyst / web portal — not <code>admin-events</code>).
+                                Also queues <strong>Firebase FCM</strong> when the user has a device token.
+                                Recipients must match <strong>role</strong> + <strong>business category</strong>
+                                (Role Category Map). Use Data Analyst type <code>analyser</code>.
+                                Portal SPA must be subscribed and Reverb must allow its origin
+                                (e.g. <code>https://analyst.sntcgroup.com</code> in <code>REVERB_ALLOWED_ORIGINS</code>).
                             </p>
 
                             <div class="form-group col-md-6" style="padding-left:0;">

@@ -158,9 +158,12 @@ BROADCAST_DRIVER=reverb
 
 If this is `log` or `null`, **no events** are pushed to Reverb (nothing to receive on the SPA).
 
-### Private channels (`web-user.{id}`) — auth URL
+### Private channels (`web-user.{id}`) — portal / Data Analyst notifications
 
-For `Echo.private('web-user.' + userId)` the client must POST to your API **broadcasting auth** URL with the **same Bearer token** as the portal. Point `authEndpoint` at your deployed API, e.g.:
+Admin push from `/administrator/push/notification/v2` broadcasts:
+
+- **Channel:** `Echo.private('web-user.' + userId)` (not `admin-events`)
+- **Event:** `.WebUserNotification` (leading dot required)
 
 ```javascript
 authEndpoint: 'https://snjtradelink.com/api/broadcasting/auth',
@@ -170,6 +173,15 @@ auth: {
     Accept: 'application/json',
   },
 },
+
+// After login — userId = portal / Data Analyst user id
+echo.private(`web-user.${userId}`).listen('.WebUserNotification', (e) => {
+  // e.title, e.message, e.id, e.user_id, ...
+});
 ```
 
-Ensure that route is reachable from the Netlify origin (CORS for `api/*` is already set up for `https://sntc.netlify.app` in `config/cors.php`).
+Do **not** listen on `admin-events` / `.AdminEvent` for these notifications — that channel is for admin live events only.
+
+Also add the portal origin to Laravel `REVERB_ALLOWED_ORIGINS` (e.g. `https://analyst.sntcgroup.com`, `https://sntc.netlify.app`). If the origin is missing, the browser WebSocket is rejected and no events arrive.
+
+Ensure that auth route is reachable from the SPA origin (CORS for `api/*` already covers `*.sntcgroup.com` in `config/cors.php`).

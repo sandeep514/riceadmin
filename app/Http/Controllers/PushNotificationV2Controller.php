@@ -7,6 +7,7 @@ use App\CategoryRoleMap;
 use App\Role;
 use App\Services\TradeWebNotificationService;
 use App\Services\WebPortalNotificationDelivery;
+use App\User;
 use App\WebUserNotification;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -100,6 +101,7 @@ class PushNotificationV2Controller extends Controller
 
         $webUserIds = $tradeNotify->eligibleWebUserIds($categoryIds, $roleId);
         $appFcmIds = $tradeNotify->eligibleAppUserIdsForFcm($categoryIds, $roleId);
+        // App-only = has FCM token but was not already covered by the web/Reverb delivery path.
         $appOnlyFcmIds = array_values(array_diff($appFcmIds, $webUserIds));
 
         if ($webUserIds === [] && $appOnlyFcmIds === []) {
@@ -128,14 +130,32 @@ class PushNotificationV2Controller extends Controller
             $delivery->queueFirebasePushForUserIds($appOnlyFcmIds, $title, $message, 'admin');
         }
 
-        Session::flash(
-            'success',
-            sprintf(
-                'Success|Notification sent: %d web (Reverb/Firebase), %d app FCM.',
-                count($webUserIds),
-                count($appOnlyFcmIds)
-            )
+        // Data Analyst / portal users are userType 2 — they count as "web", not "app-only".
+        // FCM still queues for any of those recipients who have user_token set.
+        $webWithFcm = $webUserIds === []
+            ? 0
+            : (int) User::query()
+                ->whereIn('id', $webUserIds)
+                ->whereNotNull('user_token')
+                ->where('user_token', '!=', '')
+                ->count();
+        $fcmQueued = $webWithFcm + count($appOnlyFcmIds);
+
+        $previewIds = array_slice($webUserIds, 0, 8);
+        $flashBody = sprintf(
+            'Success|Notification sent: %d web (Reverb), %d FCM queued (%d portal tokens + %d app-only). Socket user ids: %s%s',
+            count($webUserIds),
+            $fcmQueued,
+            $webWithFcm,
+            count($appOnlyFcmIds),
+            $previewIds === [] ? '—' : implode(', ', $previewIds),
+            count($webUserIds) > count($previewIds) ? '…' : ''
         );
+        if ($fcmQueued === 0) {
+            $flashBody .= ' No device tokens on matched users (socket still sent).';
+        }
+
+        Session::flash('success', $flashBody);
 
         return redirect()->route('push.notification.v2');
     }
