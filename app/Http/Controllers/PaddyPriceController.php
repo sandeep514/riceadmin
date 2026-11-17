@@ -41,7 +41,8 @@ class PaddyPriceController extends Controller
             return $pdf->download($filename);
         }
 
-        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: true);
+        // Full filtered set for client-side DataTables search + export buttons.
+        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false);
 
         $paddyStateModel = PaddyStateModel::where('status', 1)
             ->orderByRaw('order_no IS NULL, order_no ASC')

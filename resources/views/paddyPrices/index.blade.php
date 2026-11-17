@@ -199,7 +199,7 @@
                                                     </a>
                                                 </form>
                                                 <div class="table-responsive">
-                                                    <table class="table table-bordered table-striped" width="100%">
+                                                    <table id="paddy-prices-table" class="table table-bordered table-striped" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>ID</th>
@@ -214,14 +214,14 @@
                                                                 <th>Moisture</th>
                                                                 <th>Total Arrivals</th>
                                                                 <th>Change</th>
-                                                                <th>Created At</th>
-                                                                <th>Updated At</th>
+                                                                <th>Created At (IST)</th>
+                                                                <th>Updated At (IST)</th>
                                                                 <th>Status</th>
                                                                 <th>Actions</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @forelse ($paddyPrices as $paddyPrice)
+                                                            @foreach ($paddyPrices as $paddyPrice)
                                                                 <tr>
                                                                     <td>{{ $paddyPrice->id }}</td>
                                                                     <td>{{ optional($paddyPrice->getMandi_rel)->mandi }}</td>
@@ -236,10 +236,10 @@
                                                                     <td>{{ $paddyPrice->total_arrivals }}</td>
                                                                     <td>{{ $paddyPrice->change }}</td>
                                                                     <td>
-                                                                        {{ $paddyPrice->created_at ? $paddyPrice->created_at->format('Y-m-d') : '' }}
+                                                                        {{ $paddyPrice->created_at ? $paddyPrice->created_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d H:i:s') : '' }}
                                                                     </td>
                                                                     <td>
-                                                                        {{ $paddyPrice->updated_at ? $paddyPrice->updated_at->format('Y-m-d') : '' }}
+                                                                        {{ $paddyPrice->updated_at ? $paddyPrice->updated_at->copy()->timezone('Asia/Kolkata')->format('Y-m-d H:i:s') : '' }}
                                                                     </td>
                                                                     <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
                                                                     <td style="white-space: nowrap;">
@@ -273,16 +273,9 @@
                                                                         </form>
                                                                     </td>
                                                                 </tr>
-                                                            @empty
-                                                                <tr>
-                                                                    <td colspan="14" class="text-center text-muted">No paddy prices found for the selected date range.</td>
-                                                                </tr>
-                                                            @endforelse
+                                                            @endforeach
                                                         </tbody>
                                                     </table>
-                                                </div>
-                                                <div class="text-center" style="margin-top: 10px;">
-                                                    {{ $paddyPrices->onEachSide(1)->links() }}
                                                 </div>
                                             </div>
                                         </div>
@@ -299,6 +292,46 @@
 @section('javascript')
 <script>
     $(function () {
+        $('#paddy-prices-table').DataTable({
+            pageLength: 25,
+            order: [[0, 'desc']],
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copy',
+                    exportOptions: { columns: ':not(:last-child)' }
+                },
+                {
+                    extend: 'csv',
+                    title: 'paddy-prices',
+                    exportOptions: { columns: ':not(:last-child)' }
+                },
+                {
+                    extend: 'excel',
+                    title: 'paddy-prices',
+                    exportOptions: { columns: ':not(:last-child)' }
+                },
+                {
+                    extend: 'pdf',
+                    title: 'Paddy Prices',
+                    orientation: 'landscape',
+                    pageSize: 'A4',
+                    exportOptions: { columns: ':not(:last-child)' }
+                },
+                {
+                    extend: 'print',
+                    exportOptions: { columns: ':not(:last-child)' }
+                }
+            ],
+            columnDefs: [
+                { orderable: false, targets: [15] }
+            ],
+            language: {
+                emptyTable: 'No paddy prices found for the selected date range.',
+                search: 'Search:'
+            }
+        });
+
         var $state = $('#paddy-state');
         var $mandi = $('#paddy-mandi');
         var mandiOptions = $mandi.find('option[data-state-id]').clone();
