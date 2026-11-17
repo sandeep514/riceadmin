@@ -113,6 +113,26 @@ class PaddyApiController extends Controller
     }
 
     /**
+     * Flag each row: is_updated=true when price date (IST) is today, false when yesterday fallback.
+     *
+     * @param  \Illuminate\Support\Collection<int, \App\PaddyPrice>  $rows
+     * @return \Illuminate\Support\Collection<int, \App\PaddyPrice>
+     */
+    private function flagPaddyRowsIsUpdated($rows)
+    {
+        [$today] = $this->paddyTodayYesterdayDates();
+
+        return $rows->map(function ($row) use ($today) {
+            $day = $row->created_at
+                ? Carbon::parse($row->created_at)->timezone('Asia/Kolkata')->format('Y-m-d')
+                : null;
+            $row->setAttribute('is_updated', $day === $today);
+
+            return $row;
+        });
+    }
+
+    /**
      * Primary snapshot date for meta: today if any today rows in the window collection, else yesterday.
      *
      * @param  \Illuminate\Support\Collection<int, \App\PaddyPrice>  $rows
@@ -341,7 +361,9 @@ class PaddyApiController extends Controller
                 ->orderByDesc('id')
                 ->get();
 
-            $paddyPrices = $this->preferTodayElseYesterdayPerKey($windowRows, 'quality_id');
+            $paddyPrices = $this->flagPaddyRowsIsUpdated(
+                $this->preferTodayElseYesterdayPerKey($windowRows, 'quality_id')
+            );
         }
 
         $marketStatus = PaddyTradeCurrentStatus::current();
@@ -385,7 +407,9 @@ class PaddyApiController extends Controller
                 ->orderByDesc('id')
                 ->get();
 
-            $paddyPrices = $this->preferTodayElseYesterdayPerKey($windowRows, 'mandi');
+            $paddyPrices = $this->flagPaddyRowsIsUpdated(
+                $this->preferTodayElseYesterdayPerKey($windowRows, 'mandi')
+            );
         }
 
         $marketStatus = PaddyTradeCurrentStatus::current();
