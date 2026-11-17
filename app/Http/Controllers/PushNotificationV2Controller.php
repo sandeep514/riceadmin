@@ -27,7 +27,11 @@ class PushNotificationV2Controller extends Controller
 
     public function index()
     {
-        $roles = Role::query()->orderBy('role_name')->get(['id', 'role_name', 'type']);
+        // Same as trade web notify: portal push targets only web-type roles.
+        $roles = Role::query()
+            ->whereRaw('LOWER(TRIM(type)) = ?', ['web'])
+            ->orderBy('role_name')
+            ->get(['id', 'role_name', 'type']);
 
         $sampleIds = DB::table('web_notifications')
             ->selectRaw('MAX(id) as id')
@@ -81,6 +85,13 @@ class PushNotificationV2Controller extends Controller
         ]);
 
         $roleId = (int) $validated['role_id'];
+        $role = Role::query()->whereKey($roleId)->first(['id', 'type']);
+        if (! $role || strtolower(trim((string) $role->type)) !== 'web') {
+            return back()
+                ->withInput()
+                ->with('error', 'Error|Select a web role only.');
+        }
+
         $categoryIds = array_values(array_unique(array_filter(array_map('intval', $validated['category_ids']))));
         $allowedIds = $this->categoriesForRole($roleId)->pluck('id')->map(fn ($id) => (int) $id)->all();
         $categoryIds = array_values(array_intersect($categoryIds, $allowedIds));

@@ -26,12 +26,9 @@
                             <p class="help-block" style="margin-top:0;">
                                 Sends <strong>Reverb socket</strong> to matching portal users on private channel
                                 <code>web-user.&#123;userId&#125;</code> event <code>.WebUserNotification</code>
-                                (Data Analyst / web portal — not <code>admin-events</code>).
-                                Also queues <strong>Firebase FCM</strong> when the user has a device token.
-                                Recipients must match <strong>role</strong> + <strong>business category</strong>
-                                (Role Category Map). Use Data Analyst type <code>analyser</code>.
-                                Portal SPA must be subscribed and Reverb must allow its origin
-                                (e.g. <code>https://analyst.sntcgroup.com</code> in <code>REVERB_ALLOWED_ORIGINS</code>).
+                                (not <code>admin-events</code>). Also queues <strong>Firebase FCM</strong> when the user has a device token.
+                                Role list shows <strong>web</strong> roles only. Recipients must match
+                                <strong>role</strong> + <strong>business category</strong> (Role Category Map).
                             </p>
 
                             <div class="form-group col-md-6" style="padding-left:0;">

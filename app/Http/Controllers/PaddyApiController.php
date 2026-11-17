@@ -26,18 +26,134 @@ use Maatwebsite\Excel\Facades\Excel;
 class PaddyApiController extends Controller
 {
     /**
-     * Calendar date (Y-m-d) of the most recently inserted/updated paddy row.
-     * Optional filters scope the snapshot so crop-year / state / mandi selections
-     * do not accidentally use another year's latest date.
+     * IST calendar today + yesterday (Y-m-d). Used for per-crop/mandi fallback.
+     *
+     * @return array{0: string, 1: string}
      */
-    private function latestPaddyPricesDate($stateId = null, $mandiId = null, $cropYear = null): ?string
+    private function paddyTodayYesterdayDates(): array
     {
-        $row = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
-            ->first();
+        $today = Carbon::now('Asia/Kolkata')->toDateString();
+        $yesterday = Carbon::now('Asia/Kolkata')->subDay()->toDateString();
 
-        return $row ? Carbon::parse($row->created_at)->format('Y-m-d') : null;
+        return [$today, $yesterday];
+    }
+
+    /**
+     * Restrict a paddy price query to IST calendar today OR yesterday.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function scopePaddyTodayOrYesterday($query)
+    {
+        [$today, $yesterday] = $this->paddyTodayYesterdayDates();
+
+        return $query->where(function ($q) use ($today, $yesterday) {
+            $q->whereDate('created_at', $today)
+                ->orWhereDate('created_at', $yesterday);
+        });
+    }
+
+    /**
+     * Resolve crop year: prefer requested year if it has today/yesterday rows;
+     * otherwise fall back to all years (same empty-year behavior as before).
+     *
+     * @return array{0: ?string, 1: bool} [cropYear, hasWindowRows]
+     */
+    private function resolvePaddyCropYearForWindow($stateId, $mandiId, ?string $requestedCropYear): array
+    {
+        $cropYear = $requestedCropYear;
+        $hasRows = $this->scopePaddyTodayOrYesterday(
+            $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
+        )->exists();
+
+        if ($cropYear !== null && ! $hasRows) {
+            $cropYear = null;
+            $hasRows = $this->scopePaddyTodayOrYesterday(
+                $this->paddyPriceBaseQuery($stateId, $mandiId, null)
+            )->exists();
+        }
+
+        return [$cropYear, $hasRows];
+    }
+
+    /**
+     * Among today+yesterday rows, keep one row per group key preferring today over yesterday
+     * (latest id wins within the chosen day).
+     *
+     * @param  \Illuminate\Support\Collection<int, \App\PaddyPrice>  $rows
+     * @return \Illuminate\Support\Collection<int, \App\PaddyPrice>
+     */
+    private function preferTodayElseYesterdayPerKey($rows, string $groupKey)
+    {
+        [$today, $yesterday] = $this->paddyTodayYesterdayDates();
+
+        return $rows
+            ->groupBy(fn ($row) => (string) $row->{$groupKey})
+            ->map(function ($group) use ($today, $yesterday) {
+                $byDay = $group->groupBy(function ($row) {
+                    if (! $row->created_at) {
+                        return '';
+                    }
+
+                    return Carbon::parse($row->created_at)
+                        ->timezone('Asia/Kolkata')
+                        ->format('Y-m-d');
+                });
+
+                $dayRows = $byDay->get($today) ?? $byDay->get($yesterday);
+                if (! $dayRows || $dayRows->isEmpty()) {
+                    return null;
+                }
+
+                return $dayRows->sortByDesc('id')->first();
+            })
+            ->filter()
+            ->values();
+    }
+
+    /**
+     * Primary snapshot date for meta: today if any today rows in the window collection, else yesterday.
+     *
+     * @param  \Illuminate\Support\Collection<int, \App\PaddyPrice>  $rows
+     */
+    private function snapshotDateFromWindowRows($rows): ?string
+    {
+        [$today, $yesterday] = $this->paddyTodayYesterdayDates();
+        if ($rows->isEmpty()) {
+            return null;
+        }
+
+        $hasToday = $rows->contains(function ($row) use ($today) {
+            return $row->created_at
+                && Carbon::parse($row->created_at)->timezone('Asia/Kolkata')->format('Y-m-d') === $today;
+        });
+
+        return $hasToday ? $today : $yesterday;
+    }
+
+    /**
+     * Format lastUpdatedDate from max updated_at among selected rows.
+     *
+     * @param  \Illuminate\Support\Collection<int, \App\PaddyPrice>  $rows
+     */
+    private function lastUpdatedFromRows($rows): string
+    {
+        $anchor = $rows->sortByDesc(function ($row) {
+            $t = $row->updated_at ?: $row->created_at;
+
+            return $t ? Carbon::parse($t)->timestamp : 0;
+        })->first();
+
+        if (! $anchor) {
+            return '';
+        }
+
+        $anchorTime = $anchor->updated_at ?: $anchor->created_at;
+
+        return $anchorTime
+            ? Carbon::parse($anchorTime)->timezone('Asia/Kolkata')->format('Y-m-d H:i')
+            : '';
     }
 
     /**
@@ -115,36 +231,32 @@ class PaddyApiController extends Controller
     /**
      * List active paddy states.
      *
-     * Snapshot rule (per scope): show only rows of the latest entry date
-     * in this scope. Previous-date rows stay visible until a new row with
-     * today's entry date arrives in this scope, then only today is visible.
-     * No any-date fallback: empty snapshot returns empty (not previous data).
+     * Visibility: states that have at least one price on IST calendar today
+     * OR yesterday (per-crop style window). Crops older than yesterday are skipped.
      *
      * Optional: ?cropYear=2025 | ?crop_year=2025
      */
     public function listPaddy(Request $request)
     {
-        $requestedCropYear = $this->requestCropYear($request);
-        $cropYear = $requestedCropYear;
-        $lastAddedDate = $this->latestPaddyPricesDate(null, null, $cropYear);
+        [$cropYear, $hasRows] = $this->resolvePaddyCropYearForWindow(
+            null,
+            null,
+            $this->requestCropYear($request)
+        );
 
-        // Fallback to latest overall when requested crop year has no data.
-        if ($cropYear !== null && $lastAddedDate === null) {
-            $cropYear = null;
-            $lastAddedDate = $this->latestPaddyPricesDate(null, null, null);
-        }
-
-        $selectedStatesIds = [];
-        if ($lastAddedDate !== null) {
-            $selectedStatesIds = array_unique(
+        $windowRows = collect();
+        if ($hasRows) {
+            $windowRows = $this->scopePaddyTodayOrYesterday(
                 $this->paddyPriceBaseQuery(null, null, $cropYear)
-                    ->whereDate('created_at', $lastAddedDate)
-                    ->pluck('state')
-                    ->filter()
-                    ->values()
-                    ->toArray()
-            );
+            )->get(['id', 'state', 'created_at', 'updated_at']);
         }
+
+        $selectedStatesIds = $windowRows
+            ->pluck('state')
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
         $paddyState = $selectedStatesIds === []
             ? collect()
@@ -159,39 +271,36 @@ class PaddyApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Paddy state successfully',
-            'lastSnapshotDate' => $lastAddedDate,
+            'lastSnapshotDate' => $this->snapshotDateFromWindowRows($windowRows),
             'crop_year' => $cropYear,
             'data' => $paddyState,
         ]);
     }
 
     /**
-     * Snapshot rule (per state + crop scope): only mandis having rows on the
-     * latest entry date are visible. Previous-date mandis are hidden once a
-     * new row with today's entry date arrives in this state scope.
+     * Visibility: mandis in this state with at least one price on IST today OR yesterday.
      */
     public function listPaddyMandi(Request $request, $stateId)
     {
-        $cropYear = $this->requestCropYear($request);
-        $lastAddedDate = $this->latestPaddyPricesDate($stateId, null, $cropYear);
+        [$cropYear, $hasRows] = $this->resolvePaddyCropYearForWindow(
+            $stateId,
+            null,
+            $this->requestCropYear($request)
+        );
 
-        // Fallback to latest overall when requested crop year has no data.
-        if ($cropYear !== null && $lastAddedDate === null) {
-            $cropYear = null;
-            $lastAddedDate = $this->latestPaddyPricesDate($stateId, null, null);
-        }
-
-        $selectedMandiIds = [];
-        if ($lastAddedDate !== null) {
-            $selectedMandiIds = array_unique(
+        $windowRows = collect();
+        if ($hasRows) {
+            $windowRows = $this->scopePaddyTodayOrYesterday(
                 $this->paddyPriceBaseQuery($stateId, null, $cropYear)
-                    ->whereDate('created_at', $lastAddedDate)
-                    ->pluck('mandi')
-                    ->filter()
-                    ->values()
-                    ->toArray()
-            );
+            )->get(['id', 'mandi', 'created_at', 'updated_at']);
         }
+
+        $selectedMandiIds = $windowRows
+            ->pluck('mandi')
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
 
         $paddyMandi = $selectedMandiIds === []
             ? collect()
@@ -207,7 +316,7 @@ class PaddyApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Paddy mandi successfully',
-            'lastSnapshotDate' => $lastAddedDate,
+            'lastSnapshotDate' => $this->snapshotDateFromWindowRows($windowRows),
             'crop_year' => $cropYear,
             'data' => $paddyMandi,
         ]);
@@ -215,47 +324,27 @@ class PaddyApiController extends Controller
 
     public function getPaddyPrices(Request $request, $mandi_id, $state_id)
     {
-        $cropYear = $this->requestCropYear($request);
-        $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, $cropYear);
+        [$cropYear, $hasRows] = $this->resolvePaddyCropYearForWindow(
+            $state_id,
+            $mandi_id,
+            $this->requestCropYear($request)
+        );
 
-        // Fallback to latest overall when requested crop year has no data.
-        if ($cropYear !== null && $lastEnterDate === null) {
-            $cropYear = null;
-            $lastEnterDate = $this->latestPaddyPricesDate($state_id, $mandi_id, null);
-        }
-        $lastCreated_at = '';
-
+        // Per quality: prefer today's price, else yesterday; skip if neither.
+        // Each row keeps its own created_at (price date) for the client.
         $paddyPrices = collect();
-
-        if ($lastEnterDate !== null) {
-            // created_at is the admin-entered entry date (always 00:00),
-            // so "last updated" must come from updated_at (actual save time).
-            $anchorRow = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
-                ->whereDate('created_at', $lastEnterDate)
-                ->orderByDesc('updated_at')
-                ->orderByDesc('id')
-                ->first();
-            if ($anchorRow) {
-                $anchorTime = $anchorRow->updated_at ?: $anchorRow->created_at;
-                $lastCreated_at = $anchorTime
-                    ? Carbon::parse($anchorTime)->timezone('Asia/Kolkata')->format('Y-m-d H:i')
-                    : '';
-            }
-
-            $paddyPrices = $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
-                ->whereDate('created_at', $lastEnterDate)
+        if ($hasRows) {
+            $windowRows = $this->scopePaddyTodayOrYesterday(
+                $this->paddyPriceBaseQuery($state_id, $mandi_id, $cropYear)
+            )
                 ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,type,quality'])
                 ->orderByDesc('id')
-                ->get()
-                ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
-                ->map(function ($group) {
-                    return $group->groupBy('quality_id')->map(fn ($qGroup) => $qGroup->first());
-                })
-                ->first() ?? collect();
+                ->get();
+
+            $paddyPrices = $this->preferTodayElseYesterdayPerKey($windowRows, 'quality_id');
         }
 
         $marketStatus = PaddyTradeCurrentStatus::current();
-
         $priceDefaults = PaddyPriceDefault::current()->toDefaultsArray();
 
         return response()->json([
@@ -263,8 +352,8 @@ class PaddyApiController extends Controller
             'message' => 'Paddy get successfully',
             'data' => $paddyPrices,
             'crop_year' => $cropYear,
-            'lastUpdatedDate' => $lastCreated_at,
-            'lastSnapshotDate' => $lastEnterDate,
+            'lastUpdatedDate' => $this->lastUpdatedFromRows($paddyPrices),
+            'lastSnapshotDate' => $this->snapshotDateFromWindowRows($paddyPrices),
             'defaults' => $priceDefaults,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
@@ -278,50 +367,25 @@ class PaddyApiController extends Controller
 
     public function getPaddyPricesByPaddy(Request $request, $stateId, $paddyId)
     {
-        $cropYear = $this->requestCropYear($request);
         $mandiId = $request->input('mandi_id', $request->input('mandi'));
-        $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, $cropYear);
+        [$cropYear, $hasRows] = $this->resolvePaddyCropYearForWindow(
+            $stateId,
+            $mandiId,
+            $this->requestCropYear($request)
+        );
 
-        // Fallback to latest overall when requested crop year has no data.
-        if ($cropYear !== null && $lastEnterDate === null) {
-            $cropYear = null;
-            $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, null);
-        }
-        $lastCreated_at = '';
-
+        // Per mandi for this crop: prefer today, else yesterday; skip if neither.
         $paddyPrices = collect();
-
-        if ($lastEnterDate !== null) {
-            // created_at is the admin-entered entry date (always 00:00),
-            // so "last updated" must come from updated_at (actual save time).
-            $anchorRow = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
-                ->whereDate('created_at', $lastEnterDate)
-                ->orderByDesc('updated_at')
-                ->orderByDesc('id')
-                ->first();
-            if ($anchorRow) {
-                $anchorTime = $anchorRow->updated_at ?: $anchorRow->created_at;
-                $lastCreated_at = $anchorTime
-                    ? Carbon::parse($anchorTime)->timezone('Asia/Kolkata')->format('Y-m-d H:i')
-                    : '';
-            }
-
-            $paddyPrices = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
-                ->where('quality_id', $paddyId)
-                ->whereDate('created_at', $lastEnterDate)
+        if ($hasRows) {
+            $windowRows = $this->scopePaddyTodayOrYesterday(
+                $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
+                    ->where('quality_id', $paddyId)
+            )
                 ->with(['getMandi_rel:id,mandi', 'getState_rel:id,state', 'quality_rel:id,type,quality'])
                 ->orderByDesc('id')
-                ->get()
-                ->groupBy(fn ($item) => $item->created_at->format('Y-m-d'))
-                ->map(function ($group) {
-                    // One row per mandi (latest id wins) so the same mandi
-                    // never renders twice when duplicate price rows exist
-                    // for the snapshot date (store() always inserts).
-                    return $group->groupBy('mandi')->map(
-                        fn ($mGroup) => $mGroup->sortByDesc('id')->first()
-                    )->values();
-                })
-                ->first() ?? collect();
+                ->get();
+
+            $paddyPrices = $this->preferTodayElseYesterdayPerKey($windowRows, 'mandi');
         }
 
         $marketStatus = PaddyTradeCurrentStatus::current();
@@ -331,8 +395,8 @@ class PaddyApiController extends Controller
             'message' => 'Paddy get successfully',
             'data' => $paddyPrices,
             'crop_year' => $cropYear,
-            'lastUpdatedDate' => $lastCreated_at,
-            'lastSnapshotDate' => $lastEnterDate,
+            'lastUpdatedDate' => $this->lastUpdatedFromRows($paddyPrices),
+            'lastSnapshotDate' => $this->snapshotDateFromWindowRows($paddyPrices),
             'defaults' => PaddyPriceDefault::current()->toDefaultsArray(),
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
@@ -346,25 +410,29 @@ class PaddyApiController extends Controller
 
     public function getPaddyQualities(Request $request, $stateId)
     {
-        $cropYear = $this->requestCropYear($request);
         $mandiId = $request->input('mandi_id', $request->input('mandi'));
-        $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, $cropYear);
+        [$cropYear, $hasRows] = $this->resolvePaddyCropYearForWindow(
+            $stateId,
+            $mandiId,
+            $this->requestCropYear($request)
+        );
 
-        // Fallback to latest overall when requested crop year has no data.
-        if ($cropYear !== null && $lastEnterDate === null) {
-            $cropYear = null;
-            $lastEnterDate = $this->latestPaddyPricesDate($stateId, $mandiId, null);
-        }
         $qualities = collect();
+        $windowRows = collect();
 
-        if ($lastEnterDate !== null) {
-            $paddyQualityIds = $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
-                ->whereDate('created_at', $lastEnterDate)
-                ->orderByDesc('id')
+        if ($hasRows) {
+            $windowRows = $this->scopePaddyTodayOrYesterday(
+                $this->paddyPriceBaseQuery($stateId, $mandiId, $cropYear)
+            )->get(['id', 'quality_id', 'created_at', 'updated_at']);
+
+            // Prefer today else yesterday per quality so a crop only listed once.
+            $preferred = $this->preferTodayElseYesterdayPerKey($windowRows, 'quality_id');
+            $paddyQualityArrayIds = $preferred
                 ->pluck('quality_id')
-                ->toArray();
-
-            $paddyQualityArrayIds = array_values(array_unique(array_filter($paddyQualityIds)));
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
 
             if ($paddyQualityArrayIds !== []) {
                 $qualities = PaddyQuality::query()
@@ -389,7 +457,7 @@ class PaddyApiController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Paddy mandi get successfully',
-            'lastSnapshotDate' => $lastEnterDate,
+            'lastSnapshotDate' => $this->snapshotDateFromWindowRows($windowRows),
             'crop_year' => $cropYear,
             'data' => $qualities,
         ]);
