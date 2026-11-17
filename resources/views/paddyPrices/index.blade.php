@@ -277,6 +277,9 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <div class="text-center" style="margin-top: 10px;">
+                                                    {{ $paddyPrices->onEachSide(1)->links() }}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -293,7 +296,9 @@
 <script>
     $(function () {
         $('#paddy-prices-table').DataTable({
-            pageLength: 25,
+            // Server already paginates 30/page — do not double-paginate in DataTables.
+            paging: false,
+            info: false,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
             buttons: [

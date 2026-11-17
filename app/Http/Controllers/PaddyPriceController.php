@@ -41,8 +41,7 @@ class PaddyPriceController extends Controller
             return $pdf->download($filename);
         }
 
-        // Full filtered set for client-side DataTables search + export buttons.
-        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false);
+        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: true);
 
         $paddyStateModel = PaddyStateModel::where('status', 1)
             ->orderByRaw('order_no IS NULL, order_no ASC')
@@ -153,7 +152,7 @@ class PaddyPriceController extends Controller
         }
 
         if ($paginate) {
-            return $query->paginate(25)->appends(request()->except(['page', 'export']));
+            return $query->paginate(30)->appends(request()->except(['page', 'export']));
         }
 
         return $query->get();
