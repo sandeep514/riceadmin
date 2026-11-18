@@ -366,7 +366,7 @@ class PaddyApiController extends Controller
             );
         }
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
         $priceDefaults = PaddyPriceDefault::current()->toDefaultsArray();
 
         return response()->json([
@@ -379,11 +379,7 @@ class PaddyApiController extends Controller
             'defaults' => $priceDefaults,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
-            'market_status' => [
-                'currentStatus' => (int) $marketStatus->currentStatus,
-                'label' => $marketStatus->status_label,
-                'message' => $marketStatus->message,
-            ],
+            'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
         ]);
     }
 
@@ -412,7 +408,7 @@ class PaddyApiController extends Controller
             );
         }
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
 
         return response()->json([
             'status' => true,
@@ -424,11 +420,7 @@ class PaddyApiController extends Controller
             'defaults' => PaddyPriceDefault::current()->toDefaultsArray(),
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
-            'market_status' => [
-                'currentStatus' => (int) $marketStatus->currentStatus,
-                'label' => $marketStatus->status_label,
-                'message' => $marketStatus->message,
-            ],
+            'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
         ]);
     }
 
@@ -1050,7 +1042,7 @@ class PaddyApiController extends Controller
             return $this->formatPaddyTradeResponse($row, $isInterested, $interestUserId);
         })->values();
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
 
         return response()->json([
             'status' => true,
@@ -1059,11 +1051,7 @@ class PaddyApiController extends Controller
             'userId' => $interestUserId,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
-            'market_status' => [
-                'currentStatus' => (int) $marketStatus->currentStatus,
-                'label' => $marketStatus->status_label,
-                'message' => $marketStatus->message,
-            ],
+            'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
             'pagination' => [
                 'current_page' => $paginator->currentPage(),
                 'per_page' => $paginator->perPage(),
@@ -1110,7 +1098,7 @@ class PaddyApiController extends Controller
                 ->exists();
         }
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
 
         return response()->json([
             'status' => true,
@@ -1119,11 +1107,7 @@ class PaddyApiController extends Controller
             'userId' => $interestUserId,
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
-            'market_status' => [
-                'currentStatus' => (int) $marketStatus->currentStatus,
-                'label' => $marketStatus->status_label,
-                'message' => $marketStatus->message,
-            ],
+            'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
         ], 200);
     }
 
@@ -1205,7 +1189,7 @@ class PaddyApiController extends Controller
             ], 422);
         }
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
         $marketCode = (int) $marketStatus->currentStatus;
         if ($marketCode !== 1) {
             $msg = $marketCode === 12

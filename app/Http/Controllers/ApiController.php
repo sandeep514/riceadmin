@@ -6790,7 +6790,7 @@ if (!file_exists('uploads')) {
         $allTrade = collect($this->tradeCollectionToMobileArray($allTrade));
         $trade = $allTrade->groupBy('tradeType');
 
-        $tradeStatus = TradeCurrentStatus::first();
+        $tradeStatus = TradeCurrentStatus::currentResolved();
         $callNow = AppSetting::current()->callNowPayload();
 
         return response()->json([
@@ -6819,7 +6819,7 @@ if (!file_exists('uploads')) {
         $paginated = $this->hydrateWebTradesPage($allTrade, $request, $interestUserId);
         $trade = $paginated['items'];
 
-        $tradeStatus = TradeCurrentStatus::first();
+        $tradeStatus = TradeCurrentStatus::currentResolved();
         $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null, $interestUserId);
         $callNow = AppSetting::current()->callNowPayload();
 
@@ -7117,7 +7117,7 @@ if (!file_exists('uploads')) {
         $allTrade = collect($this->tradeCollectionToMobileArray($allTrade));
         $trade = $allTrade->groupBy('tradeType');
 
-        $tradeStatus = TradeCurrentStatus::first();
+        $tradeStatus = TradeCurrentStatus::currentResolved();
         $callNow = AppSetting::current()->callNowPayload();
 
         return response()->json([
@@ -7149,7 +7149,7 @@ if (!file_exists('uploads')) {
         $paginated = $this->hydrateWebTradesPage($allTrade, $request, $interestUserId);
         $trade = $paginated['items'];
 
-        $tradeStatus = TradeCurrentStatus::first();
+        $tradeStatus = TradeCurrentStatus::currentResolved();
         $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType, $interestUserId);
         $callNow = AppSetting::current()->callNowPayload();
 
@@ -8583,7 +8583,7 @@ if (!file_exists('uploads')) {
 
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
-        $tradeStatus = TradeCurrentStatus::first();
+        $tradeStatus = TradeCurrentStatus::currentResolved();
 
         return response()->json([
             'status' => true,

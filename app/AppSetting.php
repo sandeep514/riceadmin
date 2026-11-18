@@ -17,11 +17,26 @@ class AppSetting extends Model
         'market_to',
         'market_override_status',
         'market_override_until',
+        'rice_sourcing_from',
+        'rice_sourcing_to',
+        'rice_sourcing_override_status',
+        'rice_sourcing_override_until',
+        'paddy_market_from',
+        'paddy_market_to',
+        'paddy_market_override_status',
+        'paddy_market_override_until',
     ];
 
     protected $casts = [
         'market_override_until' => 'datetime',
+        'rice_sourcing_override_until' => 'datetime',
+        'paddy_market_override_until' => 'datetime',
     ];
+
+    /** Trade / paddy market codes (unlike live prices 1/2/3). */
+    public const TRADE_STATUS_OPEN = 1;
+    public const TRADE_STATUS_CLOSED = 11;
+    public const TRADE_STATUS_HOLD = 12;
 
     public static function current(): self
     {
@@ -39,6 +54,18 @@ class AppSetting extends Model
         if (Schema::hasColumn('app_settings', 'market_override_status')) {
             $attrs['market_override_status'] = null;
             $attrs['market_override_until'] = null;
+        }
+        if (Schema::hasColumn('app_settings', 'rice_sourcing_from')) {
+            $attrs['rice_sourcing_from'] = '09:00';
+            $attrs['rice_sourcing_to'] = '18:00';
+            $attrs['rice_sourcing_override_status'] = null;
+            $attrs['rice_sourcing_override_until'] = null;
+        }
+        if (Schema::hasColumn('app_settings', 'paddy_market_from')) {
+            $attrs['paddy_market_from'] = '09:00';
+            $attrs['paddy_market_to'] = '18:00';
+            $attrs['paddy_market_override_status'] = null;
+            $attrs['paddy_market_override_until'] = null;
         }
 
         return self::create($attrs);
@@ -278,11 +305,11 @@ class AppSetting extends Model
     /**
      * Next IST moment when the market schedule flips (open→close or close→open).
      */
-    public function nextScheduleBoundary(?Carbon $at = null): Carbon
+    public function nextScheduleBoundary(?Carbon $at = null, ?string $fromTime = null, ?string $toTime = null): Carbon
     {
         $now = $at ? $at->copy()->timezone('Asia/Kolkata') : Carbon::now('Asia/Kolkata');
-        $from = $this->normalizeTime((string) $this->market_from) ?? '09:00';
-        $to = $this->normalizeTime((string) $this->market_to) ?? '18:00';
+        $from = $this->normalizeTime((string) ($fromTime ?? $this->market_from)) ?? '09:00';
+        $to = $this->normalizeTime((string) ($toTime ?? $this->market_to)) ?? '18:00';
 
         [$fromH, $fromM] = array_map('intval', explode(':', $from));
         [$toH, $toM] = array_map('intval', explode(':', $to));
@@ -308,6 +335,204 @@ class AppSetting extends Model
         }
 
         return $fromToday;
+    }
+
+    public function riceSourcingTimingPayload(?Carbon $at = null): array
+    {
+        return $this->tradeStyleTimingPayload(
+            (string) ($this->rice_sourcing_from ?? '09:00'),
+            (string) ($this->rice_sourcing_to ?? '18:00'),
+            $at
+        );
+    }
+
+    public function paddyMarketTimingPayload(?Carbon $at = null): array
+    {
+        return $this->tradeStyleTimingPayload(
+            (string) ($this->paddy_market_from ?? '09:00'),
+            (string) ($this->paddy_market_to ?? '18:00'),
+            $at
+        );
+    }
+
+    /**
+     * Resolve rice sourcing market (codes 1/11/12).
+     *
+     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string,label:string}
+     */
+    public function resolvedRiceSourcingMarket(?Carbon $at = null): array
+    {
+        return $this->resolveTradeStyleMarket(
+            'rice_sourcing_from',
+            'rice_sourcing_to',
+            'rice_sourcing_override_status',
+            'rice_sourcing_override_until',
+            $at
+        );
+    }
+
+    /**
+     * Resolve paddy market (codes 1/11/12).
+     *
+     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string,label:string}
+     */
+    public function resolvedPaddyMarket(?Carbon $at = null): array
+    {
+        return $this->resolveTradeStyleMarket(
+            'paddy_market_from',
+            'paddy_market_to',
+            'paddy_market_override_status',
+            'paddy_market_override_until',
+            $at
+        );
+    }
+
+    public function applyManualRiceSourcingOverride(int $statusCode, string $message): void
+    {
+        $this->applyTradeStyleManualOverride(
+            'rice_sourcing_from',
+            'rice_sourcing_to',
+            'rice_sourcing_override_status',
+            'rice_sourcing_override_until',
+            $statusCode,
+            $message
+        );
+
+        if (Schema::hasTable('trade_current_status')) {
+            TradeCurrentStatus::query()->where('id', 1)->update([
+                'currentStatus' => $statusCode,
+                'message' => $message,
+            ]);
+        }
+    }
+
+    public function applyManualPaddyMarketOverride(int $statusCode, string $message): void
+    {
+        $this->applyTradeStyleManualOverride(
+            'paddy_market_from',
+            'paddy_market_to',
+            'paddy_market_override_status',
+            'paddy_market_override_until',
+            $statusCode,
+            $message
+        );
+
+        if (Schema::hasTable('paddy_trade_current_status')) {
+            $row = PaddyTradeCurrentStatus::current();
+            $row->update([
+                'currentStatus' => $statusCode,
+                'message' => $message,
+            ]);
+        }
+    }
+
+    /**
+     * @return array{open_time:string,close_time:string,market_open_time:string,market_close_time:string,from:string,to:string,timezone:string,in_window:bool}
+     */
+    private function tradeStyleTimingPayload(string $from, string $to, ?Carbon $at = null): array
+    {
+        $open = $this->normalizeTime($from) ?? '09:00';
+        $close = $this->normalizeTime($to) ?? '18:00';
+
+        return [
+            'open_time' => $open,
+            'close_time' => $close,
+            'market_open_time' => $open,
+            'market_close_time' => $close,
+            'from' => $open,
+            'to' => $close,
+            'timezone' => 'Asia/Kolkata',
+            'in_window' => $this->isWithinWindow($open, $close, $at),
+        ];
+    }
+
+    /**
+     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string,label:string}
+     */
+    private function resolveTradeStyleMarket(
+        string $fromCol,
+        string $toCol,
+        string $overrideStatusCol,
+        string $overrideUntilCol,
+        ?Carbon $at = null
+    ): array {
+        $now = $at ? $at->copy()->timezone('Asia/Kolkata') : Carbon::now('Asia/Kolkata');
+        $from = Schema::hasColumn('app_settings', $fromCol)
+            ? (string) ($this->{$fromCol} ?? '09:00')
+            : '09:00';
+        $to = Schema::hasColumn('app_settings', $toCol)
+            ? (string) ($this->{$toCol} ?? '18:00')
+            : '18:00';
+
+        $schedule = $this->tradeStyleTimingPayload($from, $to, $now);
+
+        if (Schema::hasColumn('app_settings', $overrideStatusCol)) {
+            $until = $this->{$overrideUntilCol} ?? null;
+            if ($until && $now->gte($until)) {
+                $this->forceFill([
+                    $overrideStatusCol => null,
+                    $overrideUntilCol => null,
+                ])->save();
+            } elseif (($this->{$overrideStatusCol} ?? null) !== null && $until && $now->lt($until)) {
+                $code = (int) $this->{$overrideStatusCol};
+                $label = $this->tradeStyleStatusLabel($code);
+                $message = $code === self::TRADE_STATUS_OPEN
+                    ? 'open'
+                    : ($code === self::TRADE_STATUS_HOLD ? 'Market on hold' : 'Market closed');
+
+                return [
+                    'currentStatus' => $code,
+                    'message' => $message,
+                    'label' => $label,
+                    'mode' => 'manual_override',
+                    'schedule' => $schedule,
+                    'override_until' => $until->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
+                ];
+            }
+        }
+
+        $open = $schedule['in_window'];
+        $code = $open ? self::TRADE_STATUS_OPEN : self::TRADE_STATUS_CLOSED;
+
+        return [
+            'currentStatus' => $code,
+            'message' => $open ? 'open' : 'Market closed',
+            'label' => $this->tradeStyleStatusLabel($code),
+            'mode' => 'auto',
+            'schedule' => $schedule,
+            'override_until' => null,
+        ];
+    }
+
+    private function applyTradeStyleManualOverride(
+        string $fromCol,
+        string $toCol,
+        string $overrideStatusCol,
+        string $overrideUntilCol,
+        int $statusCode,
+        string $message
+    ): void {
+        if (! Schema::hasColumn('app_settings', $overrideStatusCol)) {
+            return;
+        }
+
+        $from = (string) ($this->{$fromCol} ?? '09:00');
+        $to = (string) ($this->{$toCol} ?? '18:00');
+        $until = $this->nextScheduleBoundary(null, $from, $to);
+
+        $this->update([
+            $overrideStatusCol => $statusCode,
+            $overrideUntilCol => $until,
+        ]);
+    }
+
+    private function tradeStyleStatusLabel(int $code): string
+    {
+        return match ($code) {
+            self::TRADE_STATUS_OPEN => 'open',
+            self::TRADE_STATUS_HOLD => 'hold',
+            default => 'closed',
+        };
     }
 
     private function clearExpiredOverride(Carbon $now): void

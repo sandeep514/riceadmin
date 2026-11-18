@@ -53,7 +53,7 @@ class PaddyPriceController extends Controller
             ->get();
         $quality = $this->activePaddyQualities();
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
         $marketStatusLabels = PaddyTradeCurrentStatus::$marketStatus;
         $currentMarketStatus = (int) $marketStatus->currentStatus;
         $currentMarketLabel = $marketStatusLabels[$currentMarketStatus] ?? $marketStatus->message;

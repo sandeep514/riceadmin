@@ -15,6 +15,7 @@ use App\QualityMaster;
 use App\RiceName;
 use App\PublicPacking;
 use App\TradeQueriesINR;
+use App\AppSetting;
 use App\TradeCurrentStatus;
 use App\RiceFormMilestone3;
 use App\RiceForm;
@@ -67,7 +68,7 @@ class TradeController extends Controller
             11 => 'closed',
             12 => 'hold',
         ];
-        $tradeCurrentStatus = TradeCurrentStatus::query()->first();
+        $tradeCurrentStatus = TradeCurrentStatus::currentResolved();
         $currentMarketStatus = (int) ($tradeCurrentStatus->currentStatus ?? 1);
         $currentMarketLabel = $tradeStatusLabels[$currentMarketStatus]
             ?? (string) ($tradeCurrentStatus->message ?? 'open');
@@ -697,13 +698,19 @@ class TradeController extends Controller
 
     public function updateTradeStatus($tradeStatus)
     {
-        // 1: open
-        // 11: close
-        // 12: hold
-        $status = [1=> 'open' , 11=> 'Market closed', 12 => 'Market on hold.'];
+        // 1: open, 11: close, 12: hold — temporary override until next schedule flip
+        $tradeStatus = (int) $tradeStatus;
+        $status = TradeCurrentStatus::$marketStatusMessages;
 
-        TradeCurrentStatus::where('id' , 1)->update(['currentStatus' => $tradeStatus , 'message' => $status[$tradeStatus] ]);
-        Session::flash('success','Success|Trade status updated successfully!');
+        if (! array_key_exists($tradeStatus, $status)) {
+            Session::flash('error', 'Error|Invalid trade market status.');
+
+            return back();
+        }
+
+        AppSetting::current()->applyManualRiceSourcingOverride($tradeStatus, $status[$tradeStatus]);
+        Session::flash('success', 'Success|Trade status updated successfully!');
+
         return back();
     }
 

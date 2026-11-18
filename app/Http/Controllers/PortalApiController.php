@@ -2879,7 +2879,6 @@ class PortalApiController extends Controller
         $paddyTradeCount = PaddyTrade::query()
             ->whereIn('status', PaddyTrade::$listableStatuses)
             ->count();
-        $paddyMarketStatus = PaddyTradeCurrentStatus::current();
         $callNow = AppSetting::current()->callNowPayload();
 
         return response()->json([
@@ -2909,11 +2908,7 @@ class PortalApiController extends Controller
                 'web_access' => $permissions,
                 'years' => $yearsAccess,
                 'paddy_trade_count' => $paddyTradeCount,
-                'paddy_market_status' => [
-                    'currentStatus' => (int) $paddyMarketStatus->currentStatus,
-                    'label' => $paddyMarketStatus->status_label,
-                    'message' => $paddyMarketStatus->message,
-                ],
+                'paddy_market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
                 'call_now' => $callNow,
             ]
         ], 200);

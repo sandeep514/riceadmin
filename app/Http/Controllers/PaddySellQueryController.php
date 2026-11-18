@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AppSetting;
 use App\PaddyQuality;
 use App\PaddySellQuery;
 use App\PaddyTrade;
@@ -373,7 +374,7 @@ class PaddySellQueryController extends Controller
             ->orderByDesc('id')
             ->get();
 
-        $marketStatus = PaddyTradeCurrentStatus::current();
+        $marketStatus = PaddyTradeCurrentStatus::currentResolved();
         $marketStatusLabels = PaddyTradeCurrentStatus::$marketStatus;
         $currentMarketStatus = (int) $marketStatus->currentStatus;
         $currentMarketLabel = $marketStatusLabels[$currentMarketStatus] ?? $marketStatus->message;
@@ -400,11 +401,8 @@ class PaddySellQueryController extends Controller
             return back();
         }
 
-        $row = PaddyTradeCurrentStatus::current();
-        $row->update([
-            'currentStatus' => $tradeStatus,
-            'message' => $allowed[$tradeStatus],
-        ]);
+        // Temporary override until next schedule flip (Settings §4), then auto resumes.
+        AppSetting::current()->applyManualPaddyMarketOverride($tradeStatus, $allowed[$tradeStatus]);
 
         Session::flash('success', 'Success|Paddy market status updated to ' . ($allowed[$tradeStatus] ?? $tradeStatus) . '.');
 
