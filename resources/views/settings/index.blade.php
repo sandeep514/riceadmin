@@ -1,11 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-@php
-    $liveStatus = (int) ($resolved['currentStatus'] ?? 1);
-    $riceStatus = (int) ($resolvedRice['currentStatus'] ?? 1);
-    $paddyStatus = (int) ($resolvedPaddy['currentStatus'] ?? 1);
-@endphp
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
@@ -71,7 +66,10 @@
                         <div class="box-body">
                             <p class="help-block">
                                 Automatic from this window (open inside, closed outside).
-                                Use Open / Closed / Hold below for a temporary override until the next schedule change.
+                                Admins can still force Open / Closed / Hold from
+                                <a href="{{ route('live_prices') }}">Live Prices</a>
+                                — that override lasts until the next schedule change, then auto resumes.
+                                Use <strong>Upcoming Closings</strong> for festival/strike closed days.
                             </p>
                             <div class="row">
                                 <div class="form-group col-md-6 @error('market_from') has-error @enderror">
@@ -100,15 +98,8 @@
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
-                            <span style="margin-left:8px;">
-                                <a href="{{ route('update.live.price.market.status', 'open') }}"
-                                   class="btn btn-success btn-sm {{ $liveStatus === 1 ? 'active' : '' }}">Open</a>
-                                <a href="{{ route('update.live.price.market.status', 'closed') }}"
-                                   class="btn btn-danger btn-sm {{ $liveStatus === 2 ? 'active' : '' }}">Closed</a>
-                                <a href="{{ route('update.live.price.market.status', 'hold') }}"
-                                   class="btn btn-warning btn-sm {{ $liveStatus === 3 ? 'active' : '' }}">Hold</a>
-                            </span>
-                            <a href="{{ route('rice-price-closings.index') }}" class="btn btn-default btn-sm" style="margin-left:8px;">Upcoming Closings</a>
+                            <a href="{{ route('rice-price-closings.index', ['market' => 'live']) }}"
+                               class="btn btn-warning">Upcoming Closings</a>
                         </div>
                     </form>
                 </div>
@@ -124,7 +115,10 @@
                         <div class="box-body">
                             <p class="help-block">
                                 Automatic open/close for rice sourcing trades.
-                                Use Open / Closed / Hold below for a temporary override until the next schedule change.
+                                Admins can still force Open / Closed / Hold from
+                                <a href="{{ route('master.trade') }}">Rice Sourcing</a>
+                                — that override lasts until the next schedule change, then auto resumes.
+                                Use <strong>Upcoming Closings</strong> for festival/strike closed days.
                             </p>
                             <div class="row">
                                 <div class="form-group col-md-6 @error('rice_sourcing_from') has-error @enderror">
@@ -153,14 +147,8 @@
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
-                            <span style="margin-left:8px;">
-                                <a href="{{ route('master.update.trade.create', ['tradeStatus' => 1]) }}"
-                                   class="btn btn-success btn-sm {{ $riceStatus === 1 ? 'active' : '' }}">Open</a>
-                                <a href="{{ route('master.update.trade.create', ['tradeStatus' => 11]) }}"
-                                   class="btn btn-danger btn-sm {{ $riceStatus === 11 ? 'active' : '' }}">Closed</a>
-                                <a href="{{ route('master.update.trade.create', ['tradeStatus' => 12]) }}"
-                                   class="btn btn-warning btn-sm {{ $riceStatus === 12 ? 'active' : '' }}">Hold</a>
-                            </span>
+                            <a href="{{ route('rice-price-closings.index', ['market' => 'rice_sourcing']) }}"
+                               class="btn btn-warning">Upcoming Closings</a>
                         </div>
                     </form>
                 </div>
@@ -176,7 +164,10 @@
                         <div class="box-body">
                             <p class="help-block">
                                 Automatic open/close for paddy pricing / paddy trades.
-                                Use Open / Closed / Hold below for a temporary override until the next schedule change.
+                                Admins can still force Open / Closed / Hold from
+                                <a href="{{ route('list.paddy.trades') }}">Paddy Trades</a>
+                                — that override lasts until the next schedule change, then auto resumes.
+                                Use <strong>Upcoming Closings</strong> for festival/strike closed days.
                             </p>
                             <div class="row">
                                 <div class="form-group col-md-6 @error('paddy_market_from') has-error @enderror">
@@ -205,14 +196,8 @@
                         </div>
                         <div class="box-footer">
                             <button type="submit" class="btn btn-primary">Save</button>
-                            <span style="margin-left:8px;">
-                                <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 1]) }}"
-                                   class="btn btn-success btn-sm {{ $paddyStatus === 1 ? 'active' : '' }}">Open</a>
-                                <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 11]) }}"
-                                   class="btn btn-danger btn-sm {{ $paddyStatus === 11 ? 'active' : '' }}">Closed</a>
-                                <a href="{{ route('update.paddy.market.status', ['tradeStatus' => 12]) }}"
-                                   class="btn btn-warning btn-sm {{ $paddyStatus === 12 ? 'active' : '' }}">Hold</a>
-                            </span>
+                            <a href="{{ route('rice-price-closings.index', ['market' => 'paddy']) }}"
+                               class="btn btn-warning">Upcoming Closings</a>
                         </div>
                     </form>
                 </div>

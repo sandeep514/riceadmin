@@ -162,11 +162,11 @@ class AppSetting extends Model
 
         $this->clearExpiredOverride($now);
 
-        $closingNotice = RicePriceClosing::noticeFor($now, $schedule['to']);
+        $closingNotice = RicePriceClosing::noticeFor($now, $schedule['to'], RicePriceClosing::MARKET_LIVE);
 
         // Special closed days win over a leftover manual Open/Closed/Hold override.
         // (Manual reopen on a festival day: delete the closing entry first.)
-        $special = RicePriceClosing::forDate($now);
+        $special = RicePriceClosing::forDate($now, RicePriceClosing::MARKET_LIVE);
         if ($special) {
             // Prefer range notice (e.g. 30 Oct–2 Nov) over single-day reason.
             $message = $closingNotice['message']
@@ -258,9 +258,9 @@ class AppSetting extends Model
     /**
      * Upcoming special closed days for frontend calendars / banners.
      */
-    public function upcomingClosingsPayload(?int $limit = 30): array
+    public function upcomingClosingsPayload(?int $limit = 30, string $market = RicePriceClosing::MARKET_LIVE): array
     {
-        return RicePriceClosing::upcoming($limit)
+        return RicePriceClosing::upcoming($limit, $market)
             ->map(fn (RicePriceClosing $row) => $row->toApiArray())
             ->values()
             ->all();
@@ -269,11 +269,34 @@ class AppSetting extends Model
     /**
      * Contiguous closing ranges (same reason, consecutive dates).
      */
-    public function upcomingClosingBlocksPayload(): array
+    public function upcomingClosingBlocksPayload(string $market = RicePriceClosing::MARKET_LIVE): array
     {
         return RicePriceClosing::contiguousBlocks(
-            Carbon::now('Asia/Kolkata')->startOfDay()
+            Carbon::now('Asia/Kolkata')->startOfDay(),
+            $market
         );
+    }
+
+    public function clearManualRiceSourcingOverride(): void
+    {
+        if (! Schema::hasColumn('app_settings', 'rice_sourcing_override_status')) {
+            return;
+        }
+        $this->update([
+            'rice_sourcing_override_status' => null,
+            'rice_sourcing_override_until' => null,
+        ]);
+    }
+
+    public function clearManualPaddyMarketOverride(): void
+    {
+        if (! Schema::hasColumn('app_settings', 'paddy_market_override_status')) {
+            return;
+        }
+        $this->update([
+            'paddy_market_override_status' => null,
+            'paddy_market_override_until' => null,
+        ]);
     }
 
     /**
@@ -367,6 +390,7 @@ class AppSetting extends Model
             'rice_sourcing_to',
             'rice_sourcing_override_status',
             'rice_sourcing_override_until',
+            RicePriceClosing::MARKET_RICE_SOURCING,
             $at
         );
     }
@@ -383,6 +407,7 @@ class AppSetting extends Model
             'paddy_market_to',
             'paddy_market_override_status',
             'paddy_market_override_until',
+            RicePriceClosing::MARKET_PADDY,
             $at
         );
     }
@@ -447,13 +472,14 @@ class AppSetting extends Model
     }
 
     /**
-     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string,label:string}
+     * @return array{currentStatus:int,message:string,mode:string,schedule:array,override_until:?string,label:string,special_closing:?array,closing_notice:?array}
      */
     private function resolveTradeStyleMarket(
         string $fromCol,
         string $toCol,
         string $overrideStatusCol,
         string $overrideUntilCol,
+        string $closingMarket,
         ?Carbon $at = null
     ): array {
         $now = $at ? $at->copy()->timezone('Asia/Kolkata') : Carbon::now('Asia/Kolkata');
@@ -465,6 +491,25 @@ class AppSetting extends Model
             : '18:00';
 
         $schedule = $this->tradeStyleTimingPayload($from, $to, $now);
+        $closingNotice = RicePriceClosing::noticeFor($now, $schedule['to'], $closingMarket);
+
+        // Special closed days win over leftover manual Open/Closed/Hold.
+        $special = RicePriceClosing::forDate($now, $closingMarket);
+        if ($special) {
+            $message = $closingNotice['message']
+                ?? (($reason = trim((string) $special->reason)) !== '' ? ('Market closed - '.$reason) : 'Market closed');
+
+            return [
+                'currentStatus' => self::TRADE_STATUS_CLOSED,
+                'message' => $message,
+                'label' => $this->tradeStyleStatusLabel(self::TRADE_STATUS_CLOSED),
+                'mode' => 'special_closing',
+                'schedule' => $schedule,
+                'override_until' => null,
+                'special_closing' => $special->toApiArray(),
+                'closing_notice' => $closingNotice,
+            ];
+        }
 
         if (Schema::hasColumn('app_settings', $overrideStatusCol)) {
             $until = $this->{$overrideUntilCol} ?? null;
@@ -487,20 +532,25 @@ class AppSetting extends Model
                     'mode' => 'manual_override',
                     'schedule' => $schedule,
                     'override_until' => $until->timezone('Asia/Kolkata')->format('Y-m-d H:i'),
+                    'special_closing' => null,
+                    'closing_notice' => $code === self::TRADE_STATUS_OPEN ? null : $closingNotice,
                 ];
             }
         }
 
         $open = $schedule['in_window'];
         $code = $open ? self::TRADE_STATUS_OPEN : self::TRADE_STATUS_CLOSED;
+        $message = $open ? 'open' : ($closingNotice['message'] ?? 'Market closed');
 
         return [
             'currentStatus' => $code,
-            'message' => $open ? 'open' : 'Market closed',
+            'message' => $message,
             'label' => $this->tradeStyleStatusLabel($code),
-            'mode' => 'auto',
+            'mode' => $open ? 'auto' : ($closingNotice ? 'scheduled_closing_notice' : 'auto'),
             'schedule' => $schedule,
             'override_until' => null,
+            'special_closing' => null,
+            'closing_notice' => $open ? null : $closingNotice,
         ];
     }
 

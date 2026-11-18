@@ -9,9 +9,20 @@ use Illuminate\Support\Facades\Schema;
 
 class RicePriceClosing extends Model
 {
+    public const MARKET_LIVE = 'live';
+    public const MARKET_RICE_SOURCING = 'rice_sourcing';
+    public const MARKET_PADDY = 'paddy';
+
+    public const MARKETS = [
+        self::MARKET_LIVE => 'Live prices',
+        self::MARKET_RICE_SOURCING => 'Rice sourcing',
+        self::MARKET_PADDY => 'Paddy pricing',
+    ];
+
     protected $table = 'rice_price_closings';
 
     protected $fillable = [
+        'market',
         'close_date',
         'reason',
         'created_by',
@@ -26,33 +37,61 @@ class RicePriceClosing extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public static function forDate($date): ?self
+    public static function normalizeMarket(?string $market): string
+    {
+        $market = strtolower(trim((string) $market));
+        if (array_key_exists($market, self::MARKETS)) {
+            return $market;
+        }
+
+        return self::MARKET_LIVE;
+    }
+
+    public static function marketLabel(string $market): string
+    {
+        $market = self::normalizeMarket($market);
+
+        return self::MARKETS[$market] ?? 'Live prices';
+    }
+
+    public static function forDate($date, string $market = self::MARKET_LIVE): ?self
     {
         if (! Schema::hasTable('rice_price_closings')) {
             return null;
         }
 
+        $market = self::normalizeMarket($market);
         $day = $date instanceof Carbon
             ? $date->copy()->timezone('Asia/Kolkata')->toDateString()
             : Carbon::parse($date, 'Asia/Kolkata')->toDateString();
 
-        return self::query()->whereDate('close_date', $day)->first();
+        $query = self::query()->whereDate('close_date', $day);
+        if (Schema::hasColumn('rice_price_closings', 'market')) {
+            $query->where('market', $market);
+        }
+
+        return $query->first();
     }
 
     /**
      * Upcoming closings from today (IST), optionally limited.
      */
-    public static function upcoming(?int $limit = null): Collection
+    public static function upcoming(?int $limit = null, string $market = self::MARKET_LIVE): Collection
     {
         if (! Schema::hasTable('rice_price_closings')) {
             return collect();
         }
 
+        $market = self::normalizeMarket($market);
         $today = Carbon::now('Asia/Kolkata')->toDateString();
 
         $query = self::query()
             ->whereDate('close_date', '>=', $today)
             ->orderBy('close_date');
+
+        if (Schema::hasColumn('rice_price_closings', 'market')) {
+            $query->where('market', $market);
+        }
 
         if ($limit !== null) {
             $query->limit($limit);
@@ -63,17 +102,20 @@ class RicePriceClosing extends Model
 
     /**
      * Group consecutive same-reason dates into ranges.
-     * e.g. 30 Oct–2 Nov Strike, then 3–5 Nov Diwali as separate blocks.
      *
      * @return array<int, array{from:string,to:string,reason:string,message:string,display_from:string,display_to:string}>
      */
-    public static function contiguousBlocks(?Carbon $fromDate = null): array
+    public static function contiguousBlocks(?Carbon $fromDate = null, string $market = self::MARKET_LIVE): array
     {
         if (! Schema::hasTable('rice_price_closings')) {
             return [];
         }
 
+        $market = self::normalizeMarket($market);
         $query = self::query()->orderBy('close_date');
+        if (Schema::hasColumn('rice_price_closings', 'market')) {
+            $query->where('market', $market);
+        }
         if ($fromDate) {
             $query->whereDate('close_date', '>=', $fromDate->copy()->timezone('Asia/Kolkata')->toDateString());
         }
@@ -97,7 +139,6 @@ class RicePriceClosing extends Model
             $last = $blocks[$lastIndex];
             $expectedNext = Carbon::parse($last['to'], 'Asia/Kolkata')->addDay()->toDateString();
 
-            // Extend only when next calendar day AND same reason.
             if ($date === $expectedNext && $reason === $last['reason']) {
                 $blocks[$lastIndex] = self::makeBlock($last['from'], $date, $reason);
             } else {
@@ -110,12 +151,8 @@ class RicePriceClosing extends Model
 
     /**
      * Notice to show after daily market close / on closing days.
-     *
-     * - After market_to on 29th → next block starting tomorrow (30–2 strike)
-     * - During 30–2 → current strike block
-     * - After market_to on 2nd → next block (3–5 Diwali)
      */
-    public static function noticeFor(?Carbon $at = null, ?string $marketTo = null): ?array
+    public static function noticeFor(?Carbon $at = null, ?string $marketTo = null, string $market = self::MARKET_LIVE): ?array
     {
         $now = $at ? $at->copy()->timezone('Asia/Kolkata') : Carbon::now('Asia/Kolkata');
         $today = $now->toDateString();
@@ -123,7 +160,7 @@ class RicePriceClosing extends Model
         $marketTo = $marketTo ?: '18:00';
         $afterMarketClose = $now->format('H:i') > $marketTo;
 
-        $blocks = self::contiguousBlocks($now->copy()->subDays(1)->startOfDay());
+        $blocks = self::contiguousBlocks($now->copy()->subDays(1)->startOfDay(), $market);
         if ($blocks === []) {
             return null;
         }
@@ -150,8 +187,6 @@ class RicePriceClosing extends Model
 
         $current = $blockContaining($today);
 
-        // After daily close: preview the next block that starts tomorrow or later.
-        // (On last day of a range after 6pm, this surfaces the following festival/strike.)
         if ($afterMarketClose) {
             $next = $firstBlockFrom($tomorrow);
             if ($next) {
@@ -159,7 +194,6 @@ class RicePriceClosing extends Model
             }
         }
 
-        // During a special closing day (before/at market close): show that range.
         if ($current) {
             return $current;
         }
@@ -198,6 +232,9 @@ class RicePriceClosing extends Model
     {
         return [
             'id' => $this->id,
+            'market' => Schema::hasColumn('rice_price_closings', 'market')
+                ? self::normalizeMarket((string) ($this->market ?? self::MARKET_LIVE))
+                : self::MARKET_LIVE,
             'date' => $this->close_date ? $this->close_date->format('Y-m-d') : null,
             'close_date' => $this->close_date ? $this->close_date->format('Y-m-d') : null,
             'reason' => (string) $this->reason,

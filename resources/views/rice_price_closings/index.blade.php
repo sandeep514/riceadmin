@@ -1,10 +1,14 @@
 @extends('layouts.main')
 
 @section('content')
+@php
+    $market = $market ?? \App\RicePriceClosing::MARKET_LIVE;
+    $marketLabel = $marketLabel ?? \App\RicePriceClosing::marketLabel($market);
+@endphp
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            Upcoming Rice Price Closings
+            Upcoming {{ $marketLabel }} Closings
             <small>Special market closed days (festivals, strikes, etc.)</small>
         </h1>
         <ol class="breadcrumb">
@@ -15,14 +19,28 @@
     </section>
 
     <section class="content">
+        <div class="row" style="margin-bottom:15px;">
+            <div class="col-md-12">
+                <div class="btn-group">
+                    <a href="{{ route('rice-price-closings.index', ['market' => 'live', 'month' => $month]) }}"
+                       class="btn btn-sm {{ $market === 'live' ? 'btn-primary' : 'btn-default' }}">Live prices</a>
+                    <a href="{{ route('rice-price-closings.index', ['market' => 'rice_sourcing', 'month' => $month]) }}"
+                       class="btn btn-sm {{ $market === 'rice_sourcing' ? 'btn-primary' : 'btn-default' }}">Rice sourcing</a>
+                    <a href="{{ route('rice-price-closings.index', ['market' => 'paddy', 'month' => $month]) }}"
+                       class="btn btn-sm {{ $market === 'paddy' ? 'btn-primary' : 'btn-default' }}">Paddy pricing</a>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-5">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Add closing day</h3>
+                        <h3 class="box-title">Add closing day — {{ $marketLabel }}</h3>
                     </div>
                     <form method="POST" action="{{ route('rice-price-closings.store') }}">
                         @csrf
+                        <input type="hidden" name="market" value="{{ $market }}">
                         <div class="box-body">
                             <div class="form-group @error('close_date') has-error @enderror">
                                 <label>Closing date (IST)*</label>
@@ -68,6 +86,7 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Closings for {{ $monthStart->format('F Y') }}</h3>
                         <form method="GET" action="{{ route('rice-price-closings.index') }}" class="form-inline pull-right" style="margin:0;">
+                            <input type="hidden" name="market" value="{{ $market }}">
                             <input type="month" name="month" class="form-control input-sm"
                                    value="{{ $month }}" onchange="this.form.submit()">
                         </form>

@@ -82,6 +82,8 @@ class PaddyTradeCurrentStatus extends Model
             'mode' => $resolved['mode'],
             'schedule' => $resolved['schedule'],
             'override_until' => $resolved['override_until'],
+            'special_closing' => $resolved['special_closing'] ?? null,
+            'closing_notice' => $resolved['closing_notice'] ?? null,
         ];
     }
 
