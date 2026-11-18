@@ -16,15 +16,17 @@
     <section class="content">
         <div class="row">
             <div class="col-md-8">
-                <div class="box box-primary">
+
+                {{-- 1. Call Now --}}
+                <div class="box box-primary" id="call-now">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Timing Settings (Asia/Kolkata)</h3>
+                        <h3 class="box-title">1. Call Now timing</h3>
                     </div>
                     <form method="POST" action="{{ route('settings.update') }}">
                         @csrf
+                        <input type="hidden" name="section" value="call_now">
                         <div class="box-body">
-                            <h4 style="margin-top:0;">1. Call Now timing</h4>
-                            <p class="help-block">When "Call Now" is available in the app/website.</p>
+                            <p class="help-block">When "Call Now" is available in the app/website. Times are Asia/Kolkata.</p>
                             <div class="row">
                                 <div class="form-group col-md-6 @error('call_now_from') has-error @enderror">
                                     <label>From (IST)*</label>
@@ -39,16 +41,29 @@
                                     @error('call_now_to')<span class="help-block text-danger">{{ $message }}</span>@enderror
                                 </div>
                             </div>
-                            <p class="text-muted" style="margin-bottom:20px;">
+                            <p class="text-muted" style="margin-bottom:0;">
                                 Right now Call Now is
                                 <strong class="{{ !empty($callNow['is_available']) ? 'text-success' : 'text-danger' }}">
                                     {{ !empty($callNow['is_available']) ? 'AVAILABLE' : 'UNAVAILABLE' }}
                                 </strong>
                                 ({{ $callNow['from'] ?? '' }} – {{ $callNow['to'] ?? '' }} IST).
                             </p>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Save Call Now</button>
+                        </div>
+                    </form>
+                </div>
 
-                            <hr>
-                            <h4>2. Market open / close timing</h4>
+                {{-- 2. Live market --}}
+                <div class="box box-primary" id="live-market">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">2. Market open / close timing</h3>
+                    </div>
+                    <form method="POST" action="{{ route('settings.update') }}">
+                        @csrf
+                        <input type="hidden" name="section" value="live_market">
+                        <div class="box-body">
                             <p class="help-block">
                                 Always automatic from this window (open inside, closed outside).
                                 Admins can still force Open / Closed / Hold from
@@ -69,7 +84,7 @@
                                     @error('market_to')<span class="help-block text-danger">{{ $message }}</span>@enderror
                                 </div>
                             </div>
-                            <p class="text-muted">
+                            <p class="text-muted" style="margin-bottom:0;">
                                 Resolved market status now:
                                 <strong>{{ strtoupper($resolved['message'] ?? 'open') }}</strong>
                                 ({{ $resolved['mode'] ?? 'auto' }}
@@ -79,9 +94,24 @@
                                 @endif
                                 ).
                             </p>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Save Market Timing</button>
+                            <a href="{{ route('live_prices') }}" class="btn btn-default">Live Prices (manual Open/Close)</a>
+                            <a href="{{ route('rice-price-closings.index') }}" class="btn btn-warning">Upcoming Rice Price Closings</a>
+                        </div>
+                    </form>
+                </div>
 
-                            <hr>
-                            <h4>3. Rice sourcing open / close timing</h4>
+                {{-- 3. Rice sourcing --}}
+                <div class="box box-primary" id="rice-sourcing">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">3. Rice sourcing open / close timing</h3>
+                    </div>
+                    <form method="POST" action="{{ route('settings.update') }}">
+                        @csrf
+                        <input type="hidden" name="section" value="rice_sourcing">
+                        <div class="box-body">
                             <p class="help-block">
                                 Automatic open/close for rice sourcing trades.
                                 Admins can still force Open / Closed / Hold from
@@ -102,7 +132,7 @@
                                     @error('rice_sourcing_to')<span class="help-block text-danger">{{ $message }}</span>@enderror
                                 </div>
                             </div>
-                            <p class="text-muted">
+                            <p class="text-muted" style="margin-bottom:0;">
                                 Resolved rice sourcing status now:
                                 <strong>{{ strtoupper($resolvedRice['message'] ?? 'open') }}</strong>
                                 ({{ $resolvedRice['mode'] ?? 'auto' }}
@@ -112,9 +142,23 @@
                                 @endif
                                 ).
                             </p>
+                        </div>
+                        <div class="box-footer">
+                            <button type="submit" class="btn btn-primary">Save Rice Sourcing</button>
+                            <a href="{{ route('master.trade') }}" class="btn btn-default">Rice Sourcing</a>
+                        </div>
+                    </form>
+                </div>
 
-                            <hr>
-                            <h4>4. Paddy pricing open / close timing</h4>
+                {{-- 4. Paddy --}}
+                <div class="box box-primary" id="paddy-market">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">4. Paddy pricing open / close timing</h3>
+                    </div>
+                    <form method="POST" action="{{ route('settings.update') }}">
+                        @csrf
+                        <input type="hidden" name="section" value="paddy_market">
+                        <div class="box-body">
                             <p class="help-block">
                                 Automatic open/close for paddy pricing / paddy trades.
                                 Admins can still force Open / Closed / Hold from
@@ -135,7 +179,7 @@
                                     @error('paddy_market_to')<span class="help-block text-danger">{{ $message }}</span>@enderror
                                 </div>
                             </div>
-                            <p class="text-muted">
+                            <p class="text-muted" style="margin-bottom:0;">
                                 Resolved paddy market status now:
                                 <strong>{{ strtoupper($resolvedPaddy['message'] ?? 'open') }}</strong>
                                 ({{ $resolvedPaddy['mode'] ?? 'auto' }}
@@ -147,14 +191,12 @@
                             </p>
                         </div>
                         <div class="box-footer">
-                            <button type="submit" class="btn btn-primary">Save Settings</button>
-                            <a href="{{ route('live_prices') }}" class="btn btn-default">Live Prices (manual Open/Close)</a>
-                            <a href="{{ route('master.trade') }}" class="btn btn-default">Rice Sourcing</a>
+                            <button type="submit" class="btn btn-primary">Save Paddy Timing</button>
                             <a href="{{ route('list.paddy.trades') }}" class="btn btn-default">Paddy Trades</a>
-                            <a href="{{ route('rice-price-closings.index') }}" class="btn btn-warning">Upcoming Rice Price Closings</a>
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
     </section>

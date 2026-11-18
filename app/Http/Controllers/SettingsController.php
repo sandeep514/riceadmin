@@ -11,6 +11,8 @@ use Session;
 
 class SettingsController extends Controller
 {
+    private const TIME_RULE = ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'];
+
     public function index()
     {
         $settings = AppSetting::current();
@@ -30,58 +32,99 @@ class SettingsController extends Controller
 
     public function update(Request $request)
     {
-        $rules = [
-            'call_now_from' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'call_now_to' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'market_from' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'market_to' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'rice_sourcing_from' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'rice_sourcing_to' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'paddy_market_from' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
-            'paddy_market_to' => ['required', 'regex:/^([01]?\d|2[0-3]):[0-5]\d$/'],
+        $section = (string) $request->input('section', 'all');
+
+        $sections = [
+            'call_now' => [
+                'fields' => ['call_now_from', 'call_now_to'],
+                'messages' => [
+                    'call_now_from.regex' => 'Call Now From must be HH:MM (24h IST).',
+                    'call_now_to.regex' => 'Call Now To must be HH:MM (24h IST).',
+                ],
+                'label' => 'Call Now timing',
+                'anchor' => 'call-now',
+                'bust_prices' => false,
+            ],
+            'live_market' => [
+                'fields' => ['market_from', 'market_to'],
+                'messages' => [
+                    'market_from.regex' => 'Market From must be HH:MM (24h IST).',
+                    'market_to.regex' => 'Market To must be HH:MM (24h IST).',
+                ],
+                'label' => 'Market open / close timing',
+                'anchor' => 'live-market',
+                'bust_prices' => true,
+            ],
+            'rice_sourcing' => [
+                'fields' => ['rice_sourcing_from', 'rice_sourcing_to'],
+                'messages' => [
+                    'rice_sourcing_from.regex' => 'Rice sourcing From must be HH:MM (24h IST).',
+                    'rice_sourcing_to.regex' => 'Rice sourcing To must be HH:MM (24h IST).',
+                ],
+                'label' => 'Rice sourcing timing',
+                'anchor' => 'rice-sourcing',
+                'bust_prices' => false,
+                'requires_columns' => ['rice_sourcing_from', 'rice_sourcing_to'],
+            ],
+            'paddy_market' => [
+                'fields' => ['paddy_market_from', 'paddy_market_to'],
+                'messages' => [
+                    'paddy_market_from.regex' => 'Paddy market From must be HH:MM (24h IST).',
+                    'paddy_market_to.regex' => 'Paddy market To must be HH:MM (24h IST).',
+                ],
+                'label' => 'Paddy pricing timing',
+                'anchor' => 'paddy-market',
+                'bust_prices' => false,
+                'requires_columns' => ['paddy_market_from', 'paddy_market_to'],
+            ],
         ];
 
-        $messages = [
-            'call_now_from.regex' => 'Call Now From must be HH:MM (24h IST).',
-            'call_now_to.regex' => 'Call Now To must be HH:MM (24h IST).',
-            'market_from.regex' => 'Market From must be HH:MM (24h IST).',
-            'market_to.regex' => 'Market To must be HH:MM (24h IST).',
-            'rice_sourcing_from.regex' => 'Rice sourcing From must be HH:MM (24h IST).',
-            'rice_sourcing_to.regex' => 'Rice sourcing To must be HH:MM (24h IST).',
-            'paddy_market_from.regex' => 'Paddy market From must be HH:MM (24h IST).',
-            'paddy_market_to.regex' => 'Paddy market To must be HH:MM (24h IST).',
-        ];
+        if (! isset($sections[$section])) {
+            Session::flash('error', 'Error|Unknown settings section.');
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+            return redirect()->route('settings.index');
+        }
 
+        $config = $sections[$section];
+
+        if (! empty($config['requires_columns'])) {
+            foreach ($config['requires_columns'] as $col) {
+                if (! Schema::hasColumn('app_settings', $col)) {
+                    Session::flash('error', 'Error|Please run the latest migration before saving '.$config['label'].'.');
+
+                    return redirect()->route('settings.index')->withFragment($config['anchor']);
+                }
+            }
+        }
+
+        $rules = [];
+        foreach ($config['fields'] as $field) {
+            $rules[$field] = self::TIME_RULE;
+        }
+
+        $validator = Validator::make($request->all(), $rules, $config['messages']);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+            return redirect()
+                ->route('settings.index')
+                ->withFragment($config['anchor'])
+                ->withErrors($validator)
+                ->withInput();
         }
 
-        $settings = AppSetting::current();
-        $payload = [
-            'call_now_from' => $this->padTime($request->input('call_now_from')),
-            'call_now_to' => $this->padTime($request->input('call_now_to')),
-            'market_from' => $this->padTime($request->input('market_from')),
-            'market_to' => $this->padTime($request->input('market_to')),
-        ];
-
-        if (Schema::hasColumn('app_settings', 'rice_sourcing_from')) {
-            $payload['rice_sourcing_from'] = $this->padTime($request->input('rice_sourcing_from'));
-            $payload['rice_sourcing_to'] = $this->padTime($request->input('rice_sourcing_to'));
-        }
-        if (Schema::hasColumn('app_settings', 'paddy_market_from')) {
-            $payload['paddy_market_from'] = $this->padTime($request->input('paddy_market_from'));
-            $payload['paddy_market_to'] = $this->padTime($request->input('paddy_market_to'));
+        $payload = [];
+        foreach ($config['fields'] as $field) {
+            $payload[$field] = $this->padTime((string) $request->input($field));
         }
 
-        $settings->update($payload);
+        AppSetting::current()->update($payload);
 
-        Cache::increment('web:prices:version');
+        if (! empty($config['bust_prices'])) {
+            Cache::increment('web:prices:version');
+        }
 
-        Session::flash('success', 'Success|Settings saved successfully.');
+        Session::flash('success', 'Success|'.$config['label'].' saved successfully.');
 
-        return redirect()->route('settings.index');
+        return redirect()->route('settings.index')->withFragment($config['anchor']);
     }
 
     private function padTime(string $value): string
