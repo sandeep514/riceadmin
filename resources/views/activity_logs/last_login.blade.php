@@ -81,7 +81,7 @@
                                             </td>
                                             <td style="text-align:center;">
                                                 {{ $user->getWebBusinessDetails->getCategoryDetails->category
-                                                    ?? ($user->bagVendor->category ?? '--') }}
+                                                    ?? ($user->bagVendor->name ?? '--') }}
                                             </td>
                                             <td style="text-align:center;">{{ $activePlatform ?: '--' }}</td>
                                             <td style="text-align:center;">

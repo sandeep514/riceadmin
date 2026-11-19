@@ -196,10 +196,10 @@ class ActivityLogController extends Controller
             ->orderBy('category')
             ->get(['id', 'category']);
 
-        // App bag categories (vendorcategory) — merge into filter list by id/name if distinct.
+        // App bag categories (vendorcategory uses `name`).
         $bagCategories = Vendorcategory::query()
-            ->orderBy('category')
-            ->get(['id', 'category']);
+            ->orderBy('name')
+            ->get(['id', 'name']);
 
         $sources = self::SOURCE_OPTIONS;
 
@@ -234,11 +234,12 @@ class ActivityLogController extends Controller
     private function userListRelations(): array
     {
         return [
-            'role_rel:id,role_name,type',
-            'role_rel_usd:id,role_name,type',
-            'bagVendor:id,category',
+            'role_rel',
+            'role_rel_usd',
+            // vendorcategory column is `name` (not category)
+            'bagVendor',
             'getWebBusinessDetails' => function ($q) {
-                $q->with(['getCategoryDetails:id,category']);
+                $q->with(['getCategoryDetails']);
             },
         ];
     }

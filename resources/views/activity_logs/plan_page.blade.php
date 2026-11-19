@@ -74,7 +74,7 @@
                                             </td>
                                             <td style="text-align:center;">
                                                 {{ $user->getWebBusinessDetails->getCategoryDetails->category
-                                                    ?? ($user->bagVendor->category ?? '--') }}
+                                                    ?? ($user->bagVendor->name ?? '--') }}
                                             </td>
                                             <td style="text-align:center;">{{ $user->visit_count ?? 0 }}</td>
                                             <td style="text-align:center;">

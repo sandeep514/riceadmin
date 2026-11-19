@@ -65,7 +65,7 @@
                                         <optgroup label="App bag categories">
                                             @foreach($bagCategories as $category)
                                                 <option value="{{ $category->id }}" {{ (string) ($categoryId ?? '') === (string) $category->id ? 'selected' : '' }}>
-                                                    {{ $category->category }}
+                                                    {{ $category->name ?? $category->category ?? ('#'.$category->id) }}
                                                 </option>
                                             @endforeach
                                         </optgroup>
@@ -110,7 +110,7 @@
                                             </td>
                                             <td style="text-align:center;">
                                                 {{ $user->getWebBusinessDetails->getCategoryDetails->category
-                                                    ?? ($user->bagVendor->category ?? '--') }}
+                                                    ?? ($user->bagVendor->name ?? '--') }}
                                             </td>
                                             <td style="text-align:center;">
                                                 @if((int) ($user->is_deactivated ?? 0) === 1 && (int) ($user->is_active_by_admin ?? 0) === 0)
