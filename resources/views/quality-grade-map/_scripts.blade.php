@@ -10,7 +10,49 @@ $(function(){
     }
     initSelect2('#rice_name_id', 'Select quality');
     initSelect2('#form_id', 'Select form');
-    initSelect2('#wand_ids', 'Select grades');
+
+    function clearWandGrid(message) {
+        $('#wand_grade_grid').html(
+            '<p class="text-muted" id="wand_grade_placeholder" style="margin:8px 0;">' +
+            (message || 'Select a quality to load grades.') +
+            '</p>'
+        );
+    }
+
+    function syncCardState($input) {
+        $input.closest('.wand-grade-card').toggleClass('is-checked', $input.is(':checked'));
+    }
+
+    function loadWands(riceNameId, preselect) {
+        clearWandGrid('Loading grades…');
+        if (!riceNameId) {
+            clearWandGrid();
+            return;
+        }
+        var selected = (preselect || []).map(String);
+        $.get(wandsUrl.replace(':riceNameId', riceNameId), function(data) {
+            var $grid = $('#wand_grade_grid').empty();
+            var count = 0;
+            $.each(data, function(id, label) {
+                count++;
+                var checked = selected.indexOf(String(id)) !== -1 ? ' checked' : '';
+                var activeClass = checked ? ' is-checked' : '';
+                $grid.append(
+                    '<div class="wand-grade-item">' +
+                        '<label class="wand-grade-card' + activeClass + '" title="' + $('<div>').text(label).html() + '">' +
+                            '<input type="checkbox" name="wand_ids[]" value="' + id + '"' + checked + '> ' +
+                            $('<div>').text(label).html() +
+                        '</label>' +
+                    '</div>'
+                );
+            });
+            if (!count) {
+                clearWandGrid('No grades found for this quality.');
+            }
+        }).fail(function() {
+            clearWandGrid('Could not load grades. Try again.');
+        });
+    }
 
     $.get(formsUrl.replace(':type', 'all'), function(data) {
         var currentForm = $('#form_id').val();
@@ -23,25 +65,10 @@ $(function(){
         }
     });
 
-    function loadWands(riceNameId, preselect) {
-        $('#wand_ids').val(null).trigger('change').empty();
-        if (!riceNameId) {
-            return;
-        }
-        $.get(wandsUrl.replace(':riceNameId', riceNameId), function(data) {
-            $.each(data, function(id, label) {
-                $('#wand_ids').append('<option value="' + id + '">' + label + '</option>');
-            });
-            if (preselect && preselect.length) {
-                $('#wand_ids').val(preselect.map(String)).trigger('change');
-            }
-        });
-    }
-
     $('#quality_type').on('change', function() {
         var type = $(this).val();
         $('#rice_name_id').val(null).trigger('change');
-        $('#wand_ids').val(null).trigger('change').empty();
+        clearWandGrid();
         $('#rice_name_id').empty().append('<option value="">-- Select quality --</option>');
         if (!type) {
             return;
@@ -58,14 +85,19 @@ $(function(){
         loadWands($(this).val(), []);
     });
 
+    $(document).on('change', '#wand_grade_grid input[type="checkbox"]', function() {
+        syncCardState($(this));
+    });
+
     $(document).on('click', '#wand_check_all', function() {
-        var allIds = $('#wand_ids option').map(function() {
-            return this.value ? String(this.value) : null;
-        }).get();
-        $('#wand_ids').val(allIds).trigger('change');
+        $('#wand_grade_grid input[type="checkbox"]').prop('checked', true).each(function() {
+            syncCardState($(this));
+        });
     });
     $(document).on('click', '#wand_uncheck_all', function() {
-        $('#wand_ids').val(null).trigger('change');
+        $('#wand_grade_grid input[type="checkbox"]').prop('checked', false).each(function() {
+            syncCardState($(this));
+        });
     });
 
     if ($('#quality_type').val() && !$('#rice_name_id option:selected').val()) {

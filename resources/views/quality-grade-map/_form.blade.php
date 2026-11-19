@@ -49,17 +49,17 @@
     </div>
 
     <div class="row">
-        <div class="form-group col-md-8 @error('wand_ids') has-error @enderror">
-            <label for="wand_ids" style="display:block;">
+        <div class="form-group col-md-12 @error('wand_ids') has-error @enderror">
+            <label style="display:block;">
                 Grades (Wands)
                 <span class="pull-right">
                     <button type="button" id="wand_check_all" class="btn btn-xs btn-default">Check All</button>
                     <button type="button" id="wand_uncheck_all" class="btn btn-xs btn-default">Uncheck All</button>
                 </span>
             </label>
-            <select name="wand_ids[]" id="wand_ids" class="form-control select2" multiple="multiple">
-                <option value="">-- Select quality first --</option>
-            </select>
+            <div id="wand_grade_grid" class="wand-grade-grid">
+                <p class="text-muted" id="wand_grade_placeholder" style="margin:8px 0;">Select a quality to load grades.</p>
+            </div>
             <p class="help-block">Select one or more wand grades for this quality + form (e.g. 4 Wands, 2 Short Wands).</p>
             @error('wand_ids')
                 <span class="help-block text-danger">{{ $message }}</span>
@@ -71,3 +71,60 @@
     </div>
 
 </div>
+
+<style>
+    .wand-grade-grid {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -6px;
+        min-height: 48px;
+        border: 1px solid #d2d6de;
+        border-radius: 3px;
+        padding: 10px 4px 4px;
+        background: #fafafa;
+    }
+    .wand-grade-grid .wand-grade-item {
+        flex: 0 0 20%;
+        max-width: 20%;
+        padding: 0 6px 10px;
+        box-sizing: border-box;
+    }
+    .wand-grade-grid .wand-grade-card {
+        display: block;
+        margin: 0;
+        padding: 10px 12px;
+        background: #fff;
+        border: 1px solid #d2d6de;
+        border-radius: 3px;
+        cursor: pointer;
+        font-weight: normal;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: border-color .15s, background .15s;
+    }
+    .wand-grade-grid .wand-grade-card:hover {
+        border-color: #3c8dbc;
+    }
+    .wand-grade-grid .wand-grade-card.is-checked {
+        border-color: #3c8dbc;
+        background: #eaf4fb;
+    }
+    .wand-grade-grid .wand-grade-card input {
+        margin-right: 6px;
+        vertical-align: middle;
+    }
+    @media (max-width: 991px) {
+        .wand-grade-grid .wand-grade-item {
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+        }
+    }
+    @media (max-width: 767px) {
+        .wand-grade-grid .wand-grade-item {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+</style>
+
