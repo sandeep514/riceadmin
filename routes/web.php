@@ -228,6 +228,17 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::delete('avg-length-map/delete/{id}', ['as' => 'delete.avg-length-map', 'uses' => 'AvgLengthMapController@delete', 'action' => 'delete']);
             });
 
+            // Quality Grade Map (quality + form → wand grades)
+            Route::group(['module' => 'quality_grade_map', 'icon' => 'fa-random'], function () {
+                Route::get('quality-grade-map', ['as' => 'quality-grade-map', 'uses' => 'QualityGradeMapController@index', 'action' => 'view']);
+                Route::get('quality-grade-map/create', ['as' => 'create.quality-grade-map', 'uses' => 'QualityGradeMapController@create', 'action' => 'create']);
+                Route::post('quality-grade-map/save', ['as' => 'save.quality-grade-map', 'uses' => 'QualityGradeMapController@save', 'action' => 'create']);
+                Route::get('quality-grade-map/edit/{id}', ['as' => 'edit.quality-grade-map', 'uses' => 'QualityGradeMapController@edit', 'action' => 'edit']);
+                Route::put('quality-grade-map/update/{id}', ['as' => 'update.quality-grade-map', 'uses' => 'QualityGradeMapController@update', 'action' => 'edit']);
+                Route::delete('quality-grade-map/delete/{id}', ['as' => 'delete.quality-grade-map', 'uses' => 'QualityGradeMapController@delete', 'action' => 'delete']);
+            });
+
+
             // Vendor Flow — Spec For master
             Route::group(['module' => 'vendor_spec_for', 'icon' => 'fa-tags'], function () {
                 Route::get('vendor-flow/spec-for', ['as' => 'vendor-spec-fors', 'uses' => 'VendorSpecForController@index', 'action' => 'view']);

@@ -374,6 +374,12 @@
                     <span>Wands</span>
                 </a>
             </li>
+            <li class="{{ in_array($currentRoute, ['quality-grade-map', 'create.quality-grade-map', 'edit.quality-grade-map'], true) ? 'active' : '' }}">
+                <a href="{{ route('quality-grade-map') }}">
+                    <i class="fa fa-random"></i>
+                    <span>Quality Grade Map</span>
+                </a>
+            </li>
             <li class="{{ (in_array($currentRoute,['master.list.sell.queries.INR']))?'active':'' }}">
                 <a href="{{ route('master.list.sell.queries.INR') }}">
                     <i class="fa fa-address-card-o"></i> 
