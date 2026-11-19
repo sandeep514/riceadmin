@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\FutureSellQueriesINR;
 use App\QualityGradeMap;
 use App\RiceFormMilestone3;
 use App\RiceName;
+use App\SellQueriesINR;
+use App\TradeQueriesINR;
+use App\WandModel;
 use Illuminate\Http\Request;
 use Session;
 
@@ -128,5 +132,83 @@ class QualityGradeMapController extends Controller
         }
 
         return $q->exists();
+    }
+
+    /**
+     * Distinct wand grades already used on trades / sell queries
+     * for the selected quality (rice name) + form.
+     */
+    public function usedWands(Request $request)
+    {
+        $request->validate([
+            'rice_name_id' => 'required|integer|exists:rice_names,id',
+            'form_id' => 'required|integer|exists:rice_form_milestone3,id',
+        ]);
+
+        $riceNameId = (int) $request->rice_name_id;
+        $formId = (int) $request->form_id;
+
+        $wandIds = collect()
+            ->merge(
+                TradeQueriesINR::query()
+                    ->where('quality', $riceNameId)
+                    ->where('qualityForm', $formId)
+                    ->whereNotNull('grade')
+                    ->where('grade', '>', 0)
+                    ->distinct()
+                    ->pluck('grade')
+            )
+            ->merge(
+                SellQueriesINR::query()
+                    ->where('quality', $riceNameId)
+                    ->where('qualityForm', $formId)
+                    ->whereNotNull('grade')
+                    ->where('grade', '>', 0)
+                    ->distinct()
+                    ->pluck('grade')
+            )
+            ->merge(
+                FutureSellQueriesINR::query()
+                    ->where('quality', $riceNameId)
+                    ->where('quality_form', $formId)
+                    ->whereNotNull('grade')
+                    ->where('grade', '>', 0)
+                    ->distinct()
+                    ->pluck('grade')
+            )
+            ->map(function ($id) {
+                return (int) $id;
+            })
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($wandIds->isEmpty()) {
+            return response()->json([
+                'count' => 0,
+                'wands' => [],
+            ]);
+        }
+
+        $wands = WandModel::with('getWandType')
+            ->whereIn('id', $wandIds->all())
+            ->orderBy('order')
+            ->get()
+            ->map(function ($wand) {
+                $label = $wand->getWandType
+                    ? $wand->getWandType->type.' - '.$wand->value
+                    : $wand->value;
+
+                return [
+                    'id' => $wand->id,
+                    'label' => $label,
+                ];
+            })
+            ->values();
+
+        return response()->json([
+            'count' => $wands->count(),
+            'wands' => $wands,
+        ]);
     }
 }

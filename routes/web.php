@@ -236,6 +236,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::get('quality-grade-map/edit/{id}', ['as' => 'edit.quality-grade-map', 'uses' => 'QualityGradeMapController@edit', 'action' => 'edit']);
                 Route::put('quality-grade-map/update/{id}', ['as' => 'update.quality-grade-map', 'uses' => 'QualityGradeMapController@update', 'action' => 'edit']);
                 Route::delete('quality-grade-map/delete/{id}', ['as' => 'delete.quality-grade-map', 'uses' => 'QualityGradeMapController@delete', 'action' => 'delete']);
+                Route::get('quality-grade-map/ajax/used-wands', ['as' => 'ajax.quality-grade-map.used-wands', 'uses' => 'QualityGradeMapController@usedWands', 'action' => 'view']);
             });
 
 
