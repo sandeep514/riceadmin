@@ -1,5 +1,10 @@
 @extends('layouts.main')
 @section('content')
+@php
+    $stage = $stage ?? 'all';
+    $stageTabs = $stageTabs ?? ['all' => 'All'];
+    $stageCounts = $stageCounts ?? [];
+@endphp
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -22,6 +27,7 @@
                         </div>
                         <div style="padding: 10px">
                             <form method="GET" action="{{ route('web.user') }}" class="form-inline" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+                                <input type="hidden" name="stage" value="{{ $stage }}">
                                 <div class="form-group">
                                     <label for="from" style="margin-right:5px">Joined From</label>
                                     <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">
@@ -31,13 +37,43 @@
                                     <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                <a href="{{ route('web.user') }}" class="btn btn-default btn-sm">Clear</a>
-                                <a href="{{ request()->fullUrlWithQuery(['from' => $from ?? '', 'to' => $to ?? '', 'export' => 'csv']) }}" class="btn btn-success btn-sm">
-                                    <i class="fa fa-download"></i> Export CSV (Full)
+                                <a href="{{ route('web.user', ['stage' => $stage]) }}" class="btn btn-default btn-sm">Clear dates</a>
+                                <a href="{{ request()->fullUrlWithQuery(['from' => $from ?? '', 'to' => $to ?? '', 'stage' => $stage, 'export' => 'csv']) }}" class="btn btn-success btn-sm">
+                                    <i class="fa fa-download"></i> Export CSV
                                 </a>
                             </form>
                         </div>
-                        <a href="{{ route('mark.as.viewed') }}" class="btn btn-success btn-sm">Mark as viewed</a>
+
+                        <div style="padding: 0 10px 10px;">
+                            <ul class="nav nav-pills" style="display:flex;flex-wrap:wrap;gap:6px;">
+                                @foreach($stageTabs as $key => $label)
+                                    @php
+                                        $count = (int) ($stageCounts[$key] ?? 0);
+                                        $isActive = $stage === $key;
+                                        $pillClass = $isActive ? 'btn-primary' : 'btn-default';
+                                    @endphp
+                                    <li class="{{ $isActive ? 'active' : '' }}" style="float:none;">
+                                        <a href="{{ route('web.user', array_filter(['stage' => $key, 'from' => $from ?? null, 'to' => $to ?? null])) }}"
+                                           class="btn btn-sm {{ $pillClass }}"
+                                           style="border-radius:16px;margin:0;">
+                                            {{ $label }}
+                                            <span class="badge" style="margin-left:4px;background:{{ $isActive ? 'rgba(255,255,255,0.25)' : '#777' }};">{{ $count }}</span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <p class="text-muted" style="margin:8px 0 0;">
+                                Showing <strong>{{ $vendorUsers->count() }}</strong> user(s)
+                                @if($stage !== 'all')
+                                    in <strong>{{ $stageTabs[$stage] ?? $stage }}</strong>
+                                @endif
+                                .
+                            </p>
+                        </div>
+
+                        <div style="padding: 0 10px 10px;">
+                            <a href="{{ route('mark.as.viewed') }}" class="btn btn-success btn-sm">Mark as viewed</a>
+                        </div>
                         <!-- /.box-header -->
                         <div class="box-body">
                             <div class="table-responsive">
@@ -53,19 +89,17 @@
                                             <th style="text-align: center">SNTC Recommended</th>
                                             <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
-                                            <!-- <th style="text-align: center">country</th> -->
-                                            <!-- <th style="text-align: center">Bag Vendor</th> -->
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        @foreach($vendorUsers as $k => $v)
+                                        @forelse($vendorUsers as $k => $v)
                                             <tr>
                                                 <td style="text-align: center">
                                                     @if( $v->is_viewed_by_admin == 0 )
                                                         <img src="{{ asset('new-icon.png') }}" style="width: 45px">
                                                     @endif
-                                                    
+
                                                     {{ $v->name ?? '--' }}</td>
                                                 <td style="text-align: center">{{ $v->email ?? '--' }}</td>
                                                 <td style="text-align: center">{{ $v->phone ?: $v->mobile }}</td>
@@ -119,12 +153,14 @@
                                                         <a href="{{ route('list.web.change.status.user', $v->id) }}" class="btn btn-danger btn-xs" onclick="return confirm('De-activate this user?');">De-Activate</a>
                                                     @endif
                                                 </td>
-                                                <!-- <td style="text-align: center">{{ $v->country  }}</td> -->
-                                                <!-- {{-- <td style="text-align: center">{{ $v->bagVendor->name  }}</td> --}} -->
                                             </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="9" class="text-center text-muted">No users in this onboarding stage.</td>
+                                            </tr>
+                                        @endforelse
                                     </tbody>
-                                    
+
                                     <tfoot>
                                         <tr>
                                             <th style="text-align: center">Name</th>
@@ -136,8 +172,6 @@
                                             <th style="text-align: center">SNTC Recommended</th>
                                             <th style="text-align: center">Status </th>
                                             <th style="text-align: center">Action </th>
-                                            <!-- <th style="text-align: center">country</th> -->
-                                            <!-- <th style="text-align: center">Bag Vendor</th> -->
                                         </tr>
                                     </tfoot>
                                 </table>

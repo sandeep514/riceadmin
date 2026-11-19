@@ -669,19 +669,54 @@ class UsersController extends Controller
         $from = trim((string) $request->get('from'));
         $to = trim((string) $request->get('to'));
         $export = $request->get('export');
+        $stage = $this->normalizeWebOnboardingStageKey($request->get('stage'));
 
         $vendorUsers = $this->webUserQuery($from, $to);
 
-        // Full CSV export (ignores pagination), filtered the same way as the screen.
-        if ($export === 'csv') {
-            return $this->exportWebUsersCsv($vendorUsers, $from, $to);
-        }
-
         foreach ($vendorUsers as $user) {
-            $user->setAttribute('onboarding_stage', $this->webUserOnboardingStage($user));
+            $label = $this->webUserOnboardingStage($user);
+            $user->setAttribute('onboarding_stage', $label);
+            $user->setAttribute('onboarding_stage_key', $this->webOnboardingStageKeyFromLabel($label));
         }
 
-        return view('users.webUser' , compact('vendorUsers', 'from', 'to'));
+        $stageCounts = [
+            'all' => $vendorUsers->count(),
+            'otp' => 0,
+            'profile' => 0,
+            'documents' => 0,
+            'trial' => 0,
+            'paid' => 0,
+        ];
+        foreach ($vendorUsers as $user) {
+            $key = (string) ($user->onboarding_stage_key ?? 'otp');
+            if (array_key_exists($key, $stageCounts)) {
+                $stageCounts[$key]++;
+            }
+        }
+
+        // Full CSV export (same date filter; respects active stage tab when set).
+        if ($export === 'csv') {
+            $exportUsers = $stage === 'all'
+                ? $vendorUsers
+                : $vendorUsers->where('onboarding_stage_key', $stage)->values();
+
+            return $this->exportWebUsersCsv($exportUsers, $from, $to);
+        }
+
+        if ($stage !== 'all') {
+            $vendorUsers = $vendorUsers->where('onboarding_stage_key', $stage)->values();
+        }
+
+        $stageTabs = $this->webOnboardingStageTabs();
+
+        return view('users.webUser', compact(
+            'vendorUsers',
+            'from',
+            'to',
+            'stage',
+            'stageCounts',
+            'stageTabs'
+        ));
     }
 
     private function webUserQuery(string $from, string $to)
@@ -782,6 +817,50 @@ class UsersController extends Controller
         }
 
         return 'OTP login only';
+    }
+
+    /**
+     * @return array<string, string> key => label
+     */
+    private function webOnboardingStageTabs(): array
+    {
+        return [
+            'all' => 'All',
+            'otp' => 'OTP login only',
+            'profile' => 'Profile completed',
+            'documents' => 'Documents uploaded',
+            'trial' => 'Trial started',
+            'paid' => 'Paid plan',
+        ];
+    }
+
+    private function normalizeWebOnboardingStageKey($stage): string
+    {
+        $stage = strtolower(trim((string) $stage));
+        $tabs = $this->webOnboardingStageTabs();
+
+        return array_key_exists($stage, $tabs) ? $stage : 'all';
+    }
+
+    private function webOnboardingStageKeyFromLabel(string $label): string
+    {
+        if ($label === 'OTP login only') {
+            return 'otp';
+        }
+        if ($label === 'Profile completed') {
+            return 'profile';
+        }
+        if ($label === 'Documents uploaded') {
+            return 'documents';
+        }
+        if ($label === 'Trial started') {
+            return 'trial';
+        }
+        if (str_starts_with($label, 'Paid plan')) {
+            return 'paid';
+        }
+
+        return 'otp';
     }
 
     public function markAsViewed()
