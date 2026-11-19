@@ -77,6 +77,7 @@ use App\WebPersonalDetails;
 use App\WebCities;
 use App\WebStates;
 use App\WebUserAttachment;
+use App\PlanPageVisit;
 use App\WebPlanModel;
 use App\WebPlanKeysModel;
 use App\WebUserSubscriptionModel;
@@ -765,6 +766,7 @@ class PortalApiController extends Controller
         $userId = (int) $user->id;
         $platform = $this->resolveLoginPlatform($request);
         $token = $this->generateAndStoreApiToken($userId, $platform);
+        $user->recordLastLogin($platform);
         auth('web')->login($user);
         $request->session()->save();
 
@@ -1597,6 +1599,8 @@ class PortalApiController extends Controller
 
     public function getPlans()
     {
+        PlanPageVisit::recordFromRequest(request());
+
         $webKeys = WebPlanKeysModel::select(["id","key","status","order_no"])
             ->where(['status'  =>  1])
             ->orderByRaw('order_no IS NULL, order_no ASC')
@@ -1982,6 +1986,8 @@ class PortalApiController extends Controller
 
         $roleId = (int) $request->role;
         $categoryId = (int) $request->category;
+
+        PlanPageVisit::recordFromRequest($request, $roleId, $categoryId);
 
         $webKeys = WebPlanKeysModel::select(['id', 'key', 'status', 'order_no'])
             ->where('status', 1)

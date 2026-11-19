@@ -1149,4 +1149,8 @@ Route::group(['prefix'=>'administrator'], function(){
     Route::get('web/users' , ['as' => 'web.user' , 'uses' => 'UsersController@webusers']);
     Route::get('mark/as/viewed' , ['as' => 'mark.as.viewed' , 'uses' => 'UsersController@markAsViewed']);
 
+    Route::get('activity/last-login-users', ['as' => 'activity.last-login-users', 'uses' => 'ActivityLogController@lastLoginUsers']);
+    Route::get('activity/plan-page', ['as' => 'activity.plan-page', 'uses' => 'ActivityLogController@planPageUsers']);
+    Route::get('activity/new-users', ['as' => 'activity.new-users', 'uses' => 'ActivityLogController@newUsers']);
+
 });

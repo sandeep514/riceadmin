@@ -353,6 +353,8 @@ class ApiController extends Controller
      */
     private function appLoginSuccessResponse(User $user, string $token)
     {
+        $user->recordLastLogin('mobile');
+
         $userArr = $user->toArray();
         $sessionVersion = (int) ($user->session_version ?? 0);
         $userArr['api_token'] = $token;

@@ -284,7 +284,7 @@ class AnalyserController extends Controller
 
         return Role::create([
             'role_name' => AnalyserAccount::ROLE_NAME,
-            'type' => AnalyserAccount::ROLE_TYPE,
+            'type' => AnalyserAccount::ROLE_TYPE, // web — eligible for push v2 / portal notifications
         ]);
     }
 

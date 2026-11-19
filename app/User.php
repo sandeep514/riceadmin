@@ -56,7 +56,9 @@ class User extends Authenticatable
         'userType',
         'can_edit_by_admin',
         'stripe_customer_id',
-        'stripe_payment_method'
+        'stripe_payment_method',
+        'last_login_at',
+        'last_login_platform',
     ];
 
     public function routeNotificationForFcm()
@@ -129,7 +131,30 @@ class User extends Authenticatable
         'can_edit_by_admin' => 'integer',
         'is_deactivated' => 'integer',
         'session_version' => 'integer',
+        'last_login_at' => 'datetime',
     ];
+
+    /**
+     * Stamp last login for portal / app activity logs.
+     */
+    public function recordLastLogin(?string $platform = null): void
+    {
+        if (! self::usersTableHasColumn('last_login_at')) {
+            return;
+        }
+
+        $payload = [
+            'last_login_at' => Carbon::now('Asia/Kolkata'),
+        ];
+        if (self::usersTableHasColumn('last_login_platform')) {
+            $payload['last_login_platform'] = $platform
+                ? strtolower(trim($platform))
+                : null;
+        }
+
+        self::where('id', $this->id)->update($payload);
+        $this->fill($payload);
+    }
 
     /** Cached Schema::hasColumn results — information_schema lookups are slow, never run them per-request. */
     private static array $columnExistsCache = [];

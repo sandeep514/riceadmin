@@ -784,6 +784,30 @@
                     <span style="display: inline-flex;">Web Users &nbsp; <div style="background: white; height: 10px;width: 10px;border-radius: 100px;display: none;" id="hasNewUser"></div></span>
                 </a>
             </li>
+            <li class="treeview {{ in_array($currentRoute, [
+                'activity.last-login-users',
+                'activity.plan-page',
+                'activity.new-users',
+            ], true) ? 'active' : '' }}">
+                <a href="javascript:void(0)">
+                    <i class="fa fa-history"></i>
+                    <span>Activity Logs</span>
+                    <span class="pull-right-container">
+                        <i class="fa fa-angle-left pull-right"></i>
+                    </span>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ $currentRoute === 'activity.last-login-users' ? 'active' : '' }}">
+                        <a href="{{ route('activity.last-login-users') }}"><i class="fa fa-circle-o"></i> Last Login Users</a>
+                    </li>
+                    <li class="{{ $currentRoute === 'activity.plan-page' ? 'active' : '' }}">
+                        <a href="{{ route('activity.plan-page') }}"><i class="fa fa-circle-o"></i> Plan Page</a>
+                    </li>
+                    <li class="{{ $currentRoute === 'activity.new-users' ? 'active' : '' }}">
+                        <a href="{{ route('activity.new-users') }}"><i class="fa fa-circle-o"></i> New Users</a>
+                    </li>
+                </ul>
+            </li>
             <li class="{{ ($currentRoute == 'user-interests')?'active':'' }}">
                 <a href="{{ route('user-interests') }}">
                     <i class="fa fa-heart-o"></i>

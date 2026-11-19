@@ -13,11 +13,12 @@ class RoleCategoryMapController extends Controller
 {
     public function index(Request $request)
     {
-        // Include Data Analyst so admin can map categories used by Data Analyst accounts.
+        // Portal web roles (includes Data Analyst now that its type is web).
+        // Also keep legacy type=analyser / name aliases if any still exist.
         $roles = Role::query()
             ->where(function ($q) {
-                $q->where('type', 'web')
-                    ->orWhere('type', \App\AnalyserAccount::ROLE_TYPE);
+                $q->whereRaw('LOWER(TRIM(type)) = ?', ['web'])
+                    ->orWhereRaw('LOWER(TRIM(type)) = ?', ['analyser']);
                 foreach (\App\AnalyserAccount::roleNameAliases() as $alias) {
                     $q->orWhereRaw('LOWER(role_name) = ?', [$alias]);
                 }

@@ -112,6 +112,7 @@ class AnalyserPortalController extends Controller
     private function loginSuccessPayload(User $user, AnalyserAccount $account, Request $request): array
     {
         $token = $this->generateWebToken($user->id);
+        $user->recordLastLogin('web');
 
         auth('web')->login($user);
         $request->session()->save();

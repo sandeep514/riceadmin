@@ -11,8 +11,11 @@ class AnalyserAccount extends Model
     /** Display / DB role_name for this product role. */
     public const ROLE_NAME = 'Data Analyst';
 
-    /** Stable technical role type (kept as analyser for APIs / maps). */
-    public const ROLE_TYPE = 'analyser';
+    /**
+     * roles.type — same as other portal roles so push v2 / web notifications include them.
+     * Identity is by role_name (see roleNameAliases), not by a distinct type.
+     */
+    public const ROLE_TYPE = 'web';
 
     /**
      * Legacy + current role_name values that identify this role.
@@ -72,7 +75,7 @@ class AnalyserAccount extends Model
             ->orderBy('id')
             ->first();
         if ($byCanonical) {
-            return $byCanonical;
+            return self::ensureWebRoleType($byCanonical);
         }
 
         $byName = Role::query()
@@ -85,13 +88,34 @@ class AnalyserAccount extends Model
             ->first();
 
         if ($byName) {
-            return $byName;
+            return self::ensureWebRoleType($byName);
         }
 
-        return Role::query()
-            ->where('type', self::ROLE_TYPE)
+        // Legacy rows that still use type=analyser (before type was moved to web).
+        $legacy = Role::query()
+            ->whereRaw('LOWER(TRIM(type)) = ?', ['analyser'])
             ->orderBy('id')
             ->first();
+
+        return $legacy ? self::ensureWebRoleType($legacy) : null;
+    }
+
+    /**
+     * Keep Data Analyst on type=web so push v2 / web role pickers include it.
+     */
+    private static function ensureWebRoleType(Role $role): Role
+    {
+        if (! Schema::hasColumn('roles', 'type')) {
+            return $role;
+        }
+        if (strtolower(trim((string) $role->type)) === self::ROLE_TYPE) {
+            return $role;
+        }
+
+        $role->type = self::ROLE_TYPE;
+        $role->save();
+
+        return $role;
     }
 
     /**
@@ -108,7 +132,8 @@ class AnalyserAccount extends Model
                 foreach ($aliases as $alias) {
                     $q->orWhereRaw('LOWER(role_name) = ?', [$alias]);
                 }
-                $q->orWhere('type', self::ROLE_TYPE);
+                // Legacy type before Data Analyst was moved to type=web.
+                $q->orWhereRaw('LOWER(TRIM(type)) = ?', ['analyser']);
             })
             ->pluck('id')
             ->map(fn ($id) => (int) $id)
