@@ -670,60 +670,19 @@ class UsersController extends Controller
         $to = trim((string) $request->get('to'));
         $export = $request->get('export');
         $stage = $this->normalizeWebOnboardingStageKey($request->get('stage'));
-
-        $vendorUsers = $this->webUserQuery($from, $to);
-
-        foreach ($vendorUsers as $user) {
-            $label = $this->webUserOnboardingStage($user);
-            $user->setAttribute('onboarding_stage', $label);
-            $user->setAttribute('onboarding_stage_key', $this->webOnboardingStageKeyFromLabel($label));
-        }
-
-        $stageCounts = [
-            'all' => $vendorUsers->count(),
-            'otp' => 0,
-            'profile' => 0,
-            'documents' => 0,
-            'trial' => 0,
-            'paid' => 0,
-        ];
-        foreach ($vendorUsers as $user) {
-            $key = (string) ($user->onboarding_stage_key ?? 'otp');
-            if (array_key_exists($key, $stageCounts)) {
-                $stageCounts[$key]++;
-            }
-        }
-
-        // Full CSV export (same date filter; respects active stage tab when set).
-        if ($export === 'csv') {
-            $exportUsers = $stage === 'all'
-                ? $vendorUsers
-                : $vendorUsers->where('onboarding_stage_key', $stage)->values();
-
-            return $this->exportWebUsersCsv($exportUsers, $from, $to);
-        }
-
-        if ($stage !== 'all') {
-            $vendorUsers = $vendorUsers->where('onboarding_stage_key', $stage)->values();
+        $perPage = (int) $request->get('per_page', 30);
+        if (! in_array($perPage, [25, 30, 50, 100], true)) {
+            $perPage = 30;
         }
 
         $stageTabs = $this->webOnboardingStageTabs();
+        $stageCounts = $this->webOnboardingStageCounts($from, $to);
 
-        return view('users.webUser', compact(
-            'vendorUsers',
-            'from',
-            'to',
-            'stage',
-            'stageCounts',
-            'stageTabs'
-        ));
-    }
-
-    private function webUserQuery(string $from, string $to)
-    {
-        $query = User::where('user_from', 'web')
-            ->orderBy('id', 'desc')
-            ->with([
+        // Full CSV export for the active stage + date filter.
+        if ($export === 'csv') {
+            $exportQuery = $this->webUserBaseQuery($from, $to);
+            $this->applyWebOnboardingStageFilter($exportQuery, $stage);
+            $exportQuery->with([
                 'getWebPersonalDetails',
                 'getWebUserSubscription',
                 'getWebUserAttachment',
@@ -732,6 +691,47 @@ class UsersController extends Controller
                 },
             ]);
 
+            return $this->exportWebUsersCsv($exportQuery, $from, $to, $stage);
+        }
+
+        $query = $this->webUserBaseQuery($from, $to);
+        $this->applyWebOnboardingStageFilter($query, $stage);
+        $query->with([
+            'getWebPersonalDetails',
+            'getWebUserSubscription',
+            'getWebUserAttachment',
+            'getWebBusinessDetails' => function ($q) {
+                return $q->with(['getCategoryDetails:id,category']);
+            },
+        ]);
+
+        $vendorUsers = $query
+            ->paginate($perPage)
+            ->appends($request->except('page'));
+
+        foreach ($vendorUsers as $user) {
+            $label = $this->webUserOnboardingStage($user);
+            $user->setAttribute('onboarding_stage', $label);
+            $user->setAttribute('onboarding_stage_key', $this->webOnboardingStageKeyFromLabel($label));
+        }
+
+        return view('users.webUser', compact(
+            'vendorUsers',
+            'from',
+            'to',
+            'stage',
+            'stageCounts',
+            'stageTabs',
+            'perPage'
+        ));
+    }
+
+    private function webUserBaseQuery(string $from, string $to)
+    {
+        $query = User::query()
+            ->where('user_from', 'web')
+            ->orderBy('id', 'desc');
+
         if ($from !== '') {
             $query->where('created_at', '>=', \Illuminate\Support\Carbon::parse($from, 'Asia/Kolkata')->startOfDay());
         }
@@ -739,48 +739,144 @@ class UsersController extends Controller
             $query->where('created_at', '<=', \Illuminate\Support\Carbon::parse($to, 'Asia/Kolkata')->endOfDay());
         }
 
-        return $query->get();
+        return $query;
     }
 
-    private function exportWebUsersCsv($vendorUsers, string $from, string $to)
+    /**
+     * @return array<string, int>
+     */
+    private function webOnboardingStageCounts(string $from, string $to): array
+    {
+        $counts = ['all' => 0, 'otp' => 0, 'profile' => 0, 'documents' => 0, 'trial' => 0, 'paid' => 0];
+        foreach (array_keys($counts) as $key) {
+            $q = $this->webUserBaseQuery($from, $to);
+            $this->applyWebOnboardingStageFilter($q, $key);
+            $counts[$key] = (int) $q->count();
+        }
+
+        return $counts;
+    }
+
+    private function applyWebOnboardingStageFilter($query, string $stage): void
+    {
+        if ($stage === 'all') {
+            return;
+        }
+
+        if ($stage === 'paid') {
+            $query->whereHas('getWebUserSubscription', function ($q) {
+                $q->where(function ($inner) {
+                    $inner->whereNull('subscription_type')
+                        ->orWhere('subscription_type', '')
+                        ->orWhere('subscription_type', '!=', 'trial');
+                });
+            });
+
+            return;
+        }
+
+        if ($stage === 'trial') {
+            $query->whereHas('getWebUserSubscription', function ($q) {
+                $q->where('subscription_type', 'trial');
+            })->whereDoesntHave('getWebUserSubscription', function ($q) {
+                $q->where(function ($inner) {
+                    $inner->whereNull('subscription_type')
+                        ->orWhere('subscription_type', '')
+                        ->orWhere('subscription_type', '!=', 'trial');
+                });
+            });
+
+            return;
+        }
+
+        // No subscription for the remaining funnel stages.
+        $query->whereDoesntHave('getWebUserSubscription');
+
+        if ($stage === 'documents') {
+            $query->whereHas('getWebUserAttachment', function ($q) {
+                $this->scopeWebUserHasDocuments($q);
+            });
+
+            return;
+        }
+
+        if ($stage === 'profile') {
+            $query->whereDoesntHave('getWebUserAttachment', function ($q) {
+                $this->scopeWebUserHasDocuments($q);
+            })->where(function ($q) {
+                $q->whereHas('getWebPersonalDetails')
+                    ->orWhereHas('getWebBusinessDetails');
+            });
+
+            return;
+        }
+
+        // otp
+        $query->whereDoesntHave('getWebUserAttachment', function ($q) {
+            $this->scopeWebUserHasDocuments($q);
+        })->whereDoesntHave('getWebPersonalDetails')
+            ->whereDoesntHave('getWebBusinessDetails');
+    }
+
+    private function scopeWebUserHasDocuments($query): void
+    {
+        $query->where(function ($q) {
+            $q->where(function ($inner) {
+                $inner->whereNotNull('panCard')->where('panCard', '!=', '');
+            })->orWhere(function ($inner) {
+                $inner->whereNotNull('farmer_file')->where('farmer_file', '!=', '');
+            })->orWhere(function ($inner) {
+                $inner->whereNotNull('gst_fssai')->where('gst_fssai', '!=', '');
+            })->orWhere(function ($inner) {
+                $inner->whereNotNull('gstCard')->where('gstCard', '!=', '');
+            })->orWhere(function ($inner) {
+                $inner->whereNotNull('fssaiCard')->where('fssaiCard', '!=', '');
+            });
+        });
+    }
+
+    private function exportWebUsersCsv($exportQuery, string $from, string $to, string $stage = 'all')
     {
         @set_time_limit(0);
 
-        $filename = 'web_users_'.($from !== '' ? $from : 'start').'_'.($to !== '' ? $to : 'end').'.csv';
+        $filename = 'web_users_'.($from !== '' ? $from : 'start').'_'.($to !== '' ? $to : 'end')
+            .'_'.($stage !== '' ? $stage : 'all').'.csv';
 
-        return response()->streamDownload($this->webUsersCsvWriter($vendorUsers), $filename, [
+        return response()->streamDownload($this->webUsersCsvWriter($exportQuery), $filename, [
             'Content-Type' => 'text/csv; charset=UTF-8',
         ]);
     }
 
-    private function webUsersCsvWriter($vendorUsers): \Closure
+    private function webUsersCsvWriter($exportQuery): \Closure
     {
-        return function () use ($vendorUsers) {
+        return function () use ($exportQuery) {
             $out = fopen('php://output', 'w');
             fputcsv($out, [
                 'User ID', 'Name', 'Email', 'Phone', 'Joined At', 'Category', 'Onboarding Stage',
                 'SNTC Recommended', 'Status',
             ], ',', '"', '\\');
 
-            foreach ($vendorUsers as $user) {
-                $stage = $this->webUserOnboardingStage($user);
-                $business = $user->getWebBusinessDetails;
-                $phone = $user->phone ?: $user->mobile;
+            $exportQuery->orderBy('id', 'desc')->chunk(500, function ($users) use ($out) {
+                foreach ($users as $user) {
+                    $stage = $this->webUserOnboardingStage($user);
+                    $business = $user->getWebBusinessDetails;
+                    $phone = $user->phone ?: $user->mobile;
 
-                fputcsv($out, [
-                    $user->id,
-                    (string) ($user->name ?? ''),
-                    (string) ($user->email ?? ''),
-                    (string) ($phone ?? ''),
-                    $user->created_at ? \Illuminate\Support\Carbon::parse($user->created_at)->format('Y-m-d') : '',
-                    (string) ($business->getCategoryDetails->category ?? ''),
-                    $stage,
-                    $business !== null ? (int) ($business->is_sntc_recommended ?? 0) : '',
-                    $user->is_deactivated == 1
-                        ? ($user->is_active_by_admin == 1 ? 'Deactivated' : 'Rejected')
-                        : ($user->is_active_by_admin == 1 ? 'Active' : 'Pending'),
-                ], ',', '"', '\\');
-            }
+                    fputcsv($out, [
+                        $user->id,
+                        (string) ($user->name ?? ''),
+                        (string) ($user->email ?? ''),
+                        (string) ($phone ?? ''),
+                        $user->created_at ? \Illuminate\Support\Carbon::parse($user->created_at)->format('Y-m-d') : '',
+                        (string) ($business->getCategoryDetails->category ?? ''),
+                        $stage,
+                        $business !== null ? (int) ($business->is_sntc_recommended ?? 0) : '',
+                        $user->is_deactivated == 1
+                            ? ($user->is_active_by_admin == 1 ? 'Deactivated' : 'Rejected')
+                            : ($user->is_active_by_admin == 1 ? 'Active' : 'Pending'),
+                    ], ',', '"', '\\');
+                }
+            });
 
             fclose($out);
         };

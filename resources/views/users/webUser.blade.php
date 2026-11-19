@@ -4,9 +4,9 @@
     $stage = $stage ?? 'all';
     $stageTabs = $stageTabs ?? ['all' => 'All'];
     $stageCounts = $stageCounts ?? [];
+    $perPage = $perPage ?? 30;
 @endphp
     <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
                 Web Users
@@ -36,9 +36,17 @@
                                     <label for="to" style="margin-right:5px">Joined To</label>
                                     <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
                                 </div>
+                                <div class="form-group">
+                                    <label for="per_page" style="margin-right:5px">Per page</label>
+                                    <select name="per_page" id="per_page" class="form-control" onchange="this.form.submit()">
+                                        @foreach([25, 30, 50, 100] as $n)
+                                            <option value="{{ $n }}" {{ (int) $perPage === $n ? 'selected' : '' }}>{{ $n }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <button type="submit" class="btn btn-primary btn-sm">Apply</button>
                                 <a href="{{ route('web.user', ['stage' => $stage]) }}" class="btn btn-default btn-sm">Clear dates</a>
-                                <a href="{{ request()->fullUrlWithQuery(['from' => $from ?? '', 'to' => $to ?? '', 'stage' => $stage, 'export' => 'csv']) }}" class="btn btn-success btn-sm">
+                                <a href="{{ request()->fullUrlWithQuery(['export' => 'csv', 'page' => null]) }}" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i> Export CSV
                                 </a>
                             </form>
@@ -53,7 +61,12 @@
                                         $pillClass = $isActive ? 'btn-primary' : 'btn-default';
                                     @endphp
                                     <li class="{{ $isActive ? 'active' : '' }}" style="float:none;">
-                                        <a href="{{ route('web.user', array_filter(['stage' => $key, 'from' => $from ?? null, 'to' => $to ?? null])) }}"
+                                        <a href="{{ route('web.user', array_filter([
+                                                'stage' => $key,
+                                                'from' => $from ?? null,
+                                                'to' => $to ?? null,
+                                                'per_page' => $perPage,
+                                            ])) }}"
                                            class="btn btn-sm {{ $pillClass }}"
                                            style="border-radius:16px;margin:0;">
                                             {{ $label }}
@@ -63,7 +76,9 @@
                                 @endforeach
                             </ul>
                             <p class="text-muted" style="margin:8px 0 0;">
-                                Showing <strong>{{ $vendorUsers->count() }}</strong> user(s)
+                                Showing
+                                <strong>{{ $vendorUsers->firstItem() ?? 0 }}–{{ $vendorUsers->lastItem() ?? 0 }}</strong>
+                                of <strong>{{ $vendorUsers->total() }}</strong>
                                 @if($stage !== 'all')
                                     in <strong>{{ $stageTabs[$stage] ?? $stage }}</strong>
                                 @endif
@@ -74,10 +89,11 @@
                         <div style="padding: 0 10px 10px;">
                             <a href="{{ route('mark.as.viewed') }}" class="btn btn-success btn-sm">Mark as viewed</a>
                         </div>
-                        <!-- /.box-header -->
+
                         <div class="box-body">
                             <div class="table-responsive">
-                                <table id="example2" class="display" style="width: 100%;">
+                                {{-- Not #example2: server-side Laravel pagination (avoid DataTables client paging). --}}
+                                <table id="web-users-table" class="table table-bordered table-striped" style="width: 100%;">
                                     <thead>
                                         <tr>
                                             <th style="text-align: center">Name</th>
@@ -160,21 +176,11 @@
                                             </tr>
                                         @endforelse
                                     </tbody>
-
-                                    <tfoot>
-                                        <tr>
-                                            <th style="text-align: center">Name</th>
-                                            <th style="text-align: center">email </th>
-                                            <th style="text-align: center">Phone </th>
-                                            <th style="text-align: center">Joined</th>
-                                            <th style="text-align: center">Category </th>
-                                            <th style="text-align: center">Onboarding Stage</th>
-                                            <th style="text-align: center">SNTC Recommended</th>
-                                            <th style="text-align: center">Status </th>
-                                            <th style="text-align: center">Action </th>
-                                        </tr>
-                                    </tfoot>
                                 </table>
+                            </div>
+
+                            <div class="text-center" style="margin-top:15px;">
+                                {{ $vendorUsers->onEachSide(1)->links('pagination.page-numbers') }}
                             </div>
                         </div>
                     </div>
