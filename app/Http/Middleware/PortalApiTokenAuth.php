@@ -97,7 +97,9 @@ class PortalApiTokenAuth
             }
         }
 
-        $request->attributes->set('auth_platform', $user->getAttribute('auth_platform') ?: $platform);
+        $authPlatform = $user->getAttribute('auth_platform') ?: $platform;
+        $request->attributes->set('auth_platform', $authPlatform);
+        $user->recordLastActivity(is_string($authPlatform) ? $authPlatform : 'web');
         $request->setUserResolver(function () use ($user) {
             return $user;
         });

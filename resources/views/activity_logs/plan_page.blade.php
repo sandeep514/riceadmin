@@ -5,7 +5,7 @@
     <section class="content-header">
         <h1>
             Plan Page
-            <small>Visited plans without buy / trial</small>
+            <small>Visited without buy / trial (Web + App)</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -25,9 +25,17 @@
                         <form method="GET" action="{{ route('activity.plan-page') }}" class="form-inline" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
                             <div class="form-group">
                                 <label for="period" style="margin-right:5px;">Period</label>
-                                <select name="period" id="period" class="form-control" onchange="this.form.submit()">
+                                <select name="period" id="period" class="form-control">
                                     @foreach($periods as $key => $label)
                                         <option value="{{ $key }}" {{ ($period ?? '') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="source" style="margin-right:5px;">Source</label>
+                                <select name="source" id="source" class="form-control">
+                                    @foreach($sources as $key => $label)
+                                        <option value="{{ $key }}" {{ ($source ?? 'all') === $key ? 'selected' : '' }}>{{ $label }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -46,6 +54,7 @@
                                         <th style="text-align:center;">Name</th>
                                         <th style="text-align:center;">Email</th>
                                         <th style="text-align:center;">Phone</th>
+                                        <th style="text-align:center;">Source</th>
                                         <th style="text-align:center;">Role</th>
                                         <th style="text-align:center;">Category</th>
                                         <th style="text-align:center;">Visits</th>
@@ -59,9 +68,13 @@
                                             <td style="text-align:center;">{{ $user->name ?? '--' }}</td>
                                             <td style="text-align:center;">{{ $user->email ?? '--' }}</td>
                                             <td style="text-align:center;">{{ $user->phone ?: ($user->mobile ?? '--') }}</td>
-                                            <td style="text-align:center;">{{ $user->role_rel->role_name ?? '--' }}</td>
+                                            <td style="text-align:center;">@include('activity_logs._source_badge', ['user' => $user])</td>
                                             <td style="text-align:center;">
-                                                {{ $user->getWebBusinessDetails->getCategoryDetails->category ?? '--' }}
+                                                {{ $user->role_rel->role_name ?? ($user->role_rel_usd->role_name ?? '--') }}
+                                            </td>
+                                            <td style="text-align:center;">
+                                                {{ $user->getWebBusinessDetails->getCategoryDetails->category
+                                                    ?? ($user->bagVendor->category ?? '--') }}
                                             </td>
                                             <td style="text-align:center;">{{ $user->visit_count ?? 0 }}</td>
                                             <td style="text-align:center;">
@@ -77,9 +90,9 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center text-muted">
+                                            <td colspan="9" class="text-center text-muted">
                                                 No plan-page abandonments in this period.
-                                                Visits are recorded when the portal plans APIs are called after login.
+                                                Web visits log on portal plans APIs; app visits log when get/plans is called with token or user_id.
                                             </td>
                                         </tr>
                                     @endforelse

@@ -798,7 +798,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ $currentRoute === 'activity.last-login-users' ? 'active' : '' }}">
-                        <a href="{{ route('activity.last-login-users') }}"><i class="fa fa-circle-o"></i> Last Login Users</a>
+                        <a href="{{ route('activity.last-login-users') }}"><i class="fa fa-circle-o"></i> Recently Active Users</a>
                     </li>
                     <li class="{{ $currentRoute === 'activity.plan-page' ? 'active' : '' }}">
                         <a href="{{ route('activity.plan-page') }}"><i class="fa fa-circle-o"></i> Plan Page</a>

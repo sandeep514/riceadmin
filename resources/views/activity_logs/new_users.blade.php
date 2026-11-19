@@ -5,7 +5,7 @@
     <section class="content-header">
         <h1>
             New Users
-            <small>Activity Logs</small>
+            <small>Web + App</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -32,12 +32,20 @@
                                 <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
                             </div>
                             <div class="form-group">
+                                <label for="source" style="margin-right:5px;">Source</label>
+                                <select name="source" id="source" class="form-control">
+                                    @foreach($sources as $key => $label)
+                                        <option value="{{ $key }}" {{ ($source ?? 'all') === $key ? 'selected' : '' }}>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="role" style="margin-right:5px;">Role</label>
                                 <select name="role" id="role" class="form-control">
                                     <option value="">All roles</option>
                                     @foreach($roles as $role)
                                         <option value="{{ $role->id }}" {{ (string) ($roleId ?? '') === (string) $role->id ? 'selected' : '' }}>
-                                            {{ $role->role_name }}
+                                            {{ $role->role_name }}@if(!empty($role->type)) ({{ $role->type }})@endif
                                         </option>
                                     @endforeach
                                 </select>
@@ -46,11 +54,22 @@
                                 <label for="category" style="margin-right:5px;">Category</label>
                                 <select name="category" id="category" class="form-control">
                                     <option value="">All categories</option>
-                                    @foreach($categories as $category)
-                                        <option value="{{ $category->id }}" {{ (string) ($categoryId ?? '') === (string) $category->id ? 'selected' : '' }}>
-                                            {{ $category->category }}
-                                        </option>
-                                    @endforeach
+                                    <optgroup label="Web categories">
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" {{ (string) ($categoryId ?? '') === (string) $category->id ? 'selected' : '' }}>
+                                                {{ $category->category }}
+                                            </option>
+                                        @endforeach
+                                    </optgroup>
+                                    @if(($bagCategories ?? collect())->isNotEmpty())
+                                        <optgroup label="App bag categories">
+                                            @foreach($bagCategories as $category)
+                                                <option value="{{ $category->id }}" {{ (string) ($categoryId ?? '') === (string) $category->id ? 'selected' : '' }}>
+                                                    {{ $category->category }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endif
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary btn-sm">Apply</button>
@@ -68,6 +87,7 @@
                                         <th style="text-align:center;">Name</th>
                                         <th style="text-align:center;">Email</th>
                                         <th style="text-align:center;">Phone</th>
+                                        <th style="text-align:center;">Source</th>
                                         <th style="text-align:center;">Joined (IST)</th>
                                         <th style="text-align:center;">Role</th>
                                         <th style="text-align:center;">Category</th>
@@ -81,19 +101,23 @@
                                             <td style="text-align:center;">{{ $user->name ?? '--' }}</td>
                                             <td style="text-align:center;">{{ $user->email ?? '--' }}</td>
                                             <td style="text-align:center;">{{ $user->phone ?: ($user->mobile ?? '--') }}</td>
+                                            <td style="text-align:center;">@include('activity_logs._source_badge', ['user' => $user])</td>
                                             <td style="text-align:center;">
                                                 {{ $user->created_at ? \Illuminate\Support\Carbon::parse($user->created_at)->timezone('Asia/Kolkata')->format('d-m-Y H:i') : '--' }}
                                             </td>
-                                            <td style="text-align:center;">{{ $user->role_rel->role_name ?? '--' }}</td>
                                             <td style="text-align:center;">
-                                                {{ $user->getWebBusinessDetails->getCategoryDetails->category ?? '--' }}
+                                                {{ $user->role_rel->role_name ?? ($user->role_rel_usd->role_name ?? '--') }}
+                                            </td>
+                                            <td style="text-align:center;">
+                                                {{ $user->getWebBusinessDetails->getCategoryDetails->category
+                                                    ?? ($user->bagVendor->category ?? '--') }}
                                             </td>
                                             <td style="text-align:center;">
                                                 @if((int) ($user->is_deactivated ?? 0) === 1 && (int) ($user->is_active_by_admin ?? 0) === 0)
                                                     <span class="label label-danger">Rejected</span>
                                                 @elseif((int) ($user->is_deactivated ?? 0) === 1)
                                                     <span class="label label-danger">Deactivated</span>
-                                                @elseif((int) ($user->is_active_by_admin ?? 0) === 1)
+                                                @elseif((int) ($user->is_active_by_admin ?? 0) === 1 || (int) ($user->status ?? 0) === 1)
                                                     <span class="label label-success">Active</span>
                                                 @else
                                                     <span class="label label-warning">Pending</span>
@@ -105,7 +129,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="8" class="text-center text-muted">No users for the selected filters.</td>
+                                            <td colspan="9" class="text-center text-muted">No users for the selected filters.</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

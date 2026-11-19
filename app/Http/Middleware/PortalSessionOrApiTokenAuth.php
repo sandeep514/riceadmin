@@ -100,6 +100,8 @@ class PortalSessionOrApiTokenAuth
             $request->merge(['user_id' => $user->id]);
         }
 
+        $authPlatform = $request->attributes->get('auth_platform') ?: 'web';
+        $user->recordLastActivity(is_string($authPlatform) ? $authPlatform : 'web');
         $request->setUserResolver(static fn () => $user);
 
         return $next($request);

@@ -59,6 +59,8 @@ class User extends Authenticatable
         'stripe_payment_method',
         'last_login_at',
         'last_login_platform',
+        'last_active_at',
+        'last_active_platform',
     ];
 
     public function routeNotificationForFcm()
@@ -132,7 +134,11 @@ class User extends Authenticatable
         'is_deactivated' => 'integer',
         'session_version' => 'integer',
         'last_login_at' => 'datetime',
+        'last_active_at' => 'datetime',
     ];
+
+    /** Skip DB writes if activity was stamped within this many seconds. */
+    private const LAST_ACTIVE_THROTTLE_SECONDS = 300;
 
     /**
      * Stamp last login for portal / app activity logs.
@@ -143,11 +149,52 @@ class User extends Authenticatable
             return;
         }
 
+        $now = Carbon::now('Asia/Kolkata');
         $payload = [
-            'last_login_at' => Carbon::now('Asia/Kolkata'),
+            'last_login_at' => $now,
         ];
         if (self::usersTableHasColumn('last_login_platform')) {
             $payload['last_login_platform'] = $platform
+                ? strtolower(trim($platform))
+                : null;
+        }
+        if (self::usersTableHasColumn('last_active_at')) {
+            $payload['last_active_at'] = $now;
+            if (self::usersTableHasColumn('last_active_platform')) {
+                $payload['last_active_platform'] = $platform
+                    ? strtolower(trim($platform))
+                    : null;
+            }
+        }
+
+        self::where('id', $this->id)->update($payload);
+        $this->fill($payload);
+    }
+
+    /**
+     * Stamp last activity when the user uses the website / mobile app (throttled).
+     */
+    public function recordLastActivity(?string $platform = null): void
+    {
+        if (! self::usersTableHasColumn('last_active_at')) {
+            // Fallback before migration: reuse last_login_at as activity proxy.
+            if (self::usersTableHasColumn('last_login_at')) {
+                $this->recordLastLogin($platform);
+            }
+
+            return;
+        }
+
+        $now = Carbon::now('Asia/Kolkata');
+        $previous = $this->last_active_at;
+        if ($previous instanceof Carbon
+            && $previous->diffInSeconds($now) < self::LAST_ACTIVE_THROTTLE_SECONDS) {
+            return;
+        }
+
+        $payload = ['last_active_at' => $now];
+        if (self::usersTableHasColumn('last_active_platform')) {
+            $payload['last_active_platform'] = $platform
                 ? strtolower(trim($platform))
                 : null;
         }

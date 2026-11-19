@@ -30,6 +30,7 @@ use App\RiceForm;
 use App\Order;
 use App\BuyQuery;
 use App\Plan;
+use App\PlanPageVisit;
 use App\SubPlan;
 use App\Message;
 use App\TrialPeriod;
@@ -372,6 +373,56 @@ class ApiController extends Controller
     }
 
     /**
+     * Best-effort plan page visit for Activity Logs (app get/plans is often unauthenticated).
+     * Accepts api_token / Bearer / X-API-TOKEN / user_id|userId.
+     */
+    private function recordAppPlanPageVisitIfPossible(Request $request): void
+    {
+        try {
+            $token = null;
+            $authHeader = $request->header('Authorization');
+            if ($authHeader && preg_match('/Bearer\s+(.+)/i', $authHeader, $matches)) {
+                $token = trim($matches[1]);
+            }
+            if (! $token) {
+                $token = $request->header('X-API-TOKEN')
+                    ?: $request->input('api_token')
+                    ?: $request->query('api_token');
+            }
+
+            $user = null;
+            if ($token) {
+                $user = User::query()
+                    ->where(function ($q) use ($token) {
+                        $q->where('api_token', $token)
+                            ->orWhere('mobile_api_token', $token);
+                    })
+                    ->whereIn('userType', [1, 2])
+                    ->first();
+            }
+
+            if (! $user) {
+                $userId = (int) ($request->input('user_id')
+                    ?? $request->input('userId')
+                    ?? $request->query('user_id')
+                    ?? $request->query('userId')
+                    ?? 0);
+                if ($userId > 0) {
+                    $user = User::query()->whereKey($userId)->whereIn('userType', [1, 2])->first();
+                }
+            }
+
+            if (! $user) {
+                return;
+            }
+
+            PlanPageVisit::recordForUser((int) $user->id, 'mobile');
+        } catch (\Throwable $e) {
+            // Never break plan listing for analytics.
+        }
+    }
+
+    /**
      * Data-only FCM so the previous phone can clear local session.
      */
     private function sendAppForceLogoutPush(string $fcmToken): void
@@ -606,8 +657,11 @@ class ApiController extends Controller
         return response()->json(['status' => 'success', 'mill_status' => $millStatusModel]);
     }
 
-    public function getPlans()
+    public function getPlans(Request $request)
     {
+        // Optional: record plan-page visit for Activity Logs when app sends user/token.
+        $this->recordAppPlanPageVisitIfPossible($request);
+
         $plan = Plan::get();
         $ChartInterval = ChartInterval::get();
 
