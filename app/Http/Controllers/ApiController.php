@@ -92,6 +92,8 @@ use App\Support\QueuedMail;
 use Auth;
 use App\NewsRunner;
 use App\WebNewsRunner;
+use App\PaddyTradeCurrentStatus;
+use App\RicePriceClosing;
 use App\TradeCurrentStatus;
 use App\PostedJob;
 use App\JobApplication;
@@ -2261,11 +2263,26 @@ class ApiController extends Controller
             'message' => 'App timing settings',
             'timezone' => 'Asia/Kolkata',
             'call_now' => $settings->callNowPayload(),
+            // Live prices
             'market_timing' => $settings->marketTimingPayload(),
             'live_market' => $settings->resolvedLiveMarket(),
             'livePriceStatusMessage' => $settings->livePriceStatusMessagePayload(),
             'upcoming_rice_price_closings' => $settings->upcomingClosingsPayload(),
             'upcoming_closing_blocks' => $settings->upcomingClosingBlocksPayload(),
+            // Rice sourcing (live sourcing trades)
+            'rice_sourcing' => [
+                'market_timing' => $settings->riceSourcingTimingPayload(),
+                'market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+                'upcoming_closings' => $settings->upcomingClosingsPayload(30, RicePriceClosing::MARKET_RICE_SOURCING),
+                'upcoming_closing_blocks' => $settings->upcomingClosingBlocksPayload(RicePriceClosing::MARKET_RICE_SOURCING),
+            ],
+            // Paddy prices / trades
+            'paddy' => [
+                'market_timing' => $settings->paddyMarketTimingPayload(),
+                'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
+                'upcoming_closings' => $settings->upcomingClosingsPayload(30, RicePriceClosing::MARKET_PADDY),
+                'upcoming_closing_blocks' => $settings->upcomingClosingBlocksPayload(RicePriceClosing::MARKET_PADDY),
+            ],
         ]);
     }
 
@@ -6847,7 +6864,8 @@ if (!file_exists('uploads')) {
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::currentResolved();
-        $callNow = AppSetting::current()->callNowPayload();
+        $settings = AppSetting::current();
+        $callNow = $settings->callNowPayload();
 
         return response()->json([
             'status' => true,
@@ -6856,6 +6874,8 @@ if (!file_exists('uploads')) {
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'call_now' => $callNow,
+            'market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->riceSourcingTimingPayload(),
         ]);
     }
 
@@ -6877,7 +6897,8 @@ if (!file_exists('uploads')) {
 
         $tradeStatus = TradeCurrentStatus::currentResolved();
         $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, false, null, $interestUserId);
-        $callNow = AppSetting::current()->callNowPayload();
+        $settings = AppSetting::current();
+        $callNow = $settings->callNowPayload();
 
         return response()->json([
             'status' => true,
@@ -6889,6 +6910,8 @@ if (!file_exists('uploads')) {
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'call_now' => $callNow,
+            'market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->riceSourcingTimingPayload(),
             'user_interests_applied' => $interestTuples !== [],
             'preferred_interest_user_id' => $interestUserId,
             'preferred_interest_count' => count($interestTuples),
@@ -7174,7 +7197,8 @@ if (!file_exists('uploads')) {
         $trade = $allTrade->groupBy('tradeType');
 
         $tradeStatus = TradeCurrentStatus::currentResolved();
-        $callNow = AppSetting::current()->callNowPayload();
+        $settings = AppSetting::current();
+        $callNow = $settings->callNowPayload();
 
         return response()->json([
             'status' => true,
@@ -7183,6 +7207,8 @@ if (!file_exists('uploads')) {
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'call_now' => $callNow,
+            'market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->riceSourcingTimingPayload(),
         ]);
     }
 
@@ -7207,7 +7233,8 @@ if (!file_exists('uploads')) {
 
         $tradeStatus = TradeCurrentStatus::currentResolved();
         $tradeListMeta = $this->buildWebTradeListMeta($allTrade, $request, $hasTradeTypeFilter, $appliedTradeType, $interestUserId);
-        $callNow = AppSetting::current()->callNowPayload();
+        $settings = AppSetting::current();
+        $callNow = $settings->callNowPayload();
 
         return response()->json([
             'status' => true,
@@ -7220,6 +7247,8 @@ if (!file_exists('uploads')) {
             'currentStatus' => $tradeStatus['currentStatus'],
             'statusMessage' => $tradeStatus['message'],
             'call_now' => $callNow,
+            'market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->riceSourcingTimingPayload(),
             'user_interests_applied' => $interestTuples !== [],
             'preferred_interest_user_id' => $interestUserId,
             'preferred_interest_count' => count($interestTuples),
@@ -8640,12 +8669,15 @@ if (!file_exists('uploads')) {
         $allTrade = $this->formatTradeCollectionValidDays($allTrade);
 
         $tradeStatus = TradeCurrentStatus::currentResolved();
+        $settings = AppSetting::current();
 
         return response()->json([
             'status' => true,
             'data' => $allTrade,
             'currentStatus' => $tradeStatus['currentStatus'] ?? null,
             'statusMessage' => $tradeStatus['message'] ?? null,
+            'market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->riceSourcingTimingPayload(),
         ]);
     }
 

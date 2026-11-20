@@ -2915,6 +2915,9 @@ class PortalApiController extends Controller
                 'years' => $yearsAccess,
                 'paddy_trade_count' => $paddyTradeCount,
                 'paddy_market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
+                'paddy_market_timing' => AppSetting::current()->paddyMarketTimingPayload(),
+                'rice_sourcing_market_status' => TradeCurrentStatus::marketStatusApiPayload(),
+                'rice_sourcing_market_timing' => AppSetting::current()->riceSourcingTimingPayload(),
                 'call_now' => $callNow,
             ]
         ], 200);

@@ -10,6 +10,25 @@ use Symfony\Component\Process\Process;
 class DatabaseBackupController extends Controller
 {
     /**
+     * Lightweight status for the blocking overdue modal (poll after download).
+     */
+    public function status()
+    {
+        $last = DatabaseBackupLog::lastDownload();
+        $overdue = DatabaseBackupLog::isOverdue($last);
+        $daysAgo = DatabaseBackupLog::daysSinceLastDownload($last);
+
+        return response()->json([
+            'overdue' => $overdue,
+            'last_backup_at' => $last && $last->downloaded_at
+                ? $last->downloaded_at->toDateTimeString()
+                : null,
+            'days_ago' => $daysAgo,
+            'threshold_days' => DatabaseBackupLog::OVERDUE_AFTER_DAYS,
+        ]);
+    }
+
+    /**
      * Stream a SQL dump of the default database (MySQL via mysqldump, or SQLite file download).
      */
     public function download()

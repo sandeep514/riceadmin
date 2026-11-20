@@ -67,6 +67,49 @@
         </div>
     </nav>
 </header>
+
+@if(!empty($backupOverdue) && auth()->check() && (int) auth()->user()->role === 2)
+<div class="modal fade" id="backup-overdue-modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="backup-overdue-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document" style="margin-top: 12vh;">
+        <div class="modal-content" style="border-top: 4px solid #dd4b39;">
+            <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+                <h4 class="modal-title" id="backup-overdue-modal-title" style="font-weight: 700; color: #dd4b39;">
+                    <i class="fa fa-exclamation-triangle"></i> Database backup required
+                </h4>
+            </div>
+            <div class="modal-body" style="padding-top: 12px;">
+                <p style="font-size: 15px; margin-bottom: 10px;">
+                    A database backup is overdue and must be downloaded before you continue.
+                </p>
+                @if(!empty($lastBackupAt))
+                    <p class="text-muted" style="margin-bottom: 8px;">
+                        Last backup was <strong>{{ (int) $lastBackupDaysAgo }} day{{ (int) $lastBackupDaysAgo === 1 ? '' : 's' }}</strong> ago
+                        ({{ $lastBackupAt->format('d M Y H:i') }}).
+                        Backups are required at least every {{ (int) \App\DatabaseBackupLog::OVERDUE_AFTER_DAYS }} days.
+                    </p>
+                @else
+                    <p class="text-muted" style="margin-bottom: 8px;">
+                        No backup has been downloaded yet. Please download one now.
+                    </p>
+                @endif
+                <p id="backup-overdue-modal-status" class="text-muted" style="display:none; margin-top: 12px; margin-bottom: 0;">
+                    <i class="fa fa-spinner fa-spin"></i>
+                    Preparing backup… keep this window open. The dialog will close when the backup is recorded.
+                </p>
+            </div>
+            <div class="modal-footer" style="border-top: none; text-align: center; padding-top: 0;">
+                <a href="{{ route('database.backup.download') }}"
+                   id="backup-overdue-download-btn"
+                   class="btn btn-danger btn-lg"
+                   style="min-width: 240px;">
+                    <i class="fa fa-download"></i> Download database backup
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+
 <style>
     .backup-overdue-banner {
         display: inline-block;
@@ -103,7 +146,116 @@
             white-space: normal;
         }
     }
+    #backup-overdue-modal .modal-dialog-centered {
+        display: flex;
+        align-items: center;
+        min-height: calc(100% - 1rem);
+    }
+    #backup-overdue-modal .modal-content {
+        width: 100%;
+        box-shadow: 0 12px 40px rgba(0,0,0,.35);
+    }
+    body.backup-overdue-locked {
+        overflow: hidden !important;
+    }
 </style>
+
+@if(!empty($backupOverdue) && auth()->check() && (int) auth()->user()->role === 2)
+<script>
+(function () {
+    function bootBackupModal() {
+        if (typeof jQuery === 'undefined') {
+            setTimeout(bootBackupModal, 50);
+            return;
+        }
+        var $ = jQuery;
+        var $modal = $('#backup-overdue-modal');
+        if (!$modal.length) {
+            return;
+        }
+
+        var statusUrl = @json(route('database.backup.status'));
+        var pollTimer = null;
+        var polling = false;
+
+        function showModal() {
+            $('body').addClass('backup-overdue-locked');
+            $modal.modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
+        }
+
+        function stopPolling() {
+            if (pollTimer) {
+                clearInterval(pollTimer);
+                pollTimer = null;
+            }
+            polling = false;
+        }
+
+        function startPolling() {
+            if (polling) {
+                return;
+            }
+            polling = true;
+            $('#backup-overdue-modal-status').show();
+            $('#backup-overdue-download-btn')
+                .addClass('disabled')
+                .css('pointer-events', 'none')
+                .html('<i class="fa fa-spinner fa-spin"></i> Preparing backup…');
+
+            pollTimer = setInterval(function () {
+                $.getJSON(statusUrl)
+                    .done(function (resp) {
+                        if (resp && resp.overdue === false) {
+                            stopPolling();
+                            $('#backup-overdue-modal-status').html(
+                                '<i class="fa fa-check text-success"></i> Backup recorded. Reloading…'
+                            );
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 600);
+                        }
+                    });
+            }, 2500);
+        }
+
+        // Never dismiss until backup succeeds (page reloads after status clears)
+        $modal.on('hide.bs.modal', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            return false;
+        });
+
+        $(document).on('keydown.backupOverdue', function (e) {
+            if (e.key === 'Escape' || e.keyCode === 27) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        $('#backup-overdue-download-btn').on('click', function () {
+            startPolling();
+        });
+
+        // Header banner "Download now" should also start polling
+        $(document).on('click', '.backup-overdue-banner a', function () {
+            startPolling();
+        });
+
+        showModal();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', bootBackupModal);
+    } else {
+        bootBackupModal();
+    }
+})();
+</script>
+@endif
 {{-- <script>
     const toggleBtn = document.querySelector("a[data-toggle='push-menu']")
     const body = document.querySelector("body")

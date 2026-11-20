@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 
 class DatabaseBackupLog extends Model
 {
-    public const OVERDUE_AFTER_DAYS = 5;
+    public const OVERDUE_AFTER_DAYS = 2;
 
     protected $table = 'database_backup_logs';
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AppSetting;
 use App\Export\PaddyPricesApiExport;
 use App\Jobs\ExportPaddyPricesMailJob;
 use App\PaddyMandiModel;
@@ -368,6 +369,7 @@ class PaddyApiController extends Controller
 
         $marketStatus = PaddyTradeCurrentStatus::currentResolved();
         $priceDefaults = PaddyPriceDefault::current()->toDefaultsArray();
+        $settings = AppSetting::current();
 
         return response()->json([
             'status' => true,
@@ -380,6 +382,7 @@ class PaddyApiController extends Controller
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->paddyMarketTimingPayload(),
         ]);
     }
 
@@ -409,6 +412,7 @@ class PaddyApiController extends Controller
         }
 
         $marketStatus = PaddyTradeCurrentStatus::currentResolved();
+        $settings = AppSetting::current();
 
         return response()->json([
             'status' => true,
@@ -421,6 +425,7 @@ class PaddyApiController extends Controller
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->paddyMarketTimingPayload(),
         ]);
     }
 
@@ -1043,6 +1048,7 @@ class PaddyApiController extends Controller
         })->values();
 
         $marketStatus = PaddyTradeCurrentStatus::currentResolved();
+        $settings = AppSetting::current();
 
         return response()->json([
             'status' => true,
@@ -1052,6 +1058,7 @@ class PaddyApiController extends Controller
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->paddyMarketTimingPayload(),
             'pagination' => [
                 'current_page' => $paginator->currentPage(),
                 'per_page' => $paginator->perPage(),
@@ -1099,6 +1106,7 @@ class PaddyApiController extends Controller
         }
 
         $marketStatus = PaddyTradeCurrentStatus::currentResolved();
+        $settings = AppSetting::current();
 
         return response()->json([
             'status' => true,
@@ -1108,6 +1116,7 @@ class PaddyApiController extends Controller
             'currentStatus' => (int) $marketStatus->currentStatus,
             'statusMessage' => $marketStatus->message,
             'market_status' => PaddyTradeCurrentStatus::marketStatusApiPayload(),
+            'market_timing' => $settings->paddyMarketTimingPayload(),
         ], 200);
     }
 

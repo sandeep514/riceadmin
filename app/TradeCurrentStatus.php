@@ -64,6 +64,26 @@ class TradeCurrentStatus extends Model
         return $row;
     }
 
+    /**
+     * API-shaped market status (includes schedule open/close / override meta).
+     * Same shape as PaddyTradeCurrentStatus::marketStatusApiPayload().
+     */
+    public static function marketStatusApiPayload(?\Carbon\Carbon $at = null): array
+    {
+        $resolved = self::resolved($at);
+
+        return [
+            'currentStatus' => $resolved['currentStatus'],
+            'label' => $resolved['label'],
+            'message' => $resolved['message'],
+            'mode' => $resolved['mode'],
+            'schedule' => $resolved['schedule'],
+            'override_until' => $resolved['override_until'],
+            'special_closing' => $resolved['special_closing'] ?? null,
+            'closing_notice' => $resolved['closing_notice'] ?? null,
+        ];
+    }
+
     public function getStatusLabelAttribute(): string
     {
         return self::$marketStatus[(int) $this->currentStatus] ?? (string) $this->currentStatus;
