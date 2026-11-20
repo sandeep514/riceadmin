@@ -180,7 +180,7 @@
                                                     </div>
                                                     <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                                 </form>
-                                                <form method="GET" action="{{ route('list.paddy.price') }}" class="form-inline" style="margin-bottom: 15px;">
+                                                <form method="GET" action="{{ route('list.paddy.price') }}" id="paddy-prices-filter-form" class="form-inline" style="margin-bottom: 15px;">
                                                     <div class="form-group" style="margin-right: 10px;">
                                                         <label for="from" style="margin-right: 6px;">From</label>
                                                         <input type="date" id="from" name="from" class="form-control" value="{{ $from ?? '' }}">
@@ -189,12 +189,25 @@
                                                         <label for="to" style="margin-right: 6px;">To</label>
                                                         <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
                                                     </div>
+                                                    <div class="form-group" style="margin-right: 10px;">
+                                                        <label for="paddy-prices-search" style="margin-right: 6px;">Search</label>
+                                                        <input
+                                                            type="search"
+                                                            id="paddy-prices-search"
+                                                            name="search"
+                                                            class="form-control"
+                                                            placeholder="Mandi, state, quality, price…"
+                                                            value="{{ $search ?? '' }}"
+                                                            autocomplete="off"
+                                                            style="min-width: 220px;"
+                                                        >
+                                                    </div>
                                                     <button type="submit" class="btn btn-info btn-sm">Filter</button>
                                                     <a href="{{ route('list.paddy.price') }}" class="btn btn-default btn-sm">Clear</a>
-                                                    <a href="{{ route('list.paddy.price', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'export' => 'excel'])) }}" class="btn btn-success btn-sm">
+                                                    <a href="{{ route('list.paddy.price', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'search' => $search ?? null, 'export' => 'excel'])) }}" class="btn btn-success btn-sm">
                                                         <i class="fa fa-file-excel-o"></i> Excel
                                                     </a>
-                                                    <a href="{{ route('list.paddy.price', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'export' => 'pdf'])) }}" class="btn btn-danger btn-sm">
+                                                    <a href="{{ route('list.paddy.price', array_filter(['from' => $from ?? null, 'to' => $to ?? null, 'search' => $search ?? null, 'export' => 'pdf'])) }}" class="btn btn-danger btn-sm">
                                                         <i class="fa fa-file-pdf-o"></i> PDF
                                                     </a>
                                                 </form>
@@ -244,7 +257,7 @@
                                                                     <td>{{ $paddyPrice->status ? 'Active' : 'Inactive' }}</td>
                                                                     <td style="white-space: nowrap;">
                                                                         <a
-                                                                            href="{{ route('edit.paddy.price', array_filter(['id' => $paddyPrice->id, 'from' => $from ?? null, 'to' => $to ?? null])) }}"
+                                                                            href="{{ route('edit.paddy.price', array_filter(['id' => $paddyPrice->id, 'from' => $from ?? null, 'to' => $to ?? null, 'search' => $search ?? null])) }}"
                                                                             class="btn btn-primary btn-xs"
                                                                         >
                                                                             <i class="fa fa-pencil"></i> Edit
@@ -297,8 +310,10 @@
     $(function () {
         $('#paddy-prices-table').DataTable({
             // Server already paginates 30/page — do not double-paginate in DataTables.
+            // Search is server-side (see #paddy-prices-search) so it covers all pages.
             paging: false,
             info: false,
+            searching: false,
             order: [[0, 'desc']],
             dom: 'Bfrtip',
             buttons: [
@@ -332,8 +347,36 @@
                 { orderable: false, targets: [15] }
             ],
             language: {
-                emptyTable: 'No paddy prices found for the selected date range.',
-                search: 'Search:'
+                emptyTable: 'No paddy prices found for the selected filters.'
+            }
+        });
+
+        var $search = $('#paddy-prices-search');
+        var $filterForm = $('#paddy-prices-filter-form');
+        var searchTimer = null;
+        var lastSubmittedSearch = String($search.val() || '');
+
+        function submitSearchIfChanged() {
+            var current = String($search.val() || '').trim();
+            if (current === lastSubmittedSearch) {
+                return;
+            }
+            lastSubmittedSearch = current;
+            // Reset to page 1 when search changes.
+            $filterForm.find('input[name="page"]').remove();
+            $filterForm.trigger('submit');
+        }
+
+        $search.on('input', function () {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(submitSearchIfChanged, 450);
+        });
+
+        $search.on('keydown', function (e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                e.preventDefault();
+                clearTimeout(searchTimer);
+                submitSearchIfChanged();
             }
         });
 

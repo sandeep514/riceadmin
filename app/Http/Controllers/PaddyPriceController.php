@@ -24,16 +24,17 @@ class PaddyPriceController extends Controller
     public function index(Request $request)
     {
         [$from, $to] = $this->resolvedFilterDates($request);
+        $search = $this->resolvedSearch($request);
 
         $export = strtolower((string) $request->input('export', ''));
         if ($export === 'excel') {
-            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false, lastOfDayOnly: true);
+            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false, lastOfDayOnly: true, search: $search);
             $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.xlsx';
 
             return Excel::download(new PaddyPriceExport($paddyPrices), $filename);
         }
         if ($export === 'pdf') {
-            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false, lastOfDayOnly: true);
+            $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: false, lastOfDayOnly: true, search: $search);
             $filename = 'paddy-prices_'.($from ?? 'start').'_'.($to ?? 'end').'.pdf';
             $pdf = Pdf::loadView('paddyPrices.pdf', compact('paddyPrices', 'from', 'to'))
                 ->setPaper('a4', 'landscape');
@@ -41,7 +42,7 @@ class PaddyPriceController extends Controller
             return $pdf->download($filename);
         }
 
-        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: true);
+        $paddyPrices = $this->filteredPaddyPrices($from, $to, paginate: true, search: $search);
 
         $paddyStateModel = PaddyStateModel::where('status', 1)
             ->orderByRaw('order_no IS NULL, order_no ASC')
@@ -67,6 +68,7 @@ class PaddyPriceController extends Controller
             'quality',
             'from',
             'to',
+            'search',
             'marketStatus',
             'marketStatusLabels',
             'currentMarketStatus',
@@ -119,8 +121,13 @@ class PaddyPriceController extends Controller
         return [$from, $to];
     }
 
-    private function filteredPaddyPrices(?string $from, ?string $to, bool $paginate = false, bool $lastOfDayOnly = false)
-    {
+    private function filteredPaddyPrices(
+        ?string $from,
+        ?string $to,
+        bool $paginate = false,
+        bool $lastOfDayOnly = false,
+        ?string $search = null
+    ) {
         $applyDateFilters = function ($q) use ($from, $to) {
             if ($from) {
                 $q->where('created_at', '>=', Carbon::parse($from, config('app.timezone', 'Asia/Kolkata'))->startOfDay());
@@ -130,9 +137,45 @@ class PaddyPriceController extends Controller
             }
         };
 
+        $applySearch = function ($q) use ($search) {
+            if ($search === null || $search === '') {
+                return;
+            }
+
+            $like = '%'.$search.'%';
+            $q->where(function ($inner) use ($like, $search) {
+                $inner->where('id', 'like', $like)
+                    ->orWhere('crop_year', 'like', $like)
+                    ->orWhere('min_hand_cutting_price', 'like', $like)
+                    ->orWhere('hand_cutting_price', 'like', $like)
+                    ->orWhere('min_machine_cutting_price', 'like', $like)
+                    ->orWhere('machine_cutting_price', 'like', $like)
+                    ->orWhere('moisture', 'like', $like)
+                    ->orWhere('total_arrivals', 'like', $like)
+                    ->orWhere('change', 'like', $like)
+                    ->orWhereHas('getMandi_rel', function ($m) use ($like) {
+                        $m->where('mandi', 'like', $like);
+                    })
+                    ->orWhereHas('getState_rel', function ($s) use ($like) {
+                        $s->where('state', 'like', $like);
+                    })
+                    ->orWhereHas('quality_rel', function ($qq) use ($like) {
+                        $qq->where('quality', 'like', $like)
+                            ->orWhere('type', 'like', $like);
+                    });
+
+                if (strcasecmp($search, 'active') === 0) {
+                    $inner->orWhere('status', 1);
+                } elseif (strcasecmp($search, 'inactive') === 0) {
+                    $inner->orWhere('status', 0);
+                }
+            });
+        };
+
         $query = PaddyPrice::with(['getMandi_rel', 'getState_rel', 'quality_rel'])
             ->orderBy('id', 'DESC');
         $applyDateFilters($query);
+        $applySearch($query);
 
         // Export: one row per day × state × mandi × quality × crop year
         // (earlier same-day saves for that combo are superseded duplicates).
@@ -140,6 +183,7 @@ class PaddyPriceController extends Controller
             $lastIds = PaddyPrice::query()
                 ->selectRaw('MAX(id) as id');
             $applyDateFilters($lastIds);
+            $applySearch($lastIds);
             $lastIds->groupBy(
                 DB::raw('DATE(created_at)'),
                 'state',
@@ -156,6 +200,17 @@ class PaddyPriceController extends Controller
         }
 
         return $query->get();
+    }
+
+    private function resolvedSearch(Request $request): ?string
+    {
+        $search = trim((string) $request->input('search', $request->input('q', '')));
+        if ($search === '') {
+            return null;
+        }
+
+        // Keep query strings short / safe for LIKE.
+        return mb_substr($search, 0, 100);
     }
 
     private function validFilterDate($value): ?string
