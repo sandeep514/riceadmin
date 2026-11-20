@@ -52,12 +52,25 @@ class WebPortalNotificationEvent implements ShouldBroadcastNow
             'user_id' => $this->notification->user_id,
         ];
 
+        $storedTradeId = (int) ($this->notification->trade_id ?? 0);
+        if ($storedTradeId > 0) {
+            $payload['trade_id'] = (string) $storedTradeId;
+            $payload['tradeId'] = (string) $storedTradeId;
+            $payload['trade_no'] = (string) $storedTradeId;
+            $payload['type'] = 'trade_notification';
+        }
+
         foreach ($this->extra as $key => $value) {
-            if ($value === null) {
+            if ($value === null || $value === '') {
                 continue;
             }
             // FCM/socket clients expect string data values for common keys.
             $payload[$key] = is_scalar($value) ? (string) $value : $value;
+        }
+
+        // Keep camelCase alias if only snake_case was provided in extra.
+        if (! empty($payload['trade_id']) && empty($payload['tradeId'])) {
+            $payload['tradeId'] = (string) $payload['trade_id'];
         }
 
         return $payload;

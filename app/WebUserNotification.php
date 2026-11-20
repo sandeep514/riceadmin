@@ -15,6 +15,7 @@ class WebUserNotification extends Model
         'message',
         'role_id',
         'category_id',
+        'trade_id',
         'audience_mode',
         'broadcast_group_id',
         'read_at',
@@ -25,6 +26,7 @@ class WebUserNotification extends Model
         'notify_date' => 'date',
         'read_at' => 'datetime',
         'is_cleared' => 'integer',
+        'trade_id' => 'integer',
     ];
 
     public function user()

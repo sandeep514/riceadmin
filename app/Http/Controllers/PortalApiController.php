@@ -3037,6 +3037,10 @@ class PortalApiController extends Controller
             ->limit($limit)
             ->get()
             ->map(function ($row) {
+                $tradeId = isset($row->trade_id) && (int) $row->trade_id > 0
+                    ? (int) $row->trade_id
+                    : null;
+
                 return [
                     'id' => $row->id,
                     'title' => $row->title,
@@ -3044,6 +3048,9 @@ class PortalApiController extends Controller
                     'notify_date' => $row->notify_date ? $row->notify_date->format('Y-m-d') : null,
                     'read_at' => $row->read_at ? Carbon::parse($row->read_at)->format('Y-m-d H:i:s') : null,
                     'created_at' => $row->created_at ? Carbon::parse($row->created_at)->format('Y-m-d H:i:s') : null,
+                    'trade_id' => $tradeId,
+                    'tradeId' => $tradeId,
+                    'type' => $tradeId ? 'trade_notification' : 'portal_notification',
                 ];
             })
             ->values();

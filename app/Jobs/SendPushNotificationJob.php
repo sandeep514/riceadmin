@@ -166,9 +166,17 @@ class SendPushNotificationJob implements ShouldQueue, ShouldBeUnique
         }
 
         $now = Carbon::now()->format('Y-m-d H:i:s');
+        $tradeId = null;
+        $rawTradeId = $this->data['trade_id'] ?? $this->data['tradeId'] ?? null;
+        if ($rawTradeId !== null && $rawTradeId !== '') {
+            $parsed = (int) $rawTradeId;
+            $tradeId = $parsed > 0 ? $parsed : null;
+        }
+
+        $hasTradeId = \Illuminate\Support\Facades\Schema::hasColumn('notification', 'trade_id');
         $postedData = [];
         foreach ($userIds as $userId) {
-            $postedData[] = [
+            $row = [
                 'user_id' => $userId,
                 'title' => $this->title,
                 'message' => $this->body,
@@ -177,6 +185,10 @@ class SendPushNotificationJob implements ShouldQueue, ShouldBeUnique
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
+            if ($hasTradeId) {
+                $row['trade_id'] = $tradeId;
+            }
+            $postedData[] = $row;
         }
 
         Notification::insert($postedData);

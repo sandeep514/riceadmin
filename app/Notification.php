@@ -15,6 +15,7 @@ class Notification extends Model
         'title',
         'message',
         'userAppType',
+        'trade_id',
         'status',
         'is_cleared',
         'created_at',
@@ -25,6 +26,7 @@ class Notification extends Model
     protected $casts = [
         'status' => 'integer',
         'is_cleared' => 'integer',
+        'trade_id' => 'integer',
     ];
 
 

@@ -226,11 +226,13 @@ Quantity: {quantity}';
     private function tradeNotificationPayload(TradeQueriesINR $trade): array
     {
         $tradeId = (int) ($trade->getKey() ?: $trade->id);
+        $id = $tradeId > 0 ? (string) $tradeId : '';
 
         return [
             'type' => 'trade_notification',
-            'trade_id' => $tradeId > 0 ? (string) $tradeId : '',
-            'trade_no' => $tradeId > 0 ? (string) $tradeId : '',
+            'trade_id' => $id,
+            'tradeId' => $id,
+            'trade_no' => $id,
         ];
     }
 

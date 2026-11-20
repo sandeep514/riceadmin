@@ -10,6 +10,7 @@ use App\WebUserNotification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 /**
@@ -63,6 +64,7 @@ class WebPortalNotificationDelivery
         $fillRoleFromUser = (bool) ($meta['fill_role_from_user'] ?? ($fixedRoleId === null));
         $fillCategoryFromBusiness = (bool) ($meta['fill_category_from_business'] ?? ($fixedCategoryId === null));
         $payload = is_array($meta['payload'] ?? null) ? $meta['payload'] : [];
+        $tradeId = $this->resolveTradeIdFromPayload($payload);
 
         $chunkSize = (int) (config('queue.trade_web_notification_chunk_size') ?: self::DEFAULT_CHUNK_SIZE);
         if ($chunkSize < 1) {
@@ -92,7 +94,7 @@ class WebPortalNotificationDelivery
                     $categoryId = isset($categoriesByUser[$userId]) ? (int) $categoriesByUser[$userId] : null;
                 }
 
-                $rows[] = [
+                $row = [
                     'user_id' => $userId,
                     'notify_date' => $notifyDate,
                     'title' => $title,
@@ -105,6 +107,10 @@ class WebPortalNotificationDelivery
                     'created_at' => $now,
                     'updated_at' => $now,
                 ];
+                if (Schema::hasColumn('web_notifications', 'trade_id')) {
+                    $row['trade_id'] = $tradeId;
+                }
+                $rows[] = $row;
             }
 
             WebUserNotification::insert($rows);
@@ -138,7 +144,7 @@ class WebPortalNotificationDelivery
             }
 
             // History for portal recipients (including users without an FCM token).
-            $this->persistNotificationRows($chunkIds, $title, $message, $pushType, $now);
+            $this->persistNotificationRows($chunkIds, $title, $message, $pushType, $now, $tradeId);
 
             // 2) FCM push — independent of socket (explicit; not only via event listener)
             $fcmData = $this->buildFcmDataPayload($payload, $pushType);
@@ -228,7 +234,7 @@ class WebPortalNotificationDelivery
     {
         $data = [];
         foreach ($payload as $key => $value) {
-            if ($value === null) {
+            if ($value === null || $value === '') {
                 continue;
             }
             $data[(string) $key] = is_scalar($value) ? (string) $value : json_encode($value);
@@ -238,7 +244,29 @@ class WebPortalNotificationDelivery
             $data['type'] = $pushType === 'trade' ? 'trade_notification' : 'portal_notification';
         }
 
+        // Ensure both snake_case and camelCase for mobile deep-links.
+        if (isset($data['trade_id']) && ! isset($data['tradeId'])) {
+            $data['tradeId'] = $data['trade_id'];
+        } elseif (isset($data['tradeId']) && ! isset($data['trade_id'])) {
+            $data['trade_id'] = $data['tradeId'];
+        }
+
         return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $payload
+     */
+    private function resolveTradeIdFromPayload(array $payload): ?int
+    {
+        $raw = $payload['trade_id'] ?? $payload['tradeId'] ?? null;
+        if ($raw === null || $raw === '') {
+            return null;
+        }
+
+        $tradeId = (int) $raw;
+
+        return $tradeId > 0 ? $tradeId : null;
     }
 
     /**
@@ -249,11 +277,13 @@ class WebPortalNotificationDelivery
         string $title,
         string $message,
         string $pushType,
-        string $now
+        string $now,
+        ?int $tradeId = null
     ): void {
+        $hasTradeId = Schema::hasColumn('notification', 'trade_id');
         $rows = [];
         foreach ($userIds as $userId) {
-            $rows[] = [
+            $row = [
                 'user_id' => $userId,
                 'title' => $title,
                 'message' => $message,
@@ -262,6 +292,10 @@ class WebPortalNotificationDelivery
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
+            if ($hasTradeId) {
+                $row['trade_id'] = $tradeId;
+            }
+            $rows[] = $row;
         }
 
         if ($rows !== []) {
