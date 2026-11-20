@@ -188,8 +188,25 @@ class ApiController extends Controller
     public function getWebOtherServices()
     {
         $bagVendor = BagVendors::vendorType();
+        $vendorController = app(WebBrandController::class);
 
-        return response()->json(['status' => true , 'messages' => 'Bag vendoe get successfully' , 'data' => $bagVendor ]);
+        $services = [];
+        foreach ($bagVendor as $id => $name) {
+            $services[] = [
+                'id' => (int) $id,
+                'name' => trim((string) $name),
+                'active_vendors_count' => $vendorController->activeVendorCountForType($id),
+            ];
+        }
+
+        return response()->json([
+            'status' => true,
+            'messages' => 'Bag vendoe get successfully',
+            // Legacy map kept for older clients
+            'data' => $bagVendor,
+            // Enriched list with active vendor counts per service
+            'services' => $services,
+        ]);
     }
 
     //Validate

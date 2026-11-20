@@ -641,11 +641,20 @@ class WebBrandController extends Controller
             ->orderBy('category')
             ->get();
 
+        $data = $category->map(function ($row) {
+            return [
+                'id' => (int) $row->id,
+                'category' => $row->category,
+                'image' => $row->image,
+                'active_vendors_count' => $this->activeVendorCountForType($row->id),
+            ];
+        })->values();
+
         return response()->json([
             'status' => true,
             'message' => 'Vendor type get successfully.',
             'filePath' => asset('bagimages/'),
-            'data' => $category,
+            'data' => $data,
         ], 200);
     }
 
@@ -666,79 +675,11 @@ class WebBrandController extends Controller
 
     public function vendorList($vendorType)
     {
-        $rawType = trim((string) $vendorType);
-        $categoryId = (int) $rawType;
-        $categoryName = $categoryId > 0
-            ? trim((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''))
-            : '';
-        $kind = $categoryId > 0
-            ? VendorProductCatalog::detectKindFromCategoryId($categoryId)
-            : null;
+        $resolved = $this->resolveVendorTypeContext($vendorType);
+        $productOwnerIds = $resolved['product_owner_ids'];
 
-        // Backward compatibility: earlier clients send legacy bag_vendor type ids
-        // (1-14, see BagVendors::vendorType()) instead of category.id.
-        // Resolve those to a catalog kind + legacy names so the list still matches.
-        $legacyNames = [];
-        if ($kind === null) {
-            $legacyMap = \App\BagVendors::vendorType();
-            if (isset($legacyMap[$categoryId])) {
-                $legacyNames[] = trim((string) $legacyMap[$categoryId]);
-                $kind = VendorProductCatalog::detectKindFromCategoryName($legacyMap[$categoryId]);
-            } elseif ($rawType !== '' && $categoryId <= 0) {
-                // Non-numeric type (e.g. "Clearing agents") passed directly.
-                $kind = VendorProductCatalog::detectKindFromCategoryName($rawType);
-            }
-        }
-        // productOwnerIdsForKind(null) is every vendor with any catalog product.
-        // Categories without a catalog must stay on selected_category.
-        $productOwnerIds = $kind !== null
-            ? VendorProductCatalog::productOwnerIdsForKind($kind)
-            : [];
-        $productOwnerIdList = array_keys($productOwnerIds);
-
-        $categoryNameLower = $categoryName !== '' ? strtolower($categoryName) : null;
-        $legacyLower = array_values(array_unique(array_filter(array_map(
-            fn ($n) => strtolower(trim((string) $n)),
-            $legacyNames
-        ))));
-
-        $webBusinessDetails = WebBusinessDetails::query()
+        $webBusinessDetails = $this->activeVendorsQueryForType($vendorType)
             ->select(['id', 'user_id', 'company_name', 'product', 'contactPerson', 'contactMobile', 'address', 'is_sntc_recommended', 'is_active_listing', 'selected_category'])
-            // Inactive vendors stay hidden until admin approves (is_active_listing = 1).
-            ->where('is_active_listing', 1)
-            // Deleted users are removed with a hard delete (users table has no
-            // soft deletes) while their business row stays behind — explicitly
-            // require a live user account or deleted vendors still list here.
-            ->whereIn('user_id', User::query()->select('id'))
-            ->where(function ($query) use ($rawType, $categoryId, $categoryNameLower, $legacyLower, $productOwnerIdList) {
-                $query->where(function ($inner) use ($rawType, $categoryId, $categoryNameLower, $legacyLower) {
-                    $inner->where('selected_category', $rawType);
-                    if ((string) $categoryId !== $rawType) {
-                        $inner->orWhere('selected_category', (string) $categoryId);
-                    }
-                    $inner->orWhere('selected_category', $categoryId);
-                    // selected_category may be stored as CSV ("20,21") or with spaces.
-                    if ($categoryId > 0) {
-                        $inner->orWhereRaw('FIND_IN_SET(?, selected_category) > 0', [(string) $categoryId]);
-                    }
-                    if ($categoryNameLower !== null) {
-                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [$categoryNameLower]);
-                    }
-                    foreach ($legacyLower as $legacy) {
-                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [$legacy]);
-                    }
-                });
-
-                if ($productOwnerIdList !== []) {
-                    // Verified product vendors, matched by users.id as well as
-                    // web_business_details.id (products were historically stored
-                    // under either). Listing toggle above still applies.
-                    $query->orWhere(function ($owners) use ($productOwnerIdList) {
-                        $owners->whereIn('user_id', $productOwnerIdList)
-                            ->orWhereIn('id', $productOwnerIdList);
-                    });
-                }
-            })
             ->orderByDesc('is_sntc_recommended')
             ->orderBy('company_name')
             ->orderByDesc('id')
@@ -769,15 +710,17 @@ class WebBrandController extends Controller
             ->values();
 
         if (request()->boolean('debug')) {
+            $productOwnerIdList = array_keys($productOwnerIds);
+
             return response()->json([
                 'status' => true,
                 'message' => 'Vendors get successfully.',
                 'data' => $data,
                 'debug' => [
-                    'type' => $rawType,
-                    'category_id' => $categoryId,
-                    'category_name' => $categoryName !== '' ? $categoryName : null,
-                    'kind' => $kind,
+                    'type' => $resolved['raw_type'],
+                    'category_id' => $resolved['category_id'],
+                    'category_name' => $resolved['category_name'] !== '' ? $resolved['category_name'] : null,
+                    'kind' => $resolved['kind'],
                     'verified_owner_count' => count($productOwnerIdList),
                     'verified_owner_sample' => array_slice($productOwnerIdList, 0, 20),
                     'result_count' => $data->count(),
@@ -789,9 +732,115 @@ class WebBrandController extends Controller
             'status' => true,
             'message' => 'Vendors get successfully.',
             'data' => $data,
+            'active_vendors_count' => $data->count(),
         ], 200);
     }
 
+    /**
+     * Active listed vendors for a service/category (same rules as vendor list).
+     */
+    public function activeVendorCountForType($vendorType): int
+    {
+        return (int) $this->activeVendorsQueryForType($vendorType)->count();
+    }
 
+    /**
+     * @return array{
+     *   raw_type:string,
+     *   category_id:int,
+     *   category_name:string,
+     *   kind:?string,
+     *   legacy_names:array<int,string>,
+     *   product_owner_ids:array<int,mixed>
+     * }
+     */
+    private function resolveVendorTypeContext($vendorType): array
+    {
+        $rawType = trim((string) $vendorType);
+        $categoryId = (int) $rawType;
+        $categoryName = $categoryId > 0
+            ? trim((string) (Category::query()->where('id', $categoryId)->value('category') ?? ''))
+            : '';
+        $kind = $categoryId > 0
+            ? VendorProductCatalog::detectKindFromCategoryId($categoryId)
+            : null;
+
+        // Backward compatibility: earlier clients send legacy bag_vendor type ids
+        // (1-14, see BagVendors::vendorType()) instead of category.id.
+        $legacyNames = [];
+        if ($kind === null) {
+            $legacyMap = BagVendors::vendorType();
+            if (isset($legacyMap[$categoryId])) {
+                $legacyNames[] = trim((string) $legacyMap[$categoryId]);
+                $kind = VendorProductCatalog::detectKindFromCategoryName($legacyMap[$categoryId]);
+            } elseif ($rawType !== '' && $categoryId <= 0) {
+                $kind = VendorProductCatalog::detectKindFromCategoryName($rawType);
+            }
+        }
+
+        $productOwnerIds = $kind !== null
+            ? VendorProductCatalog::productOwnerIdsForKind($kind)
+            : [];
+
+        return [
+            'raw_type' => $rawType,
+            'category_id' => $categoryId,
+            'category_name' => $categoryName,
+            'kind' => $kind,
+            'legacy_names' => $legacyNames,
+            'product_owner_ids' => $productOwnerIds,
+        ];
+    }
+
+    /**
+     * Query of active vendors for a service type (is_active_listing + live user).
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function activeVendorsQueryForType($vendorType)
+    {
+        $resolved = $this->resolveVendorTypeContext($vendorType);
+        $rawType = $resolved['raw_type'];
+        $categoryId = $resolved['category_id'];
+        $categoryNameLower = $resolved['category_name'] !== ''
+            ? strtolower($resolved['category_name'])
+            : null;
+        $legacyLower = array_values(array_unique(array_filter(array_map(
+            fn ($n) => strtolower(trim((string) $n)),
+            $resolved['legacy_names']
+        ))));
+        $productOwnerIdList = array_keys($resolved['product_owner_ids']);
+
+        return WebBusinessDetails::query()
+            // Inactive vendors stay hidden until admin approves (is_active_listing = 1).
+            ->where('is_active_listing', 1)
+            // Deleted users are removed with a hard delete while business rows remain.
+            ->whereIn('user_id', User::query()->select('id'))
+            ->where(function ($query) use ($rawType, $categoryId, $categoryNameLower, $legacyLower, $productOwnerIdList) {
+                $query->where(function ($inner) use ($rawType, $categoryId, $categoryNameLower, $legacyLower) {
+                    $inner->where('selected_category', $rawType);
+                    if ((string) $categoryId !== $rawType) {
+                        $inner->orWhere('selected_category', (string) $categoryId);
+                    }
+                    $inner->orWhere('selected_category', $categoryId);
+                    if ($categoryId > 0) {
+                        $inner->orWhereRaw('FIND_IN_SET(?, selected_category) > 0', [(string) $categoryId]);
+                    }
+                    if ($categoryNameLower !== null) {
+                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [$categoryNameLower]);
+                    }
+                    foreach ($legacyLower as $legacy) {
+                        $inner->orWhereRaw('LOWER(TRIM(selected_category)) = ?', [$legacy]);
+                    }
+                });
+
+                if ($productOwnerIdList !== []) {
+                    $query->orWhere(function ($owners) use ($productOwnerIdList) {
+                        $owners->whereIn('user_id', $productOwnerIdList)
+                            ->orWhereIn('id', $productOwnerIdList);
+                    });
+                }
+            });
+    }
 
 }
