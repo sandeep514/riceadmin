@@ -7,6 +7,7 @@
 		<h2>User Details - ID #{{ $user['id'] }}</h2>
 		@if (($user['user_from'] ?? '') === 'web')
 			<div style="margin: 10px 0 20px 0;">
+				{{-- Delete Web User temporarily disabled (reject/on-hold + same-mobile re-login issues).
 				<form id="delete-web-user-form" method="POST" action="{{ route('delete.web.user.with.pin', $user['id']) }}" style="display:inline;">
 					@csrf
 					<input type="hidden" name="pin" id="delete-web-user-pin" value="">
@@ -14,6 +15,7 @@
 						<i class="fa fa-trash"></i> Delete Web User
 					</button>
 				</form>
+				--}}
 				@php
 					$hasSubscription = array_key_exists('get_web_user_subscription', $user) && $user['get_web_user_subscription'] != null;
 				@endphp
@@ -479,6 +481,7 @@ $(document).ready(function() {
 
 	});
 
+	{{-- Delete Web User temporarily disabled
 	$('#delete-web-user-btn').on('click', function () {
 		if (typeof toastr !== 'undefined') {
 			toastr.warning('This action will permanently delete this web user. Enter PIN to continue.', 'Confirm delete');
@@ -503,6 +506,7 @@ $(document).ready(function() {
 		$('#delete-web-user-pin').val(pin);
 		$('#delete-web-user-form').trigger('submit');
 	});
+	--}}
 
 	@if ($canAdminManageInterests === true)
 	// --- Admin: rice interests (cascading selects) ---

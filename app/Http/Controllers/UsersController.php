@@ -106,6 +106,12 @@ class UsersController extends Controller
 
     public function deleteWebUserWithPin(Request $request, $id)
     {
+        // Temporarily disabled — do not hard-delete web users from admin.
+        Session::flash('error', 'Error|Delete Web User is temporarily disabled. Use Reject / On Hold instead.');
+
+        return back();
+
+        /*
         try {
             $request->validate([
                 'pin' => ['required', 'string', 'in:22334455'],
@@ -140,6 +146,7 @@ class UsersController extends Controller
         Session::flash('success', 'Success|Web user deleted successfully. Active products were deactivated.');
 
         return redirect()->route('users', $role);
+        */
     }
     
     public function changeChatStatus(Request $request){
