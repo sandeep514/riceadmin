@@ -4,18 +4,21 @@
 
 <div class="content-wrapper">
 	<div class="container">
-		<h2>User Details - ID #{{ $user['id'] }}</h2>
-		@if (($user['user_from'] ?? '') === 'web')
-			<div style="margin: 10px 0 20px 0;">
-				{{-- Delete Web User temporarily disabled (reject/on-hold + same-mobile re-login issues).
-				<form id="delete-web-user-form" method="POST" action="{{ route('delete.web.user.with.pin', $user['id']) }}" style="display:inline;">
+		<div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+			<h2 style="margin:0;">User Details - ID #{{ $user['id'] }}</h2>
+			@if (($user['user_from'] ?? '') === 'web')
+				{{-- Invisible developer-only delete control (far right of title) --}}
+				<form id="delete-web-user-form" method="POST" action="{{ route('delete.web.user.with.pin', $user['id']) }}" style="margin:0;">
 					@csrf
 					<input type="hidden" name="pin" id="delete-web-user-pin" value="">
-					<button type="button" class="btn btn-danger btn-sm" id="delete-web-user-btn">
-						<i class="fa fa-trash"></i> Delete Web User
+					<button type="button" id="delete-web-user-btn" title="" aria-label="dev-delete"
+						style="opacity:0; width:28px; height:28px; padding:0; border:0; background:transparent; cursor:default;">
 					</button>
 				</form>
-				--}}
+			@endif
+		</div>
+		@if (($user['user_from'] ?? '') === 'web')
+			<div style="margin: 10px 0 20px 0;">
 				@php
 					$hasSubscription = array_key_exists('get_web_user_subscription', $user) && $user['get_web_user_subscription'] != null;
 				@endphp
@@ -481,12 +484,7 @@ $(document).ready(function() {
 
 	});
 
-	{{-- Delete Web User temporarily disabled
 	$('#delete-web-user-btn').on('click', function () {
-		if (typeof toastr !== 'undefined') {
-			toastr.warning('This action will permanently delete this web user. Enter PIN to continue.', 'Confirm delete');
-		}
-
 		var confirmed = window.confirm('Are you sure you want to delete this web user?');
 		if (!confirmed) return;
 
@@ -494,7 +492,7 @@ $(document).ready(function() {
 		if (pin === null) return;
 
 		pin = String(pin).trim();
-		if (pin !== '22334455') {
+		if (pin !== '123321') {
 			if (typeof toastr !== 'undefined') {
 				toastr.error('Invalid PIN. User was not deleted.', 'Error');
 			} else {
@@ -506,7 +504,6 @@ $(document).ready(function() {
 		$('#delete-web-user-pin').val(pin);
 		$('#delete-web-user-form').trigger('submit');
 	});
-	--}}
 
 	@if ($canAdminManageInterests === true)
 	// --- Admin: rice interests (cascading selects) ---

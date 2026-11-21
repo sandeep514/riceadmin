@@ -56,8 +56,7 @@ Route::group(['prefix'=>'administrator'], function(){
                 Route::post('users/view/{userId}/interests/row/delete', ['as' => 'delete.user.interest.row', 'uses' => 'UsersController@deleteUserInterestRow']);
                 Route::post('users/view/{userId}/vendor-profile/recommended', ['as' => 'update.user.vendor.profile.recommended', 'uses' => 'UsersController@updateVendorProfileRecommended']);
                 Route::post('users/view/{userId}/business-details/recommended', ['as' => 'update.user.business.details.recommended', 'uses' => 'UsersController@updateBusinessDetailsRecommended']);
-                // Delete Web User temporarily disabled (reject/on-hold + same-mobile re-login issues).
-                // Route::post('users/delete-web/{id}', ['as' => 'delete.web.user.with.pin', 'uses' => 'UsersController@deleteWebUserWithPin', 'action' => 'delete']);
+                Route::post('users/delete-web/{id}', ['as' => 'delete.web.user.with.pin', 'uses' => 'UsersController@deleteWebUserWithPin', 'action' => 'delete']);
                 Route::get('users/edit/{id}/{role}',['as'=>'edit.user','uses'=>'UsersController@edit','action'=>'edit']);
                 Route::put('users/update/{id}/{role}',['as'=>'update.user','uses'=>'UsersController@update','action'=>'edit']);
                 Route::delete('users/delete/{id}/{role}',['as'=>'delete.user','uses'=>'UsersController@delete','action'=>'delete']);
