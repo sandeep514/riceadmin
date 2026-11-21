@@ -728,6 +728,11 @@ Route::group(['prefix'=>'administrator'], function(){
             
             Route::get('bag/vendor/master',['as'=>'bag.vendor.master','uses'=>'DollarController@bagVendorMaster']);
             Route::post('save/bag/vendor/master',['as'=>'bag.vendor.master.save','uses'=>'DollarController@saveBagVendor']);
+
+            // Bulk import portal vendors / other service providers (Excel per category)
+            Route::get('vendor-bulk-import', ['as' => 'vendor-bulk-import', 'uses' => 'VendorBulkImportController@index']);
+            Route::get('vendor-bulk-import/sample', ['as' => 'vendor-bulk-import.sample', 'uses' => 'VendorBulkImportController@sample']);
+            Route::post('vendor-bulk-import/import', ['as' => 'vendor-bulk-import.import', 'uses' => 'VendorBulkImportController@import']);
             
 
 

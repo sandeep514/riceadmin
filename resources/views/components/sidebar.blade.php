@@ -790,6 +790,12 @@
                     <span style="display: inline-flex;">Web Users &nbsp; <div style="background: white; height: 10px;width: 10px;border-radius: 100px;display: none;" id="hasNewUser"></div></span>
                 </a>
             </li>
+            <li class="{{ in_array($currentRoute, ['vendor-bulk-import', 'vendor-bulk-import.sample', 'vendor-bulk-import.import'], true) ? 'active' : '' }}">
+                <a href="{{ route('vendor-bulk-import') }}">
+                    <i class="fa fa-upload"></i>
+                    <span>Import Vendors</span>
+                </a>
+            </li>
             <li class="treeview {{ in_array($currentRoute, [
                 'activity.last-login-users',
                 'activity.plan-page',

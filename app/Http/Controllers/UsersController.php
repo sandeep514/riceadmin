@@ -668,6 +668,7 @@ class UsersController extends Controller
         $request = request();
         $from = trim((string) $request->get('from'));
         $to = trim((string) $request->get('to'));
+        $search = $this->resolvedWebUserSearch($request);
         $export = $request->get('export');
         $stage = $this->normalizeWebOnboardingStageKey($request->get('stage'));
         $perPage = (int) $request->get('per_page', 30);
@@ -676,11 +677,11 @@ class UsersController extends Controller
         }
 
         $stageTabs = $this->webOnboardingStageTabs();
-        $stageCounts = $this->webOnboardingStageCounts($from, $to);
+        $stageCounts = $this->webOnboardingStageCounts($from, $to, $search);
 
-        // Full CSV export for the active stage + date filter.
+        // Full CSV export for the active stage + date/search filter.
         if ($export === 'csv') {
-            $exportQuery = $this->webUserBaseQuery($from, $to);
+            $exportQuery = $this->webUserBaseQuery($from, $to, $search);
             $this->applyWebOnboardingStageFilter($exportQuery, $stage);
             $exportQuery->with([
                 'getWebPersonalDetails',
@@ -694,7 +695,7 @@ class UsersController extends Controller
             return $this->exportWebUsersCsv($exportQuery, $from, $to, $stage);
         }
 
-        $query = $this->webUserBaseQuery($from, $to);
+        $query = $this->webUserBaseQuery($from, $to, $search);
         $this->applyWebOnboardingStageFilter($query, $stage);
         $query->with([
             'getWebPersonalDetails',
@@ -719,6 +720,7 @@ class UsersController extends Controller
             'vendorUsers',
             'from',
             'to',
+            'search',
             'stage',
             'stageCounts',
             'stageTabs',
@@ -726,7 +728,7 @@ class UsersController extends Controller
         ));
     }
 
-    private function webUserBaseQuery(string $from, string $to)
+    private function webUserBaseQuery(string $from, string $to, ?string $search = null)
     {
         $query = User::query()
             ->where('user_from', 'web')
@@ -739,17 +741,82 @@ class UsersController extends Controller
             $query->where('created_at', '<=', \Illuminate\Support\Carbon::parse($to, 'Asia/Kolkata')->endOfDay());
         }
 
+        $this->applyWebUserSearchFilter($query, $search);
+
         return $query;
+    }
+
+    private function resolvedWebUserSearch($request): ?string
+    {
+        $search = trim((string) $request->input('search', $request->input('q', '')));
+        if ($search === '') {
+            return null;
+        }
+
+        return mb_substr($search, 0, 100);
+    }
+
+    private function applyWebUserSearchFilter($query, ?string $search): void
+    {
+        if ($search === null || $search === '') {
+            return;
+        }
+
+        $like = '%'.$search.'%';
+        $query->where(function ($q) use ($like, $search) {
+            $q->where('id', 'like', $like)
+                ->orWhere('name', 'like', $like)
+                ->orWhere('email', 'like', $like)
+                ->orWhere('phone', 'like', $like)
+                ->orWhere('mobile', 'like', $like)
+                ->orWhereHas('getWebBusinessDetails', function ($bq) use ($like) {
+                    $bq->where('company_name', 'like', $like)
+                        ->orWhere('contactPerson', 'like', $like)
+                        ->orWhere('contactMobile', 'like', $like)
+                        ->orWhereHas('getCategoryDetails', function ($cq) use ($like) {
+                            $cq->where('category', 'like', $like);
+                        });
+                });
+
+            $status = strtolower($search);
+            if (in_array($status, ['active', 'pending', 'rejected', 'deactivated'], true)) {
+                if ($status === 'active') {
+                    $q->orWhere(function ($inner) {
+                        $inner->where('is_active_by_admin', 1)->where(function ($d) {
+                            $d->whereNull('is_deactivated')->orWhere('is_deactivated', 0);
+                        });
+                    });
+                } elseif ($status === 'pending') {
+                    $q->orWhere(function ($inner) {
+                        $inner->where(function ($a) {
+                            $a->whereNull('is_active_by_admin')->orWhere('is_active_by_admin', 0);
+                        })->where(function ($d) {
+                            $d->whereNull('is_deactivated')->orWhere('is_deactivated', 0);
+                        });
+                    });
+                } elseif ($status === 'rejected') {
+                    $q->orWhere(function ($inner) {
+                        $inner->where('is_deactivated', 1)->where(function ($a) {
+                            $a->whereNull('is_active_by_admin')->orWhere('is_active_by_admin', 0);
+                        });
+                    });
+                } elseif ($status === 'deactivated') {
+                    $q->orWhere(function ($inner) {
+                        $inner->where('is_deactivated', 1)->where('is_active_by_admin', 1);
+                    });
+                }
+            }
+        });
     }
 
     /**
      * @return array<string, int>
      */
-    private function webOnboardingStageCounts(string $from, string $to): array
+    private function webOnboardingStageCounts(string $from, string $to, ?string $search = null): array
     {
         $counts = ['all' => 0, 'otp' => 0, 'profile' => 0, 'documents' => 0, 'trial' => 0, 'paid' => 0];
         foreach (array_keys($counts) as $key) {
-            $q = $this->webUserBaseQuery($from, $to);
+            $q = $this->webUserBaseQuery($from, $to, $search);
             $this->applyWebOnboardingStageFilter($q, $key);
             $counts[$key] = (int) $q->count();
         }

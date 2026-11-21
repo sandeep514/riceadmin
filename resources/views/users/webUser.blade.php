@@ -26,7 +26,7 @@
                             <h3 class="box-title">List of web users</h3>
                         </div>
                         <div style="padding: 10px">
-                            <form method="GET" action="{{ route('web.user') }}" class="form-inline" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
+                            <form method="GET" action="{{ route('web.user') }}" id="web-users-filter-form" class="form-inline" style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;">
                                 <input type="hidden" name="stage" value="{{ $stage }}">
                                 <div class="form-group">
                                     <label for="from" style="margin-right:5px">Joined From</label>
@@ -37,6 +37,19 @@
                                     <input type="date" id="to" name="to" class="form-control" value="{{ $to ?? '' }}">
                                 </div>
                                 <div class="form-group">
+                                    <label for="web-users-search" style="margin-right:5px">Search</label>
+                                    <input
+                                        type="search"
+                                        id="web-users-search"
+                                        name="search"
+                                        class="form-control"
+                                        placeholder="Name, email, phone, company…"
+                                        value="{{ $search ?? '' }}"
+                                        autocomplete="off"
+                                        style="min-width: 220px;"
+                                    >
+                                </div>
+                                <div class="form-group">
                                     <label for="per_page" style="margin-right:5px">Per page</label>
                                     <select name="per_page" id="per_page" class="form-control" onchange="this.form.submit()">
                                         @foreach([25, 30, 50, 100] as $n)
@@ -45,7 +58,7 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-sm">Apply</button>
-                                <a href="{{ route('web.user', ['stage' => $stage]) }}" class="btn btn-default btn-sm">Clear dates</a>
+                                <a href="{{ route('web.user', ['stage' => $stage]) }}" class="btn btn-default btn-sm">Clear</a>
                                 <a href="{{ request()->fullUrlWithQuery(['export' => 'csv', 'page' => null]) }}" class="btn btn-success btn-sm">
                                     <i class="fa fa-download"></i> Export CSV
                                 </a>
@@ -65,6 +78,7 @@
                                                 'stage' => $key,
                                                 'from' => $from ?? null,
                                                 'to' => $to ?? null,
+                                                'search' => $search ?? null,
                                                 'per_page' => $perPage,
                                             ])) }}"
                                            class="btn btn-sm {{ $pillClass }}"
@@ -189,5 +203,39 @@
         </section>
     </div>
 @endsection
-@section('scripts')
+@section('javascript')
+<script>
+$(function () {
+    var $search = $('#web-users-search');
+    var $form = $('#web-users-filter-form');
+    if (!$search.length || !$form.length) {
+        return;
+    }
+
+    var searchTimer = null;
+    var lastSubmitted = String($search.val() || '').trim();
+
+    function submitSearchIfChanged() {
+        var current = String($search.val() || '').trim();
+        if (current === lastSubmitted) {
+            return;
+        }
+        lastSubmitted = current;
+        $form.trigger('submit');
+    }
+
+    $search.on('input', function () {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(submitSearchIfChanged, 450);
+    });
+
+    $search.on('keydown', function (e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+            e.preventDefault();
+            clearTimeout(searchTimer);
+            submitSearchIfChanged();
+        }
+    });
+});
+</script>
 @endsection
